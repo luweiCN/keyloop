@@ -8,7 +8,7 @@ use crate::model::{
 use crate::plan::PracticePlan;
 use anyhow::Result;
 use chrono::Local;
-use library::ContentLibrary;
+use library::{ContentLibrary, FoundationDrill};
 use rand::seq::SliceRandom;
 use std::collections::HashSet;
 use std::path::Path;
@@ -17,9 +17,16 @@ pub use snippets::{CodeSnippet, extract_snippets};
 
 pub use library::source_catalog;
 
+pub use library::FoundationDrill as FoundationPracticeDrill;
+
 pub fn code_practice_options() -> Result<Vec<CodePracticeOption>> {
     let library = library::load()?;
     Ok(snippets::code_practice_options(&library.code_snippets))
+}
+
+pub fn foundation_drills() -> Result<Vec<FoundationDrill>> {
+    let library = library::load()?;
+    Ok(library.foundation_drills)
 }
 
 pub fn build_daily_practice_plan(
@@ -102,6 +109,45 @@ pub fn build_daily_practice_plan(
         target_minutes: 20,
         completed_ms,
         lessons,
+    })
+}
+
+pub fn build_foundation_target(
+    records: &[&SessionRecord],
+    drill_id: &str,
+    line_count: usize,
+) -> Result<PracticeTarget> {
+    let library = library::load()?;
+    let Some(drill) = library
+        .foundation_drills
+        .iter()
+        .find(|drill| drill.id == drill_id)
+        .or_else(|| library.foundation_drills.first())
+    else {
+        return Ok(PracticeTarget {
+            mode: Mode::Chars,
+            text: build_lesson_chars(&library),
+            source: "keyloop:foundation-fallback".to_string(),
+        });
+    };
+
+    let used = used_foundation_lines(records, &drill.id);
+    let mut pool = drill
+        .items
+        .iter()
+        .filter(|item| !used.contains(item.as_str()))
+        .cloned()
+        .collect::<Vec<_>>();
+    if pool.len() < line_count {
+        pool = drill.items.clone();
+    }
+    pool.shuffle(&mut rand::thread_rng());
+    pool.truncate(line_count);
+
+    Ok(PracticeTarget {
+        mode: Mode::Chars,
+        text: pool.join("\n"),
+        source: format!("keyloop:foundation:{}", drill.id),
     })
 }
 
@@ -257,6 +303,18 @@ fn used_code_snippet_texts(records: &[&SessionRecord]) -> HashSet<String> {
         .collect()
 }
 
+fn used_foundation_lines(records: &[&SessionRecord], drill_id: &str) -> HashSet<String> {
+    let source = format!("keyloop:foundation:{drill_id}");
+    records
+        .iter()
+        .filter(|record| record.source == source)
+        .flat_map(|record| record.target_text.lines())
+        .map(str::trim)
+        .filter(|line| !line.is_empty())
+        .map(ToOwned::to_owned)
+        .collect()
+}
+
 fn code_specialist_source(config: &CodePracticeConfig, picked_count: usize) -> String {
     let mut parts = Vec::new();
     append_filter_label(&mut parts, "lang", &config.languages);
@@ -338,8 +396,14 @@ mod tests {
     #[test]
     fn content_library_loads_external_json() {
         let library = library::load().expect("content json should load");
-        assert!(library.common_words.len() >= 200);
-        assert!(library.word_chunks.len() >= 50);
+        assert!(library.foundation_drills.len() >= 12);
+        assert!(library.warmup.len() >= 180);
+        assert!(library.common_words.len() >= 400);
+        assert!(library.word_chunks.len() >= 300);
+        assert!(library.programming_words.len() >= 800);
+        assert!(library.symbols.len() >= 200);
+        assert!(library.number_drills.len() >= 80);
+        assert!(library.naming.len() >= 300);
         assert!(library.code_snippets.len() >= 1_000);
 
         let catalog = library::source_catalog().expect("source catalog should load");
@@ -359,6 +423,50 @@ mod tests {
                 && !source.retrieved_at.is_empty()
                 && !source.notes.is_empty()
         }));
+    }
+
+    #[test]
+    fn foundation_drills_are_large_and_unique() {
+        let library = library::load().expect("content json should load");
+        let mut ids = HashSet::new();
+
+        for drill in &library.foundation_drills {
+            assert!(
+                ids.insert(drill.id.as_str()),
+                "duplicate drill id {}",
+                drill.id
+            );
+            assert!(drill.items.len() >= 40, "{} has too few items", drill.id);
+            assert!(!drill.title_zh.trim().is_empty());
+            assert!(!drill.title_en.trim().is_empty());
+            assert!(!drill.hint_zh.trim().is_empty());
+            assert!(!drill.hint_en.trim().is_empty());
+        }
+    }
+
+    #[test]
+    fn foundation_target_avoids_recent_lines() {
+        let first = build_foundation_target(&[], "home-row", 12)
+            .expect("first foundation target should build");
+        let record = SessionRecord {
+            mode: Mode::Chars,
+            source: first.source.clone(),
+            target_text: first.text.clone(),
+            ..SessionRecord::default()
+        };
+        let records = vec![&record];
+
+        let second = build_foundation_target(&records, "home-row", 12)
+            .expect("second foundation target should build");
+
+        let first_lines = first.text.lines().map(str::trim).collect::<HashSet<_>>();
+        assert!(
+            second
+                .text
+                .lines()
+                .map(str::trim)
+                .all(|line| !first_lines.contains(line))
+        );
     }
 
     #[test]

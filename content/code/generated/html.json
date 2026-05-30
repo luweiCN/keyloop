@@ -2,31 +2,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "web-components",
     "level": "block",
     "source": "keyloop:generated:html:001",
     "text": "<form class=\"profile-form\" method=\"post\">\n  <label for=\"profile-name\">Profile name</label>\n  <input id=\"profile-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:002",
     "text": "<section class=\"session-summary\" aria-labelledby=\"session-title\">\n  <h2 id=\"session-title\">Session</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-admin",
     "level": "block",
     "source": "keyloop:generated:html:003",
     "text": "<table class=\"invoice-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"invoice-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:004",
     "text": "<dialog id=\"wallet-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
@@ -34,31 +34,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "design-system",
     "level": "block",
     "source": "keyloop:generated:html:005",
     "text": "<nav class=\"message-tabs\" aria-label=\"Message views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
     "level": "block",
     "source": "keyloop:generated:html:006",
     "text": "<form class=\"project-form\" method=\"post\">\n  <label for=\"project-name\">Project name</label>\n  <input id=\"project-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-components",
     "level": "block",
     "source": "keyloop:generated:html:007",
     "text": "<section class=\"comment-summary\" aria-labelledby=\"comment-title\">\n  <h2 id=\"comment-title\">Comment</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:html:008",
     "text": "<table class=\"notification-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"notification-rows\"></tbody>\n</table>"
@@ -66,31 +66,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:html:009",
     "text": "<dialog id=\"preference-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
     "level": "block",
     "source": "keyloop:generated:html:010",
     "text": "<nav class=\"workspace-tabs\" aria-label=\"Workspace views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:011",
     "text": "<form class=\"deployment-form\" method=\"post\">\n  <label for=\"deployment-name\">Deployment name</label>\n  <input id=\"deployment-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:html:012",
     "text": "<section class=\"subscription-summary\" aria-labelledby=\"subscription-title\">\n  <h2 id=\"subscription-title\">Subscription</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
@@ -98,31 +98,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:html:013",
     "text": "<table class=\"payment-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"payment-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
     "level": "block",
     "source": "keyloop:generated:html:014",
     "text": "<dialog id=\"account-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-forms",
     "level": "block",
     "source": "keyloop:generated:html:015",
     "text": "<nav class=\"draft-tabs\" aria-label=\"Draft views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-table",
     "level": "block",
     "source": "keyloop:generated:html:016",
     "text": "<form class=\"activity-form\" method=\"post\">\n  <label for=\"activity-name\">Activity name</label>\n  <input id=\"activity-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
@@ -130,31 +130,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "web-components",
     "level": "block",
     "source": "keyloop:generated:html:017",
     "text": "<section class=\"report-summary\" aria-labelledby=\"report-title\">\n  <h2 id=\"report-title\">Report</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:018",
     "text": "<table class=\"pipeline-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"pipeline-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-admin",
     "level": "block",
     "source": "keyloop:generated:html:019",
     "text": "<dialog id=\"token-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:020",
     "text": "<nav class=\"permission-tabs\" aria-label=\"Permission views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
@@ -162,31 +162,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "design-system",
     "level": "block",
     "source": "keyloop:generated:html:021",
     "text": "<form class=\"contact-form\" method=\"post\">\n  <label for=\"contact-name\">Contact name</label>\n  <input id=\"contact-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
     "level": "block",
     "source": "keyloop:generated:html:022",
     "text": "<section class=\"order-summary\" aria-labelledby=\"order-title\">\n  <h2 id=\"order-title\">Order</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-components",
     "level": "block",
     "source": "keyloop:generated:html:023",
     "text": "<table class=\"ticket-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"ticket-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:html:024",
     "text": "<dialog id=\"release-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
@@ -194,31 +194,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:html:025",
     "text": "<nav class=\"bundle-tabs\" aria-label=\"Bundle views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
     "level": "block",
     "source": "keyloop:generated:html:026",
     "text": "<form class=\"audit-form\" method=\"post\">\n  <label for=\"audit-name\">Audit name</label>\n  <input id=\"audit-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:027",
     "text": "<section class=\"bookmark-summary\" aria-labelledby=\"bookmark-title\">\n  <h2 id=\"bookmark-title\">Bookmark</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:html:028",
     "text": "<table class=\"campaign-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"campaign-rows\"></tbody>\n</table>"
@@ -226,31 +226,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:html:029",
     "text": "<dialog id=\"channel-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
     "level": "block",
     "source": "keyloop:generated:html:030",
     "text": "<nav class=\"checkout-tabs\" aria-label=\"Checkout views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-forms",
     "level": "block",
     "source": "keyloop:generated:html:031",
     "text": "<form class=\"collection-form\" method=\"post\">\n  <label for=\"collection-name\">Collection name</label>\n  <input id=\"collection-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-table",
     "level": "block",
     "source": "keyloop:generated:html:032",
     "text": "<section class=\"credential-summary\" aria-labelledby=\"credential-title\">\n  <h2 id=\"credential-title\">Credential</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
@@ -258,31 +258,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "web-components",
     "level": "block",
     "source": "keyloop:generated:html:033",
     "text": "<table class=\"dashboard-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"dashboard-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:034",
     "text": "<dialog id=\"dataset-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-admin",
     "level": "block",
     "source": "keyloop:generated:html:035",
     "text": "<nav class=\"device-tabs\" aria-label=\"Device views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:036",
     "text": "<form class=\"document-form\" method=\"post\">\n  <label for=\"document-name\">Document name</label>\n  <input id=\"document-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
@@ -290,31 +290,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "design-system",
     "level": "block",
     "source": "keyloop:generated:html:037",
     "text": "<section class=\"endpoint-summary\" aria-labelledby=\"endpoint-title\">\n  <h2 id=\"endpoint-title\">Endpoint</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
     "level": "block",
     "source": "keyloop:generated:html:038",
     "text": "<table class=\"experiment-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"experiment-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-components",
     "level": "block",
     "source": "keyloop:generated:html:039",
     "text": "<dialog id=\"feature-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:html:040",
     "text": "<nav class=\"feed-tabs\" aria-label=\"Feed views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
@@ -322,31 +322,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:html:041",
     "text": "<form class=\"gateway-form\" method=\"post\">\n  <label for=\"gateway-name\">Gateway name</label>\n  <input id=\"gateway-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
     "level": "block",
     "source": "keyloop:generated:html:042",
     "text": "<section class=\"group-summary\" aria-labelledby=\"group-title\">\n  <h2 id=\"group-title\">Group</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:043",
     "text": "<table class=\"identity-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"identity-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:html:044",
     "text": "<dialog id=\"integration-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
@@ -354,31 +354,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:html:045",
     "text": "<nav class=\"invite-tabs\" aria-label=\"Invite views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
     "level": "block",
     "source": "keyloop:generated:html:046",
     "text": "<form class=\"issue-form\" method=\"post\">\n  <label for=\"issue-name\">Issue name</label>\n  <input id=\"issue-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-forms",
     "level": "block",
     "source": "keyloop:generated:html:047",
     "text": "<section class=\"job-summary\" aria-labelledby=\"job-title\">\n  <h2 id=\"job-title\">Job</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-table",
     "level": "block",
     "source": "keyloop:generated:html:048",
     "text": "<table class=\"layout-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"layout-rows\"></tbody>\n</table>"
@@ -386,31 +386,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "web-components",
     "level": "block",
     "source": "keyloop:generated:html:049",
     "text": "<dialog id=\"ledger-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:050",
     "text": "<nav class=\"member-tabs\" aria-label=\"Member views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-admin",
     "level": "block",
     "source": "keyloop:generated:html:051",
     "text": "<form class=\"metric-form\" method=\"post\">\n  <label for=\"metric-name\">Metric name</label>\n  <input id=\"metric-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:052",
     "text": "<section class=\"module-summary\" aria-labelledby=\"module-title\">\n  <h2 id=\"module-title\">Module</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
@@ -418,31 +418,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "design-system",
     "level": "block",
     "source": "keyloop:generated:html:053",
     "text": "<table class=\"notice-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"notice-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
     "level": "block",
     "source": "keyloop:generated:html:054",
     "text": "<dialog id=\"operator-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-components",
     "level": "block",
     "source": "keyloop:generated:html:055",
     "text": "<nav class=\"organization-tabs\" aria-label=\"Organization views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:html:056",
     "text": "<form class=\"package-form\" method=\"post\">\n  <label for=\"package-name\">Package name</label>\n  <input id=\"package-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
@@ -450,31 +450,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:html:057",
     "text": "<section class=\"policy-summary\" aria-labelledby=\"policy-title\">\n  <h2 id=\"policy-title\">Policy</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
     "level": "block",
     "source": "keyloop:generated:html:058",
     "text": "<table class=\"preset-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"preset-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:059",
     "text": "<dialog id=\"preview-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:html:060",
     "text": "<nav class=\"product-tabs\" aria-label=\"Product views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
@@ -482,31 +482,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:html:061",
     "text": "<form class=\"queue-form\" method=\"post\">\n  <label for=\"queue-name\">Queue name</label>\n  <input id=\"queue-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
     "level": "block",
     "source": "keyloop:generated:html:062",
     "text": "<section class=\"quota-summary\" aria-labelledby=\"quota-title\">\n  <h2 id=\"quota-title\">Quota</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-forms",
     "level": "block",
     "source": "keyloop:generated:html:063",
     "text": "<table class=\"receipt-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"receipt-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-table",
     "level": "block",
     "source": "keyloop:generated:html:064",
     "text": "<dialog id=\"registry-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
@@ -514,31 +514,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "web-components",
     "level": "block",
     "source": "keyloop:generated:html:065",
     "text": "<nav class=\"request-tabs\" aria-label=\"Request views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:066",
     "text": "<form class=\"resource-form\" method=\"post\">\n  <label for=\"resource-name\">Resource name</label>\n  <input id=\"resource-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-admin",
     "level": "block",
     "source": "keyloop:generated:html:067",
     "text": "<section class=\"review-summary\" aria-labelledby=\"review-title\">\n  <h2 id=\"review-title\">Review</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:068",
     "text": "<table class=\"role-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"role-rows\"></tbody>\n</table>"
@@ -546,31 +546,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "design-system",
     "level": "block",
     "source": "keyloop:generated:html:069",
     "text": "<dialog id=\"rule-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
     "level": "block",
     "source": "keyloop:generated:html:070",
     "text": "<nav class=\"schedule-tabs\" aria-label=\"Schedule views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-components",
     "level": "block",
     "source": "keyloop:generated:html:071",
     "text": "<form class=\"schema-form\" method=\"post\">\n  <label for=\"schema-name\">Schema name</label>\n  <input id=\"schema-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:html:072",
     "text": "<section class=\"section-summary\" aria-labelledby=\"section-title\">\n  <h2 id=\"section-title\">Section</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
@@ -578,31 +578,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:html:073",
     "text": "<table class=\"segment-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"segment-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
     "level": "block",
     "source": "keyloop:generated:html:074",
     "text": "<dialog id=\"setting-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:075",
     "text": "<nav class=\"snapshot-tabs\" aria-label=\"Snapshot views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:html:076",
     "text": "<form class=\"space-form\" method=\"post\">\n  <label for=\"space-name\">Space name</label>\n  <input id=\"space-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
@@ -610,31 +610,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:html:077",
     "text": "<section class=\"stream-summary\" aria-labelledby=\"stream-title\">\n  <h2 id=\"stream-title\">Stream</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
     "level": "block",
     "source": "keyloop:generated:html:078",
     "text": "<table class=\"task-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"task-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-forms",
     "level": "block",
     "source": "keyloop:generated:html:079",
     "text": "<dialog id=\"template-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-table",
     "level": "block",
     "source": "keyloop:generated:html:080",
     "text": "<nav class=\"thread-tabs\" aria-label=\"Thread views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
@@ -642,31 +642,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "web-components",
     "level": "block",
     "source": "keyloop:generated:html:081",
     "text": "<form class=\"transaction-form\" method=\"post\">\n  <label for=\"transaction-name\">Transaction name</label>\n  <input id=\"transaction-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:082",
     "text": "<section class=\"trigger-summary\" aria-labelledby=\"trigger-title\">\n  <h2 id=\"trigger-title\">Trigger</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-admin",
     "level": "block",
     "source": "keyloop:generated:html:083",
     "text": "<table class=\"upload-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"upload-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:084",
     "text": "<dialog id=\"user-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
@@ -674,31 +674,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "design-system",
     "level": "block",
     "source": "keyloop:generated:html:085",
     "text": "<nav class=\"variant-tabs\" aria-label=\"Variant views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
     "level": "block",
     "source": "keyloop:generated:html:086",
     "text": "<form class=\"vault-form\" method=\"post\">\n  <label for=\"vault-name\">Vault name</label>\n  <input id=\"vault-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-components",
     "level": "block",
     "source": "keyloop:generated:html:087",
     "text": "<section class=\"version-summary\" aria-labelledby=\"version-title\">\n  <h2 id=\"version-title\">Version</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:html:088",
     "text": "<table class=\"view-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"view-rows\"></tbody>\n</table>"
@@ -706,31 +706,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:html:089",
     "text": "<dialog id=\"webhook-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
     "level": "block",
     "source": "keyloop:generated:html:090",
     "text": "<nav class=\"workflow-tabs\" aria-label=\"Workflow views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:091",
     "text": "<form class=\"zone-form\" method=\"post\">\n  <label for=\"zone-name\">Zone name</label>\n  <input id=\"zone-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:html:092",
     "text": "<section class=\"anchor-summary\" aria-labelledby=\"anchor-title\">\n  <h2 id=\"anchor-title\">Anchor</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
@@ -738,31 +738,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:html:093",
     "text": "<table class=\"batch-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"batch-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
     "level": "block",
     "source": "keyloop:generated:html:094",
     "text": "<dialog id=\"cache-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-forms",
     "level": "block",
     "source": "keyloop:generated:html:095",
     "text": "<nav class=\"cell-tabs\" aria-label=\"Cell views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-table",
     "level": "block",
     "source": "keyloop:generated:html:096",
     "text": "<form class=\"delta-form\" method=\"post\">\n  <label for=\"delta-name\">Delta name</label>\n  <input id=\"delta-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
@@ -770,31 +770,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "web-components",
     "level": "block",
     "source": "keyloop:generated:html:097",
     "text": "<section class=\"entry-summary\" aria-labelledby=\"entry-title\">\n  <h2 id=\"entry-title\">Entry</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:098",
     "text": "<table class=\"field-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"field-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-admin",
     "level": "block",
     "source": "keyloop:generated:html:099",
     "text": "<dialog id=\"filter-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:100",
     "text": "<nav class=\"handle-tabs\" aria-label=\"Handle views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
@@ -802,31 +802,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "design-system",
     "level": "block",
     "source": "keyloop:generated:html:101",
     "text": "<form class=\"index-form\" method=\"post\">\n  <label for=\"index-name\">Index name</label>\n  <input id=\"index-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
     "level": "block",
     "source": "keyloop:generated:html:102",
     "text": "<section class=\"journey-summary\" aria-labelledby=\"journey-title\">\n  <h2 id=\"journey-title\">Journey</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-components",
     "level": "block",
     "source": "keyloop:generated:html:103",
     "text": "<table class=\"kernel-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"kernel-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:html:104",
     "text": "<dialog id=\"layer-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
@@ -834,31 +834,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:html:105",
     "text": "<nav class=\"matrix-tabs\" aria-label=\"Matrix views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
     "level": "block",
     "source": "keyloop:generated:html:106",
     "text": "<form class=\"node-form\" method=\"post\">\n  <label for=\"node-name\">Node name</label>\n  <input id=\"node-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:107",
     "text": "<section class=\"profile-summary\" aria-labelledby=\"profile-title\">\n  <h2 id=\"profile-title\">Profile</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:html:108",
     "text": "<table class=\"session-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"session-rows\"></tbody>\n</table>"
@@ -866,31 +866,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:html:109",
     "text": "<dialog id=\"invoice-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
     "level": "block",
     "source": "keyloop:generated:html:110",
     "text": "<nav class=\"wallet-tabs\" aria-label=\"Wallet views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-forms",
     "level": "block",
     "source": "keyloop:generated:html:111",
     "text": "<form class=\"message-form\" method=\"post\">\n  <label for=\"message-name\">Message name</label>\n  <input id=\"message-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-table",
     "level": "block",
     "source": "keyloop:generated:html:112",
     "text": "<section class=\"project-summary\" aria-labelledby=\"project-title\">\n  <h2 id=\"project-title\">Project</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
@@ -898,31 +898,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "web-components",
     "level": "block",
     "source": "keyloop:generated:html:113",
     "text": "<table class=\"comment-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"comment-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:114",
     "text": "<dialog id=\"notification-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-admin",
     "level": "block",
     "source": "keyloop:generated:html:115",
     "text": "<nav class=\"preference-tabs\" aria-label=\"Preference views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:html:116",
     "text": "<form class=\"workspace-form\" method=\"post\">\n  <label for=\"workspace-name\">Workspace name</label>\n  <input id=\"workspace-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
@@ -930,31 +930,31 @@
   {
     "language": "html",
     "framework": "web",
-    "project": "keyloop-generated",
+    "project": "design-system",
     "level": "block",
     "source": "keyloop:generated:html:117",
     "text": "<section class=\"deployment-summary\" aria-labelledby=\"deployment-title\">\n  <h2 id=\"deployment-title\">Deployment</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
     "level": "block",
     "source": "keyloop:generated:html:118",
     "text": "<table class=\"subscription-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"subscription-rows\"></tbody>\n</table>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "tailwind",
+    "project": "tailwind-components",
     "level": "block",
     "source": "keyloop:generated:html:119",
     "text": "<dialog id=\"payment-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
   },
   {
     "language": "html",
-    "framework": "web",
-    "project": "keyloop-generated",
+    "framework": "antd",
+    "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:html:120",
     "text": "<nav class=\"account-tabs\" aria-label=\"Account views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"

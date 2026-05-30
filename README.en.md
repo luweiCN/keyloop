@@ -99,7 +99,7 @@ Current lesson structure:
 6. Naming: casing and frontend APIs
 7. Code blocks: complete snippets with at least 120 built-in entries per language for TypeScript, JavaScript, Vue, Solidity, Rust, HTML, CSS, Less, and Sass
 
-The menu also includes Code focus mode. It lets you multi-select languages, frameworks, and projects, then continue into another generated code group after each completion.
+The menu also includes Foundation practice and Code focus mode. Foundation practice has row, horizontal, vertical, and finger-movement drills that continue into another group after each completion. Code focus lets you multi-select languages, frameworks, and projects, then continue into another generated code group.
 
 KeyLoop does not expose manual toggles for length, difficulty, casing, numbers, or symbols. Those are handled by content planning and history.
 

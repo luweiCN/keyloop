@@ -4,6 +4,7 @@ use anyhow::{Context, Result};
 #[derive(Debug, Clone)]
 pub struct ContentLibrary {
     pub warmup: Vec<String>,
+    pub foundation_drills: Vec<FoundationDrill>,
     pub word_chunks: Vec<String>,
     pub common_words: Vec<String>,
     pub programming_words: Vec<String>,
@@ -11,6 +12,16 @@ pub struct ContentLibrary {
     pub number_drills: Vec<String>,
     pub naming: Vec<String>,
     pub code_snippets: Vec<BuiltinCodeSnippet>,
+}
+
+#[derive(Debug, Clone, serde::Deserialize)]
+pub struct FoundationDrill {
+    pub id: String,
+    pub title_zh: String,
+    pub title_en: String,
+    pub hint_zh: String,
+    pub hint_en: String,
+    pub items: Vec<String>,
 }
 
 #[derive(Debug, Clone, serde::Deserialize)]
@@ -28,6 +39,10 @@ pub struct SourceCatalogEntry {
 pub fn load() -> Result<ContentLibrary> {
     Ok(ContentLibrary {
         warmup: load_json_list("warmup", include_str!("../../content/warmup.json"))?,
+        foundation_drills: load_json_records(
+            "foundation_drills",
+            include_str!("../../content/foundation_drills.json"),
+        )?,
         word_chunks: load_json_list(
             "word_chunks",
             include_str!("../../content/word_chunks.json"),

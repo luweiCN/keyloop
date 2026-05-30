@@ -207,11 +207,7 @@ pub fn code_practice_options(snippets: &[BuiltinCodeSnippet]) -> Vec<CodePractic
     let mut options = Vec::new();
     options.extend(sorted_options(CodePracticeFacet::Language, languages));
     options.extend(sorted_options(CodePracticeFacet::Framework, frameworks));
-    options.extend(
-        sorted_options(CodePracticeFacet::Project, projects)
-            .into_iter()
-            .take(18),
-    );
+    options.extend(sorted_options(CodePracticeFacet::Project, projects));
     options
 }
 

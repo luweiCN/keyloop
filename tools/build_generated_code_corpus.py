@@ -150,11 +150,44 @@ def camel(*parts: str) -> str:
     return head + "".join(pascal(part) for part in tail)
 
 
+PROJECTS_BY_FRAMEWORK = {
+    "react": ["react-dashboard", "nextjs-app", "tanstack-query", "react-hook-form"],
+    "vue": ["vue-core", "nuxt-app", "pinia-store", "vue-router"],
+    "nestjs": ["nestjs-api", "nestjs-auth", "typeorm-service", "prisma-service"],
+    "vite": ["vite-plugin", "vite-app", "vitest-suite", "rollup-plugin"],
+    "node": ["node-cli", "node-service", "node-worker", "node-scripts"],
+    "web": ["web-components", "design-system", "browser-ui", "frontend-shell"],
+    "tailwind": ["tailwind-admin", "tailwind-components", "tailwind-dashboard", "tailwind-forms"],
+    "bootstrap": ["bootstrap-dashboard", "bootstrap-theme", "bootstrap-forms", "bootstrap-grid"],
+    "antd": ["antd-dashboard", "antd-pro", "antd-forms", "antd-table"],
+    "css-modules": ["css-module-shell", "css-module-card", "css-module-dashboard", "css-module-layout"],
+    "scss": ["scss-design-system", "scss-theme", "scss-components", "scss-layout"],
+    "sass": ["sass-foundation", "sass-toolkit", "sass-components", "sass-theme"],
+    "design-system": ["component-library", "token-pipeline", "storybook-kit", "pattern-library"],
+    "less": ["less-admin", "less-theme", "less-components", "less-layout"],
+    "express": ["express-api", "express-auth", "express-router", "express-worker"],
+    "astro": ["astro-site", "astro-content", "astro-islands", "astro-endpoints"],
+    "evm": ["erc20-vault", "erc721-minter", "staking-pool", "governance-treasury"],
+    "foundry": ["foundry-protocol", "foundry-tests", "forge-scripts", "foundry-invariant"],
+    "hardhat": ["hardhat-contract", "hardhat-tasks", "hardhat-deploy", "hardhat-tests"],
+    "openzeppelin": ["openzeppelin-access", "openzeppelin-token", "openzeppelin-governor", "openzeppelin-upgrade"],
+    "cli": ["rust-cli", "clap-app", "cargo-tool", "terminal-runner"],
+    "server": ["axum-server", "tokio-service", "api-server", "tower-layer"],
+    "terminal": ["ratatui-app", "terminal-ui", "tui-widget", "console-tool"],
+    "tauri": ["tauri-app", "desktop-shell", "tauri-command", "webview-bridge"],
+}
+
+
+def project_for(framework: str, index: int) -> str:
+    projects = PROJECTS_BY_FRAMEWORK.get(framework, [f"{framework}-practice"])
+    return projects[((index - 1) // 4) % len(projects)]
+
+
 def entry(language: str, framework: str, index: int, text: str, level: str = "block") -> dict:
     return {
         "language": language,
         "framework": framework,
-        "project": "keyloop-generated",
+        "project": project_for(framework, index),
         "level": level,
         "source": f"keyloop:generated:{language}:{index:03}",
         "text": text,
@@ -242,10 +275,11 @@ def build_javascript() -> list[dict]:
             )
             level = "function"
         elif variant == 1:
+            map_name = camel("by", noun, "id")
             text = (
-                f"const {camel('by', noun, 'id')} = new Map();\n"
+                f"const {map_name} = new Map();\n"
                 f"for (const item of {collection}) {{\n"
-                "  if (item.enabled) byId.set(item.id, item);\n"
+                f"  if (item.enabled) {map_name}.set(item.id, item);\n"
                 "}"
             )
             level = "block"
@@ -334,9 +368,11 @@ def build_vue() -> list[dict]:
 
 def build_solidity() -> list[dict]:
     snippets: list[dict] = []
+    frameworks = ["evm", "foundry", "hardhat", "openzeppelin"]
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
         label = pascal(noun)
+        framework = frameworks[index % len(frameworks)]
         variant = index % 5
         if variant == 0:
             text = (
@@ -379,7 +415,7 @@ def build_solidity() -> list[dict]:
                 f"mapping(uint256 => bool) private {noun}Claimed;"
             )
             level = "block"
-        snippets.append(entry("solidity", "evm", index + 1, text, level))
+        snippets.append(entry("solidity", framework, index + 1, text, level))
     return snippets
 
 
@@ -439,9 +475,11 @@ def build_rust() -> list[dict]:
 
 def build_html() -> list[dict]:
     snippets: list[dict] = []
+    frameworks = ["web", "bootstrap", "tailwind", "antd"]
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
         title = pascal(noun)
+        framework = frameworks[index % len(frameworks)]
         variant = index % 5
         if variant == 0:
             text = (
@@ -481,15 +519,17 @@ def build_html() -> list[dict]:
                 "  <a href=\"#activity\">Activity</a>\n"
                 "</nav>"
             )
-        snippets.append(entry("html", "web", index + 1, text, "block"))
+        snippets.append(entry("html", framework, index + 1, text, "block"))
     return snippets
 
 
 def build_css() -> list[dict]:
     snippets: list[dict] = []
+    frameworks = ["web", "tailwind", "bootstrap", "antd", "css-modules"]
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
         adjective = ADJECTIVES[index % len(ADJECTIVES)]
+        framework = frameworks[index % len(frameworks)]
         variant = index % 5
         if variant == 0:
             text = (
@@ -528,14 +568,16 @@ def build_css() -> list[dict]:
                 "  padding-block-start: 0.75rem;\n"
                 "}"
             )
-        snippets.append(entry("css", "web", index + 1, text, "block"))
+        snippets.append(entry("css", framework, index + 1, text, "block"))
     return snippets
 
 
 def build_scss() -> list[dict]:
     snippets: list[dict] = []
+    frameworks = ["scss", "sass", "design-system", "bootstrap"]
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
+        framework = frameworks[index % len(frameworks)]
         variant = index % 5
         if variant == 0:
             text = (
@@ -578,14 +620,16 @@ def build_scss() -> list[dict]:
                 "  }\n"
                 "}"
             )
-        snippets.append(entry("scss", "web", index + 1, text, "block"))
+        snippets.append(entry("scss", framework, index + 1, text, "block"))
     return snippets
 
 
 def build_less() -> list[dict]:
     snippets: list[dict] = []
+    frameworks = ["less", "antd", "web"]
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
+        framework = frameworks[index % len(frameworks)]
         variant = index % 5
         if variant == 0:
             text = (
@@ -627,7 +671,7 @@ def build_less() -> list[dict]:
                 "  }\n"
                 "}"
             )
-        snippets.append(entry("less", "web", index + 1, text, "block"))
+        snippets.append(entry("less", framework, index + 1, text, "block"))
     return snippets
 
 
