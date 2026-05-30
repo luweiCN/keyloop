@@ -56,6 +56,8 @@ struct App {
     events: Vec<KeyEventRecord>,
     started_at: Option<DateTime<Utc>>,
     started: Option<Instant>,
+    paused_at: Option<Instant>,
+    paused_total: Duration,
     completed_records: Vec<SessionRecord>,
     completed_lesson_indices: Vec<usize>,
     ignored_non_ascii: u32,
@@ -81,6 +83,8 @@ impl App {
             events: Vec::new(),
             started_at: None,
             started: None,
+            paused_at: None,
+            paused_total: Duration::ZERO,
             completed_records: Vec::new(),
             completed_lesson_indices: Vec::new(),
             ignored_non_ascii: 0,
@@ -129,6 +133,8 @@ impl App {
         self.exit_confirm = false;
         self.started_at = Some(Utc::now());
         self.started = Some(Instant::now());
+        self.paused_at = None;
+        self.paused_total = Duration::ZERO;
         self.phase = Phase::Running;
     }
 
@@ -152,9 +158,8 @@ impl App {
     fn current_record(&self) -> Option<SessionRecord> {
         let target = self.target.clone()?;
         let started_at = self.started_at?;
-        let started = self.started?;
 
-        let duration_ms = elapsed_ms(started);
+        let duration_ms = self.active_elapsed_ms()?;
         let user_input = self.input.iter().collect::<String>();
         Some(metrics::build_session_record(
             target,
@@ -185,6 +190,37 @@ impl App {
         self.quit = true;
     }
 
+    fn pause(&mut self) {
+        if self.paused_at.is_none() {
+            self.paused_at = Some(Instant::now());
+        }
+    }
+
+    fn resume(&mut self) {
+        if let Some(paused_at) = self.paused_at.take() {
+            self.paused_total += paused_at.elapsed();
+        }
+        self.exit_confirm = false;
+    }
+
+    fn is_paused(&self) -> bool {
+        self.paused_at.is_some()
+    }
+
+    fn active_elapsed(&self) -> Option<Duration> {
+        let started = self.started?;
+        let current_pause = self
+            .paused_at
+            .map(|paused_at| paused_at.elapsed())
+            .unwrap_or_default();
+        let paused = self.paused_total.saturating_add(current_pause);
+        Some(started.elapsed().saturating_sub(paused))
+    }
+
+    fn active_elapsed_ms(&self) -> Option<u64> {
+        self.active_elapsed().map(duration_ms)
+    }
+
     fn reset_to_menu(&mut self) {
         self.phase = Phase::Menu;
         self.single_lesson = None;
@@ -195,6 +231,8 @@ impl App {
         self.events.clear();
         self.started_at = None;
         self.started = None;
+        self.paused_at = None;
+        self.paused_total = Duration::ZERO;
         self.ignored_non_ascii = 0;
         self.exit_confirm = false;
     }
@@ -396,13 +434,19 @@ fn handle_summary_key(app: &mut App, code: KeyCode) {
 }
 
 fn handle_running_key(app: &mut App, code: KeyCode, modifiers: KeyModifiers) {
-    let Some(started) = app.started else {
+    if app.started.is_none() {
         return;
-    };
+    }
+
+    let pause_shortcut = is_pause_shortcut(code, modifiers);
 
     if app.exit_confirm {
+        if pause_shortcut {
+            app.resume();
+            return;
+        }
         match code {
-            KeyCode::Enter | KeyCode::Char(' ') | KeyCode::Esc => app.exit_confirm = false,
+            KeyCode::Enter | KeyCode::Char(' ') | KeyCode::Esc => app.resume(),
             KeyCode::Char('s') | KeyCode::Char('S') => app.save_partial_and_quit(),
             KeyCode::Char('m') | KeyCode::Char('M') => app.reset_to_menu(),
             KeyCode::Char('q') | KeyCode::Char('Q') => app.quit = true,
@@ -411,7 +455,26 @@ fn handle_running_key(app: &mut App, code: KeyCode, modifiers: KeyModifiers) {
         return;
     }
 
+    if app.is_paused() {
+        if pause_shortcut {
+            app.resume();
+            return;
+        }
+        match code {
+            KeyCode::Enter | KeyCode::Char(' ') => app.resume(),
+            KeyCode::Esc | KeyCode::Char('q') | KeyCode::Char('Q') => app.exit_confirm = true,
+            _ => {}
+        }
+        return;
+    }
+
+    if pause_shortcut {
+        app.pause();
+        return;
+    }
+
     if code == KeyCode::Esc {
+        app.pause();
         app.exit_confirm = true;
         return;
     }
@@ -421,7 +484,7 @@ fn handle_running_key(app: &mut App, code: KeyCode, modifiers: KeyModifiers) {
             app.input.pop();
             let position = app.input.len();
             app.events.push(KeyEventRecord {
-                at_ms: elapsed_ms(started),
+                at_ms: app.active_elapsed_ms().unwrap_or(0),
                 action: KeyAction::Backspace,
                 position,
                 expected: app.target_chars.get(position).copied(),
@@ -429,8 +492,8 @@ fn handle_running_key(app: &mut App, code: KeyCode, modifiers: KeyModifiers) {
                 correct: false,
             });
         }
-        KeyCode::Enter => push_char('\n', app, started),
-        KeyCode::Tab => push_char('\t', app, started),
+        KeyCode::Enter => push_char('\n', app),
+        KeyCode::Tab => push_char('\t', app),
         KeyCode::Char(ch) => {
             if modifiers.contains(KeyModifiers::CONTROL) || modifiers.contains(KeyModifiers::ALT) {
                 return;
@@ -439,10 +502,15 @@ fn handle_running_key(app: &mut App, code: KeyCode, modifiers: KeyModifiers) {
                 app.ignored_non_ascii += 1;
                 return;
             }
-            push_char(ch, app, started);
+            push_char(ch, app);
         }
         _ => {}
     }
+}
+
+fn is_pause_shortcut(code: KeyCode, modifiers: KeyModifiers) -> bool {
+    matches!(code, KeyCode::Char('p') | KeyCode::Char('P'))
+        && modifiers.contains(KeyModifiers::CONTROL)
 }
 
 fn draw(tui: &mut Tui, app: &App) -> Result<()> {
@@ -840,6 +908,12 @@ fn render_running(frame: &mut Frame, area: Rect, app: &App) {
             centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
             app.language,
         );
+    } else if app.is_paused() {
+        render_pause(
+            frame,
+            centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
+            app.language,
+        );
     } else {
         render_metrics(
             frame,
@@ -847,7 +921,7 @@ fn render_running(frame: &mut Frame, area: Rect, app: &App) {
             &app.target_chars,
             &app.input,
             &app.events,
-            app.started,
+            app.active_elapsed().unwrap_or_default(),
             app.language,
         );
     }
@@ -1084,7 +1158,7 @@ fn render_header(frame: &mut Frame, area: Rect, app: &App, target: Option<&Pract
         Span::raw(format!(
             " {}  ",
             if app.phase == Phase::Running {
-                running_exit_help(app.language, app.exit_confirm)
+                running_help(app.language, app.is_paused(), app.exit_confirm)
             } else {
                 text(app.language, "esc_help")
             }
@@ -1226,10 +1300,9 @@ fn render_metrics(
     target_chars: &[char],
     input: &[char],
     events: &[KeyEventRecord],
-    started: Option<Instant>,
+    elapsed: Duration,
     language: Language,
 ) {
-    let elapsed = started.map(|started| started.elapsed()).unwrap_or_default();
     let metrics = live_metrics(target_chars, input, events, elapsed);
     let metric_line = Line::from(vec![
         Span::styled(
@@ -1269,6 +1342,49 @@ fn render_metrics(
                 .borders(Borders::ALL)
                 .title(text(language, "metrics_title")),
         ),
+        area,
+    );
+}
+
+fn render_pause(frame: &mut Frame, area: Rect, language: Language) {
+    let lines = match language {
+        Language::Zh => vec![
+            Line::from(vec![
+                Span::styled(
+                    "已暂停",
+                    Style::default()
+                        .fg(Color::Yellow)
+                        .add_modifier(Modifier::BOLD),
+                ),
+                Span::raw("  计时已停止，当前输入会保留。"),
+            ]),
+            Line::from("Ctrl+P/Enter/Space 继续 | Esc 退出选项"),
+        ],
+        Language::En => vec![
+            Line::from(vec![
+                Span::styled(
+                    "Paused",
+                    Style::default()
+                        .fg(Color::Yellow)
+                        .add_modifier(Modifier::BOLD),
+                ),
+                Span::raw("  Timer is stopped and current input is kept."),
+            ]),
+            Line::from("Ctrl+P/Enter/Space resume | Esc exit options"),
+        ],
+    };
+
+    frame.render_widget(
+        Paragraph::new(lines)
+            .block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .title(match language {
+                        Language::Zh => "暂停",
+                        Language::En => "Pause",
+                    }),
+            )
+            .wrap(Wrap { trim: false }),
         area,
     );
 }
@@ -1349,16 +1465,18 @@ fn render_progress(
     );
 }
 
-fn running_exit_help(language: Language, exit_confirm: bool) -> &'static str {
-    match (language, exit_confirm) {
-        (Language::Zh, true) => "已暂停，按 Enter/Space/Esc 继续",
-        (Language::En, true) => "paused, Enter/Space/Esc resumes",
-        (Language::Zh, false) => "Esc 暂停并打开退出确认",
-        (Language::En, false) => "Esc pauses and opens exit confirmation",
+fn running_help(language: Language, is_paused: bool, exit_confirm: bool) -> &'static str {
+    match (language, is_paused, exit_confirm) {
+        (Language::Zh, _, true) => "已暂停，按 Enter/Space/Esc 继续",
+        (Language::En, _, true) => "paused, Enter/Space/Esc resumes",
+        (Language::Zh, true, false) => "已暂停，Ctrl+P/Enter/Space 继续",
+        (Language::En, true, false) => "paused, Ctrl+P/Enter/Space resumes",
+        (Language::Zh, false, false) => "Ctrl+P 暂停 | Esc 退出选项",
+        (Language::En, false, false) => "Ctrl+P pause | Esc exit options",
     }
 }
 
-fn push_char(ch: char, app: &mut App, started: Instant) {
+fn push_char(ch: char, app: &mut App) {
     if app.input.len() >= app.target_chars.len() {
         return;
     }
@@ -1368,7 +1486,7 @@ fn push_char(ch: char, app: &mut App, started: Instant) {
     let correct = expected == Some(ch);
     app.input.push(ch);
     app.events.push(KeyEventRecord {
-        at_ms: elapsed_ms(started),
+        at_ms: app.active_elapsed_ms().unwrap_or(0),
         action: KeyAction::Insert,
         position,
         expected,
@@ -1595,8 +1713,8 @@ fn live_metrics(
     }
 }
 
-fn elapsed_ms(started: Instant) -> u64 {
-    started.elapsed().as_millis().min(u128::from(u64::MAX)) as u64
+fn duration_ms(duration: Duration) -> u64 {
+    duration.as_millis().min(u128::from(u64::MAX)) as u64
 }
 
 fn truncate(value: &str, max_chars: usize) -> String {
@@ -1776,9 +1894,45 @@ mod tests {
 
         assert_eq!(app.phase, Phase::Running);
         assert!(app.exit_confirm);
+        assert!(app.is_paused());
         assert_eq!(app.input, vec!['a']);
         assert_eq!(app.events.len(), 1);
         assert!(!app.quit);
+    }
+
+    #[test]
+    fn running_ctrl_p_pauses_and_resumes_without_losing_input() {
+        let mut app = running_app_with_input();
+
+        handle_running_key(&mut app, KeyCode::Char('p'), KeyModifiers::CONTROL);
+
+        assert!(app.is_paused());
+        assert!(!app.exit_confirm);
+        assert_eq!(app.input, vec!['a']);
+
+        handle_running_key(&mut app, KeyCode::Char('b'), KeyModifiers::NONE);
+
+        assert_eq!(app.input, vec!['a']);
+        assert_eq!(app.events.len(), 1);
+
+        handle_running_key(&mut app, KeyCode::Char('p'), KeyModifiers::CONTROL);
+        handle_running_key(&mut app, KeyCode::Char('b'), KeyModifiers::NONE);
+
+        assert!(!app.is_paused());
+        assert_eq!(app.input, vec!['a', 'b']);
+        assert_eq!(app.events.len(), 2);
+    }
+
+    #[test]
+    fn running_plain_p_is_typed_instead_of_pausing() {
+        let mut app = running_app_with_input();
+
+        handle_running_key(&mut app, KeyCode::Char('p'), KeyModifiers::NONE);
+
+        assert!(!app.is_paused());
+        assert_eq!(app.input, vec!['a', 'p']);
+        assert_eq!(app.events.len(), 2);
+        assert_eq!(app.events[1].input, Some('p'));
     }
 
     #[test]
@@ -1786,10 +1940,13 @@ mod tests {
         let mut app = running_app_with_input();
         handle_running_key(&mut app, KeyCode::Esc, KeyModifiers::NONE);
 
+        assert!(app.is_paused());
+
         handle_running_key(&mut app, KeyCode::Esc, KeyModifiers::NONE);
 
         assert_eq!(app.phase, Phase::Running);
         assert!(!app.exit_confirm);
+        assert!(!app.is_paused());
         assert_eq!(app.input, vec!['a']);
         assert!(!app.quit);
     }
@@ -1808,6 +1965,37 @@ mod tests {
         assert_eq!(record.user_input, "a");
         assert_eq!(record.target_len, 3);
         assert_eq!(record.typed_len, 1);
+    }
+
+    #[test]
+    fn active_elapsed_excludes_accumulated_and_current_pause_time() {
+        let mut app = running_app_with_input();
+        app.started = Some(Instant::now() - Duration::from_secs(60));
+        app.paused_total = Duration::from_secs(45);
+        app.paused_at = Some(Instant::now() - Duration::from_secs(10));
+
+        let active = app
+            .active_elapsed()
+            .expect("running app should have elapsed time");
+
+        assert!(active >= Duration::from_secs(5));
+        assert!(active < Duration::from_secs(7));
+    }
+
+    #[test]
+    fn running_event_timestamps_use_active_elapsed() {
+        let mut app = running_app_with_input();
+        app.started = Some(Instant::now() - Duration::from_secs(60));
+        app.paused_total = Duration::from_secs(55);
+
+        handle_running_key(&mut app, KeyCode::Char('b'), KeyModifiers::NONE);
+
+        let event = app
+            .events
+            .last()
+            .expect("typed character should be recorded");
+        assert!(event.at_ms >= 5_000);
+        assert!(event.at_ms < 7_000);
     }
 
     #[test]
