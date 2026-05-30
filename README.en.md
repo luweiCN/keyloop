@@ -42,7 +42,20 @@ Inside the TUI, press `L` on menu/plan/result pages. While typing, press `Ctrl+L
 
 ## Install
 
-Install locally from source:
+Use Homebrew:
+
+```bash
+brew tap luweiCN/keyloop
+brew install keyloop
+```
+
+Or install in one command:
+
+```bash
+brew install luweiCN/keyloop/keyloop
+```
+
+The repositories are still private, so unauthenticated Homebrew environments cannot download the release assets yet. Before a public release, install from source:
 
 ```bash
 cargo install --path .

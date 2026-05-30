@@ -22,29 +22,36 @@ KeyLoop 使用 GitHub PR 工作流：
 
 ### Homebrew Tap
 
-Homebrew 的推荐方式是维护一个单独的 tap 仓库。官方文档要求 GitHub 上的短命令 tap 仓库使用 `homebrew-` 前缀，所以这里使用：
+Homebrew 的推荐方式是维护一个单独的 tap 仓库。`brew tap luweiCN/keyloop` 会按 Homebrew 约定自动映射到 GitHub 仓库 `luweiCN/homebrew-keyloop`，所以这里使用：
 
 ```text
-luweiCN/homebrew-tap
+luweiCN/homebrew-keyloop
 ```
 
-安装命令会是：
+安装命令是：
 
 ```bash
-brew install luweiCN/tap/keyloop
+brew tap luweiCN/keyloop
+brew install keyloop
 ```
 
-release workflow 会尝试更新 `luweiCN/homebrew-tap` 的 `Formula/keyloop.rb`。要让这一步生效，需要在 `luweiCN/keyloop` 仓库里配置 secret：
+也可以用一条命令：
+
+```bash
+brew install luweiCN/keyloop/keyloop
+```
+
+release workflow 会尝试更新 `luweiCN/homebrew-keyloop` 的 `Formula/keyloop.rb`。要让这一步生效，需要在 `luweiCN/keyloop` 仓库里配置 secret：
 
 ```text
 HOMEBREW_TAP_TOKEN
 ```
 
-这个 token 需要能写入 `luweiCN/homebrew-tap`。建议后续换成只允许写 tap 仓库 contents 的 fine-grained token。
+这个 token 需要能写入 `luweiCN/homebrew-keyloop`。建议后续换成只允许写 tap 仓库 contents 的 fine-grained token。
 
 ### 私有仓库注意事项
 
-当前 `luweiCN/keyloop` 是 private 仓库。GitHub Release 资产也是私有的，所以普通 Homebrew 用户无法无认证下载。要让一条命令安装真正可用，需要把 `keyloop` 和 `homebrew-tap` 都改成 public，或者只在配置了 GitHub 认证的个人环境里使用。
+当前 `luweiCN/keyloop` 是 private 仓库。GitHub Release 资产也是私有的，所以普通 Homebrew 用户无法无认证下载。要让一条命令安装真正可用，需要把 `keyloop` 和 `homebrew-keyloop` 都改成 public，或者只在配置了 GitHub 认证的个人环境里使用。
 
 ## English
 
@@ -68,26 +75,33 @@ Releases are version-driven. If a merge to `main` does not change `Cargo.toml` v
 
 ### Homebrew Tap
 
-Homebrew packages are published through a separate tap repository:
+Homebrew packages are published through a separate tap repository. `brew tap luweiCN/keyloop` maps to `luweiCN/homebrew-keyloop` by Homebrew convention, so this project uses:
 
 ```text
-luweiCN/homebrew-tap
+luweiCN/homebrew-keyloop
 ```
 
-Install command:
+Install commands:
 
 ```bash
-brew install luweiCN/tap/keyloop
+brew tap luweiCN/keyloop
+brew install keyloop
 ```
 
-The release workflow updates `Formula/keyloop.rb` in `luweiCN/homebrew-tap`. To enable this, add this secret to `luweiCN/keyloop`:
+Or as a single command:
+
+```bash
+brew install luweiCN/keyloop/keyloop
+```
+
+The release workflow updates `Formula/keyloop.rb` in `luweiCN/homebrew-keyloop`. To enable this, add this secret to `luweiCN/keyloop`:
 
 ```text
 HOMEBREW_TAP_TOKEN
 ```
 
-The token must be able to write to `luweiCN/homebrew-tap`. Prefer a fine-grained token limited to tap repository contents.
+The token must be able to write to `luweiCN/homebrew-keyloop`. Prefer a fine-grained token limited to tap repository contents.
 
 ### Private Repository Caveat
 
-`luweiCN/keyloop` is currently private. Its GitHub Release assets are private too, so unauthenticated Homebrew installs will not work for normal users. For a public one-command Homebrew install, make both `keyloop` and `homebrew-tap` public, or use it only in authenticated personal environments.
+`luweiCN/keyloop` is currently private. Its GitHub Release assets are private too, so unauthenticated Homebrew installs will not work for normal users. For a public one-command Homebrew install, make both `keyloop` and `homebrew-keyloop` public, or use it only in authenticated personal environments.

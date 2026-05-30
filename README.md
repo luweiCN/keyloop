@@ -43,7 +43,20 @@ TUI 里也可以切换语言：菜单、计划和结果页按 `L`；正在跟打
 
 ## 安装
 
-当前是本地 Rust CLI 工具：
+使用 Homebrew：
+
+```bash
+brew tap luweiCN/keyloop
+brew install keyloop
+```
+
+也可以一条命令安装：
+
+```bash
+brew install luweiCN/keyloop/keyloop
+```
+
+当前仓库仍是 private，未配置 GitHub 私有仓库认证的普通 Homebrew 环境无法下载 release 资产。公开发布前，可以从源码安装：
 
 ```bash
 cargo install --path .
