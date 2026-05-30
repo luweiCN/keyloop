@@ -1,0 +1,402 @@
+[
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:001",
+    "text": "<form class=\"profile-form\" method=\"post\">\n  <label for=\"profile-name\">Profile name</label>\n  <input id=\"profile-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:002",
+    "text": "<section class=\"session-summary\" aria-labelledby=\"session-title\">\n  <h2 id=\"session-title\">Session</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:003",
+    "text": "<table class=\"invoice-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"invoice-rows\"></tbody>\n</table>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:004",
+    "text": "<dialog id=\"wallet-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:005",
+    "text": "<nav class=\"message-tabs\" aria-label=\"Message views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:006",
+    "text": "<form class=\"project-form\" method=\"post\">\n  <label for=\"project-name\">Project name</label>\n  <input id=\"project-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:007",
+    "text": "<section class=\"comment-summary\" aria-labelledby=\"comment-title\">\n  <h2 id=\"comment-title\">Comment</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:008",
+    "text": "<table class=\"notification-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"notification-rows\"></tbody>\n</table>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:009",
+    "text": "<dialog id=\"preference-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:010",
+    "text": "<nav class=\"workspace-tabs\" aria-label=\"Workspace views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:011",
+    "text": "<form class=\"deployment-form\" method=\"post\">\n  <label for=\"deployment-name\">Deployment name</label>\n  <input id=\"deployment-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:012",
+    "text": "<section class=\"subscription-summary\" aria-labelledby=\"subscription-title\">\n  <h2 id=\"subscription-title\">Subscription</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:013",
+    "text": "<table class=\"payment-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"payment-rows\"></tbody>\n</table>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:014",
+    "text": "<dialog id=\"account-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:015",
+    "text": "<nav class=\"draft-tabs\" aria-label=\"Draft views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:016",
+    "text": "<form class=\"activity-form\" method=\"post\">\n  <label for=\"activity-name\">Activity name</label>\n  <input id=\"activity-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:017",
+    "text": "<section class=\"report-summary\" aria-labelledby=\"report-title\">\n  <h2 id=\"report-title\">Report</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:018",
+    "text": "<table class=\"pipeline-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"pipeline-rows\"></tbody>\n</table>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:019",
+    "text": "<dialog id=\"token-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:020",
+    "text": "<nav class=\"permission-tabs\" aria-label=\"Permission views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:021",
+    "text": "<form class=\"contact-form\" method=\"post\">\n  <label for=\"contact-name\">Contact name</label>\n  <input id=\"contact-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:022",
+    "text": "<section class=\"order-summary\" aria-labelledby=\"order-title\">\n  <h2 id=\"order-title\">Order</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:023",
+    "text": "<table class=\"ticket-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"ticket-rows\"></tbody>\n</table>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:024",
+    "text": "<dialog id=\"release-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:025",
+    "text": "<nav class=\"bundle-tabs\" aria-label=\"Bundle views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:026",
+    "text": "<form class=\"profile-form\" method=\"post\">\n  <label for=\"profile-name\">Profile name</label>\n  <input id=\"profile-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:027",
+    "text": "<section class=\"session-summary\" aria-labelledby=\"session-title\">\n  <h2 id=\"session-title\">Session</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:028",
+    "text": "<table class=\"invoice-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"invoice-rows\"></tbody>\n</table>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:029",
+    "text": "<dialog id=\"wallet-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:030",
+    "text": "<nav class=\"message-tabs\" aria-label=\"Message views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:031",
+    "text": "<form class=\"project-form\" method=\"post\">\n  <label for=\"project-name\">Project name</label>\n  <input id=\"project-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:032",
+    "text": "<section class=\"comment-summary\" aria-labelledby=\"comment-title\">\n  <h2 id=\"comment-title\">Comment</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:033",
+    "text": "<table class=\"notification-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"notification-rows\"></tbody>\n</table>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:034",
+    "text": "<dialog id=\"preference-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:035",
+    "text": "<nav class=\"workspace-tabs\" aria-label=\"Workspace views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:036",
+    "text": "<form class=\"deployment-form\" method=\"post\">\n  <label for=\"deployment-name\">Deployment name</label>\n  <input id=\"deployment-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:037",
+    "text": "<section class=\"subscription-summary\" aria-labelledby=\"subscription-title\">\n  <h2 id=\"subscription-title\">Subscription</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:038",
+    "text": "<table class=\"payment-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"payment-rows\"></tbody>\n</table>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:039",
+    "text": "<dialog id=\"account-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:040",
+    "text": "<nav class=\"draft-tabs\" aria-label=\"Draft views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:041",
+    "text": "<form class=\"activity-form\" method=\"post\">\n  <label for=\"activity-name\">Activity name</label>\n  <input id=\"activity-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:042",
+    "text": "<section class=\"report-summary\" aria-labelledby=\"report-title\">\n  <h2 id=\"report-title\">Report</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:043",
+    "text": "<table class=\"pipeline-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"pipeline-rows\"></tbody>\n</table>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:044",
+    "text": "<dialog id=\"token-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:045",
+    "text": "<nav class=\"permission-tabs\" aria-label=\"Permission views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:046",
+    "text": "<form class=\"contact-form\" method=\"post\">\n  <label for=\"contact-name\">Contact name</label>\n  <input id=\"contact-name\" name=\"name\" autocomplete=\"off\" />\n  <button type=\"submit\">Save</button>\n</form>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:047",
+    "text": "<section class=\"order-summary\" aria-labelledby=\"order-title\">\n  <h2 id=\"order-title\">Order</h2>\n  <p data-state=\"empty\">No items yet.</p>\n</section>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:048",
+    "text": "<table class=\"ticket-table\">\n  <thead><tr><th>Name</th><th>Status</th></tr></thead>\n  <tbody id=\"ticket-rows\"></tbody>\n</table>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:049",
+    "text": "<dialog id=\"release-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:html:050",
+    "text": "<nav class=\"bundle-tabs\" aria-label=\"Bundle views\">\n  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n  <a href=\"#activity\">Activity</a>\n</nav>"
+  }
+]

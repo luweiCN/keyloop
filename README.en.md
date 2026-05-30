@@ -85,7 +85,7 @@ cargo run -- plan
 
 The default daily target is 20 minutes. You can finish it in one session or in several short sessions. Each completed lesson adds to today's progress.
 
-Built-in content lives in the root `content/` directory instead of large Rust string arrays. See [docs/content/CATALOG.md](docs/content/CATALOG.md).
+Built-in content lives in the root `content/` directory instead of large Rust string arrays. See [docs/content/CATALOG.md](docs/content/CATALOG.md). Code indentation is normalized before practice by removing the shared outer indentation while preserving relative indentation inside functions, HTML/Vue trees, and CSS nesting.
 
 Current lesson structure:
 
@@ -95,7 +95,7 @@ Current lesson structure:
 4. Words: frontend and programmer vocabulary
 5. Focus: numbers and symbols
 6. Naming: casing and frontend APIs
-7. Code blocks: short complete frontend code blocks
+7. Code blocks: complete snippets with at least 50 built-in entries per language for TypeScript, JavaScript, Vue, Solidity, Rust, HTML, CSS, Less, and Sass
 
 KeyLoop does not expose manual toggles for length, difficulty, casing, numbers, symbols, or code snippets. Those are handled by content planning and history.
 

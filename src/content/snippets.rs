@@ -48,7 +48,7 @@ pub struct CodeSnippet {
 impl CodeSnippet {
     pub fn from_builtin(snippet: &BuiltinCodeSnippet) -> Self {
         make_snippet_with_meta(
-            snippet.text.clone(),
+            normalize_snippet_text(&snippet.text),
             snippet.source.clone(),
             snippet.language.clone(),
             snippet.framework.clone(),
@@ -256,6 +256,14 @@ fn capture_block(lines: &[&str], start: usize) -> String {
     }
 
     normalize_indent(&raw_block).join("\n")
+}
+
+fn normalize_snippet_text(text: &str) -> String {
+    let lines = text
+        .lines()
+        .map(|line| line.trim_end().to_string())
+        .collect::<Vec<_>>();
+    normalize_indent(&lines).join("\n")
 }
 
 fn char_count(value: &str, target: char) -> usize {
@@ -495,6 +503,22 @@ mod tests {
                 .iter()
                 .any(|snippet| snippet.text == "if (value) {\n  return value;\n}")
         );
+    }
+
+    #[test]
+    fn normalizes_builtin_common_indent_and_trailing_spaces() {
+        let snippet = BuiltinCodeSnippet {
+            text: "    function value() {  \n      return 1;  \n    }  ".to_string(),
+            source: "keyloop:test".to_string(),
+            language: "javascript".to_string(),
+            framework: "web".to_string(),
+            project: "test".to_string(),
+            level: CodeSnippetLevel::Function,
+        };
+
+        let normalized = CodeSnippet::from_builtin(&snippet);
+
+        assert_eq!(normalized.text, "function value() {\n  return 1;\n}");
     }
 
     #[test]

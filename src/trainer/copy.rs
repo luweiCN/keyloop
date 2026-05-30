@@ -22,7 +22,7 @@ pub(super) fn lesson_title(kind: LessonKind, language: Language) -> &'static str
             LessonKind::Words => "单词：前端高频词",
             LessonKind::Symbols => "专项：数字和符号",
             LessonKind::Naming => "命名：大小写和前端 API",
-            LessonKind::CodeBlock => "代码块：前端短代码",
+            LessonKind::CodeBlock => "代码块：多语言完整片段",
         },
         Language::En => match kind {
             LessonKind::Warmup => "Warmup: base keys",
@@ -31,7 +31,7 @@ pub(super) fn lesson_title(kind: LessonKind, language: Language) -> &'static str
             LessonKind::Words => "Words: frontend vocabulary",
             LessonKind::Symbols => "Drill: numbers and symbols",
             LessonKind::Naming => "Naming: case and frontend APIs",
-            LessonKind::CodeBlock => "Code blocks: short frontend code",
+            LessonKind::CodeBlock => "Code blocks: complete multi-language snippets",
         },
     }
 }

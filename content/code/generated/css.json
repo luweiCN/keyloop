@@ -1,0 +1,402 @@
+[
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:001",
+    "text": ".profile-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));\n  gap: 1rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:002",
+    "text": ".session-button[data-state=\"pending\"] {\n  border-color: var(--accent);\n  background: color-mix(in srgb, var(--accent) 12%, transparent);\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:003",
+    "text": "@media (min-width: 48rem) {\n  .invoice-layout {\n    grid-template-columns: 18rem minmax(0, 1fr);\n  }\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:004",
+    "text": ".wallet-panel:focus-within {\n  outline: 2px solid var(--focus-ring);\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:005",
+    "text": ".message-list > li + li {\n  border-top: 1px solid var(--border-subtle);\n  padding-block-start: 0.75rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:006",
+    "text": ".project-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));\n  gap: 1rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:007",
+    "text": ".comment-button[data-state=\"primary\"] {\n  border-color: var(--accent);\n  background: color-mix(in srgb, var(--accent) 12%, transparent);\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:008",
+    "text": "@media (min-width: 48rem) {\n  .notification-layout {\n    grid-template-columns: 18rem minmax(0, 1fr);\n  }\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:009",
+    "text": ".preference-panel:focus-within {\n  outline: 2px solid var(--focus-ring);\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:010",
+    "text": ".workspace-list > li + li {\n  border-top: 1px solid var(--border-subtle);\n  padding-block-start: 0.75rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:011",
+    "text": ".deployment-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));\n  gap: 1rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:012",
+    "text": ".subscription-button[data-state=\"pending\"] {\n  border-color: var(--accent);\n  background: color-mix(in srgb, var(--accent) 12%, transparent);\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:013",
+    "text": "@media (min-width: 48rem) {\n  .payment-layout {\n    grid-template-columns: 18rem minmax(0, 1fr);\n  }\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:014",
+    "text": ".account-panel:focus-within {\n  outline: 2px solid var(--focus-ring);\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:015",
+    "text": ".draft-list > li + li {\n  border-top: 1px solid var(--border-subtle);\n  padding-block-start: 0.75rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:016",
+    "text": ".activity-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));\n  gap: 1rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:017",
+    "text": ".report-button[data-state=\"primary\"] {\n  border-color: var(--accent);\n  background: color-mix(in srgb, var(--accent) 12%, transparent);\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:018",
+    "text": "@media (min-width: 48rem) {\n  .pipeline-layout {\n    grid-template-columns: 18rem minmax(0, 1fr);\n  }\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:019",
+    "text": ".token-panel:focus-within {\n  outline: 2px solid var(--focus-ring);\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:020",
+    "text": ".permission-list > li + li {\n  border-top: 1px solid var(--border-subtle);\n  padding-block-start: 0.75rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:021",
+    "text": ".contact-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));\n  gap: 1rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:022",
+    "text": ".order-button[data-state=\"pending\"] {\n  border-color: var(--accent);\n  background: color-mix(in srgb, var(--accent) 12%, transparent);\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:023",
+    "text": "@media (min-width: 48rem) {\n  .ticket-layout {\n    grid-template-columns: 18rem minmax(0, 1fr);\n  }\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:024",
+    "text": ".release-panel:focus-within {\n  outline: 2px solid var(--focus-ring);\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:025",
+    "text": ".bundle-list > li + li {\n  border-top: 1px solid var(--border-subtle);\n  padding-block-start: 0.75rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:026",
+    "text": ".profile-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));\n  gap: 1rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:027",
+    "text": ".session-button[data-state=\"primary\"] {\n  border-color: var(--accent);\n  background: color-mix(in srgb, var(--accent) 12%, transparent);\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:028",
+    "text": "@media (min-width: 48rem) {\n  .invoice-layout {\n    grid-template-columns: 18rem minmax(0, 1fr);\n  }\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:029",
+    "text": ".wallet-panel:focus-within {\n  outline: 2px solid var(--focus-ring);\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:030",
+    "text": ".message-list > li + li {\n  border-top: 1px solid var(--border-subtle);\n  padding-block-start: 0.75rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:031",
+    "text": ".project-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));\n  gap: 1rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:032",
+    "text": ".comment-button[data-state=\"pending\"] {\n  border-color: var(--accent);\n  background: color-mix(in srgb, var(--accent) 12%, transparent);\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:033",
+    "text": "@media (min-width: 48rem) {\n  .notification-layout {\n    grid-template-columns: 18rem minmax(0, 1fr);\n  }\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:034",
+    "text": ".preference-panel:focus-within {\n  outline: 2px solid var(--focus-ring);\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:035",
+    "text": ".workspace-list > li + li {\n  border-top: 1px solid var(--border-subtle);\n  padding-block-start: 0.75rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:036",
+    "text": ".deployment-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));\n  gap: 1rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:037",
+    "text": ".subscription-button[data-state=\"primary\"] {\n  border-color: var(--accent);\n  background: color-mix(in srgb, var(--accent) 12%, transparent);\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:038",
+    "text": "@media (min-width: 48rem) {\n  .payment-layout {\n    grid-template-columns: 18rem minmax(0, 1fr);\n  }\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:039",
+    "text": ".account-panel:focus-within {\n  outline: 2px solid var(--focus-ring);\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:040",
+    "text": ".draft-list > li + li {\n  border-top: 1px solid var(--border-subtle);\n  padding-block-start: 0.75rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:041",
+    "text": ".activity-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));\n  gap: 1rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:042",
+    "text": ".report-button[data-state=\"pending\"] {\n  border-color: var(--accent);\n  background: color-mix(in srgb, var(--accent) 12%, transparent);\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:043",
+    "text": "@media (min-width: 48rem) {\n  .pipeline-layout {\n    grid-template-columns: 18rem minmax(0, 1fr);\n  }\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:044",
+    "text": ".token-panel:focus-within {\n  outline: 2px solid var(--focus-ring);\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:045",
+    "text": ".permission-list > li + li {\n  border-top: 1px solid var(--border-subtle);\n  padding-block-start: 0.75rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:046",
+    "text": ".contact-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));\n  gap: 1rem;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:047",
+    "text": ".order-button[data-state=\"primary\"] {\n  border-color: var(--accent);\n  background: color-mix(in srgb, var(--accent) 12%, transparent);\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:048",
+    "text": "@media (min-width: 48rem) {\n  .ticket-layout {\n    grid-template-columns: 18rem minmax(0, 1fr);\n  }\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:049",
+    "text": ".release-panel:focus-within {\n  outline: 2px solid var(--focus-ring);\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:css:050",
+    "text": ".bundle-list > li + li {\n  border-top: 1px solid var(--border-subtle);\n  padding-block-start: 0.75rem;\n}"
+  }
+]

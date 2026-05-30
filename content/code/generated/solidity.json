@@ -1,0 +1,402 @@
+[
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:001",
+    "text": "function setProfile(uint256 value) external onlyOwner {\n  profileValue = value;\n  emit ProfileUpdated(value);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:002",
+    "text": "modifier onlySessionOwner(uint256 id) {\n  require(sessionOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:003",
+    "text": "function claimInvoice(uint256 id) external {\n  require(!invoiceClaimed[id], \"already claimed\");\n  invoiceClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:004",
+    "text": "function _authorizeWallet(address account) internal view {\n  if (!hasRole(WALLET_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:solidity:005",
+    "text": "event MessageConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private messageBalance;\nmapping(uint256 => bool) private messageClaimed;"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:006",
+    "text": "function setProject(uint256 value) external onlyOwner {\n  projectValue = value;\n  emit ProjectUpdated(value);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:007",
+    "text": "modifier onlyCommentOwner(uint256 id) {\n  require(commentOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:008",
+    "text": "function claimNotification(uint256 id) external {\n  require(!notificationClaimed[id], \"already claimed\");\n  notificationClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:009",
+    "text": "function _authorizePreference(address account) internal view {\n  if (!hasRole(PREFERENCE_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:solidity:010",
+    "text": "event WorkspaceConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private workspaceBalance;\nmapping(uint256 => bool) private workspaceClaimed;"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:011",
+    "text": "function setDeployment(uint256 value) external onlyOwner {\n  deploymentValue = value;\n  emit DeploymentUpdated(value);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:012",
+    "text": "modifier onlySubscriptionOwner(uint256 id) {\n  require(subscriptionOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:013",
+    "text": "function claimPayment(uint256 id) external {\n  require(!paymentClaimed[id], \"already claimed\");\n  paymentClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:014",
+    "text": "function _authorizeAccount(address account) internal view {\n  if (!hasRole(ACCOUNT_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:solidity:015",
+    "text": "event DraftConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private draftBalance;\nmapping(uint256 => bool) private draftClaimed;"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:016",
+    "text": "function setActivity(uint256 value) external onlyOwner {\n  activityValue = value;\n  emit ActivityUpdated(value);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:017",
+    "text": "modifier onlyReportOwner(uint256 id) {\n  require(reportOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:018",
+    "text": "function claimPipeline(uint256 id) external {\n  require(!pipelineClaimed[id], \"already claimed\");\n  pipelineClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:019",
+    "text": "function _authorizeToken(address account) internal view {\n  if (!hasRole(TOKEN_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:solidity:020",
+    "text": "event PermissionConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private permissionBalance;\nmapping(uint256 => bool) private permissionClaimed;"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:021",
+    "text": "function setContact(uint256 value) external onlyOwner {\n  contactValue = value;\n  emit ContactUpdated(value);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:022",
+    "text": "modifier onlyOrderOwner(uint256 id) {\n  require(orderOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:023",
+    "text": "function claimTicket(uint256 id) external {\n  require(!ticketClaimed[id], \"already claimed\");\n  ticketClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:024",
+    "text": "function _authorizeRelease(address account) internal view {\n  if (!hasRole(RELEASE_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:solidity:025",
+    "text": "event BundleConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private bundleBalance;\nmapping(uint256 => bool) private bundleClaimed;"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:026",
+    "text": "function setProfile(uint256 value) external onlyOwner {\n  profileValue = value;\n  emit ProfileUpdated(value);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:027",
+    "text": "modifier onlySessionOwner(uint256 id) {\n  require(sessionOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:028",
+    "text": "function claimInvoice(uint256 id) external {\n  require(!invoiceClaimed[id], \"already claimed\");\n  invoiceClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:029",
+    "text": "function _authorizeWallet(address account) internal view {\n  if (!hasRole(WALLET_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:solidity:030",
+    "text": "event MessageConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private messageBalance;\nmapping(uint256 => bool) private messageClaimed;"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:031",
+    "text": "function setProject(uint256 value) external onlyOwner {\n  projectValue = value;\n  emit ProjectUpdated(value);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:032",
+    "text": "modifier onlyCommentOwner(uint256 id) {\n  require(commentOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:033",
+    "text": "function claimNotification(uint256 id) external {\n  require(!notificationClaimed[id], \"already claimed\");\n  notificationClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:034",
+    "text": "function _authorizePreference(address account) internal view {\n  if (!hasRole(PREFERENCE_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:solidity:035",
+    "text": "event WorkspaceConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private workspaceBalance;\nmapping(uint256 => bool) private workspaceClaimed;"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:036",
+    "text": "function setDeployment(uint256 value) external onlyOwner {\n  deploymentValue = value;\n  emit DeploymentUpdated(value);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:037",
+    "text": "modifier onlySubscriptionOwner(uint256 id) {\n  require(subscriptionOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:038",
+    "text": "function claimPayment(uint256 id) external {\n  require(!paymentClaimed[id], \"already claimed\");\n  paymentClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:039",
+    "text": "function _authorizeAccount(address account) internal view {\n  if (!hasRole(ACCOUNT_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:solidity:040",
+    "text": "event DraftConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private draftBalance;\nmapping(uint256 => bool) private draftClaimed;"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:041",
+    "text": "function setActivity(uint256 value) external onlyOwner {\n  activityValue = value;\n  emit ActivityUpdated(value);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:042",
+    "text": "modifier onlyReportOwner(uint256 id) {\n  require(reportOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:043",
+    "text": "function claimPipeline(uint256 id) external {\n  require(!pipelineClaimed[id], \"already claimed\");\n  pipelineClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:044",
+    "text": "function _authorizeToken(address account) internal view {\n  if (!hasRole(TOKEN_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:solidity:045",
+    "text": "event PermissionConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private permissionBalance;\nmapping(uint256 => bool) private permissionClaimed;"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:046",
+    "text": "function setContact(uint256 value) external onlyOwner {\n  contactValue = value;\n  emit ContactUpdated(value);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:047",
+    "text": "modifier onlyOrderOwner(uint256 id) {\n  require(orderOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:048",
+    "text": "function claimTicket(uint256 id) external {\n  require(!ticketClaimed[id], \"already claimed\");\n  ticketClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:solidity:049",
+    "text": "function _authorizeRelease(address account) internal view {\n  if (!hasRole(RELEASE_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:solidity:050",
+    "text": "event BundleConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private bundleBalance;\nmapping(uint256 => bool) private bundleClaimed;"
+  }
+]

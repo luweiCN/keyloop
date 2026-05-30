@@ -1,0 +1,402 @@
+[
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:001",
+    "text": "export async function loadProfile(id: string): Promise<Profile> {\n  const response = await api.get<Profile>(`/profiles/${id}`);\n  return response.data;\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:002",
+    "text": "const visibleSessions = sessions.filter((session) => {\n  return session.enabled && session.status !== \"archived\";\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "nestjs",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:003",
+    "text": "type InvoiceState = {\n  selectedInvoiceId: string | null;\n  isLoading: boolean;\n  error?: string;\n};"
+  },
+  {
+    "language": "typescript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:004",
+    "text": "function groupWalletsByOwner(items: Wallet[]) {\n  return items.reduce<Record<string, Wallet[]>>((groups, item) => {\n    (groups[item.ownerId] ??= []).push(item);\n    return groups;\n  }, {});\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:005",
+    "text": "export const createMessageSchema = z.object({\n  name: z.string().min(1),\n  enabled: z.boolean().default(true),\n  ownerId: z.string().uuid(),\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:006",
+    "text": "export async function loadProject(id: string): Promise<Project> {\n  const response = await api.get<Project>(`/projects/${id}`);\n  return response.data;\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:007",
+    "text": "const visibleComments = comments.filter((comment) => {\n  return comment.enabled && comment.status !== \"archived\";\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "nestjs",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:008",
+    "text": "type NotificationState = {\n  selectedNotificationId: string | null;\n  isLoading: boolean;\n  error?: string;\n};"
+  },
+  {
+    "language": "typescript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:009",
+    "text": "function groupPreferencesByOwner(items: Preference[]) {\n  return items.reduce<Record<string, Preference[]>>((groups, item) => {\n    (groups[item.ownerId] ??= []).push(item);\n    return groups;\n  }, {});\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:010",
+    "text": "export const createWorkspaceSchema = z.object({\n  name: z.string().min(1),\n  enabled: z.boolean().default(true),\n  ownerId: z.string().uuid(),\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:011",
+    "text": "export async function loadDeployment(id: string): Promise<Deployment> {\n  const response = await api.get<Deployment>(`/deployments/${id}`);\n  return response.data;\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:012",
+    "text": "const visibleSubscriptions = subscriptions.filter((subscription) => {\n  return subscription.enabled && subscription.status !== \"archived\";\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "nestjs",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:013",
+    "text": "type PaymentState = {\n  selectedPaymentId: string | null;\n  isLoading: boolean;\n  error?: string;\n};"
+  },
+  {
+    "language": "typescript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:014",
+    "text": "function groupAccountsByOwner(items: Account[]) {\n  return items.reduce<Record<string, Account[]>>((groups, item) => {\n    (groups[item.ownerId] ??= []).push(item);\n    return groups;\n  }, {});\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:015",
+    "text": "export const createDraftSchema = z.object({\n  name: z.string().min(1),\n  enabled: z.boolean().default(true),\n  ownerId: z.string().uuid(),\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:016",
+    "text": "export async function loadActivity(id: string): Promise<Activity> {\n  const response = await api.get<Activity>(`/activitys/${id}`);\n  return response.data;\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:017",
+    "text": "const visibleReports = reports.filter((report) => {\n  return report.enabled && report.status !== \"archived\";\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "nestjs",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:018",
+    "text": "type PipelineState = {\n  selectedPipelineId: string | null;\n  isLoading: boolean;\n  error?: string;\n};"
+  },
+  {
+    "language": "typescript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:019",
+    "text": "function groupTokensByOwner(items: Token[]) {\n  return items.reduce<Record<string, Token[]>>((groups, item) => {\n    (groups[item.ownerId] ??= []).push(item);\n    return groups;\n  }, {});\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:020",
+    "text": "export const createPermissionSchema = z.object({\n  name: z.string().min(1),\n  enabled: z.boolean().default(true),\n  ownerId: z.string().uuid(),\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:021",
+    "text": "export async function loadContact(id: string): Promise<Contact> {\n  const response = await api.get<Contact>(`/contacts/${id}`);\n  return response.data;\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:022",
+    "text": "const visibleOrders = orders.filter((order) => {\n  return order.enabled && order.status !== \"archived\";\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "nestjs",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:023",
+    "text": "type TicketState = {\n  selectedTicketId: string | null;\n  isLoading: boolean;\n  error?: string;\n};"
+  },
+  {
+    "language": "typescript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:024",
+    "text": "function groupReleasesByOwner(items: Release[]) {\n  return items.reduce<Record<string, Release[]>>((groups, item) => {\n    (groups[item.ownerId] ??= []).push(item);\n    return groups;\n  }, {});\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:025",
+    "text": "export const createBundleSchema = z.object({\n  name: z.string().min(1),\n  enabled: z.boolean().default(true),\n  ownerId: z.string().uuid(),\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:026",
+    "text": "export async function loadProfile(id: string): Promise<Profile> {\n  const response = await api.get<Profile>(`/profiles/${id}`);\n  return response.data;\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:027",
+    "text": "const visibleSessions = sessions.filter((session) => {\n  return session.enabled && session.status !== \"archived\";\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "nestjs",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:028",
+    "text": "type InvoiceState = {\n  selectedInvoiceId: string | null;\n  isLoading: boolean;\n  error?: string;\n};"
+  },
+  {
+    "language": "typescript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:029",
+    "text": "function groupWalletsByOwner(items: Wallet[]) {\n  return items.reduce<Record<string, Wallet[]>>((groups, item) => {\n    (groups[item.ownerId] ??= []).push(item);\n    return groups;\n  }, {});\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:030",
+    "text": "export const createMessageSchema = z.object({\n  name: z.string().min(1),\n  enabled: z.boolean().default(true),\n  ownerId: z.string().uuid(),\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:031",
+    "text": "export async function loadProject(id: string): Promise<Project> {\n  const response = await api.get<Project>(`/projects/${id}`);\n  return response.data;\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:032",
+    "text": "const visibleComments = comments.filter((comment) => {\n  return comment.enabled && comment.status !== \"archived\";\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "nestjs",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:033",
+    "text": "type NotificationState = {\n  selectedNotificationId: string | null;\n  isLoading: boolean;\n  error?: string;\n};"
+  },
+  {
+    "language": "typescript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:034",
+    "text": "function groupPreferencesByOwner(items: Preference[]) {\n  return items.reduce<Record<string, Preference[]>>((groups, item) => {\n    (groups[item.ownerId] ??= []).push(item);\n    return groups;\n  }, {});\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:035",
+    "text": "export const createWorkspaceSchema = z.object({\n  name: z.string().min(1),\n  enabled: z.boolean().default(true),\n  ownerId: z.string().uuid(),\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:036",
+    "text": "export async function loadDeployment(id: string): Promise<Deployment> {\n  const response = await api.get<Deployment>(`/deployments/${id}`);\n  return response.data;\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:037",
+    "text": "const visibleSubscriptions = subscriptions.filter((subscription) => {\n  return subscription.enabled && subscription.status !== \"archived\";\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "nestjs",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:038",
+    "text": "type PaymentState = {\n  selectedPaymentId: string | null;\n  isLoading: boolean;\n  error?: string;\n};"
+  },
+  {
+    "language": "typescript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:039",
+    "text": "function groupAccountsByOwner(items: Account[]) {\n  return items.reduce<Record<string, Account[]>>((groups, item) => {\n    (groups[item.ownerId] ??= []).push(item);\n    return groups;\n  }, {});\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:040",
+    "text": "export const createDraftSchema = z.object({\n  name: z.string().min(1),\n  enabled: z.boolean().default(true),\n  ownerId: z.string().uuid(),\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:041",
+    "text": "export async function loadActivity(id: string): Promise<Activity> {\n  const response = await api.get<Activity>(`/activitys/${id}`);\n  return response.data;\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:042",
+    "text": "const visibleReports = reports.filter((report) => {\n  return report.enabled && report.status !== \"archived\";\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "nestjs",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:043",
+    "text": "type PipelineState = {\n  selectedPipelineId: string | null;\n  isLoading: boolean;\n  error?: string;\n};"
+  },
+  {
+    "language": "typescript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:044",
+    "text": "function groupTokensByOwner(items: Token[]) {\n  return items.reduce<Record<string, Token[]>>((groups, item) => {\n    (groups[item.ownerId] ??= []).push(item);\n    return groups;\n  }, {});\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:045",
+    "text": "export const createPermissionSchema = z.object({\n  name: z.string().min(1),\n  enabled: z.boolean().default(true),\n  ownerId: z.string().uuid(),\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:046",
+    "text": "export async function loadContact(id: string): Promise<Contact> {\n  const response = await api.get<Contact>(`/contacts/${id}`);\n  return response.data;\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:047",
+    "text": "const visibleOrders = orders.filter((order) => {\n  return order.enabled && order.status !== \"archived\";\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "nestjs",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:048",
+    "text": "type TicketState = {\n  selectedTicketId: string | null;\n  isLoading: boolean;\n  error?: string;\n};"
+  },
+  {
+    "language": "typescript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:typescript:049",
+    "text": "function groupReleasesByOwner(items: Release[]) {\n  return items.reduce<Record<string, Release[]>>((groups, item) => {\n    (groups[item.ownerId] ??= []).push(item);\n    return groups;\n  }, {});\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:typescript:050",
+    "text": "export const createBundleSchema = z.object({\n  name: z.string().min(1),\n  enabled: z.boolean().default(true),\n  ownerId: z.string().uuid(),\n});"
+  }
+]

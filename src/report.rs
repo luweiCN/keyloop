@@ -324,7 +324,7 @@ pub fn plan_report(plan: &PracticePlan, language: Language) -> String {
             let _ = writeln!(output, "  2. 可以零碎练，每次完成都会累计到今日进度。");
             let _ = writeln!(
                 output,
-                "  3. 短代码块优先使用 TS/JS/Solidity/HTML/CSS/Less/Sass。"
+                "  3. 代码块覆盖 TS/JS/Vue/Solidity/Rust/HTML/CSS/Less/Sass。"
             );
             let _ = writeln!(output, "  4. 一周后根据记录调整课程内容和难度。");
         }
@@ -337,7 +337,7 @@ pub fn plan_report(plan: &PracticePlan, language: Language) -> String {
             );
             let _ = writeln!(
                 output,
-                "  3. Code blocks favor TS/JS/Solidity/HTML/CSS/Less/Sass."
+                "  3. Code blocks cover TS/JS/Vue/Solidity/Rust/HTML/CSS/Less/Sass."
             );
             let _ = writeln!(
                 output,
