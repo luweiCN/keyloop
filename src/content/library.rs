@@ -46,10 +46,7 @@ pub fn load() -> Result<ContentLibrary> {
             include_str!("../../content/number_drills.json"),
         )?,
         naming: load_json_list("naming", include_str!("../../content/naming.json"))?,
-        code_snippets: load_json_records(
-            "code_snippets",
-            include_str!("../../content/code_snippets.json"),
-        )?,
+        code_snippets: load_code_snippets()?,
     })
 }
 
@@ -62,6 +59,28 @@ pub fn source_catalog() -> Result<Vec<SourceCatalogEntry>> {
 
 fn load_json_list(name: &str, data: &str) -> Result<Vec<String>> {
     serde_json::from_str(data).with_context(|| format!("Could not load content/{name}.json"))
+}
+
+fn load_code_snippets() -> Result<Vec<BuiltinCodeSnippet>> {
+    let mut snippets = Vec::new();
+    for (name, data) in [
+        ("code/react", include_str!("../../content/code/react.json")),
+        ("code/vue", include_str!("../../content/code/vue.json")),
+        (
+            "code/nestjs",
+            include_str!("../../content/code/nestjs.json"),
+        ),
+        (
+            "code/solidity",
+            include_str!("../../content/code/solidity.json"),
+        ),
+        ("code/rust", include_str!("../../content/code/rust.json")),
+        ("code/web", include_str!("../../content/code/web.json")),
+        ("code/css", include_str!("../../content/code/css.json")),
+    ] {
+        snippets.extend(load_json_records::<BuiltinCodeSnippet>(name, data)?);
+    }
+    Ok(snippets)
 }
 
 fn load_json_records<T>(name: &str, data: &str) -> Result<Vec<T>>

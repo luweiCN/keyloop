@@ -1,0 +1,66 @@
+[
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "html",
+    "level": "block",
+    "source": "keyloop:html-form",
+    "text": "<form class=\"stack\" method=\"post\">\n  <label for=\"email\">Email</label>\n  <input id=\"email\" name=\"email\" type=\"email\" />\n</form>"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "html",
+    "level": "block",
+    "source": "keyloop:html-dialog",
+    "text": "<dialog id=\"confirm-dialog\">\n  <form method=\"dialog\">\n    <button value=\"cancel\">Cancel</button>\n    <button value=\"confirm\">Confirm</button>\n  </form>\n</dialog>"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "mdn",
+    "level": "function",
+    "source": "github:mdn/dom-examples:web-components",
+    "text": "customElements.define(\"user-card\", class extends HTMLElement {\n  connectedCallback() {\n    this.render();\n  }\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "undici",
+    "level": "function",
+    "source": "github:nodejs/undici:examples",
+    "text": "async function loadProfile(account) {\n  const response = await fetch(`/api/profile?account=${account}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vite",
+    "project": "vite",
+    "level": "function",
+    "source": "github:vitejs/vite:packages/vite/src/node",
+    "text": "export async function loadConfig(root: string) {\n  const file = await findConfigFile(root);\n  if (!file) return null;\n  return await bundleAndLoadConfigFile(file);\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vite",
+    "project": "vite",
+    "level": "block",
+    "source": "github:vitejs/vite:packages/vite/src/node/server",
+    "text": "server.watcher.on(\"change\", async (file) => {\n  const modules = moduleGraph.getModulesByFile(file);\n  await handleHmrUpdate(file, modules);\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "svelte",
+    "project": "sveltekit",
+    "level": "function",
+    "source": "github:sveltejs/kit:packages/kit",
+    "text": "export const load = async ({ fetch }) => {\n  const response = await fetch(\"/api/posts\");\n  return { posts: await response.json() };\n};"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "astro",
+    "level": "block",
+    "source": "keyloop:astro-toggle",
+    "text": "document.querySelectorAll(\"[data-toggle]\").forEach((button) => {\n  button.addEventListener(\"click\", () => button.toggleAttribute(\"aria-expanded\"));\n});"
+  }
+]

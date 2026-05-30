@@ -115,7 +115,7 @@ cargo run -- plan
 - camelCase、PascalCase、DOM/React/API 命名
 - TS / JS / Solidity / HTML / CSS / Less / Sass 代码块
 
-代码块优先使用完整代码块，不再只抽单行碎片。当前会从 `--repo` 指定目录或当前目录提取，也有内置前端代码块兜底。
+代码块优先使用完整代码块，不再只抽单行碎片。默认启动会直接使用内置代码语料池，不扫描当前目录；只有传入 `--repo /path/to/project` 时，才会额外扫描指定仓库并和内置语料混合。
 
 ## 指标
 

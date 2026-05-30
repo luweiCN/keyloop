@@ -49,6 +49,9 @@ keyloop start --code-framework react
 keyloop start --repo /path/to/project --code-language rust
 ```
 
+Plain `keyloop` and `keyloop start` use the built-in code corpus immediately.
+KeyLoop scans a local repository only when `--repo /path/to/project` is provided.
+
 ## Install
 
 Use Homebrew:

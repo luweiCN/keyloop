@@ -11,7 +11,6 @@ use anyhow::Result;
 use clap::Parser;
 use cli::{Cli, Command, ReportScope};
 use model::{CodePracticeConfig, Language, Mode};
-use std::env;
 use std::path::PathBuf;
 
 fn main() -> Result<()> {
@@ -67,10 +66,10 @@ fn start(
     repo: Option<PathBuf>,
     code_config: CodePracticeConfig,
 ) -> Result<()> {
-    let repo = repo.unwrap_or(env::current_dir()?);
     let records = storage::load_sessions()?;
     let plan = plan::build_plan(&records, language);
-    let daily_plan = content::build_daily_practice_plan(&records, &repo, &plan, &code_config)?;
+    let daily_plan =
+        content::build_daily_practice_plan(&records, repo.as_deref(), &plan, &code_config)?;
     let completed = trainer::run(daily_plan, records, language)?;
 
     if completed.is_empty() {

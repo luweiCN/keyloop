@@ -11,17 +11,21 @@ KeyLoop 的练习内容不再写在 Rust 源码的大字符串数组里。内置
 - `symbols.json`：代码符号、括号、箭头、比较符、模板字符串、泛型等。
 - `number_drills.json`：数字行和代码里的数字模式。
 - `naming.json`：camelCase、PascalCase、DOM/React/Vue/Nest/Solidity/Rust 名称。
-- `code_snippets.json`：内置短代码块，带 `language`、`framework`、`project`、`level`。
-- `source_catalog.json`：未来可抽取代码语料的候选开源仓库、license 和用途。
+- `code/*.json`：按方向拆分的内置代码语料，带 `language`、`framework`、`project`、`level`。
+  当前包括 `react`、`vue`、`nestjs`、`solidity`、`rust`、`web`、`css`。
+- `source_catalog.json`：内置代码语料和后续精确抽取使用的开源来源、license 和用途。
 
 代码块当前支持这些过滤参数：
 
 ```bash
 keyloop start --code-language typescript
 keyloop start --code-framework react
-keyloop start --code-project keyloop-builtin
+keyloop start --code-project nextjs
 keyloop start --repo /path/to/project --code-language rust
 ```
+
+普通 `keyloop` 和 `keyloop start` 不会扫描当前目录，避免在大仓库中进入 TUI 前卡住。
+只有显式传入 `--repo /path/to/project` 时，才会扫描指定仓库；`keyloop import /path/to/project` 可用于预览扫描结果。
 
 查看推荐语料来源：
 
@@ -42,7 +46,7 @@ KeyLoop 是 MIT 项目。外部内容进入仓库前必须确认 license：
 
 KeyLoop training content is no longer embedded as large Rust string arrays. Built-in content lives in the root `content/` directory.
 
-Code snippets carry `language`, `framework`, `project`, and `level` metadata, so future plans can choose React/Vue/NestJS/Solidity/Rust or local repository snippets without changing Rust source.
+Built-in code snippets live under `content/code/*.json` and carry `language`, `framework`, `project`, and `level` metadata, so future plans can choose React/Vue/NestJS/Solidity/Rust or local repository snippets without changing Rust source.
 
 Use:
 

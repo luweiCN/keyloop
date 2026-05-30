@@ -1,0 +1,66 @@
+[
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "vue-core",
+    "level": "function",
+    "source": "github:vuejs/core:packages/runtime-core",
+    "text": "export function useCounter(initial = 0) {\n  const count = ref(initial);\n  const inc = () => count.value++;\n  const dec = () => count.value--;\n  return { count, inc, dec };\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "vue-core",
+    "level": "block",
+    "source": "github:vuejs/core:packages/reactivity",
+    "text": "const visibleTodos = computed(() => {\n  return todos.value.filter((todo) => !todo.completed);\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "vue-core",
+    "level": "function",
+    "source": "github:vuejs/core:packages/runtime-core",
+    "text": "function toggleTodo(id: string) {\n  const todo = todos.value.find((item) => item.id === id);\n  if (!todo) return;\n  todo.completed = !todo.completed;\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "pinia",
+    "level": "function",
+    "source": "github:vuejs/pinia:packages/playground",
+    "text": "export const useCartStore = defineStore(\"cart\", () => {\n  const items = ref<CartItem[]>([]);\n  const total = computed(() => items.value.reduce((sum, item) => sum + item.price, 0));\n  return { items, total };\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "vue-router",
+    "level": "block",
+    "source": "github:vuejs/router:packages/router",
+    "text": "router.beforeEach((to) => {\n  if (to.meta.requiresAuth && !auth.isLoggedIn) {\n    return { name: \"login\", query: { redirect: to.fullPath } };\n  }\n});"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "nuxt",
+    "level": "block",
+    "source": "github:nuxt/nuxt:examples",
+    "text": "<script setup lang=\"ts\">\nconst route = useRoute();\nconst { data: post } = await useFetch(`/api/posts/${route.params.slug}`);\n</script>"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "nuxt",
+    "level": "function",
+    "source": "github:nuxt/nuxt:examples",
+    "text": "export default defineNuxtRouteMiddleware((to) => {\n  const user = useUser();\n  if (!user.value && to.path !== \"/login\") {\n    return navigateTo(\"/login\");\n  }\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "vueuse",
+    "level": "block",
+    "source": "github:vueuse/vueuse:packages",
+    "text": "const { x, y } = useMouse();\nwatchEffect(() => {\n  position.value = `${x.value},${y.value}`;\n});"
+  }
+]
