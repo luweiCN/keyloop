@@ -2,10 +2,11 @@ mod copy;
 mod stats;
 mod terminal;
 
+use crate::content;
 use crate::metrics;
 use crate::model::{
-    DailyPracticePlan, KeyAction, KeyEventRecord, Language, PracticeLesson, PracticeTarget,
-    SessionRecord,
+    CodePracticeConfig, CodePracticeFacet, CodePracticeOption, DailyPracticePlan, KeyAction,
+    KeyEventRecord, Language, LessonKind, Mode, PracticeLesson, PracticeTarget, SessionRecord,
 };
 use anyhow::Result;
 use chrono::{DateTime, NaiveDate, Utc};
@@ -28,6 +29,7 @@ const MIN_TERMINAL_HEIGHT: u16 = 25;
 enum Phase {
     Menu,
     Plan,
+    CodeSetup,
     Stats,
     Running,
     Complete,
@@ -48,6 +50,11 @@ struct App {
     menu_index: usize,
     stats_view: StatsView,
     stats_day_index: usize,
+    code_options: Vec<CodePracticeOption>,
+    code_filter_index: usize,
+    code_selected: Vec<bool>,
+    code_specialist_active: bool,
+    code_group_count: usize,
     single_lesson: Option<usize>,
     lesson_index: usize,
     target: Option<PracticeTarget>,
@@ -66,7 +73,13 @@ struct App {
 }
 
 impl App {
-    fn new(plan: DailyPracticePlan, records: Vec<SessionRecord>, language: Language) -> Self {
+    fn new(
+        plan: DailyPracticePlan,
+        records: Vec<SessionRecord>,
+        language: Language,
+        code_options: Vec<CodePracticeOption>,
+    ) -> Self {
+        let code_selected = vec![false; code_options.len()];
         Self {
             phase: Phase::Menu,
             language,
@@ -75,6 +88,11 @@ impl App {
             menu_index: 0,
             stats_view: StatsView::Overview,
             stats_day_index: 0,
+            code_options,
+            code_filter_index: 0,
+            code_selected,
+            code_specialist_active: false,
+            code_group_count: 0,
             single_lesson: None,
             lesson_index: 0,
             target: None,
@@ -98,11 +116,15 @@ impl App {
     }
 
     fn menu_len(&self) -> usize {
-        self.plan.lessons.len() + 2
+        self.plan.lessons.len() + 3
+    }
+
+    fn code_specialist_menu_index(&self) -> usize {
+        self.plan.lessons.len() + 1
     }
 
     fn stats_menu_index(&self) -> usize {
-        self.plan.lessons.len() + 1
+        self.plan.lessons.len() + 2
     }
 
     fn completed_today_ms(&self) -> u64 {
@@ -125,6 +147,10 @@ impl App {
         };
 
         let target = lesson.target.clone();
+        self.begin_target(target);
+    }
+
+    fn begin_target(&mut self, target: PracticeTarget) {
         self.target_chars = target.text.chars().collect();
         self.target = Some(target);
         self.input.clear();
@@ -143,6 +169,10 @@ impl App {
     }
 
     fn begin_next(&mut self) {
+        if self.code_specialist_active {
+            self.begin_next_code_group();
+            return;
+        }
         if self.single_lesson.is_some() {
             self.phase = Phase::Summary;
             return;
@@ -153,6 +183,64 @@ impl App {
         }
         self.lesson_index += 1;
         self.begin_current();
+    }
+
+    fn begin_code_specialist(&mut self) {
+        self.code_specialist_active = true;
+        self.code_group_count = 0;
+        self.single_lesson = Some(self.code_lesson_index());
+        self.lesson_index = self.code_lesson_index();
+        self.begin_next_code_group();
+    }
+
+    fn begin_next_code_group(&mut self) {
+        let config = self.selected_code_config();
+        let records = self.all_records();
+        let target =
+            content::build_code_specialist_target(&records, &config, 4).unwrap_or_else(|error| {
+                PracticeTarget {
+                    mode: Mode::Code,
+                    text: "function retryLater() {\n  return true;\n}".to_string(),
+                    source: format!("keyloop:code-specialist-error:{error}"),
+                }
+            });
+        self.code_group_count += 1;
+        self.begin_target(target);
+    }
+
+    fn code_lesson_index(&self) -> usize {
+        self.plan
+            .lessons
+            .iter()
+            .position(|lesson| lesson.kind == LessonKind::CodeBlock)
+            .unwrap_or_else(|| self.plan.lessons.len().saturating_sub(1))
+    }
+
+    fn selected_code_config(&self) -> CodePracticeConfig {
+        let mut config = CodePracticeConfig {
+            match_any: true,
+            ..CodePracticeConfig::default()
+        };
+        for (option, selected) in self.code_options.iter().zip(self.code_selected.iter()) {
+            if !selected {
+                continue;
+            }
+            match option.facet {
+                CodePracticeFacet::Language => config.languages.push(option.value.clone()),
+                CodePracticeFacet::Framework => config.frameworks.push(option.value.clone()),
+                CodePracticeFacet::Project => config.projects.push(option.value.clone()),
+            }
+        }
+        config
+    }
+
+    fn selected_code_labels(&self) -> Vec<String> {
+        self.code_options
+            .iter()
+            .zip(self.code_selected.iter())
+            .filter(|(_, selected)| **selected)
+            .map(|(option, _)| option.value.clone())
+            .collect()
     }
 
     fn current_record(&self) -> Option<SessionRecord> {
@@ -224,6 +312,8 @@ impl App {
     fn reset_to_menu(&mut self) {
         self.phase = Phase::Menu;
         self.single_lesson = None;
+        self.code_specialist_active = false;
+        self.code_group_count = 0;
         self.lesson_index = 0;
         self.target = None;
         self.target_chars.clear();
@@ -242,6 +332,10 @@ impl App {
             self.single_lesson = None;
             self.lesson_index = 0;
             self.phase = Phase::Plan;
+            return;
+        }
+        if self.menu_index == self.code_specialist_menu_index() {
+            self.phase = Phase::CodeSetup;
             return;
         }
         if self.menu_index == self.stats_menu_index() {
@@ -287,7 +381,8 @@ pub fn run(
     language: Language,
 ) -> Result<Vec<SessionRecord>> {
     let mut tui = Tui::enter()?;
-    let mut app = App::new(plan, records, language);
+    let code_options = content::code_practice_options()?;
+    let mut app = App::new(plan, records, language, code_options);
 
     draw(&mut tui, &app)?;
 
@@ -320,6 +415,7 @@ pub fn run(
                 match app.phase {
                     Phase::Menu => handle_menu_key(&mut app, key.code),
                     Phase::Plan => handle_plan_key(&mut app, key.code),
+                    Phase::CodeSetup => handle_code_setup_key(&mut app, key.code),
                     Phase::Stats => handle_stats_key(&mut app, key.code),
                     Phase::Running => handle_running_key(&mut app, key.code, key.modifiers),
                     Phase::Complete => handle_complete_key(&mut app, key.code),
@@ -355,6 +451,9 @@ fn handle_menu_key(app: &mut App, code: KeyCode) {
             app.menu_index = (app.menu_index + 1).min(app.menu_len().saturating_sub(1));
         }
         KeyCode::Char('l') | KeyCode::Char('L') => app.language = app.language.toggle(),
+        KeyCode::Char('0') if app.menu_len() >= 10 => {
+            app.menu_index = 9.min(app.menu_len().saturating_sub(1));
+        }
         KeyCode::Char(ch) if ('1'..='9').contains(&ch) => {
             if let Some(value) = ch.to_digit(10) {
                 let index = (value - 1) as usize;
@@ -373,6 +472,38 @@ fn handle_plan_key(app: &mut App, code: KeyCode) {
         KeyCode::Char('q') => app.quit = true,
         KeyCode::Enter => app.begin_current(),
         KeyCode::Char('l') | KeyCode::Char('L') => app.language = app.language.toggle(),
+        _ => {}
+    }
+}
+
+fn handle_code_setup_key(app: &mut App, code: KeyCode) {
+    match code {
+        KeyCode::Esc => app.reset_to_menu(),
+        KeyCode::Char('q') | KeyCode::Char('Q') => app.quit = true,
+        KeyCode::Enter => app.begin_code_specialist(),
+        KeyCode::Char('l') | KeyCode::Char('L') => app.language = app.language.toggle(),
+        KeyCode::Up | KeyCode::Char('k') | KeyCode::Char('K') => {
+            app.code_filter_index = app.code_filter_index.saturating_sub(1);
+        }
+        KeyCode::Down | KeyCode::Char('j') | KeyCode::Char('J') => {
+            app.code_filter_index =
+                (app.code_filter_index + 1).min(app.code_options.len().saturating_sub(1));
+        }
+        KeyCode::Char(' ') => {
+            if let Some(selected) = app.code_selected.get_mut(app.code_filter_index) {
+                *selected = !*selected;
+            }
+        }
+        KeyCode::Char('a') | KeyCode::Char('A') => {
+            for selected in &mut app.code_selected {
+                *selected = true;
+            }
+        }
+        KeyCode::Char('c') | KeyCode::Char('C') => {
+            for selected in &mut app.code_selected {
+                *selected = false;
+            }
+        }
         _ => {}
     }
 }
@@ -531,6 +662,7 @@ fn render(frame: &mut Frame, app: &App) {
     match app.phase {
         Phase::Menu => render_menu(frame, area, app),
         Phase::Plan => render_plan(frame, area, app),
+        Phase::CodeSetup => render_code_setup(frame, area, app),
         Phase::Stats => render_stats(frame, area, app),
         Phase::Running => render_running(frame, area, app),
         Phase::Complete => render_complete(frame, area, app),
@@ -583,6 +715,13 @@ fn render_menu(frame: &mut Frame, area: Rect, app: &App) {
             lesson_color(lesson.kind),
         ));
     }
+    lines.push(menu_line(
+        app.menu_index == app.code_specialist_menu_index(),
+        app.code_specialist_menu_index() + 1,
+        text(app.language, "menu_code_specialist"),
+        text(app.language, "menu_code_specialist_hint"),
+        Color::LightMagenta,
+    ));
     lines.push(menu_line(
         app.menu_index == app.stats_menu_index(),
         app.stats_menu_index() + 1,
@@ -736,6 +875,147 @@ fn render_plan(frame: &mut Frame, area: Rect, app: &App) {
             .wrap(Wrap { trim: false }),
         centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
     );
+}
+
+fn render_code_setup(frame: &mut Frame, area: Rect, app: &App) {
+    let chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .margin(1)
+        .constraints([
+            Constraint::Length(4),
+            Constraint::Length(4),
+            Constraint::Min(10),
+            Constraint::Length(4),
+        ])
+        .split(area);
+
+    render_header(
+        frame,
+        centered_width(chunks[0], PRACTICE_PANEL_MAX_WIDTH),
+        app,
+        None,
+    );
+    render_daily_progress(
+        frame,
+        centered_width(chunks[1], PRACTICE_PANEL_MAX_WIDTH),
+        app,
+    );
+
+    let options_area = centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH);
+    let visible_rows = options_area.height.saturating_sub(2).max(1) as usize;
+    let (start, end) = visible_window(app.code_filter_index, app.code_options.len(), visible_rows);
+    let mut lines = Vec::new();
+    if app.code_options.is_empty() {
+        lines.push(Line::from(text(app.language, "code_setup_empty")));
+    } else {
+        for index in start..end {
+            let option = &app.code_options[index];
+            let selected = app.code_selected.get(index).copied().unwrap_or(false);
+            lines.push(code_option_line(
+                index == app.code_filter_index,
+                selected,
+                option,
+                app.language,
+            ));
+        }
+    }
+
+    frame.render_widget(
+        Paragraph::new(lines)
+            .block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .title(text(app.language, "code_setup_title")),
+            )
+            .wrap(Wrap { trim: false }),
+        options_area,
+    );
+
+    let selected = app.selected_code_labels();
+    let summary = if selected.is_empty() {
+        text(app.language, "code_setup_all").to_string()
+    } else {
+        selected.into_iter().take(8).collect::<Vec<_>>().join(", ")
+    };
+    let help = vec![
+        Line::from(vec![
+            Span::styled(
+                text(app.language, "code_setup_selected"),
+                Style::default()
+                    .fg(Color::LightMagenta)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::raw(format!("  {summary}")),
+        ]),
+        Line::from(text(app.language, "code_setup_help")),
+    ];
+    frame.render_widget(
+        Paragraph::new(help)
+            .block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .title(text(app.language, "controls")),
+            )
+            .wrap(Wrap { trim: false }),
+        centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
+    );
+}
+
+fn code_option_line(
+    active: bool,
+    selected: bool,
+    option: &CodePracticeOption,
+    language: Language,
+) -> Line<'static> {
+    let marker = if active { ">" } else { " " };
+    let checkbox = if selected { "[x]" } else { "[ ]" };
+    let color = match option.facet {
+        CodePracticeFacet::Language => Color::Cyan,
+        CodePracticeFacet::Framework => Color::LightGreen,
+        CodePracticeFacet::Project => Color::Yellow,
+    };
+    let base_style = if active {
+        Style::default()
+            .fg(Color::Black)
+            .bg(color)
+            .add_modifier(Modifier::BOLD)
+    } else {
+        Style::default().fg(color)
+    };
+    let subtle_style = if active {
+        Style::default().fg(Color::Black).bg(color)
+    } else {
+        Style::default().fg(Color::Gray)
+    };
+
+    Line::from(vec![
+        Span::styled(format!("{marker} {checkbox} "), base_style),
+        Span::styled(code_facet_label(option.facet, language), base_style),
+        Span::styled("  ".to_string(), subtle_style),
+        Span::styled(option.value.clone(), base_style),
+        Span::styled(
+            match language {
+                Language::Zh => format!("  {} 组", option.count),
+                Language::En => format!("  {} snippets", option.count),
+            },
+            subtle_style,
+        ),
+    ])
+}
+
+fn code_facet_label(facet: CodePracticeFacet, language: Language) -> &'static str {
+    match language {
+        Language::Zh => match facet {
+            CodePracticeFacet::Language => "语言",
+            CodePracticeFacet::Framework => "框架",
+            CodePracticeFacet::Project => "项目",
+        },
+        Language::En => match facet {
+            CodePracticeFacet::Language => "language",
+            CodePracticeFacet::Framework => "framework",
+            CodePracticeFacet::Project => "project",
+        },
+    }
 }
 
 fn render_stats(frame: &mut Frame, area: Rect, app: &App) {
@@ -973,8 +1253,9 @@ fn render_complete(frame: &mut Frame, area: Rect, app: &App) {
         .map(|stat| stat.token.as_str())
         .collect::<Vec<_>>()
         .join(", ");
-    let next_text = if app.single_lesson.is_some() || app.lesson_index + 1 >= app.plan.lessons.len()
-    {
+    let next_text = if app.code_specialist_active {
+        text(app.language, "next_code_group")
+    } else if app.single_lesson.is_some() || app.lesson_index + 1 >= app.plan.lessons.len() {
         text(app.language, "finish_today")
     } else {
         text(app.language, "next_lesson")
@@ -1113,6 +1394,10 @@ fn render_header(frame: &mut Frame, area: Rect, app: &App, target: Option<&Pract
             ),
         },
         Phase::Stats => text(app.language, "stats_title").to_string(),
+        Phase::CodeSetup => text(app.language, "menu_code_specialist").to_string(),
+        Phase::Menu if app.menu_index == app.code_specialist_menu_index() => {
+            text(app.language, "menu_code_specialist").to_string()
+        }
         Phase::Menu if app.menu_index == app.stats_menu_index() => {
             text(app.language, "stats_title").to_string()
         }
@@ -1493,6 +1778,32 @@ fn push_char(ch: char, app: &mut App) {
         input: Some(ch),
         correct,
     });
+    if correct
+        && ch == '\n'
+        && matches!(
+            app.target.as_ref().map(|target| target.mode),
+            Some(Mode::Code)
+        )
+    {
+        auto_insert_code_indent(app);
+    }
+}
+
+fn auto_insert_code_indent(app: &mut App) {
+    while app.input.len() < app.target_chars.len()
+        && app.target_chars.get(app.input.len()) == Some(&' ')
+    {
+        let position = app.input.len();
+        app.input.push(' ');
+        app.events.push(KeyEventRecord {
+            at_ms: app.active_elapsed_ms().unwrap_or(0),
+            action: KeyAction::AutoIndent,
+            position,
+            expected: Some(' '),
+            input: Some(' '),
+            correct: true,
+        });
+    }
 }
 
 struct WrappedLines {
@@ -1529,7 +1840,7 @@ fn target_lines(target_chars: &[char], input: &[char], width: usize) -> WrappedL
                     .bg(Color::Yellow)
                     .add_modifier(Modifier::BOLD);
             }
-            spans.push(Span::styled("↵", style));
+            spans.push(Span::styled("⏎", style));
             push_line(&mut lines, &mut spans);
             col = 0;
             continue;
@@ -1587,6 +1898,17 @@ fn scroll_offset(current_line: usize, total_lines: usize, view_height: u16) -> u
     let half = view_height / 2;
     let max_scroll = total_lines.saturating_sub(view_height);
     current_line.saturating_sub(half).min(max_scroll) as u16
+}
+
+fn visible_window(active: usize, total: usize, height: usize) -> (usize, usize) {
+    if total == 0 || height == 0 {
+        return (0, 0);
+    }
+    let start = active
+        .saturating_sub(height / 2)
+        .min(total.saturating_sub(height));
+    let end = (start + height).min(total);
+    (start, end)
 }
 
 fn display_char(ch: char) -> String {
@@ -1674,7 +1996,7 @@ fn live_metrics(
     events: &[KeyEventRecord],
     elapsed: Duration,
 ) -> LiveMetrics {
-    let correct = target_chars
+    let final_correct = target_chars
         .iter()
         .zip(input.iter())
         .filter(|(expected, actual)| expected == actual)
@@ -1687,6 +2009,14 @@ fn live_metrics(
         .iter()
         .filter(|event| matches!(event.action, KeyAction::Insert) && event.correct)
         .count();
+    let has_auto_indent = events
+        .iter()
+        .any(|event| matches!(event.action, KeyAction::AutoIndent));
+    let correct = if has_auto_indent {
+        correct_insert_count
+    } else {
+        final_correct
+    };
     let accuracy = if insert_count == 0 {
         100.0
     } else {
@@ -1875,7 +2205,7 @@ mod tests {
             completed_ms: 0,
             lessons: Vec::new(),
         };
-        let mut app = App::new(plan, Vec::new(), Language::Zh);
+        let mut app = App::new(plan, Vec::new(), Language::Zh, Vec::new());
         app.started = Some(Instant::now());
         app.target_chars = vec!['a'];
 
@@ -1933,6 +2263,65 @@ mod tests {
         assert_eq!(app.input, vec!['a', 'p']);
         assert_eq!(app.events.len(), 2);
         assert_eq!(app.events[1].input, Some('p'));
+    }
+
+    #[test]
+    fn code_setup_toggles_multiple_filter_facets() {
+        let mut app = empty_app_with_code_options(vec![
+            code_option(CodePracticeFacet::Language, "typescript", 120),
+            code_option(CodePracticeFacet::Framework, "nestjs", 30),
+            code_option(CodePracticeFacet::Language, "solidity", 120),
+        ]);
+        app.phase = Phase::CodeSetup;
+
+        handle_code_setup_key(&mut app, KeyCode::Char(' '));
+        handle_code_setup_key(&mut app, KeyCode::Down);
+        handle_code_setup_key(&mut app, KeyCode::Char(' '));
+
+        let config = app.selected_code_config();
+        assert!(config.match_any);
+        assert_eq!(config.languages, vec!["typescript"]);
+        assert_eq!(config.frameworks, vec!["nestjs"]);
+    }
+
+    #[test]
+    fn menu_code_specialist_opens_setup_before_stats() {
+        let mut app = empty_app_with_code_options(vec![code_option(
+            CodePracticeFacet::Language,
+            "typescript",
+            120,
+        )]);
+        app.menu_index = app.code_specialist_menu_index();
+
+        handle_menu_key(&mut app, KeyCode::Enter);
+
+        assert_eq!(app.phase, Phase::CodeSetup);
+    }
+
+    #[test]
+    fn code_enter_auto_inserts_expected_indentation() {
+        let mut app = empty_app_with_code_options(Vec::new());
+        app.phase = Phase::Running;
+        app.target = Some(PracticeTarget {
+            mode: Mode::Code,
+            text: "\n  x".to_string(),
+            source: "test".to_string(),
+        });
+        app.target_chars = vec!['\n', ' ', ' ', 'x'];
+        app.started_at = Some(Utc::now());
+        app.started = Some(Instant::now());
+
+        handle_running_key(&mut app, KeyCode::Enter, KeyModifiers::NONE);
+
+        assert_eq!(app.input, vec!['\n', ' ', ' ']);
+        assert!(matches!(app.events[0].action, KeyAction::Insert));
+        assert!(matches!(app.events[1].action, KeyAction::AutoIndent));
+        assert!(matches!(app.events[2].action, KeyAction::AutoIndent));
+        let record = app
+            .current_record()
+            .expect("partial code record should build");
+        assert_eq!(record.typed_len, 1);
+        assert_eq!(record.correct_chars, 1);
     }
 
     #[test]
@@ -2018,7 +2407,7 @@ mod tests {
             completed_ms: 0,
             lessons: Vec::new(),
         };
-        let mut app = App::new(plan, Vec::new(), Language::Zh);
+        let mut app = App::new(plan, Vec::new(), Language::Zh, Vec::new());
         app.menu_index = app.stats_menu_index();
 
         handle_menu_key(&mut app, KeyCode::Char('0'));
@@ -2032,7 +2421,7 @@ mod tests {
 
         assert_eq!(wrapped.lines.len(), 2);
         assert_eq!(wrapped.lines[0].spans.len(), 2);
-        assert_eq!(wrapped.lines[0].spans[1].content.as_ref(), "↵");
+        assert_eq!(wrapped.lines[0].spans[1].content.as_ref(), "⏎");
         assert_eq!(wrapped.lines[0].spans[1].style, wrong_text_style());
     }
 
@@ -2041,7 +2430,7 @@ mod tests {
         let wrapped = target_lines(&['a', '\n', 'b'], &[], 1);
 
         assert_eq!(wrapped.lines[0].spans[0].content.as_ref(), "a");
-        assert_eq!(wrapped.lines[1].spans[0].content.as_ref(), "↵");
+        assert_eq!(wrapped.lines[1].spans[0].content.as_ref(), "⏎");
         assert_eq!(wrapped.lines[2].spans[0].content.as_ref(), "b");
     }
 
@@ -2121,15 +2510,10 @@ mod tests {
     }
 
     fn running_app_with_input() -> App {
-        let plan = DailyPracticePlan {
-            target_minutes: 20,
-            completed_ms: 0,
-            lessons: Vec::new(),
-        };
-        let mut app = App::new(plan, Vec::new(), Language::Zh);
+        let mut app = empty_app_with_code_options(Vec::new());
         app.phase = Phase::Running;
         app.target = Some(PracticeTarget {
-            mode: crate::model::Mode::Words,
+            mode: Mode::Words,
             text: "abc".to_string(),
             source: "test".to_string(),
         });
@@ -2138,5 +2522,22 @@ mod tests {
         app.started = Some(Instant::now());
         handle_running_key(&mut app, KeyCode::Char('a'), KeyModifiers::NONE);
         app
+    }
+
+    fn empty_app_with_code_options(code_options: Vec<CodePracticeOption>) -> App {
+        let plan = DailyPracticePlan {
+            target_minutes: 20,
+            completed_ms: 0,
+            lessons: Vec::new(),
+        };
+        App::new(plan, Vec::new(), Language::Zh, code_options)
+    }
+
+    fn code_option(facet: CodePracticeFacet, value: &str, count: usize) -> CodePracticeOption {
+        CodePracticeOption {
+            facet,
+            value: value.to_string(),
+            count,
+        }
     }
 }

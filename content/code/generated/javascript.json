@@ -205,7 +205,7 @@
     "project": "keyloop-generated",
     "level": "function",
     "source": "keyloop:generated:javascript:026",
-    "text": "async function fetchProfile(id) {\n  const response = await fetch(`/api/profiles/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+    "text": "async function fetchAudit(id) {\n  const response = await fetch(`/api/audits/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
   },
   {
     "language": "javascript",
@@ -213,7 +213,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:027",
-    "text": "const bySessionId = new Map();\nfor (const item of sessions) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+    "text": "const byBookmarkId = new Map();\nfor (const item of bookmarks) {\n  if (item.enabled) byId.set(item.id, item);\n}"
   },
   {
     "language": "javascript",
@@ -221,7 +221,7 @@
     "project": "keyloop-generated",
     "level": "function",
     "source": "keyloop:generated:javascript:028",
-    "text": "export function createInvoiceStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+    "text": "export function createCampaignStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
   },
   {
     "language": "javascript",
@@ -229,7 +229,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:029",
-    "text": "document.querySelectorAll(\"[data-wallet]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+    "text": "document.querySelectorAll(\"[data-channel]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
   },
   {
     "language": "javascript",
@@ -237,7 +237,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:030",
-    "text": "const sortedMessages = [...messages].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+    "text": "const sortedCheckouts = [...checkouts].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
   },
   {
     "language": "javascript",
@@ -245,7 +245,7 @@
     "project": "keyloop-generated",
     "level": "function",
     "source": "keyloop:generated:javascript:031",
-    "text": "async function fetchProject(id) {\n  const response = await fetch(`/api/projects/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+    "text": "async function fetchCollection(id) {\n  const response = await fetch(`/api/collections/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
   },
   {
     "language": "javascript",
@@ -253,7 +253,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:032",
-    "text": "const byCommentId = new Map();\nfor (const item of comments) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+    "text": "const byCredentialId = new Map();\nfor (const item of credentials) {\n  if (item.enabled) byId.set(item.id, item);\n}"
   },
   {
     "language": "javascript",
@@ -261,7 +261,7 @@
     "project": "keyloop-generated",
     "level": "function",
     "source": "keyloop:generated:javascript:033",
-    "text": "export function createNotificationStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+    "text": "export function createDashboardStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
   },
   {
     "language": "javascript",
@@ -269,7 +269,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:034",
-    "text": "document.querySelectorAll(\"[data-preference]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+    "text": "document.querySelectorAll(\"[data-dataset]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
   },
   {
     "language": "javascript",
@@ -277,7 +277,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:035",
-    "text": "const sortedWorkspaces = [...workspaces].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+    "text": "const sortedDevices = [...devices].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
   },
   {
     "language": "javascript",
@@ -285,7 +285,7 @@
     "project": "keyloop-generated",
     "level": "function",
     "source": "keyloop:generated:javascript:036",
-    "text": "async function fetchDeployment(id) {\n  const response = await fetch(`/api/deployments/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+    "text": "async function fetchDocument(id) {\n  const response = await fetch(`/api/documents/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
   },
   {
     "language": "javascript",
@@ -293,7 +293,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:037",
-    "text": "const bySubscriptionId = new Map();\nfor (const item of subscriptions) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+    "text": "const byEndpointId = new Map();\nfor (const item of endpoints) {\n  if (item.enabled) byId.set(item.id, item);\n}"
   },
   {
     "language": "javascript",
@@ -301,7 +301,7 @@
     "project": "keyloop-generated",
     "level": "function",
     "source": "keyloop:generated:javascript:038",
-    "text": "export function createPaymentStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+    "text": "export function createExperimentStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
   },
   {
     "language": "javascript",
@@ -309,7 +309,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:039",
-    "text": "document.querySelectorAll(\"[data-account]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+    "text": "document.querySelectorAll(\"[data-feature]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
   },
   {
     "language": "javascript",
@@ -317,7 +317,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:040",
-    "text": "const sortedDrafts = [...drafts].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+    "text": "const sortedFeeds = [...feeds].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
   },
   {
     "language": "javascript",
@@ -325,7 +325,7 @@
     "project": "keyloop-generated",
     "level": "function",
     "source": "keyloop:generated:javascript:041",
-    "text": "async function fetchActivity(id) {\n  const response = await fetch(`/api/activitys/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+    "text": "async function fetchGateway(id) {\n  const response = await fetch(`/api/gateways/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
   },
   {
     "language": "javascript",
@@ -333,7 +333,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:042",
-    "text": "const byReportId = new Map();\nfor (const item of reports) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+    "text": "const byGroupId = new Map();\nfor (const item of groups) {\n  if (item.enabled) byId.set(item.id, item);\n}"
   },
   {
     "language": "javascript",
@@ -341,7 +341,7 @@
     "project": "keyloop-generated",
     "level": "function",
     "source": "keyloop:generated:javascript:043",
-    "text": "export function createPipelineStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+    "text": "export function createIdentityStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
   },
   {
     "language": "javascript",
@@ -349,7 +349,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:044",
-    "text": "document.querySelectorAll(\"[data-token]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+    "text": "document.querySelectorAll(\"[data-integration]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
   },
   {
     "language": "javascript",
@@ -357,7 +357,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:045",
-    "text": "const sortedPermissions = [...permissions].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+    "text": "const sortedInvites = [...invites].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
   },
   {
     "language": "javascript",
@@ -365,7 +365,7 @@
     "project": "keyloop-generated",
     "level": "function",
     "source": "keyloop:generated:javascript:046",
-    "text": "async function fetchContact(id) {\n  const response = await fetch(`/api/contacts/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+    "text": "async function fetchIssue(id) {\n  const response = await fetch(`/api/issues/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
   },
   {
     "language": "javascript",
@@ -373,7 +373,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:047",
-    "text": "const byOrderId = new Map();\nfor (const item of orders) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+    "text": "const byJobId = new Map();\nfor (const item of jobs) {\n  if (item.enabled) byId.set(item.id, item);\n}"
   },
   {
     "language": "javascript",
@@ -381,7 +381,7 @@
     "project": "keyloop-generated",
     "level": "function",
     "source": "keyloop:generated:javascript:048",
-    "text": "export function createTicketStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+    "text": "export function createLayoutStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
   },
   {
     "language": "javascript",
@@ -389,7 +389,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:049",
-    "text": "document.querySelectorAll(\"[data-release]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+    "text": "document.querySelectorAll(\"[data-ledger]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
   },
   {
     "language": "javascript",
@@ -397,6 +397,566 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:javascript:050",
-    "text": "const sortedBundles = [...bundles].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+    "text": "const sortedMembers = [...members].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:051",
+    "text": "async function fetchMetric(id) {\n  const response = await fetch(`/api/metrics/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:052",
+    "text": "const byModuleId = new Map();\nfor (const item of modules) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:053",
+    "text": "export function createNoticeStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:054",
+    "text": "document.querySelectorAll(\"[data-operator]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:055",
+    "text": "const sortedOrganizations = [...organizations].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:056",
+    "text": "async function fetchPackage(id) {\n  const response = await fetch(`/api/packages/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:057",
+    "text": "const byPolicyId = new Map();\nfor (const item of policys) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:058",
+    "text": "export function createPresetStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:059",
+    "text": "document.querySelectorAll(\"[data-preview]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:060",
+    "text": "const sortedProducts = [...products].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:061",
+    "text": "async function fetchQueue(id) {\n  const response = await fetch(`/api/queues/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:062",
+    "text": "const byQuotaId = new Map();\nfor (const item of quotas) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:063",
+    "text": "export function createReceiptStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:064",
+    "text": "document.querySelectorAll(\"[data-registry]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:065",
+    "text": "const sortedRequests = [...requests].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:066",
+    "text": "async function fetchResource(id) {\n  const response = await fetch(`/api/resources/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:067",
+    "text": "const byReviewId = new Map();\nfor (const item of reviews) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:068",
+    "text": "export function createRoleStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:069",
+    "text": "document.querySelectorAll(\"[data-rule]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:070",
+    "text": "const sortedSchedules = [...schedules].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:071",
+    "text": "async function fetchSchema(id) {\n  const response = await fetch(`/api/schemas/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:072",
+    "text": "const bySectionId = new Map();\nfor (const item of sections) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:073",
+    "text": "export function createSegmentStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:074",
+    "text": "document.querySelectorAll(\"[data-setting]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:075",
+    "text": "const sortedSnapshots = [...snapshots].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:076",
+    "text": "async function fetchSpace(id) {\n  const response = await fetch(`/api/spaces/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:077",
+    "text": "const byStreamId = new Map();\nfor (const item of streams) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:078",
+    "text": "export function createTaskStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:079",
+    "text": "document.querySelectorAll(\"[data-template]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:080",
+    "text": "const sortedThreads = [...threads].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:081",
+    "text": "async function fetchTransaction(id) {\n  const response = await fetch(`/api/transactions/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:082",
+    "text": "const byTriggerId = new Map();\nfor (const item of triggers) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:083",
+    "text": "export function createUploadStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:084",
+    "text": "document.querySelectorAll(\"[data-user]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:085",
+    "text": "const sortedVariants = [...variants].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:086",
+    "text": "async function fetchVault(id) {\n  const response = await fetch(`/api/vaults/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:087",
+    "text": "const byVersionId = new Map();\nfor (const item of versions) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:088",
+    "text": "export function createViewStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:089",
+    "text": "document.querySelectorAll(\"[data-webhook]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:090",
+    "text": "const sortedWorkflows = [...workflows].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:091",
+    "text": "async function fetchZone(id) {\n  const response = await fetch(`/api/zones/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:092",
+    "text": "const byAnchorId = new Map();\nfor (const item of anchors) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:093",
+    "text": "export function createBatchStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:094",
+    "text": "document.querySelectorAll(\"[data-cache]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:095",
+    "text": "const sortedCells = [...cells].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:096",
+    "text": "async function fetchDelta(id) {\n  const response = await fetch(`/api/deltas/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:097",
+    "text": "const byEntryId = new Map();\nfor (const item of entrys) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:098",
+    "text": "export function createFieldStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:099",
+    "text": "document.querySelectorAll(\"[data-filter]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:100",
+    "text": "const sortedHandles = [...handles].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:101",
+    "text": "async function fetchIndex(id) {\n  const response = await fetch(`/api/indexs/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:102",
+    "text": "const byJourneyId = new Map();\nfor (const item of journeys) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:103",
+    "text": "export function createKernelStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:104",
+    "text": "document.querySelectorAll(\"[data-layer]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:105",
+    "text": "const sortedMatrixs = [...matrixs].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:106",
+    "text": "async function fetchNode(id) {\n  const response = await fetch(`/api/nodes/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:107",
+    "text": "const byProfileId = new Map();\nfor (const item of profiles) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:108",
+    "text": "export function createSessionStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:109",
+    "text": "document.querySelectorAll(\"[data-invoice]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:110",
+    "text": "const sortedWallets = [...wallets].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:111",
+    "text": "async function fetchMessage(id) {\n  const response = await fetch(`/api/messages/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:112",
+    "text": "const byProjectId = new Map();\nfor (const item of projects) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:113",
+    "text": "export function createCommentStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:114",
+    "text": "document.querySelectorAll(\"[data-notification]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:115",
+    "text": "const sortedPreferences = [...preferences].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:116",
+    "text": "async function fetchWorkspace(id) {\n  const response = await fetch(`/api/workspaces/${id}`);\n  if (!response.ok) throw new Error(\"request failed\");\n  return response.json();\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:117",
+    "text": "const byDeploymentId = new Map();\nfor (const item of deployments) {\n  if (item.enabled) byId.set(item.id, item);\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "vite",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:javascript:118",
+    "text": "export function createSubscriptionStore(initialItems = []) {\n  const listeners = new Set();\n  let items = [...initialItems];\n  return { getSnapshot: () => items, subscribe: (fn) => listeners.add(fn) };\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "express",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:119",
+    "text": "document.querySelectorAll(\"[data-payment]\").forEach((node) => {\n  node.addEventListener(\"click\", () => {\n    node.toggleAttribute(\"data-selected\");\n  });\n});"
+  },
+  {
+    "language": "javascript",
+    "framework": "astro",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:javascript:120",
+    "text": "const sortedAccounts = [...accounts].sort((left, right) => {\n  return left.createdAt.localeCompare(right.createdAt);\n});"
   }
 ]

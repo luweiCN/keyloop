@@ -32,6 +32,7 @@ fn main() -> Result<()> {
                 language: code_language,
                 framework: code_framework,
                 project: code_project,
+                ..CodePracticeConfig::default()
             },
         )?,
         Some(Command::Report { scope }) => match scope.unwrap_or(ReportScope::Today) {

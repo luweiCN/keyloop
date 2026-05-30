@@ -66,6 +66,8 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "practice_menu" => "练习菜单",
             "menu_comprehensive" => "综合练习",
             "menu_comprehensive_hint" => "按今日计划从第 1 组练到第 7 组",
+            "menu_code_specialist" => "代码专项",
+            "menu_code_specialist_hint" => "选择语言、框架或项目，连续练代码块",
             "menu_stats" => "数据统计",
             "menu_stats_hint" => "查看总览、历史最好成绩和每天练习明细",
             "menu_help" => "↑/↓ 或 J/K：选择 | Enter：开始/进入 | L：切换语言 | Esc/Q：退出",
@@ -88,6 +90,13 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "stats_error_symbols" => "高错符号",
             "stats_key_heat" => "键位热力图",
             "stats_slow_tokens" => "慢词块",
+            "code_setup_title" => "代码专项设置",
+            "code_setup_selected" => "已选范围",
+            "code_setup_all" => "全部代码语料",
+            "code_setup_empty" => "没有可用代码语料。",
+            "code_setup_help" => {
+                "↑/↓ 或 J/K：选择 | Space：勾选 | A：全选 | C：清空 | Enter：开始 | Esc：返回"
+            }
             "today_plan" => "今日练习",
             "today_summary" => "今日总结",
             "daily_progress" => "今日进度",
@@ -102,6 +111,7 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "daily_goal_hint" => "建议今天练满 20 分钟，可以零碎时间分几次完成。",
             "session_complete" => "本组完成",
             "next_lesson" => "Enter 进入下一组",
+            "next_code_group" => "Enter 再来一组代码",
             "finish_today" => "Enter 查看今日总结",
             "complete_help" => "Enter：继续 | R：重练本组 | L：切换语言 | Esc/Q：保存退出",
             "summary_help" => "Enter：回到今日练习 | L：切换语言 | Esc/Q：保存退出",
@@ -131,6 +141,10 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "practice_menu" => "Practice menu",
             "menu_comprehensive" => "Full practice",
             "menu_comprehensive_hint" => "Follow today's plan from lesson 1 to lesson 7",
+            "menu_code_specialist" => "Code focus",
+            "menu_code_specialist_hint" => {
+                "Choose languages, frameworks, or projects for code drills"
+            }
             "menu_stats" => "Stats",
             "menu_stats_hint" => "Overview, personal bests, and daily session details",
             "menu_help" => "Up/Down or J/K: choose | Enter: start/open | L: language | Esc/Q: quit",
@@ -155,6 +169,13 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "stats_error_symbols" => "High-error symbols",
             "stats_key_heat" => "Key heatmap",
             "stats_slow_tokens" => "Slow tokens",
+            "code_setup_title" => "Code focus setup",
+            "code_setup_selected" => "Selected scope",
+            "code_setup_all" => "all code corpus",
+            "code_setup_empty" => "No code corpus is available.",
+            "code_setup_help" => {
+                "Up/Down or J/K: choose | Space: toggle | A: all | C: clear | Enter: start | Esc: back"
+            }
             "today_plan" => "Today's practice",
             "today_summary" => "Today summary",
             "daily_progress" => "Daily progress",
@@ -169,6 +190,7 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "daily_goal_hint" => "Recommended target is 20 minutes today. Short sessions count.",
             "session_complete" => "Lesson complete",
             "next_lesson" => "Enter for next lesson",
+            "next_code_group" => "Enter for another code group",
             "finish_today" => "Enter for today summary",
             "complete_help" => {
                 "Enter: continue | R: repeat lesson | L: language | Esc/Q: save and exit"

@@ -205,7 +205,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:026",
-    "text": "<script setup lang=\"ts\">\nconst profileOpen = ref(false);\nfunction toggleProfile() {\n  profileOpen.value = !profileOpen.value;\n}\n</script>"
+    "text": "<script setup lang=\"ts\">\nconst auditOpen = ref(false);\nfunction toggleAudit() {\n  auditOpen.value = !auditOpen.value;\n}\n</script>"
   },
   {
     "language": "vue",
@@ -213,7 +213,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:027",
-    "text": "<template>\n  <section class=\"session-panel\">\n    <h2>{{ session.title }}</h2>\n    <button @click=\"selectSession(session.id)\">Select</button>\n  </section>\n</template>"
+    "text": "<template>\n  <section class=\"bookmark-panel\">\n    <h2>{{ bookmark.title }}</h2>\n    <button @click=\"selectBookmark(bookmark.id)\">Select</button>\n  </section>\n</template>"
   },
   {
     "language": "vue",
@@ -221,7 +221,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:028",
-    "text": "<script setup lang=\"ts\">\nconst visibleInvoiceItems = computed(() => {\n  return invoiceItems.value.filter((item) => item.visible);\n});\n</script>"
+    "text": "<script setup lang=\"ts\">\nconst visibleCampaignItems = computed(() => {\n  return campaignItems.value.filter((item) => item.visible);\n});\n</script>"
   },
   {
     "language": "vue",
@@ -229,7 +229,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:029",
-    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.walletId, async (id) => {\n  if (!id) return;\n  currentWallet.value = await loadWallet(String(id));\n});\n</script>"
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.channelId, async (id) => {\n  if (!id) return;\n  currentChannel.value = await loadChannel(String(id));\n});\n</script>"
   },
   {
     "language": "vue",
@@ -237,7 +237,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:030",
-    "text": "<template>\n  <Transition name=\"message-fade\">\n    <aside v-if=\"messageOpen\" class=\"drawer\">{{ message.summary }}</aside>\n  </Transition>\n</template>"
+    "text": "<template>\n  <Transition name=\"checkout-fade\">\n    <aside v-if=\"checkoutOpen\" class=\"drawer\">{{ checkout.summary }}</aside>\n  </Transition>\n</template>"
   },
   {
     "language": "vue",
@@ -245,7 +245,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:031",
-    "text": "<script setup lang=\"ts\">\nconst projectOpen = ref(false);\nfunction toggleProject() {\n  projectOpen.value = !projectOpen.value;\n}\n</script>"
+    "text": "<script setup lang=\"ts\">\nconst collectionOpen = ref(false);\nfunction toggleCollection() {\n  collectionOpen.value = !collectionOpen.value;\n}\n</script>"
   },
   {
     "language": "vue",
@@ -253,7 +253,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:032",
-    "text": "<template>\n  <section class=\"comment-panel\">\n    <h2>{{ comment.title }}</h2>\n    <button @click=\"selectComment(comment.id)\">Select</button>\n  </section>\n</template>"
+    "text": "<template>\n  <section class=\"credential-panel\">\n    <h2>{{ credential.title }}</h2>\n    <button @click=\"selectCredential(credential.id)\">Select</button>\n  </section>\n</template>"
   },
   {
     "language": "vue",
@@ -261,7 +261,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:033",
-    "text": "<script setup lang=\"ts\">\nconst visibleNotificationItems = computed(() => {\n  return notificationItems.value.filter((item) => item.visible);\n});\n</script>"
+    "text": "<script setup lang=\"ts\">\nconst visibleDashboardItems = computed(() => {\n  return dashboardItems.value.filter((item) => item.visible);\n});\n</script>"
   },
   {
     "language": "vue",
@@ -269,7 +269,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:034",
-    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.preferenceId, async (id) => {\n  if (!id) return;\n  currentPreference.value = await loadPreference(String(id));\n});\n</script>"
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.datasetId, async (id) => {\n  if (!id) return;\n  currentDataset.value = await loadDataset(String(id));\n});\n</script>"
   },
   {
     "language": "vue",
@@ -277,7 +277,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:035",
-    "text": "<template>\n  <Transition name=\"workspace-fade\">\n    <aside v-if=\"workspaceOpen\" class=\"drawer\">{{ workspace.summary }}</aside>\n  </Transition>\n</template>"
+    "text": "<template>\n  <Transition name=\"device-fade\">\n    <aside v-if=\"deviceOpen\" class=\"drawer\">{{ device.summary }}</aside>\n  </Transition>\n</template>"
   },
   {
     "language": "vue",
@@ -285,7 +285,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:036",
-    "text": "<script setup lang=\"ts\">\nconst deploymentOpen = ref(false);\nfunction toggleDeployment() {\n  deploymentOpen.value = !deploymentOpen.value;\n}\n</script>"
+    "text": "<script setup lang=\"ts\">\nconst documentOpen = ref(false);\nfunction toggleDocument() {\n  documentOpen.value = !documentOpen.value;\n}\n</script>"
   },
   {
     "language": "vue",
@@ -293,7 +293,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:037",
-    "text": "<template>\n  <section class=\"subscription-panel\">\n    <h2>{{ subscription.title }}</h2>\n    <button @click=\"selectSubscription(subscription.id)\">Select</button>\n  </section>\n</template>"
+    "text": "<template>\n  <section class=\"endpoint-panel\">\n    <h2>{{ endpoint.title }}</h2>\n    <button @click=\"selectEndpoint(endpoint.id)\">Select</button>\n  </section>\n</template>"
   },
   {
     "language": "vue",
@@ -301,7 +301,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:038",
-    "text": "<script setup lang=\"ts\">\nconst visiblePaymentItems = computed(() => {\n  return paymentItems.value.filter((item) => item.visible);\n});\n</script>"
+    "text": "<script setup lang=\"ts\">\nconst visibleExperimentItems = computed(() => {\n  return experimentItems.value.filter((item) => item.visible);\n});\n</script>"
   },
   {
     "language": "vue",
@@ -309,7 +309,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:039",
-    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.accountId, async (id) => {\n  if (!id) return;\n  currentAccount.value = await loadAccount(String(id));\n});\n</script>"
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.featureId, async (id) => {\n  if (!id) return;\n  currentFeature.value = await loadFeature(String(id));\n});\n</script>"
   },
   {
     "language": "vue",
@@ -317,7 +317,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:040",
-    "text": "<template>\n  <Transition name=\"draft-fade\">\n    <aside v-if=\"draftOpen\" class=\"drawer\">{{ draft.summary }}</aside>\n  </Transition>\n</template>"
+    "text": "<template>\n  <Transition name=\"feed-fade\">\n    <aside v-if=\"feedOpen\" class=\"drawer\">{{ feed.summary }}</aside>\n  </Transition>\n</template>"
   },
   {
     "language": "vue",
@@ -325,7 +325,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:041",
-    "text": "<script setup lang=\"ts\">\nconst activityOpen = ref(false);\nfunction toggleActivity() {\n  activityOpen.value = !activityOpen.value;\n}\n</script>"
+    "text": "<script setup lang=\"ts\">\nconst gatewayOpen = ref(false);\nfunction toggleGateway() {\n  gatewayOpen.value = !gatewayOpen.value;\n}\n</script>"
   },
   {
     "language": "vue",
@@ -333,7 +333,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:042",
-    "text": "<template>\n  <section class=\"report-panel\">\n    <h2>{{ report.title }}</h2>\n    <button @click=\"selectReport(report.id)\">Select</button>\n  </section>\n</template>"
+    "text": "<template>\n  <section class=\"group-panel\">\n    <h2>{{ group.title }}</h2>\n    <button @click=\"selectGroup(group.id)\">Select</button>\n  </section>\n</template>"
   },
   {
     "language": "vue",
@@ -341,7 +341,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:043",
-    "text": "<script setup lang=\"ts\">\nconst visiblePipelineItems = computed(() => {\n  return pipelineItems.value.filter((item) => item.visible);\n});\n</script>"
+    "text": "<script setup lang=\"ts\">\nconst visibleIdentityItems = computed(() => {\n  return identityItems.value.filter((item) => item.visible);\n});\n</script>"
   },
   {
     "language": "vue",
@@ -349,7 +349,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:044",
-    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.tokenId, async (id) => {\n  if (!id) return;\n  currentToken.value = await loadToken(String(id));\n});\n</script>"
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.integrationId, async (id) => {\n  if (!id) return;\n  currentIntegration.value = await loadIntegration(String(id));\n});\n</script>"
   },
   {
     "language": "vue",
@@ -357,7 +357,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:045",
-    "text": "<template>\n  <Transition name=\"permission-fade\">\n    <aside v-if=\"permissionOpen\" class=\"drawer\">{{ permission.summary }}</aside>\n  </Transition>\n</template>"
+    "text": "<template>\n  <Transition name=\"invite-fade\">\n    <aside v-if=\"inviteOpen\" class=\"drawer\">{{ invite.summary }}</aside>\n  </Transition>\n</template>"
   },
   {
     "language": "vue",
@@ -365,7 +365,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:046",
-    "text": "<script setup lang=\"ts\">\nconst contactOpen = ref(false);\nfunction toggleContact() {\n  contactOpen.value = !contactOpen.value;\n}\n</script>"
+    "text": "<script setup lang=\"ts\">\nconst issueOpen = ref(false);\nfunction toggleIssue() {\n  issueOpen.value = !issueOpen.value;\n}\n</script>"
   },
   {
     "language": "vue",
@@ -373,7 +373,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:047",
-    "text": "<template>\n  <section class=\"order-panel\">\n    <h2>{{ order.title }}</h2>\n    <button @click=\"selectOrder(order.id)\">Select</button>\n  </section>\n</template>"
+    "text": "<template>\n  <section class=\"job-panel\">\n    <h2>{{ job.title }}</h2>\n    <button @click=\"selectJob(job.id)\">Select</button>\n  </section>\n</template>"
   },
   {
     "language": "vue",
@@ -381,7 +381,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:048",
-    "text": "<script setup lang=\"ts\">\nconst visibleTicketItems = computed(() => {\n  return ticketItems.value.filter((item) => item.visible);\n});\n</script>"
+    "text": "<script setup lang=\"ts\">\nconst visibleLayoutItems = computed(() => {\n  return layoutItems.value.filter((item) => item.visible);\n});\n</script>"
   },
   {
     "language": "vue",
@@ -389,7 +389,7 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:049",
-    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.releaseId, async (id) => {\n  if (!id) return;\n  currentRelease.value = await loadRelease(String(id));\n});\n</script>"
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.ledgerId, async (id) => {\n  if (!id) return;\n  currentLedger.value = await loadLedger(String(id));\n});\n</script>"
   },
   {
     "language": "vue",
@@ -397,6 +397,566 @@
     "project": "keyloop-generated",
     "level": "block",
     "source": "keyloop:generated:vue:050",
-    "text": "<template>\n  <Transition name=\"bundle-fade\">\n    <aside v-if=\"bundleOpen\" class=\"drawer\">{{ bundle.summary }}</aside>\n  </Transition>\n</template>"
+    "text": "<template>\n  <Transition name=\"member-fade\">\n    <aside v-if=\"memberOpen\" class=\"drawer\">{{ member.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:051",
+    "text": "<script setup lang=\"ts\">\nconst metricOpen = ref(false);\nfunction toggleMetric() {\n  metricOpen.value = !metricOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:052",
+    "text": "<template>\n  <section class=\"module-panel\">\n    <h2>{{ module.title }}</h2>\n    <button @click=\"selectModule(module.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:053",
+    "text": "<script setup lang=\"ts\">\nconst visibleNoticeItems = computed(() => {\n  return noticeItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:054",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.operatorId, async (id) => {\n  if (!id) return;\n  currentOperator.value = await loadOperator(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:055",
+    "text": "<template>\n  <Transition name=\"organization-fade\">\n    <aside v-if=\"organizationOpen\" class=\"drawer\">{{ organization.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:056",
+    "text": "<script setup lang=\"ts\">\nconst packageOpen = ref(false);\nfunction togglePackage() {\n  packageOpen.value = !packageOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:057",
+    "text": "<template>\n  <section class=\"policy-panel\">\n    <h2>{{ policy.title }}</h2>\n    <button @click=\"selectPolicy(policy.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:058",
+    "text": "<script setup lang=\"ts\">\nconst visiblePresetItems = computed(() => {\n  return presetItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:059",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.previewId, async (id) => {\n  if (!id) return;\n  currentPreview.value = await loadPreview(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:060",
+    "text": "<template>\n  <Transition name=\"product-fade\">\n    <aside v-if=\"productOpen\" class=\"drawer\">{{ product.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:061",
+    "text": "<script setup lang=\"ts\">\nconst queueOpen = ref(false);\nfunction toggleQueue() {\n  queueOpen.value = !queueOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:062",
+    "text": "<template>\n  <section class=\"quota-panel\">\n    <h2>{{ quota.title }}</h2>\n    <button @click=\"selectQuota(quota.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:063",
+    "text": "<script setup lang=\"ts\">\nconst visibleReceiptItems = computed(() => {\n  return receiptItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:064",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.registryId, async (id) => {\n  if (!id) return;\n  currentRegistry.value = await loadRegistry(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:065",
+    "text": "<template>\n  <Transition name=\"request-fade\">\n    <aside v-if=\"requestOpen\" class=\"drawer\">{{ request.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:066",
+    "text": "<script setup lang=\"ts\">\nconst resourceOpen = ref(false);\nfunction toggleResource() {\n  resourceOpen.value = !resourceOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:067",
+    "text": "<template>\n  <section class=\"review-panel\">\n    <h2>{{ review.title }}</h2>\n    <button @click=\"selectReview(review.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:068",
+    "text": "<script setup lang=\"ts\">\nconst visibleRoleItems = computed(() => {\n  return roleItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:069",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.ruleId, async (id) => {\n  if (!id) return;\n  currentRule.value = await loadRule(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:070",
+    "text": "<template>\n  <Transition name=\"schedule-fade\">\n    <aside v-if=\"scheduleOpen\" class=\"drawer\">{{ schedule.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:071",
+    "text": "<script setup lang=\"ts\">\nconst schemaOpen = ref(false);\nfunction toggleSchema() {\n  schemaOpen.value = !schemaOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:072",
+    "text": "<template>\n  <section class=\"section-panel\">\n    <h2>{{ section.title }}</h2>\n    <button @click=\"selectSection(section.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:073",
+    "text": "<script setup lang=\"ts\">\nconst visibleSegmentItems = computed(() => {\n  return segmentItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:074",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.settingId, async (id) => {\n  if (!id) return;\n  currentSetting.value = await loadSetting(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:075",
+    "text": "<template>\n  <Transition name=\"snapshot-fade\">\n    <aside v-if=\"snapshotOpen\" class=\"drawer\">{{ snapshot.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:076",
+    "text": "<script setup lang=\"ts\">\nconst spaceOpen = ref(false);\nfunction toggleSpace() {\n  spaceOpen.value = !spaceOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:077",
+    "text": "<template>\n  <section class=\"stream-panel\">\n    <h2>{{ stream.title }}</h2>\n    <button @click=\"selectStream(stream.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:078",
+    "text": "<script setup lang=\"ts\">\nconst visibleTaskItems = computed(() => {\n  return taskItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:079",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.templateId, async (id) => {\n  if (!id) return;\n  currentTemplate.value = await loadTemplate(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:080",
+    "text": "<template>\n  <Transition name=\"thread-fade\">\n    <aside v-if=\"threadOpen\" class=\"drawer\">{{ thread.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:081",
+    "text": "<script setup lang=\"ts\">\nconst transactionOpen = ref(false);\nfunction toggleTransaction() {\n  transactionOpen.value = !transactionOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:082",
+    "text": "<template>\n  <section class=\"trigger-panel\">\n    <h2>{{ trigger.title }}</h2>\n    <button @click=\"selectTrigger(trigger.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:083",
+    "text": "<script setup lang=\"ts\">\nconst visibleUploadItems = computed(() => {\n  return uploadItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:084",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.userId, async (id) => {\n  if (!id) return;\n  currentUser.value = await loadUser(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:085",
+    "text": "<template>\n  <Transition name=\"variant-fade\">\n    <aside v-if=\"variantOpen\" class=\"drawer\">{{ variant.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:086",
+    "text": "<script setup lang=\"ts\">\nconst vaultOpen = ref(false);\nfunction toggleVault() {\n  vaultOpen.value = !vaultOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:087",
+    "text": "<template>\n  <section class=\"version-panel\">\n    <h2>{{ version.title }}</h2>\n    <button @click=\"selectVersion(version.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:088",
+    "text": "<script setup lang=\"ts\">\nconst visibleViewItems = computed(() => {\n  return viewItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:089",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.webhookId, async (id) => {\n  if (!id) return;\n  currentWebhook.value = await loadWebhook(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:090",
+    "text": "<template>\n  <Transition name=\"workflow-fade\">\n    <aside v-if=\"workflowOpen\" class=\"drawer\">{{ workflow.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:091",
+    "text": "<script setup lang=\"ts\">\nconst zoneOpen = ref(false);\nfunction toggleZone() {\n  zoneOpen.value = !zoneOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:092",
+    "text": "<template>\n  <section class=\"anchor-panel\">\n    <h2>{{ anchor.title }}</h2>\n    <button @click=\"selectAnchor(anchor.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:093",
+    "text": "<script setup lang=\"ts\">\nconst visibleBatchItems = computed(() => {\n  return batchItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:094",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.cacheId, async (id) => {\n  if (!id) return;\n  currentCache.value = await loadCache(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:095",
+    "text": "<template>\n  <Transition name=\"cell-fade\">\n    <aside v-if=\"cellOpen\" class=\"drawer\">{{ cell.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:096",
+    "text": "<script setup lang=\"ts\">\nconst deltaOpen = ref(false);\nfunction toggleDelta() {\n  deltaOpen.value = !deltaOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:097",
+    "text": "<template>\n  <section class=\"entry-panel\">\n    <h2>{{ entry.title }}</h2>\n    <button @click=\"selectEntry(entry.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:098",
+    "text": "<script setup lang=\"ts\">\nconst visibleFieldItems = computed(() => {\n  return fieldItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:099",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.filterId, async (id) => {\n  if (!id) return;\n  currentFilter.value = await loadFilter(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:100",
+    "text": "<template>\n  <Transition name=\"handle-fade\">\n    <aside v-if=\"handleOpen\" class=\"drawer\">{{ handle.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:101",
+    "text": "<script setup lang=\"ts\">\nconst indexOpen = ref(false);\nfunction toggleIndex() {\n  indexOpen.value = !indexOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:102",
+    "text": "<template>\n  <section class=\"journey-panel\">\n    <h2>{{ journey.title }}</h2>\n    <button @click=\"selectJourney(journey.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:103",
+    "text": "<script setup lang=\"ts\">\nconst visibleKernelItems = computed(() => {\n  return kernelItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:104",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.layerId, async (id) => {\n  if (!id) return;\n  currentLayer.value = await loadLayer(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:105",
+    "text": "<template>\n  <Transition name=\"matrix-fade\">\n    <aside v-if=\"matrixOpen\" class=\"drawer\">{{ matrix.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:106",
+    "text": "<script setup lang=\"ts\">\nconst nodeOpen = ref(false);\nfunction toggleNode() {\n  nodeOpen.value = !nodeOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:107",
+    "text": "<template>\n  <section class=\"profile-panel\">\n    <h2>{{ profile.title }}</h2>\n    <button @click=\"selectProfile(profile.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:108",
+    "text": "<script setup lang=\"ts\">\nconst visibleSessionItems = computed(() => {\n  return sessionItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:109",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.invoiceId, async (id) => {\n  if (!id) return;\n  currentInvoice.value = await loadInvoice(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:110",
+    "text": "<template>\n  <Transition name=\"wallet-fade\">\n    <aside v-if=\"walletOpen\" class=\"drawer\">{{ wallet.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:111",
+    "text": "<script setup lang=\"ts\">\nconst messageOpen = ref(false);\nfunction toggleMessage() {\n  messageOpen.value = !messageOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:112",
+    "text": "<template>\n  <section class=\"project-panel\">\n    <h2>{{ project.title }}</h2>\n    <button @click=\"selectProject(project.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:113",
+    "text": "<script setup lang=\"ts\">\nconst visibleCommentItems = computed(() => {\n  return commentItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:114",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.notificationId, async (id) => {\n  if (!id) return;\n  currentNotification.value = await loadNotification(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:115",
+    "text": "<template>\n  <Transition name=\"preference-fade\">\n    <aside v-if=\"preferenceOpen\" class=\"drawer\">{{ preference.summary }}</aside>\n  </Transition>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:116",
+    "text": "<script setup lang=\"ts\">\nconst workspaceOpen = ref(false);\nfunction toggleWorkspace() {\n  workspaceOpen.value = !workspaceOpen.value;\n}\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:117",
+    "text": "<template>\n  <section class=\"deployment-panel\">\n    <h2>{{ deployment.title }}</h2>\n    <button @click=\"selectDeployment(deployment.id)\">Select</button>\n  </section>\n</template>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:118",
+    "text": "<script setup lang=\"ts\">\nconst visibleSubscriptionItems = computed(() => {\n  return subscriptionItems.value.filter((item) => item.visible);\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:119",
+    "text": "<script setup lang=\"ts\">\nwatch(() => route.params.paymentId, async (id) => {\n  if (!id) return;\n  currentPayment.value = await loadPayment(String(id));\n});\n</script>"
+  },
+  {
+    "language": "vue",
+    "framework": "vue",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:vue:120",
+    "text": "<template>\n  <Transition name=\"account-fade\">\n    <aside v-if=\"accountOpen\" class=\"drawer\">{{ account.summary }}</aside>\n  </Transition>\n</template>"
   }
 ]

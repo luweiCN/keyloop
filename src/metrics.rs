@@ -37,15 +37,23 @@ pub fn build_session_record(
         .iter()
         .filter(|event| matches!(event.action, KeyAction::Insert) && event.correct)
         .count();
+    let has_auto_indent = key_events
+        .iter()
+        .any(|event| matches!(event.action, KeyAction::AutoIndent));
     let backspace_count = key_events
         .iter()
         .filter(|event| matches!(event.action, KeyAction::Backspace))
         .count() as u32;
-    let correct_chars = target_chars
+    let final_correct_chars = target_chars
         .iter()
         .zip(input_chars.iter())
         .filter(|(expected, actual)| expected == actual)
         .count();
+    let correct_chars = if has_auto_indent {
+        correct_insert_count
+    } else {
+        final_correct_chars
+    };
 
     let mut error_chars = BTreeMap::<String, u32>::new();
     let error_count = key_events

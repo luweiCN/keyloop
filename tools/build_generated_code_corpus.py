@@ -15,6 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "content" / "code" / "generated"
+GENERATED_SNIPPETS_PER_LANGUAGE = 120
 
 
 NOUNS = [
@@ -43,6 +44,87 @@ NOUNS = [
     "ticket",
     "release",
     "bundle",
+    "audit",
+    "bookmark",
+    "campaign",
+    "channel",
+    "checkout",
+    "collection",
+    "credential",
+    "dashboard",
+    "dataset",
+    "device",
+    "document",
+    "endpoint",
+    "experiment",
+    "feature",
+    "feed",
+    "gateway",
+    "group",
+    "identity",
+    "integration",
+    "invite",
+    "issue",
+    "job",
+    "layout",
+    "ledger",
+    "member",
+    "metric",
+    "module",
+    "notice",
+    "operator",
+    "organization",
+    "package",
+    "policy",
+    "preset",
+    "preview",
+    "product",
+    "queue",
+    "quota",
+    "receipt",
+    "registry",
+    "request",
+    "resource",
+    "review",
+    "role",
+    "rule",
+    "schedule",
+    "schema",
+    "section",
+    "segment",
+    "setting",
+    "snapshot",
+    "space",
+    "stream",
+    "task",
+    "template",
+    "thread",
+    "transaction",
+    "trigger",
+    "upload",
+    "user",
+    "variant",
+    "vault",
+    "version",
+    "view",
+    "webhook",
+    "workflow",
+    "zone",
+    "anchor",
+    "batch",
+    "cache",
+    "cell",
+    "delta",
+    "entry",
+    "field",
+    "filter",
+    "handle",
+    "index",
+    "journey",
+    "kernel",
+    "layer",
+    "matrix",
+    "node",
 ]
 
 ADJECTIVES = [
@@ -88,7 +170,7 @@ def write(name: str, snippets: list[dict]) -> None:
 def build_typescript() -> list[dict]:
     snippets: list[dict] = []
     frameworks = ["react", "vue", "nestjs", "vite", "node"]
-    for index in range(50):
+    for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
         typ = pascal(noun)
         collection = f"{noun}s"
@@ -145,7 +227,7 @@ def build_typescript() -> list[dict]:
 def build_javascript() -> list[dict]:
     snippets: list[dict] = []
     frameworks = ["node", "web", "vite", "express", "astro"]
-    for index in range(50):
+    for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
         collection = f"{noun}s"
         framework = frameworks[index % len(frameworks)]
@@ -198,7 +280,7 @@ def build_javascript() -> list[dict]:
 
 def build_vue() -> list[dict]:
     snippets: list[dict] = []
-    for index in range(50):
+    for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
         label = pascal(noun)
         state = camel(noun, "open")
@@ -252,7 +334,7 @@ def build_vue() -> list[dict]:
 
 def build_solidity() -> list[dict]:
     snippets: list[dict] = []
-    for index in range(50):
+    for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
         label = pascal(noun)
         variant = index % 5
@@ -304,7 +386,7 @@ def build_solidity() -> list[dict]:
 def build_rust() -> list[dict]:
     snippets: list[dict] = []
     frameworks = ["cli", "server", "terminal", "tauri", "web"]
-    for index in range(50):
+    for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
         typ = pascal(noun)
         framework = frameworks[index % len(frameworks)]
@@ -357,7 +439,7 @@ def build_rust() -> list[dict]:
 
 def build_html() -> list[dict]:
     snippets: list[dict] = []
-    for index in range(50):
+    for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
         title = pascal(noun)
         variant = index % 5
@@ -405,7 +487,7 @@ def build_html() -> list[dict]:
 
 def build_css() -> list[dict]:
     snippets: list[dict] = []
-    for index in range(50):
+    for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
         adjective = ADJECTIVES[index % len(ADJECTIVES)]
         variant = index % 5
@@ -452,7 +534,7 @@ def build_css() -> list[dict]:
 
 def build_scss() -> list[dict]:
     snippets: list[dict] = []
-    for index in range(50):
+    for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
         variant = index % 5
         if variant == 0:
@@ -502,7 +584,7 @@ def build_scss() -> list[dict]:
 
 def build_less() -> list[dict]:
     snippets: list[dict] = []
-    for index in range(50):
+    for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
         noun = NOUNS[index % len(NOUNS)]
         variant = index % 5
         if variant == 0:
