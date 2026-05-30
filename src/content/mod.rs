@@ -272,7 +272,7 @@ mod tests {
         let library = library::load().expect("content json should load");
         assert!(library.common_words.len() >= 200);
         assert!(library.word_chunks.len() >= 50);
-        assert!(library.code_snippets.len() >= 60);
+        assert!(library.code_snippets.len() >= 500);
 
         let catalog = library::source_catalog().expect("source catalog should load");
         assert!(catalog.iter().any(|source| {
@@ -296,6 +296,25 @@ mod tests {
     #[test]
     fn code_corpus_has_enough_language_and_framework_targets() {
         let library = library::load().expect("content json should load");
+        for language in [
+            "typescript",
+            "javascript",
+            "vue",
+            "solidity",
+            "rust",
+            "html",
+            "css",
+            "scss",
+            "less",
+        ] {
+            let count = library
+                .code_snippets
+                .iter()
+                .filter(|snippet| snippet.language == language)
+                .count();
+            assert!(count >= 50, "{language} has only {count} snippets");
+        }
+
         let react_config = CodePracticeConfig {
             framework: Some("react".to_string()),
             ..CodePracticeConfig::default()
@@ -321,6 +340,26 @@ mod tests {
                 .iter()
                 .all(|snippet| snippet.language.eq_ignore_ascii_case("solidity"))
         );
+    }
+
+    #[test]
+    fn builtin_code_snippets_have_clean_indentation() {
+        let library = library::load().expect("content json should load");
+        for snippet in &library.code_snippets {
+            let normalized = snippets::CodeSnippet::from_builtin(snippet);
+            for line in normalized.text.lines() {
+                assert!(
+                    !line.ends_with(' ') && !line.ends_with('\t'),
+                    "{} has trailing whitespace",
+                    snippet.source
+                );
+            }
+            assert!(
+                !normalized.text.contains('\t'),
+                "{} contains tab indentation",
+                snippet.source
+            );
+        }
     }
 
     #[test]

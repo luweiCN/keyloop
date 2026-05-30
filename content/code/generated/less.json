@@ -1,0 +1,402 @@
+[
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:001",
+    "text": "@profile-accent: #2563eb;\n.profile-button {\n  color: #fff;\n  background: @profile-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:002",
+    "text": ".session-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:003",
+    "text": ".invoice-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:004",
+    "text": "@media (min-width: @screen-md) {\n  .wallet-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:005",
+    "text": ".message-status(@state, @color) {\n  .message-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:006",
+    "text": "@project-accent: #2563eb;\n.project-button {\n  color: #fff;\n  background: @project-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:007",
+    "text": ".comment-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:008",
+    "text": ".notification-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:009",
+    "text": "@media (min-width: @screen-md) {\n  .preference-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:010",
+    "text": ".workspace-status(@state, @color) {\n  .workspace-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:011",
+    "text": "@deployment-accent: #2563eb;\n.deployment-button {\n  color: #fff;\n  background: @deployment-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:012",
+    "text": ".subscription-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:013",
+    "text": ".payment-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:014",
+    "text": "@media (min-width: @screen-md) {\n  .account-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:015",
+    "text": ".draft-status(@state, @color) {\n  .draft-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:016",
+    "text": "@activity-accent: #2563eb;\n.activity-button {\n  color: #fff;\n  background: @activity-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:017",
+    "text": ".report-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:018",
+    "text": ".pipeline-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:019",
+    "text": "@media (min-width: @screen-md) {\n  .token-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:020",
+    "text": ".permission-status(@state, @color) {\n  .permission-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:021",
+    "text": "@contact-accent: #2563eb;\n.contact-button {\n  color: #fff;\n  background: @contact-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:022",
+    "text": ".order-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:023",
+    "text": ".ticket-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:024",
+    "text": "@media (min-width: @screen-md) {\n  .release-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:025",
+    "text": ".bundle-status(@state, @color) {\n  .bundle-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:026",
+    "text": "@profile-accent: #2563eb;\n.profile-button {\n  color: #fff;\n  background: @profile-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:027",
+    "text": ".session-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:028",
+    "text": ".invoice-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:029",
+    "text": "@media (min-width: @screen-md) {\n  .wallet-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:030",
+    "text": ".message-status(@state, @color) {\n  .message-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:031",
+    "text": "@project-accent: #2563eb;\n.project-button {\n  color: #fff;\n  background: @project-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:032",
+    "text": ".comment-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:033",
+    "text": ".notification-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:034",
+    "text": "@media (min-width: @screen-md) {\n  .preference-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:035",
+    "text": ".workspace-status(@state, @color) {\n  .workspace-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:036",
+    "text": "@deployment-accent: #2563eb;\n.deployment-button {\n  color: #fff;\n  background: @deployment-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:037",
+    "text": ".subscription-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:038",
+    "text": ".payment-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:039",
+    "text": "@media (min-width: @screen-md) {\n  .account-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:040",
+    "text": ".draft-status(@state, @color) {\n  .draft-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:041",
+    "text": "@activity-accent: #2563eb;\n.activity-button {\n  color: #fff;\n  background: @activity-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:042",
+    "text": ".report-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:043",
+    "text": ".pipeline-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:044",
+    "text": "@media (min-width: @screen-md) {\n  .token-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:045",
+    "text": ".permission-status(@state, @color) {\n  .permission-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:046",
+    "text": "@contact-accent: #2563eb;\n.contact-button {\n  color: #fff;\n  background: @contact-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:047",
+    "text": ".order-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:048",
+    "text": ".ticket-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:049",
+    "text": "@media (min-width: @screen-md) {\n  .release-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:less:050",
+    "text": ".bundle-status(@state, @color) {\n  .bundle-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  }
+]

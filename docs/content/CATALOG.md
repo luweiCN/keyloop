@@ -11,9 +11,11 @@ KeyLoop 的练习内容不再写在 Rust 源码的大字符串数组里。内置
 - `symbols.json`：代码符号、括号、箭头、比较符、模板字符串、泛型等。
 - `number_drills.json`：数字行和代码里的数字模式。
 - `naming.json`：camelCase、PascalCase、DOM/React/Vue/Nest/Solidity/Rust 名称。
-- `code/*.json`：按方向拆分的内置代码语料，带 `language`、`framework`、`project`、`level`。
+- `code/*.json`：按方向拆分的手工精选代码语料，带 `language`、`framework`、`project`、`level`。
   当前包括 `react`、`vue`、`nestjs`、`solidity`、`rust`、`web`、`css`。
+- `code/generated/*.json`：KeyLoop 自有补充语料，保证 `typescript`、`javascript`、`vue`、`solidity`、`rust`、`html`、`css`、`scss`、`less` 每种语言至少 50 条。
 - `source_catalog.json`：内置代码语料和后续精确抽取使用的开源来源、license 和用途。
+- `tools/build_generated_code_corpus.py`：生成 `code/generated/*.json` 的确定性脚本。
 
 代码块当前支持这些过滤参数：
 
@@ -47,6 +49,8 @@ KeyLoop 是 MIT 项目。外部内容进入仓库前必须确认 license：
 KeyLoop training content is no longer embedded as large Rust string arrays. Built-in content lives in the root `content/` directory.
 
 Built-in code snippets live under `content/code/*.json` and carry `language`, `framework`, `project`, and `level` metadata, so future plans can choose React/Vue/NestJS/Solidity/Rust or local repository snippets without changing Rust source.
+
+Indentation is normalized before practice: repository-extracted blocks strip the minimum shared leading indentation, and built-in snippets are normalized the same way when loaded. Relative indentation inside functions, CSS rules, and HTML/Vue trees is preserved.
 
 Use:
 

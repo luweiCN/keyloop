@@ -1,0 +1,402 @@
+[
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:001",
+    "text": ".profile-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:002",
+    "text": "@mixin session-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:003",
+    "text": "@each $tone, $value in $invoice-tones {\n  .invoice-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:004",
+    "text": ".wallet-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:005",
+    "text": "@include media-breakpoint-up(md) {\n  .message-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:006",
+    "text": ".project-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:007",
+    "text": "@mixin comment-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:008",
+    "text": "@each $tone, $value in $notification-tones {\n  .notification-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:009",
+    "text": ".preference-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:010",
+    "text": "@include media-breakpoint-up(md) {\n  .workspace-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:011",
+    "text": ".deployment-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:012",
+    "text": "@mixin subscription-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:013",
+    "text": "@each $tone, $value in $payment-tones {\n  .payment-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:014",
+    "text": ".account-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:015",
+    "text": "@include media-breakpoint-up(md) {\n  .draft-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:016",
+    "text": ".activity-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:017",
+    "text": "@mixin report-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:018",
+    "text": "@each $tone, $value in $pipeline-tones {\n  .pipeline-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:019",
+    "text": ".token-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:020",
+    "text": "@include media-breakpoint-up(md) {\n  .permission-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:021",
+    "text": ".contact-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:022",
+    "text": "@mixin order-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:023",
+    "text": "@each $tone, $value in $ticket-tones {\n  .ticket-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:024",
+    "text": ".release-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:025",
+    "text": "@include media-breakpoint-up(md) {\n  .bundle-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:026",
+    "text": ".profile-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:027",
+    "text": "@mixin session-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:028",
+    "text": "@each $tone, $value in $invoice-tones {\n  .invoice-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:029",
+    "text": ".wallet-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:030",
+    "text": "@include media-breakpoint-up(md) {\n  .message-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:031",
+    "text": ".project-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:032",
+    "text": "@mixin comment-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:033",
+    "text": "@each $tone, $value in $notification-tones {\n  .notification-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:034",
+    "text": ".preference-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:035",
+    "text": "@include media-breakpoint-up(md) {\n  .workspace-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:036",
+    "text": ".deployment-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:037",
+    "text": "@mixin subscription-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:038",
+    "text": "@each $tone, $value in $payment-tones {\n  .payment-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:039",
+    "text": ".account-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:040",
+    "text": "@include media-breakpoint-up(md) {\n  .draft-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:041",
+    "text": ".activity-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:042",
+    "text": "@mixin report-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:043",
+    "text": "@each $tone, $value in $pipeline-tones {\n  .pipeline-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:044",
+    "text": ".token-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:045",
+    "text": "@include media-breakpoint-up(md) {\n  .permission-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:046",
+    "text": ".contact-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:047",
+    "text": "@mixin order-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:048",
+    "text": "@each $tone, $value in $ticket-tones {\n  .ticket-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:049",
+    "text": ".release-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:scss:050",
+    "text": "@include media-breakpoint-up(md) {\n  .bundle-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  }
+]

@@ -1,0 +1,402 @@
+[
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:001",
+    "text": "fn parse_profile_id(value: &str) -> Result<ProfileId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:002",
+    "text": "match session.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:003",
+    "text": "impl InvoiceStore {\n  pub fn get(&self, id: InvoiceId) -> Option<&Invoice> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:004",
+    "text": "async fn load_wallet(State(state): State<AppState>) -> Json<Vec<Wallet>> {\n  let items = state.wallets.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:005",
+    "text": "let visible_messages = messages\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:006",
+    "text": "fn parse_project_id(value: &str) -> Result<ProjectId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:007",
+    "text": "match comment.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:008",
+    "text": "impl NotificationStore {\n  pub fn get(&self, id: NotificationId) -> Option<&Notification> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:009",
+    "text": "async fn load_preference(State(state): State<AppState>) -> Json<Vec<Preference>> {\n  let items = state.preferences.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:010",
+    "text": "let visible_workspaces = workspaces\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:011",
+    "text": "fn parse_deployment_id(value: &str) -> Result<DeploymentId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:012",
+    "text": "match subscription.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:013",
+    "text": "impl PaymentStore {\n  pub fn get(&self, id: PaymentId) -> Option<&Payment> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:014",
+    "text": "async fn load_account(State(state): State<AppState>) -> Json<Vec<Account>> {\n  let items = state.accounts.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:015",
+    "text": "let visible_drafts = drafts\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:016",
+    "text": "fn parse_activity_id(value: &str) -> Result<ActivityId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:017",
+    "text": "match report.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:018",
+    "text": "impl PipelineStore {\n  pub fn get(&self, id: PipelineId) -> Option<&Pipeline> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:019",
+    "text": "async fn load_token(State(state): State<AppState>) -> Json<Vec<Token>> {\n  let items = state.tokens.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:020",
+    "text": "let visible_permissions = permissions\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:021",
+    "text": "fn parse_contact_id(value: &str) -> Result<ContactId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:022",
+    "text": "match order.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:023",
+    "text": "impl TicketStore {\n  pub fn get(&self, id: TicketId) -> Option<&Ticket> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:024",
+    "text": "async fn load_release(State(state): State<AppState>) -> Json<Vec<Release>> {\n  let items = state.releases.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:025",
+    "text": "let visible_bundles = bundles\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:026",
+    "text": "fn parse_profile_id(value: &str) -> Result<ProfileId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:027",
+    "text": "match session.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:028",
+    "text": "impl InvoiceStore {\n  pub fn get(&self, id: InvoiceId) -> Option<&Invoice> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:029",
+    "text": "async fn load_wallet(State(state): State<AppState>) -> Json<Vec<Wallet>> {\n  let items = state.wallets.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:030",
+    "text": "let visible_messages = messages\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:031",
+    "text": "fn parse_project_id(value: &str) -> Result<ProjectId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:032",
+    "text": "match comment.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:033",
+    "text": "impl NotificationStore {\n  pub fn get(&self, id: NotificationId) -> Option<&Notification> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:034",
+    "text": "async fn load_preference(State(state): State<AppState>) -> Json<Vec<Preference>> {\n  let items = state.preferences.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:035",
+    "text": "let visible_workspaces = workspaces\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:036",
+    "text": "fn parse_deployment_id(value: &str) -> Result<DeploymentId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:037",
+    "text": "match subscription.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:038",
+    "text": "impl PaymentStore {\n  pub fn get(&self, id: PaymentId) -> Option<&Payment> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:039",
+    "text": "async fn load_account(State(state): State<AppState>) -> Json<Vec<Account>> {\n  let items = state.accounts.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:040",
+    "text": "let visible_drafts = drafts\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:041",
+    "text": "fn parse_activity_id(value: &str) -> Result<ActivityId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:042",
+    "text": "match report.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:043",
+    "text": "impl PipelineStore {\n  pub fn get(&self, id: PipelineId) -> Option<&Pipeline> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:044",
+    "text": "async fn load_token(State(state): State<AppState>) -> Json<Vec<Token>> {\n  let items = state.tokens.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:045",
+    "text": "let visible_permissions = permissions\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:046",
+    "text": "fn parse_contact_id(value: &str) -> Result<ContactId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:047",
+    "text": "match order.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:048",
+    "text": "impl TicketStore {\n  pub fn get(&self, id: TicketId) -> Option<&Ticket> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "keyloop-generated",
+    "level": "function",
+    "source": "keyloop:generated:rust:049",
+    "text": "async fn load_release(State(state): State<AppState>) -> Json<Vec<Release>> {\n  let items = state.releases.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "keyloop-generated",
+    "level": "block",
+    "source": "keyloop:generated:rust:050",
+    "text": "let visible_bundles = bundles\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  }
+]
