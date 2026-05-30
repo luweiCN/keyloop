@@ -93,12 +93,35 @@ pub struct CodePracticeConfig {
     pub language: Option<String>,
     pub framework: Option<String>,
     pub project: Option<String>,
+    pub languages: Vec<String>,
+    pub frameworks: Vec<String>,
+    pub projects: Vec<String>,
+    pub match_any: bool,
 }
 
 impl CodePracticeConfig {
     pub fn is_empty(&self) -> bool {
-        self.language.is_none() && self.framework.is_none() && self.project.is_none()
+        self.language.is_none()
+            && self.framework.is_none()
+            && self.project.is_none()
+            && self.languages.is_empty()
+            && self.frameworks.is_empty()
+            && self.projects.is_empty()
     }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum CodePracticeFacet {
+    Language,
+    Framework,
+    Project,
+}
+
+#[derive(Debug, Clone)]
+pub struct CodePracticeOption {
+    pub facet: CodePracticeFacet,
+    pub value: String,
+    pub count: usize,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -186,6 +209,7 @@ pub struct KeyEventRecord {
 #[serde(rename_all = "snake_case")]
 pub enum KeyAction {
     Insert,
+    AutoIndent,
     Backspace,
 }
 

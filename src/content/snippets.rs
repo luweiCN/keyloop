@@ -1,7 +1,8 @@
-use crate::model::CodePracticeConfig;
+use crate::model::{CodePracticeConfig, CodePracticeFacet, CodePracticeOption};
 use anyhow::{Context, Result};
 use ignore::WalkBuilder;
 use rand::seq::SliceRandom;
+use std::collections::{BTreeMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -162,10 +163,21 @@ pub fn pick_builtin_code(
     code_config: &CodePracticeConfig,
     count: usize,
 ) -> Vec<CodeSnippet> {
+    pick_builtin_code_excluding(snippets, plan_focus, code_config, count, &HashSet::new())
+}
+
+pub fn pick_builtin_code_excluding(
+    snippets: &[BuiltinCodeSnippet],
+    plan_focus: &[String],
+    code_config: &CodePracticeConfig,
+    count: usize,
+    excluded_texts: &HashSet<String>,
+) -> Vec<CodeSnippet> {
     let mut snippets = snippets
         .iter()
         .map(CodeSnippet::from_builtin)
         .filter(|snippet| matches_code_config(snippet, code_config))
+        .filter(|snippet| !excluded_texts.contains(&snippet.text))
         .collect::<Vec<_>>();
     snippets.shuffle(&mut rand::thread_rng());
     snippets.sort_by_key(|snippet| {
@@ -179,6 +191,51 @@ pub fn pick_builtin_code(
     snippets.into_iter().take(count).collect()
 }
 
+pub fn code_practice_options(snippets: &[BuiltinCodeSnippet]) -> Vec<CodePracticeOption> {
+    let mut languages = BTreeMap::<String, usize>::new();
+    let mut frameworks = BTreeMap::<String, usize>::new();
+    let mut projects = BTreeMap::<String, usize>::new();
+
+    for snippet in snippets {
+        *languages.entry(snippet.language.clone()).or_default() += 1;
+        *frameworks.entry(snippet.framework.clone()).or_default() += 1;
+        if snippet.project != "keyloop-generated" {
+            *projects.entry(snippet.project.clone()).or_default() += 1;
+        }
+    }
+
+    let mut options = Vec::new();
+    options.extend(sorted_options(CodePracticeFacet::Language, languages));
+    options.extend(sorted_options(CodePracticeFacet::Framework, frameworks));
+    options.extend(
+        sorted_options(CodePracticeFacet::Project, projects)
+            .into_iter()
+            .take(18),
+    );
+    options
+}
+
+fn sorted_options(
+    facet: CodePracticeFacet,
+    counts: BTreeMap<String, usize>,
+) -> Vec<CodePracticeOption> {
+    let mut options = counts
+        .into_iter()
+        .map(|(value, count)| CodePracticeOption {
+            facet,
+            value,
+            count,
+        })
+        .collect::<Vec<_>>();
+    options.sort_by(|left, right| {
+        right
+            .count
+            .cmp(&left.count)
+            .then_with(|| left.value.cmp(&right.value))
+    });
+    options
+}
+
 fn is_practice_code_block(text: &str) -> bool {
     text.is_ascii() && text.lines().filter(|line| !line.trim().is_empty()).count() >= 2
 }
@@ -188,15 +245,38 @@ fn matches_code_config(snippet: &CodeSnippet, config: &CodePracticeConfig) -> bo
         return true;
     }
 
-    matches_optional(&snippet.language, config.language.as_deref())
-        && matches_optional(&snippet.framework, config.framework.as_deref())
-        && matches_optional(&snippet.project, config.project.as_deref())
+    if config.match_any {
+        return matches_any(&snippet.language, &config.languages)
+            || matches_any(&snippet.framework, &config.frameworks)
+            || matches_any(&snippet.project, &config.projects);
+    }
+
+    matches_optional(
+        &snippet.language,
+        config.language.as_deref(),
+        &config.languages,
+    ) && matches_optional(
+        &snippet.framework,
+        config.framework.as_deref(),
+        &config.frameworks,
+    ) && matches_optional(
+        &snippet.project,
+        config.project.as_deref(),
+        &config.projects,
+    )
 }
 
-fn matches_optional(value: &str, expected: Option<&str>) -> bool {
+fn matches_optional(value: &str, expected: Option<&str>, expected_many: &[String]) -> bool {
     expected
         .map(|expected| value.eq_ignore_ascii_case(expected))
         .unwrap_or(true)
+        && (expected_many.is_empty() || matches_any(value, expected_many))
+}
+
+fn matches_any(value: &str, expected_many: &[String]) -> bool {
+    expected_many
+        .iter()
+        .any(|expected| value.eq_ignore_ascii_case(expected))
 }
 
 fn snippets_from_file(content: &str, relative_path: &Path) -> Vec<CodeSnippet> {

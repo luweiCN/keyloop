@@ -41,6 +41,8 @@ keyloop plan --language en
 
 Inside the TUI, press `L` on menu/plan/result pages. While typing, press `Ctrl+L` so the normal `l` key remains available for practice input.
 
+While typing, press `Ctrl+P` to pause/resume. `Esc` pauses and opens the explicit exit choices. Paused time is excluded from timers, WPM, and key event timestamps.
+
 Code block lessons can be filtered by language, framework, or project:
 
 ```bash
@@ -85,7 +87,7 @@ cargo run -- plan
 
 The default daily target is 20 minutes. You can finish it in one session or in several short sessions. Each completed lesson adds to today's progress.
 
-Built-in content lives in the root `content/` directory instead of large Rust string arrays. See [docs/content/CATALOG.md](docs/content/CATALOG.md). Code indentation is normalized before practice by removing the shared outer indentation while preserving relative indentation inside functions, HTML/Vue trees, and CSS nesting.
+Built-in content lives in the root `content/` directory instead of large Rust string arrays. See [docs/content/CATALOG.md](docs/content/CATALOG.md). Code indentation is normalized before practice by removing the shared outer indentation while preserving relative indentation inside functions, HTML/Vue trees, and CSS nesting. In code mode, pressing Enter automatically inserts the expected leading indentation for the next line.
 
 Current lesson structure:
 
@@ -95,9 +97,11 @@ Current lesson structure:
 4. Words: frontend and programmer vocabulary
 5. Focus: numbers and symbols
 6. Naming: casing and frontend APIs
-7. Code blocks: complete snippets with at least 50 built-in entries per language for TypeScript, JavaScript, Vue, Solidity, Rust, HTML, CSS, Less, and Sass
+7. Code blocks: complete snippets with at least 120 built-in entries per language for TypeScript, JavaScript, Vue, Solidity, Rust, HTML, CSS, Less, and Sass
 
-KeyLoop does not expose manual toggles for length, difficulty, casing, numbers, symbols, or code snippets. Those are handled by content planning and history.
+The menu also includes Code focus mode. It lets you multi-select languages, frameworks, and projects, then continue into another generated code group after each completion.
+
+KeyLoop does not expose manual toggles for length, difficulty, casing, numbers, or symbols. Those are handled by content planning and history.
 
 ## Metrics
 
