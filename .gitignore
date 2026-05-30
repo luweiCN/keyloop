@@ -1,0 +1,13 @@
+/target
+
+# Local editor and OS noise
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Local runtime data. KeyLoop writes to ~/.keyloop by default, but keep
+# redirected local data out of the repository as well.
+.keyloop/
+sessions.jsonl

@@ -1,0 +1,132 @@
+# KeyLoop
+
+KeyLoop 是一个个人化的程序员终端打字训练工具。它不是通用打字游戏：打开后先显示练习菜单，可以选择“综合练习”按今日计划走完整流程，也可以只练某一个步骤。
+
+默认中文界面，也可以切换英文。
+
+## 核心闭环
+
+```text
+练习菜单 -> 今日练习 / 单项练习 -> 跟打 -> 记录 -> 报告 -> 调整内容
+```
+
+练习记录保存在：
+
+```text
+~/.keyloop/sessions.jsonl
+```
+
+可以用 `KEYLOOP_HOME` 改存储位置。
+
+## 用法
+
+```bash
+keyloop
+keyloop start
+keyloop start --repo /path/to/project
+keyloop report today
+keyloop plan
+keyloop import /path/to/project
+```
+
+切换英文：
+
+```bash
+keyloop --language en
+keyloop plan --language en
+```
+
+TUI 里也可以切换语言：菜单、计划和结果页按 `L`；正在跟打时按 `Ctrl+L`，避免和练习输入里的字母 `l` 冲突。
+切换后，菜单、课程标题、课程说明和固定 UI 文案都会一起切换。
+
+## 安装
+
+当前是本地 Rust CLI 工具：
+
+```bash
+cargo install --path .
+```
+
+也可以直接开发运行：
+
+```bash
+cargo run -- start
+cargo run -- report today
+cargo run -- plan
+```
+
+## 今日练习
+
+默认每日目标是 20 分钟。可以一次练完，也可以零碎时间分几次练；每次完成都会累计到今日进度。TUI 会用文本显示 `已练 / 目标`，超过 20 分钟后继续显示真实累计时长。
+
+当前课程结构：
+
+1. 热身：基础键位
+2. 词块：英文拼写块，例如 `the`、`tion`、`ing`、`ment`、`pre`、`con`、`str`
+3. 高频词：真正英语常用词，不混大小写
+4. 单词：前端高频词
+5. 专项：数字和符号
+6. 命名：大小写和前端 API
+7. 代码块：前端短代码
+
+软件里不再暴露练习长度、大小写、数字、符号、代码片段等开关。这些由内容计划和历史记录决定。
+
+入口菜单保留两种练法：
+
+- 综合练习：按上面的 7 个步骤顺序练。
+- 单项练习：只选择其中一个步骤针对性练习。
+- 数据统计：查看累计总时长、历史最高 WPM、平均正确率、最低错误率，并按日期切换查看每天每次练习的记录。
+
+## 内容方向
+
+练习内容会重点丰富：
+
+- 基础键位和字母过渡
+- 英文拼写词块，例如常见前缀、后缀、三连字母和字母组合
+- 真正英语高频词，例如 `the`、`people`、`because`、`through`
+- 程序员高频词和前端变量名
+- 数字行、括号、引号、箭头、比较符等代码符号
+- camelCase、PascalCase、DOM/React/API 命名
+- TS / JS / Solidity / HTML / CSS / Less / Sass 代码块
+
+代码块优先使用完整代码块，不再只抽单行碎片。当前会从 `--repo` 指定目录或当前目录提取，也有内置前端代码块兜底。
+
+## 指标
+
+每次完成的练习会记录：
+
+- 练习时长
+- WPM 和原始 WPM
+- 正确率
+- 错误数
+- 退格数
+- 目标文本和最终输入
+- 每次按键事件
+- 错误字符
+- 错误词块
+- token 启动延迟和耗时
+
+`keyloop report today` 查看当天练习；`keyloop plan` 查看当前建议和内容方向。
+
+## 数据和隐私
+
+KeyLoop 不上传练习数据。默认只写入本机：
+
+```text
+~/.keyloop/sessions.jsonl
+```
+
+记录里会包含目标文本、最终输入、按键事件、错误字符和 token 统计。用 `KEYLOOP_HOME=/path/to/dir` 可以切换数据目录。
+
+功能规划见 [docs/ROADMAP.md](docs/ROADMAP.md)。
+
+## Development / Quality
+
+```bash
+cargo fmt
+cargo test
+cargo clippy -- -D warnings
+cargo run -- plan
+```
+
+更多检查说明见 [docs/QUALITY.md](docs/QUALITY.md)。
