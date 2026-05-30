@@ -19,7 +19,7 @@ pub use library::source_catalog;
 
 pub fn build_daily_practice_plan(
     records: &[SessionRecord],
-    repo: &Path,
+    repo: Option<&Path>,
     plan: &PracticePlan,
     code_config: &CodePracticeConfig,
 ) -> Result<DailyPracticePlan> {
@@ -146,14 +146,17 @@ fn build_lesson_naming(library: &ContentLibrary) -> String {
 }
 
 fn build_code_lesson_target(
-    repo: &Path,
+    repo: Option<&Path>,
     plan: &PracticePlan,
     library: &ContentLibrary,
     code_config: &CodePracticeConfig,
 ) -> Result<PracticeTarget> {
-    let (snippets, scan_error) = match extract_snippets(repo) {
-        Ok(snippets) => (snippets, None),
-        Err(error) => (Vec::new(), Some(error.to_string())),
+    let (snippets, scan_error) = match repo {
+        Some(repo) => match extract_snippets(repo) {
+            Ok(snippets) => (snippets, None),
+            Err(error) => (Vec::new(), Some(error.to_string())),
+        },
+        None => (Vec::new(), None),
     };
     let mut picked = snippets::pick_code_snippets(&snippets, &plan.focus_code, code_config, 3);
     let repo_count = picked.len();
@@ -173,10 +176,10 @@ fn build_code_lesson_target(
         return Ok(PracticeTarget {
             mode: Mode::Code,
             text: join_snippets(&picked),
-            source: if repo_count == picked.len() {
-                repo.display().to_string()
-            } else {
-                format!("{} + keyloop:fallback-code", repo.display())
+            source: match repo {
+                Some(repo) if repo_count == picked.len() => repo.display().to_string(),
+                Some(repo) => format!("{} + keyloop:fallback-code", repo.display()),
+                None => "keyloop:code-corpus".to_string(),
             },
         });
     }
@@ -190,8 +193,8 @@ fn build_code_lesson_target(
             4,
         )),
         source: scan_error
-            .map(|error| format!("keyloop:frontend-code (repo scan failed: {error})"))
-            .unwrap_or_else(|| "keyloop:frontend-code".into()),
+            .map(|error| format!("keyloop:code-corpus (repo scan failed: {error})"))
+            .unwrap_or_else(|| "keyloop:code-corpus".into()),
     })
 }
 
@@ -269,7 +272,7 @@ mod tests {
         let library = library::load().expect("content json should load");
         assert!(library.common_words.len() >= 200);
         assert!(library.word_chunks.len() >= 50);
-        assert!(library.code_snippets.len() >= 20);
+        assert!(library.code_snippets.len() >= 60);
 
         let catalog = library::source_catalog().expect("source catalog should load");
         assert!(catalog.iter().any(|source| {
@@ -291,6 +294,56 @@ mod tests {
     }
 
     #[test]
+    fn code_corpus_has_enough_language_and_framework_targets() {
+        let library = library::load().expect("content json should load");
+        let react_config = CodePracticeConfig {
+            framework: Some("react".to_string()),
+            ..CodePracticeConfig::default()
+        };
+        let solidity_config = CodePracticeConfig {
+            language: Some("solidity".to_string()),
+            ..CodePracticeConfig::default()
+        };
+
+        let react = snippets::pick_builtin_code(&library.code_snippets, &[], &react_config, 5);
+        let solidity =
+            snippets::pick_builtin_code(&library.code_snippets, &[], &solidity_config, 5);
+
+        assert_eq!(react.len(), 5);
+        assert!(
+            react
+                .iter()
+                .all(|snippet| snippet.framework.eq_ignore_ascii_case("react"))
+        );
+        assert_eq!(solidity.len(), 5);
+        assert!(
+            solidity
+                .iter()
+                .all(|snippet| snippet.language.eq_ignore_ascii_case("solidity"))
+        );
+    }
+
+    #[test]
+    fn source_catalog_covers_all_github_code_sources() {
+        let library = library::load().expect("content json should load");
+        let catalog = library::source_catalog().expect("source catalog should load");
+        let github_repos = library
+            .code_snippets
+            .iter()
+            .filter_map(|snippet| github_repo_from_source(&snippet.source))
+            .collect::<HashSet<_>>();
+
+        for repo in github_repos {
+            let Some(source) = catalog.iter().find(|source| source.repo == repo) else {
+                panic!("missing source catalog entry for {repo}");
+            };
+            assert_eq!(source.source_id, format!("github:{repo}"));
+            assert!(!source.license_spdx.trim().is_empty());
+            assert_ne!(source.license_spdx, "NOASSERTION");
+        }
+    }
+
+    #[test]
     fn build_daily_plan_keeps_seven_lesson_flow() {
         let plan = PracticePlan {
             focus_words: Vec::new(),
@@ -299,13 +352,21 @@ mod tests {
             advice: Vec::new(),
             recommended_mode: Mode::Chars,
         };
-        let daily =
-            build_daily_practice_plan(&[], Path::new("."), &plan, &CodePracticeConfig::default())
-                .expect("plan should build");
+        let daily = build_daily_practice_plan(&[], None, &plan, &CodePracticeConfig::default())
+            .expect("plan should build");
 
         assert_eq!(daily.target_minutes, 20);
         assert_eq!(daily.lessons.len(), 7);
         assert_eq!(daily.lessons[0].kind, LessonKind::Warmup);
         assert_eq!(daily.lessons[6].kind, LessonKind::CodeBlock);
+        assert_eq!(daily.lessons[6].target.source, "keyloop:code-corpus");
+        assert!(!daily.lessons[6].target.text.trim().is_empty());
+    }
+
+    fn github_repo_from_source(source: &str) -> Option<String> {
+        source
+            .strip_prefix("github:")
+            .and_then(|source| source.split(':').next())
+            .map(ToOwned::to_owned)
     }
 }

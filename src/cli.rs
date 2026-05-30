@@ -34,7 +34,7 @@ pub enum Command {
         #[arg(long)]
         code_framework: Option<String>,
 
-        /// 代码练习项目过滤，例如本地仓库名或内置 keyloop-builtin。
+        /// 代码练习项目过滤，例如 nextjs、vue-core、openzeppelin 或本地仓库名。
         #[arg(long)]
         code_project: Option<String>,
     },
@@ -61,4 +61,37 @@ pub enum Command {
 #[derive(Debug, Subcommand)]
 pub enum ReportScope {
     Today,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn bare_keyloop_has_no_repo_to_scan() {
+        let cli = Cli::try_parse_from(["keyloop"]).expect("cli should parse");
+
+        assert!(cli.command.is_none());
+    }
+
+    #[test]
+    fn start_repo_defaults_to_none() {
+        let cli = Cli::try_parse_from(["keyloop", "start"]).expect("cli should parse");
+        let Some(Command::Start { repo, .. }) = cli.command else {
+            panic!("expected start command");
+        };
+
+        assert!(repo.is_none());
+    }
+
+    #[test]
+    fn start_repo_is_explicit_only() {
+        let cli = Cli::try_parse_from(["keyloop", "start", "--repo", "/tmp/app"])
+            .expect("cli should parse");
+        let Some(Command::Start { repo, .. }) = cli.command else {
+            panic!("expected start command");
+        };
+
+        assert_eq!(repo, Some(PathBuf::from("/tmp/app")));
+    }
 }

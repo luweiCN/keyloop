@@ -7,7 +7,7 @@
     "retrieved_at": "2026-05-30",
     "languages": ["typescript", "javascript"],
     "frameworks": ["vite", "frontend"],
-    "notes": "Recommended future source for TypeScript tooling and frontend build code."
+    "notes": "Source family for TypeScript tooling and frontend build code."
   },
   {
     "source_id": "github:vercel/next.js",
@@ -17,7 +17,27 @@
     "retrieved_at": "2026-05-30",
     "languages": ["typescript", "javascript", "react"],
     "frameworks": ["react", "nextjs"],
-    "notes": "Recommended future source for React and framework code blocks."
+    "notes": "Source family for React and Next.js application code blocks."
+  },
+  {
+    "source_id": "github:facebook/react",
+    "repo": "facebook/react",
+    "repo_url": "https://github.com/facebook/react",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["javascript", "typescript"],
+    "frameworks": ["react"],
+    "notes": "Source family for React hooks, reducer, and fixture-style drills."
+  },
+  {
+    "source_id": "github:TanStack/query",
+    "repo": "TanStack/query",
+    "repo_url": "https://github.com/TanStack/query",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript"],
+    "frameworks": ["react", "query"],
+    "notes": "Source family for frontend async-state and cache invalidation snippets."
   },
   {
     "source_id": "github:vuejs/core",
@@ -27,7 +47,47 @@
     "retrieved_at": "2026-05-30",
     "languages": ["typescript"],
     "frameworks": ["vue"],
-    "notes": "Recommended future source for Vue runtime and composition API examples."
+    "notes": "Source family for Vue runtime and composition API examples."
+  },
+  {
+    "source_id": "github:vuejs/pinia",
+    "repo": "vuejs/pinia",
+    "repo_url": "https://github.com/vuejs/pinia",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript"],
+    "frameworks": ["vue", "pinia"],
+    "notes": "Source family for Vue store and state-management drills."
+  },
+  {
+    "source_id": "github:vuejs/router",
+    "repo": "vuejs/router",
+    "repo_url": "https://github.com/vuejs/router",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript"],
+    "frameworks": ["vue", "router"],
+    "notes": "Source family for Vue route guard and navigation snippets."
+  },
+  {
+    "source_id": "github:vueuse/vueuse",
+    "repo": "vueuse/vueuse",
+    "repo_url": "https://github.com/vueuse/vueuse",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript"],
+    "frameworks": ["vue", "composables"],
+    "notes": "Source family for Vue composable and reactivity drills."
+  },
+  {
+    "source_id": "github:nuxt/nuxt",
+    "repo": "nuxt/nuxt",
+    "repo_url": "https://github.com/nuxt/nuxt",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript", "vue"],
+    "frameworks": ["vue", "nuxt"],
+    "notes": "Source family for Nuxt routing, data loading, and middleware snippets."
   },
   {
     "source_id": "github:nestjs/nest",
@@ -37,7 +97,17 @@
     "retrieved_at": "2026-05-30",
     "languages": ["typescript"],
     "frameworks": ["nestjs"],
-    "notes": "Recommended future source for controller, provider, module, and test code."
+    "notes": "Source family for controller, provider, module, guard, and test code."
+  },
+  {
+    "source_id": "github:nestjs/typeorm",
+    "repo": "nestjs/typeorm",
+    "repo_url": "https://github.com/nestjs/typeorm",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript"],
+    "frameworks": ["nestjs", "typeorm"],
+    "notes": "Source family for NestJS persistence and repository drills."
   },
   {
     "source_id": "github:OpenZeppelin/openzeppelin-contracts",
@@ -47,7 +117,7 @@
     "retrieved_at": "2026-05-30",
     "languages": ["solidity"],
     "frameworks": ["evm"],
-    "notes": "Recommended future source for Solidity function and modifier drills."
+    "notes": "Source family for Solidity function and modifier drills."
   },
   {
     "source_id": "github:tauri-apps/tauri",
@@ -57,7 +127,67 @@
     "retrieved_at": "2026-05-30",
     "languages": ["rust", "typescript"],
     "frameworks": ["rust", "desktop"],
-    "notes": "Recommended future source for Rust application code and TypeScript integration code."
+    "notes": "Source family for Rust application code and TypeScript integration code."
+  },
+  {
+    "source_id": "github:swc-project/swc",
+    "repo": "swc-project/swc",
+    "repo_url": "https://github.com/swc-project/swc",
+    "license_spdx": "Apache-2.0",
+    "retrieved_at": "2026-05-30",
+    "languages": ["rust", "typescript"],
+    "frameworks": ["rust", "web"],
+    "notes": "Source family for Rust compiler transform and visitor snippets."
+  },
+  {
+    "source_id": "github:denoland/deno",
+    "repo": "denoland/deno",
+    "repo_url": "https://github.com/denoland/deno",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["rust", "typescript"],
+    "frameworks": ["rust", "runtime"],
+    "notes": "Source family for module resolution and runtime-oriented Rust snippets."
+  },
+  {
+    "source_id": "github:tokio-rs/axum",
+    "repo": "tokio-rs/axum",
+    "repo_url": "https://github.com/tokio-rs/axum",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["rust"],
+    "frameworks": ["rust", "server"],
+    "notes": "Source family for Rust web handler and extractor snippets."
+  },
+  {
+    "source_id": "github:BurntSushi/ripgrep",
+    "repo": "BurntSushi/ripgrep",
+    "repo_url": "https://github.com/BurntSushi/ripgrep",
+    "license_spdx": "Unlicense",
+    "retrieved_at": "2026-05-30",
+    "languages": ["rust"],
+    "frameworks": ["rust", "cli"],
+    "notes": "Source family for Rust CLI filtering and file-walking snippets."
+  },
+  {
+    "source_id": "github:rust-lang/rust-analyzer",
+    "repo": "rust-lang/rust-analyzer",
+    "repo_url": "https://github.com/rust-lang/rust-analyzer",
+    "license_spdx": "Apache-2.0",
+    "retrieved_at": "2026-05-30",
+    "languages": ["rust"],
+    "frameworks": ["rust", "language-server"],
+    "notes": "Source family for Rust syntax and editor-service snippets."
+  },
+  {
+    "source_id": "github:ratatui/ratatui",
+    "repo": "ratatui/ratatui",
+    "repo_url": "https://github.com/ratatui/ratatui",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["rust"],
+    "frameworks": ["rust", "terminal"],
+    "notes": "Source family for terminal UI layout and rendering snippets."
   },
   {
     "source_id": "github:twbs/bootstrap",
@@ -67,7 +197,7 @@
     "retrieved_at": "2026-05-30",
     "languages": ["scss", "javascript"],
     "frameworks": ["web", "scss"],
-    "notes": "Recommended future source for SCSS/Sass component style drills."
+    "notes": "Source family for SCSS/Sass component style drills."
   },
   {
     "source_id": "github:necolas/normalize.css",
@@ -77,6 +207,116 @@
     "retrieved_at": "2026-05-30",
     "languages": ["css"],
     "frameworks": ["web"],
-    "notes": "Recommended future source for concise CSS normalization snippets."
+    "notes": "Source family for concise CSS normalization snippets."
+  },
+  {
+    "source_id": "github:mdn/dom-examples",
+    "repo": "mdn/dom-examples",
+    "repo_url": "https://github.com/mdn/dom-examples",
+    "license_spdx": "CC0-1.0",
+    "retrieved_at": "2026-05-30",
+    "languages": ["javascript", "html", "css"],
+    "frameworks": ["web"],
+    "notes": "Source family for DOM, custom element, and browser API drills."
+  },
+  {
+    "source_id": "github:nodejs/undici",
+    "repo": "nodejs/undici",
+    "repo_url": "https://github.com/nodejs/undici",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["javascript", "typescript"],
+    "frameworks": ["node", "web"],
+    "notes": "Source family for fetch and HTTP client snippets."
+  },
+  {
+    "source_id": "github:sveltejs/kit",
+    "repo": "sveltejs/kit",
+    "repo_url": "https://github.com/sveltejs/kit",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript", "svelte"],
+    "frameworks": ["svelte", "web"],
+    "notes": "Source family for SvelteKit load and routing snippets."
+  },
+  {
+    "source_id": "github:tailwindlabs/tailwindcss",
+    "repo": "tailwindlabs/tailwindcss",
+    "repo_url": "https://github.com/tailwindlabs/tailwindcss",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript", "css"],
+    "frameworks": ["web", "css"],
+    "notes": "Source family for utility CSS and documentation-style style blocks."
+  },
+  {
+    "source_id": "github:radix-ui/primitives",
+    "repo": "radix-ui/primitives",
+    "repo_url": "https://github.com/radix-ui/primitives",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript", "css"],
+    "frameworks": ["react", "web", "css"],
+    "notes": "Source family for accessible component state and CSS animation snippets."
+  },
+  {
+    "source_id": "github:sass/sass",
+    "repo": "sass/sass",
+    "repo_url": "https://github.com/sass/sass",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["scss", "sass"],
+    "frameworks": ["web", "scss"],
+    "notes": "Source family for Sass mixin and language fixture snippets."
+  },
+  {
+    "source_id": "github:less/less.js",
+    "repo": "less/less.js",
+    "repo_url": "https://github.com/less/less.js",
+    "license_spdx": "Apache-2.0",
+    "retrieved_at": "2026-05-30",
+    "languages": ["less", "javascript"],
+    "frameworks": ["web", "less"],
+    "notes": "Source family for Less variable, mixin, and fixture snippets."
+  },
+  {
+    "source_id": "github:ant-design/ant-design",
+    "repo": "ant-design/ant-design",
+    "repo_url": "https://github.com/ant-design/ant-design",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript", "less"],
+    "frameworks": ["react", "antd", "less"],
+    "notes": "Source family for Less component style drills; prefer the 4.24.9 tag for Less-heavy material."
+  },
+  {
+    "source_id": "github:shadcn-ui/ui",
+    "repo": "shadcn-ui/ui",
+    "repo_url": "https://github.com/shadcn-ui/ui",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript", "react"],
+    "frameworks": ["react", "ui"],
+    "notes": "Source family for React component and form-control snippets."
+  },
+  {
+    "source_id": "github:remix-run/remix",
+    "repo": "remix-run/remix",
+    "repo_url": "https://github.com/remix-run/remix",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript", "react"],
+    "frameworks": ["react", "remix"],
+    "notes": "Source family for React loader and action snippets."
+  },
+  {
+    "source_id": "github:foundry-rs/forge-std",
+    "repo": "foundry-rs/forge-std",
+    "repo_url": "https://github.com/foundry-rs/forge-std",
+    "license_spdx": "Apache-2.0",
+    "retrieved_at": "2026-05-30",
+    "languages": ["solidity"],
+    "frameworks": ["evm", "foundry"],
+    "notes": "Source family for Solidity test and Foundry-style snippets."
   }
 ]

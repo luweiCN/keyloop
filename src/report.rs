@@ -441,7 +441,7 @@ pub fn source_catalog_report(sources: &[SourceCatalogEntry], language: Language)
             let _ = writeln!(output, "推荐代码语料来源（{} 个）", sources.len());
             let _ = writeln!(
                 output,
-                "这些来源只记录候选仓库和 license 元数据，不代表已经把外部代码复制进 KeyLoop。"
+                "这些来源用于内置语料选型和后续精确抽取；直接复制外部代码时需要保留 commit、path 和 line range。"
             );
         }
         Language::En => {
@@ -452,7 +452,7 @@ pub fn source_catalog_report(sources: &[SourceCatalogEntry], language: Language)
             );
             let _ = writeln!(
                 output,
-                "These entries record candidate repositories and license metadata; they do not mean external code has been copied into KeyLoop."
+                "These entries guide the built-in corpus and future exact extraction; directly copied external code must keep commit, path, and line-range metadata."
             );
         }
     }

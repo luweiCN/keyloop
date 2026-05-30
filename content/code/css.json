@@ -1,0 +1,106 @@
+[
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "css",
+    "level": "block",
+    "source": "keyloop:css-grid",
+    "text": ".layout {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));\n  gap: clamp(12px, 2vw, 24px);\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "css",
+    "level": "block",
+    "source": "keyloop:css-media",
+    "text": "@media (min-width: 768px) {\n  .layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap",
+    "level": "block",
+    "source": "github:twbs/bootstrap:scss/_buttons.scss",
+    "text": ".btn {\n  display: inline-block;\n  font-weight: $btn-font-weight;\n  text-align: center;\n  cursor: pointer;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap",
+    "level": "block",
+    "source": "github:twbs/bootstrap:scss/_grid.scss",
+    "text": "@include media-breakpoint-up(md) {\n  .container {\n    max-width: map-get($container-max-widths, md);\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "sass",
+    "level": "block",
+    "source": "keyloop:scss-card",
+    "text": ".card {\n  &__title {\n    font-weight: 600;\n  }\n  &__body {\n    padding: 1rem;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "less",
+    "level": "block",
+    "source": "keyloop:less-button",
+    "text": "@primary-color: #2563eb;\n.button {\n  color: white;\n  background: @primary-color;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-js",
+    "level": "block",
+    "source": "github:less/less.js:packages/less/test/browser/less",
+    "text": "@base: #f938ab;\n.box-shadow(@style, @color) {\n  box-shadow: @style @color;\n}\n.card {\n  .box-shadow(0 0 5px, @base);\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "ant-design",
+    "level": "block",
+    "source": "github:ant-design/ant-design:components/button/style@4.24.9",
+    "text": ".@{btn-prefix-cls} {\n  position: relative;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "ant-design",
+    "level": "block",
+    "source": "github:ant-design/ant-design:components/style/themes@4.24.9",
+    "text": "@primary-color: #1890ff;\n@border-radius-base: 2px;\n@font-size-base: 14px;\n@line-height-base: 1.5715;"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "normalize",
+    "level": "block",
+    "source": "github:necolas/normalize.css:normalize.css",
+    "text": "button,\ninput,\nselect,\ntextarea {\n  font: inherit;\n  margin: 0;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "tailwind",
+    "level": "block",
+    "source": "github:tailwindlabs/tailwindcss:examples",
+    "text": ".prose :where(a):not(:where(.not-prose *)) {\n  color: var(--link-color);\n  text-decoration: underline;\n}"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "radix",
+    "level": "block",
+    "source": "github:radix-ui/primitives:examples",
+    "text": ".DialogOverlay[data-state=\"open\"] {\n  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "sass",
+    "level": "function",
+    "source": "github:sass/sass:spec",
+    "text": "@mixin focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  }
+]
