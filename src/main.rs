@@ -10,7 +10,7 @@ mod trainer;
 use anyhow::Result;
 use clap::Parser;
 use cli::{Cli, Command, ReportScope};
-use model::{Language, Mode};
+use model::{CodePracticeConfig, Language, Mode};
 use std::env;
 use std::path::PathBuf;
 
@@ -19,7 +19,22 @@ fn main() -> Result<()> {
     let language = cli.language;
 
     match cli.command {
-        Some(Command::Start { mode, repo }) => start(mode, language, repo)?,
+        Some(Command::Start {
+            mode,
+            repo,
+            code_language,
+            code_framework,
+            code_project,
+        }) => start(
+            mode,
+            language,
+            repo,
+            CodePracticeConfig {
+                language: code_language,
+                framework: code_framework,
+                project: code_project,
+            },
+        )?,
         Some(Command::Report { scope }) => match scope.unwrap_or(ReportScope::Today) {
             ReportScope::Today => {
                 let records = storage::load_sessions()?;
@@ -36,17 +51,26 @@ fn main() -> Result<()> {
             let snippets = content::extract_snippets(&path)?;
             println!("{}", report::import_preview(&path, &snippets, language));
         }
-        None => start(Mode::Chars, language, None)?,
+        Some(Command::Sources) => {
+            let sources = content::source_catalog()?;
+            println!("{}", report::source_catalog_report(&sources, language));
+        }
+        None => start(Mode::Chars, language, None, CodePracticeConfig::default())?,
     }
 
     Ok(())
 }
 
-fn start(_mode: Mode, language: Language, repo: Option<PathBuf>) -> Result<()> {
+fn start(
+    _mode: Mode,
+    language: Language,
+    repo: Option<PathBuf>,
+    code_config: CodePracticeConfig,
+) -> Result<()> {
     let repo = repo.unwrap_or(env::current_dir()?);
     let records = storage::load_sessions()?;
     let plan = plan::build_plan(&records, language);
-    let daily_plan = content::build_daily_practice_plan(&records, &repo, &plan)?;
+    let daily_plan = content::build_daily_practice_plan(&records, &repo, &plan, &code_config)?;
     let completed = trainer::run(daily_plan, records, language)?;
 
     if completed.is_empty() {

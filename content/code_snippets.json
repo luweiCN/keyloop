@@ -1,0 +1,162 @@
+[
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-builtin",
+    "level": "block",
+    "source": "keyloop:react-state",
+    "text": "const [state, setState] = useState(0);\n\nconst increment = () => {\n  setState((current) => current + 1);\n};"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-builtin",
+    "level": "block",
+    "source": "keyloop:react-filter",
+    "text": "const visibleItems = items.filter((item) => {\n  return item.enabled && item.type === selectedType;\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-builtin",
+    "level": "function",
+    "source": "keyloop:react-hook",
+    "text": "export function useToggle(initial = false) {\n  const [enabled, setEnabled] = useState(initial);\n  return [enabled, () => setEnabled((value) => !value)] as const;\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-builtin",
+    "level": "function",
+    "source": "keyloop:react-form",
+    "text": "const handleChange = (event: ChangeEvent<HTMLInputElement>) => {\n  setValue(event.currentTarget.value);\n};"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-builtin",
+    "level": "block",
+    "source": "keyloop:react-effect",
+    "text": "useEffect(() => {\n  document.title = title;\n}, [title]);"
+  },
+  {
+    "language": "typescript",
+    "framework": "react",
+    "project": "keyloop-builtin",
+    "level": "function",
+    "source": "keyloop:react-reducer",
+    "text": "function reducer(state: State, action: Action): State {\n  switch (action.type) {\n    case \"reset\":\n      return initialState;\n    default:\n      return state;\n  }\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "keyloop-builtin",
+    "level": "block",
+    "source": "keyloop:vue-computed",
+    "text": "const visibleTodos = computed(() => {\n  return todos.value.filter((todo) => !todo.completed);\n});"
+  },
+  {
+    "language": "typescript",
+    "framework": "vue",
+    "project": "keyloop-builtin",
+    "level": "function",
+    "source": "keyloop:vue-action",
+    "text": "function toggleTodo(id: string) {\n  const todo = todos.value.find((item) => item.id === id);\n  if (todo) todo.completed = !todo.completed;\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "nestjs",
+    "project": "keyloop-builtin",
+    "level": "function",
+    "source": "keyloop:nest-controller",
+    "text": "@Get(\":id\")\nasync findOne(@Param(\"id\") id: string) {\n  return this.usersService.findOne(id);\n}"
+  },
+  {
+    "language": "typescript",
+    "framework": "nestjs",
+    "project": "keyloop-builtin",
+    "level": "block",
+    "source": "keyloop:nest-provider",
+    "text": "const user = await this.repository.findOneBy({ id });\nif (!user) {\n  throw new NotFoundException(\"user not found\");\n}"
+  },
+  {
+    "language": "javascript",
+    "framework": "node",
+    "project": "keyloop-builtin",
+    "level": "function",
+    "source": "keyloop:fetch-json",
+    "text": "async function loadProfile(account) {\n  const response = await fetch(`/api/profile?account=${account}`);\n  return response.json();\n}"
+  },
+  {
+    "language": "html",
+    "framework": "web",
+    "project": "keyloop-builtin",
+    "level": "block",
+    "source": "keyloop:html-form",
+    "text": "<form class=\"stack\" method=\"post\">\n  <label for=\"email\">Email</label>\n  <input id=\"email\" name=\"email\" type=\"email\" />\n</form>"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-builtin",
+    "level": "block",
+    "source": "keyloop:css-grid",
+    "text": "grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));\ngap: clamp(12px, 2vw, 24px);"
+  },
+  {
+    "language": "css",
+    "framework": "web",
+    "project": "keyloop-builtin",
+    "level": "block",
+    "source": "keyloop:css-media",
+    "text": "@media (min-width: 768px) {\n  .layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "web",
+    "project": "keyloop-builtin",
+    "level": "block",
+    "source": "keyloop:scss-card",
+    "text": ".card {\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "keyloop-builtin",
+    "level": "block",
+    "source": "keyloop:less-button",
+    "text": "@primary-color: #2563eb;\n.button {\n  color: white;\n  background: @primary-color;\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-builtin",
+    "level": "function",
+    "source": "keyloop:solidity-counter",
+    "text": "function increment() public {\n  count += 1;\n}"
+  },
+  {
+    "language": "solidity",
+    "framework": "evm",
+    "project": "keyloop-builtin",
+    "level": "function",
+    "source": "keyloop:solidity-transfer",
+    "text": "function approve(address spender, uint256 amount) public returns (bool) {\n  allowance[msg.sender][spender] = amount;\n  return true;\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "keyloop-builtin",
+    "level": "function",
+    "source": "keyloop:rust-result",
+    "text": "fn parse_count(value: &str) -> Result<usize> {\n  let count = value.parse::<usize>()?;\n  Ok(count)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "keyloop-builtin",
+    "level": "block",
+    "source": "keyloop:rust-match",
+    "text": "match event.code {\n  KeyCode::Enter => app.begin_current(),\n  KeyCode::Esc => app.quit = true,\n  _ => {}\n}"
+  }
+]

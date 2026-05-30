@@ -88,6 +88,19 @@ pub struct PracticeTarget {
     pub source: String,
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct CodePracticeConfig {
+    pub language: Option<String>,
+    pub framework: Option<String>,
+    pub project: Option<String>,
+}
+
+impl CodePracticeConfig {
+    pub fn is_empty(&self) -> bool {
+        self.language.is_none() && self.framework.is_none() && self.project.is_none()
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SessionRecord {
     #[serde(default = "default_session_id")]

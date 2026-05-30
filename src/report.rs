@@ -1,4 +1,4 @@
-use crate::content::CodeSnippet;
+use crate::content::{CodeSnippet, library::SourceCatalogEntry};
 use crate::model::{Language, Mode, SessionRecord, TokenKind, TokenStat};
 use crate::plan::PracticePlan;
 use chrono::Local;
@@ -408,9 +408,13 @@ pub fn import_preview(path: &Path, snippets: &[CodeSnippet], language: Language)
         let one_line = snippet.text.replace('\n', " / ");
         let _ = writeln!(
             output,
-            "{}. [{}] {} ({})",
+            "{}. [{} {} / {} / {} / {}] {} ({})",
             index + 1,
             difficulty_label(&snippet.difficulty, language),
+            snippet.level.as_str(),
+            snippet.language,
+            snippet.framework,
+            snippet.project,
             one_line,
             snippet.source
         );
@@ -425,6 +429,47 @@ pub fn import_preview(path: &Path, snippets: &[CodeSnippet], language: Language)
                 let _ = writeln!(output, "... {} more", snippets.len() - 12);
             }
         }
+    }
+
+    output
+}
+
+pub fn source_catalog_report(sources: &[SourceCatalogEntry], language: Language) -> String {
+    let mut output = String::new();
+    match language {
+        Language::Zh => {
+            let _ = writeln!(output, "推荐代码语料来源（{} 个）", sources.len());
+            let _ = writeln!(
+                output,
+                "这些来源只记录候选仓库和 license 元数据，不代表已经把外部代码复制进 KeyLoop。"
+            );
+        }
+        Language::En => {
+            let _ = writeln!(
+                output,
+                "Recommended code corpus sources ({})",
+                sources.len()
+            );
+            let _ = writeln!(
+                output,
+                "These entries record candidate repositories and license metadata; they do not mean external code has been copied into KeyLoop."
+            );
+        }
+    }
+
+    for source in sources {
+        let _ = writeln!(
+            output,
+            "- {} [{}] {} | {} | {} | {} | {} | {}",
+            source.repo,
+            source.license_spdx,
+            source.repo_url,
+            source.source_id,
+            source.retrieved_at,
+            source.languages.join(", "),
+            source.frameworks.join(", "),
+            source.notes
+        );
     }
 
     output
