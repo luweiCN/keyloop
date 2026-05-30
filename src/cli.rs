@@ -25,6 +25,18 @@ pub enum Command {
         /// 扫描代码片段的仓库或目录 / repository or source directory to scan.
         #[arg(short, long)]
         repo: Option<PathBuf>,
+
+        /// 代码练习语言过滤，例如 typescript、javascript、solidity、rust。
+        #[arg(long)]
+        code_language: Option<String>,
+
+        /// 代码练习框架过滤，例如 react、vue、nestjs、evm、web。
+        #[arg(long)]
+        code_framework: Option<String>,
+
+        /// 代码练习项目过滤，例如本地仓库名或内置 keyloop-builtin。
+        #[arg(long)]
+        code_project: Option<String>,
     },
 
     /// 查看练习报告 / show practice reports.
@@ -41,6 +53,9 @@ pub enum Command {
         /// 要扫描的仓库或目录 / repository or source directory to scan.
         path: PathBuf,
     },
+
+    /// 查看推荐代码语料来源 / list recommended code corpus sources.
+    Sources,
 }
 
 #[derive(Debug, Subcommand)]

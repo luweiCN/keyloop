@@ -29,6 +29,7 @@ keyloop start --repo /path/to/project
 keyloop report today
 keyloop plan
 keyloop import /path/to/project
+keyloop sources
 ```
 
 切换英文：
@@ -40,6 +41,14 @@ keyloop plan --language en
 
 TUI 里也可以切换语言：菜单、计划和结果页按 `L`；正在跟打时按 `Ctrl+L`，避免和练习输入里的字母 `l` 冲突。
 切换后，菜单、课程标题、课程说明和固定 UI 文案都会一起切换。
+
+代码块练习可以按语言、框架或项目过滤：
+
+```bash
+keyloop start --code-language typescript
+keyloop start --code-framework react
+keyloop start --repo /path/to/project --code-language rust
+```
 
 ## 安装
 
@@ -93,6 +102,8 @@ cargo run -- plan
 - 数据统计：查看累计总时长、历史最高 WPM、平均正确率、最低错误率，并按日期切换查看每天每次练习的记录。
 
 ## 内容方向
+
+内置练习内容放在 `content/` 目录，不再硬编码在 Rust 字符串数组里。内容结构见 [docs/content/CATALOG.md](docs/content/CATALOG.md)。
 
 练习内容会重点丰富：
 

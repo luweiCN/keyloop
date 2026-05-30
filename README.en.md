@@ -29,6 +29,7 @@ keyloop start --repo /path/to/project
 keyloop report today
 keyloop plan
 keyloop import /path/to/project
+keyloop sources
 ```
 
 Switch to English:
@@ -39,6 +40,14 @@ keyloop plan --language en
 ```
 
 Inside the TUI, press `L` on menu/plan/result pages. While typing, press `Ctrl+L` so the normal `l` key remains available for practice input.
+
+Code block lessons can be filtered by language, framework, or project:
+
+```bash
+keyloop start --code-language typescript
+keyloop start --code-framework react
+keyloop start --repo /path/to/project --code-language rust
+```
 
 ## Install
 
@@ -72,6 +81,8 @@ cargo run -- plan
 ## Daily Practice
 
 The default daily target is 20 minutes. You can finish it in one session or in several short sessions. Each completed lesson adds to today's progress.
+
+Built-in content lives in the root `content/` directory instead of large Rust string arrays. See [docs/content/CATALOG.md](docs/content/CATALOG.md).
 
 Current lesson structure:
 

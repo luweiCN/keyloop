@@ -1,0 +1,16 @@
+[
+  "1234 5678 90 0987 6543 21",
+  "2026 1000 404 200 500 301 302",
+  "0 1 2 3 5 8 13 21 34 55",
+  "index 0 length 1 page 2 count 10",
+  "const limit = 100; const page = 1;",
+  "items.slice(0, 10).map((item) => item.id)",
+  "width: 320px; height: 180px;",
+  "padding: 8px 12px 16px 24px;",
+  "z-index: 10; opacity: 0.92;",
+  "chainId: 1, confirmations: 12",
+  "gasLimit: 21000, maxFeePerGas: 30",
+  "block 18446744 tx 0x1234",
+  "retry 1 of 3 after 250ms",
+  "status 200 201 204 400 401 403 404 500"
+]

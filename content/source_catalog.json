@@ -1,0 +1,82 @@
+[
+  {
+    "source_id": "github:vitejs/vite",
+    "repo": "vitejs/vite",
+    "repo_url": "https://github.com/vitejs/vite",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript", "javascript"],
+    "frameworks": ["vite", "frontend"],
+    "notes": "Recommended future source for TypeScript tooling and frontend build code."
+  },
+  {
+    "source_id": "github:vercel/next.js",
+    "repo": "vercel/next.js",
+    "repo_url": "https://github.com/vercel/next.js",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript", "javascript", "react"],
+    "frameworks": ["react", "nextjs"],
+    "notes": "Recommended future source for React and framework code blocks."
+  },
+  {
+    "source_id": "github:vuejs/core",
+    "repo": "vuejs/core",
+    "repo_url": "https://github.com/vuejs/core",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript"],
+    "frameworks": ["vue"],
+    "notes": "Recommended future source for Vue runtime and composition API examples."
+  },
+  {
+    "source_id": "github:nestjs/nest",
+    "repo": "nestjs/nest",
+    "repo_url": "https://github.com/nestjs/nest",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["typescript"],
+    "frameworks": ["nestjs"],
+    "notes": "Recommended future source for controller, provider, module, and test code."
+  },
+  {
+    "source_id": "github:OpenZeppelin/openzeppelin-contracts",
+    "repo": "OpenZeppelin/openzeppelin-contracts",
+    "repo_url": "https://github.com/OpenZeppelin/openzeppelin-contracts",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["solidity"],
+    "frameworks": ["evm"],
+    "notes": "Recommended future source for Solidity function and modifier drills."
+  },
+  {
+    "source_id": "github:tauri-apps/tauri",
+    "repo": "tauri-apps/tauri",
+    "repo_url": "https://github.com/tauri-apps/tauri",
+    "license_spdx": "Apache-2.0",
+    "retrieved_at": "2026-05-30",
+    "languages": ["rust", "typescript"],
+    "frameworks": ["rust", "desktop"],
+    "notes": "Recommended future source for Rust application code and TypeScript integration code."
+  },
+  {
+    "source_id": "github:twbs/bootstrap",
+    "repo": "twbs/bootstrap",
+    "repo_url": "https://github.com/twbs/bootstrap",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["scss", "javascript"],
+    "frameworks": ["web", "scss"],
+    "notes": "Recommended future source for SCSS/Sass component style drills."
+  },
+  {
+    "source_id": "github:necolas/normalize.css",
+    "repo": "necolas/normalize.css",
+    "repo_url": "https://github.com/necolas/normalize.css",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-05-30",
+    "languages": ["css"],
+    "frameworks": ["web"],
+    "notes": "Recommended future source for concise CSS normalization snippets."
+  }
+]
