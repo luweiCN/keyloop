@@ -59,6 +59,7 @@ struct App {
     completed_records: Vec<SessionRecord>,
     completed_lesson_indices: Vec<usize>,
     ignored_non_ascii: u32,
+    exit_confirm: bool,
     quit: bool,
 }
 
@@ -83,6 +84,7 @@ impl App {
             completed_records: Vec::new(),
             completed_lesson_indices: Vec::new(),
             ignored_non_ascii: 0,
+            exit_confirm: false,
             quit: false,
         }
     }
@@ -124,6 +126,7 @@ impl App {
         self.input.clear();
         self.events.clear();
         self.ignored_non_ascii = 0;
+        self.exit_confirm = false;
         self.started_at = Some(Utc::now());
         self.started = Some(Instant::now());
         self.phase = Phase::Running;
@@ -146,29 +149,40 @@ impl App {
         self.begin_current();
     }
 
-    fn complete(&mut self) {
-        let Some(target) = self.target.clone() else {
-            return;
-        };
-        let Some(started_at) = self.started_at else {
-            return;
-        };
-        let Some(started) = self.started else {
-            return;
-        };
+    fn current_record(&self) -> Option<SessionRecord> {
+        let target = self.target.clone()?;
+        let started_at = self.started_at?;
+        let started = self.started?;
 
         let duration_ms = elapsed_ms(started);
         let user_input = self.input.iter().collect::<String>();
-        let record = metrics::build_session_record(
+        Some(metrics::build_session_record(
             target,
             started_at,
             duration_ms,
             user_input,
             self.events.clone(),
-        );
+        ))
+    }
+
+    fn complete(&mut self) {
+        let Some(record) = self.current_record() else {
+            return;
+        };
         self.completed_records.push(record);
         self.completed_lesson_indices.push(self.lesson_index);
+        self.exit_confirm = false;
         self.phase = Phase::Complete;
+    }
+
+    fn save_partial_and_quit(&mut self) {
+        if !self.input.is_empty()
+            && let Some(record) = self.current_record()
+        {
+            self.completed_records.push(record);
+        }
+        self.exit_confirm = false;
+        self.quit = true;
     }
 
     fn reset_to_menu(&mut self) {
@@ -182,6 +196,7 @@ impl App {
         self.started_at = None;
         self.started = None;
         self.ignored_non_ascii = 0;
+        self.exit_confirm = false;
     }
 
     fn choose_menu_item(&mut self) {
@@ -343,15 +358,15 @@ fn handle_stats_key(app: &mut App, code: KeyCode) {
             app.stats_view = StatsView::Details;
             app.clamp_stats_day();
         }
-        KeyCode::Left | KeyCode::Char('h') | KeyCode::Char('H') | KeyCode::Char('[') => {
-            if app.stats_view == StatsView::Details && dates_len > 0 {
-                app.stats_day_index = (app.stats_day_index + 1).min(dates_len - 1);
-            }
+        KeyCode::Left | KeyCode::Char('h') | KeyCode::Char('H') | KeyCode::Char('[')
+            if app.stats_view == StatsView::Details && dates_len > 0 =>
+        {
+            app.stats_day_index = (app.stats_day_index + 1).min(dates_len - 1);
         }
-        KeyCode::Right | KeyCode::Char('j') | KeyCode::Char('J') | KeyCode::Char(']') => {
-            if app.stats_view == StatsView::Details {
-                app.stats_day_index = app.stats_day_index.saturating_sub(1);
-            }
+        KeyCode::Right | KeyCode::Char('j') | KeyCode::Char('J') | KeyCode::Char(']')
+            if app.stats_view == StatsView::Details =>
+        {
+            app.stats_day_index = app.stats_day_index.saturating_sub(1);
         }
         KeyCode::Home if app.stats_view == StatsView::Details => app.stats_day_index = 0,
         KeyCode::End if app.stats_view == StatsView::Details && dates_len > 0 => {
@@ -385,25 +400,34 @@ fn handle_running_key(app: &mut App, code: KeyCode, modifiers: KeyModifiers) {
         return;
     };
 
+    if app.exit_confirm {
+        match code {
+            KeyCode::Enter | KeyCode::Char(' ') | KeyCode::Esc => app.exit_confirm = false,
+            KeyCode::Char('s') | KeyCode::Char('S') => app.save_partial_and_quit(),
+            KeyCode::Char('m') | KeyCode::Char('M') => app.reset_to_menu(),
+            KeyCode::Char('q') | KeyCode::Char('Q') => app.quit = true,
+            _ => {}
+        }
+        return;
+    }
+
     if code == KeyCode::Esc {
-        app.reset_to_menu();
+        app.exit_confirm = true;
         return;
     }
 
     match code {
-        KeyCode::Backspace => {
-            if !app.input.is_empty() {
-                app.input.pop();
-                let position = app.input.len();
-                app.events.push(KeyEventRecord {
-                    at_ms: elapsed_ms(started),
-                    action: KeyAction::Backspace,
-                    position,
-                    expected: app.target_chars.get(position).copied(),
-                    input: None,
-                    correct: false,
-                });
-            }
+        KeyCode::Backspace if !app.input.is_empty() => {
+            app.input.pop();
+            let position = app.input.len();
+            app.events.push(KeyEventRecord {
+                at_ms: elapsed_ms(started),
+                action: KeyAction::Backspace,
+                position,
+                expected: app.target_chars.get(position).copied(),
+                input: None,
+                correct: false,
+            });
         }
         KeyCode::Enter => push_char('\n', app, started),
         KeyCode::Tab => push_char('\t', app, started),
@@ -787,7 +811,7 @@ fn render_running(frame: &mut Frame, area: Rect, app: &App) {
             Constraint::Length(4),
             Constraint::Length(3),
             Constraint::Min(8),
-            Constraint::Length(3),
+            Constraint::Length(4),
             Constraint::Length(3),
         ])
         .split(area);
@@ -810,15 +834,23 @@ fn render_running(frame: &mut Frame, area: Rect, app: &App) {
         &app.input,
         app.language,
     );
-    render_metrics(
-        frame,
-        centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
-        &app.target_chars,
-        &app.input,
-        &app.events,
-        app.started,
-        app.language,
-    );
+    if app.exit_confirm {
+        render_exit_confirmation(
+            frame,
+            centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
+            app.language,
+        );
+    } else {
+        render_metrics(
+            frame,
+            centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
+            &app.target_chars,
+            &app.input,
+            &app.events,
+            app.started,
+            app.language,
+        );
+    }
     render_progress(
         frame,
         centered_width(chunks[4], PRACTICE_PANEL_MAX_WIDTH),
@@ -1049,7 +1081,14 @@ fn render_header(frame: &mut Frame, area: Rect, app: &App, target: Option<&Pract
     };
     let mut help = vec![
         Span::styled("Esc", Style::default().fg(Color::Yellow)),
-        Span::raw(format!(" {}  ", text(app.language, "esc_help"))),
+        Span::raw(format!(
+            " {}  ",
+            if app.phase == Phase::Running {
+                running_exit_help(app.language, app.exit_confirm)
+            } else {
+                text(app.language, "esc_help")
+            }
+        )),
         Span::styled(language_shortcut, Style::default().fg(Color::Yellow)),
         Span::raw(format!(" {}  ", text(app.language, "language_help"))),
         Span::styled(
@@ -1234,6 +1273,53 @@ fn render_metrics(
     );
 }
 
+fn render_exit_confirmation(frame: &mut Frame, area: Rect, language: Language) {
+    let lines = match language {
+        Language::Zh => vec![
+            Line::from(vec![
+                Span::styled(
+                    "已暂停",
+                    Style::default()
+                        .fg(Color::Yellow)
+                        .add_modifier(Modifier::BOLD),
+                ),
+                Span::raw("  你的输入还在，没有丢。"),
+            ]),
+            Line::from(
+                "Enter/Space/Esc 继续 | S 保存当前进度并退出 | M 返回菜单不保存 | Q 退出不保存",
+            ),
+        ],
+        Language::En => vec![
+            Line::from(vec![
+                Span::styled(
+                    "Paused",
+                    Style::default()
+                        .fg(Color::Yellow)
+                        .add_modifier(Modifier::BOLD),
+                ),
+                Span::raw("  Your current input is still here."),
+            ]),
+            Line::from(
+                "Enter/Space/Esc resume | S save partial and exit | M menu without saving | Q quit without saving",
+            ),
+        ],
+    };
+
+    frame.render_widget(
+        Paragraph::new(lines)
+            .block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .title(match language {
+                        Language::Zh => "退出确认",
+                        Language::En => "Exit confirmation",
+                    }),
+            )
+            .wrap(Wrap { trim: false }),
+        area,
+    );
+}
+
 fn render_progress(
     frame: &mut Frame,
     area: Rect,
@@ -1261,6 +1347,15 @@ fn render_progress(
             .label(label),
         area,
     );
+}
+
+fn running_exit_help(language: Language, exit_confirm: bool) -> &'static str {
+    match (language, exit_confirm) {
+        (Language::Zh, true) => "已暂停，按 Enter/Space/Esc 继续",
+        (Language::En, true) => "paused, Enter/Space/Esc resumes",
+        (Language::Zh, false) => "Esc 暂停并打开退出确认",
+        (Language::En, false) => "Esc pauses and opens exit confirmation",
+    }
 }
 
 fn push_char(ch: char, app: &mut App, started: Instant) {
@@ -1674,6 +1769,61 @@ mod tests {
     }
 
     #[test]
+    fn running_esc_opens_confirmation_without_losing_input() {
+        let mut app = running_app_with_input();
+
+        handle_running_key(&mut app, KeyCode::Esc, KeyModifiers::NONE);
+
+        assert_eq!(app.phase, Phase::Running);
+        assert!(app.exit_confirm);
+        assert_eq!(app.input, vec!['a']);
+        assert_eq!(app.events.len(), 1);
+        assert!(!app.quit);
+    }
+
+    #[test]
+    fn running_exit_confirmation_esc_resumes_practice() {
+        let mut app = running_app_with_input();
+        handle_running_key(&mut app, KeyCode::Esc, KeyModifiers::NONE);
+
+        handle_running_key(&mut app, KeyCode::Esc, KeyModifiers::NONE);
+
+        assert_eq!(app.phase, Phase::Running);
+        assert!(!app.exit_confirm);
+        assert_eq!(app.input, vec!['a']);
+        assert!(!app.quit);
+    }
+
+    #[test]
+    fn running_exit_confirmation_can_save_partial_record() {
+        let mut app = running_app_with_input();
+        handle_running_key(&mut app, KeyCode::Esc, KeyModifiers::NONE);
+
+        handle_running_key(&mut app, KeyCode::Char('s'), KeyModifiers::NONE);
+
+        assert!(app.quit);
+        assert_eq!(app.completed_records.len(), 1);
+        assert!(app.completed_lesson_indices.is_empty());
+        let record = &app.completed_records[0];
+        assert_eq!(record.user_input, "a");
+        assert_eq!(record.target_len, 3);
+        assert_eq!(record.typed_len, 1);
+    }
+
+    #[test]
+    fn running_exit_confirmation_menu_is_explicit_discard() {
+        let mut app = running_app_with_input();
+        handle_running_key(&mut app, KeyCode::Esc, KeyModifiers::NONE);
+
+        handle_running_key(&mut app, KeyCode::Char('m'), KeyModifiers::NONE);
+
+        assert_eq!(app.phase, Phase::Menu);
+        assert!(!app.exit_confirm);
+        assert!(app.input.is_empty());
+        assert!(app.completed_records.is_empty());
+    }
+
+    #[test]
     fn menu_zero_key_does_not_select_first_item() {
         let plan = DailyPracticePlan {
             target_minutes: 20,
@@ -1780,5 +1930,25 @@ mod tests {
 
         assert_eq!(counts.get("a"), Some(&1));
         assert_eq!(counts.get("b"), Some(&2));
+    }
+
+    fn running_app_with_input() -> App {
+        let plan = DailyPracticePlan {
+            target_minutes: 20,
+            completed_ms: 0,
+            lessons: Vec::new(),
+        };
+        let mut app = App::new(plan, Vec::new(), Language::Zh);
+        app.phase = Phase::Running;
+        app.target = Some(PracticeTarget {
+            mode: crate::model::Mode::Words,
+            text: "abc".to_string(),
+            source: "test".to_string(),
+        });
+        app.target_chars = vec!['a', 'b', 'c'];
+        app.started_at = Some(Utc::now());
+        app.started = Some(Instant::now());
+        handle_running_key(&mut app, KeyCode::Char('a'), KeyModifiers::NONE);
+        app
     }
 }
