@@ -393,10 +393,8 @@ fn handle_stats_key(app: &mut App, code: KeyCode) {
             }
         }
         KeyCode::Home if app.stats_view == StatsView::Details => app.stats_day_index = 0,
-        KeyCode::End => {
-            if app.stats_view == StatsView::Details && dates_len > 0 {
-                app.stats_day_index = dates_len - 1;
-            }
+        KeyCode::End if app.stats_view == StatsView::Details && dates_len > 0 => {
+            app.stats_day_index = dates_len - 1;
         }
         _ => {}
     }

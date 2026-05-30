@@ -29,7 +29,7 @@ impl fmt::Display for Language {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, ValueEnum)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, ValueEnum)]
 #[serde(rename_all = "lowercase")]
 pub enum Mode {
     Chars,
@@ -38,13 +38,8 @@ pub enum Mode {
     Words,
     Symbols,
     Code,
+    #[default]
     Mixed,
-}
-
-impl Default for Mode {
-    fn default() -> Self {
-        Self::Mixed
-    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
