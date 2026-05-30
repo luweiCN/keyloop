@@ -89,7 +89,7 @@ The default daily target is 20 minutes. You can finish it in one session or in s
 
 Built-in content lives in the root `content/` directory instead of large Rust string arrays. See [docs/content/CATALOG.md](docs/content/CATALOG.md). Code indentation is normalized before practice by removing the shared outer indentation while preserving relative indentation inside functions, HTML/Vue trees, and CSS nesting. In code mode, pressing Enter automatically inserts the expected leading indentation for the next line.
 
-Current lesson structure:
+Without enough history, full practice starts from this default path:
 
 1. Warmup: base keys
 2. Chunks: English spelling chunks such as `the`, `tion`, `ing`, `ment`, `pre`, `con`, `str`
@@ -98,6 +98,8 @@ Current lesson structure:
 5. Focus: numbers and symbols
 6. Naming: casing and frontend APIs
 7. Code blocks: complete snippets with at least 120 built-in entries per language for TypeScript, JavaScript, Vue, Solidity, Rust, HTML, CSS, Less, and Sass
+
+After there is recent history, full practice becomes adaptive: key hot spots add foundation drills, symbol errors add symbol groups, high-error words and identifiers feed chunk/word groups, and slow terms are pushed back into complete code blocks. The completion screen explains why the next group is coming up.
 
 The menu also includes Foundation practice and Code focus mode. Foundation practice has row, horizontal, vertical, and finger-movement drills that continue into another group after each completion. Code focus lets you multi-select languages, frameworks, and projects, then continue into another generated code group.
 

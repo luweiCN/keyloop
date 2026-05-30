@@ -259,7 +259,7 @@ pub fn plan_report(plan: &PracticePlan, language: Language) -> String {
             let _ = writeln!(output, "每日目标: 20 分钟");
             let _ = writeln!(
                 output,
-                "默认课程: 热身 -> 英文词块 -> 英语高频词 -> 前端单词 -> 数字/符号 -> 命名 -> 短代码块"
+                "默认路径: 热身 -> 英文词块 -> 英语高频词 -> 前端单词 -> 数字/符号 -> 命名 -> 短代码块"
             );
             let _ = writeln!(
                 output,
@@ -271,7 +271,7 @@ pub fn plan_report(plan: &PracticePlan, language: Language) -> String {
             let _ = writeln!(output, "Daily target: 20 minutes");
             let _ = writeln!(
                 output,
-                "Default lessons: warmup -> word chunks -> common English words -> frontend words -> numbers/symbols -> naming -> short code blocks"
+                "Default path: warmup -> word chunks -> common English words -> frontend words -> numbers/symbols -> naming -> short code blocks"
             );
             let _ = writeln!(
                 output,
@@ -280,6 +280,14 @@ pub fn plan_report(plan: &PracticePlan, language: Language) -> String {
             );
         }
     }
+    write_list(
+        &mut output,
+        match language {
+            Language::Zh => "键位热区",
+            Language::En => "Key hot spots",
+        },
+        &plan.focus_keys,
+    );
     write_list(
         &mut output,
         match language {
@@ -320,28 +328,37 @@ pub fn plan_report(plan: &PracticePlan, language: Language) -> String {
     match language {
         Language::Zh => {
             let _ = writeln!(output, "课程形态：");
-            let _ = writeln!(output, "  1. 打开软件后直接看到今日练习，不再手动调难度。");
+            let _ = writeln!(
+                output,
+                "  1. 打开软件后直接看到今日动态练习，不再手动调难度。"
+            );
             let _ = writeln!(output, "  2. 可以零碎练，每次完成都会累计到今日进度。");
             let _ = writeln!(
                 output,
-                "  3. 代码块覆盖 TS/JS/Vue/Solidity/Rust/HTML/CSS/Less/Sass。"
+                "  3. 综合训练会根据键位、错词、符号和代码慢项调整组别。"
             );
-            let _ = writeln!(output, "  4. 一周后根据记录调整课程内容和难度。");
+            let _ = writeln!(
+                output,
+                "  4. 代码块覆盖 TS/JS/Vue/Solidity/Rust/HTML/CSS/Less/Sass。"
+            );
         }
         Language::En => {
             let _ = writeln!(output, "Lesson model:");
-            let _ = writeln!(output, "  1. Open KeyLoop and start today's plan directly.");
+            let _ = writeln!(
+                output,
+                "  1. Open KeyLoop and start today's adaptive plan directly."
+            );
             let _ = writeln!(
                 output,
                 "  2. Short sessions accumulate into daily progress."
             );
             let _ = writeln!(
                 output,
-                "  3. Code blocks cover TS/JS/Vue/Solidity/Rust/HTML/CSS/Less/Sass."
+                "  3. Full practice adapts from key, word, symbol, and code hot spots."
             );
             let _ = writeln!(
                 output,
-                "  4. Adjust content and difficulty after a week of data."
+                "  4. Code blocks cover TS/JS/Vue/Solidity/Rust/HTML/CSS/Less/Sass."
             );
         }
     }
@@ -649,8 +666,10 @@ mod tests {
             focus_words: Vec::new(),
             focus_symbols: Vec::new(),
             focus_code: Vec::new(),
+            focus_keys: Vec::new(),
             advice: Vec::new(),
             recommended_mode: Mode::Mixed,
+            has_recent_history: false,
         }
     }
 

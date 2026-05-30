@@ -21,31 +21,34 @@ Starting `keyloop` opens a practice menu:
 Practice menu
 
 1. Comprehensive practice
-2. Warmup: base keys
-3. Chunks: English spelling chunks
-4. Common words: real English common words
-5. Words: frontend vocabulary
-6. Focus: numbers and symbols
-7. Naming: casing and frontend APIs
-8. Code: short complete code blocks
-9. Stats
+2. Foundation practice
+3. Warmup: base keys
+4. Chunks: English spelling chunks
+5. Common words: real English common words
+6. Words: frontend vocabulary
+7. Focus: numbers and symbols
+8. Naming: casing and frontend APIs
+9. Code: short complete code blocks
+10. Code focus
+11. Stats
 ```
 
-The user can run the full plan or choose one focused lesson. The only important runtime setting is language.
+The user can run the adaptive full plan, choose a foundation drill, choose one focused lesson, or enter code focus. The only global runtime setting is language.
 
 ## Practice Pages
 
 ### Menu
 
-- Comprehensive practice: run all seven lessons in sequence.
+- Comprehensive practice: run today's adaptive lesson sequence. With no history it uses the default path; with recent history it adjusts from key, token, symbol, and code hot spots.
+- Foundation practice: row, horizontal, vertical, diagonal, punctuation-edge, and finger movement drills.
 - Focused lesson: practice only one step.
-- Stats: review total time, best WPM, weighted accuracy, key heatmap, problem words, and daily details.
+- Stats: review total time, best WPM, weighted accuracy, key heatmap, problem words, daily details, and what the next full practice will prioritize.
 
 ### Plan
 
 The daily plan is generated from local history. With no history, KeyLoop starts from a beginner-friendly plan.
 
-It shows the target time, lesson purposes, and expected sequence. It does not expose complex configuration.
+It shows the target time, lesson reasons, and expected sequence. It does not expose complex configuration.
 
 ### Typing
 
@@ -61,7 +64,7 @@ The typing page focuses on one task: complete the current target text.
 
 ### Result
 
-After each lesson, KeyLoop shows WPM, raw WPM, accuracy, errors, backspaces, slow tokens, and next-step controls.
+After each lesson, KeyLoop shows WPM, raw WPM, accuracy, errors, backspaces, slow tokens, next-step controls, and why the next group is scheduled.
 
 ## Content System
 

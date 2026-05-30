@@ -1,4 +1,4 @@
-use crate::model::{Language, Mode, SessionRecord, TokenKind};
+use crate::model::{KeyAction, Language, Mode, SessionRecord, TokenKind};
 use chrono::{Duration, Utc};
 use std::collections::BTreeMap;
 
@@ -7,8 +7,10 @@ pub struct PracticePlan {
     pub focus_words: Vec<String>,
     pub focus_symbols: Vec<String>,
     pub focus_code: Vec<String>,
+    pub focus_keys: Vec<String>,
     pub advice: Vec<String>,
     pub recommended_mode: Mode,
+    pub has_recent_history: bool,
 }
 
 #[derive(Debug, Default)]
@@ -70,14 +72,17 @@ pub fn build_plan(records: &[SessionRecord], language: Language) -> PracticePlan
                 "{}".into(),
             ],
             focus_code: vec!["useState".into(), "items.map".into(), "!== null".into()],
+            focus_keys: Vec::new(),
             advice: no_history_advice(language),
             recommended_mode: Mode::Chars,
+            has_recent_history: false,
         };
     }
 
     let mut words = BTreeMap::<String, Aggregate>::new();
     let mut symbols = BTreeMap::<String, Aggregate>::new();
     let mut code_terms = BTreeMap::<String, Aggregate>::new();
+    let mut keys = BTreeMap::<String, Aggregate>::new();
     let mut total_typed = 0usize;
     let mut total_key_correct = 0usize;
     let mut total_backspaces = 0u32;
@@ -108,6 +113,10 @@ pub fn build_plan(records: &[SessionRecord], language: Language) -> PracticePlan
                 aggregate.add(stat.start_delay_ms, stat.duration_ms, stat.errors);
             }
         }
+
+        for (key, count) in record_key_errors(record) {
+            keys.entry(key).or_default().add(0, 0, count);
+        }
     }
 
     let focus_words = top_keys(&words, 16)
@@ -126,6 +135,7 @@ pub fn build_plan(records: &[SessionRecord], language: Language) -> PracticePlan
             focus_code.push(word.clone());
         }
     }
+    let focus_keys = top_keys(&keys, 8);
 
     let accuracy = if total_typed == 0 {
         0.0
@@ -162,6 +172,12 @@ pub fn build_plan(records: &[SessionRecord], language: Language) -> PracticePlan
             Language::En => format!("Review code symbols: {}.", focus_symbols.join(", ")),
         });
     }
+    if !focus_keys.is_empty() {
+        advice.push(match language {
+            Language::Zh => format!("补强键位热区：{}。", focus_keys.join(", ")),
+            Language::En => format!("Reinforce key hot spots: {}.", focus_keys.join(", ")),
+        });
+    }
     if advice.is_empty() {
         advice.push(match language {
             Language::Zh => "表现比较稳定。可以用混合模式，并加入更多真实代码片段。".into(),
@@ -186,9 +202,33 @@ pub fn build_plan(records: &[SessionRecord], language: Language) -> PracticePlan
         focus_words,
         focus_symbols,
         focus_code,
+        focus_keys,
         advice,
         recommended_mode,
+        has_recent_history: true,
     }
+}
+
+fn record_key_errors(record: &SessionRecord) -> Vec<(String, u32)> {
+    let mut counts = BTreeMap::<String, u32>::new();
+    for event in &record.key_events {
+        if matches!(event.action, KeyAction::Insert) && !event.correct {
+            let label = event
+                .expected
+                .or(event.input)
+                .map(key_bucket_for_char)
+                .unwrap_or_else(|| "extra".to_string());
+            *counts.entry(label).or_default() += 1;
+        }
+    }
+
+    if record.key_events.is_empty() {
+        for (label, count) in &record.error_chars {
+            *counts.entry(key_bucket_for_label(label)).or_default() += count;
+        }
+    }
+
+    counts.into_iter().collect()
 }
 
 fn no_history_advice(language: Language) -> Vec<String> {
@@ -235,6 +275,51 @@ fn is_word_like_token(token: &str) -> bool {
             .all(|ch| ch.is_ascii_alphanumeric() || ch == '_')
 }
 
+fn key_bucket_for_label(label: &str) -> String {
+    match label {
+        "<space>" => "space".to_string(),
+        "\\n" => "enter".to_string(),
+        "\\t" => "tab".to_string(),
+        _ => label
+            .chars()
+            .next()
+            .map(key_bucket_for_char)
+            .unwrap_or_default(),
+    }
+}
+
+fn key_bucket_for_char(ch: char) -> String {
+    match ch {
+        '!' | '1' => "1",
+        '@' | '2' => "2",
+        '#' | '3' => "3",
+        '$' | '4' => "4",
+        '%' | '5' => "5",
+        '^' | '6' => "6",
+        '&' | '7' => "7",
+        '*' | '8' => "8",
+        '(' | '9' => "9",
+        ')' | '0' => "0",
+        '_' | '-' => "-",
+        '+' | '=' => "=",
+        '~' | '`' => "`",
+        '{' | '[' => "[",
+        '}' | ']' => "]",
+        '|' | '\\' => "\\",
+        ':' | ';' => ";",
+        '"' | '\'' => "'",
+        '<' | ',' => ",",
+        '>' | '.' => ".",
+        '?' | '/' => "/",
+        ' ' => "space",
+        '\n' => "enter",
+        '\t' => "tab",
+        ch if ch.is_ascii_alphabetic() => return ch.to_ascii_lowercase().to_string(),
+        ch => return ch.to_string(),
+    }
+    .to_string()
+}
+
 fn effective_typed_len(record: &SessionRecord) -> usize {
     if record.typed_len > 0 {
         return record.typed_len;
@@ -261,6 +346,25 @@ mod tests {
 
         assert!(plan.focus_words.contains(&"response".to_string()));
         assert!(plan.focus_symbols.contains(&"=>".to_string()));
+    }
+
+    #[test]
+    fn build_plan_uses_key_error_hotspots() {
+        let mut record = SessionRecord {
+            started_at: Utc::now(),
+            typed_len: 10,
+            accuracy: 80.0,
+            ..SessionRecord::default()
+        };
+        record.error_chars.insert("J".to_string(), 3);
+        record.error_chars.insert(";".to_string(), 2);
+
+        let plan = build_plan(&[record], Language::Zh);
+
+        assert!(plan.has_recent_history);
+        assert!(plan.focus_keys.contains(&"j".to_string()));
+        assert!(plan.focus_keys.contains(&";".to_string()));
+        assert!(plan.advice.iter().any(|item| item.contains("键位热区")));
     }
 
     #[test]

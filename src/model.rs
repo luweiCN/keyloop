@@ -44,6 +44,7 @@ pub enum Mode {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LessonKind {
+    Foundation,
     Warmup,
     Chunks,
     CommonWords,
@@ -65,6 +66,8 @@ pub struct PracticeLesson {
     pub kind: LessonKind,
     pub estimated_minutes: u16,
     pub target: PracticeTarget,
+    pub reason_zh: String,
+    pub reason_en: String,
 }
 
 impl fmt::Display for Mode {

@@ -10,7 +10,7 @@ use crate::model::{
     KeyEventRecord, Language, LessonKind, Mode, PracticeLesson, PracticeTarget, SessionRecord,
 };
 use anyhow::Result;
-use chrono::{DateTime, NaiveDate, Utc};
+use chrono::{DateTime, Local, NaiveDate, Utc};
 use copy::{lesson_color, lesson_purpose, lesson_title, text};
 use crossterm::event::{self, Event, KeyCode, KeyEventKind, KeyModifiers};
 use ratatui::Frame;
@@ -87,6 +87,8 @@ impl App {
         code_options: Vec<CodePracticeOption>,
     ) -> Self {
         let code_selected = vec![false; code_options.len()];
+        let completed_lesson_indices = completed_lesson_indices_from_records(&plan, &records);
+        let lesson_index = first_pending_lesson_index(&plan, &completed_lesson_indices);
         Self {
             phase: Phase::Menu,
             language,
@@ -105,7 +107,7 @@ impl App {
             code_specialist_active: false,
             code_group_count: 0,
             single_lesson: None,
-            lesson_index: 0,
+            lesson_index,
             target: None,
             target_chars: Vec::new(),
             input: Vec::new(),
@@ -115,7 +117,7 @@ impl App {
             paused_at: None,
             paused_total: Duration::ZERO,
             completed_records: Vec::new(),
-            completed_lesson_indices: Vec::new(),
+            completed_lesson_indices,
             ignored_non_ascii: 0,
             exit_confirm: false,
             quit: false,
@@ -324,7 +326,13 @@ impl App {
             return;
         };
         self.completed_records.push(record);
-        self.completed_lesson_indices.push(self.lesson_index);
+        if !self.foundation_active
+            && !self.code_specialist_active
+            && self.lesson_index < self.plan.lessons.len()
+            && !self.completed_lesson_indices.contains(&self.lesson_index)
+        {
+            self.completed_lesson_indices.push(self.lesson_index);
+        }
         self.exit_confirm = false;
         self.phase = Phase::Complete;
     }
@@ -377,7 +385,7 @@ impl App {
         self.foundation_group_count = 0;
         self.code_specialist_active = false;
         self.code_group_count = 0;
-        self.lesson_index = 0;
+        self.lesson_index = self.first_pending_lesson_index();
         self.target = None;
         self.target_chars.clear();
         self.input.clear();
@@ -393,7 +401,7 @@ impl App {
     fn choose_menu_item(&mut self) {
         if self.menu_index == 0 {
             self.single_lesson = None;
-            self.lesson_index = 0;
+            self.lesson_index = self.first_pending_lesson_index();
             self.phase = Phase::Plan;
             return;
         }
@@ -440,6 +448,41 @@ impl App {
             self.stats_day_index = self.stats_day_index.min(len - 1);
         }
     }
+
+    fn first_pending_lesson_index(&self) -> usize {
+        first_pending_lesson_index(&self.plan, &self.completed_lesson_indices)
+    }
+}
+
+fn completed_lesson_indices_from_records(
+    plan: &DailyPracticePlan,
+    records: &[SessionRecord],
+) -> Vec<usize> {
+    let today = Local::now().date_naive();
+    let mut source_counts = std::collections::BTreeMap::<String, usize>::new();
+    for record in records
+        .iter()
+        .filter(|record| record.started_at.with_timezone(&Local).date_naive() == today)
+    {
+        *source_counts.entry(record.source.clone()).or_default() += 1;
+    }
+
+    let mut completed = Vec::new();
+    for (index, lesson) in plan.lessons.iter().enumerate() {
+        if let Some(count) = source_counts.get_mut(&lesson.target.source)
+            && *count > 0
+        {
+            completed.push(index);
+            *count -= 1;
+        }
+    }
+    completed
+}
+
+fn first_pending_lesson_index(plan: &DailyPracticePlan, completed: &[usize]) -> usize {
+    (0..plan.lessons.len())
+        .find(|index| !completed.contains(index))
+        .unwrap_or(0)
 }
 
 pub fn run(
@@ -451,13 +494,15 @@ pub fn run(
     let foundation_drills = content::foundation_drills()?;
     let code_options = content::code_practice_options()?;
     let mut app = App::new(plan, records, language, foundation_drills, code_options);
+    let mut next_running_tick = Instant::now() + Duration::from_secs(1);
 
     draw(&mut tui, &app)?;
 
     loop {
         if !event::poll(Duration::from_millis(250))? {
-            if app.phase == Phase::Running {
+            if app.phase == Phase::Running && Instant::now() >= next_running_tick {
                 draw(&mut tui, &app)?;
+                next_running_tick = Instant::now() + Duration::from_secs(1);
             }
             continue;
         }
@@ -491,7 +536,9 @@ pub fn run(
                     Phase::Summary => handle_summary_key(&mut app, key.code),
                 }
             }
-            Event::Resize(_, _) => {}
+            Event::Resize(_, _) => {
+                tui.terminal.clear()?;
+            }
             _ => {}
         }
 
@@ -504,6 +551,9 @@ pub fn run(
         }
 
         draw(&mut tui, &app)?;
+        if app.phase == Phase::Running {
+            next_running_tick = Instant::now() + Duration::from_secs(1);
+        }
     }
 
     Ok(app.completed_records)
@@ -814,7 +864,7 @@ fn render_menu(frame: &mut Frame, area: Rect, app: &App) {
             app.menu_index == menu_index,
             menu_index + 1,
             lesson_title(lesson.kind, app.language),
-            lesson_purpose(lesson.kind, app.language),
+            &lesson_reason(lesson, app.language),
             lesson_color(lesson.kind),
         ));
     }
@@ -881,7 +931,7 @@ fn menu_line(
         Span::styled(format!("{marker} {number}. "), base_style),
         Span::styled(title.to_string(), base_style),
         Span::styled("  ".to_string(), hint_style),
-        Span::styled(hint.to_string(), hint_style),
+        Span::styled(truncate(hint, 48), hint_style),
     ])
 }
 
@@ -943,7 +993,7 @@ fn render_plan(frame: &mut Frame, area: Rect, app: &App) {
                 lesson_lines.push(Line::from(vec![
                     Span::raw("   "),
                     Span::styled(
-                        lesson_purpose(lesson.kind, app.language),
+                        lesson_reason(lesson, app.language),
                         Style::default().fg(Color::Gray),
                     ),
                 ]));
@@ -1098,6 +1148,18 @@ fn foundation_drill_line(
             hint_style,
         ),
     ])
+}
+
+fn lesson_reason(lesson: &PracticeLesson, language: Language) -> String {
+    let reason = match language {
+        Language::Zh => lesson.reason_zh.clone(),
+        Language::En => lesson.reason_en.clone(),
+    };
+    if reason.trim().is_empty() {
+        lesson_purpose(lesson.kind, language).to_string()
+    } else {
+        reason
+    }
 }
 
 fn foundation_drill_title(drill: &FoundationPracticeDrill, language: Language) -> String {
@@ -1512,6 +1574,7 @@ fn render_complete(frame: &mut Frame, area: Rect, app: &App) {
     } else {
         format!("{}: {slow}", text(app.language, "slow_focus"))
     };
+    let next_reason = next_step_reason(app);
     let summary = vec![
         Line::from(vec![
             Span::styled(
@@ -1535,6 +1598,11 @@ fn render_complete(frame: &mut Frame, area: Rect, app: &App) {
             record.backspace_count
         )),
         Line::from(slow_line),
+        Line::from(format!(
+            "{}: {}",
+            text(app.language, "next_reason"),
+            next_reason
+        )),
         Line::from(text(app.language, "complete_help")),
     ];
     frame.render_widget(
@@ -1554,6 +1622,43 @@ fn render_complete(frame: &mut Frame, area: Rect, app: &App) {
         &app.input,
         app.language,
     );
+}
+
+fn next_step_reason(app: &App) -> String {
+    if app.foundation_active {
+        return match app.language {
+            Language::Zh => "继续同一个基础专项，并避开刚练过的行。".to_string(),
+            Language::En => {
+                "Continue the same foundation drill while avoiding recent lines.".to_string()
+            }
+        };
+    }
+    if app.code_specialist_active {
+        return match app.language {
+            Language::Zh => "继续当前代码筛选范围，并尽量避开刚练过的代码块。".to_string(),
+            Language::En => {
+                "Continue the current code filter and avoid recently practiced snippets."
+                    .to_string()
+            }
+        };
+    }
+    if app.single_lesson.is_some() || app.lesson_index + 1 >= app.plan.lessons.len() {
+        return match app.language {
+            Language::Zh => "本轮已完成，进入今日总结。".to_string(),
+            Language::En => "This round is complete; open today summary.".to_string(),
+        };
+    }
+    app.plan
+        .lessons
+        .get(app.lesson_index + 1)
+        .map(|lesson| lesson_reason(lesson, app.language))
+        .unwrap_or_else(|| {
+            match app.language {
+                Language::Zh => "继续今日动态计划。",
+                Language::En => "Continue today's adaptive plan.",
+            }
+            .to_string()
+        })
 }
 
 fn render_summary(frame: &mut Frame, area: Rect, app: &App) {
@@ -1842,7 +1947,7 @@ fn render_lesson_banner(frame: &mut Frame, area: Rect, app: &App) {
         ),
         Span::raw("  "),
         Span::styled(
-            lesson_purpose(lesson.kind, app.language),
+            lesson_reason(lesson, app.language),
             Style::default().fg(Color::Gray),
         ),
     ]);
@@ -2653,6 +2758,32 @@ mod tests {
     }
 
     #[test]
+    fn app_resumes_comprehensive_from_first_unfinished_lesson_today() {
+        let plan = DailyPracticePlan {
+            target_minutes: 20,
+            completed_ms: 60_000,
+            lessons: vec![
+                practice_lesson(LessonKind::Warmup, "keyloop:warmup"),
+                practice_lesson(LessonKind::Symbols, "keyloop:symbols"),
+            ],
+        };
+        let record = SessionRecord {
+            started_at: Local::now().with_timezone(&Utc),
+            source: "keyloop:warmup".to_string(),
+            duration_ms: 60_000,
+            ..SessionRecord::default()
+        };
+
+        let mut app = App::new(plan, vec![record], Language::Zh, Vec::new(), Vec::new());
+
+        assert_eq!(app.completed_lesson_indices, vec![0]);
+        assert_eq!(app.lesson_index, 1);
+        handle_menu_key(&mut app, KeyCode::Enter);
+        assert_eq!(app.phase, Phase::Plan);
+        assert_eq!(app.lesson_index, 1);
+    }
+
+    #[test]
     fn code_enter_auto_inserts_expected_indentation() {
         let mut app = empty_app_with_code_options(Vec::new());
         app.phase = Phase::Running;
@@ -2922,6 +3053,20 @@ mod tests {
             items: (0..24)
                 .map(|index| format!("asdf jkl; {id} {index}"))
                 .collect(),
+        }
+    }
+
+    fn practice_lesson(kind: LessonKind, source: &str) -> PracticeLesson {
+        PracticeLesson {
+            kind,
+            estimated_minutes: 3,
+            target: PracticeTarget {
+                mode: Mode::Words,
+                text: "abc".to_string(),
+                source: source.to_string(),
+            },
+            reason_zh: "测试原因".to_string(),
+            reason_en: "test reason".to_string(),
         }
     }
 }

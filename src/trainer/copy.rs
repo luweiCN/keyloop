@@ -3,6 +3,7 @@ use ratatui::style::Color;
 
 pub(super) fn lesson_color(kind: LessonKind) -> Color {
     match kind {
+        LessonKind::Foundation => Color::LightGreen,
         LessonKind::Warmup => Color::Cyan,
         LessonKind::Chunks => Color::LightGreen,
         LessonKind::CommonWords => Color::Green,
@@ -16,6 +17,7 @@ pub(super) fn lesson_color(kind: LessonKind) -> Color {
 pub(super) fn lesson_title(kind: LessonKind, language: Language) -> &'static str {
     match language {
         Language::Zh => match kind {
+            LessonKind::Foundation => "基础：键位弱项",
             LessonKind::Warmup => "热身：基础键位",
             LessonKind::Chunks => "词块：英文拼写块",
             LessonKind::CommonWords => "高频词：英语常用词",
@@ -25,6 +27,7 @@ pub(super) fn lesson_title(kind: LessonKind, language: Language) -> &'static str
             LessonKind::CodeBlock => "代码块：多语言完整片段",
         },
         Language::En => match kind {
+            LessonKind::Foundation => "Foundation: weak keys",
             LessonKind::Warmup => "Warmup: base keys",
             LessonKind::Chunks => "Chunks: English spelling blocks",
             LessonKind::CommonWords => "High frequency: common English words",
@@ -39,6 +42,7 @@ pub(super) fn lesson_title(kind: LessonKind, language: Language) -> &'static str
 pub(super) fn lesson_purpose(kind: LessonKind, language: Language) -> &'static str {
     match language {
         Language::Zh => match kind {
+            LessonKind::Foundation => "根据高错键位自动安排专项",
             LessonKind::Warmup => "把手指放稳，只追正确率",
             LessonKind::Chunks => "练常见开头、结尾和字母组合",
             LessonKind::CommonWords => "练真正高频英文单词，不混大小写",
@@ -48,6 +52,7 @@ pub(super) fn lesson_purpose(kind: LessonKind, language: Language) -> &'static s
             LessonKind::CodeBlock => "练完整代码块，不练单行碎片",
         },
         Language::En => match kind {
+            LessonKind::Foundation => "Focused drill chosen from key errors",
             LessonKind::Warmup => "Settle fingers; type accurately",
             LessonKind::Chunks => "Prefixes, suffixes, and letter patterns",
             LessonKind::CommonWords => "Common lowercase English words",
@@ -65,15 +70,15 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "terminal_small" => "终端窗口太小，无法显示 KeyLoop。",
             "practice_menu" => "练习菜单",
             "menu_comprehensive" => "综合练习",
-            "menu_comprehensive_hint" => "按今日计划从第 1 组练到第 7 组",
+            "menu_comprehensive_hint" => "按今日动态计划练完所有组",
             "menu_foundation" => "基础练习",
             "menu_foundation_hint" => "按键盘行位、横向、竖向和手指移动专项练",
             "menu_code_specialist" => "代码专项",
             "menu_code_specialist_hint" => "选择语言、框架或项目，连续练代码块",
             "menu_stats" => "数据统计",
-            "menu_stats_hint" => "查看总览、历史最好成绩和每天练习明细",
+            "menu_stats_hint" => "查看总览、热力图、弱项和每天练习明细",
             "menu_help" => "↑/↓ 或 J/K：选择 | Enter：开始/进入 | L：切换语言 | Esc/Q：退出",
-            "menu_mode_label" => "综合",
+            "menu_mode_label" => "今日计划",
             "status_title" => "状态",
             "stats_title" => "数据统计",
             "stats_overview" => "总览",
@@ -117,6 +122,8 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "daily_goal_hint" => "建议今天练满 20 分钟，可以零碎时间分几次完成。",
             "session_complete" => "本组完成",
             "next_lesson" => "Enter 进入下一组",
+            "next_reason" => "下一组原因",
+            "adaptive_reason" => "安排原因",
             "next_foundation_group" => "Enter 再来一组基础练习",
             "next_code_group" => "Enter 再来一组代码",
             "finish_today" => "Enter 查看今日总结",
@@ -139,7 +146,7 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "metrics_title" => "指标",
             "progress_title" => "本组进度",
             "current_lesson" => "当前课程",
-            "lesson_progress" => "课程",
+            "lesson_progress" => "进度",
             "lesson" => "课程",
             "no_completed_lessons" => "今天还没有完成的课程。",
             _ => "",
@@ -148,7 +155,7 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "terminal_small" => "Terminal is too small for KeyLoop.",
             "practice_menu" => "Practice menu",
             "menu_comprehensive" => "Full practice",
-            "menu_comprehensive_hint" => "Follow today's plan from lesson 1 to lesson 7",
+            "menu_comprehensive_hint" => "Follow today's adaptive plan",
             "menu_foundation" => "Foundation practice",
             "menu_foundation_hint" => "Rows, horizontal/vertical movement, and finger drills",
             "menu_code_specialist" => "Code focus",
@@ -156,9 +163,9 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
                 "Choose languages, frameworks, or projects for code drills"
             }
             "menu_stats" => "Stats",
-            "menu_stats_hint" => "Overview, personal bests, and daily session details",
+            "menu_stats_hint" => "Overview, heatmap, weak spots, and daily details",
             "menu_help" => "Up/Down or J/K: choose | Enter: start/open | L: language | Esc/Q: quit",
-            "menu_mode_label" => "full",
+            "menu_mode_label" => "plan",
             "status_title" => "Status",
             "stats_title" => "Stats",
             "stats_overview" => "Overview",
@@ -204,6 +211,8 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "daily_goal_hint" => "Recommended target is 20 minutes today. Short sessions count.",
             "session_complete" => "Lesson complete",
             "next_lesson" => "Enter for next lesson",
+            "next_reason" => "Next reason",
+            "adaptive_reason" => "Reason",
             "next_foundation_group" => "Enter for another foundation group",
             "next_code_group" => "Enter for another code group",
             "finish_today" => "Enter for today summary",
@@ -228,7 +237,7 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "metrics_title" => "Metrics",
             "progress_title" => "Lesson progress",
             "current_lesson" => "Current lesson",
-            "lesson_progress" => "lesson",
+            "lesson_progress" => "progress",
             "lesson" => "lesson",
             "no_completed_lessons" => "No completed lessons today.",
             _ => "",

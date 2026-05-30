@@ -40,6 +40,7 @@ fn stats_overview_lines(records: &[&SessionRecord], language: Language) -> Vec<L
         .first()
         .map(|entry| format!("{}({})", entry.label, entry.count))
         .unwrap_or_else(|| text(language, "stats_none").to_string());
+    let recommendation = training_recommendation_text(records, language);
 
     match language {
         Language::Zh => vec![
@@ -65,6 +66,10 @@ fn stats_overview_lines(records: &[&SessionRecord], language: Language) -> Vec<L
                 Span::styled("弱项  ", Style::default().fg(Color::LightRed)),
                 Span::raw(format!("高错词 {worst_word} | 高错键 {worst_key}")),
             ]),
+            Line::from(vec![
+                Span::styled("综合计划  ", Style::default().fg(Color::LightGreen)),
+                Span::raw(recommendation),
+            ]),
         ],
         Language::En => vec![
             Line::from(format!(
@@ -88,6 +93,10 @@ fn stats_overview_lines(records: &[&SessionRecord], language: Language) -> Vec<L
             Line::from(vec![
                 Span::styled("Focus  ", Style::default().fg(Color::LightRed)),
                 Span::raw(format!("word {worst_word} | key {worst_key}")),
+            ]),
+            Line::from(vec![
+                Span::styled("Full plan  ", Style::default().fg(Color::LightGreen)),
+                Span::raw(recommendation),
             ]),
         ],
     }
@@ -141,6 +150,7 @@ fn compact_stats_dashboard_lines(
         .first()
         .map(|entry| format!("{}({})", truncate(&entry.token, 12), entry.errors))
         .unwrap_or_else(|| text(language, "stats_none").to_string());
+    let recommendation = training_recommendation_text(records, language);
 
     let mut lines = Vec::new();
     match language {
@@ -169,6 +179,11 @@ fn compact_stats_dashboard_lines(
                     "错误  总错误 {total_errors} | 退格 {total_backspaces} | 高错词 {worst_word}"
                 )),
             );
+            push_stats_line(
+                &mut lines,
+                max_lines,
+                Line::from(format!("综合计划  {recommendation}")),
+            );
         }
         Language::En => {
             push_stats_line(
@@ -194,6 +209,11 @@ fn compact_stats_dashboard_lines(
                 Line::from(format!(
                     "Errors  total {total_errors} | backspace {total_backspaces} | worst word {worst_word}"
                 )),
+            );
+            push_stats_line(
+                &mut lines,
+                max_lines,
+                Line::from(format!("Full plan  {recommendation}")),
             );
         }
     }
@@ -386,6 +406,47 @@ fn compact_diagnosis_line(title: &'static str, color: Color, value: String) -> L
         Span::styled(format!("{title:<6} "), Style::default().fg(color)),
         Span::raw(value),
     ])
+}
+
+fn training_recommendation_text(records: &[&SessionRecord], language: Language) -> String {
+    let key = top_key_errors(records, 1).into_iter().next();
+    let symbol = top_problem_tokens(records, false, 1).into_iter().next();
+    let word = top_problem_tokens(records, true, 1).into_iter().next();
+
+    match (language, key, symbol, word) {
+        (Language::Zh, Some(key), _, _) if key.count >= 2 => {
+            format!("下一次综合会优先加入键位专项：{}", key.label)
+        }
+        (Language::Zh, _, Some(symbol), _) if symbol.errors >= 2 => {
+            format!("下一次综合会增加符号练习：{}", truncate(&symbol.token, 12))
+        }
+        (Language::Zh, _, _, Some(word)) if word.errors >= 2 => {
+            format!(
+                "下一次综合会增加词块/单词练习：{}",
+                truncate(&word.token, 12)
+            )
+        }
+        (Language::Zh, _, _, _) => "下一次综合会保持均衡计划。".to_string(),
+        (Language::En, Some(key), _, _) if key.count >= 2 => {
+            format!(
+                "Next full practice will prioritize key drill: {}",
+                key.label
+            )
+        }
+        (Language::En, _, Some(symbol), _) if symbol.errors >= 2 => {
+            format!(
+                "Next full practice will add symbol work: {}",
+                truncate(&symbol.token, 12)
+            )
+        }
+        (Language::En, _, _, Some(word)) if word.errors >= 2 => {
+            format!(
+                "Next full practice will add word/chunk work: {}",
+                truncate(&word.token, 12)
+            )
+        }
+        (Language::En, _, _, _) => "Next full practice will stay balanced.".to_string(),
+    }
 }
 
 pub(super) fn stats_day_lines(
