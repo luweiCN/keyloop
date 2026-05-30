@@ -1,5 +1,7 @@
 # KeyLoop
 
+[English](README.en.md)
+
 KeyLoop 是一个个人化的程序员终端打字训练工具。它不是通用打字游戏：打开后先显示练习菜单，可以选择“综合练习”按今日计划走完整流程，也可以只练某一个步骤。
 
 默认中文界面，也可以切换英文。
@@ -130,3 +132,14 @@ cargo run -- plan
 ```
 
 更多检查说明见 [docs/QUALITY.md](docs/QUALITY.md)。
+
+## 发布 / Homebrew
+
+本仓库采用 GitHub PR 工作流：
+
+1. 功能分支提交 PR。
+2. PR 通过 CI 后合并到 `main`。
+3. `main` 上的 release workflow 读取 `Cargo.toml` 版本号。
+4. 如果对应的 `vX.Y.Z` release 不存在，就自动构建 macOS/Linux 包、创建 GitHub Release，并更新 Homebrew tap。
+
+发布和 Homebrew 说明见 [docs/RELEASE.md](docs/RELEASE.md)。

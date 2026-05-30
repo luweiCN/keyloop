@@ -1,0 +1,199 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    name: Prepare release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+      should_release: ${{ steps.check.outputs.should_release }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read Cargo version
+        id: version
+        run: |
+          version="$(python3 - <<'PY'
+          import tomllib
+          with open("Cargo.toml", "rb") as fh:
+              print(tomllib.load(fh)["package"]["version"])
+          PY
+          )"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "tag=v${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Check whether release already exists
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; skipping."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+          elif git ls-remote --exit-code --tags origin "refs/tags/${TAG}" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists; skipping."
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    name: Build ${{ matrix.target }}
+    needs: prepare
+    if: needs.prepare.outputs.should_release == 'true'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os: macos-13
+            target: x86_64-apple-darwin
+          - os: macos-latest
+            target: aarch64-apple-darwin
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust stable
+        run: |
+          rustup toolchain install stable --profile minimal --target "${{ matrix.target }}"
+          rustup default stable
+
+      - name: Build release binary
+        run: cargo build --release --locked --target "${{ matrix.target }}"
+
+      - name: Package archive
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          archive="keyloop-${VERSION}-${TARGET}.tar.gz"
+          mkdir -p "dist/keyloop-${VERSION}-${TARGET}"
+          cp "target/${TARGET}/release/keyloop" "dist/keyloop-${VERSION}-${TARGET}/"
+          cp README.md LICENSE "dist/keyloop-${VERSION}-${TARGET}/"
+          tar -C dist -czf "$archive" "keyloop-${VERSION}-${TARGET}"
+          shasum -a 256 "$archive" > "${archive}.sha256"
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-${{ matrix.target }}
+          path: |
+            keyloop-${{ needs.prepare.outputs.version }}-${{ matrix.target }}.tar.gz
+            keyloop-${{ needs.prepare.outputs.version }}-${{ matrix.target }}.tar.gz.sha256
+          if-no-files-found: error
+
+  publish:
+    name: Publish GitHub release and Homebrew formula
+    needs:
+      - prepare
+      - build
+    if: needs.prepare.outputs.should_release == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      VERSION: ${{ needs.prepare.outputs.version }}
+      TAG: ${{ needs.prepare.outputs.tag }}
+      GH_TOKEN: ${{ github.token }}
+      HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download packages
+        uses: actions/download-artifact@v4
+        with:
+          pattern: package-*
+          path: release-artifacts
+          merge-multiple: true
+
+      - name: Create tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "$TAG"
+
+      - name: Create GitHub release
+        run: |
+          gh release create "$TAG" release-artifacts/* \
+            --title "KeyLoop $TAG" \
+            --notes "Automated KeyLoop release for version ${VERSION}."
+
+      - name: Update Homebrew tap
+        if: env.HOMEBREW_TAP_TOKEN != ''
+        run: |
+          linux_sha="$(cut -d ' ' -f 1 "release-artifacts/keyloop-${VERSION}-x86_64-unknown-linux-gnu.tar.gz.sha256")"
+          mac_x86_sha="$(cut -d ' ' -f 1 "release-artifacts/keyloop-${VERSION}-x86_64-apple-darwin.tar.gz.sha256")"
+          mac_arm_sha="$(cut -d ' ' -f 1 "release-artifacts/keyloop-${VERSION}-aarch64-apple-darwin.tar.gz.sha256")"
+
+          git clone "https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/luweiCN/homebrew-tap.git" homebrew-tap
+          mkdir -p homebrew-tap/Formula
+          cat > homebrew-tap/Formula/keyloop.rb <<EOF
+          class Keyloop < Formula
+            desc "Personal terminal typing trainer for programmers"
+            homepage "https://github.com/luweiCN/keyloop"
+            version "${VERSION}"
+            license "MIT"
+
+            on_macos do
+              if Hardware::CPU.arm?
+                url "https://github.com/luweiCN/keyloop/releases/download/${TAG}/keyloop-${VERSION}-aarch64-apple-darwin.tar.gz"
+                sha256 "${mac_arm_sha}"
+              else
+                url "https://github.com/luweiCN/keyloop/releases/download/${TAG}/keyloop-${VERSION}-x86_64-apple-darwin.tar.gz"
+                sha256 "${mac_x86_sha}"
+              end
+            end
+
+            on_linux do
+              url "https://github.com/luweiCN/keyloop/releases/download/${TAG}/keyloop-${VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+              sha256 "${linux_sha}"
+            end
+
+            def install
+              bin.install "keyloop"
+            end
+
+            test do
+              assert_match "KeyLoop", shell_output("#{bin}/keyloop --help")
+            end
+          end
+          EOF
+
+          cd homebrew-tap
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Formula/keyloop.rb
+          if git diff --cached --quiet; then
+            echo "Homebrew formula is already up to date."
+          else
+            git commit -m "Update keyloop to ${TAG}"
+            git push origin HEAD:main
+          fi
+
+      - name: Homebrew tap skipped
+        if: env.HOMEBREW_TAP_TOKEN == ''
+        run: |
+          echo "HOMEBREW_TAP_TOKEN is not set; skipped Homebrew tap update."

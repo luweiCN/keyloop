@@ -5,6 +5,9 @@ edition = "2024"
 authors = ["luwei"]
 description = "KeyLoop is a terminal-based typing trainer for programmers."
 license = "MIT"
+homepage = "https://github.com/luweiCN/keyloop"
+repository = "https://github.com/luweiCN/keyloop"
+readme = "README.md"
 
 [dependencies]
 anyhow = "1.0"

@@ -1,5 +1,7 @@
 # Quality Checks
 
+[中文](QUALITY.zh.md)
+
 KeyLoop is a terminal typing trainer, so code changes should be checked for both Rust correctness and TUI behavior.
 
 ## Required Checks
