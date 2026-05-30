@@ -3,6 +3,7 @@ mod stats;
 mod terminal;
 
 use crate::content;
+use crate::content::FoundationPracticeDrill;
 use crate::metrics;
 use crate::model::{
     CodePracticeConfig, CodePracticeFacet, CodePracticeOption, DailyPracticePlan, KeyAction,
@@ -29,6 +30,7 @@ const MIN_TERMINAL_HEIGHT: u16 = 25;
 enum Phase {
     Menu,
     Plan,
+    FoundationSetup,
     CodeSetup,
     Stats,
     Running,
@@ -50,6 +52,10 @@ struct App {
     menu_index: usize,
     stats_view: StatsView,
     stats_day_index: usize,
+    foundation_drills: Vec<FoundationPracticeDrill>,
+    foundation_index: usize,
+    foundation_active: bool,
+    foundation_group_count: usize,
     code_options: Vec<CodePracticeOption>,
     code_filter_index: usize,
     code_selected: Vec<bool>,
@@ -77,6 +83,7 @@ impl App {
         plan: DailyPracticePlan,
         records: Vec<SessionRecord>,
         language: Language,
+        foundation_drills: Vec<FoundationPracticeDrill>,
         code_options: Vec<CodePracticeOption>,
     ) -> Self {
         let code_selected = vec![false; code_options.len()];
@@ -88,6 +95,10 @@ impl App {
             menu_index: 0,
             stats_view: StatsView::Overview,
             stats_day_index: 0,
+            foundation_drills,
+            foundation_index: 0,
+            foundation_active: false,
+            foundation_group_count: 0,
             code_options,
             code_filter_index: 0,
             code_selected,
@@ -116,15 +127,23 @@ impl App {
     }
 
     fn menu_len(&self) -> usize {
-        self.plan.lessons.len() + 3
+        self.plan.lessons.len() + 4
+    }
+
+    fn foundation_menu_index(&self) -> usize {
+        1
+    }
+
+    fn lesson_menu_start_index(&self) -> usize {
+        2
     }
 
     fn code_specialist_menu_index(&self) -> usize {
-        self.plan.lessons.len() + 1
+        self.lesson_menu_start_index() + self.plan.lessons.len()
     }
 
     fn stats_menu_index(&self) -> usize {
-        self.plan.lessons.len() + 2
+        self.code_specialist_menu_index() + 1
     }
 
     fn completed_today_ms(&self) -> u64 {
@@ -165,10 +184,20 @@ impl App {
     }
 
     fn repeat_current(&mut self) {
+        if (self.foundation_active || self.code_specialist_active)
+            && let Some(target) = self.target.clone()
+        {
+            self.begin_target(target);
+            return;
+        }
         self.begin_current();
     }
 
     fn begin_next(&mut self) {
+        if self.foundation_active {
+            self.begin_next_foundation_group();
+            return;
+        }
         if self.code_specialist_active {
             self.begin_next_code_group();
             return;
@@ -185,7 +214,39 @@ impl App {
         self.begin_current();
     }
 
+    fn begin_foundation_drill(&mut self) {
+        if self.foundation_drills.is_empty() {
+            return;
+        }
+        self.foundation_active = true;
+        self.foundation_group_count = 0;
+        self.code_specialist_active = false;
+        self.code_group_count = 0;
+        self.single_lesson = None;
+        self.begin_next_foundation_group();
+    }
+
+    fn begin_next_foundation_group(&mut self) {
+        let Some(drill) = self.foundation_drills.get(self.foundation_index) else {
+            self.phase = Phase::Menu;
+            return;
+        };
+        let records = self.all_records();
+        let target =
+            content::build_foundation_target(&records, &drill.id, 12).unwrap_or_else(|error| {
+                PracticeTarget {
+                    mode: Mode::Chars,
+                    text: "asdf jkl; asdf jkl;\nfr ft fv fg jr ju jm jn".to_string(),
+                    source: format!("keyloop:foundation-error:{error}"),
+                }
+            });
+        self.foundation_group_count += 1;
+        self.begin_target(target);
+    }
+
     fn begin_code_specialist(&mut self) {
+        self.foundation_active = false;
+        self.foundation_group_count = 0;
         self.code_specialist_active = true;
         self.code_group_count = 0;
         self.single_lesson = Some(self.code_lesson_index());
@@ -312,6 +373,8 @@ impl App {
     fn reset_to_menu(&mut self) {
         self.phase = Phase::Menu;
         self.single_lesson = None;
+        self.foundation_active = false;
+        self.foundation_group_count = 0;
         self.code_specialist_active = false;
         self.code_group_count = 0;
         self.lesson_index = 0;
@@ -334,6 +397,10 @@ impl App {
             self.phase = Phase::Plan;
             return;
         }
+        if self.menu_index == self.foundation_menu_index() {
+            self.phase = Phase::FoundationSetup;
+            return;
+        }
         if self.menu_index == self.code_specialist_menu_index() {
             self.phase = Phase::CodeSetup;
             return;
@@ -347,7 +414,7 @@ impl App {
 
         let lesson_index = self
             .menu_index
-            .saturating_sub(1)
+            .saturating_sub(self.lesson_menu_start_index())
             .min(self.plan.lessons.len().saturating_sub(1));
         self.single_lesson = Some(lesson_index);
         self.lesson_index = lesson_index;
@@ -381,8 +448,9 @@ pub fn run(
     language: Language,
 ) -> Result<Vec<SessionRecord>> {
     let mut tui = Tui::enter()?;
+    let foundation_drills = content::foundation_drills()?;
     let code_options = content::code_practice_options()?;
-    let mut app = App::new(plan, records, language, code_options);
+    let mut app = App::new(plan, records, language, foundation_drills, code_options);
 
     draw(&mut tui, &app)?;
 
@@ -415,6 +483,7 @@ pub fn run(
                 match app.phase {
                     Phase::Menu => handle_menu_key(&mut app, key.code),
                     Phase::Plan => handle_plan_key(&mut app, key.code),
+                    Phase::FoundationSetup => handle_foundation_setup_key(&mut app, key.code),
                     Phase::CodeSetup => handle_code_setup_key(&mut app, key.code),
                     Phase::Stats => handle_stats_key(&mut app, key.code),
                     Phase::Running => handle_running_key(&mut app, key.code, key.modifiers),
@@ -472,6 +541,31 @@ fn handle_plan_key(app: &mut App, code: KeyCode) {
         KeyCode::Char('q') => app.quit = true,
         KeyCode::Enter => app.begin_current(),
         KeyCode::Char('l') | KeyCode::Char('L') => app.language = app.language.toggle(),
+        _ => {}
+    }
+}
+
+fn handle_foundation_setup_key(app: &mut App, code: KeyCode) {
+    match code {
+        KeyCode::Esc => app.reset_to_menu(),
+        KeyCode::Char('q') | KeyCode::Char('Q') => app.quit = true,
+        KeyCode::Enter => app.begin_foundation_drill(),
+        KeyCode::Char('l') | KeyCode::Char('L') => app.language = app.language.toggle(),
+        KeyCode::Up | KeyCode::Char('k') | KeyCode::Char('K') => {
+            app.foundation_index = app.foundation_index.saturating_sub(1);
+        }
+        KeyCode::Down | KeyCode::Char('j') | KeyCode::Char('J') => {
+            app.foundation_index =
+                (app.foundation_index + 1).min(app.foundation_drills.len().saturating_sub(1));
+        }
+        KeyCode::Char(ch) if ('1'..='9').contains(&ch) => {
+            if let Some(value) = ch.to_digit(10) {
+                let index = (value - 1) as usize;
+                if index < app.foundation_drills.len() {
+                    app.foundation_index = index;
+                }
+            }
+        }
         _ => {}
     }
 }
@@ -662,6 +756,7 @@ fn render(frame: &mut Frame, app: &App) {
     match app.phase {
         Phase::Menu => render_menu(frame, area, app),
         Phase::Plan => render_plan(frame, area, app),
+        Phase::FoundationSetup => render_foundation_setup(frame, area, app),
         Phase::CodeSetup => render_code_setup(frame, area, app),
         Phase::Stats => render_stats(frame, area, app),
         Phase::Running => render_running(frame, area, app),
@@ -706,10 +801,18 @@ fn render_menu(frame: &mut Frame, area: Rect, app: &App) {
         text(app.language, "menu_comprehensive_hint"),
         Color::Cyan,
     ));
+    lines.push(menu_line(
+        app.menu_index == app.foundation_menu_index(),
+        app.foundation_menu_index() + 1,
+        text(app.language, "menu_foundation"),
+        text(app.language, "menu_foundation_hint"),
+        Color::LightGreen,
+    ));
     for (index, lesson) in app.plan.lessons.iter().enumerate() {
+        let menu_index = app.lesson_menu_start_index() + index;
         lines.push(menu_line(
-            app.menu_index == index + 1,
-            index + 2,
+            app.menu_index == menu_index,
+            menu_index + 1,
             lesson_title(lesson.kind, app.language),
             lesson_purpose(lesson.kind, app.language),
             lesson_color(lesson.kind),
@@ -875,6 +978,148 @@ fn render_plan(frame: &mut Frame, area: Rect, app: &App) {
             .wrap(Wrap { trim: false }),
         centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
     );
+}
+
+fn render_foundation_setup(frame: &mut Frame, area: Rect, app: &App) {
+    let chunks = Layout::default()
+        .direction(Direction::Vertical)
+        .margin(1)
+        .constraints([
+            Constraint::Length(4),
+            Constraint::Length(4),
+            Constraint::Min(10),
+            Constraint::Length(4),
+        ])
+        .split(area);
+
+    render_header(
+        frame,
+        centered_width(chunks[0], PRACTICE_PANEL_MAX_WIDTH),
+        app,
+        None,
+    );
+    render_daily_progress(
+        frame,
+        centered_width(chunks[1], PRACTICE_PANEL_MAX_WIDTH),
+        app,
+    );
+
+    let drill_area = centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH);
+    let visible_rows = drill_area.height.saturating_sub(2).max(1) as usize;
+    let (start, end) = visible_window(
+        app.foundation_index,
+        app.foundation_drills.len(),
+        visible_rows,
+    );
+    let mut lines = Vec::new();
+    if app.foundation_drills.is_empty() {
+        lines.push(Line::from(text(app.language, "foundation_empty")));
+    } else {
+        for index in start..end {
+            let drill = &app.foundation_drills[index];
+            lines.push(foundation_drill_line(
+                index == app.foundation_index,
+                index + 1,
+                drill,
+                app.language,
+            ));
+        }
+    }
+
+    frame.render_widget(
+        Paragraph::new(lines)
+            .block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .title(text(app.language, "foundation_title")),
+            )
+            .wrap(Wrap { trim: false }),
+        drill_area,
+    );
+
+    let selected = app
+        .foundation_drills
+        .get(app.foundation_index)
+        .map(|drill| foundation_drill_title(drill, app.language))
+        .unwrap_or_else(|| text(app.language, "foundation_empty").to_string());
+    let help = vec![
+        Line::from(vec![
+            Span::styled(
+                text(app.language, "foundation_selected"),
+                Style::default()
+                    .fg(Color::LightGreen)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::raw(format!("  {selected}")),
+        ]),
+        Line::from(text(app.language, "foundation_help")),
+    ];
+    frame.render_widget(
+        Paragraph::new(help)
+            .block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .title(text(app.language, "controls")),
+            )
+            .wrap(Wrap { trim: false }),
+        centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
+    );
+}
+
+fn foundation_drill_line(
+    selected: bool,
+    number: usize,
+    drill: &FoundationPracticeDrill,
+    language: Language,
+) -> Line<'static> {
+    let marker = if selected { ">" } else { " " };
+    let color = Color::LightGreen;
+    let base_style = if selected {
+        Style::default()
+            .fg(Color::Black)
+            .bg(color)
+            .add_modifier(Modifier::BOLD)
+    } else {
+        Style::default().fg(color).add_modifier(Modifier::BOLD)
+    };
+    let hint_style = if selected {
+        Style::default().fg(Color::Black).bg(color)
+    } else {
+        Style::default().fg(Color::Gray)
+    };
+
+    Line::from(vec![
+        Span::styled(format!("{marker} {number}. "), base_style),
+        Span::styled(foundation_drill_title(drill, language), base_style),
+        Span::styled("  ".to_string(), hint_style),
+        Span::styled(foundation_drill_hint(drill, language), hint_style),
+        Span::styled(
+            foundation_item_count(drill.items.len(), language),
+            hint_style,
+        ),
+    ])
+}
+
+fn foundation_drill_title(drill: &FoundationPracticeDrill, language: Language) -> String {
+    match language {
+        Language::Zh => drill.title_zh.clone(),
+        Language::En => drill.title_en.clone(),
+    }
+}
+
+fn foundation_drill_hint(drill: &FoundationPracticeDrill, language: Language) -> String {
+    match language {
+        Language::Zh => drill.hint_zh.clone(),
+        Language::En => drill.hint_en.clone(),
+    }
+}
+
+fn foundation_item_count(count: usize, language: Language) -> String {
+    match language {
+        Language::Zh => format!("  {count} 组"),
+        Language::En if count == 1 => "  1 group".to_string(),
+        Language::En => format!("  {count} groups"),
+    }
 }
 
 fn render_code_setup(frame: &mut Frame, area: Rect, app: &App) {
@@ -1253,12 +1498,19 @@ fn render_complete(frame: &mut Frame, area: Rect, app: &App) {
         .map(|stat| stat.token.as_str())
         .collect::<Vec<_>>()
         .join(", ");
-    let next_text = if app.code_specialist_active {
+    let next_text = if app.foundation_active {
+        text(app.language, "next_foundation_group")
+    } else if app.code_specialist_active {
         text(app.language, "next_code_group")
     } else if app.single_lesson.is_some() || app.lesson_index + 1 >= app.plan.lessons.len() {
         text(app.language, "finish_today")
     } else {
         text(app.language, "next_lesson")
+    };
+    let slow_line = if slow.is_empty() {
+        text(app.language, "slow_focus_empty").to_string()
+    } else {
+        format!("{}: {slow}", text(app.language, "slow_focus"))
     };
     let summary = vec![
         Line::from(vec![
@@ -1282,7 +1534,7 @@ fn render_complete(frame: &mut Frame, area: Rect, app: &App) {
             text(app.language, "backspace"),
             record.backspace_count
         )),
-        Line::from(format!("{}: {slow}", text(app.language, "slow_focus"))),
+        Line::from(slow_line),
         Line::from(text(app.language, "complete_help")),
     ];
     frame.render_widget(
@@ -1335,12 +1587,7 @@ fn render_summary(frame: &mut Frame, area: Rect, app: &App) {
             .get(index)
             .copied()
             .unwrap_or(index);
-        let title = app
-            .plan
-            .lessons
-            .get(lesson_index)
-            .map(|lesson| lesson_title(lesson.kind, app.language))
-            .unwrap_or(text(app.language, "lesson"));
+        let title = record_summary_title(app, record, lesson_index);
         lines.push(Line::from(format!(
             "{}. {}  WPM {:.1} | {} {:.1}% | {} {}",
             index + 1,
@@ -1376,6 +1623,23 @@ fn render_summary(frame: &mut Frame, area: Rect, app: &App) {
     );
 }
 
+fn record_summary_title(app: &App, record: &SessionRecord, lesson_index: usize) -> String {
+    if let Some(drill_id) = record.source.strip_prefix("keyloop:foundation:")
+        && let Some(drill) = app
+            .foundation_drills
+            .iter()
+            .find(|drill| drill.id == drill_id)
+    {
+        return foundation_drill_title(drill, app.language);
+    }
+
+    app.plan
+        .lessons
+        .get(lesson_index)
+        .map(|lesson| lesson_title(lesson.kind, app.language).to_string())
+        .unwrap_or_else(|| text(app.language, "lesson").to_string())
+}
+
 fn render_header(frame: &mut Frame, area: Rect, app: &App, target: Option<&PracticeTarget>) {
     let source = target
         .map(|target| target.source.as_str())
@@ -1394,7 +1658,11 @@ fn render_header(frame: &mut Frame, area: Rect, app: &App, target: Option<&Pract
             ),
         },
         Phase::Stats => text(app.language, "stats_title").to_string(),
+        Phase::FoundationSetup => text(app.language, "menu_foundation").to_string(),
         Phase::CodeSetup => text(app.language, "menu_code_specialist").to_string(),
+        Phase::Menu if app.menu_index == app.foundation_menu_index() => {
+            text(app.language, "menu_foundation").to_string()
+        }
         Phase::Menu if app.menu_index == app.code_specialist_menu_index() => {
             text(app.language, "menu_code_specialist").to_string()
         }
@@ -1404,9 +1672,15 @@ fn render_header(frame: &mut Frame, area: Rect, app: &App, target: Option<&Pract
         Phase::Menu => format!(
             "{} {}/{}",
             text(app.language, "lesson_progress"),
-            app.menu_index.min(app.plan.lessons.len()),
+            app.menu_index
+                .saturating_sub(app.lesson_menu_start_index().saturating_sub(1))
+                .min(app.plan.lessons.len()),
             app.plan.lessons.len()
         ),
+        _ if app.foundation_active => match app.language {
+            Language::Zh => format!("基础第 {} 组", app.foundation_group_count.max(1)),
+            Language::En => format!("foundation group {}", app.foundation_group_count.max(1)),
+        },
         _ => format!(
             "{} {}/{}",
             text(app.language, "lesson_progress"),
@@ -1528,6 +1802,34 @@ fn render_daily_progress(frame: &mut Frame, area: Rect, app: &App) {
 }
 
 fn render_lesson_banner(frame: &mut Frame, area: Rect, app: &App) {
+    if app.foundation_active {
+        let Some(drill) = app.foundation_drills.get(app.foundation_index) else {
+            return;
+        };
+        let line = Line::from(vec![
+            Span::styled(
+                foundation_drill_title(drill, app.language),
+                Style::default()
+                    .fg(Color::LightGreen)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::raw("  "),
+            Span::styled(
+                foundation_drill_hint(drill, app.language),
+                Style::default().fg(Color::Gray),
+            ),
+        ]);
+        frame.render_widget(
+            Paragraph::new(vec![line]).block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .title(text(app.language, "current_lesson")),
+            ),
+            area,
+        );
+        return;
+    }
+
     let Some(lesson) = app.current_lesson() else {
         return;
     };
@@ -2205,7 +2507,7 @@ mod tests {
             completed_ms: 0,
             lessons: Vec::new(),
         };
-        let mut app = App::new(plan, Vec::new(), Language::Zh, Vec::new());
+        let mut app = App::new(plan, Vec::new(), Language::Zh, Vec::new(), Vec::new());
         app.started = Some(Instant::now());
         app.target_chars = vec!['a'];
 
@@ -2282,6 +2584,58 @@ mod tests {
         assert!(config.match_any);
         assert_eq!(config.languages, vec!["typescript"]);
         assert_eq!(config.frameworks, vec!["nestjs"]);
+    }
+
+    #[test]
+    fn menu_foundation_opens_setup_after_comprehensive() {
+        let mut app = empty_app_with_foundation_drills(vec![foundation_drill("home-row")]);
+        app.menu_index = app.foundation_menu_index();
+
+        handle_menu_key(&mut app, KeyCode::Enter);
+
+        assert_eq!(app.phase, Phase::FoundationSetup);
+    }
+
+    #[test]
+    fn foundation_setup_starts_selected_drill() {
+        let mut app = empty_app_with_foundation_drills(vec![
+            foundation_drill("home-row"),
+            foundation_drill("vertical-ladders"),
+        ]);
+        app.phase = Phase::FoundationSetup;
+
+        handle_foundation_setup_key(&mut app, KeyCode::Down);
+        handle_foundation_setup_key(&mut app, KeyCode::Enter);
+
+        assert!(app.foundation_active);
+        assert_eq!(app.foundation_group_count, 1);
+        assert_eq!(app.phase, Phase::Running);
+        assert!(
+            app.target
+                .as_ref()
+                .expect("foundation target")
+                .source
+                .contains("vertical-ladders")
+        );
+    }
+
+    #[test]
+    fn foundation_completion_enter_starts_another_group() {
+        let mut app = empty_app_with_foundation_drills(vec![foundation_drill("home-row")]);
+        app.phase = Phase::FoundationSetup;
+        handle_foundation_setup_key(&mut app, KeyCode::Enter);
+        let first_source = app.target.as_ref().expect("first target").source.clone();
+        app.complete();
+
+        handle_complete_key(&mut app, KeyCode::Enter);
+
+        assert!(app.foundation_active);
+        assert_eq!(app.foundation_group_count, 2);
+        assert_eq!(app.phase, Phase::Running);
+        assert_eq!(
+            app.target.as_ref().expect("second target").source,
+            first_source
+        );
     }
 
     #[test]
@@ -2407,7 +2761,7 @@ mod tests {
             completed_ms: 0,
             lessons: Vec::new(),
         };
-        let mut app = App::new(plan, Vec::new(), Language::Zh, Vec::new());
+        let mut app = App::new(plan, Vec::new(), Language::Zh, Vec::new(), Vec::new());
         app.menu_index = app.stats_menu_index();
 
         handle_menu_key(&mut app, KeyCode::Char('0'));
@@ -2525,12 +2879,29 @@ mod tests {
     }
 
     fn empty_app_with_code_options(code_options: Vec<CodePracticeOption>) -> App {
+        empty_app_with_options(Vec::new(), code_options)
+    }
+
+    fn empty_app_with_foundation_drills(foundation_drills: Vec<FoundationPracticeDrill>) -> App {
+        empty_app_with_options(foundation_drills, Vec::new())
+    }
+
+    fn empty_app_with_options(
+        foundation_drills: Vec<FoundationPracticeDrill>,
+        code_options: Vec<CodePracticeOption>,
+    ) -> App {
         let plan = DailyPracticePlan {
             target_minutes: 20,
             completed_ms: 0,
             lessons: Vec::new(),
         };
-        App::new(plan, Vec::new(), Language::Zh, code_options)
+        App::new(
+            plan,
+            Vec::new(),
+            Language::Zh,
+            foundation_drills,
+            code_options,
+        )
     }
 
     fn code_option(facet: CodePracticeFacet, value: &str, count: usize) -> CodePracticeOption {
@@ -2538,6 +2909,19 @@ mod tests {
             facet,
             value: value.to_string(),
             count,
+        }
+    }
+
+    fn foundation_drill(id: &str) -> FoundationPracticeDrill {
+        FoundationPracticeDrill {
+            id: id.to_string(),
+            title_zh: format!("基础 {id}"),
+            title_en: format!("Foundation {id}"),
+            hint_zh: "专项练习".to_string(),
+            hint_en: "Focused drill".to_string(),
+            items: (0..24)
+                .map(|index| format!("asdf jkl; {id} {index}"))
+                .collect(),
         }
     }
 }

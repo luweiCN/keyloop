@@ -2,31 +2,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc20-vault",
     "level": "function",
     "source": "keyloop:generated:solidity:001",
     "text": "function setProfile(uint256 value) external onlyOwner {\n  profileValue = value;\n  emit ProfileUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-protocol",
     "level": "function",
     "source": "keyloop:generated:solidity:002",
     "text": "modifier onlySessionOwner(uint256 id) {\n  require(sessionOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-contract",
     "level": "function",
     "source": "keyloop:generated:solidity:003",
     "text": "function claimInvoice(uint256 id) external {\n  require(!invoiceClaimed[id], \"already claimed\");\n  invoiceClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-access",
     "level": "function",
     "source": "keyloop:generated:solidity:004",
     "text": "function _authorizeWallet(address account) internal view {\n  if (!hasRole(WALLET_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
@@ -34,31 +34,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc721-minter",
     "level": "block",
     "source": "keyloop:generated:solidity:005",
     "text": "event MessageConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private messageBalance;\nmapping(uint256 => bool) private messageClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-tests",
     "level": "function",
     "source": "keyloop:generated:solidity:006",
     "text": "function setProject(uint256 value) external onlyOwner {\n  projectValue = value;\n  emit ProjectUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tasks",
     "level": "function",
     "source": "keyloop:generated:solidity:007",
     "text": "modifier onlyCommentOwner(uint256 id) {\n  require(commentOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-token",
     "level": "function",
     "source": "keyloop:generated:solidity:008",
     "text": "function claimNotification(uint256 id) external {\n  require(!notificationClaimed[id], \"already claimed\");\n  notificationClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
@@ -66,31 +66,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "staking-pool",
     "level": "function",
     "source": "keyloop:generated:solidity:009",
     "text": "function _authorizePreference(address account) internal view {\n  if (!hasRole(PREFERENCE_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "forge-scripts",
     "level": "block",
     "source": "keyloop:generated:solidity:010",
     "text": "event WorkspaceConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private workspaceBalance;\nmapping(uint256 => bool) private workspaceClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-deploy",
     "level": "function",
     "source": "keyloop:generated:solidity:011",
     "text": "function setDeployment(uint256 value) external onlyOwner {\n  deploymentValue = value;\n  emit DeploymentUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-governor",
     "level": "function",
     "source": "keyloop:generated:solidity:012",
     "text": "modifier onlySubscriptionOwner(uint256 id) {\n  require(subscriptionOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
@@ -98,31 +98,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "governance-treasury",
     "level": "function",
     "source": "keyloop:generated:solidity:013",
     "text": "function claimPayment(uint256 id) external {\n  require(!paymentClaimed[id], \"already claimed\");\n  paymentClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-invariant",
     "level": "function",
     "source": "keyloop:generated:solidity:014",
     "text": "function _authorizeAccount(address account) internal view {\n  if (!hasRole(ACCOUNT_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tests",
     "level": "block",
     "source": "keyloop:generated:solidity:015",
     "text": "event DraftConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private draftBalance;\nmapping(uint256 => bool) private draftClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-upgrade",
     "level": "function",
     "source": "keyloop:generated:solidity:016",
     "text": "function setActivity(uint256 value) external onlyOwner {\n  activityValue = value;\n  emit ActivityUpdated(value);\n}"
@@ -130,31 +130,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc20-vault",
     "level": "function",
     "source": "keyloop:generated:solidity:017",
     "text": "modifier onlyReportOwner(uint256 id) {\n  require(reportOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-protocol",
     "level": "function",
     "source": "keyloop:generated:solidity:018",
     "text": "function claimPipeline(uint256 id) external {\n  require(!pipelineClaimed[id], \"already claimed\");\n  pipelineClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-contract",
     "level": "function",
     "source": "keyloop:generated:solidity:019",
     "text": "function _authorizeToken(address account) internal view {\n  if (!hasRole(TOKEN_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-access",
     "level": "block",
     "source": "keyloop:generated:solidity:020",
     "text": "event PermissionConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private permissionBalance;\nmapping(uint256 => bool) private permissionClaimed;"
@@ -162,31 +162,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc721-minter",
     "level": "function",
     "source": "keyloop:generated:solidity:021",
     "text": "function setContact(uint256 value) external onlyOwner {\n  contactValue = value;\n  emit ContactUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-tests",
     "level": "function",
     "source": "keyloop:generated:solidity:022",
     "text": "modifier onlyOrderOwner(uint256 id) {\n  require(orderOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tasks",
     "level": "function",
     "source": "keyloop:generated:solidity:023",
     "text": "function claimTicket(uint256 id) external {\n  require(!ticketClaimed[id], \"already claimed\");\n  ticketClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-token",
     "level": "function",
     "source": "keyloop:generated:solidity:024",
     "text": "function _authorizeRelease(address account) internal view {\n  if (!hasRole(RELEASE_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
@@ -194,31 +194,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "staking-pool",
     "level": "block",
     "source": "keyloop:generated:solidity:025",
     "text": "event BundleConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private bundleBalance;\nmapping(uint256 => bool) private bundleClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "forge-scripts",
     "level": "function",
     "source": "keyloop:generated:solidity:026",
     "text": "function setAudit(uint256 value) external onlyOwner {\n  auditValue = value;\n  emit AuditUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-deploy",
     "level": "function",
     "source": "keyloop:generated:solidity:027",
     "text": "modifier onlyBookmarkOwner(uint256 id) {\n  require(bookmarkOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-governor",
     "level": "function",
     "source": "keyloop:generated:solidity:028",
     "text": "function claimCampaign(uint256 id) external {\n  require(!campaignClaimed[id], \"already claimed\");\n  campaignClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
@@ -226,31 +226,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "governance-treasury",
     "level": "function",
     "source": "keyloop:generated:solidity:029",
     "text": "function _authorizeChannel(address account) internal view {\n  if (!hasRole(CHANNEL_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-invariant",
     "level": "block",
     "source": "keyloop:generated:solidity:030",
     "text": "event CheckoutConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private checkoutBalance;\nmapping(uint256 => bool) private checkoutClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tests",
     "level": "function",
     "source": "keyloop:generated:solidity:031",
     "text": "function setCollection(uint256 value) external onlyOwner {\n  collectionValue = value;\n  emit CollectionUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-upgrade",
     "level": "function",
     "source": "keyloop:generated:solidity:032",
     "text": "modifier onlyCredentialOwner(uint256 id) {\n  require(credentialOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
@@ -258,31 +258,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc20-vault",
     "level": "function",
     "source": "keyloop:generated:solidity:033",
     "text": "function claimDashboard(uint256 id) external {\n  require(!dashboardClaimed[id], \"already claimed\");\n  dashboardClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-protocol",
     "level": "function",
     "source": "keyloop:generated:solidity:034",
     "text": "function _authorizeDataset(address account) internal view {\n  if (!hasRole(DATASET_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-contract",
     "level": "block",
     "source": "keyloop:generated:solidity:035",
     "text": "event DeviceConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private deviceBalance;\nmapping(uint256 => bool) private deviceClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-access",
     "level": "function",
     "source": "keyloop:generated:solidity:036",
     "text": "function setDocument(uint256 value) external onlyOwner {\n  documentValue = value;\n  emit DocumentUpdated(value);\n}"
@@ -290,31 +290,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc721-minter",
     "level": "function",
     "source": "keyloop:generated:solidity:037",
     "text": "modifier onlyEndpointOwner(uint256 id) {\n  require(endpointOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-tests",
     "level": "function",
     "source": "keyloop:generated:solidity:038",
     "text": "function claimExperiment(uint256 id) external {\n  require(!experimentClaimed[id], \"already claimed\");\n  experimentClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tasks",
     "level": "function",
     "source": "keyloop:generated:solidity:039",
     "text": "function _authorizeFeature(address account) internal view {\n  if (!hasRole(FEATURE_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-token",
     "level": "block",
     "source": "keyloop:generated:solidity:040",
     "text": "event FeedConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private feedBalance;\nmapping(uint256 => bool) private feedClaimed;"
@@ -322,31 +322,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "staking-pool",
     "level": "function",
     "source": "keyloop:generated:solidity:041",
     "text": "function setGateway(uint256 value) external onlyOwner {\n  gatewayValue = value;\n  emit GatewayUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "forge-scripts",
     "level": "function",
     "source": "keyloop:generated:solidity:042",
     "text": "modifier onlyGroupOwner(uint256 id) {\n  require(groupOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-deploy",
     "level": "function",
     "source": "keyloop:generated:solidity:043",
     "text": "function claimIdentity(uint256 id) external {\n  require(!identityClaimed[id], \"already claimed\");\n  identityClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-governor",
     "level": "function",
     "source": "keyloop:generated:solidity:044",
     "text": "function _authorizeIntegration(address account) internal view {\n  if (!hasRole(INTEGRATION_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
@@ -354,31 +354,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "governance-treasury",
     "level": "block",
     "source": "keyloop:generated:solidity:045",
     "text": "event InviteConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private inviteBalance;\nmapping(uint256 => bool) private inviteClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-invariant",
     "level": "function",
     "source": "keyloop:generated:solidity:046",
     "text": "function setIssue(uint256 value) external onlyOwner {\n  issueValue = value;\n  emit IssueUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tests",
     "level": "function",
     "source": "keyloop:generated:solidity:047",
     "text": "modifier onlyJobOwner(uint256 id) {\n  require(jobOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-upgrade",
     "level": "function",
     "source": "keyloop:generated:solidity:048",
     "text": "function claimLayout(uint256 id) external {\n  require(!layoutClaimed[id], \"already claimed\");\n  layoutClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
@@ -386,31 +386,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc20-vault",
     "level": "function",
     "source": "keyloop:generated:solidity:049",
     "text": "function _authorizeLedger(address account) internal view {\n  if (!hasRole(LEDGER_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-protocol",
     "level": "block",
     "source": "keyloop:generated:solidity:050",
     "text": "event MemberConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private memberBalance;\nmapping(uint256 => bool) private memberClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-contract",
     "level": "function",
     "source": "keyloop:generated:solidity:051",
     "text": "function setMetric(uint256 value) external onlyOwner {\n  metricValue = value;\n  emit MetricUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-access",
     "level": "function",
     "source": "keyloop:generated:solidity:052",
     "text": "modifier onlyModuleOwner(uint256 id) {\n  require(moduleOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
@@ -418,31 +418,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc721-minter",
     "level": "function",
     "source": "keyloop:generated:solidity:053",
     "text": "function claimNotice(uint256 id) external {\n  require(!noticeClaimed[id], \"already claimed\");\n  noticeClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-tests",
     "level": "function",
     "source": "keyloop:generated:solidity:054",
     "text": "function _authorizeOperator(address account) internal view {\n  if (!hasRole(OPERATOR_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tasks",
     "level": "block",
     "source": "keyloop:generated:solidity:055",
     "text": "event OrganizationConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private organizationBalance;\nmapping(uint256 => bool) private organizationClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-token",
     "level": "function",
     "source": "keyloop:generated:solidity:056",
     "text": "function setPackage(uint256 value) external onlyOwner {\n  packageValue = value;\n  emit PackageUpdated(value);\n}"
@@ -450,31 +450,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "staking-pool",
     "level": "function",
     "source": "keyloop:generated:solidity:057",
     "text": "modifier onlyPolicyOwner(uint256 id) {\n  require(policyOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "forge-scripts",
     "level": "function",
     "source": "keyloop:generated:solidity:058",
     "text": "function claimPreset(uint256 id) external {\n  require(!presetClaimed[id], \"already claimed\");\n  presetClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-deploy",
     "level": "function",
     "source": "keyloop:generated:solidity:059",
     "text": "function _authorizePreview(address account) internal view {\n  if (!hasRole(PREVIEW_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-governor",
     "level": "block",
     "source": "keyloop:generated:solidity:060",
     "text": "event ProductConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private productBalance;\nmapping(uint256 => bool) private productClaimed;"
@@ -482,31 +482,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "governance-treasury",
     "level": "function",
     "source": "keyloop:generated:solidity:061",
     "text": "function setQueue(uint256 value) external onlyOwner {\n  queueValue = value;\n  emit QueueUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-invariant",
     "level": "function",
     "source": "keyloop:generated:solidity:062",
     "text": "modifier onlyQuotaOwner(uint256 id) {\n  require(quotaOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tests",
     "level": "function",
     "source": "keyloop:generated:solidity:063",
     "text": "function claimReceipt(uint256 id) external {\n  require(!receiptClaimed[id], \"already claimed\");\n  receiptClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-upgrade",
     "level": "function",
     "source": "keyloop:generated:solidity:064",
     "text": "function _authorizeRegistry(address account) internal view {\n  if (!hasRole(REGISTRY_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
@@ -514,31 +514,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc20-vault",
     "level": "block",
     "source": "keyloop:generated:solidity:065",
     "text": "event RequestConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private requestBalance;\nmapping(uint256 => bool) private requestClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-protocol",
     "level": "function",
     "source": "keyloop:generated:solidity:066",
     "text": "function setResource(uint256 value) external onlyOwner {\n  resourceValue = value;\n  emit ResourceUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-contract",
     "level": "function",
     "source": "keyloop:generated:solidity:067",
     "text": "modifier onlyReviewOwner(uint256 id) {\n  require(reviewOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-access",
     "level": "function",
     "source": "keyloop:generated:solidity:068",
     "text": "function claimRole(uint256 id) external {\n  require(!roleClaimed[id], \"already claimed\");\n  roleClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
@@ -546,31 +546,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc721-minter",
     "level": "function",
     "source": "keyloop:generated:solidity:069",
     "text": "function _authorizeRule(address account) internal view {\n  if (!hasRole(RULE_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-tests",
     "level": "block",
     "source": "keyloop:generated:solidity:070",
     "text": "event ScheduleConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private scheduleBalance;\nmapping(uint256 => bool) private scheduleClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tasks",
     "level": "function",
     "source": "keyloop:generated:solidity:071",
     "text": "function setSchema(uint256 value) external onlyOwner {\n  schemaValue = value;\n  emit SchemaUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-token",
     "level": "function",
     "source": "keyloop:generated:solidity:072",
     "text": "modifier onlySectionOwner(uint256 id) {\n  require(sectionOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
@@ -578,31 +578,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "staking-pool",
     "level": "function",
     "source": "keyloop:generated:solidity:073",
     "text": "function claimSegment(uint256 id) external {\n  require(!segmentClaimed[id], \"already claimed\");\n  segmentClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "forge-scripts",
     "level": "function",
     "source": "keyloop:generated:solidity:074",
     "text": "function _authorizeSetting(address account) internal view {\n  if (!hasRole(SETTING_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-deploy",
     "level": "block",
     "source": "keyloop:generated:solidity:075",
     "text": "event SnapshotConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private snapshotBalance;\nmapping(uint256 => bool) private snapshotClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-governor",
     "level": "function",
     "source": "keyloop:generated:solidity:076",
     "text": "function setSpace(uint256 value) external onlyOwner {\n  spaceValue = value;\n  emit SpaceUpdated(value);\n}"
@@ -610,31 +610,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "governance-treasury",
     "level": "function",
     "source": "keyloop:generated:solidity:077",
     "text": "modifier onlyStreamOwner(uint256 id) {\n  require(streamOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-invariant",
     "level": "function",
     "source": "keyloop:generated:solidity:078",
     "text": "function claimTask(uint256 id) external {\n  require(!taskClaimed[id], \"already claimed\");\n  taskClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tests",
     "level": "function",
     "source": "keyloop:generated:solidity:079",
     "text": "function _authorizeTemplate(address account) internal view {\n  if (!hasRole(TEMPLATE_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-upgrade",
     "level": "block",
     "source": "keyloop:generated:solidity:080",
     "text": "event ThreadConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private threadBalance;\nmapping(uint256 => bool) private threadClaimed;"
@@ -642,31 +642,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc20-vault",
     "level": "function",
     "source": "keyloop:generated:solidity:081",
     "text": "function setTransaction(uint256 value) external onlyOwner {\n  transactionValue = value;\n  emit TransactionUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-protocol",
     "level": "function",
     "source": "keyloop:generated:solidity:082",
     "text": "modifier onlyTriggerOwner(uint256 id) {\n  require(triggerOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-contract",
     "level": "function",
     "source": "keyloop:generated:solidity:083",
     "text": "function claimUpload(uint256 id) external {\n  require(!uploadClaimed[id], \"already claimed\");\n  uploadClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-access",
     "level": "function",
     "source": "keyloop:generated:solidity:084",
     "text": "function _authorizeUser(address account) internal view {\n  if (!hasRole(USER_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
@@ -674,31 +674,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc721-minter",
     "level": "block",
     "source": "keyloop:generated:solidity:085",
     "text": "event VariantConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private variantBalance;\nmapping(uint256 => bool) private variantClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-tests",
     "level": "function",
     "source": "keyloop:generated:solidity:086",
     "text": "function setVault(uint256 value) external onlyOwner {\n  vaultValue = value;\n  emit VaultUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tasks",
     "level": "function",
     "source": "keyloop:generated:solidity:087",
     "text": "modifier onlyVersionOwner(uint256 id) {\n  require(versionOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-token",
     "level": "function",
     "source": "keyloop:generated:solidity:088",
     "text": "function claimView(uint256 id) external {\n  require(!viewClaimed[id], \"already claimed\");\n  viewClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
@@ -706,31 +706,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "staking-pool",
     "level": "function",
     "source": "keyloop:generated:solidity:089",
     "text": "function _authorizeWebhook(address account) internal view {\n  if (!hasRole(WEBHOOK_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "forge-scripts",
     "level": "block",
     "source": "keyloop:generated:solidity:090",
     "text": "event WorkflowConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private workflowBalance;\nmapping(uint256 => bool) private workflowClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-deploy",
     "level": "function",
     "source": "keyloop:generated:solidity:091",
     "text": "function setZone(uint256 value) external onlyOwner {\n  zoneValue = value;\n  emit ZoneUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-governor",
     "level": "function",
     "source": "keyloop:generated:solidity:092",
     "text": "modifier onlyAnchorOwner(uint256 id) {\n  require(anchorOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
@@ -738,31 +738,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "governance-treasury",
     "level": "function",
     "source": "keyloop:generated:solidity:093",
     "text": "function claimBatch(uint256 id) external {\n  require(!batchClaimed[id], \"already claimed\");\n  batchClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-invariant",
     "level": "function",
     "source": "keyloop:generated:solidity:094",
     "text": "function _authorizeCache(address account) internal view {\n  if (!hasRole(CACHE_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tests",
     "level": "block",
     "source": "keyloop:generated:solidity:095",
     "text": "event CellConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private cellBalance;\nmapping(uint256 => bool) private cellClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-upgrade",
     "level": "function",
     "source": "keyloop:generated:solidity:096",
     "text": "function setDelta(uint256 value) external onlyOwner {\n  deltaValue = value;\n  emit DeltaUpdated(value);\n}"
@@ -770,31 +770,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc20-vault",
     "level": "function",
     "source": "keyloop:generated:solidity:097",
     "text": "modifier onlyEntryOwner(uint256 id) {\n  require(entryOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-protocol",
     "level": "function",
     "source": "keyloop:generated:solidity:098",
     "text": "function claimField(uint256 id) external {\n  require(!fieldClaimed[id], \"already claimed\");\n  fieldClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-contract",
     "level": "function",
     "source": "keyloop:generated:solidity:099",
     "text": "function _authorizeFilter(address account) internal view {\n  if (!hasRole(FILTER_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-access",
     "level": "block",
     "source": "keyloop:generated:solidity:100",
     "text": "event HandleConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private handleBalance;\nmapping(uint256 => bool) private handleClaimed;"
@@ -802,31 +802,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc721-minter",
     "level": "function",
     "source": "keyloop:generated:solidity:101",
     "text": "function setIndex(uint256 value) external onlyOwner {\n  indexValue = value;\n  emit IndexUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-tests",
     "level": "function",
     "source": "keyloop:generated:solidity:102",
     "text": "modifier onlyJourneyOwner(uint256 id) {\n  require(journeyOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tasks",
     "level": "function",
     "source": "keyloop:generated:solidity:103",
     "text": "function claimKernel(uint256 id) external {\n  require(!kernelClaimed[id], \"already claimed\");\n  kernelClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-token",
     "level": "function",
     "source": "keyloop:generated:solidity:104",
     "text": "function _authorizeLayer(address account) internal view {\n  if (!hasRole(LAYER_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
@@ -834,31 +834,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "staking-pool",
     "level": "block",
     "source": "keyloop:generated:solidity:105",
     "text": "event MatrixConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private matrixBalance;\nmapping(uint256 => bool) private matrixClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "forge-scripts",
     "level": "function",
     "source": "keyloop:generated:solidity:106",
     "text": "function setNode(uint256 value) external onlyOwner {\n  nodeValue = value;\n  emit NodeUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-deploy",
     "level": "function",
     "source": "keyloop:generated:solidity:107",
     "text": "modifier onlyProfileOwner(uint256 id) {\n  require(profileOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-governor",
     "level": "function",
     "source": "keyloop:generated:solidity:108",
     "text": "function claimSession(uint256 id) external {\n  require(!sessionClaimed[id], \"already claimed\");\n  sessionClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
@@ -866,31 +866,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "governance-treasury",
     "level": "function",
     "source": "keyloop:generated:solidity:109",
     "text": "function _authorizeInvoice(address account) internal view {\n  if (!hasRole(INVOICE_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-invariant",
     "level": "block",
     "source": "keyloop:generated:solidity:110",
     "text": "event WalletConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private walletBalance;\nmapping(uint256 => bool) private walletClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tests",
     "level": "function",
     "source": "keyloop:generated:solidity:111",
     "text": "function setMessage(uint256 value) external onlyOwner {\n  messageValue = value;\n  emit MessageUpdated(value);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-upgrade",
     "level": "function",
     "source": "keyloop:generated:solidity:112",
     "text": "modifier onlyProjectOwner(uint256 id) {\n  require(projectOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
@@ -898,31 +898,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc20-vault",
     "level": "function",
     "source": "keyloop:generated:solidity:113",
     "text": "function claimComment(uint256 id) external {\n  require(!commentClaimed[id], \"already claimed\");\n  commentClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-protocol",
     "level": "function",
     "source": "keyloop:generated:solidity:114",
     "text": "function _authorizeNotification(address account) internal view {\n  if (!hasRole(NOTIFICATION_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-contract",
     "level": "block",
     "source": "keyloop:generated:solidity:115",
     "text": "event PreferenceConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private preferenceBalance;\nmapping(uint256 => bool) private preferenceClaimed;"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-access",
     "level": "function",
     "source": "keyloop:generated:solidity:116",
     "text": "function setWorkspace(uint256 value) external onlyOwner {\n  workspaceValue = value;\n  emit WorkspaceUpdated(value);\n}"
@@ -930,31 +930,31 @@
   {
     "language": "solidity",
     "framework": "evm",
-    "project": "keyloop-generated",
+    "project": "erc721-minter",
     "level": "function",
     "source": "keyloop:generated:solidity:117",
     "text": "modifier onlyDeploymentOwner(uint256 id) {\n  require(deploymentOwner[id] == msg.sender, \"not owner\");\n  _;\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "foundry",
+    "project": "foundry-tests",
     "level": "function",
     "source": "keyloop:generated:solidity:118",
     "text": "function claimSubscription(uint256 id) external {\n  require(!subscriptionClaimed[id], \"already claimed\");\n  subscriptionClaimed[id] = true;\n  _mint(msg.sender, id);\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "hardhat",
+    "project": "hardhat-tasks",
     "level": "function",
     "source": "keyloop:generated:solidity:119",
     "text": "function _authorizePayment(address account) internal view {\n  if (!hasRole(PAYMENT_ROLE, account)) {\n    revert Unauthorized(account);\n  }\n}"
   },
   {
     "language": "solidity",
-    "framework": "evm",
-    "project": "keyloop-generated",
+    "framework": "openzeppelin",
+    "project": "openzeppelin-token",
     "level": "block",
     "source": "keyloop:generated:solidity:120",
     "text": "event AccountConfigured(address indexed account, uint256 value);\nmapping(address => uint256) private accountBalance;\nmapping(uint256 => bool) private accountClaimed;"

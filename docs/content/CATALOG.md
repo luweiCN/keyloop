@@ -5,6 +5,7 @@
 KeyLoop 的练习内容不再写在 Rust 源码的大字符串数组里。内置内容放在仓库根目录的 `content/`：
 
 - `warmup.json`：基础键位、重复键位、字母过渡。
+- `foundation_drills.json`：基础练习专项，按键盘行位、左右手、手指、横向、竖向、斜向和边缘标点拆分。
 - `word_chunks.json`：常见词块、前缀、后缀、程序员常见拼写块。
 - `common_words.json`：高频英文词。
 - `programming_words.json`：前端、Web3、Rust 和常见程序员词。
@@ -15,6 +16,7 @@ KeyLoop 的练习内容不再写在 Rust 源码的大字符串数组里。内置
   当前包括 `react`、`vue`、`nestjs`、`solidity`、`rust`、`web`、`css`。
 - `code/generated/*.json`：KeyLoop 自有补充语料，保证 `typescript`、`javascript`、`vue`、`solidity`、`rust`、`html`、`css`、`scss`、`less` 每种语言至少 120 条。
 - `source_catalog.json`：内置代码语料和后续精确抽取使用的开源来源、license 和用途。
+- `tools/build_foundation_content.py`：生成基础练习、词块、符号、数字、命名和程序员词补充语料的确定性脚本。
 - `tools/build_generated_code_corpus.py`：生成 `code/generated/*.json` 的确定性脚本。
 
 代码块当前支持这些过滤参数：
@@ -30,6 +32,8 @@ keyloop start --repo /path/to/project --code-language rust
 只有显式传入 `--repo /path/to/project` 时，才会扫描指定仓库；`keyloop import /path/to/project` 可用于预览扫描结果。
 
 TUI 里的“代码专项”支持多选语言、框架和项目；如果没有选择，则使用全部代码语料。每组完成后按 Enter 会继续生成下一组，并尽量避开本机历史里已经练过的代码片段。
+
+TUI 里的“基础练习”支持单选专项，例如 Home row、Top row、Bottom row、横向连打、竖向楼梯、斜向过渡和小指边缘键。每组完成后按 Enter 会继续同一个专项的下一组。
 
 查看推荐语料来源：
 
@@ -53,6 +57,8 @@ KeyLoop training content is no longer embedded as large Rust string arrays. Buil
 Built-in code snippets live under `content/code/*.json` and carry `language`, `framework`, `project`, and `level` metadata, so future plans can choose React/Vue/NestJS/Solidity/Rust or local repository snippets without changing Rust source.
 
 Indentation is normalized before practice: repository-extracted blocks strip the minimum shared leading indentation, and built-in snippets are normalized the same way when loaded. Relative indentation inside functions, CSS rules, and HTML/Vue trees is preserved.
+
+Foundation drills live in `content/foundation_drills.json`. They are generated from `tools/build_foundation_content.py` and grouped by row, hand, finger, horizontal movement, vertical movement, diagonal movement, punctuation edges, and English transitions.
 
 Code focus mode supports multi-select language/framework/project filters inside the TUI. After each completed group, Enter generates another group and skips recently practiced snippets when the corpus still has unused material.
 
