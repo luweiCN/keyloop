@@ -2,7 +2,9 @@
 
 [中文](README.md)
 
-KeyLoop is a personalized terminal typing trainer for programmers. It is not a generic typing game: it opens with a practice menu, lets you run the full daily plan, or focus on one specific lesson.
+KeyLoop is a terminal typing trainer for programmers. It focuses on real development input: English chunks, programmer vocabulary, code symbols, naming patterns, and complete code blocks.
+
+You can start full practice immediately, choose a foundation drill, focus on code, or review statistics. KeyLoop keeps practice data locally and uses recent errors, slow tokens, and key hot spots to adjust future lessons.
 
 The default interface language is Chinese. English is available with `--language en` or the language shortcut inside the TUI.
 
@@ -69,7 +71,7 @@ Or install in one command:
 brew install luweiCN/keyloop/keyloop
 ```
 
-The repositories are still private, so unauthenticated Homebrew environments cannot download the release assets yet. Before a public release, install from source:
+You can also install from source:
 
 ```bash
 cargo install --path .
@@ -87,7 +89,7 @@ cargo run -- plan
 
 The default daily target is 20 minutes. You can finish it in one session or in several short sessions. Each completed lesson adds to today's progress.
 
-Built-in content lives in the root `content/` directory instead of large Rust string arrays. See [docs/content/CATALOG.md](docs/content/CATALOG.md). Code indentation is normalized before practice by removing the shared outer indentation while preserving relative indentation inside functions, HTML/Vue trees, and CSS nesting. In code mode, pressing Enter automatically inserts the expected leading indentation for the next line.
+Built-in content lives in the root `content/` directory. See [docs/content/CATALOG.md](docs/content/CATALOG.md). Code indentation is normalized before practice by removing the shared outer indentation while preserving relative indentation inside functions, HTML/Vue trees, and CSS nesting. In code mode, pressing Enter automatically inserts the expected leading indentation for the next line.
 
 Without enough history, full practice starts from this default path:
 
@@ -99,11 +101,9 @@ Without enough history, full practice starts from this default path:
 6. Naming: casing and frontend APIs
 7. Code blocks: complete snippets with at least 120 built-in entries per language for TypeScript, JavaScript, Vue, Solidity, Rust, HTML, CSS, Less, and Sass
 
-After there is recent history, full practice becomes adaptive: key hot spots add foundation drills, symbol errors add symbol groups, high-error words and identifiers feed chunk/word groups, and slow terms are pushed back into complete code blocks. The completion screen explains why the next group is coming up.
+After there is recent history, full practice becomes adaptive: key hot spots add foundation drills, symbol errors add symbol groups, high-error words and identifiers feed chunk/word groups, and slow terms are pushed back into complete code blocks. The plan page keeps the training rationale in one place while the menu stays stable.
 
 The menu also includes Foundation practice and Code focus mode. Foundation practice has row, horizontal, vertical, and finger-movement drills that continue into another group after each completion. Code focus lets you multi-select languages, frameworks, and projects, then continue into another generated code group.
-
-KeyLoop does not expose manual toggles for length, difficulty, casing, numbers, or symbols. Those are handled by content planning and history.
 
 ## Metrics
 

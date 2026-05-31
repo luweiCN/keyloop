@@ -17,7 +17,7 @@ pub(super) fn lesson_color(kind: LessonKind) -> Color {
 pub(super) fn lesson_title(kind: LessonKind, language: Language) -> &'static str {
     match language {
         Language::Zh => match kind {
-            LessonKind::Foundation => "基础：键位弱项",
+            LessonKind::Foundation => "基础：键位专项",
             LessonKind::Warmup => "热身：基础键位",
             LessonKind::Chunks => "词块：英文拼写块",
             LessonKind::CommonWords => "高频词：英语常用词",
@@ -27,7 +27,7 @@ pub(super) fn lesson_title(kind: LessonKind, language: Language) -> &'static str
             LessonKind::CodeBlock => "代码块：多语言完整片段",
         },
         Language::En => match kind {
-            LessonKind::Foundation => "Foundation: weak keys",
+            LessonKind::Foundation => "Foundation: key drills",
             LessonKind::Warmup => "Warmup: base keys",
             LessonKind::Chunks => "Chunks: English spelling blocks",
             LessonKind::CommonWords => "High frequency: common English words",
@@ -42,24 +42,24 @@ pub(super) fn lesson_title(kind: LessonKind, language: Language) -> &'static str
 pub(super) fn lesson_purpose(kind: LessonKind, language: Language) -> &'static str {
     match language {
         Language::Zh => match kind {
-            LessonKind::Foundation => "根据高错键位自动安排专项",
+            LessonKind::Foundation => "练键盘行位、横向、竖向和手指过渡",
             LessonKind::Warmup => "把手指放稳，只追正确率",
             LessonKind::Chunks => "练常见开头、结尾和字母组合",
             LessonKind::CommonWords => "练真正高频英文单词，不混大小写",
             LessonKind::Words => "练常见英文单词和变量名",
             LessonKind::Symbols => "解决代码输入掉速的主要来源",
             LessonKind::Naming => "适应 camelCase、PascalCase 和 DOM/React 名称",
-            LessonKind::CodeBlock => "练完整代码块，不练单行碎片",
+            LessonKind::CodeBlock => "练完整代码块和多行结构",
         },
         Language::En => match kind {
-            LessonKind::Foundation => "Focused drill chosen from key errors",
+            LessonKind::Foundation => "Keyboard rows, columns, and finger transitions",
             LessonKind::Warmup => "Settle fingers; type accurately",
             LessonKind::Chunks => "Prefixes, suffixes, and letter patterns",
             LessonKind::CommonWords => "Common lowercase English words",
             LessonKind::Words => "Frontend words and identifiers",
             LessonKind::Symbols => "Numbers and code symbols",
             LessonKind::Naming => "camelCase, PascalCase, DOM/React",
-            LessonKind::CodeBlock => "Complete code blocks, not one-line fragments",
+            LessonKind::CodeBlock => "Complete code blocks and multi-line structure",
         },
     }
 }
@@ -114,9 +114,13 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "daily_target" => "今日练习目标",
             "practiced" => "已练",
             "remaining" => "还差",
-            "done" => "已完成",
-            "next" => "下一组",
-            "pending" => "待练",
+            "done" => "完成",
+            "current" => "当前",
+            "pending" => "待开始",
+            "analysis_title" => "训练依据",
+            "analysis_current" => "当前组",
+            "analysis_hint" => "这里展示本轮计划为什么这样安排；菜单只保留稳定入口说明。",
+            "analysis_empty" => "暂无当前训练依据。",
             "controls" => "操作",
             "plan_help" => "Enter：开始今日练习 | L：切换语言 | Esc/Q：退出",
             "daily_goal_hint" => "建议今天练满 20 分钟，可以零碎时间分几次完成。",
@@ -204,8 +208,14 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "practiced" => "done",
             "remaining" => "remaining",
             "done" => "done",
-            "next" => "next",
-            "pending" => "pending",
+            "current" => "current",
+            "pending" => "not started",
+            "analysis_title" => "Training rationale",
+            "analysis_current" => "Current lesson",
+            "analysis_hint" => {
+                "This panel explains why the current plan is scheduled; the menu stays stable."
+            }
+            "analysis_empty" => "No training rationale yet.",
             "controls" => "Controls",
             "plan_help" => "Enter: start today's practice | L: language | Esc/Q: quit",
             "daily_goal_hint" => "Recommended target is 20 minutes today. Short sessions count.",

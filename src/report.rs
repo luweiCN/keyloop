@@ -330,7 +330,7 @@ pub fn plan_report(plan: &PracticePlan, language: Language) -> String {
             let _ = writeln!(output, "课程形态：");
             let _ = writeln!(
                 output,
-                "  1. 打开软件后直接看到今日动态练习，不再手动调难度。"
+                "  1. 打开软件后直接看到今日动态练习，难度由历史表现自动调整。"
             );
             let _ = writeln!(output, "  2. 可以零碎练，每次完成都会累计到今日进度。");
             let _ = writeln!(

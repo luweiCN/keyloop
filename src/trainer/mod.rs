@@ -17,7 +17,7 @@ use ratatui::Frame;
 use ratatui::layout::{Constraint, Direction, Layout, Rect};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span, Text};
-use ratatui::widgets::{Block, Borders, Gauge, Paragraph, Wrap};
+use ratatui::widgets::{Block, BorderType, Borders, Gauge, Paragraph, Wrap};
 use stats::*;
 use std::time::{Duration, Instant};
 use terminal::Tui;
@@ -25,6 +25,18 @@ use terminal::Tui;
 const PRACTICE_PANEL_MAX_WIDTH: u16 = 92;
 const MIN_TERMINAL_WIDTH: u16 = 72;
 const MIN_TERMINAL_HEIGHT: u16 = 25;
+
+fn panel_block(title: &'static str) -> Block<'static> {
+    Block::default()
+        .borders(Borders::ALL)
+        .border_type(BorderType::Rounded)
+        .border_style(Style::default().fg(Color::Reset))
+        .title(title)
+}
+
+fn analysis_block(title: &'static str) -> Block<'static> {
+    panel_block(title).border_style(Style::default().fg(Color::Cyan))
+}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Phase {
@@ -864,7 +876,7 @@ fn render_menu(frame: &mut Frame, area: Rect, app: &App) {
             app.menu_index == menu_index,
             menu_index + 1,
             lesson_title(lesson.kind, app.language),
-            &lesson_reason(lesson, app.language),
+            lesson_purpose(lesson.kind, app.language),
             lesson_color(lesson.kind),
         ));
     }
@@ -884,22 +896,14 @@ fn render_menu(frame: &mut Frame, area: Rect, app: &App) {
     ));
 
     frame.render_widget(
-        Paragraph::new(lines).block(
-            Block::default()
-                .borders(Borders::ALL)
-                .title(text(app.language, "practice_menu")),
-        ),
+        Paragraph::new(lines).block(panel_block(text(app.language, "practice_menu"))),
         centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH),
     );
 
     let help = vec![Line::from(text(app.language, "menu_help"))];
     frame.render_widget(
         Paragraph::new(help)
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(text(app.language, "controls")),
-            )
+            .block(panel_block(text(app.language, "controls")))
             .wrap(Wrap { trim: false }),
         centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
     );
@@ -942,7 +946,8 @@ fn render_plan(frame: &mut Frame, area: Rect, app: &App) {
         .constraints([
             Constraint::Length(4),
             Constraint::Length(4),
-            Constraint::Min(10),
+            Constraint::Min(8),
+            Constraint::Length(5),
             Constraint::Length(4),
         ])
         .split(area);
@@ -970,7 +975,7 @@ fn render_plan(frame: &mut Frame, area: Rect, app: &App) {
             let status = if app.completed_lesson_indices.contains(&index) {
                 text(app.language, "done")
             } else if index == app.lesson_index {
-                text(app.language, "next")
+                text(app.language, "current")
             } else {
                 text(app.language, "pending")
             };
@@ -993,7 +998,7 @@ fn render_plan(frame: &mut Frame, area: Rect, app: &App) {
                 lesson_lines.push(Line::from(vec![
                     Span::raw("   "),
                     Span::styled(
-                        lesson_reason(lesson, app.language),
+                        lesson_purpose(lesson.kind, app.language),
                         Style::default().fg(Color::Gray),
                     ),
                 ]));
@@ -1005,13 +1010,15 @@ fn render_plan(frame: &mut Frame, area: Rect, app: &App) {
 
     frame.render_widget(
         Paragraph::new(lines)
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(text(app.language, "today_plan")),
-            )
+            .block(panel_block(text(app.language, "today_plan")))
             .wrap(Wrap { trim: false }),
         plan_area,
+    );
+
+    render_plan_analysis(
+        frame,
+        centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
+        app,
     );
 
     let help = vec![
@@ -1020,13 +1027,41 @@ fn render_plan(frame: &mut Frame, area: Rect, app: &App) {
     ];
     frame.render_widget(
         Paragraph::new(help)
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(text(app.language, "controls")),
-            )
+            .block(panel_block(text(app.language, "controls")))
             .wrap(Wrap { trim: false }),
-        centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
+        centered_width(chunks[4], PRACTICE_PANEL_MAX_WIDTH),
+    );
+}
+
+fn render_plan_analysis(frame: &mut Frame, area: Rect, app: &App) {
+    let analysis = app
+        .current_lesson()
+        .map(|lesson| {
+            format!(
+                "{}  {}",
+                lesson_title(lesson.kind, app.language),
+                lesson_reason(lesson, app.language)
+            )
+        })
+        .unwrap_or_else(|| text(app.language, "analysis_empty").to_string());
+    let lines = vec![
+        Line::from(vec![
+            Span::styled(
+                text(app.language, "analysis_current"),
+                Style::default()
+                    .fg(Color::Blue)
+                    .add_modifier(Modifier::BOLD),
+            ),
+            Span::raw("  "),
+            Span::raw(analysis),
+        ]),
+        Line::from(text(app.language, "analysis_hint")),
+    ];
+    frame.render_widget(
+        Paragraph::new(lines)
+            .block(analysis_block(text(app.language, "analysis_title")))
+            .wrap(Wrap { trim: false }),
+        area,
     );
 }
 
@@ -1078,11 +1113,7 @@ fn render_foundation_setup(frame: &mut Frame, area: Rect, app: &App) {
 
     frame.render_widget(
         Paragraph::new(lines)
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(text(app.language, "foundation_title")),
-            )
+            .block(panel_block(text(app.language, "foundation_title")))
             .wrap(Wrap { trim: false }),
         drill_area,
     );
@@ -1106,11 +1137,7 @@ fn render_foundation_setup(frame: &mut Frame, area: Rect, app: &App) {
     ];
     frame.render_widget(
         Paragraph::new(help)
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(text(app.language, "controls")),
-            )
+            .block(panel_block(text(app.language, "controls")))
             .wrap(Wrap { trim: false }),
         centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
     );
@@ -1229,11 +1256,7 @@ fn render_code_setup(frame: &mut Frame, area: Rect, app: &App) {
 
     frame.render_widget(
         Paragraph::new(lines)
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(text(app.language, "code_setup_title")),
-            )
+            .block(panel_block(text(app.language, "code_setup_title")))
             .wrap(Wrap { trim: false }),
         options_area,
     );
@@ -1258,11 +1281,7 @@ fn render_code_setup(frame: &mut Frame, area: Rect, app: &App) {
     ];
     frame.render_widget(
         Paragraph::new(help)
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(text(app.language, "controls")),
-            )
+            .block(panel_block(text(app.language, "controls")))
             .wrap(Wrap { trim: false }),
         centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
     );
@@ -1346,11 +1365,7 @@ fn render_stats(frame: &mut Frame, area: Rect, app: &App) {
 
     let records = app.all_records();
     frame.render_widget(
-        Paragraph::new(stats_tab_lines(app)).block(
-            Block::default()
-                .borders(Borders::ALL)
-                .title(text(app.language, "stats_tabs")),
-        ),
+        Paragraph::new(stats_tab_lines(app)).block(panel_block(text(app.language, "stats_tabs"))),
         centered_width(chunks[1], PRACTICE_PANEL_MAX_WIDTH),
     );
 
@@ -1359,11 +1374,8 @@ fn render_stats(frame: &mut Frame, area: Rect, app: &App) {
         StatsView::Overview => {
             let max_lines = body.height.saturating_sub(2) as usize;
             frame.render_widget(
-                Paragraph::new(stats_dashboard_lines(&records, max_lines, app.language)).block(
-                    Block::default()
-                        .borders(Borders::ALL)
-                        .title(text(app.language, "stats_dashboard")),
-                ),
+                Paragraph::new(stats_dashboard_lines(&records, max_lines, app.language))
+                    .block(panel_block(text(app.language, "stats_dashboard"))),
                 body,
             );
         }
@@ -1384,11 +1396,8 @@ fn render_stats(frame: &mut Frame, area: Rect, app: &App) {
                 vec![Line::from(text(app.language, "stats_empty"))]
             };
             frame.render_widget(
-                Paragraph::new(detail_lines).block(
-                    Block::default()
-                        .borders(Borders::ALL)
-                        .title(text(app.language, "stats_details")),
-                ),
+                Paragraph::new(detail_lines)
+                    .block(panel_block(text(app.language, "stats_details"))),
                 body,
             );
         }
@@ -1396,11 +1405,7 @@ fn render_stats(frame: &mut Frame, area: Rect, app: &App) {
 
     frame.render_widget(
         Paragraph::new(stats_help_text(app))
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(text(app.language, "controls")),
-            )
+            .block(panel_block(text(app.language, "controls")))
             .wrap(Wrap { trim: false }),
         centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
     );
@@ -1465,8 +1470,8 @@ fn render_running(frame: &mut Frame, area: Rect, app: &App) {
         .constraints([
             Constraint::Length(4),
             Constraint::Length(3),
-            Constraint::Min(8),
             Constraint::Length(4),
+            Constraint::Min(8),
             Constraint::Length(3),
         ])
         .split(area);
@@ -1482,29 +1487,22 @@ fn render_running(frame: &mut Frame, area: Rect, app: &App) {
         centered_width(chunks[1], PRACTICE_PANEL_MAX_WIDTH),
         app,
     );
-    render_target(
-        frame,
-        centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH),
-        &app.target_chars,
-        &app.input,
-        app.language,
-    );
     if app.exit_confirm {
         render_exit_confirmation(
             frame,
-            centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
+            centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH),
             app.language,
         );
     } else if app.is_paused() {
         render_pause(
             frame,
-            centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
+            centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH),
             app.language,
         );
     } else {
         render_metrics(
             frame,
-            centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
+            centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH),
             &app.target_chars,
             &app.input,
             &app.events,
@@ -1512,6 +1510,13 @@ fn render_running(frame: &mut Frame, area: Rect, app: &App) {
             app.language,
         );
     }
+    render_target(
+        frame,
+        centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
+        &app.target_chars,
+        &app.input,
+        app.language,
+    );
     render_progress(
         frame,
         centered_width(chunks[4], PRACTICE_PANEL_MAX_WIDTH),
@@ -1607,11 +1612,7 @@ fn render_complete(frame: &mut Frame, area: Rect, app: &App) {
     ];
     frame.render_widget(
         Paragraph::new(summary)
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(text(app.language, "result_title")),
-            )
+            .block(panel_block(text(app.language, "result_title")))
             .wrap(Wrap { trim: false }),
         centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH),
     );
@@ -1710,20 +1711,13 @@ fn render_summary(frame: &mut Frame, area: Rect, app: &App) {
 
     frame.render_widget(
         Paragraph::new(lines)
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(text(app.language, "today_summary")),
-            )
+            .block(panel_block(text(app.language, "today_summary")))
             .wrap(Wrap { trim: false }),
         centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH),
     );
     frame.render_widget(
-        Paragraph::new(text(app.language, "summary_help")).block(
-            Block::default()
-                .borders(Borders::ALL)
-                .title(text(app.language, "controls")),
-        ),
+        Paragraph::new(text(app.language, "summary_help"))
+            .block(panel_block(text(app.language, "controls"))),
         centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
     );
 }
@@ -1846,11 +1840,8 @@ fn render_header(frame: &mut Frame, area: Rect, app: &App, target: Option<&Pract
         ));
     }
     frame.render_widget(
-        Paragraph::new(vec![title, Line::from(help)]).block(
-            Block::default()
-                .borders(Borders::ALL)
-                .title(text(app.language, "status_title")),
-        ),
+        Paragraph::new(vec![title, Line::from(help)])
+            .block(panel_block(text(app.language, "status_title"))),
         area,
     );
 }
@@ -1896,11 +1887,7 @@ fn render_daily_progress(frame: &mut Frame, area: Rect, app: &App) {
             line,
             Line::from(text(app.language, "daily_goal_hint")),
         ])
-        .block(
-            Block::default()
-                .borders(Borders::ALL)
-                .title(text(app.language, "daily_progress")),
-        )
+        .block(panel_block(text(app.language, "daily_progress")))
         .wrap(Wrap { trim: false }),
         area,
     );
@@ -1925,11 +1912,7 @@ fn render_lesson_banner(frame: &mut Frame, area: Rect, app: &App) {
             ),
         ]);
         frame.render_widget(
-            Paragraph::new(vec![line]).block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(text(app.language, "current_lesson")),
-            ),
+            Paragraph::new(vec![line]).block(panel_block(text(app.language, "current_lesson"))),
             area,
         );
         return;
@@ -1952,11 +1935,7 @@ fn render_lesson_banner(frame: &mut Frame, area: Rect, app: &App) {
         ),
     ]);
     frame.render_widget(
-        Paragraph::new(vec![line]).block(
-            Block::default()
-                .borders(Borders::ALL)
-                .title(text(app.language, "current_lesson")),
-        ),
+        Paragraph::new(vec![line]).block(panel_block(text(app.language, "current_lesson"))),
         area,
     );
 }
@@ -1974,15 +1953,9 @@ fn render_target(
     let scroll = scroll_offset(wrapped.current_line, wrapped.lines.len(), inner_height);
 
     let paragraph = Paragraph::new(Text::from(wrapped.lines))
-        .style(Style::default().fg(Color::White).bg(Color::Black))
+        .style(Style::default().fg(Color::Reset).bg(Color::Reset))
         .scroll((scroll, 0))
-        .block(
-            Block::default()
-                .borders(Borders::ALL)
-                .border_style(Style::default().fg(Color::Gray))
-                .style(Style::default().fg(Color::White).bg(Color::Black))
-                .title(text(language, "ghost_title")),
-        );
+        .block(panel_block(text(language, "ghost_title")));
     frame.render_widget(paragraph, area);
 }
 
@@ -2029,11 +2002,7 @@ fn render_metrics(
         ),
     ]);
     frame.render_widget(
-        Paragraph::new(vec![metric_line]).block(
-            Block::default()
-                .borders(Borders::ALL)
-                .title(text(language, "metrics_title")),
-        ),
+        Paragraph::new(vec![metric_line]).block(panel_block(text(language, "metrics_title"))),
         area,
     );
 }
@@ -2068,14 +2037,10 @@ fn render_pause(frame: &mut Frame, area: Rect, language: Language) {
 
     frame.render_widget(
         Paragraph::new(lines)
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(match language {
-                        Language::Zh => "暂停",
-                        Language::En => "Pause",
-                    }),
-            )
+            .block(panel_block(match language {
+                Language::Zh => "暂停",
+                Language::En => "Pause",
+            }))
             .wrap(Wrap { trim: false }),
         area,
     );
@@ -2115,14 +2080,10 @@ fn render_exit_confirmation(frame: &mut Frame, area: Rect, language: Language) {
 
     frame.render_widget(
         Paragraph::new(lines)
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(match language {
-                        Language::Zh => "退出确认",
-                        Language::En => "Exit confirmation",
-                    }),
-            )
+            .block(panel_block(match language {
+                Language::Zh => "退出确认",
+                Language::En => "Exit confirmation",
+            }))
             .wrap(Wrap { trim: false }),
         area,
     );
@@ -2145,11 +2106,7 @@ fn render_progress(
     let label = format!("{}/{}", input.len(), target_chars.len());
     frame.render_widget(
         Gauge::default()
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(text(language, "progress_title")),
-            )
+            .block(panel_block(text(language, "progress_title")))
             .gauge_style(Style::default().fg(Color::Cyan))
             .ratio(ratio)
             .label(label),
@@ -2375,17 +2332,17 @@ fn cursor_style() -> Style {
 }
 
 fn pending_text_style() -> Style {
-    Style::default().fg(Color::Indexed(250)).bg(Color::Black)
+    Style::default().fg(Color::Indexed(250)).bg(Color::Reset)
 }
 
 fn correct_text_style() -> Style {
-    Style::default().fg(Color::LightGreen).bg(Color::Black)
+    Style::default().fg(Color::LightGreen).bg(Color::Reset)
 }
 
 fn wrong_text_style() -> Style {
     Style::default()
         .fg(Color::LightRed)
-        .bg(Color::Black)
+        .bg(Color::Reset)
         .add_modifier(Modifier::BOLD | Modifier::UNDERLINED)
 }
 
