@@ -49,9 +49,9 @@ HOMEBREW_TAP_TOKEN
 
 这个 token 需要能写入 `luweiCN/homebrew-keyloop`。建议后续换成只允许写 tap 仓库 contents 的 fine-grained token。
 
-### 私有仓库注意事项
+### 公开安装要求
 
-当前 `luweiCN/keyloop` 是 private 仓库。GitHub Release 资产也是私有的，所以普通 Homebrew 用户无法无认证下载。要让一条命令安装真正可用，需要把 `keyloop` 和 `homebrew-keyloop` 都改成 public，或者只在配置了 GitHub 认证的个人环境里使用。
+要让普通用户通过 Homebrew 无认证安装，`luweiCN/keyloop` 的 GitHub Release 资产和 `luweiCN/homebrew-keyloop` tap 仓库都需要公开可读。
 
 ## English
 
@@ -102,6 +102,6 @@ HOMEBREW_TAP_TOKEN
 
 The token must be able to write to `luweiCN/homebrew-keyloop`. Prefer a fine-grained token limited to tap repository contents.
 
-### Private Repository Caveat
+### Public Install Requirements
 
-`luweiCN/keyloop` is currently private. Its GitHub Release assets are private too, so unauthenticated Homebrew installs will not work for normal users. For a public one-command Homebrew install, make both `keyloop` and `homebrew-keyloop` public, or use it only in authenticated personal environments.
+For unauthenticated Homebrew installs, GitHub Release assets from `luweiCN/keyloop` and the `luweiCN/homebrew-keyloop` tap repository must be publicly readable.

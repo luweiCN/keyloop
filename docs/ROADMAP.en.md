@@ -2,7 +2,9 @@
 
 [中文](ROADMAP.md)
 
-KeyLoop is not a general typing game. In this phase it is tailored for one programmer: a native Chinese speaker whose regular English typing is around 50 WPM, while code typing drops much lower. The product goal is to open the app and immediately see what should be practiced today, without manually choosing difficulty, length, or whether to practice code.
+KeyLoop is a terminal typing trainer for programmers. It started from a personal training need and has grown into a general local tool: users can open it and practice immediately, or focus on foundation keys, chunks, symbols, naming, or code.
+
+The product goal is to let the software organize the practice path while the user focuses on typing. Plans become personal from local history, and practice data stays on the user's machine by default.
 
 ## Product Principles
 
@@ -48,7 +50,7 @@ The user can run the adaptive full plan, choose a foundation drill, choose one f
 
 The daily plan is generated from local history. With no history, KeyLoop starts from a beginner-friendly plan.
 
-It shows the target time, lesson reasons, and expected sequence. It does not expose complex configuration.
+It shows the target time, the expected sequence, and a separate training-rationale panel so personal analysis does not clutter the menu.
 
 ### Typing
 
