@@ -113,7 +113,8 @@ impl CodePracticeConfig {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum CodePracticeFacet {
     Language,
     Framework,
@@ -125,6 +126,27 @@ pub struct CodePracticeOption {
     pub facet: CodePracticeFacet,
     pub value: String,
     pub count: usize,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub struct CodeFilterPreference {
+    pub facet: CodePracticeFacet,
+    pub value: String,
+}
+
+impl CodeFilterPreference {
+    pub fn from_option(option: &CodePracticeOption) -> Self {
+        Self {
+            facet: option.facet,
+            value: option.value.clone(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct UserPreferences {
+    #[serde(default)]
+    pub pinned_code_filters: Vec<CodeFilterPreference>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -2,13 +2,14 @@ mod copy;
 mod stats;
 mod terminal;
 
-use crate::content;
 use crate::content::FoundationPracticeDrill;
 use crate::metrics;
 use crate::model::{
-    CodePracticeConfig, CodePracticeFacet, CodePracticeOption, DailyPracticePlan, KeyAction,
-    KeyEventRecord, Language, LessonKind, Mode, PracticeLesson, PracticeTarget, SessionRecord,
+    CodeFilterPreference, CodePracticeConfig, CodePracticeFacet, CodePracticeOption,
+    DailyPracticePlan, KeyAction, KeyEventRecord, Language, LessonKind, Mode, PracticeLesson,
+    PracticeTarget, SessionRecord, UserPreferences,
 };
+use crate::{content, storage};
 use anyhow::Result;
 use chrono::{DateTime, Local, NaiveDate, Utc};
 use copy::{lesson_color, lesson_purpose, lesson_title, text};
@@ -59,6 +60,8 @@ struct App {
     code_options: Vec<CodePracticeOption>,
     code_filter_index: usize,
     code_selected: Vec<bool>,
+    preferences: UserPreferences,
+    preferences_dirty: bool,
     code_specialist_active: bool,
     code_group_count: usize,
     single_lesson: Option<usize>,
@@ -85,6 +88,7 @@ impl App {
         language: Language,
         foundation_drills: Vec<FoundationPracticeDrill>,
         code_options: Vec<CodePracticeOption>,
+        preferences: UserPreferences,
     ) -> Self {
         let code_selected = vec![false; code_options.len()];
         let completed_lesson_indices = completed_lesson_indices_from_records(&plan, &records);
@@ -104,6 +108,8 @@ impl App {
             code_options,
             code_filter_index: 0,
             code_selected,
+            preferences,
+            preferences_dirty: false,
             code_specialist_active: false,
             code_group_count: 0,
             single_lesson: None,
@@ -247,6 +253,7 @@ impl App {
     }
 
     fn begin_code_specialist(&mut self) {
+        self.remember_selected_code_filters();
         self.foundation_active = false;
         self.foundation_group_count = 0;
         self.code_specialist_active = true;
@@ -304,6 +311,75 @@ impl App {
             .filter(|(_, selected)| **selected)
             .map(|(option, _)| option.value.clone())
             .collect()
+    }
+
+    fn selected_code_preferences(&self) -> Vec<CodeFilterPreference> {
+        self.code_options
+            .iter()
+            .zip(self.code_selected.iter())
+            .filter(|(_, selected)| **selected)
+            .map(|(option, _)| CodeFilterPreference::from_option(option))
+            .collect()
+    }
+
+    fn current_code_preference(&self) -> Option<CodeFilterPreference> {
+        self.code_options
+            .get(self.code_filter_index)
+            .map(CodeFilterPreference::from_option)
+    }
+
+    fn remember_selected_code_filters(&mut self) {
+        let selected = self.selected_code_preferences();
+        if selected.is_empty() {
+            return;
+        }
+        for preference in selected.into_iter().rev() {
+            pin_code_filter(&mut self.preferences, preference);
+        }
+        self.preferences_dirty = true;
+        self.sort_code_options_preserving_state();
+    }
+
+    fn toggle_current_code_filter_pin(&mut self) {
+        let Some(preference) = self.current_code_preference() else {
+            return;
+        };
+        if code_filter_is_pinned(&self.preferences, &preference) {
+            remove_code_filter_pin(&mut self.preferences, &preference);
+        } else {
+            pin_code_filter(&mut self.preferences, preference);
+        }
+        self.preferences_dirty = true;
+        self.sort_code_options_preserving_state();
+    }
+
+    fn remove_current_code_filter_pin(&mut self) {
+        let Some(preference) = self.current_code_preference() else {
+            return;
+        };
+        if remove_code_filter_pin(&mut self.preferences, &preference) {
+            self.preferences_dirty = true;
+            self.sort_code_options_preserving_state();
+        }
+    }
+
+    fn sort_code_options_preserving_state(&mut self) {
+        let active = self.current_code_preference();
+        let selected = self.selected_code_preferences();
+        sort_code_options_by_preferences(&mut self.code_options, &self.preferences);
+        self.code_selected = self
+            .code_options
+            .iter()
+            .map(|option| selected.contains(&CodeFilterPreference::from_option(option)))
+            .collect();
+        if let Some(active) = active
+            && let Some(index) = self
+                .code_options
+                .iter()
+                .position(|option| CodeFilterPreference::from_option(option) == active)
+        {
+            self.code_filter_index = index;
+        }
     }
 
     fn current_record(&self) -> Option<SessionRecord> {
@@ -485,6 +561,54 @@ fn first_pending_lesson_index(plan: &DailyPracticePlan, completed: &[usize]) -> 
         .unwrap_or(0)
 }
 
+fn sort_code_options_by_preferences(
+    options: &mut [CodePracticeOption],
+    preferences: &UserPreferences,
+) {
+    options.sort_by(|left, right| {
+        code_filter_rank(preferences, &CodeFilterPreference::from_option(left))
+            .cmp(&code_filter_rank(
+                preferences,
+                &CodeFilterPreference::from_option(right),
+            ))
+            .then_with(|| right.count.cmp(&left.count))
+            .then_with(|| left.facet.cmp(&right.facet))
+            .then_with(|| left.value.cmp(&right.value))
+    });
+}
+
+fn code_filter_rank(preferences: &UserPreferences, preference: &CodeFilterPreference) -> usize {
+    preferences
+        .pinned_code_filters
+        .iter()
+        .position(|pinned| pinned == preference)
+        .unwrap_or(usize::MAX)
+}
+
+fn code_filter_is_pinned(preferences: &UserPreferences, preference: &CodeFilterPreference) -> bool {
+    preferences
+        .pinned_code_filters
+        .iter()
+        .any(|pinned| pinned == preference)
+}
+
+fn pin_code_filter(preferences: &mut UserPreferences, preference: CodeFilterPreference) {
+    remove_code_filter_pin(preferences, &preference);
+    preferences.pinned_code_filters.insert(0, preference);
+    preferences.pinned_code_filters.truncate(24);
+}
+
+fn remove_code_filter_pin(
+    preferences: &mut UserPreferences,
+    preference: &CodeFilterPreference,
+) -> bool {
+    let before = preferences.pinned_code_filters.len();
+    preferences
+        .pinned_code_filters
+        .retain(|pinned| pinned != preference);
+    preferences.pinned_code_filters.len() != before
+}
+
 pub fn run(
     plan: DailyPracticePlan,
     records: Vec<SessionRecord>,
@@ -492,8 +616,17 @@ pub fn run(
 ) -> Result<Vec<SessionRecord>> {
     let mut tui = Tui::enter()?;
     let foundation_drills = content::foundation_drills()?;
-    let code_options = content::code_practice_options()?;
-    let mut app = App::new(plan, records, language, foundation_drills, code_options);
+    let mut code_options = content::code_practice_options()?;
+    let preferences = storage::load_preferences()?;
+    sort_code_options_by_preferences(&mut code_options, &preferences);
+    let mut app = App::new(
+        plan,
+        records,
+        language,
+        foundation_drills,
+        code_options,
+        preferences,
+    );
     let mut next_running_tick = Instant::now() + Duration::from_secs(1);
 
     draw(&mut tui, &app)?;
@@ -554,6 +687,10 @@ pub fn run(
         if app.phase == Phase::Running {
             next_running_tick = Instant::now() + Duration::from_secs(1);
         }
+    }
+
+    if app.preferences_dirty {
+        storage::save_preferences(&app.preferences)?;
     }
 
     Ok(app.completed_records)
@@ -637,6 +774,10 @@ fn handle_code_setup_key(app: &mut App, code: KeyCode) {
             if let Some(selected) = app.code_selected.get_mut(app.code_filter_index) {
                 *selected = !*selected;
             }
+        }
+        KeyCode::Char('f') | KeyCode::Char('F') => app.toggle_current_code_filter_pin(),
+        KeyCode::Char('d') | KeyCode::Char('D') | KeyCode::Delete => {
+            app.remove_current_code_filter_pin();
         }
         KeyCode::Char('a') | KeyCode::Char('A') => {
             for selected in &mut app.code_selected {
@@ -1221,6 +1362,7 @@ fn render_code_setup(frame: &mut Frame, area: Rect, app: &App) {
             lines.push(code_option_line(
                 index == app.code_filter_index,
                 selected,
+                code_filter_is_pinned(&app.preferences, &CodeFilterPreference::from_option(option)),
                 option,
                 app.language,
             ));
@@ -1271,11 +1413,13 @@ fn render_code_setup(frame: &mut Frame, area: Rect, app: &App) {
 fn code_option_line(
     active: bool,
     selected: bool,
+    pinned: bool,
     option: &CodePracticeOption,
     language: Language,
 ) -> Line<'static> {
     let marker = if active { ">" } else { " " };
     let checkbox = if selected { "[x]" } else { "[ ]" };
+    let pin_marker = if pinned { "*" } else { " " };
     let color = match option.facet {
         CodePracticeFacet::Language => Color::Cyan,
         CodePracticeFacet::Framework => Color::LightGreen,
@@ -1296,7 +1440,7 @@ fn code_option_line(
     };
 
     Line::from(vec![
-        Span::styled(format!("{marker} {checkbox} "), base_style),
+        Span::styled(format!("{marker} {checkbox}{pin_marker} "), base_style),
         Span::styled(code_facet_label(option.facet, language), base_style),
         Span::styled("  ".to_string(), subtle_style),
         Span::styled(option.value.clone(), base_style),
@@ -2612,7 +2756,14 @@ mod tests {
             completed_ms: 0,
             lessons: Vec::new(),
         };
-        let mut app = App::new(plan, Vec::new(), Language::Zh, Vec::new(), Vec::new());
+        let mut app = App::new(
+            plan,
+            Vec::new(),
+            Language::Zh,
+            Vec::new(),
+            Vec::new(),
+            UserPreferences::default(),
+        );
         app.started = Some(Instant::now());
         app.target_chars = vec!['a'];
 
@@ -2689,6 +2840,75 @@ mod tests {
         assert!(config.match_any);
         assert_eq!(config.languages, vec!["typescript"]);
         assert_eq!(config.frameworks, vec!["nestjs"]);
+    }
+
+    #[test]
+    fn code_options_sort_pinned_preferences_first() {
+        let mut options = vec![
+            code_option(CodePracticeFacet::Language, "typescript", 120),
+            code_option(CodePracticeFacet::Framework, "nestjs", 30),
+            code_option(CodePracticeFacet::Language, "solidity", 120),
+        ];
+        let preferences = UserPreferences {
+            pinned_code_filters: vec![CodeFilterPreference {
+                facet: CodePracticeFacet::Framework,
+                value: "nestjs".to_string(),
+            }],
+        };
+
+        sort_code_options_by_preferences(&mut options, &preferences);
+
+        assert_eq!(options[0].facet, CodePracticeFacet::Framework);
+        assert_eq!(options[0].value, "nestjs");
+    }
+
+    #[test]
+    fn code_setup_remembers_selected_filters_as_pins() {
+        let mut app = empty_app_with_code_options(vec![
+            code_option(CodePracticeFacet::Language, "typescript", 120),
+            code_option(CodePracticeFacet::Framework, "nestjs", 30),
+            code_option(CodePracticeFacet::Language, "solidity", 120),
+        ]);
+        app.phase = Phase::CodeSetup;
+
+        handle_code_setup_key(&mut app, KeyCode::Char(' '));
+        handle_code_setup_key(&mut app, KeyCode::Down);
+        handle_code_setup_key(&mut app, KeyCode::Char(' '));
+        app.remember_selected_code_filters();
+
+        assert!(app.preferences_dirty);
+        assert_eq!(
+            app.preferences.pinned_code_filters,
+            vec![
+                CodeFilterPreference {
+                    facet: CodePracticeFacet::Language,
+                    value: "typescript".to_string(),
+                },
+                CodeFilterPreference {
+                    facet: CodePracticeFacet::Framework,
+                    value: "nestjs".to_string(),
+                },
+            ]
+        );
+    }
+
+    #[test]
+    fn code_setup_can_remove_current_pin() {
+        let mut app = empty_app_with_code_options(vec![
+            code_option(CodePracticeFacet::Language, "typescript", 120),
+            code_option(CodePracticeFacet::Framework, "nestjs", 30),
+        ]);
+        app.preferences = UserPreferences {
+            pinned_code_filters: vec![CodeFilterPreference {
+                facet: CodePracticeFacet::Language,
+                value: "typescript".to_string(),
+            }],
+        };
+
+        handle_code_setup_key(&mut app, KeyCode::Char('d'));
+
+        assert!(app.preferences.pinned_code_filters.is_empty());
+        assert!(app.preferences_dirty);
     }
 
     #[test]
@@ -2774,7 +2994,14 @@ mod tests {
             ..SessionRecord::default()
         };
 
-        let mut app = App::new(plan, vec![record], Language::Zh, Vec::new(), Vec::new());
+        let mut app = App::new(
+            plan,
+            vec![record],
+            Language::Zh,
+            Vec::new(),
+            Vec::new(),
+            UserPreferences::default(),
+        );
 
         assert_eq!(app.completed_lesson_indices, vec![0]);
         assert_eq!(app.lesson_index, 1);
@@ -2892,7 +3119,14 @@ mod tests {
             completed_ms: 0,
             lessons: Vec::new(),
         };
-        let mut app = App::new(plan, Vec::new(), Language::Zh, Vec::new(), Vec::new());
+        let mut app = App::new(
+            plan,
+            Vec::new(),
+            Language::Zh,
+            Vec::new(),
+            Vec::new(),
+            UserPreferences::default(),
+        );
         app.menu_index = app.stats_menu_index();
 
         handle_menu_key(&mut app, KeyCode::Char('0'));
@@ -3032,6 +3266,7 @@ mod tests {
             Language::Zh,
             foundation_drills,
             code_options,
+            UserPreferences::default(),
         )
     }
 

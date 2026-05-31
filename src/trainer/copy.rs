@@ -106,7 +106,7 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "code_setup_all" => "全部代码语料（未筛选）",
             "code_setup_empty" => "没有可用代码语料。",
             "code_setup_help" => {
-                "↑/↓ 或 J/K：选择 | Space：勾选 | A：全选 | C：清空 | Enter：开始 | Esc：返回"
+                "↑/↓ 或 J/K：选择 | Space：勾选 | F：置顶/取消 | D：删除置顶 | A：全选 | C：清空 | Enter：开始 | Esc：返回"
             }
             "today_plan" => "今日练习",
             "today_summary" => "今日总结",
@@ -195,7 +195,7 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "code_setup_all" => "all code corpus (no filter)",
             "code_setup_empty" => "No code corpus is available.",
             "code_setup_help" => {
-                "Up/Down or J/K: choose | Space: toggle | A: all | C: clear | Enter: start | Esc: back"
+                "Up/Down or J/K: choose | Space: toggle | F: pin/unpin | D: delete pin | A: all | C: clear | Enter: start | Esc: back"
             }
             "today_plan" => "Today's practice",
             "today_summary" => "Today summary",

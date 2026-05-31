@@ -16,6 +16,7 @@ Practice records are saved to:
 
 ```text
 ~/.keyloop/sessions.jsonl
+~/.keyloop/preferences.json
 ```
 
 Set `KEYLOOP_HOME` to use a different data directory.
@@ -101,7 +102,7 @@ Without enough history, full practice starts from this default path:
 
 After there is recent history, full practice becomes adaptive: key hot spots add foundation drills, symbol errors add symbol groups, high-error words and identifiers feed chunk/word groups, and slow terms are pushed back into complete code blocks. The completion screen explains why the next group is coming up.
 
-The menu also includes Foundation practice and Code focus mode. Foundation practice has row, horizontal, vertical, and finger-movement drills that continue into another group after each completion. Code focus lets you multi-select languages, frameworks, and projects, then continue into another generated code group.
+The menu also includes Foundation practice and Code focus mode. Foundation practice has row, horizontal, vertical, and finger-movement drills that continue into another group after each completion. Code focus lets you multi-select languages, frameworks, and projects, keeps used or pinned filters near the top, then continues into another generated code group.
 
 KeyLoop does not expose manual toggles for length, difficulty, casing, numbers, or symbols. Those are handled by content planning and history.
 
@@ -128,9 +129,10 @@ KeyLoop does not upload practice data. By default it only writes local data to:
 
 ```text
 ~/.keyloop/sessions.jsonl
+~/.keyloop/preferences.json
 ```
 
-Records include target text, final input, key events, error characters, and token statistics.
+Session records include target text, final input, key events, error characters, and token statistics. Preferences store pinned language, framework, and project filters for code focus mode.
 
 ## Development / Quality
 
