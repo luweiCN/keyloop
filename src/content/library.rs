@@ -9,6 +9,7 @@ pub struct ContentLibrary {
     pub common_words: Vec<String>,
     pub programming_words: Vec<String>,
     pub symbols: Vec<String>,
+    pub language_symbols: Vec<LanguageSymbolSet>,
     pub number_drills: Vec<String>,
     pub naming: Vec<String>,
     pub code_snippets: Vec<BuiltinCodeSnippet>,
@@ -21,6 +22,13 @@ pub struct FoundationDrill {
     pub title_en: String,
     pub hint_zh: String,
     pub hint_en: String,
+    pub items: Vec<String>,
+}
+
+#[derive(Debug, Clone, serde::Deserialize)]
+pub struct LanguageSymbolSet {
+    pub language: Option<String>,
+    pub framework: Option<String>,
     pub items: Vec<String>,
 }
 
@@ -56,6 +64,10 @@ pub fn load() -> Result<ContentLibrary> {
             include_str!("../../content/programming_words.json"),
         )?,
         symbols: load_json_list("symbols", include_str!("../../content/symbols.json"))?,
+        language_symbols: load_json_records(
+            "language_symbols",
+            include_str!("../../content/language_symbols.json"),
+        )?,
         number_drills: load_json_list(
             "number_drills",
             include_str!("../../content/number_drills.json"),

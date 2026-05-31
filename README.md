@@ -120,6 +120,7 @@ cargo run -- plan
 - 真正英语高频词，例如 `the`、`people`、`because`、`through`
 - 程序员高频词和前端变量名，内置 900 组词和命名片段
 - 数字行、括号、引号、箭头、比较符等代码符号，内置 200+ 组符号和 100+ 组数字模式
+- 语言 / 框架感知符号，例如 TS/JS 的 `=>`、`?.`、`??`，Rust 的 `::`、`->`、`'a`，CSS/Sass 的 `@media`、`&`、`:root`，Solidity 的 `indexed`、`payable` 和 `mapping`
 - camelCase、PascalCase、DOM/React/API 命名，内置 300+ 组
 - TS / JS / Vue / Solidity / Rust / HTML / CSS / Less / Sass 代码块，每种语言和每个内置框架至少 100 条练习，并覆盖 block / function / file 三种层级
 

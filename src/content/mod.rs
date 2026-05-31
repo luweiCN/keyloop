@@ -312,7 +312,7 @@ fn build_lesson(
             3,
             PracticeTarget {
                 mode: Mode::Symbols,
-                text: build_lesson_symbols(context.plan, context.library),
+                text: build_lesson_symbols(context.plan, context.library, context.code_config),
                 source: "keyloop:symbols".into(),
             },
             if context.plan.focus_symbols.is_empty() {
@@ -578,11 +578,56 @@ fn build_lesson_words(plan: &PracticePlan, library: &ContentLibrary) -> String {
     chunk_words(&chosen, 7).join("\n")
 }
 
-fn build_lesson_symbols(plan: &PracticePlan, library: &ContentLibrary) -> String {
+fn build_lesson_symbols(
+    plan: &PracticePlan,
+    library: &ContentLibrary,
+    code_config: &CodePracticeConfig,
+) -> String {
     let mut chosen = unique_focus(&plan.focus_symbols);
+    let mut specific = language_symbol_items(library, code_config);
+    specific.shuffle(&mut rand::thread_rng());
+    append_from(&mut chosen, &specific, 16);
     fill_from(&mut chosen, &library.symbols, 48);
     append_from(&mut chosen, &library.number_drills, 3);
     chunk_words(&chosen, 8).join("\n")
+}
+
+fn language_symbol_items(
+    library: &ContentLibrary,
+    code_config: &CodePracticeConfig,
+) -> Vec<String> {
+    if code_config.is_empty() {
+        return Vec::new();
+    }
+
+    let mut items = Vec::new();
+    for set in &library.language_symbols {
+        if symbol_set_matches(
+            set.language.as_deref(),
+            &code_config.language,
+            &code_config.languages,
+        ) || symbol_set_matches(
+            set.framework.as_deref(),
+            &code_config.framework,
+            &code_config.frameworks,
+        ) {
+            items.extend(set.items.iter().cloned());
+        }
+    }
+    items
+}
+
+fn symbol_set_matches(value: Option<&str>, single: &Option<String>, many: &[String]) -> bool {
+    let Some(value) = value else {
+        return false;
+    };
+    single
+        .as_deref()
+        .map(|expected| value.eq_ignore_ascii_case(expected))
+        .unwrap_or(false)
+        || many
+            .iter()
+            .any(|expected| value.eq_ignore_ascii_case(expected))
 }
 
 fn build_lesson_naming(plan: &PracticePlan, library: &ContentLibrary) -> String {
@@ -1036,6 +1081,7 @@ mod tests {
         assert!(library.word_chunks.len() >= 300);
         assert!(library.programming_words.len() >= 800);
         assert!(library.symbols.len() >= 200);
+        assert!(library.language_symbols.len() >= 8);
         assert!(library.number_drills.len() >= 80);
         assert!(library.naming.len() >= 300);
         assert!(library.code_snippets.len() >= 1_000);
@@ -1277,6 +1323,29 @@ mod tests {
                 .iter()
                 .all(|snippet| { snippet.language == "solidity" || snippet.framework == "nestjs" })
         );
+    }
+
+    #[test]
+    fn symbol_lesson_can_include_language_specific_sets() {
+        let library = library::load().expect("content json should load");
+        let plan = PracticePlan {
+            focus_words: Vec::new(),
+            focus_symbols: Vec::new(),
+            focus_code: Vec::new(),
+            focus_keys: Vec::new(),
+            advice: Vec::new(),
+            recommended_mode: Mode::Symbols,
+            has_recent_history: false,
+        };
+        let config = CodePracticeConfig {
+            languages: vec!["rust".to_string()],
+            match_any: true,
+            ..CodePracticeConfig::default()
+        };
+
+        let target = build_lesson_symbols(&plan, &library, &config);
+
+        assert!(target.contains("Result<T, E>") || target.contains(":: ->"));
     }
 
     #[test]

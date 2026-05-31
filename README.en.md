@@ -107,6 +107,8 @@ After there is recent history, full practice becomes adaptive: key hot spots add
 
 Code difficulty is selected from recent code-practice accuracy, WPM, and error rate, then mapped to easy, medium, or hard snippets.
 
+Symbol practice has a generic layer plus language/framework-specific sets, for example TS/JS `=>`, `?.`, `??`, Rust `::`, `->`, `'a`, CSS/Sass `@media`, `&`, `:root`, and Solidity `indexed`, `payable`, `mapping`.
+
 The menu also includes Foundation practice and Code focus mode. Foundation practice has row, horizontal, vertical, and finger-movement drills that continue into another group after each completion. Code focus lets you multi-select languages, frameworks, and projects, keeps used or pinned filters near the top, then continues into another generated code group.
 
 ## Metrics
