@@ -2636,6 +2636,7 @@ fn centered_width(area: Rect, max_width: u16) -> Rect {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use ratatui::{Terminal, backend::TestBackend};
 
     #[test]
     fn live_raw_wpm_counts_backspaced_inserts() {
@@ -3264,6 +3265,46 @@ mod tests {
     }
 
     #[test]
+    fn render_smoke_covers_primary_tui_phases() {
+        let mut app = renderable_app(Language::En);
+
+        for (phase, expected) in [
+            (Phase::Menu, "Practice menu"),
+            (Phase::Plan, "Today's practice"),
+            (Phase::FoundationSetup, "Foundation practice"),
+            (Phase::CodeSetup, "Code focus setup"),
+            (Phase::Stats, "Stats"),
+        ] {
+            app.phase = phase;
+            let screen = render_app_to_text(&app, 100, 32);
+            assert!(
+                screen.contains(expected),
+                "expected {phase:?} screen to contain {expected:?}\n{screen}"
+            );
+        }
+
+        let running = running_render_app();
+        let running_screen = render_app_to_text(&running, 100, 32);
+        assert!(running_screen.contains("Ghost text"));
+        assert!(running_screen.contains("WPM"));
+
+        let mut complete = running_render_app();
+        complete.complete();
+        let complete_screen = render_app_to_text(&complete, 100, 32);
+        assert!(complete_screen.contains("Lesson complete"));
+        assert!(complete_screen.contains("Result"));
+    }
+
+    #[test]
+    fn render_small_terminal_shows_clear_guard_message() {
+        let app = renderable_app(Language::En);
+        let screen = render_app_to_text(&app, 60, 20);
+
+        assert!(screen.contains("Terminal is too small for KeyLoop."));
+        assert!(!screen.contains("Practice menu"));
+    }
+
+    #[test]
     fn short_duration_keeps_seconds_under_one_minute() {
         assert_eq!(format_duration_short(0, Language::Zh), "0 秒");
         assert_eq!(format_duration_short(29_000, Language::Zh), "29 秒");
@@ -3334,6 +3375,64 @@ mod tests {
         app.started = Some(Instant::now());
         handle_running_key(&mut app, KeyCode::Char('a'), KeyModifiers::NONE);
         app
+    }
+
+    fn running_render_app() -> App {
+        let mut app = renderable_app(Language::En);
+        app.phase = Phase::Running;
+        app.target = Some(PracticeTarget {
+            mode: Mode::Code,
+            text: "function value() {\n  return 1;\n}".to_string(),
+            source: "render-test".to_string(),
+        });
+        app.target_chars = app.target.as_ref().expect("target").text.chars().collect();
+        app.started_at = Some(Utc::now());
+        app.started = Some(Instant::now() - Duration::from_secs(30));
+        handle_running_key(&mut app, KeyCode::Char('f'), KeyModifiers::NONE);
+        handle_running_key(&mut app, KeyCode::Char('u'), KeyModifiers::NONE);
+        handle_running_key(&mut app, KeyCode::Char('n'), KeyModifiers::NONE);
+        app
+    }
+
+    fn renderable_app(language: Language) -> App {
+        let plan = DailyPracticePlan {
+            run_id: "render-run".to_string(),
+            run_number: 1,
+            target_minutes: 20,
+            completed_ms: 90_000,
+            lessons: vec![
+                practice_lesson(LessonKind::Warmup, "keyloop:warmup"),
+                practice_lesson(LessonKind::Symbols, "keyloop:symbols"),
+                practice_lesson(LessonKind::CodeBlock, "keyloop:code-corpus"),
+            ],
+        };
+        App::new(
+            plan,
+            Vec::new(),
+            language,
+            vec![foundation_drill("home-row"), foundation_drill("top-row")],
+            vec![
+                code_option(CodePracticeFacet::Language, "typescript", 120),
+                code_option(CodePracticeFacet::Framework, "react", 100),
+            ],
+            UserPreferences::default(),
+        )
+    }
+
+    fn render_app_to_text(app: &App, width: u16, height: u16) -> String {
+        let backend = TestBackend::new(width, height);
+        let mut terminal = Terminal::new(backend).expect("test terminal should initialize");
+        terminal
+            .draw(|frame| render(frame, app))
+            .expect("render should not fail");
+        terminal
+            .backend()
+            .buffer()
+            .content
+            .chunks(width as usize)
+            .map(|row| row.iter().map(|cell| cell.symbol()).collect::<String>())
+            .collect::<Vec<_>>()
+            .join("\n")
     }
 
     fn empty_app_with_code_options(code_options: Vec<CodePracticeOption>) -> App {
