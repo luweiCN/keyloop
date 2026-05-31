@@ -1,6 +1,7 @@
 use super::{format_duration_short, format_practice_minutes, text, truncate};
 use crate::model::{KeyAction, Language, SessionRecord};
-use chrono::{Local, NaiveDate};
+use crate::plan::PLAN_HISTORY_DAYS;
+use chrono::{Duration, Local, NaiveDate, Utc};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use std::collections::BTreeMap;
@@ -40,7 +41,8 @@ fn stats_overview_lines(records: &[&SessionRecord], language: Language) -> Vec<L
         .first()
         .map(|entry| format!("{}({})", entry.label, entry.count))
         .unwrap_or_else(|| text(language, "stats_none").to_string());
-    let recommendation = training_recommendation_text(records, language);
+    let recent_records = recent_plan_records(records);
+    let recommendation = training_recommendation_text(&recent_records, language);
 
     match language {
         Language::Zh => vec![
@@ -150,7 +152,8 @@ fn compact_stats_dashboard_lines(
         .first()
         .map(|entry| format!("{}({})", truncate(&entry.token, 12), entry.errors))
         .unwrap_or_else(|| text(language, "stats_none").to_string());
-    let recommendation = training_recommendation_text(records, language);
+    let recent_records = recent_plan_records(records);
+    let recommendation = training_recommendation_text(&recent_records, language);
 
     let mut lines = Vec::new();
     match language {
@@ -447,6 +450,15 @@ fn training_recommendation_text(records: &[&SessionRecord], language: Language) 
         }
         (Language::En, _, _, _) => "Next full practice will stay balanced.".to_string(),
     }
+}
+
+fn recent_plan_records<'a>(records: &[&'a SessionRecord]) -> Vec<&'a SessionRecord> {
+    let recent_cutoff = Utc::now() - Duration::days(PLAN_HISTORY_DAYS);
+    records
+        .iter()
+        .copied()
+        .filter(|record| record.started_at >= recent_cutoff)
+        .collect()
 }
 
 pub(super) fn stats_day_lines(
@@ -1277,4 +1289,39 @@ pub(super) fn aggregate_wpm(records: &[&SessionRecord]) -> f64 {
         .sum::<usize>();
     let minutes = duration_ms.max(1) as f64 / 60_000.0;
     correct_chars as f64 / 5.0 / minutes
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn overview_recommendation_uses_recent_plan_window() {
+        let mut old_record = SessionRecord {
+            started_at: Utc::now() - Duration::days(PLAN_HISTORY_DAYS + 5),
+            duration_ms: 60_000,
+            ..SessionRecord::default()
+        };
+        old_record.error_chars.insert("j".to_string(), 5);
+        let recent_record = SessionRecord {
+            started_at: Utc::now() - Duration::days(1),
+            duration_ms: 60_000,
+            ..SessionRecord::default()
+        };
+        let records = vec![&old_record, &recent_record];
+
+        let rendered = stats_overview_lines(&records, Language::Zh)
+            .into_iter()
+            .map(|line| {
+                line.spans
+                    .into_iter()
+                    .map(|span| span.content.into_owned())
+                    .collect::<String>()
+            })
+            .collect::<Vec<_>>()
+            .join("\n");
+
+        assert!(rendered.contains("下一次综合会保持均衡计划"));
+        assert!(!rendered.contains("键位专项：j"));
+    }
 }

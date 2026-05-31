@@ -44,16 +44,22 @@ pub fn build_daily_practice_plan(
         .sum::<u64>();
 
     let recent_records = records.iter().collect::<Vec<_>>();
+    let mut build_state = PlanBuildState::from_records(&recent_records);
+    let mut build_context = LessonBuildContext {
+        records: &recent_records,
+        repo,
+        plan,
+        library: &library,
+        code_config,
+        build_state: &mut build_state,
+    };
+    let mut occurrence_counts = std::collections::BTreeMap::<LessonKind, usize>::new();
     let mut lessons = Vec::new();
     for kind in adaptive_lesson_sequence(plan) {
-        lessons.push(build_lesson(
-            kind,
-            &recent_records,
-            repo,
-            plan,
-            &library,
-            code_config,
-        )?);
+        let lesson_id = next_lesson_id(kind, &mut occurrence_counts);
+        let lesson = build_lesson(lesson_id, kind, &mut build_context)?;
+        build_context.build_state.observe_lesson(&lesson);
+        lessons.push(lesson);
     }
 
     Ok(DailyPracticePlan {
@@ -63,6 +69,65 @@ pub fn build_daily_practice_plan(
     })
 }
 
+struct LessonBuildContext<'a> {
+    records: &'a [&'a SessionRecord],
+    repo: Option<&'a Path>,
+    plan: &'a PracticePlan,
+    library: &'a ContentLibrary,
+    code_config: &'a CodePracticeConfig,
+    build_state: &'a mut PlanBuildState,
+}
+
+#[derive(Debug, Default)]
+struct PlanBuildState {
+    used_foundation_lines: HashSet<String>,
+    used_code_snippet_texts: HashSet<String>,
+}
+
+impl PlanBuildState {
+    fn from_records(records: &[&SessionRecord]) -> Self {
+        Self {
+            used_foundation_lines: records
+                .iter()
+                .filter(|record| record.source.starts_with("keyloop:foundation:"))
+                .flat_map(|record| record.target_text.lines())
+                .map(str::trim)
+                .filter(|line| !line.is_empty())
+                .map(ToOwned::to_owned)
+                .collect(),
+            used_code_snippet_texts: used_code_snippet_texts(records),
+        }
+    }
+
+    fn observe_lesson(&mut self, lesson: &PracticeLesson) {
+        match lesson.kind {
+            LessonKind::Foundation => {
+                self.used_foundation_lines.extend(
+                    lesson
+                        .target
+                        .text
+                        .lines()
+                        .map(str::trim)
+                        .filter(|line| !line.is_empty())
+                        .map(ToOwned::to_owned),
+                );
+            }
+            LessonKind::CodeBlock => {
+                self.used_code_snippet_texts.extend(
+                    lesson
+                        .target
+                        .text
+                        .split("\n\n")
+                        .map(str::trim)
+                        .filter(|snippet| !snippet.is_empty())
+                        .map(ToOwned::to_owned),
+                );
+            }
+            _ => {}
+        }
+    }
+}
+
 pub fn build_foundation_target(
     records: &[&SessionRecord],
     drill_id: &str,
@@ -70,7 +135,11 @@ pub fn build_foundation_target(
 ) -> Result<PracticeTarget> {
     let library = library::load()?;
     Ok(build_foundation_target_from_library(
-        &library, records, drill_id, line_count,
+        &library,
+        records,
+        drill_id,
+        line_count,
+        &HashSet::new(),
     ))
 }
 
@@ -79,6 +148,7 @@ fn build_foundation_target_from_library(
     records: &[&SessionRecord],
     drill_id: &str,
     line_count: usize,
+    extra_used: &HashSet<String>,
 ) -> PracticeTarget {
     let Some(drill) = library
         .foundation_drills
@@ -93,7 +163,8 @@ fn build_foundation_target_from_library(
         };
     };
 
-    let used = used_foundation_lines(records, &drill.id);
+    let mut used = used_foundation_lines(records, &drill.id);
+    used.extend(extra_used.iter().cloned());
     let mut pool = drill
         .items
         .iter()
@@ -114,6 +185,7 @@ fn build_foundation_target_from_library(
 }
 
 fn lesson(
+    id: impl Into<String>,
     kind: LessonKind,
     estimated_minutes: u16,
     target: PracticeTarget,
@@ -121,6 +193,7 @@ fn lesson(
     reason_en: impl Into<String>,
 ) -> PracticeLesson {
     PracticeLesson {
+        id: id.into(),
         kind,
         estimated_minutes,
         target,
@@ -130,34 +203,37 @@ fn lesson(
 }
 
 fn build_lesson(
+    id: String,
     kind: LessonKind,
-    records: &[&SessionRecord],
-    repo: Option<&Path>,
-    plan: &PracticePlan,
-    library: &ContentLibrary,
-    code_config: &CodePracticeConfig,
+    context: &mut LessonBuildContext<'_>,
 ) -> Result<PracticeLesson> {
     let (estimated_minutes, target, reason_zh, reason_en) = match kind {
         LessonKind::Foundation => {
-            let drill_id = foundation_drill_for_keys(&plan.focus_keys);
-            let target = build_foundation_target_from_library(library, records, drill_id, 12);
+            let drill_id = foundation_drill_for_keys(&context.plan.focus_keys);
+            let target = build_foundation_target_from_library(
+                context.library,
+                context.records,
+                drill_id,
+                12,
+                &context.build_state.used_foundation_lines,
+            );
             (
                 3,
                 target,
-                if plan.focus_keys.is_empty() {
+                if context.plan.focus_keys.is_empty() {
                     "没有明显键位热区，先做基础键位校准。".to_string()
                 } else {
                     format!(
                         "高错键位集中在 {}，先做对应基础专项。",
-                        plan.focus_keys.join(", ")
+                        context.plan.focus_keys.join(", ")
                     )
                 },
-                if plan.focus_keys.is_empty() {
+                if context.plan.focus_keys.is_empty() {
                     "No clear key hot spot yet; calibrate base keys first.".to_string()
                 } else {
                     format!(
                         "Key errors cluster around {}; start with a matching foundation drill.",
-                        plan.focus_keys.join(", ")
+                        context.plan.focus_keys.join(", ")
                     )
                 },
             )
@@ -166,7 +242,7 @@ fn build_lesson(
             3,
             PracticeTarget {
                 mode: Mode::Chars,
-                text: build_lesson_chars(library),
+                text: build_lesson_chars(context.library),
                 source: "keyloop:warmup".into(),
             },
             "先稳住基础键位，给后面的词块和代码降噪。".to_string(),
@@ -176,23 +252,23 @@ fn build_lesson(
             3,
             PracticeTarget {
                 mode: Mode::Words,
-                text: build_lesson_word_chunks(plan, library),
+                text: build_lesson_word_chunks(context.plan, context.library),
                 source: "keyloop:word-chunks".into(),
             },
-            if plan.focus_words.is_empty() {
+            if context.plan.focus_words.is_empty() {
                 "拆常见英文词块，降低拼写停顿。".to_string()
             } else {
                 format!(
                     "把高错词 {} 拆成前缀、后缀和字母块练。",
-                    short_list(&plan.focus_words, 4)
+                    short_list(&context.plan.focus_words, 4)
                 )
             },
-            if plan.focus_words.is_empty() {
+            if context.plan.focus_words.is_empty() {
                 "Break common English chunks to reduce spelling pauses.".to_string()
             } else {
                 format!(
                     "Break high-error words {} into prefixes, suffixes, and letter chunks.",
-                    short_list(&plan.focus_words, 4)
+                    short_list(&context.plan.focus_words, 4)
                 )
             },
         ),
@@ -200,7 +276,7 @@ fn build_lesson(
             3,
             PracticeTarget {
                 mode: Mode::Words,
-                text: build_lesson_common_words(plan, library),
+                text: build_lesson_common_words(context.plan, context.library),
                 source: "keyloop:common-english".into(),
             },
             "补真正高频英文词，避免只会敲代码词。".to_string(),
@@ -210,23 +286,23 @@ fn build_lesson(
             3,
             PracticeTarget {
                 mode: Mode::Words,
-                text: build_lesson_words(plan, library),
+                text: build_lesson_words(context.plan, context.library),
                 source: "keyloop:programming-words".into(),
             },
-            if plan.focus_words.is_empty() {
+            if context.plan.focus_words.is_empty() {
                 "补前端和程序员高频词。".to_string()
             } else {
                 format!(
                     "优先复盘高错词和标识符：{}。",
-                    short_list(&plan.focus_words, 5)
+                    short_list(&context.plan.focus_words, 5)
                 )
             },
-            if plan.focus_words.is_empty() {
+            if context.plan.focus_words.is_empty() {
                 "Practice frontend and programming vocabulary.".to_string()
             } else {
                 format!(
                     "Prioritize high-error words and identifiers: {}.",
-                    short_list(&plan.focus_words, 5)
+                    short_list(&context.plan.focus_words, 5)
                 )
             },
         ),
@@ -234,23 +310,23 @@ fn build_lesson(
             3,
             PracticeTarget {
                 mode: Mode::Symbols,
-                text: build_lesson_symbols(plan, library),
+                text: build_lesson_symbols(context.plan, context.library),
                 source: "keyloop:symbols".into(),
             },
-            if plan.focus_symbols.is_empty() {
+            if context.plan.focus_symbols.is_empty() {
                 "补数字、括号、箭头、比较符等代码符号。".to_string()
             } else {
                 format!(
                     "符号错误偏高，优先练：{}。",
-                    short_list(&plan.focus_symbols, 6)
+                    short_list(&context.plan.focus_symbols, 6)
                 )
             },
-            if plan.focus_symbols.is_empty() {
+            if context.plan.focus_symbols.is_empty() {
                 "Practice numbers, brackets, arrows, and comparison symbols.".to_string()
             } else {
                 format!(
                     "Symbol errors are high; prioritize {}.",
-                    short_list(&plan.focus_symbols, 6)
+                    short_list(&context.plan.focus_symbols, 6)
                 )
             },
         ),
@@ -258,7 +334,7 @@ fn build_lesson(
             2,
             PracticeTarget {
                 mode: Mode::Case,
-                text: build_lesson_naming(plan, library),
+                text: build_lesson_naming(context.plan, context.library),
                 source: "keyloop:naming".into(),
             },
             "补 camelCase、PascalCase 和 API 命名切换。".to_string(),
@@ -266,33 +342,62 @@ fn build_lesson(
         ),
         LessonKind::CodeBlock => (
             3,
-            build_code_lesson_target(repo, plan, library, code_config)?,
-            if plan.focus_code.is_empty() {
+            build_code_lesson_target(
+                context.repo,
+                context.plan,
+                context.library,
+                context.code_config,
+                &context.build_state.used_code_snippet_texts,
+            )?,
+            if context.plan.focus_code.is_empty() {
                 "最后进入完整代码块，验证前面专项能不能迁移到真实代码。".to_string()
             } else {
                 format!(
                     "把慢项/错项 {} 放回完整代码块里练。",
-                    short_list(&plan.focus_code, 4)
+                    short_list(&context.plan.focus_code, 4)
                 )
             },
-            if plan.focus_code.is_empty() {
+            if context.plan.focus_code.is_empty() {
                 "Finish with complete code blocks to transfer drills into real code.".to_string()
             } else {
                 format!(
                     "Put slow or error-prone terms {} back into complete code blocks.",
-                    short_list(&plan.focus_code, 4)
+                    short_list(&context.plan.focus_code, 4)
                 )
             },
         ),
     };
 
     Ok(lesson(
+        id,
         kind,
         estimated_minutes,
         target,
         reason_zh,
         reason_en,
     ))
+}
+
+fn next_lesson_id(
+    kind: LessonKind,
+    occurrence_counts: &mut std::collections::BTreeMap<LessonKind, usize>,
+) -> String {
+    let count = occurrence_counts.entry(kind).or_default();
+    *count += 1;
+    format!("daily:{}:{}", lesson_kind_slug(kind), count)
+}
+
+fn lesson_kind_slug(kind: LessonKind) -> &'static str {
+    match kind {
+        LessonKind::Foundation => "foundation",
+        LessonKind::Warmup => "warmup",
+        LessonKind::Chunks => "chunks",
+        LessonKind::CommonWords => "common-words",
+        LessonKind::Words => "words",
+        LessonKind::Symbols => "symbols",
+        LessonKind::Naming => "naming",
+        LessonKind::CodeBlock => "code-block",
+    }
 }
 
 fn adaptive_lesson_sequence(plan: &PracticePlan) -> Vec<LessonKind> {
@@ -488,14 +593,21 @@ fn build_lesson_naming(plan: &PracticePlan, library: &ContentLibrary) -> String 
 fn focus_word_chunks(words: &[String]) -> Vec<String> {
     let mut chunks = Vec::new();
     for word in words.iter().take(5) {
-        let letters = word
-            .chars()
-            .filter(|ch| ch.is_ascii_alphabetic())
-            .map(|ch| ch.to_ascii_lowercase())
-            .collect::<Vec<_>>();
-        if letters.len() < 4 {
+        let original = word.trim();
+        let parts = identifier_parts(original);
+        if parts.len() >= 2 {
+            let part_line = parts.iter().take(5).cloned().collect::<Vec<_>>().join(" ");
+            chunks.push(unique_line_items([part_line, original.to_string()]));
             continue;
         }
+
+        let Some(word) = parts.first() else {
+            continue;
+        };
+        if word.chars().count() < 4 {
+            continue;
+        }
+        let letters = word.chars().collect::<Vec<_>>();
         let prefix = letters.iter().take(3).collect::<String>();
         let suffix = letters
             .iter()
@@ -506,7 +618,6 @@ fn focus_word_chunks(words: &[String]) -> Vec<String> {
             .into_iter()
             .rev()
             .collect::<String>();
-        let word = letters.iter().collect::<String>();
         chunks.push(format!("{prefix} {suffix} {word} {word}"));
     }
     chunks
@@ -515,21 +626,99 @@ fn focus_word_chunks(words: &[String]) -> Vec<String> {
 fn focus_naming_lines(words: &[String]) -> Vec<String> {
     let mut lines = Vec::new();
     for word in words.iter().take(4) {
-        let normalized = word
-            .chars()
-            .filter(|ch| ch.is_ascii_alphanumeric())
-            .collect::<String>();
-        if normalized.len() < 4 {
+        let original = word.trim();
+        let parts = identifier_parts(original);
+        if parts.is_empty() || parts.iter().map(|part| part.len()).sum::<usize>() < 4 {
             continue;
         }
-        let lower = normalized.to_ascii_lowercase();
-        let pascal = pascal_case(&lower);
-        lines.push(format!("{lower} {pascal} get{pascal} set{pascal}"));
+        let camel = camel_case(&parts);
+        let pascal = pascal_case(&parts);
+        let constant = parts
+            .iter()
+            .map(|part| part.to_ascii_uppercase())
+            .collect::<Vec<_>>()
+            .join("_");
+        lines.push(unique_line_items([
+            original.to_string(),
+            camel,
+            pascal.clone(),
+            format!("get{pascal}"),
+            constant,
+        ]));
     }
     lines
 }
 
-fn pascal_case(value: &str) -> String {
+fn identifier_parts(value: &str) -> Vec<String> {
+    let chars = value.chars().collect::<Vec<_>>();
+    let mut parts = Vec::new();
+    let mut current = String::new();
+
+    for (index, ch) in chars.iter().copied().enumerate() {
+        if !ch.is_ascii_alphanumeric() {
+            push_identifier_part(&mut parts, &mut current);
+            continue;
+        }
+
+        if !current.is_empty() && starts_identifier_boundary(&chars, index) {
+            push_identifier_part(&mut parts, &mut current);
+        }
+        current.push(ch.to_ascii_lowercase());
+    }
+    push_identifier_part(&mut parts, &mut current);
+    parts
+}
+
+fn starts_identifier_boundary(chars: &[char], index: usize) -> bool {
+    if index == 0 {
+        return false;
+    }
+    let ch = chars[index];
+    let prev = chars[index - 1];
+    if !prev.is_ascii_alphanumeric() {
+        return false;
+    }
+    if ch.is_ascii_digit() {
+        return !prev.is_ascii_digit();
+    }
+    if prev.is_ascii_digit() {
+        return true;
+    }
+    if ch.is_ascii_uppercase() && prev.is_ascii_lowercase() {
+        return true;
+    }
+    ch.is_ascii_uppercase()
+        && prev.is_ascii_uppercase()
+        && chars
+            .get(index + 1)
+            .is_some_and(|next| next.is_ascii_lowercase())
+}
+
+fn push_identifier_part(parts: &mut Vec<String>, current: &mut String) {
+    if !current.is_empty() {
+        parts.push(std::mem::take(current));
+    }
+}
+
+fn camel_case(parts: &[String]) -> String {
+    let Some((first, rest)) = parts.split_first() else {
+        return String::new();
+    };
+    let mut output = first.clone();
+    for part in rest {
+        output.push_str(&capitalize_ascii(part));
+    }
+    output
+}
+
+fn pascal_case(parts: &[String]) -> String {
+    parts
+        .iter()
+        .map(|part| capitalize_ascii(part))
+        .collect::<String>()
+}
+
+fn capitalize_ascii(value: &str) -> String {
     let mut chars = value.chars();
     let Some(first) = chars.next() else {
         return String::new();
@@ -537,11 +726,22 @@ fn pascal_case(value: &str) -> String {
     first.to_ascii_uppercase().to_string() + chars.as_str()
 }
 
+fn unique_line_items(items: impl IntoIterator<Item = String>) -> String {
+    let mut seen = HashSet::new();
+    items
+        .into_iter()
+        .filter(|item| !item.trim().is_empty())
+        .filter(|item| seen.insert(item.to_ascii_lowercase()))
+        .collect::<Vec<_>>()
+        .join(" ")
+}
+
 fn build_code_lesson_target(
     repo: Option<&Path>,
     plan: &PracticePlan,
     library: &ContentLibrary,
     code_config: &CodePracticeConfig,
+    excluded_code_texts: &HashSet<String>,
 ) -> Result<PracticeTarget> {
     let (snippets, scan_error) = match repo {
         Some(repo) => match extract_snippets(repo) {
@@ -550,8 +750,27 @@ fn build_code_lesson_target(
         },
         None => (Vec::new(), None),
     };
-    let mut picked = snippets::pick_code_snippets(&snippets, &plan.focus_code, code_config, 3);
+    let mut picked = snippets::pick_code_snippets_excluding(
+        &snippets,
+        &plan.focus_code,
+        code_config,
+        3,
+        excluded_code_texts,
+    );
     let repo_count = picked.len();
+    if picked.len() < 3 {
+        for fallback in snippets::pick_builtin_code_excluding(
+            &library.code_snippets,
+            &plan.focus_code,
+            code_config,
+            3 - picked.len(),
+            excluded_code_texts,
+        ) {
+            if !picked.iter().any(|snippet| snippet.text == fallback.text) {
+                picked.push(fallback);
+            }
+        }
+    }
     if picked.len() < 3 {
         for fallback in snippets::pick_builtin_code(
             &library.code_snippets,
@@ -576,14 +795,29 @@ fn build_code_lesson_target(
         });
     }
 
-    Ok(PracticeTarget {
-        mode: Mode::Code,
-        text: join_snippets(&snippets::pick_builtin_code(
+    let mut picked = snippets::pick_builtin_code_excluding(
+        &library.code_snippets,
+        &plan.focus_code,
+        code_config,
+        4,
+        excluded_code_texts,
+    );
+    if picked.len() < 4 {
+        for fallback in snippets::pick_builtin_code(
             &library.code_snippets,
             &plan.focus_code,
             code_config,
-            4,
-        )),
+            4 - picked.len(),
+        ) {
+            if !picked.iter().any(|snippet| snippet.text == fallback.text) {
+                picked.push(fallback);
+            }
+        }
+    }
+
+    Ok(PracticeTarget {
+        mode: Mode::Code,
+        text: join_snippets(&picked),
         source: scan_error
             .map(|error| format!("keyloop:code-corpus (repo scan failed: {error})"))
             .unwrap_or_else(|| "keyloop:code-corpus".into()),
@@ -1039,6 +1273,85 @@ mod tests {
                 .iter()
                 .any(|lesson| lesson.target.text.contains("response"))
         );
+    }
+
+    #[test]
+    fn adaptive_daily_plan_assigns_stable_unique_lesson_ids() {
+        let plan = PracticePlan {
+            focus_words: Vec::new(),
+            focus_symbols: Vec::new(),
+            focus_code: vec!["useState".to_string(), "response".to_string()],
+            focus_keys: Vec::new(),
+            advice: Vec::new(),
+            recommended_mode: Mode::Mixed,
+            has_recent_history: true,
+        };
+
+        let daily = build_daily_practice_plan(&[], None, &plan, &CodePracticeConfig::default())
+            .expect("adaptive plan should build");
+        let ids = daily
+            .lessons
+            .iter()
+            .map(|lesson| lesson.id.as_str())
+            .collect::<HashSet<_>>();
+
+        assert_eq!(ids.len(), daily.lessons.len());
+        assert!(
+            daily
+                .lessons
+                .iter()
+                .any(|lesson| lesson.id == "daily:code-block:2")
+        );
+    }
+
+    #[test]
+    fn adaptive_daily_plan_does_not_repeat_code_snippets_within_plan() {
+        let plan = PracticePlan {
+            focus_words: Vec::new(),
+            focus_symbols: Vec::new(),
+            focus_code: vec!["useState".to_string(), "response".to_string()],
+            focus_keys: Vec::new(),
+            advice: Vec::new(),
+            recommended_mode: Mode::Mixed,
+            has_recent_history: true,
+        };
+
+        let daily = build_daily_practice_plan(&[], None, &plan, &CodePracticeConfig::default())
+            .expect("adaptive plan should build");
+        let mut seen = HashSet::new();
+        let mut code_lesson_count = 0;
+        for lesson in daily
+            .lessons
+            .iter()
+            .filter(|lesson| lesson.kind == LessonKind::CodeBlock)
+        {
+            code_lesson_count += 1;
+            for snippet in lesson.target.text.split("\n\n").map(str::trim) {
+                assert!(seen.insert(snippet), "duplicate snippet in daily plan");
+            }
+        }
+
+        assert!(code_lesson_count >= 2);
+    }
+
+    #[test]
+    fn focus_identifier_lines_preserve_programmer_boundaries() {
+        let words = vec![
+            "NEXT_PUBLIC_CHAIN_ID".to_string(),
+            "useEffect".to_string(),
+            "VITE_API_BASE_URL".to_string(),
+        ];
+
+        let chunks = focus_word_chunks(&words).join("\n");
+        let naming = focus_naming_lines(&words).join("\n");
+
+        assert!(chunks.contains("next public chain id NEXT_PUBLIC_CHAIN_ID"));
+        assert!(chunks.contains("use effect useEffect"));
+        assert!(naming.contains("nextPublicChainId"));
+        assert!(naming.contains("NEXT_PUBLIC_CHAIN_ID"));
+        assert!(naming.contains("VITE_API_BASE_URL"));
+        assert!(!chunks.contains("nextpublicchainid"));
+        assert!(!naming.contains("Nextpublicchainid"));
     }
 
     fn github_repo_from_source(source: &str) -> Option<String> {

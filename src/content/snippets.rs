@@ -102,11 +102,12 @@ pub fn extract_snippets(repo: &Path) -> Result<Vec<CodeSnippet>> {
     Ok(snippets)
 }
 
-pub fn pick_code_snippets(
+pub fn pick_code_snippets_excluding(
     snippets: &[CodeSnippet],
     plan_focus: &[String],
     code_config: &CodePracticeConfig,
     count: usize,
+    excluded_texts: &HashSet<String>,
 ) -> Vec<CodeSnippet> {
     let focus = plan_focus
         .iter()
@@ -117,6 +118,7 @@ pub fn pick_code_snippets(
         .iter()
         .filter(|snippet| is_practice_code_block(&snippet.text))
         .filter(|snippet| matches_code_config(snippet, code_config))
+        .filter(|snippet| !excluded_texts.contains(&snippet.text))
         .collect::<Vec<_>>();
     candidates.shuffle(&mut rand::thread_rng());
     if !focus.is_empty() {
@@ -622,7 +624,13 @@ mod tests {
             },
         ];
 
-        let picked = pick_code_snippets(&snippets, &[], &CodePracticeConfig::default(), 3);
+        let picked = pick_code_snippets_excluding(
+            &snippets,
+            &[],
+            &CodePracticeConfig::default(),
+            3,
+            &HashSet::new(),
+        );
 
         assert_eq!(picked.len(), 1);
         assert!(picked[0].text.contains('\n'));

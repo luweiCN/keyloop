@@ -42,7 +42,7 @@ pub enum Mode {
     Mixed,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum LessonKind {
     Foundation,
     Warmup,
@@ -63,6 +63,7 @@ pub struct DailyPracticePlan {
 
 #[derive(Debug, Clone)]
 pub struct PracticeLesson {
+    pub id: String,
     pub kind: LessonKind,
     pub estimated_minutes: u16,
     pub target: PracticeTarget,
@@ -138,6 +139,8 @@ pub struct SessionRecord {
     #[serde(default)]
     pub source: String,
     #[serde(default)]
+    pub lesson_id: String,
+    #[serde(default)]
     pub duration_ms: u64,
     #[serde(default)]
     pub target_text: String,
@@ -178,6 +181,7 @@ impl Default for SessionRecord {
             started_at: default_started_at(),
             mode: Mode::default(),
             source: String::new(),
+            lesson_id: String::new(),
             duration_ms: 0,
             target_text: String::new(),
             user_input: String::new(),
@@ -278,6 +282,7 @@ mod tests {
         .expect("legacy session should deserialize");
 
         assert_eq!(record.id, "legacy");
+        assert!(record.lesson_id.is_empty());
         assert!(record.error_chars.is_empty());
         assert!(record.error_tokens.is_empty());
         assert!(record.slow_tokens.is_empty());
