@@ -43,9 +43,9 @@
     "language": "less",
     "framework": "web",
     "project": "design-system",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:006",
-    "text": "@project-accent: #2563eb;\n.project-button {\n  color: #fff;\n  background: @project-accent;\n}"
+    "text": "@project-gap: 16px;\n\n.project-layout() {\n  display: grid;\n  gap: @project-gap;\n}\n\n.project-shell { .project-layout(); }"
   },
   {
     "language": "less",
@@ -53,7 +53,7 @@
     "project": "less-theme",
     "level": "block",
     "source": "keyloop:generated:less:007",
-    "text": ".comment-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": "@comment-accent: #2563eb;\n.comment-button {\n  color: #fff;\n  background: @comment-accent;\n}"
   },
   {
     "language": "less",
@@ -61,7 +61,7 @@
     "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:less:008",
-    "text": ".notification-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": ".notification-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -69,7 +69,7 @@
     "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:less:009",
-    "text": "@media (min-width: @screen-md) {\n  .preference-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": ".preference-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -77,7 +77,7 @@
     "project": "less-components",
     "level": "block",
     "source": "keyloop:generated:less:010",
-    "text": ".workspace-status(@state, @color) {\n  .workspace-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": "@media (min-width: @screen-md) {\n  .workspace-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -85,15 +85,15 @@
     "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:less:011",
-    "text": "@deployment-accent: #2563eb;\n.deployment-button {\n  color: #fff;\n  background: @deployment-accent;\n}"
+    "text": ".deployment-status(@state, @color) {\n  .deployment-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "browser-ui",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:012",
-    "text": ".subscription-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": "@subscription-gap: 16px;\n\n.subscription-layout() {\n  display: grid;\n  gap: @subscription-gap;\n}\n\n.subscription-shell { .subscription-layout(); }"
   },
   {
     "language": "less",
@@ -101,7 +101,7 @@
     "project": "less-layout",
     "level": "block",
     "source": "keyloop:generated:less:013",
-    "text": ".payment-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@payment-accent: #2563eb;\n.payment-button {\n  color: #fff;\n  background: @payment-accent;\n}"
   },
   {
     "language": "less",
@@ -109,7 +109,7 @@
     "project": "antd-table",
     "level": "block",
     "source": "keyloop:generated:less:014",
-    "text": "@media (min-width: @screen-md) {\n  .account-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": ".account-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -117,7 +117,7 @@
     "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:less:015",
-    "text": ".draft-status(@state, @color) {\n  .draft-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": ".draft-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -125,7 +125,7 @@
     "project": "less-layout",
     "level": "block",
     "source": "keyloop:generated:less:016",
-    "text": "@activity-accent: #2563eb;\n.activity-button {\n  color: #fff;\n  background: @activity-accent;\n}"
+    "text": "@media (min-width: @screen-md) {\n  .activity-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -133,15 +133,15 @@
     "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:less:017",
-    "text": ".report-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": ".report-status(@state, @color) {\n  .report-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "web-components",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:018",
-    "text": ".pipeline-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@pipeline-gap: 16px;\n\n.pipeline-layout() {\n  display: grid;\n  gap: @pipeline-gap;\n}\n\n.pipeline-shell { .pipeline-layout(); }"
   },
   {
     "language": "less",
@@ -149,7 +149,7 @@
     "project": "less-admin",
     "level": "block",
     "source": "keyloop:generated:less:019",
-    "text": "@media (min-width: @screen-md) {\n  .token-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": "@token-accent: #2563eb;\n.token-button {\n  color: #fff;\n  background: @token-accent;\n}"
   },
   {
     "language": "less",
@@ -157,7 +157,7 @@
     "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:less:020",
-    "text": ".permission-status(@state, @color) {\n  .permission-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": ".permission-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -165,7 +165,7 @@
     "project": "design-system",
     "level": "block",
     "source": "keyloop:generated:less:021",
-    "text": "@contact-accent: #2563eb;\n.contact-button {\n  color: #fff;\n  background: @contact-accent;\n}"
+    "text": ".contact-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -173,7 +173,7 @@
     "project": "less-theme",
     "level": "block",
     "source": "keyloop:generated:less:022",
-    "text": ".order-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": "@media (min-width: @screen-md) {\n  .order-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -181,15 +181,15 @@
     "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:less:023",
-    "text": ".ticket-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": ".ticket-status(@state, @color) {\n  .ticket-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "design-system",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:024",
-    "text": "@media (min-width: @screen-md) {\n  .release-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": "@release-gap: 16px;\n\n.release-layout() {\n  display: grid;\n  gap: @release-gap;\n}\n\n.release-shell { .release-layout(); }"
   },
   {
     "language": "less",
@@ -197,7 +197,7 @@
     "project": "less-components",
     "level": "block",
     "source": "keyloop:generated:less:025",
-    "text": ".bundle-status(@state, @color) {\n  .bundle-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": "@bundle-accent: #2563eb;\n.bundle-button {\n  color: #fff;\n  background: @bundle-accent;\n}"
   },
   {
     "language": "less",
@@ -205,7 +205,7 @@
     "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:less:026",
-    "text": "@audit-accent: #2563eb;\n.audit-button {\n  color: #fff;\n  background: @audit-accent;\n}"
+    "text": ".audit-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -213,7 +213,7 @@
     "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:less:027",
-    "text": ".bookmark-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": ".bookmark-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -221,7 +221,7 @@
     "project": "less-components",
     "level": "block",
     "source": "keyloop:generated:less:028",
-    "text": ".campaign-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@media (min-width: @screen-md) {\n  .campaign-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -229,15 +229,15 @@
     "project": "antd-table",
     "level": "block",
     "source": "keyloop:generated:less:029",
-    "text": "@media (min-width: @screen-md) {\n  .channel-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": ".channel-status(@state, @color) {\n  .channel-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "frontend-shell",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:030",
-    "text": ".checkout-status(@state, @color) {\n  .checkout-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": "@checkout-gap: 16px;\n\n.checkout-layout() {\n  display: grid;\n  gap: @checkout-gap;\n}\n\n.checkout-shell { .checkout-layout(); }"
   },
   {
     "language": "less",
@@ -283,9 +283,9 @@
     "language": "less",
     "framework": "web",
     "project": "web-components",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:036",
-    "text": "@document-accent: #2563eb;\n.document-button {\n  color: #fff;\n  background: @document-accent;\n}"
+    "text": "@document-gap: 16px;\n\n.document-layout() {\n  display: grid;\n  gap: @document-gap;\n}\n\n.document-shell { .document-layout(); }"
   },
   {
     "language": "less",
@@ -293,7 +293,7 @@
     "project": "less-theme",
     "level": "block",
     "source": "keyloop:generated:less:037",
-    "text": ".endpoint-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": "@endpoint-accent: #2563eb;\n.endpoint-button {\n  color: #fff;\n  background: @endpoint-accent;\n}"
   },
   {
     "language": "less",
@@ -301,7 +301,7 @@
     "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:less:038",
-    "text": ".experiment-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": ".experiment-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -309,7 +309,7 @@
     "project": "design-system",
     "level": "block",
     "source": "keyloop:generated:less:039",
-    "text": "@media (min-width: @screen-md) {\n  .feature-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": ".feature-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -317,7 +317,7 @@
     "project": "less-theme",
     "level": "block",
     "source": "keyloop:generated:less:040",
-    "text": ".feed-status(@state, @color) {\n  .feed-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": "@media (min-width: @screen-md) {\n  .feed-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -325,15 +325,15 @@
     "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:less:041",
-    "text": "@gateway-accent: #2563eb;\n.gateway-button {\n  color: #fff;\n  background: @gateway-accent;\n}"
+    "text": ".gateway-status(@state, @color) {\n  .gateway-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "browser-ui",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:042",
-    "text": ".group-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": "@group-gap: 16px;\n\n.group-layout() {\n  display: grid;\n  gap: @group-gap;\n}\n\n.group-shell { .group-layout(); }"
   },
   {
     "language": "less",
@@ -341,7 +341,7 @@
     "project": "less-components",
     "level": "block",
     "source": "keyloop:generated:less:043",
-    "text": ".identity-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@identity-accent: #2563eb;\n.identity-button {\n  color: #fff;\n  background: @identity-accent;\n}"
   },
   {
     "language": "less",
@@ -349,7 +349,7 @@
     "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:less:044",
-    "text": "@media (min-width: @screen-md) {\n  .integration-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": ".integration-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -357,7 +357,7 @@
     "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:less:045",
-    "text": ".invite-status(@state, @color) {\n  .invite-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": ".invite-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -365,7 +365,7 @@
     "project": "less-layout",
     "level": "block",
     "source": "keyloop:generated:less:046",
-    "text": "@issue-accent: #2563eb;\n.issue-button {\n  color: #fff;\n  background: @issue-accent;\n}"
+    "text": "@media (min-width: @screen-md) {\n  .issue-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -373,15 +373,15 @@
     "project": "antd-table",
     "level": "block",
     "source": "keyloop:generated:less:047",
-    "text": ".job-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": ".job-status(@state, @color) {\n  .job-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "frontend-shell",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:048",
-    "text": ".layout-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@layout-gap: 16px;\n\n.layout-layout() {\n  display: grid;\n  gap: @layout-gap;\n}\n\n.layout-shell { .layout-layout(); }"
   },
   {
     "language": "less",
@@ -389,7 +389,7 @@
     "project": "less-admin",
     "level": "block",
     "source": "keyloop:generated:less:049",
-    "text": "@media (min-width: @screen-md) {\n  .ledger-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": "@ledger-accent: #2563eb;\n.ledger-button {\n  color: #fff;\n  background: @ledger-accent;\n}"
   },
   {
     "language": "less",
@@ -397,7 +397,7 @@
     "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:less:050",
-    "text": ".member-status(@state, @color) {\n  .member-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": ".member-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -405,7 +405,7 @@
     "project": "web-components",
     "level": "block",
     "source": "keyloop:generated:less:051",
-    "text": "@metric-accent: #2563eb;\n.metric-button {\n  color: #fff;\n  background: @metric-accent;\n}"
+    "text": ".metric-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -413,7 +413,7 @@
     "project": "less-admin",
     "level": "block",
     "source": "keyloop:generated:less:052",
-    "text": ".module-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": "@media (min-width: @screen-md) {\n  .module-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -421,15 +421,15 @@
     "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:less:053",
-    "text": ".notice-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": ".notice-status(@state, @color) {\n  .notice-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "design-system",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:054",
-    "text": "@media (min-width: @screen-md) {\n  .operator-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": "@operator-gap: 16px;\n\n.operator-layout() {\n  display: grid;\n  gap: @operator-gap;\n}\n\n.operator-shell { .operator-layout(); }"
   },
   {
     "language": "less",
@@ -437,7 +437,7 @@
     "project": "less-theme",
     "level": "block",
     "source": "keyloop:generated:less:055",
-    "text": ".organization-status(@state, @color) {\n  .organization-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": "@organization-accent: #2563eb;\n.organization-button {\n  color: #fff;\n  background: @organization-accent;\n}"
   },
   {
     "language": "less",
@@ -445,7 +445,7 @@
     "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:less:056",
-    "text": "@package-accent: #2563eb;\n.package-button {\n  color: #fff;\n  background: @package-accent;\n}"
+    "text": ".package-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -453,7 +453,7 @@
     "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:less:057",
-    "text": ".policy-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": ".policy-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -461,7 +461,7 @@
     "project": "less-components",
     "level": "block",
     "source": "keyloop:generated:less:058",
-    "text": ".preset-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@media (min-width: @screen-md) {\n  .preset-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -469,15 +469,15 @@
     "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:less:059",
-    "text": "@media (min-width: @screen-md) {\n  .preview-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": ".preview-status(@state, @color) {\n  .preview-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "browser-ui",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:060",
-    "text": ".product-status(@state, @color) {\n  .product-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": "@product-gap: 16px;\n\n.product-layout() {\n  display: grid;\n  gap: @product-gap;\n}\n\n.product-shell { .product-layout(); }"
   },
   {
     "language": "less",
@@ -523,9 +523,9 @@
     "language": "less",
     "framework": "web",
     "project": "web-components",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:066",
-    "text": "@resource-accent: #2563eb;\n.resource-button {\n  color: #fff;\n  background: @resource-accent;\n}"
+    "text": "@resource-gap: 16px;\n\n.resource-layout() {\n  display: grid;\n  gap: @resource-gap;\n}\n\n.resource-shell { .resource-layout(); }"
   },
   {
     "language": "less",
@@ -533,7 +533,7 @@
     "project": "less-admin",
     "level": "block",
     "source": "keyloop:generated:less:067",
-    "text": ".review-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": "@review-accent: #2563eb;\n.review-button {\n  color: #fff;\n  background: @review-accent;\n}"
   },
   {
     "language": "less",
@@ -541,7 +541,7 @@
     "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:less:068",
-    "text": ".role-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": ".role-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -549,7 +549,7 @@
     "project": "design-system",
     "level": "block",
     "source": "keyloop:generated:less:069",
-    "text": "@media (min-width: @screen-md) {\n  .rule-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": ".rule-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -557,7 +557,7 @@
     "project": "less-theme",
     "level": "block",
     "source": "keyloop:generated:less:070",
-    "text": ".schedule-status(@state, @color) {\n  .schedule-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": "@media (min-width: @screen-md) {\n  .schedule-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -565,15 +565,15 @@
     "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:less:071",
-    "text": "@schema-accent: #2563eb;\n.schema-button {\n  color: #fff;\n  background: @schema-accent;\n}"
+    "text": ".schema-status(@state, @color) {\n  .schema-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "design-system",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:072",
-    "text": ".section-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": "@section-gap: 16px;\n\n.section-layout() {\n  display: grid;\n  gap: @section-gap;\n}\n\n.section-shell { .section-layout(); }"
   },
   {
     "language": "less",
@@ -581,7 +581,7 @@
     "project": "less-components",
     "level": "block",
     "source": "keyloop:generated:less:073",
-    "text": ".segment-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@segment-accent: #2563eb;\n.segment-button {\n  color: #fff;\n  background: @segment-accent;\n}"
   },
   {
     "language": "less",
@@ -589,7 +589,7 @@
     "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:less:074",
-    "text": "@media (min-width: @screen-md) {\n  .setting-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": ".setting-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -597,7 +597,7 @@
     "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:less:075",
-    "text": ".snapshot-status(@state, @color) {\n  .snapshot-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": ".snapshot-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -605,7 +605,7 @@
     "project": "less-components",
     "level": "block",
     "source": "keyloop:generated:less:076",
-    "text": "@space-accent: #2563eb;\n.space-button {\n  color: #fff;\n  background: @space-accent;\n}"
+    "text": "@media (min-width: @screen-md) {\n  .space-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -613,15 +613,15 @@
     "project": "antd-table",
     "level": "block",
     "source": "keyloop:generated:less:077",
-    "text": ".stream-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": ".stream-status(@state, @color) {\n  .stream-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "frontend-shell",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:078",
-    "text": ".task-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@task-gap: 16px;\n\n.task-layout() {\n  display: grid;\n  gap: @task-gap;\n}\n\n.task-shell { .task-layout(); }"
   },
   {
     "language": "less",
@@ -629,7 +629,7 @@
     "project": "less-layout",
     "level": "block",
     "source": "keyloop:generated:less:079",
-    "text": "@media (min-width: @screen-md) {\n  .template-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": "@template-accent: #2563eb;\n.template-button {\n  color: #fff;\n  background: @template-accent;\n}"
   },
   {
     "language": "less",
@@ -637,7 +637,7 @@
     "project": "antd-table",
     "level": "block",
     "source": "keyloop:generated:less:080",
-    "text": ".thread-status(@state, @color) {\n  .thread-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": ".thread-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -645,7 +645,7 @@
     "project": "web-components",
     "level": "block",
     "source": "keyloop:generated:less:081",
-    "text": "@transaction-accent: #2563eb;\n.transaction-button {\n  color: #fff;\n  background: @transaction-accent;\n}"
+    "text": ".transaction-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -653,7 +653,7 @@
     "project": "less-admin",
     "level": "block",
     "source": "keyloop:generated:less:082",
-    "text": ".trigger-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": "@media (min-width: @screen-md) {\n  .trigger-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -661,15 +661,15 @@
     "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:less:083",
-    "text": ".upload-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": ".upload-status(@state, @color) {\n  .upload-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "web-components",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:084",
-    "text": "@media (min-width: @screen-md) {\n  .user-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": "@user-gap: 16px;\n\n.user-layout() {\n  display: grid;\n  gap: @user-gap;\n}\n\n.user-shell { .user-layout(); }"
   },
   {
     "language": "less",
@@ -677,7 +677,7 @@
     "project": "less-theme",
     "level": "block",
     "source": "keyloop:generated:less:085",
-    "text": ".variant-status(@state, @color) {\n  .variant-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": "@variant-accent: #2563eb;\n.variant-button {\n  color: #fff;\n  background: @variant-accent;\n}"
   },
   {
     "language": "less",
@@ -685,7 +685,7 @@
     "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:less:086",
-    "text": "@vault-accent: #2563eb;\n.vault-button {\n  color: #fff;\n  background: @vault-accent;\n}"
+    "text": ".vault-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -693,7 +693,7 @@
     "project": "design-system",
     "level": "block",
     "source": "keyloop:generated:less:087",
-    "text": ".version-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": ".version-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -701,7 +701,7 @@
     "project": "less-theme",
     "level": "block",
     "source": "keyloop:generated:less:088",
-    "text": ".view-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@media (min-width: @screen-md) {\n  .view-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -709,15 +709,15 @@
     "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:less:089",
-    "text": "@media (min-width: @screen-md) {\n  .webhook-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": ".webhook-status(@state, @color) {\n  .webhook-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "browser-ui",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:090",
-    "text": ".workflow-status(@state, @color) {\n  .workflow-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": "@workflow-gap: 16px;\n\n.workflow-layout() {\n  display: grid;\n  gap: @workflow-gap;\n}\n\n.workflow-shell { .workflow-layout(); }"
   },
   {
     "language": "less",
@@ -763,9 +763,9 @@
     "language": "less",
     "framework": "web",
     "project": "frontend-shell",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:096",
-    "text": "@delta-accent: #2563eb;\n.delta-button {\n  color: #fff;\n  background: @delta-accent;\n}"
+    "text": "@delta-gap: 16px;\n\n.delta-layout() {\n  display: grid;\n  gap: @delta-gap;\n}\n\n.delta-shell { .delta-layout(); }"
   },
   {
     "language": "less",
@@ -773,7 +773,7 @@
     "project": "less-admin",
     "level": "block",
     "source": "keyloop:generated:less:097",
-    "text": ".entry-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": "@entry-accent: #2563eb;\n.entry-button {\n  color: #fff;\n  background: @entry-accent;\n}"
   },
   {
     "language": "less",
@@ -781,7 +781,7 @@
     "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:less:098",
-    "text": ".field-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": ".field-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -789,7 +789,7 @@
     "project": "web-components",
     "level": "block",
     "source": "keyloop:generated:less:099",
-    "text": "@media (min-width: @screen-md) {\n  .filter-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": ".filter-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -797,7 +797,7 @@
     "project": "less-admin",
     "level": "block",
     "source": "keyloop:generated:less:100",
-    "text": ".handle-status(@state, @color) {\n  .handle-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": "@media (min-width: @screen-md) {\n  .handle-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -805,15 +805,15 @@
     "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:less:101",
-    "text": "@index-accent: #2563eb;\n.index-button {\n  color: #fff;\n  background: @index-accent;\n}"
+    "text": ".index-status(@state, @color) {\n  .index-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "design-system",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:102",
-    "text": ".journey-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": "@journey-gap: 16px;\n\n.journey-layout() {\n  display: grid;\n  gap: @journey-gap;\n}\n\n.journey-shell { .journey-layout(); }"
   },
   {
     "language": "less",
@@ -821,7 +821,7 @@
     "project": "less-theme",
     "level": "block",
     "source": "keyloop:generated:less:103",
-    "text": ".kernel-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@kernel-accent: #2563eb;\n.kernel-button {\n  color: #fff;\n  background: @kernel-accent;\n}"
   },
   {
     "language": "less",
@@ -829,7 +829,7 @@
     "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:less:104",
-    "text": "@media (min-width: @screen-md) {\n  .layer-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": ".layer-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -837,7 +837,7 @@
     "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:less:105",
-    "text": ".matrix-status(@state, @color) {\n  .matrix-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": ".matrix-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -845,7 +845,7 @@
     "project": "less-components",
     "level": "block",
     "source": "keyloop:generated:less:106",
-    "text": "@node-accent: #2563eb;\n.node-button {\n  color: #fff;\n  background: @node-accent;\n}"
+    "text": "@media (min-width: @screen-md) {\n  .node-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -853,15 +853,15 @@
     "project": "antd-forms",
     "level": "block",
     "source": "keyloop:generated:less:107",
-    "text": ".profile-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": ".profile2-status(@state, @color) {\n  .profile2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "browser-ui",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:108",
-    "text": ".session-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@session2-gap: 16px;\n\n.session2-layout() {\n  display: grid;\n  gap: @session2-gap;\n}\n\n.session2-shell { .session2-layout(); }"
   },
   {
     "language": "less",
@@ -869,7 +869,7 @@
     "project": "less-layout",
     "level": "block",
     "source": "keyloop:generated:less:109",
-    "text": "@media (min-width: @screen-md) {\n  .invoice-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": "@invoice2-accent: #2563eb;\n.invoice2-button {\n  color: #fff;\n  background: @invoice2-accent;\n}"
   },
   {
     "language": "less",
@@ -877,7 +877,7 @@
     "project": "antd-table",
     "level": "block",
     "source": "keyloop:generated:less:110",
-    "text": ".wallet-status(@state, @color) {\n  .wallet-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": ".wallet2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -885,7 +885,7 @@
     "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:less:111",
-    "text": "@message-accent: #2563eb;\n.message-button {\n  color: #fff;\n  background: @message-accent;\n}"
+    "text": ".message2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -893,7 +893,7 @@
     "project": "less-layout",
     "level": "block",
     "source": "keyloop:generated:less:112",
-    "text": ".project-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": "@media (min-width: @screen-md) {\n  .project2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -901,15 +901,15 @@
     "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:less:113",
-    "text": ".comment-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": ".comment2-status(@state, @color) {\n  .comment2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "web-components",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:less:114",
-    "text": "@media (min-width: @screen-md) {\n  .notification-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": "@notification2-gap: 16px;\n\n.notification2-layout() {\n  display: grid;\n  gap: @notification2-gap;\n}\n\n.notification2-shell { .notification2-layout(); }"
   },
   {
     "language": "less",
@@ -917,7 +917,7 @@
     "project": "less-admin",
     "level": "block",
     "source": "keyloop:generated:less:115",
-    "text": ".preference-status(@state, @color) {\n  .preference-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "text": "@preference2-accent: #2563eb;\n.preference2-button {\n  color: #fff;\n  background: @preference2-accent;\n}"
   },
   {
     "language": "less",
@@ -925,7 +925,7 @@
     "project": "antd-dashboard",
     "level": "block",
     "source": "keyloop:generated:less:116",
-    "text": "@workspace-accent: #2563eb;\n.workspace-button {\n  color: #fff;\n  background: @workspace-accent;\n}"
+    "text": ".workspace2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
@@ -933,7 +933,7 @@
     "project": "design-system",
     "level": "block",
     "source": "keyloop:generated:less:117",
-    "text": ".deployment-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+    "text": ".deployment2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "less",
@@ -941,7 +941,7 @@
     "project": "less-theme",
     "level": "block",
     "source": "keyloop:generated:less:118",
-    "text": ".subscription-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@media (min-width: @screen-md) {\n  .subscription2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
   },
   {
     "language": "less",
@@ -949,14 +949,3854 @@
     "project": "antd-pro",
     "level": "block",
     "source": "keyloop:generated:less:119",
-    "text": "@media (min-width: @screen-md) {\n  .payment-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+    "text": ".payment2-status(@state, @color) {\n  .payment2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:120",
+    "text": "@account2-gap: 16px;\n\n.account2-layout() {\n  display: grid;\n  gap: @account2-gap;\n}\n\n.account2-shell { .account2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:121",
+    "text": "@draft2-accent: #2563eb;\n.draft2-button {\n  color: #fff;\n  background: @draft2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:122",
+    "text": ".activity2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:123",
+    "text": ".report2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:124",
+    "text": "@media (min-width: @screen-md) {\n  .pipeline2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:125",
+    "text": ".token2-status(@state, @color) {\n  .token2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:126",
+    "text": "@permission2-gap: 16px;\n\n.permission2-layout() {\n  display: grid;\n  gap: @permission2-gap;\n}\n\n.permission2-shell { .permission2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:127",
+    "text": "@contact2-accent: #2563eb;\n.contact2-button {\n  color: #fff;\n  background: @contact2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:128",
+    "text": ".order2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:129",
+    "text": ".ticket2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:130",
+    "text": "@media (min-width: @screen-md) {\n  .release2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:131",
+    "text": ".bundle2-status(@state, @color) {\n  .bundle2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:132",
+    "text": "@audit2-gap: 16px;\n\n.audit2-layout() {\n  display: grid;\n  gap: @audit2-gap;\n}\n\n.audit2-shell { .audit2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:133",
+    "text": "@bookmark2-accent: #2563eb;\n.bookmark2-button {\n  color: #fff;\n  background: @bookmark2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:134",
+    "text": ".campaign2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "less",
     "framework": "web",
     "project": "design-system",
     "level": "block",
-    "source": "keyloop:generated:less:120",
-    "text": ".account-status(@state, @color) {\n  .account-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+    "source": "keyloop:generated:less:135",
+    "text": ".channel2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:136",
+    "text": "@media (min-width: @screen-md) {\n  .checkout2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:137",
+    "text": ".collection2-status(@state, @color) {\n  .collection2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:138",
+    "text": "@credential2-gap: 16px;\n\n.credential2-layout() {\n  display: grid;\n  gap: @credential2-gap;\n}\n\n.credential2-shell { .credential2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:139",
+    "text": "@dashboard2-accent: #2563eb;\n.dashboard2-button {\n  color: #fff;\n  background: @dashboard2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:140",
+    "text": ".dataset2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:141",
+    "text": ".device2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:142",
+    "text": "@media (min-width: @screen-md) {\n  .document2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:143",
+    "text": ".endpoint2-status(@state, @color) {\n  .endpoint2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:144",
+    "text": "@experiment2-gap: 16px;\n\n.experiment2-layout() {\n  display: grid;\n  gap: @experiment2-gap;\n}\n\n.experiment2-shell { .experiment2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:145",
+    "text": "@feature2-accent: #2563eb;\n.feature2-button {\n  color: #fff;\n  background: @feature2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:146",
+    "text": ".feed2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:147",
+    "text": ".gateway2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:148",
+    "text": "@media (min-width: @screen-md) {\n  .group2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:149",
+    "text": ".identity2-status(@state, @color) {\n  .identity2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:150",
+    "text": "@integration2-gap: 16px;\n\n.integration2-layout() {\n  display: grid;\n  gap: @integration2-gap;\n}\n\n.integration2-shell { .integration2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:151",
+    "text": "@invite2-accent: #2563eb;\n.invite2-button {\n  color: #fff;\n  background: @invite2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:152",
+    "text": ".issue2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:153",
+    "text": ".job2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:154",
+    "text": "@media (min-width: @screen-md) {\n  .layout2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:155",
+    "text": ".ledger2-status(@state, @color) {\n  .ledger2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:156",
+    "text": "@member2-gap: 16px;\n\n.member2-layout() {\n  display: grid;\n  gap: @member2-gap;\n}\n\n.member2-shell { .member2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:157",
+    "text": "@metric2-accent: #2563eb;\n.metric2-button {\n  color: #fff;\n  background: @metric2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:158",
+    "text": ".module2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:159",
+    "text": ".notice2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:160",
+    "text": "@media (min-width: @screen-md) {\n  .operator2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:161",
+    "text": ".organization2-status(@state, @color) {\n  .organization2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:162",
+    "text": "@package2-gap: 16px;\n\n.package2-layout() {\n  display: grid;\n  gap: @package2-gap;\n}\n\n.package2-shell { .package2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:163",
+    "text": "@policy2-accent: #2563eb;\n.policy2-button {\n  color: #fff;\n  background: @policy2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:164",
+    "text": ".preset2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:165",
+    "text": ".preview2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:166",
+    "text": "@media (min-width: @screen-md) {\n  .product2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:167",
+    "text": ".queue2-status(@state, @color) {\n  .queue2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:168",
+    "text": "@quota2-gap: 16px;\n\n.quota2-layout() {\n  display: grid;\n  gap: @quota2-gap;\n}\n\n.quota2-shell { .quota2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:169",
+    "text": "@receipt2-accent: #2563eb;\n.receipt2-button {\n  color: #fff;\n  background: @receipt2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:170",
+    "text": ".registry2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:171",
+    "text": ".request2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:172",
+    "text": "@media (min-width: @screen-md) {\n  .resource2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:173",
+    "text": ".review2-status(@state, @color) {\n  .review2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:174",
+    "text": "@role2-gap: 16px;\n\n.role2-layout() {\n  display: grid;\n  gap: @role2-gap;\n}\n\n.role2-shell { .role2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:175",
+    "text": "@rule2-accent: #2563eb;\n.rule2-button {\n  color: #fff;\n  background: @rule2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:176",
+    "text": ".schedule2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:177",
+    "text": ".schema2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:178",
+    "text": "@media (min-width: @screen-md) {\n  .section2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:179",
+    "text": ".segment2-status(@state, @color) {\n  .segment2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:180",
+    "text": "@setting2-gap: 16px;\n\n.setting2-layout() {\n  display: grid;\n  gap: @setting2-gap;\n}\n\n.setting2-shell { .setting2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:181",
+    "text": "@snapshot2-accent: #2563eb;\n.snapshot2-button {\n  color: #fff;\n  background: @snapshot2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:182",
+    "text": ".space2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:183",
+    "text": ".stream2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:184",
+    "text": "@media (min-width: @screen-md) {\n  .task2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:185",
+    "text": ".template2-status(@state, @color) {\n  .template2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:186",
+    "text": "@thread2-gap: 16px;\n\n.thread2-layout() {\n  display: grid;\n  gap: @thread2-gap;\n}\n\n.thread2-shell { .thread2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:187",
+    "text": "@transaction2-accent: #2563eb;\n.transaction2-button {\n  color: #fff;\n  background: @transaction2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:188",
+    "text": ".trigger2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:189",
+    "text": ".upload2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:190",
+    "text": "@media (min-width: @screen-md) {\n  .user2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:191",
+    "text": ".variant2-status(@state, @color) {\n  .variant2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:192",
+    "text": "@vault2-gap: 16px;\n\n.vault2-layout() {\n  display: grid;\n  gap: @vault2-gap;\n}\n\n.vault2-shell { .vault2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:193",
+    "text": "@version2-accent: #2563eb;\n.version2-button {\n  color: #fff;\n  background: @version2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:194",
+    "text": ".view2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:195",
+    "text": ".webhook2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:196",
+    "text": "@media (min-width: @screen-md) {\n  .workflow2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:197",
+    "text": ".zone2-status(@state, @color) {\n  .zone2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:198",
+    "text": "@anchor2-gap: 16px;\n\n.anchor2-layout() {\n  display: grid;\n  gap: @anchor2-gap;\n}\n\n.anchor2-shell { .anchor2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:199",
+    "text": "@batch2-accent: #2563eb;\n.batch2-button {\n  color: #fff;\n  background: @batch2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:200",
+    "text": ".cache2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:201",
+    "text": ".cell2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:202",
+    "text": "@media (min-width: @screen-md) {\n  .delta2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:203",
+    "text": ".entry2-status(@state, @color) {\n  .entry2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:204",
+    "text": "@field2-gap: 16px;\n\n.field2-layout() {\n  display: grid;\n  gap: @field2-gap;\n}\n\n.field2-shell { .field2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:205",
+    "text": "@filter2-accent: #2563eb;\n.filter2-button {\n  color: #fff;\n  background: @filter2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:206",
+    "text": ".handle2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:207",
+    "text": ".index2-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:208",
+    "text": "@media (min-width: @screen-md) {\n  .journey2-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:209",
+    "text": ".kernel2-status(@state, @color) {\n  .kernel2-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:210",
+    "text": "@layer2-gap: 16px;\n\n.layer2-layout() {\n  display: grid;\n  gap: @layer2-gap;\n}\n\n.layer2-shell { .layer2-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:211",
+    "text": "@matrix2-accent: #2563eb;\n.matrix2-button {\n  color: #fff;\n  background: @matrix2-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:212",
+    "text": ".node2-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:213",
+    "text": ".profile3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:214",
+    "text": "@media (min-width: @screen-md) {\n  .session3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:215",
+    "text": ".invoice3-status(@state, @color) {\n  .invoice3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:216",
+    "text": "@wallet3-gap: 16px;\n\n.wallet3-layout() {\n  display: grid;\n  gap: @wallet3-gap;\n}\n\n.wallet3-shell { .wallet3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:217",
+    "text": "@message3-accent: #2563eb;\n.message3-button {\n  color: #fff;\n  background: @message3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:218",
+    "text": ".project3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:219",
+    "text": ".comment3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:220",
+    "text": "@media (min-width: @screen-md) {\n  .notification3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:221",
+    "text": ".preference3-status(@state, @color) {\n  .preference3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:222",
+    "text": "@workspace3-gap: 16px;\n\n.workspace3-layout() {\n  display: grid;\n  gap: @workspace3-gap;\n}\n\n.workspace3-shell { .workspace3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:223",
+    "text": "@deployment3-accent: #2563eb;\n.deployment3-button {\n  color: #fff;\n  background: @deployment3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:224",
+    "text": ".subscription3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:225",
+    "text": ".payment3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:226",
+    "text": "@media (min-width: @screen-md) {\n  .account3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:227",
+    "text": ".draft3-status(@state, @color) {\n  .draft3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:228",
+    "text": "@activity3-gap: 16px;\n\n.activity3-layout() {\n  display: grid;\n  gap: @activity3-gap;\n}\n\n.activity3-shell { .activity3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:229",
+    "text": "@report3-accent: #2563eb;\n.report3-button {\n  color: #fff;\n  background: @report3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:230",
+    "text": ".pipeline3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:231",
+    "text": ".token3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:232",
+    "text": "@media (min-width: @screen-md) {\n  .permission3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:233",
+    "text": ".contact3-status(@state, @color) {\n  .contact3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:234",
+    "text": "@order3-gap: 16px;\n\n.order3-layout() {\n  display: grid;\n  gap: @order3-gap;\n}\n\n.order3-shell { .order3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:235",
+    "text": "@ticket3-accent: #2563eb;\n.ticket3-button {\n  color: #fff;\n  background: @ticket3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:236",
+    "text": ".release3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:237",
+    "text": ".bundle3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:238",
+    "text": "@media (min-width: @screen-md) {\n  .audit3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:239",
+    "text": ".bookmark3-status(@state, @color) {\n  .bookmark3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:240",
+    "text": "@campaign3-gap: 16px;\n\n.campaign3-layout() {\n  display: grid;\n  gap: @campaign3-gap;\n}\n\n.campaign3-shell { .campaign3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:241",
+    "text": "@channel3-accent: #2563eb;\n.channel3-button {\n  color: #fff;\n  background: @channel3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:242",
+    "text": ".checkout3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:243",
+    "text": ".collection3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:244",
+    "text": "@media (min-width: @screen-md) {\n  .credential3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:245",
+    "text": ".dashboard3-status(@state, @color) {\n  .dashboard3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:246",
+    "text": "@dataset3-gap: 16px;\n\n.dataset3-layout() {\n  display: grid;\n  gap: @dataset3-gap;\n}\n\n.dataset3-shell { .dataset3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:247",
+    "text": "@device3-accent: #2563eb;\n.device3-button {\n  color: #fff;\n  background: @device3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:248",
+    "text": ".document3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:249",
+    "text": ".endpoint3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:250",
+    "text": "@media (min-width: @screen-md) {\n  .experiment3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:251",
+    "text": ".feature3-status(@state, @color) {\n  .feature3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:252",
+    "text": "@feed3-gap: 16px;\n\n.feed3-layout() {\n  display: grid;\n  gap: @feed3-gap;\n}\n\n.feed3-shell { .feed3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:253",
+    "text": "@gateway3-accent: #2563eb;\n.gateway3-button {\n  color: #fff;\n  background: @gateway3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:254",
+    "text": ".group3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:255",
+    "text": ".identity3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:256",
+    "text": "@media (min-width: @screen-md) {\n  .integration3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:257",
+    "text": ".invite3-status(@state, @color) {\n  .invite3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:258",
+    "text": "@issue3-gap: 16px;\n\n.issue3-layout() {\n  display: grid;\n  gap: @issue3-gap;\n}\n\n.issue3-shell { .issue3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:259",
+    "text": "@job3-accent: #2563eb;\n.job3-button {\n  color: #fff;\n  background: @job3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:260",
+    "text": ".layout3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:261",
+    "text": ".ledger3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:262",
+    "text": "@media (min-width: @screen-md) {\n  .member3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:263",
+    "text": ".metric3-status(@state, @color) {\n  .metric3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:264",
+    "text": "@module3-gap: 16px;\n\n.module3-layout() {\n  display: grid;\n  gap: @module3-gap;\n}\n\n.module3-shell { .module3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:265",
+    "text": "@notice3-accent: #2563eb;\n.notice3-button {\n  color: #fff;\n  background: @notice3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:266",
+    "text": ".operator3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:267",
+    "text": ".organization3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:268",
+    "text": "@media (min-width: @screen-md) {\n  .package3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:269",
+    "text": ".policy3-status(@state, @color) {\n  .policy3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:270",
+    "text": "@preset3-gap: 16px;\n\n.preset3-layout() {\n  display: grid;\n  gap: @preset3-gap;\n}\n\n.preset3-shell { .preset3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:271",
+    "text": "@preview3-accent: #2563eb;\n.preview3-button {\n  color: #fff;\n  background: @preview3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:272",
+    "text": ".product3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:273",
+    "text": ".queue3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:274",
+    "text": "@media (min-width: @screen-md) {\n  .quota3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:275",
+    "text": ".receipt3-status(@state, @color) {\n  .receipt3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:276",
+    "text": "@registry3-gap: 16px;\n\n.registry3-layout() {\n  display: grid;\n  gap: @registry3-gap;\n}\n\n.registry3-shell { .registry3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:277",
+    "text": "@request3-accent: #2563eb;\n.request3-button {\n  color: #fff;\n  background: @request3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:278",
+    "text": ".resource3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:279",
+    "text": ".review3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:280",
+    "text": "@media (min-width: @screen-md) {\n  .role3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:281",
+    "text": ".rule3-status(@state, @color) {\n  .rule3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:282",
+    "text": "@schedule3-gap: 16px;\n\n.schedule3-layout() {\n  display: grid;\n  gap: @schedule3-gap;\n}\n\n.schedule3-shell { .schedule3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:283",
+    "text": "@schema3-accent: #2563eb;\n.schema3-button {\n  color: #fff;\n  background: @schema3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:284",
+    "text": ".section3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:285",
+    "text": ".segment3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:286",
+    "text": "@media (min-width: @screen-md) {\n  .setting3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:287",
+    "text": ".snapshot3-status(@state, @color) {\n  .snapshot3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:288",
+    "text": "@space3-gap: 16px;\n\n.space3-layout() {\n  display: grid;\n  gap: @space3-gap;\n}\n\n.space3-shell { .space3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:289",
+    "text": "@stream3-accent: #2563eb;\n.stream3-button {\n  color: #fff;\n  background: @stream3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:290",
+    "text": ".task3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:291",
+    "text": ".template3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:292",
+    "text": "@media (min-width: @screen-md) {\n  .thread3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:293",
+    "text": ".transaction3-status(@state, @color) {\n  .transaction3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:294",
+    "text": "@trigger3-gap: 16px;\n\n.trigger3-layout() {\n  display: grid;\n  gap: @trigger3-gap;\n}\n\n.trigger3-shell { .trigger3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:295",
+    "text": "@upload3-accent: #2563eb;\n.upload3-button {\n  color: #fff;\n  background: @upload3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:296",
+    "text": ".user3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:297",
+    "text": ".variant3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:298",
+    "text": "@media (min-width: @screen-md) {\n  .vault3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:299",
+    "text": ".version3-status(@state, @color) {\n  .version3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:300",
+    "text": "@view3-gap: 16px;\n\n.view3-layout() {\n  display: grid;\n  gap: @view3-gap;\n}\n\n.view3-shell { .view3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:301",
+    "text": "@webhook3-accent: #2563eb;\n.webhook3-button {\n  color: #fff;\n  background: @webhook3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:302",
+    "text": ".workflow3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:303",
+    "text": ".zone3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:304",
+    "text": "@media (min-width: @screen-md) {\n  .anchor3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:305",
+    "text": ".batch3-status(@state, @color) {\n  .batch3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:306",
+    "text": "@cache3-gap: 16px;\n\n.cache3-layout() {\n  display: grid;\n  gap: @cache3-gap;\n}\n\n.cache3-shell { .cache3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:307",
+    "text": "@cell3-accent: #2563eb;\n.cell3-button {\n  color: #fff;\n  background: @cell3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:308",
+    "text": ".delta3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:309",
+    "text": ".entry3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:310",
+    "text": "@media (min-width: @screen-md) {\n  .field3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:311",
+    "text": ".filter3-status(@state, @color) {\n  .filter3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:312",
+    "text": "@handle3-gap: 16px;\n\n.handle3-layout() {\n  display: grid;\n  gap: @handle3-gap;\n}\n\n.handle3-shell { .handle3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:313",
+    "text": "@index3-accent: #2563eb;\n.index3-button {\n  color: #fff;\n  background: @index3-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:314",
+    "text": ".journey3-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:315",
+    "text": ".kernel3-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:316",
+    "text": "@media (min-width: @screen-md) {\n  .layer3-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:317",
+    "text": ".matrix3-status(@state, @color) {\n  .matrix3-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:318",
+    "text": "@node3-gap: 16px;\n\n.node3-layout() {\n  display: grid;\n  gap: @node3-gap;\n}\n\n.node3-shell { .node3-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:319",
+    "text": "@profile4-accent: #2563eb;\n.profile4-button {\n  color: #fff;\n  background: @profile4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:320",
+    "text": ".session4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:321",
+    "text": ".invoice4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:322",
+    "text": "@media (min-width: @screen-md) {\n  .wallet4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:323",
+    "text": ".message4-status(@state, @color) {\n  .message4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:324",
+    "text": "@project4-gap: 16px;\n\n.project4-layout() {\n  display: grid;\n  gap: @project4-gap;\n}\n\n.project4-shell { .project4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:325",
+    "text": "@comment4-accent: #2563eb;\n.comment4-button {\n  color: #fff;\n  background: @comment4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:326",
+    "text": ".notification4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:327",
+    "text": ".preference4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:328",
+    "text": "@media (min-width: @screen-md) {\n  .workspace4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:329",
+    "text": ".deployment4-status(@state, @color) {\n  .deployment4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:330",
+    "text": "@subscription4-gap: 16px;\n\n.subscription4-layout() {\n  display: grid;\n  gap: @subscription4-gap;\n}\n\n.subscription4-shell { .subscription4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:331",
+    "text": "@payment4-accent: #2563eb;\n.payment4-button {\n  color: #fff;\n  background: @payment4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:332",
+    "text": ".account4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:333",
+    "text": ".draft4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:334",
+    "text": "@media (min-width: @screen-md) {\n  .activity4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:335",
+    "text": ".report4-status(@state, @color) {\n  .report4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:336",
+    "text": "@pipeline4-gap: 16px;\n\n.pipeline4-layout() {\n  display: grid;\n  gap: @pipeline4-gap;\n}\n\n.pipeline4-shell { .pipeline4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:337",
+    "text": "@token4-accent: #2563eb;\n.token4-button {\n  color: #fff;\n  background: @token4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:338",
+    "text": ".permission4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:339",
+    "text": ".contact4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:340",
+    "text": "@media (min-width: @screen-md) {\n  .order4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:341",
+    "text": ".ticket4-status(@state, @color) {\n  .ticket4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:342",
+    "text": "@release4-gap: 16px;\n\n.release4-layout() {\n  display: grid;\n  gap: @release4-gap;\n}\n\n.release4-shell { .release4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:343",
+    "text": "@bundle4-accent: #2563eb;\n.bundle4-button {\n  color: #fff;\n  background: @bundle4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:344",
+    "text": ".audit4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:345",
+    "text": ".bookmark4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:346",
+    "text": "@media (min-width: @screen-md) {\n  .campaign4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:347",
+    "text": ".channel4-status(@state, @color) {\n  .channel4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:348",
+    "text": "@checkout4-gap: 16px;\n\n.checkout4-layout() {\n  display: grid;\n  gap: @checkout4-gap;\n}\n\n.checkout4-shell { .checkout4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:349",
+    "text": "@collection4-accent: #2563eb;\n.collection4-button {\n  color: #fff;\n  background: @collection4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:350",
+    "text": ".credential4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:351",
+    "text": ".dashboard4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:352",
+    "text": "@media (min-width: @screen-md) {\n  .dataset4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:353",
+    "text": ".device4-status(@state, @color) {\n  .device4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:354",
+    "text": "@document4-gap: 16px;\n\n.document4-layout() {\n  display: grid;\n  gap: @document4-gap;\n}\n\n.document4-shell { .document4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:355",
+    "text": "@endpoint4-accent: #2563eb;\n.endpoint4-button {\n  color: #fff;\n  background: @endpoint4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:356",
+    "text": ".experiment4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:357",
+    "text": ".feature4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:358",
+    "text": "@media (min-width: @screen-md) {\n  .feed4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:359",
+    "text": ".gateway4-status(@state, @color) {\n  .gateway4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:360",
+    "text": "@group4-gap: 16px;\n\n.group4-layout() {\n  display: grid;\n  gap: @group4-gap;\n}\n\n.group4-shell { .group4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:361",
+    "text": "@identity4-accent: #2563eb;\n.identity4-button {\n  color: #fff;\n  background: @identity4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:362",
+    "text": ".integration4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:363",
+    "text": ".invite4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:364",
+    "text": "@media (min-width: @screen-md) {\n  .issue4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:365",
+    "text": ".job4-status(@state, @color) {\n  .job4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:366",
+    "text": "@layout4-gap: 16px;\n\n.layout4-layout() {\n  display: grid;\n  gap: @layout4-gap;\n}\n\n.layout4-shell { .layout4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:367",
+    "text": "@ledger4-accent: #2563eb;\n.ledger4-button {\n  color: #fff;\n  background: @ledger4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:368",
+    "text": ".member4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:369",
+    "text": ".metric4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:370",
+    "text": "@media (min-width: @screen-md) {\n  .module4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:371",
+    "text": ".notice4-status(@state, @color) {\n  .notice4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:372",
+    "text": "@operator4-gap: 16px;\n\n.operator4-layout() {\n  display: grid;\n  gap: @operator4-gap;\n}\n\n.operator4-shell { .operator4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:373",
+    "text": "@organization4-accent: #2563eb;\n.organization4-button {\n  color: #fff;\n  background: @organization4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:374",
+    "text": ".package4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:375",
+    "text": ".policy4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:376",
+    "text": "@media (min-width: @screen-md) {\n  .preset4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:377",
+    "text": ".preview4-status(@state, @color) {\n  .preview4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:378",
+    "text": "@product4-gap: 16px;\n\n.product4-layout() {\n  display: grid;\n  gap: @product4-gap;\n}\n\n.product4-shell { .product4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:379",
+    "text": "@queue4-accent: #2563eb;\n.queue4-button {\n  color: #fff;\n  background: @queue4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:380",
+    "text": ".quota4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:381",
+    "text": ".receipt4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:382",
+    "text": "@media (min-width: @screen-md) {\n  .registry4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:383",
+    "text": ".request4-status(@state, @color) {\n  .request4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:384",
+    "text": "@resource4-gap: 16px;\n\n.resource4-layout() {\n  display: grid;\n  gap: @resource4-gap;\n}\n\n.resource4-shell { .resource4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:385",
+    "text": "@review4-accent: #2563eb;\n.review4-button {\n  color: #fff;\n  background: @review4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:386",
+    "text": ".role4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:387",
+    "text": ".rule4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:388",
+    "text": "@media (min-width: @screen-md) {\n  .schedule4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:389",
+    "text": ".schema4-status(@state, @color) {\n  .schema4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:390",
+    "text": "@section4-gap: 16px;\n\n.section4-layout() {\n  display: grid;\n  gap: @section4-gap;\n}\n\n.section4-shell { .section4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:391",
+    "text": "@segment4-accent: #2563eb;\n.segment4-button {\n  color: #fff;\n  background: @segment4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:392",
+    "text": ".setting4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:393",
+    "text": ".snapshot4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:394",
+    "text": "@media (min-width: @screen-md) {\n  .space4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:395",
+    "text": ".stream4-status(@state, @color) {\n  .stream4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:396",
+    "text": "@task4-gap: 16px;\n\n.task4-layout() {\n  display: grid;\n  gap: @task4-gap;\n}\n\n.task4-shell { .task4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:397",
+    "text": "@template4-accent: #2563eb;\n.template4-button {\n  color: #fff;\n  background: @template4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:398",
+    "text": ".thread4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:399",
+    "text": ".transaction4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:400",
+    "text": "@media (min-width: @screen-md) {\n  .trigger4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:401",
+    "text": ".upload4-status(@state, @color) {\n  .upload4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:402",
+    "text": "@user4-gap: 16px;\n\n.user4-layout() {\n  display: grid;\n  gap: @user4-gap;\n}\n\n.user4-shell { .user4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:403",
+    "text": "@variant4-accent: #2563eb;\n.variant4-button {\n  color: #fff;\n  background: @variant4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:404",
+    "text": ".vault4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:405",
+    "text": ".version4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:406",
+    "text": "@media (min-width: @screen-md) {\n  .view4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:407",
+    "text": ".webhook4-status(@state, @color) {\n  .webhook4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:408",
+    "text": "@workflow4-gap: 16px;\n\n.workflow4-layout() {\n  display: grid;\n  gap: @workflow4-gap;\n}\n\n.workflow4-shell { .workflow4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:409",
+    "text": "@zone4-accent: #2563eb;\n.zone4-button {\n  color: #fff;\n  background: @zone4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:410",
+    "text": ".anchor4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:411",
+    "text": ".batch4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:412",
+    "text": "@media (min-width: @screen-md) {\n  .cache4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:413",
+    "text": ".cell4-status(@state, @color) {\n  .cell4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:414",
+    "text": "@delta4-gap: 16px;\n\n.delta4-layout() {\n  display: grid;\n  gap: @delta4-gap;\n}\n\n.delta4-shell { .delta4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:415",
+    "text": "@entry4-accent: #2563eb;\n.entry4-button {\n  color: #fff;\n  background: @entry4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:416",
+    "text": ".field4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:417",
+    "text": ".filter4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:418",
+    "text": "@media (min-width: @screen-md) {\n  .handle4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:419",
+    "text": ".index4-status(@state, @color) {\n  .index4-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:420",
+    "text": "@journey4-gap: 16px;\n\n.journey4-layout() {\n  display: grid;\n  gap: @journey4-gap;\n}\n\n.journey4-shell { .journey4-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:421",
+    "text": "@kernel4-accent: #2563eb;\n.kernel4-button {\n  color: #fff;\n  background: @kernel4-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:422",
+    "text": ".layer4-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:423",
+    "text": ".matrix4-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:424",
+    "text": "@media (min-width: @screen-md) {\n  .node4-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:425",
+    "text": ".profile5-status(@state, @color) {\n  .profile5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:426",
+    "text": "@session5-gap: 16px;\n\n.session5-layout() {\n  display: grid;\n  gap: @session5-gap;\n}\n\n.session5-shell { .session5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:427",
+    "text": "@invoice5-accent: #2563eb;\n.invoice5-button {\n  color: #fff;\n  background: @invoice5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:428",
+    "text": ".wallet5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:429",
+    "text": ".message5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:430",
+    "text": "@media (min-width: @screen-md) {\n  .project5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:431",
+    "text": ".comment5-status(@state, @color) {\n  .comment5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:432",
+    "text": "@notification5-gap: 16px;\n\n.notification5-layout() {\n  display: grid;\n  gap: @notification5-gap;\n}\n\n.notification5-shell { .notification5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:433",
+    "text": "@preference5-accent: #2563eb;\n.preference5-button {\n  color: #fff;\n  background: @preference5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:434",
+    "text": ".workspace5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:435",
+    "text": ".deployment5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:436",
+    "text": "@media (min-width: @screen-md) {\n  .subscription5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:437",
+    "text": ".payment5-status(@state, @color) {\n  .payment5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:438",
+    "text": "@account5-gap: 16px;\n\n.account5-layout() {\n  display: grid;\n  gap: @account5-gap;\n}\n\n.account5-shell { .account5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:439",
+    "text": "@draft5-accent: #2563eb;\n.draft5-button {\n  color: #fff;\n  background: @draft5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:440",
+    "text": ".activity5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:441",
+    "text": ".report5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:442",
+    "text": "@media (min-width: @screen-md) {\n  .pipeline5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:443",
+    "text": ".token5-status(@state, @color) {\n  .token5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:444",
+    "text": "@permission5-gap: 16px;\n\n.permission5-layout() {\n  display: grid;\n  gap: @permission5-gap;\n}\n\n.permission5-shell { .permission5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:445",
+    "text": "@contact5-accent: #2563eb;\n.contact5-button {\n  color: #fff;\n  background: @contact5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:446",
+    "text": ".order5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:447",
+    "text": ".ticket5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:448",
+    "text": "@media (min-width: @screen-md) {\n  .release5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:449",
+    "text": ".bundle5-status(@state, @color) {\n  .bundle5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:450",
+    "text": "@audit5-gap: 16px;\n\n.audit5-layout() {\n  display: grid;\n  gap: @audit5-gap;\n}\n\n.audit5-shell { .audit5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:451",
+    "text": "@bookmark5-accent: #2563eb;\n.bookmark5-button {\n  color: #fff;\n  background: @bookmark5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:452",
+    "text": ".campaign5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:453",
+    "text": ".channel5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:454",
+    "text": "@media (min-width: @screen-md) {\n  .checkout5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:455",
+    "text": ".collection5-status(@state, @color) {\n  .collection5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:456",
+    "text": "@credential5-gap: 16px;\n\n.credential5-layout() {\n  display: grid;\n  gap: @credential5-gap;\n}\n\n.credential5-shell { .credential5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:457",
+    "text": "@dashboard5-accent: #2563eb;\n.dashboard5-button {\n  color: #fff;\n  background: @dashboard5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:458",
+    "text": ".dataset5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:459",
+    "text": ".device5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:460",
+    "text": "@media (min-width: @screen-md) {\n  .document5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:461",
+    "text": ".endpoint5-status(@state, @color) {\n  .endpoint5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:462",
+    "text": "@experiment5-gap: 16px;\n\n.experiment5-layout() {\n  display: grid;\n  gap: @experiment5-gap;\n}\n\n.experiment5-shell { .experiment5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:463",
+    "text": "@feature5-accent: #2563eb;\n.feature5-button {\n  color: #fff;\n  background: @feature5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:464",
+    "text": ".feed5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:465",
+    "text": ".gateway5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:466",
+    "text": "@media (min-width: @screen-md) {\n  .group5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:467",
+    "text": ".identity5-status(@state, @color) {\n  .identity5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:468",
+    "text": "@integration5-gap: 16px;\n\n.integration5-layout() {\n  display: grid;\n  gap: @integration5-gap;\n}\n\n.integration5-shell { .integration5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:469",
+    "text": "@invite5-accent: #2563eb;\n.invite5-button {\n  color: #fff;\n  background: @invite5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:470",
+    "text": ".issue5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:471",
+    "text": ".job5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:472",
+    "text": "@media (min-width: @screen-md) {\n  .layout5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:473",
+    "text": ".ledger5-status(@state, @color) {\n  .ledger5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:474",
+    "text": "@member5-gap: 16px;\n\n.member5-layout() {\n  display: grid;\n  gap: @member5-gap;\n}\n\n.member5-shell { .member5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:475",
+    "text": "@metric5-accent: #2563eb;\n.metric5-button {\n  color: #fff;\n  background: @metric5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:476",
+    "text": ".module5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:477",
+    "text": ".notice5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:478",
+    "text": "@media (min-width: @screen-md) {\n  .operator5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:479",
+    "text": ".organization5-status(@state, @color) {\n  .organization5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:480",
+    "text": "@package5-gap: 16px;\n\n.package5-layout() {\n  display: grid;\n  gap: @package5-gap;\n}\n\n.package5-shell { .package5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:481",
+    "text": "@policy5-accent: #2563eb;\n.policy5-button {\n  color: #fff;\n  background: @policy5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:482",
+    "text": ".preset5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:483",
+    "text": ".preview5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:484",
+    "text": "@media (min-width: @screen-md) {\n  .product5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:485",
+    "text": ".queue5-status(@state, @color) {\n  .queue5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:486",
+    "text": "@quota5-gap: 16px;\n\n.quota5-layout() {\n  display: grid;\n  gap: @quota5-gap;\n}\n\n.quota5-shell { .quota5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:487",
+    "text": "@receipt5-accent: #2563eb;\n.receipt5-button {\n  color: #fff;\n  background: @receipt5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:488",
+    "text": ".registry5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:489",
+    "text": ".request5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:490",
+    "text": "@media (min-width: @screen-md) {\n  .resource5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:491",
+    "text": ".review5-status(@state, @color) {\n  .review5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:492",
+    "text": "@role5-gap: 16px;\n\n.role5-layout() {\n  display: grid;\n  gap: @role5-gap;\n}\n\n.role5-shell { .role5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:493",
+    "text": "@rule5-accent: #2563eb;\n.rule5-button {\n  color: #fff;\n  background: @rule5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:494",
+    "text": ".schedule5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:495",
+    "text": ".schema5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:496",
+    "text": "@media (min-width: @screen-md) {\n  .section5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:497",
+    "text": ".segment5-status(@state, @color) {\n  .segment5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:498",
+    "text": "@setting5-gap: 16px;\n\n.setting5-layout() {\n  display: grid;\n  gap: @setting5-gap;\n}\n\n.setting5-shell { .setting5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:499",
+    "text": "@snapshot5-accent: #2563eb;\n.snapshot5-button {\n  color: #fff;\n  background: @snapshot5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:500",
+    "text": ".space5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:501",
+    "text": ".stream5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:502",
+    "text": "@media (min-width: @screen-md) {\n  .task5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:503",
+    "text": ".template5-status(@state, @color) {\n  .template5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:504",
+    "text": "@thread5-gap: 16px;\n\n.thread5-layout() {\n  display: grid;\n  gap: @thread5-gap;\n}\n\n.thread5-shell { .thread5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:505",
+    "text": "@transaction5-accent: #2563eb;\n.transaction5-button {\n  color: #fff;\n  background: @transaction5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:506",
+    "text": ".trigger5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:507",
+    "text": ".upload5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:508",
+    "text": "@media (min-width: @screen-md) {\n  .user5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:509",
+    "text": ".variant5-status(@state, @color) {\n  .variant5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:510",
+    "text": "@vault5-gap: 16px;\n\n.vault5-layout() {\n  display: grid;\n  gap: @vault5-gap;\n}\n\n.vault5-shell { .vault5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:511",
+    "text": "@version5-accent: #2563eb;\n.version5-button {\n  color: #fff;\n  background: @version5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:512",
+    "text": ".view5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:513",
+    "text": ".webhook5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:514",
+    "text": "@media (min-width: @screen-md) {\n  .workflow5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:515",
+    "text": ".zone5-status(@state, @color) {\n  .zone5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:516",
+    "text": "@anchor5-gap: 16px;\n\n.anchor5-layout() {\n  display: grid;\n  gap: @anchor5-gap;\n}\n\n.anchor5-shell { .anchor5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:517",
+    "text": "@batch5-accent: #2563eb;\n.batch5-button {\n  color: #fff;\n  background: @batch5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:518",
+    "text": ".cache5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:519",
+    "text": ".cell5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:520",
+    "text": "@media (min-width: @screen-md) {\n  .delta5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:521",
+    "text": ".entry5-status(@state, @color) {\n  .entry5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:522",
+    "text": "@field5-gap: 16px;\n\n.field5-layout() {\n  display: grid;\n  gap: @field5-gap;\n}\n\n.field5-shell { .field5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:523",
+    "text": "@filter5-accent: #2563eb;\n.filter5-button {\n  color: #fff;\n  background: @filter5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:524",
+    "text": ".handle5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:525",
+    "text": ".index5-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:526",
+    "text": "@media (min-width: @screen-md) {\n  .journey5-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:527",
+    "text": ".kernel5-status(@state, @color) {\n  .kernel5-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:528",
+    "text": "@layer5-gap: 16px;\n\n.layer5-layout() {\n  display: grid;\n  gap: @layer5-gap;\n}\n\n.layer5-shell { .layer5-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:529",
+    "text": "@matrix5-accent: #2563eb;\n.matrix5-button {\n  color: #fff;\n  background: @matrix5-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:530",
+    "text": ".node5-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:531",
+    "text": ".profile6-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:532",
+    "text": "@media (min-width: @screen-md) {\n  .session6-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:533",
+    "text": ".invoice6-status(@state, @color) {\n  .invoice6-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:534",
+    "text": "@wallet6-gap: 16px;\n\n.wallet6-layout() {\n  display: grid;\n  gap: @wallet6-gap;\n}\n\n.wallet6-shell { .wallet6-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:535",
+    "text": "@message6-accent: #2563eb;\n.message6-button {\n  color: #fff;\n  background: @message6-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:536",
+    "text": ".project6-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:537",
+    "text": ".comment6-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:538",
+    "text": "@media (min-width: @screen-md) {\n  .notification6-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:539",
+    "text": ".preference6-status(@state, @color) {\n  .preference6-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:540",
+    "text": "@workspace6-gap: 16px;\n\n.workspace6-layout() {\n  display: grid;\n  gap: @workspace6-gap;\n}\n\n.workspace6-shell { .workspace6-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:541",
+    "text": "@deployment6-accent: #2563eb;\n.deployment6-button {\n  color: #fff;\n  background: @deployment6-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:542",
+    "text": ".subscription6-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:543",
+    "text": ".payment6-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:544",
+    "text": "@media (min-width: @screen-md) {\n  .account6-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:545",
+    "text": ".draft6-status(@state, @color) {\n  .draft6-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:546",
+    "text": "@activity6-gap: 16px;\n\n.activity6-layout() {\n  display: grid;\n  gap: @activity6-gap;\n}\n\n.activity6-shell { .activity6-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:547",
+    "text": "@report6-accent: #2563eb;\n.report6-button {\n  color: #fff;\n  background: @report6-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:548",
+    "text": ".pipeline6-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:549",
+    "text": ".token6-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:550",
+    "text": "@media (min-width: @screen-md) {\n  .permission6-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:551",
+    "text": ".contact6-status(@state, @color) {\n  .contact6-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:552",
+    "text": "@order6-gap: 16px;\n\n.order6-layout() {\n  display: grid;\n  gap: @order6-gap;\n}\n\n.order6-shell { .order6-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:553",
+    "text": "@ticket6-accent: #2563eb;\n.ticket6-button {\n  color: #fff;\n  background: @ticket6-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:554",
+    "text": ".release6-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:555",
+    "text": ".bundle6-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:556",
+    "text": "@media (min-width: @screen-md) {\n  .audit6-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:557",
+    "text": ".bookmark6-status(@state, @color) {\n  .bookmark6-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:558",
+    "text": "@campaign6-gap: 16px;\n\n.campaign6-layout() {\n  display: grid;\n  gap: @campaign6-gap;\n}\n\n.campaign6-shell { .campaign6-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:559",
+    "text": "@channel6-accent: #2563eb;\n.channel6-button {\n  color: #fff;\n  background: @channel6-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:560",
+    "text": ".checkout6-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:561",
+    "text": ".collection6-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:562",
+    "text": "@media (min-width: @screen-md) {\n  .credential6-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:563",
+    "text": ".dashboard6-status(@state, @color) {\n  .dashboard6-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:564",
+    "text": "@dataset6-gap: 16px;\n\n.dataset6-layout() {\n  display: grid;\n  gap: @dataset6-gap;\n}\n\n.dataset6-shell { .dataset6-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:565",
+    "text": "@device6-accent: #2563eb;\n.device6-button {\n  color: #fff;\n  background: @device6-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:566",
+    "text": ".document6-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:567",
+    "text": ".endpoint6-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:568",
+    "text": "@media (min-width: @screen-md) {\n  .experiment6-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:569",
+    "text": ".feature6-status(@state, @color) {\n  .feature6-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:570",
+    "text": "@feed6-gap: 16px;\n\n.feed6-layout() {\n  display: grid;\n  gap: @feed6-gap;\n}\n\n.feed6-shell { .feed6-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:571",
+    "text": "@gateway6-accent: #2563eb;\n.gateway6-button {\n  color: #fff;\n  background: @gateway6-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:572",
+    "text": ".group6-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:573",
+    "text": ".identity6-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:574",
+    "text": "@media (min-width: @screen-md) {\n  .integration6-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:575",
+    "text": ".invite6-status(@state, @color) {\n  .invite6-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:less:576",
+    "text": "@issue6-gap: 16px;\n\n.issue6-layout() {\n  display: grid;\n  gap: @issue6-gap;\n}\n\n.issue6-shell { .issue6-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:577",
+    "text": "@job6-accent: #2563eb;\n.job6-button {\n  color: #fff;\n  background: @job6-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:578",
+    "text": ".layout6-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:less:579",
+    "text": ".ledger6-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:580",
+    "text": "@media (min-width: @screen-md) {\n  .member6-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:581",
+    "text": ".metric6-status(@state, @color) {\n  .metric6-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:582",
+    "text": "@module6-gap: 16px;\n\n.module6-layout() {\n  display: grid;\n  gap: @module6-gap;\n}\n\n.module6-shell { .module6-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:583",
+    "text": "@notice6-accent: #2563eb;\n.notice6-button {\n  color: #fff;\n  background: @notice6-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:584",
+    "text": ".operator6-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:less:585",
+    "text": ".organization6-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-components",
+    "level": "block",
+    "source": "keyloop:generated:less:586",
+    "text": "@media (min-width: @screen-md) {\n  .package6-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-forms",
+    "level": "block",
+    "source": "keyloop:generated:less:587",
+    "text": ".policy6-status(@state, @color) {\n  .policy6-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:less:588",
+    "text": "@preset6-gap: 16px;\n\n.preset6-layout() {\n  display: grid;\n  gap: @preset6-gap;\n}\n\n.preset6-shell { .preset6-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:589",
+    "text": "@preview6-accent: #2563eb;\n.preview6-button {\n  color: #fff;\n  background: @preview6-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-table",
+    "level": "block",
+    "source": "keyloop:generated:less:590",
+    "text": ".product6-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:less:591",
+    "text": ".queue6-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-layout",
+    "level": "block",
+    "source": "keyloop:generated:less:592",
+    "text": "@media (min-width: @screen-md) {\n  .quota6-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:593",
+    "text": ".receipt6-status(@state, @color) {\n  .receipt6-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:less:594",
+    "text": "@registry6-gap: 16px;\n\n.registry6-layout() {\n  display: grid;\n  gap: @registry6-gap;\n}\n\n.registry6-shell { .registry6-layout(); }"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-admin",
+    "level": "block",
+    "source": "keyloop:generated:less:595",
+    "text": "@request6-accent: #2563eb;\n.request6-button {\n  color: #fff;\n  background: @request6-accent;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:less:596",
+    "text": ".resource6-focus-ring(@color) {\n  outline: 2px solid @color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:less:597",
+    "text": ".review6-card {\n  padding: @space-md;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "less",
+    "project": "less-theme",
+    "level": "block",
+    "source": "keyloop:generated:less:598",
+    "text": "@media (min-width: @screen-md) {\n  .role6-layout {\n    grid-template-columns: 240px 1fr;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "antd",
+    "project": "antd-pro",
+    "level": "block",
+    "source": "keyloop:generated:less:599",
+    "text": ".rule6-status(@state, @color) {\n  .rule6-badge[data-state=\"@{state}\"] {\n    border-color: @color;\n  }\n}"
+  },
+  {
+    "language": "less",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:less:600",
+    "text": "@schedule6-gap: 16px;\n\n.schedule6-layout() {\n  display: grid;\n  gap: @schedule6-gap;\n}\n\n.schedule6-shell { .schedule6-layout(); }"
   }
 ]

@@ -102,24 +102,41 @@ pub fn extract_snippets(repo: &Path) -> Result<Vec<CodeSnippet>> {
     Ok(snippets)
 }
 
-pub fn pick_code_snippets_excluding(
+#[cfg(test)]
+fn pick_code_snippets_excluding(
     snippets: &[CodeSnippet],
     plan_focus: &[String],
     code_config: &CodePracticeConfig,
     count: usize,
     excluded_texts: &HashSet<String>,
 ) -> Vec<CodeSnippet> {
+    pick_code_snippets_excluding_by_difficulty(
+        snippets,
+        plan_focus,
+        code_config,
+        count,
+        excluded_texts,
+        None,
+    )
+}
+
+pub fn pick_code_snippets_excluding_by_difficulty(
+    snippets: &[CodeSnippet],
+    plan_focus: &[String],
+    code_config: &CodePracticeConfig,
+    count: usize,
+    excluded_texts: &HashSet<String>,
+    difficulty: Option<&str>,
+) -> Vec<CodeSnippet> {
     let focus = plan_focus
         .iter()
         .map(|item| item.to_lowercase())
         .collect::<Vec<_>>();
 
-    let mut candidates = snippets
-        .iter()
-        .filter(|snippet| is_practice_code_block(&snippet.text))
-        .filter(|snippet| matches_code_config(snippet, code_config))
-        .filter(|snippet| !excluded_texts.contains(&snippet.text))
-        .collect::<Vec<_>>();
+    let mut candidates = code_candidates(snippets, code_config, excluded_texts, difficulty);
+    if candidates.len() < count && difficulty.is_some() {
+        candidates = code_candidates(snippets, code_config, excluded_texts, None);
+    }
     candidates.shuffle(&mut rand::thread_rng());
     if !focus.is_empty() {
         candidates.sort_by_key(|snippet| {
@@ -159,6 +176,25 @@ pub fn pick_code_snippets_excluding(
     selected
 }
 
+fn code_candidates<'a>(
+    snippets: &'a [CodeSnippet],
+    code_config: &CodePracticeConfig,
+    excluded_texts: &HashSet<String>,
+    difficulty: Option<&str>,
+) -> Vec<&'a CodeSnippet> {
+    snippets
+        .iter()
+        .filter(|snippet| is_practice_code_block(&snippet.text))
+        .filter(|snippet| matches_code_config(snippet, code_config))
+        .filter(|snippet| !excluded_texts.contains(&snippet.text))
+        .filter(|snippet| {
+            difficulty
+                .map(|value| snippet.difficulty == value)
+                .unwrap_or(true)
+        })
+        .collect::<Vec<_>>()
+}
+
 pub fn pick_builtin_code(
     snippets: &[BuiltinCodeSnippet],
     plan_focus: &[String],
@@ -175,14 +211,45 @@ pub fn pick_builtin_code_excluding(
     count: usize,
     excluded_texts: &HashSet<String>,
 ) -> Vec<CodeSnippet> {
-    let mut snippets = snippets
+    pick_builtin_code_excluding_by_difficulty(
+        snippets,
+        plan_focus,
+        code_config,
+        count,
+        excluded_texts,
+        None,
+    )
+}
+
+pub fn pick_builtin_code_excluding_by_difficulty(
+    snippets: &[BuiltinCodeSnippet],
+    plan_focus: &[String],
+    code_config: &CodePracticeConfig,
+    count: usize,
+    excluded_texts: &HashSet<String>,
+    difficulty: Option<&str>,
+) -> Vec<CodeSnippet> {
+    let mut candidates = snippets
         .iter()
         .map(CodeSnippet::from_builtin)
         .filter(|snippet| matches_code_config(snippet, code_config))
         .filter(|snippet| !excluded_texts.contains(&snippet.text))
+        .filter(|snippet| {
+            difficulty
+                .map(|value| snippet.difficulty == value)
+                .unwrap_or(true)
+        })
         .collect::<Vec<_>>();
-    snippets.shuffle(&mut rand::thread_rng());
-    snippets.sort_by_key(|snippet| {
+    if candidates.len() < count && difficulty.is_some() {
+        candidates = snippets
+            .iter()
+            .map(CodeSnippet::from_builtin)
+            .filter(|snippet| matches_code_config(snippet, code_config))
+            .filter(|snippet| !excluded_texts.contains(&snippet.text))
+            .collect::<Vec<_>>();
+    }
+    candidates.shuffle(&mut rand::thread_rng());
+    candidates.sort_by_key(|snippet| {
         std::cmp::Reverse(
             plan_focus
                 .iter()
@@ -190,7 +257,7 @@ pub fn pick_builtin_code_excluding(
                 .count(),
         )
     });
-    snippets.into_iter().take(count).collect()
+    candidates.into_iter().take(count).collect()
 }
 
 pub fn code_practice_options(snippets: &[BuiltinCodeSnippet]) -> Vec<CodePracticeOption> {

@@ -43,17 +43,17 @@
     "language": "rust",
     "framework": "cli",
     "project": "clap-app",
-    "level": "function",
+    "level": "file",
     "source": "keyloop:generated:rust:006",
-    "text": "fn parse_project_id(value: &str) -> Result<ProjectId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "pub struct ProjectConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl ProjectConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "server",
     "project": "tokio-service",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:007",
-    "text": "match comment.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "fn parse_comment_id(value: &str) -> Result<CommentId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
@@ -61,55 +61,55 @@
     "project": "terminal-ui",
     "level": "block",
     "source": "keyloop:generated:rust:008",
-    "text": "impl NotificationStore {\n  pub fn get(&self, id: NotificationId) -> Option<&Notification> {\n    self.items.get(&id)\n  }\n}"
+    "text": "match notification.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "tauri-command",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:009",
-    "text": "async fn load_preference(State(state): State<AppState>) -> Json<Vec<Preference>> {\n  let items = state.preferences.read().await.clone();\n  Json(items)\n}"
+    "text": "impl PreferenceStore {\n  pub fn get(&self, id: PreferenceId) -> Option<&Preference> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "web",
     "project": "browser-ui",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:010",
-    "text": "let visible_workspaces = workspaces\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "async fn load_workspace(State(state): State<AppState>) -> Json<Vec<Workspace>> {\n  let items = state.workspaces.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
     "framework": "cli",
     "project": "cargo-tool",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:011",
-    "text": "fn parse_deployment_id(value: &str) -> Result<DeploymentId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "let visible_deployments = deployments\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "server",
     "project": "api-server",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:rust:012",
-    "text": "match subscription.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "pub struct SubscriptionConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl SubscriptionConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "terminal",
     "project": "console-tool",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:013",
-    "text": "impl PaymentStore {\n  pub fn get(&self, id: PaymentId) -> Option<&Payment> {\n    self.items.get(&id)\n  }\n}"
+    "text": "fn parse_payment_id(value: &str) -> Result<PaymentId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "webview-bridge",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:014",
-    "text": "async fn load_account(State(state): State<AppState>) -> Json<Vec<Account>> {\n  let items = state.accounts.read().await.clone();\n  Json(items)\n}"
+    "text": "match account.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
@@ -117,7 +117,7 @@
     "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:rust:015",
-    "text": "let visible_drafts = drafts\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "impl DraftStore {\n  pub fn get(&self, id: DraftId) -> Option<&Draft> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
@@ -125,7 +125,7 @@
     "project": "terminal-runner",
     "level": "function",
     "source": "keyloop:generated:rust:016",
-    "text": "fn parse_activity_id(value: &str) -> Result<ActivityId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "async fn load_activity(State(state): State<AppState>) -> Json<Vec<Activity>> {\n  let items = state.activitys.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
@@ -133,15 +133,15 @@
     "project": "axum-server",
     "level": "block",
     "source": "keyloop:generated:rust:017",
-    "text": "match report.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "let visible_reports = reports\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "terminal",
     "project": "ratatui-app",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:rust:018",
-    "text": "impl PipelineStore {\n  pub fn get(&self, id: PipelineId) -> Option<&Pipeline> {\n    self.items.get(&id)\n  }\n}"
+    "text": "pub struct PipelineConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl PipelineConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
@@ -149,7 +149,7 @@
     "project": "tauri-app",
     "level": "function",
     "source": "keyloop:generated:rust:019",
-    "text": "async fn load_token(State(state): State<AppState>) -> Json<Vec<Token>> {\n  let items = state.tokens.read().await.clone();\n  Json(items)\n}"
+    "text": "fn parse_token_id(value: &str) -> Result<TokenId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
@@ -157,23 +157,23 @@
     "project": "web-components",
     "level": "block",
     "source": "keyloop:generated:rust:020",
-    "text": "let visible_permissions = permissions\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "match permission.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
     "framework": "cli",
     "project": "clap-app",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:021",
-    "text": "fn parse_contact_id(value: &str) -> Result<ContactId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "impl ContactStore {\n  pub fn get(&self, id: ContactId) -> Option<&Contact> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "server",
     "project": "tokio-service",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:022",
-    "text": "match order.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "async fn load_order(State(state): State<AppState>) -> Json<Vec<Order>> {\n  let items = state.orders.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
@@ -181,31 +181,31 @@
     "project": "terminal-ui",
     "level": "block",
     "source": "keyloop:generated:rust:023",
-    "text": "impl TicketStore {\n  pub fn get(&self, id: TicketId) -> Option<&Ticket> {\n    self.items.get(&id)\n  }\n}"
+    "text": "let visible_tickets = tickets\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "desktop-shell",
-    "level": "function",
+    "level": "file",
     "source": "keyloop:generated:rust:024",
-    "text": "async fn load_release(State(state): State<AppState>) -> Json<Vec<Release>> {\n  let items = state.releases.read().await.clone();\n  Json(items)\n}"
+    "text": "pub struct ReleaseConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl ReleaseConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "web",
     "project": "browser-ui",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:025",
-    "text": "let visible_bundles = bundles\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "fn parse_bundle_id(value: &str) -> Result<BundleId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
     "framework": "cli",
     "project": "cargo-tool",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:026",
-    "text": "fn parse_audit_id(value: &str) -> Result<AuditId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "match audit.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
@@ -213,31 +213,31 @@
     "project": "api-server",
     "level": "block",
     "source": "keyloop:generated:rust:027",
-    "text": "match bookmark.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "impl BookmarkStore {\n  pub fn get(&self, id: BookmarkId) -> Option<&Bookmark> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "terminal",
     "project": "tui-widget",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:028",
-    "text": "impl CampaignStore {\n  pub fn get(&self, id: CampaignId) -> Option<&Campaign> {\n    self.items.get(&id)\n  }\n}"
+    "text": "async fn load_campaign(State(state): State<AppState>) -> Json<Vec<Campaign>> {\n  let items = state.campaigns.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "webview-bridge",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:029",
-    "text": "async fn load_channel(State(state): State<AppState>) -> Json<Vec<Channel>> {\n  let items = state.channels.read().await.clone();\n  Json(items)\n}"
+    "text": "let visible_channels = channels\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "web",
     "project": "frontend-shell",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:rust:030",
-    "text": "let visible_checkouts = checkouts\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "pub struct CheckoutConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl CheckoutConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
@@ -283,17 +283,17 @@
     "language": "rust",
     "framework": "cli",
     "project": "rust-cli",
-    "level": "function",
+    "level": "file",
     "source": "keyloop:generated:rust:036",
-    "text": "fn parse_document_id(value: &str) -> Result<DocumentId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "pub struct DocumentConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl DocumentConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "server",
     "project": "tokio-service",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:037",
-    "text": "match endpoint.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "fn parse_endpoint_id(value: &str) -> Result<EndpointId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
@@ -301,55 +301,55 @@
     "project": "terminal-ui",
     "level": "block",
     "source": "keyloop:generated:rust:038",
-    "text": "impl ExperimentStore {\n  pub fn get(&self, id: ExperimentId) -> Option<&Experiment> {\n    self.items.get(&id)\n  }\n}"
+    "text": "match experiment.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "desktop-shell",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:039",
-    "text": "async fn load_feature(State(state): State<AppState>) -> Json<Vec<Feature>> {\n  let items = state.features.read().await.clone();\n  Json(items)\n}"
+    "text": "impl FeatureStore {\n  pub fn get(&self, id: FeatureId) -> Option<&Feature> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "web",
     "project": "design-system",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:040",
-    "text": "let visible_feeds = feeds\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "async fn load_feed(State(state): State<AppState>) -> Json<Vec<Feed>> {\n  let items = state.feeds.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
     "framework": "cli",
     "project": "cargo-tool",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:041",
-    "text": "fn parse_gateway_id(value: &str) -> Result<GatewayId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "let visible_gateways = gateways\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "server",
     "project": "api-server",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:rust:042",
-    "text": "match group.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "pub struct GroupConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl GroupConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "terminal",
     "project": "tui-widget",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:043",
-    "text": "impl IdentityStore {\n  pub fn get(&self, id: IdentityId) -> Option<&Identity> {\n    self.items.get(&id)\n  }\n}"
+    "text": "fn parse_identity_id(value: &str) -> Result<IdentityId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "tauri-command",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:044",
-    "text": "async fn load_integration(State(state): State<AppState>) -> Json<Vec<Integration>> {\n  let items = state.integrations.read().await.clone();\n  Json(items)\n}"
+    "text": "match integration.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
@@ -357,7 +357,7 @@
     "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:rust:045",
-    "text": "let visible_invites = invites\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "impl InviteStore {\n  pub fn get(&self, id: InviteId) -> Option<&Invite> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
@@ -365,7 +365,7 @@
     "project": "terminal-runner",
     "level": "function",
     "source": "keyloop:generated:rust:046",
-    "text": "fn parse_issue_id(value: &str) -> Result<IssueId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "async fn load_issue(State(state): State<AppState>) -> Json<Vec<Issue>> {\n  let items = state.issues.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
@@ -373,15 +373,15 @@
     "project": "tower-layer",
     "level": "block",
     "source": "keyloop:generated:rust:047",
-    "text": "match job.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "let visible_jobs = jobs\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "terminal",
     "project": "console-tool",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:rust:048",
-    "text": "impl LayoutStore {\n  pub fn get(&self, id: LayoutId) -> Option<&Layout> {\n    self.items.get(&id)\n  }\n}"
+    "text": "pub struct LayoutConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl LayoutConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
@@ -389,7 +389,7 @@
     "project": "tauri-app",
     "level": "function",
     "source": "keyloop:generated:rust:049",
-    "text": "async fn load_ledger(State(state): State<AppState>) -> Json<Vec<Ledger>> {\n  let items = state.ledgers.read().await.clone();\n  Json(items)\n}"
+    "text": "fn parse_ledger_id(value: &str) -> Result<LedgerId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
@@ -397,23 +397,23 @@
     "project": "web-components",
     "level": "block",
     "source": "keyloop:generated:rust:050",
-    "text": "let visible_members = members\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "match member.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
     "framework": "cli",
     "project": "rust-cli",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:051",
-    "text": "fn parse_metric_id(value: &str) -> Result<MetricId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "impl MetricStore {\n  pub fn get(&self, id: MetricId) -> Option<&Metric> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "server",
     "project": "axum-server",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:052",
-    "text": "match module.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "async fn load_module(State(state): State<AppState>) -> Json<Vec<Module>> {\n  let items = state.modules.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
@@ -421,31 +421,31 @@
     "project": "terminal-ui",
     "level": "block",
     "source": "keyloop:generated:rust:053",
-    "text": "impl NoticeStore {\n  pub fn get(&self, id: NoticeId) -> Option<&Notice> {\n    self.items.get(&id)\n  }\n}"
+    "text": "let visible_notices = notices\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "desktop-shell",
-    "level": "function",
+    "level": "file",
     "source": "keyloop:generated:rust:054",
-    "text": "async fn load_operator(State(state): State<AppState>) -> Json<Vec<Operator>> {\n  let items = state.operators.read().await.clone();\n  Json(items)\n}"
+    "text": "pub struct OperatorConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl OperatorConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "web",
     "project": "design-system",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:055",
-    "text": "let visible_organizations = organizations\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "fn parse_organization_id(value: &str) -> Result<OrganizationId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
     "framework": "cli",
     "project": "clap-app",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:056",
-    "text": "fn parse_package_id(value: &str) -> Result<PackageId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "match package.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
@@ -453,31 +453,31 @@
     "project": "api-server",
     "level": "block",
     "source": "keyloop:generated:rust:057",
-    "text": "match policy.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "impl PolicyStore {\n  pub fn get(&self, id: PolicyId) -> Option<&Policy> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "terminal",
     "project": "tui-widget",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:058",
-    "text": "impl PresetStore {\n  pub fn get(&self, id: PresetId) -> Option<&Preset> {\n    self.items.get(&id)\n  }\n}"
+    "text": "async fn load_preset(State(state): State<AppState>) -> Json<Vec<Preset>> {\n  let items = state.presets.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "tauri-command",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:059",
-    "text": "async fn load_preview(State(state): State<AppState>) -> Json<Vec<Preview>> {\n  let items = state.previews.read().await.clone();\n  Json(items)\n}"
+    "text": "let visible_previews = previews\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "web",
     "project": "browser-ui",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:rust:060",
-    "text": "let visible_products = products\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "pub struct ProductConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl ProductConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
@@ -523,17 +523,17 @@
     "language": "rust",
     "framework": "cli",
     "project": "rust-cli",
-    "level": "function",
+    "level": "file",
     "source": "keyloop:generated:rust:066",
-    "text": "fn parse_resource_id(value: &str) -> Result<ResourceId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "pub struct ResourceConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl ResourceConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "server",
     "project": "axum-server",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:067",
-    "text": "match review.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "fn parse_review_id(value: &str) -> Result<ReviewId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
@@ -541,55 +541,55 @@
     "project": "ratatui-app",
     "level": "block",
     "source": "keyloop:generated:rust:068",
-    "text": "impl RoleStore {\n  pub fn get(&self, id: RoleId) -> Option<&Role> {\n    self.items.get(&id)\n  }\n}"
+    "text": "match role.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "desktop-shell",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:069",
-    "text": "async fn load_rule(State(state): State<AppState>) -> Json<Vec<Rule>> {\n  let items = state.rules.read().await.clone();\n  Json(items)\n}"
+    "text": "impl RuleStore {\n  pub fn get(&self, id: RuleId) -> Option<&Rule> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "web",
     "project": "design-system",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:070",
-    "text": "let visible_schedules = schedules\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "async fn load_schedule(State(state): State<AppState>) -> Json<Vec<Schedule>> {\n  let items = state.schedules.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
     "framework": "cli",
     "project": "clap-app",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:071",
-    "text": "fn parse_schema_id(value: &str) -> Result<SchemaId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "let visible_schemas = schemas\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "server",
     "project": "tokio-service",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:rust:072",
-    "text": "match section.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "pub struct SectionConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl SectionConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "terminal",
     "project": "tui-widget",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:073",
-    "text": "impl SegmentStore {\n  pub fn get(&self, id: SegmentId) -> Option<&Segment> {\n    self.items.get(&id)\n  }\n}"
+    "text": "fn parse_segment_id(value: &str) -> Result<SegmentId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "tauri-command",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:074",
-    "text": "async fn load_setting(State(state): State<AppState>) -> Json<Vec<Setting>> {\n  let items = state.settings.read().await.clone();\n  Json(items)\n}"
+    "text": "match setting.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
@@ -597,7 +597,7 @@
     "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:rust:075",
-    "text": "let visible_snapshots = snapshots\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "impl SnapshotStore {\n  pub fn get(&self, id: SnapshotId) -> Option<&Snapshot> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
@@ -605,7 +605,7 @@
     "project": "cargo-tool",
     "level": "function",
     "source": "keyloop:generated:rust:076",
-    "text": "fn parse_space_id(value: &str) -> Result<SpaceId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "async fn load_space(State(state): State<AppState>) -> Json<Vec<Space>> {\n  let items = state.spaces.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
@@ -613,15 +613,15 @@
     "project": "tower-layer",
     "level": "block",
     "source": "keyloop:generated:rust:077",
-    "text": "match stream.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "let visible_streams = streams\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "terminal",
     "project": "console-tool",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:rust:078",
-    "text": "impl TaskStore {\n  pub fn get(&self, id: TaskId) -> Option<&Task> {\n    self.items.get(&id)\n  }\n}"
+    "text": "pub struct TaskConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl TaskConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
@@ -629,7 +629,7 @@
     "project": "webview-bridge",
     "level": "function",
     "source": "keyloop:generated:rust:079",
-    "text": "async fn load_template(State(state): State<AppState>) -> Json<Vec<Template>> {\n  let items = state.templates.read().await.clone();\n  Json(items)\n}"
+    "text": "fn parse_template_id(value: &str) -> Result<TemplateId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
@@ -637,23 +637,23 @@
     "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:rust:080",
-    "text": "let visible_threads = threads\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "match thread.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
     "framework": "cli",
     "project": "rust-cli",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:081",
-    "text": "fn parse_transaction_id(value: &str) -> Result<TransactionId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "impl TransactionStore {\n  pub fn get(&self, id: TransactionId) -> Option<&Transaction> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "server",
     "project": "axum-server",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:082",
-    "text": "match trigger.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "async fn load_trigger(State(state): State<AppState>) -> Json<Vec<Trigger>> {\n  let items = state.triggers.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
@@ -661,31 +661,31 @@
     "project": "ratatui-app",
     "level": "block",
     "source": "keyloop:generated:rust:083",
-    "text": "impl UploadStore {\n  pub fn get(&self, id: UploadId) -> Option<&Upload> {\n    self.items.get(&id)\n  }\n}"
+    "text": "let visible_uploads = uploads\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "tauri-app",
-    "level": "function",
+    "level": "file",
     "source": "keyloop:generated:rust:084",
-    "text": "async fn load_user(State(state): State<AppState>) -> Json<Vec<User>> {\n  let items = state.users.read().await.clone();\n  Json(items)\n}"
+    "text": "pub struct UserConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl UserConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "web",
     "project": "design-system",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:085",
-    "text": "let visible_variants = variants\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "fn parse_variant_id(value: &str) -> Result<VariantId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
     "framework": "cli",
     "project": "clap-app",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:086",
-    "text": "fn parse_vault_id(value: &str) -> Result<VaultId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "match vault.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
@@ -693,31 +693,31 @@
     "project": "tokio-service",
     "level": "block",
     "source": "keyloop:generated:rust:087",
-    "text": "match version.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "impl VersionStore {\n  pub fn get(&self, id: VersionId) -> Option<&Version> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "terminal",
     "project": "terminal-ui",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:088",
-    "text": "impl ViewStore {\n  pub fn get(&self, id: ViewId) -> Option<&View> {\n    self.items.get(&id)\n  }\n}"
+    "text": "async fn load_view(State(state): State<AppState>) -> Json<Vec<View>> {\n  let items = state.views.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "tauri-command",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:089",
-    "text": "async fn load_webhook(State(state): State<AppState>) -> Json<Vec<Webhook>> {\n  let items = state.webhooks.read().await.clone();\n  Json(items)\n}"
+    "text": "let visible_webhooks = webhooks\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "web",
     "project": "browser-ui",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:rust:090",
-    "text": "let visible_workflows = workflows\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "pub struct WorkflowConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl WorkflowConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
@@ -763,17 +763,17 @@
     "language": "rust",
     "framework": "cli",
     "project": "terminal-runner",
-    "level": "function",
+    "level": "file",
     "source": "keyloop:generated:rust:096",
-    "text": "fn parse_delta_id(value: &str) -> Result<DeltaId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "pub struct DeltaConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl DeltaConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "server",
     "project": "axum-server",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:097",
-    "text": "match entry.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "fn parse_entry_id(value: &str) -> Result<EntryId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
@@ -781,55 +781,55 @@
     "project": "ratatui-app",
     "level": "block",
     "source": "keyloop:generated:rust:098",
-    "text": "impl FieldStore {\n  pub fn get(&self, id: FieldId) -> Option<&Field> {\n    self.items.get(&id)\n  }\n}"
+    "text": "match field.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "tauri-app",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:099",
-    "text": "async fn load_filter(State(state): State<AppState>) -> Json<Vec<Filter>> {\n  let items = state.filters.read().await.clone();\n  Json(items)\n}"
+    "text": "impl FilterStore {\n  pub fn get(&self, id: FilterId) -> Option<&Filter> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "web",
     "project": "web-components",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:100",
-    "text": "let visible_handles = handles\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "async fn load_handle(State(state): State<AppState>) -> Json<Vec<Handle>> {\n  let items = state.handles.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
     "framework": "cli",
     "project": "clap-app",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:101",
-    "text": "fn parse_index_id(value: &str) -> Result<IndexId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "let visible_indexs = indexs\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "server",
     "project": "tokio-service",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:rust:102",
-    "text": "match journey.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "pub struct JourneyConfig {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl JourneyConfig {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "terminal",
     "project": "terminal-ui",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:103",
-    "text": "impl KernelStore {\n  pub fn get(&self, id: KernelId) -> Option<&Kernel> {\n    self.items.get(&id)\n  }\n}"
+    "text": "fn parse_kernel_id(value: &str) -> Result<KernelId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "desktop-shell",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:104",
-    "text": "async fn load_layer(State(state): State<AppState>) -> Json<Vec<Layer>> {\n  let items = state.layers.read().await.clone();\n  Json(items)\n}"
+    "text": "match layer.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
@@ -837,7 +837,7 @@
     "project": "browser-ui",
     "level": "block",
     "source": "keyloop:generated:rust:105",
-    "text": "let visible_matrixs = matrixs\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "impl MatrixStore {\n  pub fn get(&self, id: MatrixId) -> Option<&Matrix> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
@@ -845,7 +845,7 @@
     "project": "cargo-tool",
     "level": "function",
     "source": "keyloop:generated:rust:106",
-    "text": "fn parse_node_id(value: &str) -> Result<NodeId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "async fn load_node(State(state): State<AppState>) -> Json<Vec<Node>> {\n  let items = state.nodes.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
@@ -853,15 +853,15 @@
     "project": "api-server",
     "level": "block",
     "source": "keyloop:generated:rust:107",
-    "text": "match profile.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "let visible_profile2s = profile2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "terminal",
     "project": "tui-widget",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:rust:108",
-    "text": "impl SessionStore {\n  pub fn get(&self, id: SessionId) -> Option<&Session> {\n    self.items.get(&id)\n  }\n}"
+    "text": "pub struct Session2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Session2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
@@ -869,7 +869,7 @@
     "project": "webview-bridge",
     "level": "function",
     "source": "keyloop:generated:rust:109",
-    "text": "async fn load_invoice(State(state): State<AppState>) -> Json<Vec<Invoice>> {\n  let items = state.invoices.read().await.clone();\n  Json(items)\n}"
+    "text": "fn parse_invoice2_id(value: &str) -> Result<Invoice2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
@@ -877,23 +877,23 @@
     "project": "frontend-shell",
     "level": "block",
     "source": "keyloop:generated:rust:110",
-    "text": "let visible_wallets = wallets\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "match wallet2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
     "framework": "cli",
     "project": "terminal-runner",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:111",
-    "text": "fn parse_message_id(value: &str) -> Result<MessageId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "impl Message2Store {\n  pub fn get(&self, id: Message2Id) -> Option<&Message2> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "server",
     "project": "tower-layer",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:112",
-    "text": "match project.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "async fn load_project2(State(state): State<AppState>) -> Json<Vec<Project2>> {\n  let items = state.project2s.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
@@ -901,31 +901,31 @@
     "project": "ratatui-app",
     "level": "block",
     "source": "keyloop:generated:rust:113",
-    "text": "impl CommentStore {\n  pub fn get(&self, id: CommentId) -> Option<&Comment> {\n    self.items.get(&id)\n  }\n}"
+    "text": "let visible_comment2s = comment2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "tauri-app",
-    "level": "function",
+    "level": "file",
     "source": "keyloop:generated:rust:114",
-    "text": "async fn load_notification(State(state): State<AppState>) -> Json<Vec<Notification>> {\n  let items = state.notifications.read().await.clone();\n  Json(items)\n}"
+    "text": "pub struct Notification2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Notification2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "web",
     "project": "web-components",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:115",
-    "text": "let visible_preferences = preferences\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "text": "fn parse_preference2_id(value: &str) -> Result<Preference2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
   },
   {
     "language": "rust",
     "framework": "cli",
     "project": "rust-cli",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:116",
-    "text": "fn parse_workspace_id(value: &str) -> Result<WorkspaceId> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+    "text": "match workspace2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
@@ -933,30 +933,3870 @@
     "project": "tokio-service",
     "level": "block",
     "source": "keyloop:generated:rust:117",
-    "text": "match deployment.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+    "text": "impl Deployment2Store {\n  pub fn get(&self, id: Deployment2Id) -> Option<&Deployment2> {\n    self.items.get(&id)\n  }\n}"
   },
   {
     "language": "rust",
     "framework": "terminal",
     "project": "terminal-ui",
-    "level": "block",
+    "level": "function",
     "source": "keyloop:generated:rust:118",
-    "text": "impl SubscriptionStore {\n  pub fn get(&self, id: SubscriptionId) -> Option<&Subscription> {\n    self.items.get(&id)\n  }\n}"
+    "text": "async fn load_subscription2(State(state): State<AppState>) -> Json<Vec<Subscription2>> {\n  let items = state.subscription2s.read().await.clone();\n  Json(items)\n}"
   },
   {
     "language": "rust",
     "framework": "tauri",
     "project": "desktop-shell",
-    "level": "function",
+    "level": "block",
     "source": "keyloop:generated:rust:119",
-    "text": "async fn load_payment(State(state): State<AppState>) -> Json<Vec<Payment>> {\n  let items = state.payments.read().await.clone();\n  Json(items)\n}"
+    "text": "let visible_payment2s = payment2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:rust:120",
+    "text": "pub struct Account2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Account2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:121",
+    "text": "fn parse_draft2_id(value: &str) -> Result<Draft2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:122",
+    "text": "match activity2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "block",
+    "source": "keyloop:generated:rust:123",
+    "text": "impl Report2Store {\n  pub fn get(&self, id: Report2Id) -> Option<&Report2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "function",
+    "source": "keyloop:generated:rust:124",
+    "text": "async fn load_pipeline2(State(state): State<AppState>) -> Json<Vec<Pipeline2>> {\n  let items = state.pipeline2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:125",
+    "text": "let visible_token2s = token2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "file",
+    "source": "keyloop:generated:rust:126",
+    "text": "pub struct Permission2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Permission2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "function",
+    "source": "keyloop:generated:rust:127",
+    "text": "fn parse_contact2_id(value: &str) -> Result<Contact2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:128",
+    "text": "match order2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:129",
+    "text": "impl Ticket2Store {\n  pub fn get(&self, id: Ticket2Id) -> Option<&Ticket2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "function",
+    "source": "keyloop:generated:rust:130",
+    "text": "async fn load_release2(State(state): State<AppState>) -> Json<Vec<Release2>> {\n  let items = state.release2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "block",
+    "source": "keyloop:generated:rust:131",
+    "text": "let visible_bundle2s = bundle2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "file",
+    "source": "keyloop:generated:rust:132",
+    "text": "pub struct Audit2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Audit2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:133",
+    "text": "fn parse_bookmark2_id(value: &str) -> Result<Bookmark2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:134",
+    "text": "match campaign2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
   },
   {
     "language": "rust",
     "framework": "web",
     "project": "design-system",
     "level": "block",
-    "source": "keyloop:generated:rust:120",
-    "text": "let visible_accounts = accounts\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+    "source": "keyloop:generated:rust:135",
+    "text": "impl Channel2Store {\n  pub fn get(&self, id: Channel2Id) -> Option<&Channel2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:136",
+    "text": "async fn load_checkout2(State(state): State<AppState>) -> Json<Vec<Checkout2>> {\n  let items = state.checkout2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:137",
+    "text": "let visible_collection2s = collection2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "file",
+    "source": "keyloop:generated:rust:138",
+    "text": "pub struct Credential2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Credential2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "function",
+    "source": "keyloop:generated:rust:139",
+    "text": "fn parse_dashboard2_id(value: &str) -> Result<Dashboard2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:140",
+    "text": "match dataset2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "block",
+    "source": "keyloop:generated:rust:141",
+    "text": "impl Device2Store {\n  pub fn get(&self, id: Device2Id) -> Option<&Device2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "function",
+    "source": "keyloop:generated:rust:142",
+    "text": "async fn load_document2(State(state): State<AppState>) -> Json<Vec<Document2>> {\n  let items = state.document2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:143",
+    "text": "let visible_endpoint2s = endpoint2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "file",
+    "source": "keyloop:generated:rust:144",
+    "text": "pub struct Experiment2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Experiment2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "function",
+    "source": "keyloop:generated:rust:145",
+    "text": "fn parse_feature2_id(value: &str) -> Result<Feature2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "block",
+    "source": "keyloop:generated:rust:146",
+    "text": "match feed2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:147",
+    "text": "impl Gateway2Store {\n  pub fn get(&self, id: Gateway2Id) -> Option<&Gateway2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:148",
+    "text": "async fn load_group2(State(state): State<AppState>) -> Json<Vec<Group2>> {\n  let items = state.group2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:149",
+    "text": "let visible_identity2s = identity2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:rust:150",
+    "text": "pub struct Integration2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Integration2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:151",
+    "text": "fn parse_invite2_id(value: &str) -> Result<Invite2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "block",
+    "source": "keyloop:generated:rust:152",
+    "text": "match issue2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "block",
+    "source": "keyloop:generated:rust:153",
+    "text": "impl Job2Store {\n  pub fn get(&self, id: Job2Id) -> Option<&Job2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "function",
+    "source": "keyloop:generated:rust:154",
+    "text": "async fn load_layout2(State(state): State<AppState>) -> Json<Vec<Layout2>> {\n  let items = state.layout2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:155",
+    "text": "let visible_ledger2s = ledger2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "file",
+    "source": "keyloop:generated:rust:156",
+    "text": "pub struct Member2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Member2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "function",
+    "source": "keyloop:generated:rust:157",
+    "text": "fn parse_metric2_id(value: &str) -> Result<Metric2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:158",
+    "text": "match module2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "block",
+    "source": "keyloop:generated:rust:159",
+    "text": "impl Notice2Store {\n  pub fn get(&self, id: Notice2Id) -> Option<&Notice2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:160",
+    "text": "async fn load_operator2(State(state): State<AppState>) -> Json<Vec<Operator2>> {\n  let items = state.operator2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "block",
+    "source": "keyloop:generated:rust:161",
+    "text": "let visible_organization2s = organization2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "file",
+    "source": "keyloop:generated:rust:162",
+    "text": "pub struct Package2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Package2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:163",
+    "text": "fn parse_policy2_id(value: &str) -> Result<Policy2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:164",
+    "text": "match preset2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:rust:165",
+    "text": "impl Preview2Store {\n  pub fn get(&self, id: Preview2Id) -> Option<&Preview2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:166",
+    "text": "async fn load_product2(State(state): State<AppState>) -> Json<Vec<Product2>> {\n  let items = state.product2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "block",
+    "source": "keyloop:generated:rust:167",
+    "text": "let visible_queue2s = queue2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "file",
+    "source": "keyloop:generated:rust:168",
+    "text": "pub struct Quota2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Quota2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "function",
+    "source": "keyloop:generated:rust:169",
+    "text": "fn parse_receipt2_id(value: &str) -> Result<Receipt2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:170",
+    "text": "match registry2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:171",
+    "text": "impl Request2Store {\n  pub fn get(&self, id: Request2Id) -> Option<&Request2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:172",
+    "text": "async fn load_resource2(State(state): State<AppState>) -> Json<Vec<Resource2>> {\n  let items = state.resource2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:173",
+    "text": "let visible_review2s = review2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "file",
+    "source": "keyloop:generated:rust:174",
+    "text": "pub struct Role2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Role2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:175",
+    "text": "fn parse_rule2_id(value: &str) -> Result<Rule2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "block",
+    "source": "keyloop:generated:rust:176",
+    "text": "match schedule2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:177",
+    "text": "impl Schema2Store {\n  pub fn get(&self, id: Schema2Id) -> Option<&Schema2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:178",
+    "text": "async fn load_section2(State(state): State<AppState>) -> Json<Vec<Section2>> {\n  let items = state.section2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:179",
+    "text": "let visible_segment2s = segment2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:rust:180",
+    "text": "pub struct Setting2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Setting2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:181",
+    "text": "fn parse_snapshot2_id(value: &str) -> Result<Snapshot2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "block",
+    "source": "keyloop:generated:rust:182",
+    "text": "match space2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:183",
+    "text": "impl Stream2Store {\n  pub fn get(&self, id: Stream2Id) -> Option<&Stream2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:184",
+    "text": "async fn load_task2(State(state): State<AppState>) -> Json<Vec<Task2>> {\n  let items = state.task2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:185",
+    "text": "let visible_template2s = template2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "file",
+    "source": "keyloop:generated:rust:186",
+    "text": "pub struct Thread2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Thread2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:187",
+    "text": "fn parse_transaction2_id(value: &str) -> Result<Transaction2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "block",
+    "source": "keyloop:generated:rust:188",
+    "text": "match trigger2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "block",
+    "source": "keyloop:generated:rust:189",
+    "text": "impl Upload2Store {\n  pub fn get(&self, id: Upload2Id) -> Option<&Upload2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:190",
+    "text": "async fn load_user2(State(state): State<AppState>) -> Json<Vec<User2>> {\n  let items = state.user2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "block",
+    "source": "keyloop:generated:rust:191",
+    "text": "let visible_variant2s = variant2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "file",
+    "source": "keyloop:generated:rust:192",
+    "text": "pub struct Vault2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Vault2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:193",
+    "text": "fn parse_version2_id(value: &str) -> Result<Version2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:194",
+    "text": "match view2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:rust:195",
+    "text": "impl Webhook2Store {\n  pub fn get(&self, id: Webhook2Id) -> Option<&Webhook2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "function",
+    "source": "keyloop:generated:rust:196",
+    "text": "async fn load_workflow2(State(state): State<AppState>) -> Json<Vec<Workflow2>> {\n  let items = state.workflow2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "block",
+    "source": "keyloop:generated:rust:197",
+    "text": "let visible_zone2s = zone2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "file",
+    "source": "keyloop:generated:rust:198",
+    "text": "pub struct Anchor2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Anchor2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:199",
+    "text": "fn parse_batch2_id(value: &str) -> Result<Batch2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:rust:200",
+    "text": "match cache2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:201",
+    "text": "impl Cell2Store {\n  pub fn get(&self, id: Cell2Id) -> Option<&Cell2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:202",
+    "text": "async fn load_delta2(State(state): State<AppState>) -> Json<Vec<Delta2>> {\n  let items = state.delta2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "block",
+    "source": "keyloop:generated:rust:203",
+    "text": "let visible_entry2s = entry2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "file",
+    "source": "keyloop:generated:rust:204",
+    "text": "pub struct Field2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Field2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:205",
+    "text": "fn parse_filter2_id(value: &str) -> Result<Filter2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "block",
+    "source": "keyloop:generated:rust:206",
+    "text": "match handle2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "block",
+    "source": "keyloop:generated:rust:207",
+    "text": "impl Index2Store {\n  pub fn get(&self, id: Index2Id) -> Option<&Index2> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:208",
+    "text": "async fn load_journey2(State(state): State<AppState>) -> Json<Vec<Journey2>> {\n  let items = state.journey2s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:209",
+    "text": "let visible_kernel2s = kernel2s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:rust:210",
+    "text": "pub struct Layer2Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Layer2Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "function",
+    "source": "keyloop:generated:rust:211",
+    "text": "fn parse_matrix2_id(value: &str) -> Result<Matrix2Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:212",
+    "text": "match node2.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:213",
+    "text": "impl Profile3Store {\n  pub fn get(&self, id: Profile3Id) -> Option<&Profile3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:214",
+    "text": "async fn load_session3(State(state): State<AppState>) -> Json<Vec<Session3>> {\n  let items = state.session3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:rust:215",
+    "text": "let visible_invoice3s = invoice3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "file",
+    "source": "keyloop:generated:rust:216",
+    "text": "pub struct Wallet3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Wallet3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:217",
+    "text": "fn parse_message3_id(value: &str) -> Result<Message3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "block",
+    "source": "keyloop:generated:rust:218",
+    "text": "match project3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "block",
+    "source": "keyloop:generated:rust:219",
+    "text": "impl Comment3Store {\n  pub fn get(&self, id: Comment3Id) -> Option<&Comment3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:220",
+    "text": "async fn load_notification3(State(state): State<AppState>) -> Json<Vec<Notification3>> {\n  let items = state.notification3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "block",
+    "source": "keyloop:generated:rust:221",
+    "text": "let visible_preference3s = preference3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "file",
+    "source": "keyloop:generated:rust:222",
+    "text": "pub struct Workspace3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Workspace3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:223",
+    "text": "fn parse_deployment3_id(value: &str) -> Result<Deployment3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "block",
+    "source": "keyloop:generated:rust:224",
+    "text": "match subscription3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:rust:225",
+    "text": "impl Payment3Store {\n  pub fn get(&self, id: Payment3Id) -> Option<&Payment3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "function",
+    "source": "keyloop:generated:rust:226",
+    "text": "async fn load_account3(State(state): State<AppState>) -> Json<Vec<Account3>> {\n  let items = state.account3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:227",
+    "text": "let visible_draft3s = draft3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "file",
+    "source": "keyloop:generated:rust:228",
+    "text": "pub struct Activity3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Activity3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:229",
+    "text": "fn parse_report3_id(value: &str) -> Result<Report3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:rust:230",
+    "text": "match pipeline3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:231",
+    "text": "impl Token3Store {\n  pub fn get(&self, id: Token3Id) -> Option<&Token3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "function",
+    "source": "keyloop:generated:rust:232",
+    "text": "async fn load_permission3(State(state): State<AppState>) -> Json<Vec<Permission3>> {\n  let items = state.permission3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "block",
+    "source": "keyloop:generated:rust:233",
+    "text": "let visible_contact3s = contact3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "file",
+    "source": "keyloop:generated:rust:234",
+    "text": "pub struct Order3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Order3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:235",
+    "text": "fn parse_ticket3_id(value: &str) -> Result<Ticket3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:236",
+    "text": "match release3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "block",
+    "source": "keyloop:generated:rust:237",
+    "text": "impl Bundle3Store {\n  pub fn get(&self, id: Bundle3Id) -> Option<&Bundle3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:238",
+    "text": "async fn load_audit3(State(state): State<AppState>) -> Json<Vec<Audit3>> {\n  let items = state.audit3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "block",
+    "source": "keyloop:generated:rust:239",
+    "text": "let visible_bookmark3s = bookmark3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:rust:240",
+    "text": "pub struct Campaign3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Campaign3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "function",
+    "source": "keyloop:generated:rust:241",
+    "text": "fn parse_channel3_id(value: &str) -> Result<Channel3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:242",
+    "text": "match checkout3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:243",
+    "text": "impl Collection3Store {\n  pub fn get(&self, id: Collection3Id) -> Option<&Collection3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:244",
+    "text": "async fn load_credential3(State(state): State<AppState>) -> Json<Vec<Credential3>> {\n  let items = state.credential3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:rust:245",
+    "text": "let visible_dashboard3s = dashboard3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "file",
+    "source": "keyloop:generated:rust:246",
+    "text": "pub struct Dataset3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Dataset3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "function",
+    "source": "keyloop:generated:rust:247",
+    "text": "fn parse_device3_id(value: &str) -> Result<Device3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:248",
+    "text": "match document3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "block",
+    "source": "keyloop:generated:rust:249",
+    "text": "impl Endpoint3Store {\n  pub fn get(&self, id: Endpoint3Id) -> Option<&Endpoint3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:250",
+    "text": "async fn load_experiment3(State(state): State<AppState>) -> Json<Vec<Experiment3>> {\n  let items = state.experiment3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:251",
+    "text": "let visible_feature3s = feature3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "file",
+    "source": "keyloop:generated:rust:252",
+    "text": "pub struct Feed3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Feed3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:253",
+    "text": "fn parse_gateway3_id(value: &str) -> Result<Gateway3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "block",
+    "source": "keyloop:generated:rust:254",
+    "text": "match group3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:255",
+    "text": "impl Identity3Store {\n  pub fn get(&self, id: Identity3Id) -> Option<&Identity3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "function",
+    "source": "keyloop:generated:rust:256",
+    "text": "async fn load_integration3(State(state): State<AppState>) -> Json<Vec<Integration3>> {\n  let items = state.integration3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:257",
+    "text": "let visible_invite3s = invite3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "file",
+    "source": "keyloop:generated:rust:258",
+    "text": "pub struct Issue3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Issue3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:259",
+    "text": "fn parse_job3_id(value: &str) -> Result<Job3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:rust:260",
+    "text": "match layout3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:261",
+    "text": "impl Ledger3Store {\n  pub fn get(&self, id: Ledger3Id) -> Option<&Ledger3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "function",
+    "source": "keyloop:generated:rust:262",
+    "text": "async fn load_member3(State(state): State<AppState>) -> Json<Vec<Member3>> {\n  let items = state.member3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:263",
+    "text": "let visible_metric3s = metric3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "file",
+    "source": "keyloop:generated:rust:264",
+    "text": "pub struct Module3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Module3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:265",
+    "text": "fn parse_notice3_id(value: &str) -> Result<Notice3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:266",
+    "text": "match operator3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:267",
+    "text": "impl Organization3Store {\n  pub fn get(&self, id: Organization3Id) -> Option<&Organization3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "function",
+    "source": "keyloop:generated:rust:268",
+    "text": "async fn load_package3(State(state): State<AppState>) -> Json<Vec<Package3>> {\n  let items = state.package3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "block",
+    "source": "keyloop:generated:rust:269",
+    "text": "let visible_policy3s = policy3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:rust:270",
+    "text": "pub struct Preset3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Preset3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "function",
+    "source": "keyloop:generated:rust:271",
+    "text": "fn parse_preview3_id(value: &str) -> Result<Preview3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "block",
+    "source": "keyloop:generated:rust:272",
+    "text": "match product3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:273",
+    "text": "impl Queue3Store {\n  pub fn get(&self, id: Queue3Id) -> Option<&Queue3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:274",
+    "text": "async fn load_quota3(State(state): State<AppState>) -> Json<Vec<Quota3>> {\n  let items = state.quota3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:rust:275",
+    "text": "let visible_receipt3s = receipt3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "file",
+    "source": "keyloop:generated:rust:276",
+    "text": "pub struct Registry3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Registry3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "function",
+    "source": "keyloop:generated:rust:277",
+    "text": "fn parse_request3_id(value: &str) -> Result<Request3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:278",
+    "text": "match resource3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:279",
+    "text": "impl Review3Store {\n  pub fn get(&self, id: Review3Id) -> Option<&Review3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "function",
+    "source": "keyloop:generated:rust:280",
+    "text": "async fn load_role3(State(state): State<AppState>) -> Json<Vec<Role3>> {\n  let items = state.role3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:281",
+    "text": "let visible_rule3s = rule3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "file",
+    "source": "keyloop:generated:rust:282",
+    "text": "pub struct Schedule3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Schedule3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "function",
+    "source": "keyloop:generated:rust:283",
+    "text": "fn parse_schema3_id(value: &str) -> Result<Schema3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "block",
+    "source": "keyloop:generated:rust:284",
+    "text": "match section3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:285",
+    "text": "impl Segment3Store {\n  pub fn get(&self, id: Segment3Id) -> Option<&Segment3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "function",
+    "source": "keyloop:generated:rust:286",
+    "text": "async fn load_setting3(State(state): State<AppState>) -> Json<Vec<Setting3>> {\n  let items = state.setting3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "block",
+    "source": "keyloop:generated:rust:287",
+    "text": "let visible_snapshot3s = snapshot3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "file",
+    "source": "keyloop:generated:rust:288",
+    "text": "pub struct Space3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Space3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:289",
+    "text": "fn parse_stream3_id(value: &str) -> Result<Stream3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:rust:290",
+    "text": "match task3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "block",
+    "source": "keyloop:generated:rust:291",
+    "text": "impl Template3Store {\n  pub fn get(&self, id: Template3Id) -> Option<&Template3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:292",
+    "text": "async fn load_thread3(State(state): State<AppState>) -> Json<Vec<Thread3>> {\n  let items = state.thread3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:293",
+    "text": "let visible_transaction3s = transaction3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "file",
+    "source": "keyloop:generated:rust:294",
+    "text": "pub struct Trigger3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Trigger3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "function",
+    "source": "keyloop:generated:rust:295",
+    "text": "fn parse_upload3_id(value: &str) -> Result<Upload3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:296",
+    "text": "match user3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:297",
+    "text": "impl Variant3Store {\n  pub fn get(&self, id: Variant3Id) -> Option<&Variant3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "function",
+    "source": "keyloop:generated:rust:298",
+    "text": "async fn load_vault3(State(state): State<AppState>) -> Json<Vec<Vault3>> {\n  let items = state.vault3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "block",
+    "source": "keyloop:generated:rust:299",
+    "text": "let visible_version3s = version3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:rust:300",
+    "text": "pub struct View3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl View3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "function",
+    "source": "keyloop:generated:rust:301",
+    "text": "fn parse_webhook3_id(value: &str) -> Result<Webhook3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "block",
+    "source": "keyloop:generated:rust:302",
+    "text": "match workflow3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:303",
+    "text": "impl Zone3Store {\n  pub fn get(&self, id: Zone3Id) -> Option<&Zone3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "function",
+    "source": "keyloop:generated:rust:304",
+    "text": "async fn load_anchor3(State(state): State<AppState>) -> Json<Vec<Anchor3>> {\n  let items = state.anchor3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:rust:305",
+    "text": "let visible_batch3s = batch3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "file",
+    "source": "keyloop:generated:rust:306",
+    "text": "pub struct Cache3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Cache3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:307",
+    "text": "fn parse_cell3_id(value: &str) -> Result<Cell3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:308",
+    "text": "match delta3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:309",
+    "text": "impl Entry3Store {\n  pub fn get(&self, id: Entry3Id) -> Option<&Entry3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "function",
+    "source": "keyloop:generated:rust:310",
+    "text": "async fn load_field3(State(state): State<AppState>) -> Json<Vec<Field3>> {\n  let items = state.field3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:311",
+    "text": "let visible_filter3s = filter3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "file",
+    "source": "keyloop:generated:rust:312",
+    "text": "pub struct Handle3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Handle3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "function",
+    "source": "keyloop:generated:rust:313",
+    "text": "fn parse_index3_id(value: &str) -> Result<Index3Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "block",
+    "source": "keyloop:generated:rust:314",
+    "text": "match journey3.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:315",
+    "text": "impl Kernel3Store {\n  pub fn get(&self, id: Kernel3Id) -> Option<&Kernel3> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:316",
+    "text": "async fn load_layer3(State(state): State<AppState>) -> Json<Vec<Layer3>> {\n  let items = state.layer3s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "block",
+    "source": "keyloop:generated:rust:317",
+    "text": "let visible_matrix3s = matrix3s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "file",
+    "source": "keyloop:generated:rust:318",
+    "text": "pub struct Node3Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Node3Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "function",
+    "source": "keyloop:generated:rust:319",
+    "text": "fn parse_profile4_id(value: &str) -> Result<Profile4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:320",
+    "text": "match session4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "block",
+    "source": "keyloop:generated:rust:321",
+    "text": "impl Invoice4Store {\n  pub fn get(&self, id: Invoice4Id) -> Option<&Invoice4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:322",
+    "text": "async fn load_wallet4(State(state): State<AppState>) -> Json<Vec<Wallet4>> {\n  let items = state.wallet4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:323",
+    "text": "let visible_message4s = message4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "file",
+    "source": "keyloop:generated:rust:324",
+    "text": "pub struct Project4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Project4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "function",
+    "source": "keyloop:generated:rust:325",
+    "text": "fn parse_comment4_id(value: &str) -> Result<Comment4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:326",
+    "text": "match notification4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "block",
+    "source": "keyloop:generated:rust:327",
+    "text": "impl Preference4Store {\n  pub fn get(&self, id: Preference4Id) -> Option<&Preference4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:328",
+    "text": "async fn load_workspace4(State(state): State<AppState>) -> Json<Vec<Workspace4>> {\n  let items = state.workspace4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "block",
+    "source": "keyloop:generated:rust:329",
+    "text": "let visible_deployment4s = deployment4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:rust:330",
+    "text": "pub struct Subscription4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Subscription4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:331",
+    "text": "fn parse_payment4_id(value: &str) -> Result<Payment4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:332",
+    "text": "match account4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:333",
+    "text": "impl Draft4Store {\n  pub fn get(&self, id: Draft4Id) -> Option<&Draft4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "function",
+    "source": "keyloop:generated:rust:334",
+    "text": "async fn load_activity4(State(state): State<AppState>) -> Json<Vec<Activity4>> {\n  let items = state.activity4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:335",
+    "text": "let visible_report4s = report4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "file",
+    "source": "keyloop:generated:rust:336",
+    "text": "pub struct Pipeline4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Pipeline4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:337",
+    "text": "fn parse_token4_id(value: &str) -> Result<Token4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:338",
+    "text": "match permission4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:339",
+    "text": "impl Contact4Store {\n  pub fn get(&self, id: Contact4Id) -> Option<&Contact4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "function",
+    "source": "keyloop:generated:rust:340",
+    "text": "async fn load_order4(State(state): State<AppState>) -> Json<Vec<Order4>> {\n  let items = state.order4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:341",
+    "text": "let visible_ticket4s = ticket4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "file",
+    "source": "keyloop:generated:rust:342",
+    "text": "pub struct Release4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Release4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:343",
+    "text": "fn parse_bundle4_id(value: &str) -> Result<Bundle4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:344",
+    "text": "match audit4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:345",
+    "text": "impl Bookmark4Store {\n  pub fn get(&self, id: Bookmark4Id) -> Option<&Bookmark4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:346",
+    "text": "async fn load_campaign4(State(state): State<AppState>) -> Json<Vec<Campaign4>> {\n  let items = state.campaign4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:347",
+    "text": "let visible_channel4s = channel4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "file",
+    "source": "keyloop:generated:rust:348",
+    "text": "pub struct Checkout4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Checkout4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "function",
+    "source": "keyloop:generated:rust:349",
+    "text": "fn parse_collection4_id(value: &str) -> Result<Collection4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:350",
+    "text": "match credential4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "block",
+    "source": "keyloop:generated:rust:351",
+    "text": "impl Dashboard4Store {\n  pub fn get(&self, id: Dashboard4Id) -> Option<&Dashboard4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "function",
+    "source": "keyloop:generated:rust:352",
+    "text": "async fn load_dataset4(State(state): State<AppState>) -> Json<Vec<Dataset4>> {\n  let items = state.dataset4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:353",
+    "text": "let visible_device4s = device4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "file",
+    "source": "keyloop:generated:rust:354",
+    "text": "pub struct Document4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Document4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "function",
+    "source": "keyloop:generated:rust:355",
+    "text": "fn parse_endpoint4_id(value: &str) -> Result<Endpoint4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "block",
+    "source": "keyloop:generated:rust:356",
+    "text": "match experiment4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "block",
+    "source": "keyloop:generated:rust:357",
+    "text": "impl Feature4Store {\n  pub fn get(&self, id: Feature4Id) -> Option<&Feature4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:358",
+    "text": "async fn load_feed4(State(state): State<AppState>) -> Json<Vec<Feed4>> {\n  let items = state.feed4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:359",
+    "text": "let visible_gateway4s = gateway4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:rust:360",
+    "text": "pub struct Group4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Group4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:361",
+    "text": "fn parse_identity4_id(value: &str) -> Result<Identity4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:362",
+    "text": "match integration4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "block",
+    "source": "keyloop:generated:rust:363",
+    "text": "impl Invite4Store {\n  pub fn get(&self, id: Invite4Id) -> Option<&Invite4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "function",
+    "source": "keyloop:generated:rust:364",
+    "text": "async fn load_issue4(State(state): State<AppState>) -> Json<Vec<Issue4>> {\n  let items = state.issue4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:365",
+    "text": "let visible_job4s = job4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "file",
+    "source": "keyloop:generated:rust:366",
+    "text": "pub struct Layout4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Layout4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "function",
+    "source": "keyloop:generated:rust:367",
+    "text": "fn parse_ledger4_id(value: &str) -> Result<Ledger4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:368",
+    "text": "match member4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:369",
+    "text": "impl Metric4Store {\n  pub fn get(&self, id: Metric4Id) -> Option<&Metric4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "function",
+    "source": "keyloop:generated:rust:370",
+    "text": "async fn load_module4(State(state): State<AppState>) -> Json<Vec<Module4>> {\n  let items = state.module4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "block",
+    "source": "keyloop:generated:rust:371",
+    "text": "let visible_notice4s = notice4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "file",
+    "source": "keyloop:generated:rust:372",
+    "text": "pub struct Operator4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Operator4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:373",
+    "text": "fn parse_organization4_id(value: &str) -> Result<Organization4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:374",
+    "text": "match package4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:rust:375",
+    "text": "impl Policy4Store {\n  pub fn get(&self, id: Policy4Id) -> Option<&Policy4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:376",
+    "text": "async fn load_preset4(State(state): State<AppState>) -> Json<Vec<Preset4>> {\n  let items = state.preset4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:377",
+    "text": "let visible_preview4s = preview4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "file",
+    "source": "keyloop:generated:rust:378",
+    "text": "pub struct Product4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Product4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "function",
+    "source": "keyloop:generated:rust:379",
+    "text": "fn parse_queue4_id(value: &str) -> Result<Queue4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:380",
+    "text": "match quota4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "block",
+    "source": "keyloop:generated:rust:381",
+    "text": "impl Receipt4Store {\n  pub fn get(&self, id: Receipt4Id) -> Option<&Receipt4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "function",
+    "source": "keyloop:generated:rust:382",
+    "text": "async fn load_registry4(State(state): State<AppState>) -> Json<Vec<Registry4>> {\n  let items = state.registry4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:383",
+    "text": "let visible_request4s = request4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "file",
+    "source": "keyloop:generated:rust:384",
+    "text": "pub struct Resource4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Resource4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "function",
+    "source": "keyloop:generated:rust:385",
+    "text": "fn parse_review4_id(value: &str) -> Result<Review4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "block",
+    "source": "keyloop:generated:rust:386",
+    "text": "match role4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:387",
+    "text": "impl Rule4Store {\n  pub fn get(&self, id: Rule4Id) -> Option<&Rule4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:388",
+    "text": "async fn load_schedule4(State(state): State<AppState>) -> Json<Vec<Schedule4>> {\n  let items = state.schedule4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:389",
+    "text": "let visible_schema4s = schema4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:rust:390",
+    "text": "pub struct Section4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Section4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:391",
+    "text": "fn parse_segment4_id(value: &str) -> Result<Segment4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "block",
+    "source": "keyloop:generated:rust:392",
+    "text": "match setting4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "block",
+    "source": "keyloop:generated:rust:393",
+    "text": "impl Snapshot4Store {\n  pub fn get(&self, id: Snapshot4Id) -> Option<&Snapshot4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "function",
+    "source": "keyloop:generated:rust:394",
+    "text": "async fn load_space4(State(state): State<AppState>) -> Json<Vec<Space4>> {\n  let items = state.space4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:395",
+    "text": "let visible_stream4s = stream4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "file",
+    "source": "keyloop:generated:rust:396",
+    "text": "pub struct Task4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Task4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "function",
+    "source": "keyloop:generated:rust:397",
+    "text": "fn parse_template4_id(value: &str) -> Result<Template4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:398",
+    "text": "match thread4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "block",
+    "source": "keyloop:generated:rust:399",
+    "text": "impl Transaction4Store {\n  pub fn get(&self, id: Transaction4Id) -> Option<&Transaction4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:400",
+    "text": "async fn load_trigger4(State(state): State<AppState>) -> Json<Vec<Trigger4>> {\n  let items = state.trigger4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "block",
+    "source": "keyloop:generated:rust:401",
+    "text": "let visible_upload4s = upload4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "file",
+    "source": "keyloop:generated:rust:402",
+    "text": "pub struct User4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl User4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:403",
+    "text": "fn parse_variant4_id(value: &str) -> Result<Variant4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:404",
+    "text": "match vault4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:rust:405",
+    "text": "impl Version4Store {\n  pub fn get(&self, id: Version4Id) -> Option<&Version4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:406",
+    "text": "async fn load_view4(State(state): State<AppState>) -> Json<Vec<View4>> {\n  let items = state.view4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "block",
+    "source": "keyloop:generated:rust:407",
+    "text": "let visible_webhook4s = webhook4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "file",
+    "source": "keyloop:generated:rust:408",
+    "text": "pub struct Workflow4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Workflow4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "function",
+    "source": "keyloop:generated:rust:409",
+    "text": "fn parse_zone4_id(value: &str) -> Result<Zone4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:410",
+    "text": "match anchor4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:411",
+    "text": "impl Batch4Store {\n  pub fn get(&self, id: Batch4Id) -> Option<&Batch4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:412",
+    "text": "async fn load_cache4(State(state): State<AppState>) -> Json<Vec<Cache4>> {\n  let items = state.cache4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:413",
+    "text": "let visible_cell4s = cell4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "file",
+    "source": "keyloop:generated:rust:414",
+    "text": "pub struct Delta4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Delta4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:415",
+    "text": "fn parse_entry4_id(value: &str) -> Result<Entry4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "block",
+    "source": "keyloop:generated:rust:416",
+    "text": "match field4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:417",
+    "text": "impl Filter4Store {\n  pub fn get(&self, id: Filter4Id) -> Option<&Filter4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:418",
+    "text": "async fn load_handle4(State(state): State<AppState>) -> Json<Vec<Handle4>> {\n  let items = state.handle4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:419",
+    "text": "let visible_index4s = index4s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:rust:420",
+    "text": "pub struct Journey4Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Journey4Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:421",
+    "text": "fn parse_kernel4_id(value: &str) -> Result<Kernel4Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "block",
+    "source": "keyloop:generated:rust:422",
+    "text": "match layer4.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:423",
+    "text": "impl Matrix4Store {\n  pub fn get(&self, id: Matrix4Id) -> Option<&Matrix4> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:424",
+    "text": "async fn load_node4(State(state): State<AppState>) -> Json<Vec<Node4>> {\n  let items = state.node4s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:425",
+    "text": "let visible_profile5s = profile5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "file",
+    "source": "keyloop:generated:rust:426",
+    "text": "pub struct Session5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Session5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:427",
+    "text": "fn parse_invoice5_id(value: &str) -> Result<Invoice5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "block",
+    "source": "keyloop:generated:rust:428",
+    "text": "match wallet5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "block",
+    "source": "keyloop:generated:rust:429",
+    "text": "impl Message5Store {\n  pub fn get(&self, id: Message5Id) -> Option<&Message5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:430",
+    "text": "async fn load_project5(State(state): State<AppState>) -> Json<Vec<Project5>> {\n  let items = state.project5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "block",
+    "source": "keyloop:generated:rust:431",
+    "text": "let visible_comment5s = comment5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "file",
+    "source": "keyloop:generated:rust:432",
+    "text": "pub struct Notification5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Notification5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:433",
+    "text": "fn parse_preference5_id(value: &str) -> Result<Preference5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:434",
+    "text": "match workspace5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:rust:435",
+    "text": "impl Deployment5Store {\n  pub fn get(&self, id: Deployment5Id) -> Option<&Deployment5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "function",
+    "source": "keyloop:generated:rust:436",
+    "text": "async fn load_subscription5(State(state): State<AppState>) -> Json<Vec<Subscription5>> {\n  let items = state.subscription5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "block",
+    "source": "keyloop:generated:rust:437",
+    "text": "let visible_payment5s = payment5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "file",
+    "source": "keyloop:generated:rust:438",
+    "text": "pub struct Account5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Account5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:439",
+    "text": "fn parse_draft5_id(value: &str) -> Result<Draft5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:rust:440",
+    "text": "match activity5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:441",
+    "text": "impl Report5Store {\n  pub fn get(&self, id: Report5Id) -> Option<&Report5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:442",
+    "text": "async fn load_pipeline5(State(state): State<AppState>) -> Json<Vec<Pipeline5>> {\n  let items = state.pipeline5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "block",
+    "source": "keyloop:generated:rust:443",
+    "text": "let visible_token5s = token5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "file",
+    "source": "keyloop:generated:rust:444",
+    "text": "pub struct Permission5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Permission5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:445",
+    "text": "fn parse_contact5_id(value: &str) -> Result<Contact5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "block",
+    "source": "keyloop:generated:rust:446",
+    "text": "match order5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "block",
+    "source": "keyloop:generated:rust:447",
+    "text": "impl Ticket5Store {\n  pub fn get(&self, id: Ticket5Id) -> Option<&Ticket5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:448",
+    "text": "async fn load_release5(State(state): State<AppState>) -> Json<Vec<Release5>> {\n  let items = state.release5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:449",
+    "text": "let visible_bundle5s = bundle5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "file",
+    "source": "keyloop:generated:rust:450",
+    "text": "pub struct Audit5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Audit5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "function",
+    "source": "keyloop:generated:rust:451",
+    "text": "fn parse_bookmark5_id(value: &str) -> Result<Bookmark5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:452",
+    "text": "match campaign5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:453",
+    "text": "impl Channel5Store {\n  pub fn get(&self, id: Channel5Id) -> Option<&Channel5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:454",
+    "text": "async fn load_checkout5(State(state): State<AppState>) -> Json<Vec<Checkout5>> {\n  let items = state.checkout5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:rust:455",
+    "text": "let visible_collection5s = collection5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "file",
+    "source": "keyloop:generated:rust:456",
+    "text": "pub struct Credential5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Credential5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:457",
+    "text": "fn parse_dashboard5_id(value: &str) -> Result<Dashboard5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "block",
+    "source": "keyloop:generated:rust:458",
+    "text": "match dataset5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "block",
+    "source": "keyloop:generated:rust:459",
+    "text": "impl Device5Store {\n  pub fn get(&self, id: Device5Id) -> Option<&Device5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:460",
+    "text": "async fn load_document5(State(state): State<AppState>) -> Json<Vec<Document5>> {\n  let items = state.document5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "block",
+    "source": "keyloop:generated:rust:461",
+    "text": "let visible_endpoint5s = endpoint5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "file",
+    "source": "keyloop:generated:rust:462",
+    "text": "pub struct Experiment5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Experiment5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:463",
+    "text": "fn parse_feature5_id(value: &str) -> Result<Feature5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "block",
+    "source": "keyloop:generated:rust:464",
+    "text": "match feed5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:rust:465",
+    "text": "impl Gateway5Store {\n  pub fn get(&self, id: Gateway5Id) -> Option<&Gateway5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "function",
+    "source": "keyloop:generated:rust:466",
+    "text": "async fn load_group5(State(state): State<AppState>) -> Json<Vec<Group5>> {\n  let items = state.group5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:467",
+    "text": "let visible_identity5s = identity5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "file",
+    "source": "keyloop:generated:rust:468",
+    "text": "pub struct Integration5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Integration5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "function",
+    "source": "keyloop:generated:rust:469",
+    "text": "fn parse_invite5_id(value: &str) -> Result<Invite5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:rust:470",
+    "text": "match issue5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:471",
+    "text": "impl Job5Store {\n  pub fn get(&self, id: Job5Id) -> Option<&Job5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "function",
+    "source": "keyloop:generated:rust:472",
+    "text": "async fn load_layout5(State(state): State<AppState>) -> Json<Vec<Layout5>> {\n  let items = state.layout5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "block",
+    "source": "keyloop:generated:rust:473",
+    "text": "let visible_ledger5s = ledger5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "file",
+    "source": "keyloop:generated:rust:474",
+    "text": "pub struct Member5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Member5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:475",
+    "text": "fn parse_metric5_id(value: &str) -> Result<Metric5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:476",
+    "text": "match module5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "block",
+    "source": "keyloop:generated:rust:477",
+    "text": "impl Notice5Store {\n  pub fn get(&self, id: Notice5Id) -> Option<&Notice5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:478",
+    "text": "async fn load_operator5(State(state): State<AppState>) -> Json<Vec<Operator5>> {\n  let items = state.operator5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "block",
+    "source": "keyloop:generated:rust:479",
+    "text": "let visible_organization5s = organization5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:rust:480",
+    "text": "pub struct Package5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Package5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "function",
+    "source": "keyloop:generated:rust:481",
+    "text": "fn parse_policy5_id(value: &str) -> Result<Policy5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:482",
+    "text": "match preset5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:483",
+    "text": "impl Preview5Store {\n  pub fn get(&self, id: Preview5Id) -> Option<&Preview5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:484",
+    "text": "async fn load_product5(State(state): State<AppState>) -> Json<Vec<Product5>> {\n  let items = state.product5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "block",
+    "source": "keyloop:generated:rust:485",
+    "text": "let visible_queue5s = queue5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "file",
+    "source": "keyloop:generated:rust:486",
+    "text": "pub struct Quota5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Quota5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "function",
+    "source": "keyloop:generated:rust:487",
+    "text": "fn parse_receipt5_id(value: &str) -> Result<Receipt5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:488",
+    "text": "match registry5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "block",
+    "source": "keyloop:generated:rust:489",
+    "text": "impl Request5Store {\n  pub fn get(&self, id: Request5Id) -> Option<&Request5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:490",
+    "text": "async fn load_resource5(State(state): State<AppState>) -> Json<Vec<Resource5>> {\n  let items = state.resource5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:491",
+    "text": "let visible_review5s = review5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "file",
+    "source": "keyloop:generated:rust:492",
+    "text": "pub struct Role5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Role5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:493",
+    "text": "fn parse_rule5_id(value: &str) -> Result<Rule5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "block",
+    "source": "keyloop:generated:rust:494",
+    "text": "match schedule5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:495",
+    "text": "impl Schema5Store {\n  pub fn get(&self, id: Schema5Id) -> Option<&Schema5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "function",
+    "source": "keyloop:generated:rust:496",
+    "text": "async fn load_section5(State(state): State<AppState>) -> Json<Vec<Section5>> {\n  let items = state.section5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:497",
+    "text": "let visible_segment5s = segment5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "file",
+    "source": "keyloop:generated:rust:498",
+    "text": "pub struct Setting5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Setting5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:499",
+    "text": "fn parse_snapshot5_id(value: &str) -> Result<Snapshot5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:rust:500",
+    "text": "match space5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:501",
+    "text": "impl Stream5Store {\n  pub fn get(&self, id: Stream5Id) -> Option<&Stream5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "function",
+    "source": "keyloop:generated:rust:502",
+    "text": "async fn load_task5(State(state): State<AppState>) -> Json<Vec<Task5>> {\n  let items = state.task5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:503",
+    "text": "let visible_template5s = template5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "file",
+    "source": "keyloop:generated:rust:504",
+    "text": "pub struct Thread5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Thread5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:505",
+    "text": "fn parse_transaction5_id(value: &str) -> Result<Transaction5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:506",
+    "text": "match trigger5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:507",
+    "text": "impl Upload5Store {\n  pub fn get(&self, id: Upload5Id) -> Option<&Upload5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "function",
+    "source": "keyloop:generated:rust:508",
+    "text": "async fn load_user5(State(state): State<AppState>) -> Json<Vec<User5>> {\n  let items = state.user5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "block",
+    "source": "keyloop:generated:rust:509",
+    "text": "let visible_variant5s = variant5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "file",
+    "source": "keyloop:generated:rust:510",
+    "text": "pub struct Vault5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Vault5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "function",
+    "source": "keyloop:generated:rust:511",
+    "text": "fn parse_version5_id(value: &str) -> Result<Version5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "block",
+    "source": "keyloop:generated:rust:512",
+    "text": "match view5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:513",
+    "text": "impl Webhook5Store {\n  pub fn get(&self, id: Webhook5Id) -> Option<&Webhook5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:514",
+    "text": "async fn load_workflow5(State(state): State<AppState>) -> Json<Vec<Workflow5>> {\n  let items = state.workflow5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:rust:515",
+    "text": "let visible_zone5s = zone5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "file",
+    "source": "keyloop:generated:rust:516",
+    "text": "pub struct Anchor5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Anchor5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "function",
+    "source": "keyloop:generated:rust:517",
+    "text": "fn parse_batch5_id(value: &str) -> Result<Batch5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:518",
+    "text": "match cache5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:519",
+    "text": "impl Cell5Store {\n  pub fn get(&self, id: Cell5Id) -> Option<&Cell5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "function",
+    "source": "keyloop:generated:rust:520",
+    "text": "async fn load_delta5(State(state): State<AppState>) -> Json<Vec<Delta5>> {\n  let items = state.delta5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:521",
+    "text": "let visible_entry5s = entry5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "file",
+    "source": "keyloop:generated:rust:522",
+    "text": "pub struct Field5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Field5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "function",
+    "source": "keyloop:generated:rust:523",
+    "text": "fn parse_filter5_id(value: &str) -> Result<Filter5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "block",
+    "source": "keyloop:generated:rust:524",
+    "text": "match handle5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:525",
+    "text": "impl Index5Store {\n  pub fn get(&self, id: Index5Id) -> Option<&Index5> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "function",
+    "source": "keyloop:generated:rust:526",
+    "text": "async fn load_journey5(State(state): State<AppState>) -> Json<Vec<Journey5>> {\n  let items = state.journey5s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "block",
+    "source": "keyloop:generated:rust:527",
+    "text": "let visible_kernel5s = kernel5s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "file",
+    "source": "keyloop:generated:rust:528",
+    "text": "pub struct Layer5Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Layer5Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "function",
+    "source": "keyloop:generated:rust:529",
+    "text": "fn parse_matrix5_id(value: &str) -> Result<Matrix5Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:rust:530",
+    "text": "match node5.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "block",
+    "source": "keyloop:generated:rust:531",
+    "text": "impl Profile6Store {\n  pub fn get(&self, id: Profile6Id) -> Option<&Profile6> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:532",
+    "text": "async fn load_session6(State(state): State<AppState>) -> Json<Vec<Session6>> {\n  let items = state.session6s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:533",
+    "text": "let visible_invoice6s = invoice6s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "file",
+    "source": "keyloop:generated:rust:534",
+    "text": "pub struct Wallet6Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Wallet6Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "function",
+    "source": "keyloop:generated:rust:535",
+    "text": "fn parse_message6_id(value: &str) -> Result<Message6Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:536",
+    "text": "match project6.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:537",
+    "text": "impl Comment6Store {\n  pub fn get(&self, id: Comment6Id) -> Option<&Comment6> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "function",
+    "source": "keyloop:generated:rust:538",
+    "text": "async fn load_notification6(State(state): State<AppState>) -> Json<Vec<Notification6>> {\n  let items = state.notification6s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "block",
+    "source": "keyloop:generated:rust:539",
+    "text": "let visible_preference6s = preference6s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:rust:540",
+    "text": "pub struct Workspace6Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Workspace6Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "function",
+    "source": "keyloop:generated:rust:541",
+    "text": "fn parse_deployment6_id(value: &str) -> Result<Deployment6Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "block",
+    "source": "keyloop:generated:rust:542",
+    "text": "match subscription6.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:543",
+    "text": "impl Payment6Store {\n  pub fn get(&self, id: Payment6Id) -> Option<&Payment6> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "function",
+    "source": "keyloop:generated:rust:544",
+    "text": "async fn load_account6(State(state): State<AppState>) -> Json<Vec<Account6>> {\n  let items = state.account6s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "block",
+    "source": "keyloop:generated:rust:545",
+    "text": "let visible_draft6s = draft6s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "file",
+    "source": "keyloop:generated:rust:546",
+    "text": "pub struct Activity6Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Activity6Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:547",
+    "text": "fn parse_report6_id(value: &str) -> Result<Report6Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:548",
+    "text": "match pipeline6.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:549",
+    "text": "impl Token6Store {\n  pub fn get(&self, id: Token6Id) -> Option<&Token6> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "function",
+    "source": "keyloop:generated:rust:550",
+    "text": "async fn load_permission6(State(state): State<AppState>) -> Json<Vec<Permission6>> {\n  let items = state.permission6s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:551",
+    "text": "let visible_contact6s = contact6s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "file",
+    "source": "keyloop:generated:rust:552",
+    "text": "pub struct Order6Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Order6Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "function",
+    "source": "keyloop:generated:rust:553",
+    "text": "fn parse_ticket6_id(value: &str) -> Result<Ticket6Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "block",
+    "source": "keyloop:generated:rust:554",
+    "text": "match release6.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:555",
+    "text": "impl Bundle6Store {\n  pub fn get(&self, id: Bundle6Id) -> Option<&Bundle6> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:556",
+    "text": "async fn load_audit6(State(state): State<AppState>) -> Json<Vec<Audit6>> {\n  let items = state.audit6s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "block",
+    "source": "keyloop:generated:rust:557",
+    "text": "let visible_bookmark6s = bookmark6s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "file",
+    "source": "keyloop:generated:rust:558",
+    "text": "pub struct Campaign6Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Campaign6Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "function",
+    "source": "keyloop:generated:rust:559",
+    "text": "fn parse_channel6_id(value: &str) -> Result<Channel6Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:560",
+    "text": "match checkout6.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "block",
+    "source": "keyloop:generated:rust:561",
+    "text": "impl Collection6Store {\n  pub fn get(&self, id: Collection6Id) -> Option<&Collection6> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:562",
+    "text": "async fn load_credential6(State(state): State<AppState>) -> Json<Vec<Credential6>> {\n  let items = state.credential6s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:563",
+    "text": "let visible_dashboard6s = dashboard6s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "file",
+    "source": "keyloop:generated:rust:564",
+    "text": "pub struct Dataset6Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Dataset6Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "function",
+    "source": "keyloop:generated:rust:565",
+    "text": "fn parse_device6_id(value: &str) -> Result<Device6Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:566",
+    "text": "match document6.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "block",
+    "source": "keyloop:generated:rust:567",
+    "text": "impl Endpoint6Store {\n  pub fn get(&self, id: Endpoint6Id) -> Option<&Endpoint6> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:568",
+    "text": "async fn load_experiment6(State(state): State<AppState>) -> Json<Vec<Experiment6>> {\n  let items = state.experiment6s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-command",
+    "level": "block",
+    "source": "keyloop:generated:rust:569",
+    "text": "let visible_feature6s = feature6s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "file",
+    "source": "keyloop:generated:rust:570",
+    "text": "pub struct Feed6Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Feed6Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:571",
+    "text": "fn parse_gateway6_id(value: &str) -> Result<Gateway6Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:572",
+    "text": "match group6.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "console-tool",
+    "level": "block",
+    "source": "keyloop:generated:rust:573",
+    "text": "impl Identity6Store {\n  pub fn get(&self, id: Identity6Id) -> Option<&Identity6> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "function",
+    "source": "keyloop:generated:rust:574",
+    "text": "async fn load_integration6(State(state): State<AppState>) -> Json<Vec<Integration6>> {\n  let items = state.integration6s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:575",
+    "text": "let visible_invite6s = invite6s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "file",
+    "source": "keyloop:generated:rust:576",
+    "text": "pub struct Issue6Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Issue6Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "axum-server",
+    "level": "function",
+    "source": "keyloop:generated:rust:577",
+    "text": "fn parse_job6_id(value: &str) -> Result<Job6Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:578",
+    "text": "match layout6.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:579",
+    "text": "impl Ledger6Store {\n  pub fn get(&self, id: Ledger6Id) -> Option<&Ledger6> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "function",
+    "source": "keyloop:generated:rust:580",
+    "text": "async fn load_member6(State(state): State<AppState>) -> Json<Vec<Member6>> {\n  let items = state.member6s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "clap-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:581",
+    "text": "let visible_metric6s = metric6s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "file",
+    "source": "keyloop:generated:rust:582",
+    "text": "pub struct Module6Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Module6Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:583",
+    "text": "fn parse_notice6_id(value: &str) -> Result<Notice6Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:584",
+    "text": "match operator6.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "browser-ui",
+    "level": "block",
+    "source": "keyloop:generated:rust:585",
+    "text": "impl Organization6Store {\n  pub fn get(&self, id: Organization6Id) -> Option<&Organization6> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "cargo-tool",
+    "level": "function",
+    "source": "keyloop:generated:rust:586",
+    "text": "async fn load_package6(State(state): State<AppState>) -> Json<Vec<Package6>> {\n  let items = state.package6s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "api-server",
+    "level": "block",
+    "source": "keyloop:generated:rust:587",
+    "text": "let visible_policy6s = policy6s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "tui-widget",
+    "level": "file",
+    "source": "keyloop:generated:rust:588",
+    "text": "pub struct Preset6Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Preset6Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "webview-bridge",
+    "level": "function",
+    "source": "keyloop:generated:rust:589",
+    "text": "fn parse_preview6_id(value: &str) -> Result<Preview6Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "frontend-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:590",
+    "text": "match product6.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "terminal-runner",
+    "level": "block",
+    "source": "keyloop:generated:rust:591",
+    "text": "impl Queue6Store {\n  pub fn get(&self, id: Queue6Id) -> Option<&Queue6> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tower-layer",
+    "level": "function",
+    "source": "keyloop:generated:rust:592",
+    "text": "async fn load_quota6(State(state): State<AppState>) -> Json<Vec<Quota6>> {\n  let items = state.quota6s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "ratatui-app",
+    "level": "block",
+    "source": "keyloop:generated:rust:593",
+    "text": "let visible_receipt6s = receipt6s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "tauri-app",
+    "level": "file",
+    "source": "keyloop:generated:rust:594",
+    "text": "pub struct Registry6Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Registry6Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "web-components",
+    "level": "function",
+    "source": "keyloop:generated:rust:595",
+    "text": "fn parse_request6_id(value: &str) -> Result<Request6Id> {\n  let id = value.parse()?;\n  Ok(id)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "cli",
+    "project": "rust-cli",
+    "level": "block",
+    "source": "keyloop:generated:rust:596",
+    "text": "match resource6.status {\n  Status::Active => render_active(row),\n  Status::Pending => render_pending(row),\n  Status::Archived => return None,\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "server",
+    "project": "tokio-service",
+    "level": "block",
+    "source": "keyloop:generated:rust:597",
+    "text": "impl Review6Store {\n  pub fn get(&self, id: Review6Id) -> Option<&Review6> {\n    self.items.get(&id)\n  }\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "terminal",
+    "project": "terminal-ui",
+    "level": "function",
+    "source": "keyloop:generated:rust:598",
+    "text": "async fn load_role6(State(state): State<AppState>) -> Json<Vec<Role6>> {\n  let items = state.role6s.read().await.clone();\n  Json(items)\n}"
+  },
+  {
+    "language": "rust",
+    "framework": "tauri",
+    "project": "desktop-shell",
+    "level": "block",
+    "source": "keyloop:generated:rust:599",
+    "text": "let visible_rule6s = rule6s\n  .iter()\n  .filter(|item| item.enabled)\n  .collect::<Vec<_>>();"
+  },
+  {
+    "language": "rust",
+    "framework": "web",
+    "project": "design-system",
+    "level": "file",
+    "source": "keyloop:generated:rust:600",
+    "text": "pub struct Schedule6Config {\n  pub enabled: bool,\n  pub limit: usize,\n}\n\nimpl Schedule6Config {\n  pub fn active_limit(&self) -> usize {\n    if self.enabled { self.limit } else { 0 }\n  }\n}"
   }
 ]

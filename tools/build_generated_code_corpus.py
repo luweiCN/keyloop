@@ -15,7 +15,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "content" / "code" / "generated"
-GENERATED_SNIPPETS_PER_LANGUAGE = 120
+GENERATED_SNIPPETS_PER_LANGUAGE = 600
 
 
 NOUNS = [
@@ -150,6 +150,14 @@ def camel(*parts: str) -> str:
     return head + "".join(pascal(part) for part in tail)
 
 
+def noun_at(index: int) -> str:
+    base = NOUNS[index % len(NOUNS)]
+    cycle = index // len(NOUNS)
+    if cycle == 0:
+        return base
+    return f"{base}{cycle + 1}"
+
+
 PROJECTS_BY_FRAMEWORK = {
     "react": ["react-dashboard", "nextjs-app", "tanstack-query", "react-hook-form"],
     "vue": ["vue-core", "nuxt-app", "pinia-store", "vue-router"],
@@ -167,6 +175,7 @@ PROJECTS_BY_FRAMEWORK = {
     "less": ["less-admin", "less-theme", "less-components", "less-layout"],
     "express": ["express-api", "express-auth", "express-router", "express-worker"],
     "astro": ["astro-site", "astro-content", "astro-islands", "astro-endpoints"],
+    "svelte": ["sveltekit-app", "svelte-store", "svelte-actions", "svelte-components"],
     "evm": ["erc20-vault", "erc721-minter", "staking-pool", "governance-treasury"],
     "foundry": ["foundry-protocol", "foundry-tests", "forge-scripts", "foundry-invariant"],
     "hardhat": ["hardhat-contract", "hardhat-tasks", "hardhat-deploy", "hardhat-tests"],
@@ -204,11 +213,11 @@ def build_typescript() -> list[dict]:
     snippets: list[dict] = []
     frameworks = ["react", "vue", "nestjs", "vite", "node"]
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
-        noun = NOUNS[index % len(NOUNS)]
+        noun = noun_at(index)
         typ = pascal(noun)
         collection = f"{noun}s"
         framework = frameworks[index % len(frameworks)]
-        variant = index % 5
+        variant = index % 6
         if variant == 0:
             text = (
                 f"export async function load{typ}(id: string): Promise<{typ}> {{\n"
@@ -244,7 +253,7 @@ def build_typescript() -> list[dict]:
                 "}"
             )
             level = "function"
-        else:
+        elif variant == 4:
             text = (
                 f"export const {camel('create', noun, 'schema')} = z.object({{\n"
                 "  name: z.string().min(1),\n"
@@ -253,18 +262,30 @@ def build_typescript() -> list[dict]:
                 "});"
             )
             level = "block"
+        else:
+            text = (
+                f"import {{ z }} from \"zod\";\n\n"
+                f"export type {typ}Record = {{\n"
+                "  id: string;\n"
+                "  updatedAt: string;\n"
+                "};\n\n"
+                f"export function normalize{typ}(record: {typ}Record) {{\n"
+                "  return { ...record, updatedAt: record.updatedAt.trim() };\n"
+                "}"
+            )
+            level = "file"
         snippets.append(entry("typescript", framework, index + 1, text, level))
     return snippets
 
 
 def build_javascript() -> list[dict]:
     snippets: list[dict] = []
-    frameworks = ["node", "web", "vite", "express", "astro"]
+    frameworks = ["node", "web", "vite", "express", "astro", "svelte"]
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
-        noun = NOUNS[index % len(NOUNS)]
+        noun = noun_at(index)
         collection = f"{noun}s"
         framework = frameworks[index % len(frameworks)]
-        variant = index % 5
+        variant = index % 6
         if variant == 0:
             text = (
                 f"async function fetch{pascal(noun)}(id) {{\n"
@@ -301,13 +322,23 @@ def build_javascript() -> list[dict]:
                 "});"
             )
             level = "block"
-        else:
+        elif variant == 4:
             text = (
                 f"const sorted{pascal(collection)} = [...{collection}].sort((left, right) => {{\n"
                 "  return left.createdAt.localeCompare(right.createdAt);\n"
                 "});"
             )
             level = "block"
+        else:
+            text = (
+                f"import {{ readFile }} from \"node:fs/promises\";\n\n"
+                f"export async function load{pascal(noun)}Config(path) {{\n"
+                "  const raw = await readFile(path, \"utf8\");\n"
+                "  const config = JSON.parse(raw);\n"
+                "  return { ...config, loaded: true };\n"
+                "}"
+            )
+            level = "file"
         snippets.append(entry("javascript", framework, index + 1, text, level))
     return snippets
 
@@ -315,10 +346,11 @@ def build_javascript() -> list[dict]:
 def build_vue() -> list[dict]:
     snippets: list[dict] = []
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
-        noun = NOUNS[index % len(NOUNS)]
+        noun = noun_at(index)
         label = pascal(noun)
         state = camel(noun, "open")
-        variant = index % 5
+        variant = index % 6
+        level = "block"
         if variant == 0:
             text = (
                 "<script setup lang=\"ts\">\n"
@@ -354,7 +386,7 @@ def build_vue() -> list[dict]:
                 "});\n"
                 "</script>"
             )
-        else:
+        elif variant == 4:
             text = (
                 "<template>\n"
                 f"  <Transition name=\"{noun}-fade\">\n"
@@ -362,7 +394,21 @@ def build_vue() -> list[dict]:
                 "  </Transition>\n"
                 "</template>"
             )
-        snippets.append(entry("vue", "vue", index + 1, text, "block"))
+            level = "block"
+        else:
+            text = (
+                "<script setup lang=\"ts\">\n"
+                f"const {noun}Items = ref([]);\n"
+                f"const visible{label} = computed(() => {noun}Items.value.filter(Boolean));\n"
+                "</script>\n\n"
+                "<template>\n"
+                f"  <ul class=\"{noun}-list\">\n"
+                f"    <li v-for=\"item in visible{label}\" :key=\"item.id\">{{{{ item.name }}}}</li>\n"
+                "  </ul>\n"
+                "</template>"
+            )
+            level = "file"
+        snippets.append(entry("vue", "vue", index + 1, text, level))
     return snippets
 
 
@@ -370,10 +416,10 @@ def build_solidity() -> list[dict]:
     snippets: list[dict] = []
     frameworks = ["evm", "foundry", "hardhat", "openzeppelin"]
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
-        noun = NOUNS[index % len(NOUNS)]
+        noun = noun_at(index)
         label = pascal(noun)
         framework = frameworks[index % len(frameworks)]
-        variant = index % 5
+        variant = index % 6
         if variant == 0:
             text = (
                 f"function set{label}(uint256 value) external onlyOwner {{\n"
@@ -408,13 +454,25 @@ def build_solidity() -> list[dict]:
                 "}"
             )
             level = "function"
-        else:
+        elif variant == 4:
             text = (
                 f"event {label}Configured(address indexed account, uint256 value);\n"
                 f"mapping(address => uint256) private {noun}Balance;\n"
                 f"mapping(uint256 => bool) private {noun}Claimed;"
             )
             level = "block"
+        else:
+            text = (
+                f"contract {label}Registry {{\n"
+                f"  event {label}Saved(address indexed account, uint256 value);\n"
+                f"  mapping(address => uint256) private {noun}Values;\n\n"
+                f"  function save{label}(uint256 value) external {{\n"
+                f"    {noun}Values[msg.sender] = value;\n"
+                f"    emit {label}Saved(msg.sender, value);\n"
+                "  }\n"
+                "}"
+            )
+            level = "file"
         snippets.append(entry("solidity", framework, index + 1, text, level))
     return snippets
 
@@ -423,10 +481,10 @@ def build_rust() -> list[dict]:
     snippets: list[dict] = []
     frameworks = ["cli", "server", "terminal", "tauri", "web"]
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
-        noun = NOUNS[index % len(NOUNS)]
+        noun = noun_at(index)
         typ = pascal(noun)
         framework = frameworks[index % len(frameworks)]
-        variant = index % 5
+        variant = index % 6
         if variant == 0:
             text = (
                 f"fn parse_{noun}_id(value: &str) -> Result<{typ}Id> {{\n"
@@ -461,7 +519,7 @@ def build_rust() -> list[dict]:
                 "}"
             )
             level = "function"
-        else:
+        elif variant == 4:
             text = (
                 f"let visible_{noun}s = {noun}s\n"
                 "  .iter()\n"
@@ -469,6 +527,19 @@ def build_rust() -> list[dict]:
                 "  .collect::<Vec<_>>();"
             )
             level = "block"
+        else:
+            text = (
+                f"pub struct {typ}Config {{\n"
+                "  pub enabled: bool,\n"
+                "  pub limit: usize,\n"
+                "}\n\n"
+                f"impl {typ}Config {{\n"
+                "  pub fn active_limit(&self) -> usize {\n"
+                "    if self.enabled { self.limit } else { 0 }\n"
+                "  }\n"
+                "}"
+            )
+            level = "file"
         snippets.append(entry("rust", framework, index + 1, text, level))
     return snippets
 
@@ -477,10 +548,11 @@ def build_html() -> list[dict]:
     snippets: list[dict] = []
     frameworks = ["web", "bootstrap", "tailwind", "antd"]
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
-        noun = NOUNS[index % len(NOUNS)]
+        noun = noun_at(index)
         title = pascal(noun)
         framework = frameworks[index % len(frameworks)]
-        variant = index % 5
+        variant = index % 6
+        level = "block"
         if variant == 0:
             text = (
                 f"<form class=\"{noun}-form\" method=\"post\">\n"
@@ -512,14 +584,24 @@ def build_html() -> list[dict]:
                 "  </form>\n"
                 "</dialog>"
             )
-        else:
+        elif variant == 4:
             text = (
                 f"<nav class=\"{noun}-tabs\" aria-label=\"{title} views\">\n"
                 "  <a href=\"#overview\" aria-current=\"page\">Overview</a>\n"
                 "  <a href=\"#activity\">Activity</a>\n"
                 "</nav>"
             )
-        snippets.append(entry("html", framework, index + 1, text, "block"))
+        else:
+            text = (
+                "<main class=\"app-shell\">\n"
+                f"  <header><h1>{title}</h1></header>\n"
+                f"  <section class=\"{noun}-content\">\n"
+                "    <p data-state=\"ready\">Ready</p>\n"
+                "  </section>\n"
+                "</main>"
+            )
+            level = "file"
+        snippets.append(entry("html", framework, index + 1, text, level))
     return snippets
 
 
@@ -527,10 +609,11 @@ def build_css() -> list[dict]:
     snippets: list[dict] = []
     frameworks = ["web", "tailwind", "bootstrap", "antd", "css-modules"]
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
-        noun = NOUNS[index % len(NOUNS)]
+        noun = noun_at(index)
         adjective = ADJECTIVES[index % len(ADJECTIVES)]
         framework = frameworks[index % len(frameworks)]
-        variant = index % 5
+        variant = index % 6
+        level = "block"
         if variant == 0:
             text = (
                 f".{noun}-grid {{\n"
@@ -561,14 +644,26 @@ def build_css() -> list[dict]:
                 "  outline-offset: 2px;\n"
                 "}"
             )
-        else:
+        elif variant == 4:
             text = (
                 f".{noun}-list > li + li {{\n"
                 "  border-top: 1px solid var(--border-subtle);\n"
                 "  padding-block-start: 0.75rem;\n"
                 "}"
             )
-        snippets.append(entry("css", framework, index + 1, text, "block"))
+            level = "block"
+        else:
+            text = (
+                ":root {\n"
+                f"  --{noun}-gap: 1rem;\n"
+                "}\n\n"
+                f".{noun}-shell {{\n"
+                f"  display: grid;\n"
+                f"  gap: var(--{noun}-gap);\n"
+                "}"
+            )
+            level = "file"
+        snippets.append(entry("css", framework, index + 1, text, level))
     return snippets
 
 
@@ -576,9 +671,10 @@ def build_scss() -> list[dict]:
     snippets: list[dict] = []
     frameworks = ["scss", "sass", "design-system", "bootstrap"]
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
-        noun = NOUNS[index % len(NOUNS)]
+        noun = noun_at(index)
         framework = frameworks[index % len(frameworks)]
-        variant = index % 5
+        variant = index % 6
+        level = "block"
         if variant == 0:
             text = (
                 f".{noun}-card {{\n"
@@ -612,7 +708,7 @@ def build_scss() -> list[dict]:
                 "  gap: $space-3;\n"
                 "}"
             )
-        else:
+        elif variant == 4:
             text = (
                 f"@include media-breakpoint-up(md) {{\n"
                 f"  .{noun}-shell {{\n"
@@ -620,7 +716,18 @@ def build_scss() -> list[dict]:
                 "  }\n"
                 "}"
             )
-        snippets.append(entry("scss", framework, index + 1, text, "block"))
+            level = "block"
+        else:
+            text = (
+                f"${noun}-gap: $space-4;\n\n"
+                f"@mixin {noun}-layout {{\n"
+                "  display: grid;\n"
+                f"  gap: ${noun}-gap;\n"
+                "}\n\n"
+                f".{noun}-shell {{ @include {noun}-layout; }}"
+            )
+            level = "file"
+        snippets.append(entry("scss", framework, index + 1, text, level))
     return snippets
 
 
@@ -628,9 +735,10 @@ def build_less() -> list[dict]:
     snippets: list[dict] = []
     frameworks = ["less", "antd", "web"]
     for index in range(GENERATED_SNIPPETS_PER_LANGUAGE):
-        noun = NOUNS[index % len(NOUNS)]
+        noun = noun_at(index)
         framework = frameworks[index % len(frameworks)]
-        variant = index % 5
+        variant = index % 6
+        level = "block"
         if variant == 0:
             text = (
                 f"@{noun}-accent: #2563eb;\n"
@@ -663,7 +771,7 @@ def build_less() -> list[dict]:
                 "  }\n"
                 "}"
             )
-        else:
+        elif variant == 4:
             text = (
                 f".{noun}-status(@state, @color) {{\n"
                 f"  .{noun}-badge[data-state=\"@{{state}}\"] {{\n"
@@ -671,7 +779,18 @@ def build_less() -> list[dict]:
                 "  }\n"
                 "}"
             )
-        snippets.append(entry("less", framework, index + 1, text, "block"))
+            level = "block"
+        else:
+            text = (
+                f"@{noun}-gap: 16px;\n\n"
+                f".{noun}-layout() {{\n"
+                "  display: grid;\n"
+                f"  gap: @{noun}-gap;\n"
+                "}\n\n"
+                f".{noun}-shell {{ .{noun}-layout(); }}"
+            )
+            level = "file"
+        snippets.append(entry("less", framework, index + 1, text, level))
     return snippets
 
 

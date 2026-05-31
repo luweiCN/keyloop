@@ -101,9 +101,11 @@ Without enough history, full practice starts from this default path:
 4. Words: frontend and programmer vocabulary
 5. Focus: numbers and symbols
 6. Naming: casing and frontend APIs
-7. Code blocks: complete snippets with at least 120 built-in entries per language for TypeScript, JavaScript, Vue, Solidity, Rust, HTML, CSS, Less, and Sass
+7. Code blocks: complete snippets with at least 100 built-in entries for every supported language and framework, covering block, function, and file levels
 
 After there is recent history, full practice becomes adaptive: key hot spots add foundation drills, symbol errors add symbol groups, high-error words and identifiers feed chunk/word groups, and slow terms are pushed back into complete code blocks. The plan page keeps the training rationale in one place while the menu stays stable.
+
+Code difficulty is selected from recent code-practice accuracy, WPM, and error rate, then mapped to easy, medium, or hard snippets.
 
 The menu also includes Foundation practice and Code focus mode. Foundation practice has row, horizontal, vertical, and finger-movement drills that continue into another group after each completion. Code focus lets you multi-select languages, frameworks, and projects, keeps used or pinned filters near the top, then continues into another generated code group.
 
