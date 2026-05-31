@@ -19,6 +19,7 @@ Practice records are saved to:
 ```text
 ~/.keyloop/sessions.jsonl
 ~/.keyloop/preferences.json
+~/.keyloop/daily_runs.json
 ```
 
 Set `KEYLOOP_HOME` to use a different data directory.
@@ -130,9 +131,10 @@ KeyLoop does not upload practice data. By default it only writes local data to:
 ```text
 ~/.keyloop/sessions.jsonl
 ~/.keyloop/preferences.json
+~/.keyloop/daily_runs.json
 ```
 
-Session records include target text, final input, key events, error characters, and token statistics. Preferences store pinned language, framework, and project filters for code focus mode.
+Session records include target text, final input, key events, error characters, token statistics, daily run IDs, and lesson IDs. Preferences store pinned language, framework, and project filters for code focus mode. `daily_runs.json` stores generated full-practice plans so an unfinished run resumes next time, while a completed run allows the next launch to generate another full-practice run for the same day.
 
 ## Development / Quality
 

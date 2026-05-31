@@ -19,6 +19,7 @@ KeyLoop 是一个面向程序员的终端打字训练工具。它关注真实开
 ```text
 ~/.keyloop/sessions.jsonl
 ~/.keyloop/preferences.json
+~/.keyloop/daily_runs.json
 ```
 
 可以用 `KEYLOOP_HOME` 改存储位置。
@@ -148,9 +149,10 @@ KeyLoop 不上传练习数据。默认只写入本机：
 ```text
 ~/.keyloop/sessions.jsonl
 ~/.keyloop/preferences.json
+~/.keyloop/daily_runs.json
 ```
 
-练习记录会包含目标文本、最终输入、按键事件、错误字符和 token 统计；偏好记录会保存代码专项里置顶的语言、框架和项目过滤项。用 `KEYLOOP_HOME=/path/to/dir` 可以切换数据目录。
+练习记录会包含目标文本、最终输入、按键事件、错误字符、token 统计、daily run ID 和 lesson ID；偏好记录会保存代码专项里置顶的语言、框架和项目过滤项。`daily_runs.json` 保存当天已经生成的综合训练计划，未完成时下次启动会继续同一份计划，完成后再次启动会生成当天下一份综合训练。用 `KEYLOOP_HOME=/path/to/dir` 可以切换数据目录。
 
 功能规划见 [docs/ROADMAP.md](docs/ROADMAP.md)。
 

@@ -6,8 +6,8 @@ use crate::content::FoundationPracticeDrill;
 use crate::metrics;
 use crate::model::{
     CodeFilterPreference, CodePracticeConfig, CodePracticeFacet, CodePracticeOption,
-    DailyPracticePlan, KeyAction, KeyEventRecord, Language, LessonKind, Mode, PracticeLesson,
-    PracticeTarget, SessionRecord, UserPreferences,
+    CompletionState, DailyPracticePlan, KeyAction, KeyEventRecord, Language, LessonKind, Mode,
+    PracticeLesson, PracticeTarget, SessionRecord, UserPreferences,
 };
 use crate::{content, storage};
 use anyhow::Result;
@@ -394,7 +394,7 @@ impl App {
         }
     }
 
-    fn current_record(&self) -> Option<SessionRecord> {
+    fn current_record(&self, completion_state: CompletionState) -> Option<SessionRecord> {
         let target = self.target.clone()?;
         let started_at = self.started_at?;
 
@@ -407,17 +407,20 @@ impl App {
             user_input,
             self.events.clone(),
         );
+        record.daily_run_id = self.plan.run_id.clone();
         if !self.foundation_active
             && !self.code_specialist_active
             && let Some(lesson) = self.current_lesson()
         {
             record.lesson_id = lesson.id.clone();
+            record.lesson_index = Some(self.lesson_index);
         }
+        record.completion_state = completion_state;
         Some(record)
     }
 
     fn complete(&mut self) {
-        let Some(record) = self.current_record() else {
+        let Some(record) = self.current_record(CompletionState::Completed) else {
             return;
         };
         self.completed_records.push(record);
@@ -434,7 +437,7 @@ impl App {
 
     fn save_partial_and_quit(&mut self) {
         if !self.input.is_empty()
-            && let Some(record) = self.current_record()
+            && let Some(record) = self.current_record(CompletionState::Partial)
         {
             self.completed_records.push(record);
         }
@@ -553,6 +556,22 @@ fn completed_lesson_indices_from_records(
     plan: &DailyPracticePlan,
     records: &[SessionRecord],
 ) -> Vec<usize> {
+    if !plan.run_id.is_empty() {
+        let completed_lesson_ids = records
+            .iter()
+            .filter(|record| record.daily_run_id == plan.run_id)
+            .filter(|record| record.completion_state == CompletionState::Completed)
+            .map(|record| record.lesson_id.as_str())
+            .collect::<std::collections::HashSet<_>>();
+        return plan
+            .lessons
+            .iter()
+            .enumerate()
+            .filter(|(_, lesson)| completed_lesson_ids.contains(lesson.id.as_str()))
+            .map(|(index, _)| index)
+            .collect();
+    }
+
     let today = Local::now().date_naive();
     let mut lesson_id_counts = std::collections::BTreeMap::<String, usize>::new();
     let mut legacy_source_counts = std::collections::BTreeMap::<String, usize>::new();
@@ -2746,6 +2765,8 @@ mod tests {
     #[test]
     fn running_key_ignores_non_ascii_without_recording_input() {
         let plan = DailyPracticePlan {
+            run_id: String::new(),
+            run_number: 0,
             target_minutes: 20,
             completed_ms: 0,
             lessons: Vec::new(),
@@ -2974,6 +2995,8 @@ mod tests {
     #[test]
     fn app_resumes_comprehensive_from_first_unfinished_lesson_today() {
         let plan = DailyPracticePlan {
+            run_id: "today-1".to_string(),
+            run_number: 1,
             target_minutes: 20,
             completed_ms: 60_000,
             lessons: vec![
@@ -2984,6 +3007,10 @@ mod tests {
         let record = SessionRecord {
             started_at: Local::now().with_timezone(&Utc),
             source: "keyloop:warmup".to_string(),
+            daily_run_id: "today-1".to_string(),
+            lesson_id: "daily:keyloop:warmup:1".to_string(),
+            lesson_index: Some(0),
+            completion_state: CompletionState::Completed,
             duration_ms: 60_000,
             ..SessionRecord::default()
         };
@@ -3011,6 +3038,8 @@ mod tests {
         let mut second = practice_lesson(LessonKind::Symbols, "keyloop:symbols");
         second.id = "daily:symbols:2".to_string();
         let plan = DailyPracticePlan {
+            run_id: "today-1".to_string(),
+            run_number: 1,
             target_minutes: 20,
             completed_ms: 60_000,
             lessons: vec![first, second],
@@ -3018,12 +3047,22 @@ mod tests {
         let record = SessionRecord {
             started_at: Local::now().with_timezone(&Utc),
             source: "keyloop:symbols".to_string(),
+            daily_run_id: "today-1".to_string(),
             lesson_id: "daily:symbols:2".to_string(),
+            lesson_index: Some(1),
+            completion_state: CompletionState::Completed,
             duration_ms: 60_000,
             ..SessionRecord::default()
         };
 
-        let app = App::new(plan, vec![record], Language::Zh, Vec::new(), Vec::new());
+        let app = App::new(
+            plan,
+            vec![record],
+            Language::Zh,
+            Vec::new(),
+            Vec::new(),
+            UserPreferences::default(),
+        );
 
         assert_eq!(app.completed_lesson_indices, vec![1]);
         assert_eq!(app.lesson_index, 0);
@@ -3036,6 +3075,8 @@ mod tests {
         let mut second = practice_lesson(LessonKind::Words, "keyloop:programming-words");
         second.id = "daily:words:2".to_string();
         let plan = DailyPracticePlan {
+            run_id: "today-1".to_string(),
+            run_number: 1,
             target_minutes: 20,
             completed_ms: 60_000,
             lessons: vec![first, second],
@@ -3053,6 +3094,7 @@ mod tests {
             Language::Zh,
             Vec::new(),
             Vec::new(),
+            UserPreferences::default(),
         );
 
         assert!(app.completed_lesson_indices.is_empty());
@@ -3079,7 +3121,7 @@ mod tests {
         assert!(matches!(app.events[1].action, KeyAction::AutoIndent));
         assert!(matches!(app.events[2].action, KeyAction::AutoIndent));
         let record = app
-            .current_record()
+            .current_record(CompletionState::Completed)
             .expect("partial code record should build");
         assert_eq!(record.typed_len, 1);
         assert_eq!(record.correct_chars, 1);
@@ -3164,6 +3206,8 @@ mod tests {
     #[test]
     fn menu_zero_key_does_not_select_first_item() {
         let plan = DailyPracticePlan {
+            run_id: String::new(),
+            run_number: 0,
             target_minutes: 20,
             completed_ms: 0,
             lessons: Vec::new(),
@@ -3305,6 +3349,8 @@ mod tests {
         code_options: Vec<CodePracticeOption>,
     ) -> App {
         let plan = DailyPracticePlan {
+            run_id: String::new(),
+            run_number: 0,
             target_minutes: 20,
             completed_ms: 0,
             lessons: Vec::new(),

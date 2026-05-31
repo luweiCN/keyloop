@@ -42,7 +42,8 @@ pub enum Mode {
     Mixed,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum LessonKind {
     Foundation,
     Warmup,
@@ -54,15 +55,35 @@ pub enum LessonKind {
     CodeBlock,
 }
 
-#[derive(Debug, Clone)]
+impl LessonKind {
+    pub fn slug(self) -> &'static str {
+        match self {
+            LessonKind::Foundation => "foundation",
+            LessonKind::Warmup => "warmup",
+            LessonKind::Chunks => "chunks",
+            LessonKind::CommonWords => "common_words",
+            LessonKind::Words => "words",
+            LessonKind::Symbols => "symbols",
+            LessonKind::Naming => "naming",
+            LessonKind::CodeBlock => "code_block",
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DailyPracticePlan {
+    #[serde(default)]
+    pub run_id: String,
+    #[serde(default)]
+    pub run_number: u16,
     pub target_minutes: u16,
     pub completed_ms: u64,
     pub lessons: Vec<PracticeLesson>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PracticeLesson {
+    #[serde(default)]
     pub id: String,
     pub kind: LessonKind,
     pub estimated_minutes: u16,
@@ -161,7 +182,13 @@ pub struct SessionRecord {
     #[serde(default)]
     pub source: String,
     #[serde(default)]
+    pub daily_run_id: String,
+    #[serde(default)]
     pub lesson_id: String,
+    #[serde(default)]
+    pub lesson_index: Option<usize>,
+    #[serde(default)]
+    pub completion_state: CompletionState,
     #[serde(default)]
     pub duration_ms: u64,
     #[serde(default)]
@@ -203,7 +230,10 @@ impl Default for SessionRecord {
             started_at: default_started_at(),
             mode: Mode::default(),
             source: String::new(),
+            daily_run_id: String::new(),
             lesson_id: String::new(),
+            lesson_index: None,
+            completion_state: CompletionState::default(),
             duration_ms: 0,
             target_text: String::new(),
             user_input: String::new(),
@@ -222,6 +252,14 @@ impl Default for SessionRecord {
             key_events: Vec::new(),
         }
     }
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum CompletionState {
+    #[default]
+    Completed,
+    Partial,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

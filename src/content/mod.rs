@@ -63,6 +63,8 @@ pub fn build_daily_practice_plan(
     }
 
     Ok(DailyPracticePlan {
+        run_id: String::new(),
+        run_number: 0,
         target_minutes: 20,
         completed_ms,
         lessons,
