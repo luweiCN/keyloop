@@ -69,8 +69,9 @@ fn start(
 ) -> Result<()> {
     let records = storage::load_sessions()?;
     let plan = plan::build_plan(&records, language);
-    let daily_plan =
+    let fresh_daily_plan =
         content::build_daily_practice_plan(&records, repo.as_deref(), &plan, &code_config)?;
+    let daily_plan = storage::load_or_create_daily_practice_plan(fresh_daily_plan, &records)?;
     let completed = trainer::run(daily_plan, records, language)?;
 
     if completed.is_empty() {
