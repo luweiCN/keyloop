@@ -26,7 +26,14 @@ jobs:
         run: cargo fmt --check
 
       - name: Test
-        run: cargo test --locked
+        run: cargo test --locked --all-targets
 
       - name: Clippy
         run: cargo clippy --locked -- -D warnings
+
+      - name: Install smoke
+        run: |
+          root="${RUNNER_TEMP}/keyloop-install"
+          cargo install --path . --locked --debug --force --root "$root"
+          "$root/bin/keyloop" --help
+          KEYLOOP_HOME="$(mktemp -d)" "$root/bin/keyloop" --language en plan
