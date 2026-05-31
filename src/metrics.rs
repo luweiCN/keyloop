@@ -97,6 +97,7 @@ pub fn build_session_record(
         started_at,
         mode: target.mode,
         source: target.source,
+        lesson_id: String::new(),
         duration_ms,
         target_text: target.text,
         user_input,

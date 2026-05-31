@@ -2,6 +2,8 @@ use crate::model::{KeyAction, Language, Mode, SessionRecord, TokenKind};
 use chrono::{Duration, Utc};
 use std::collections::BTreeMap;
 
+pub const PLAN_HISTORY_DAYS: i64 = 21;
+
 #[derive(Debug, Clone)]
 pub struct PracticePlan {
     pub focus_words: Vec<String>,
@@ -49,7 +51,7 @@ impl Aggregate {
 }
 
 pub fn build_plan(records: &[SessionRecord], language: Language) -> PracticePlan {
-    let recent_cutoff = Utc::now() - Duration::days(21);
+    let recent_cutoff = Utc::now() - Duration::days(PLAN_HISTORY_DAYS);
     let recent: Vec<&SessionRecord> = records
         .iter()
         .filter(|record| record.started_at >= recent_cutoff)

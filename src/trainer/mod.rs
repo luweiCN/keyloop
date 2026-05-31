@@ -312,13 +312,20 @@ impl App {
 
         let duration_ms = self.active_elapsed_ms()?;
         let user_input = self.input.iter().collect::<String>();
-        Some(metrics::build_session_record(
+        let mut record = metrics::build_session_record(
             target,
             started_at,
             duration_ms,
             user_input,
             self.events.clone(),
-        ))
+        );
+        if !self.foundation_active
+            && !self.code_specialist_active
+            && let Some(lesson) = self.current_lesson()
+        {
+            record.lesson_id = lesson.id.clone();
+        }
+        Some(record)
     }
 
     fn complete(&mut self) {
@@ -459,17 +466,36 @@ fn completed_lesson_indices_from_records(
     records: &[SessionRecord],
 ) -> Vec<usize> {
     let today = Local::now().date_naive();
-    let mut source_counts = std::collections::BTreeMap::<String, usize>::new();
+    let mut lesson_id_counts = std::collections::BTreeMap::<String, usize>::new();
+    let mut legacy_source_counts = std::collections::BTreeMap::<String, usize>::new();
     for record in records
         .iter()
         .filter(|record| record.started_at.with_timezone(&Local).date_naive() == today)
     {
-        *source_counts.entry(record.source.clone()).or_default() += 1;
+        if record.lesson_id.trim().is_empty() {
+            *legacy_source_counts
+                .entry(record.source.clone())
+                .or_default() += 1;
+        } else {
+            *lesson_id_counts
+                .entry(record.lesson_id.clone())
+                .or_default() += 1;
+        }
     }
 
+    let unique_sources = unique_lesson_sources(plan);
     let mut completed = Vec::new();
     for (index, lesson) in plan.lessons.iter().enumerate() {
-        if let Some(count) = source_counts.get_mut(&lesson.target.source)
+        if let Some(count) = lesson_id_counts.get_mut(&lesson.id)
+            && *count > 0
+        {
+            completed.push(index);
+            *count -= 1;
+            continue;
+        }
+
+        if unique_sources.contains(&lesson.target.source)
+            && let Some(count) = legacy_source_counts.get_mut(&lesson.target.source)
             && *count > 0
         {
             completed.push(index);
@@ -477,6 +503,17 @@ fn completed_lesson_indices_from_records(
         }
     }
     completed
+}
+
+fn unique_lesson_sources(plan: &DailyPracticePlan) -> std::collections::HashSet<String> {
+    let mut counts = std::collections::BTreeMap::<String, usize>::new();
+    for lesson in &plan.lessons {
+        *counts.entry(lesson.target.source.clone()).or_default() += 1;
+    }
+    counts
+        .into_iter()
+        .filter_map(|(source, count)| (count == 1).then_some(source))
+        .collect()
 }
 
 fn first_pending_lesson_index(plan: &DailyPracticePlan, completed: &[usize]) -> usize {
@@ -2784,6 +2821,61 @@ mod tests {
     }
 
     #[test]
+    fn resume_uses_lesson_id_for_repeated_sources() {
+        let mut first = practice_lesson(LessonKind::Symbols, "keyloop:symbols");
+        first.id = "daily:symbols:1".to_string();
+        let mut second = practice_lesson(LessonKind::Symbols, "keyloop:symbols");
+        second.id = "daily:symbols:2".to_string();
+        let plan = DailyPracticePlan {
+            target_minutes: 20,
+            completed_ms: 60_000,
+            lessons: vec![first, second],
+        };
+        let record = SessionRecord {
+            started_at: Local::now().with_timezone(&Utc),
+            source: "keyloop:symbols".to_string(),
+            lesson_id: "daily:symbols:2".to_string(),
+            duration_ms: 60_000,
+            ..SessionRecord::default()
+        };
+
+        let app = App::new(plan, vec![record], Language::Zh, Vec::new(), Vec::new());
+
+        assert_eq!(app.completed_lesson_indices, vec![1]);
+        assert_eq!(app.lesson_index, 0);
+    }
+
+    #[test]
+    fn resume_does_not_guess_legacy_records_for_repeated_sources() {
+        let mut first = practice_lesson(LessonKind::Words, "keyloop:programming-words");
+        first.id = "daily:words:1".to_string();
+        let mut second = practice_lesson(LessonKind::Words, "keyloop:programming-words");
+        second.id = "daily:words:2".to_string();
+        let plan = DailyPracticePlan {
+            target_minutes: 20,
+            completed_ms: 60_000,
+            lessons: vec![first, second],
+        };
+        let legacy_record = SessionRecord {
+            started_at: Local::now().with_timezone(&Utc),
+            source: "keyloop:programming-words".to_string(),
+            duration_ms: 60_000,
+            ..SessionRecord::default()
+        };
+
+        let app = App::new(
+            plan,
+            vec![legacy_record],
+            Language::Zh,
+            Vec::new(),
+            Vec::new(),
+        );
+
+        assert!(app.completed_lesson_indices.is_empty());
+        assert_eq!(app.lesson_index, 0);
+    }
+
+    #[test]
     fn code_enter_auto_inserts_expected_indentation() {
         let mut app = empty_app_with_code_options(Vec::new());
         app.phase = Phase::Running;
@@ -3058,6 +3150,7 @@ mod tests {
 
     fn practice_lesson(kind: LessonKind, source: &str) -> PracticeLesson {
         PracticeLesson {
+            id: format!("daily:{source}:1"),
             kind,
             estimated_minutes: 3,
             target: PracticeTarget {
