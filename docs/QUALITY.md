@@ -14,6 +14,8 @@ cargo test
 cargo clippy -- -D warnings
 ```
 
+`cargo test` includes CLI integration checks and ratatui `TestBackend` TUI render smoke tests for the primary screens.
+
 Useful smoke checks:
 
 ```bash

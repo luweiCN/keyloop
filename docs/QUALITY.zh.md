@@ -14,6 +14,8 @@ cargo test
 cargo clippy -- -D warnings
 ```
 
+`cargo test` 已包含 CLI 集成检查，以及基于 ratatui `TestBackend` 的主要 TUI 页面渲染冒烟测试。
+
 常用冒烟检查：
 
 ```bash
