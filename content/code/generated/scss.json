@@ -43,9 +43,9 @@
     "language": "scss",
     "framework": "sass",
     "project": "sass-toolkit",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:006",
-    "text": ".project-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "$project-gap: $space-4;\n\n@mixin project-layout {\n  display: grid;\n  gap: $project-gap;\n}\n\n.project-shell { @include project-layout; }"
   },
   {
     "language": "scss",
@@ -53,7 +53,7 @@
     "project": "token-pipeline",
     "level": "block",
     "source": "keyloop:generated:scss:007",
-    "text": "@mixin comment-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": ".comment-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -61,7 +61,7 @@
     "project": "bootstrap-theme",
     "level": "block",
     "source": "keyloop:generated:scss:008",
-    "text": "@each $tone, $value in $notification-tones {\n  .notification-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": "@mixin notification-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -69,7 +69,7 @@
     "project": "scss-components",
     "level": "block",
     "source": "keyloop:generated:scss:009",
-    "text": ".preference-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "@each $tone, $value in $preference-tones {\n  .preference-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -77,7 +77,7 @@
     "project": "sass-components",
     "level": "block",
     "source": "keyloop:generated:scss:010",
-    "text": "@include media-breakpoint-up(md) {\n  .workspace-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": ".workspace-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -85,15 +85,15 @@
     "project": "storybook-kit",
     "level": "block",
     "source": "keyloop:generated:scss:011",
-    "text": ".deployment-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .deployment-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "bootstrap",
     "project": "bootstrap-forms",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:012",
-    "text": "@mixin subscription-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": "$subscription-gap: $space-4;\n\n@mixin subscription-layout {\n  display: grid;\n  gap: $subscription-gap;\n}\n\n.subscription-shell { @include subscription-layout; }"
   },
   {
     "language": "scss",
@@ -101,7 +101,7 @@
     "project": "scss-layout",
     "level": "block",
     "source": "keyloop:generated:scss:013",
-    "text": "@each $tone, $value in $payment-tones {\n  .payment-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": ".payment-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -109,7 +109,7 @@
     "project": "sass-theme",
     "level": "block",
     "source": "keyloop:generated:scss:014",
-    "text": ".account-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "@mixin account-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -117,7 +117,7 @@
     "project": "pattern-library",
     "level": "block",
     "source": "keyloop:generated:scss:015",
-    "text": "@include media-breakpoint-up(md) {\n  .draft-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": "@each $tone, $value in $draft-tones {\n  .draft-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -125,7 +125,7 @@
     "project": "bootstrap-grid",
     "level": "block",
     "source": "keyloop:generated:scss:016",
-    "text": ".activity-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": ".activity-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -133,15 +133,15 @@
     "project": "scss-design-system",
     "level": "block",
     "source": "keyloop:generated:scss:017",
-    "text": "@mixin report-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .report-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "sass",
     "project": "sass-foundation",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:018",
-    "text": "@each $tone, $value in $pipeline-tones {\n  .pipeline-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": "$pipeline-gap: $space-4;\n\n@mixin pipeline-layout {\n  display: grid;\n  gap: $pipeline-gap;\n}\n\n.pipeline-shell { @include pipeline-layout; }"
   },
   {
     "language": "scss",
@@ -149,7 +149,7 @@
     "project": "component-library",
     "level": "block",
     "source": "keyloop:generated:scss:019",
-    "text": ".token-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": ".token-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -157,7 +157,7 @@
     "project": "bootstrap-dashboard",
     "level": "block",
     "source": "keyloop:generated:scss:020",
-    "text": "@include media-breakpoint-up(md) {\n  .permission-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": "@mixin permission-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -165,7 +165,7 @@
     "project": "scss-theme",
     "level": "block",
     "source": "keyloop:generated:scss:021",
-    "text": ".contact-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@each $tone, $value in $contact-tones {\n  .contact-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -173,7 +173,7 @@
     "project": "sass-toolkit",
     "level": "block",
     "source": "keyloop:generated:scss:022",
-    "text": "@mixin order-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": ".order-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -181,15 +181,15 @@
     "project": "token-pipeline",
     "level": "block",
     "source": "keyloop:generated:scss:023",
-    "text": "@each $tone, $value in $ticket-tones {\n  .ticket-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .ticket-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "bootstrap",
     "project": "bootstrap-theme",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:024",
-    "text": ".release-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "$release-gap: $space-4;\n\n@mixin release-layout {\n  display: grid;\n  gap: $release-gap;\n}\n\n.release-shell { @include release-layout; }"
   },
   {
     "language": "scss",
@@ -197,7 +197,7 @@
     "project": "scss-components",
     "level": "block",
     "source": "keyloop:generated:scss:025",
-    "text": "@include media-breakpoint-up(md) {\n  .bundle-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": ".bundle-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -205,7 +205,7 @@
     "project": "sass-components",
     "level": "block",
     "source": "keyloop:generated:scss:026",
-    "text": ".audit-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@mixin audit-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -213,7 +213,7 @@
     "project": "storybook-kit",
     "level": "block",
     "source": "keyloop:generated:scss:027",
-    "text": "@mixin bookmark-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": "@each $tone, $value in $bookmark-tones {\n  .bookmark-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -221,7 +221,7 @@
     "project": "bootstrap-forms",
     "level": "block",
     "source": "keyloop:generated:scss:028",
-    "text": "@each $tone, $value in $campaign-tones {\n  .campaign-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": ".campaign-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -229,15 +229,15 @@
     "project": "scss-layout",
     "level": "block",
     "source": "keyloop:generated:scss:029",
-    "text": ".channel-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .channel-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "sass",
     "project": "sass-theme",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:030",
-    "text": "@include media-breakpoint-up(md) {\n  .checkout-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": "$checkout-gap: $space-4;\n\n@mixin checkout-layout {\n  display: grid;\n  gap: $checkout-gap;\n}\n\n.checkout-shell { @include checkout-layout; }"
   },
   {
     "language": "scss",
@@ -283,9 +283,9 @@
     "language": "scss",
     "framework": "bootstrap",
     "project": "bootstrap-dashboard",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:036",
-    "text": ".document-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "$document-gap: $space-4;\n\n@mixin document-layout {\n  display: grid;\n  gap: $document-gap;\n}\n\n.document-shell { @include document-layout; }"
   },
   {
     "language": "scss",
@@ -293,7 +293,7 @@
     "project": "scss-theme",
     "level": "block",
     "source": "keyloop:generated:scss:037",
-    "text": "@mixin endpoint-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": ".endpoint-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -301,7 +301,7 @@
     "project": "sass-toolkit",
     "level": "block",
     "source": "keyloop:generated:scss:038",
-    "text": "@each $tone, $value in $experiment-tones {\n  .experiment-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": "@mixin experiment-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -309,7 +309,7 @@
     "project": "token-pipeline",
     "level": "block",
     "source": "keyloop:generated:scss:039",
-    "text": ".feature-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "@each $tone, $value in $feature-tones {\n  .feature-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -317,7 +317,7 @@
     "project": "bootstrap-theme",
     "level": "block",
     "source": "keyloop:generated:scss:040",
-    "text": "@include media-breakpoint-up(md) {\n  .feed-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": ".feed-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -325,15 +325,15 @@
     "project": "scss-components",
     "level": "block",
     "source": "keyloop:generated:scss:041",
-    "text": ".gateway-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .gateway-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "sass",
     "project": "sass-components",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:042",
-    "text": "@mixin group-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": "$group-gap: $space-4;\n\n@mixin group-layout {\n  display: grid;\n  gap: $group-gap;\n}\n\n.group-shell { @include group-layout; }"
   },
   {
     "language": "scss",
@@ -341,7 +341,7 @@
     "project": "storybook-kit",
     "level": "block",
     "source": "keyloop:generated:scss:043",
-    "text": "@each $tone, $value in $identity-tones {\n  .identity-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": ".identity-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -349,7 +349,7 @@
     "project": "bootstrap-forms",
     "level": "block",
     "source": "keyloop:generated:scss:044",
-    "text": ".integration-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "@mixin integration-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -357,7 +357,7 @@
     "project": "scss-layout",
     "level": "block",
     "source": "keyloop:generated:scss:045",
-    "text": "@include media-breakpoint-up(md) {\n  .invite-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": "@each $tone, $value in $invite-tones {\n  .invite-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -365,7 +365,7 @@
     "project": "sass-theme",
     "level": "block",
     "source": "keyloop:generated:scss:046",
-    "text": ".issue-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": ".issue-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -373,15 +373,15 @@
     "project": "pattern-library",
     "level": "block",
     "source": "keyloop:generated:scss:047",
-    "text": "@mixin job-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .job-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "bootstrap",
     "project": "bootstrap-grid",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:048",
-    "text": "@each $tone, $value in $layout-tones {\n  .layout-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": "$layout-gap: $space-4;\n\n@mixin layout-layout {\n  display: grid;\n  gap: $layout-gap;\n}\n\n.layout-shell { @include layout-layout; }"
   },
   {
     "language": "scss",
@@ -389,7 +389,7 @@
     "project": "scss-design-system",
     "level": "block",
     "source": "keyloop:generated:scss:049",
-    "text": ".ledger-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": ".ledger-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -397,7 +397,7 @@
     "project": "sass-foundation",
     "level": "block",
     "source": "keyloop:generated:scss:050",
-    "text": "@include media-breakpoint-up(md) {\n  .member-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": "@mixin member-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -405,7 +405,7 @@
     "project": "component-library",
     "level": "block",
     "source": "keyloop:generated:scss:051",
-    "text": ".metric-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@each $tone, $value in $metric-tones {\n  .metric-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -413,7 +413,7 @@
     "project": "bootstrap-dashboard",
     "level": "block",
     "source": "keyloop:generated:scss:052",
-    "text": "@mixin module-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": ".module-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -421,15 +421,15 @@
     "project": "scss-theme",
     "level": "block",
     "source": "keyloop:generated:scss:053",
-    "text": "@each $tone, $value in $notice-tones {\n  .notice-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .notice-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "sass",
     "project": "sass-toolkit",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:054",
-    "text": ".operator-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "$operator-gap: $space-4;\n\n@mixin operator-layout {\n  display: grid;\n  gap: $operator-gap;\n}\n\n.operator-shell { @include operator-layout; }"
   },
   {
     "language": "scss",
@@ -437,7 +437,7 @@
     "project": "token-pipeline",
     "level": "block",
     "source": "keyloop:generated:scss:055",
-    "text": "@include media-breakpoint-up(md) {\n  .organization-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": ".organization-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -445,7 +445,7 @@
     "project": "bootstrap-theme",
     "level": "block",
     "source": "keyloop:generated:scss:056",
-    "text": ".package-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@mixin package-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -453,7 +453,7 @@
     "project": "scss-components",
     "level": "block",
     "source": "keyloop:generated:scss:057",
-    "text": "@mixin policy-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": "@each $tone, $value in $policy-tones {\n  .policy-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -461,7 +461,7 @@
     "project": "sass-components",
     "level": "block",
     "source": "keyloop:generated:scss:058",
-    "text": "@each $tone, $value in $preset-tones {\n  .preset-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": ".preset-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -469,15 +469,15 @@
     "project": "storybook-kit",
     "level": "block",
     "source": "keyloop:generated:scss:059",
-    "text": ".preview-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .preview-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "bootstrap",
     "project": "bootstrap-forms",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:060",
-    "text": "@include media-breakpoint-up(md) {\n  .product-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": "$product-gap: $space-4;\n\n@mixin product-layout {\n  display: grid;\n  gap: $product-gap;\n}\n\n.product-shell { @include product-layout; }"
   },
   {
     "language": "scss",
@@ -523,9 +523,9 @@
     "language": "scss",
     "framework": "sass",
     "project": "sass-foundation",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:066",
-    "text": ".resource-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "$resource-gap: $space-4;\n\n@mixin resource-layout {\n  display: grid;\n  gap: $resource-gap;\n}\n\n.resource-shell { @include resource-layout; }"
   },
   {
     "language": "scss",
@@ -533,7 +533,7 @@
     "project": "component-library",
     "level": "block",
     "source": "keyloop:generated:scss:067",
-    "text": "@mixin review-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": ".review-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -541,7 +541,7 @@
     "project": "bootstrap-dashboard",
     "level": "block",
     "source": "keyloop:generated:scss:068",
-    "text": "@each $tone, $value in $role-tones {\n  .role-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": "@mixin role-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -549,7 +549,7 @@
     "project": "scss-theme",
     "level": "block",
     "source": "keyloop:generated:scss:069",
-    "text": ".rule-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "@each $tone, $value in $rule-tones {\n  .rule-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -557,7 +557,7 @@
     "project": "sass-toolkit",
     "level": "block",
     "source": "keyloop:generated:scss:070",
-    "text": "@include media-breakpoint-up(md) {\n  .schedule-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": ".schedule-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -565,15 +565,15 @@
     "project": "token-pipeline",
     "level": "block",
     "source": "keyloop:generated:scss:071",
-    "text": ".schema-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .schema-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "bootstrap",
     "project": "bootstrap-theme",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:072",
-    "text": "@mixin section-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": "$section-gap: $space-4;\n\n@mixin section-layout {\n  display: grid;\n  gap: $section-gap;\n}\n\n.section-shell { @include section-layout; }"
   },
   {
     "language": "scss",
@@ -581,7 +581,7 @@
     "project": "scss-components",
     "level": "block",
     "source": "keyloop:generated:scss:073",
-    "text": "@each $tone, $value in $segment-tones {\n  .segment-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": ".segment-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -589,7 +589,7 @@
     "project": "sass-components",
     "level": "block",
     "source": "keyloop:generated:scss:074",
-    "text": ".setting-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "@mixin setting-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -597,7 +597,7 @@
     "project": "storybook-kit",
     "level": "block",
     "source": "keyloop:generated:scss:075",
-    "text": "@include media-breakpoint-up(md) {\n  .snapshot-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": "@each $tone, $value in $snapshot-tones {\n  .snapshot-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -605,7 +605,7 @@
     "project": "bootstrap-forms",
     "level": "block",
     "source": "keyloop:generated:scss:076",
-    "text": ".space-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": ".space-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -613,15 +613,15 @@
     "project": "scss-layout",
     "level": "block",
     "source": "keyloop:generated:scss:077",
-    "text": "@mixin stream-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .stream-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "sass",
     "project": "sass-theme",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:078",
-    "text": "@each $tone, $value in $task-tones {\n  .task-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": "$task-gap: $space-4;\n\n@mixin task-layout {\n  display: grid;\n  gap: $task-gap;\n}\n\n.task-shell { @include task-layout; }"
   },
   {
     "language": "scss",
@@ -629,7 +629,7 @@
     "project": "pattern-library",
     "level": "block",
     "source": "keyloop:generated:scss:079",
-    "text": ".template-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": ".template-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -637,7 +637,7 @@
     "project": "bootstrap-grid",
     "level": "block",
     "source": "keyloop:generated:scss:080",
-    "text": "@include media-breakpoint-up(md) {\n  .thread-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": "@mixin thread-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -645,7 +645,7 @@
     "project": "scss-design-system",
     "level": "block",
     "source": "keyloop:generated:scss:081",
-    "text": ".transaction-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@each $tone, $value in $transaction-tones {\n  .transaction-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -653,7 +653,7 @@
     "project": "sass-foundation",
     "level": "block",
     "source": "keyloop:generated:scss:082",
-    "text": "@mixin trigger-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": ".trigger-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -661,15 +661,15 @@
     "project": "component-library",
     "level": "block",
     "source": "keyloop:generated:scss:083",
-    "text": "@each $tone, $value in $upload-tones {\n  .upload-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .upload-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "bootstrap",
     "project": "bootstrap-dashboard",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:084",
-    "text": ".user-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "$user-gap: $space-4;\n\n@mixin user-layout {\n  display: grid;\n  gap: $user-gap;\n}\n\n.user-shell { @include user-layout; }"
   },
   {
     "language": "scss",
@@ -677,7 +677,7 @@
     "project": "scss-theme",
     "level": "block",
     "source": "keyloop:generated:scss:085",
-    "text": "@include media-breakpoint-up(md) {\n  .variant-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": ".variant-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -685,7 +685,7 @@
     "project": "sass-toolkit",
     "level": "block",
     "source": "keyloop:generated:scss:086",
-    "text": ".vault-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@mixin vault-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -693,7 +693,7 @@
     "project": "token-pipeline",
     "level": "block",
     "source": "keyloop:generated:scss:087",
-    "text": "@mixin version-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": "@each $tone, $value in $version-tones {\n  .version-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -701,7 +701,7 @@
     "project": "bootstrap-theme",
     "level": "block",
     "source": "keyloop:generated:scss:088",
-    "text": "@each $tone, $value in $view-tones {\n  .view-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": ".view-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -709,15 +709,15 @@
     "project": "scss-components",
     "level": "block",
     "source": "keyloop:generated:scss:089",
-    "text": ".webhook-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .webhook-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "sass",
     "project": "sass-components",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:090",
-    "text": "@include media-breakpoint-up(md) {\n  .workflow-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": "$workflow-gap: $space-4;\n\n@mixin workflow-layout {\n  display: grid;\n  gap: $workflow-gap;\n}\n\n.workflow-shell { @include workflow-layout; }"
   },
   {
     "language": "scss",
@@ -763,9 +763,9 @@
     "language": "scss",
     "framework": "bootstrap",
     "project": "bootstrap-grid",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:096",
-    "text": ".delta-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "$delta-gap: $space-4;\n\n@mixin delta-layout {\n  display: grid;\n  gap: $delta-gap;\n}\n\n.delta-shell { @include delta-layout; }"
   },
   {
     "language": "scss",
@@ -773,7 +773,7 @@
     "project": "scss-design-system",
     "level": "block",
     "source": "keyloop:generated:scss:097",
-    "text": "@mixin entry-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": ".entry-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -781,7 +781,7 @@
     "project": "sass-foundation",
     "level": "block",
     "source": "keyloop:generated:scss:098",
-    "text": "@each $tone, $value in $field-tones {\n  .field-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": "@mixin field-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -789,7 +789,7 @@
     "project": "component-library",
     "level": "block",
     "source": "keyloop:generated:scss:099",
-    "text": ".filter-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "@each $tone, $value in $filter-tones {\n  .filter-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -797,7 +797,7 @@
     "project": "bootstrap-dashboard",
     "level": "block",
     "source": "keyloop:generated:scss:100",
-    "text": "@include media-breakpoint-up(md) {\n  .handle-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": ".handle-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -805,15 +805,15 @@
     "project": "scss-theme",
     "level": "block",
     "source": "keyloop:generated:scss:101",
-    "text": ".index-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .index-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "sass",
     "project": "sass-toolkit",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:102",
-    "text": "@mixin journey-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": "$journey-gap: $space-4;\n\n@mixin journey-layout {\n  display: grid;\n  gap: $journey-gap;\n}\n\n.journey-shell { @include journey-layout; }"
   },
   {
     "language": "scss",
@@ -821,7 +821,7 @@
     "project": "token-pipeline",
     "level": "block",
     "source": "keyloop:generated:scss:103",
-    "text": "@each $tone, $value in $kernel-tones {\n  .kernel-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": ".kernel-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -829,7 +829,7 @@
     "project": "bootstrap-theme",
     "level": "block",
     "source": "keyloop:generated:scss:104",
-    "text": ".layer-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "@mixin layer-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -837,7 +837,7 @@
     "project": "scss-components",
     "level": "block",
     "source": "keyloop:generated:scss:105",
-    "text": "@include media-breakpoint-up(md) {\n  .matrix-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": "@each $tone, $value in $matrix-tones {\n  .matrix-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -845,7 +845,7 @@
     "project": "sass-components",
     "level": "block",
     "source": "keyloop:generated:scss:106",
-    "text": ".node-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": ".node-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -853,15 +853,15 @@
     "project": "storybook-kit",
     "level": "block",
     "source": "keyloop:generated:scss:107",
-    "text": "@mixin profile-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .profile2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "bootstrap",
     "project": "bootstrap-forms",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:108",
-    "text": "@each $tone, $value in $session-tones {\n  .session-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": "$session2-gap: $space-4;\n\n@mixin session2-layout {\n  display: grid;\n  gap: $session2-gap;\n}\n\n.session2-shell { @include session2-layout; }"
   },
   {
     "language": "scss",
@@ -869,7 +869,7 @@
     "project": "scss-layout",
     "level": "block",
     "source": "keyloop:generated:scss:109",
-    "text": ".invoice-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": ".invoice2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -877,7 +877,7 @@
     "project": "sass-theme",
     "level": "block",
     "source": "keyloop:generated:scss:110",
-    "text": "@include media-breakpoint-up(md) {\n  .wallet-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": "@mixin wallet2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -885,7 +885,7 @@
     "project": "pattern-library",
     "level": "block",
     "source": "keyloop:generated:scss:111",
-    "text": ".message-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@each $tone, $value in $message2-tones {\n  .message2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -893,7 +893,7 @@
     "project": "bootstrap-grid",
     "level": "block",
     "source": "keyloop:generated:scss:112",
-    "text": "@mixin project-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": ".project2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -901,15 +901,15 @@
     "project": "scss-design-system",
     "level": "block",
     "source": "keyloop:generated:scss:113",
-    "text": "@each $tone, $value in $comment-tones {\n  .comment-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .comment2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "sass",
     "project": "sass-foundation",
-    "level": "block",
+    "level": "file",
     "source": "keyloop:generated:scss:114",
-    "text": ".notification-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "$notification2-gap: $space-4;\n\n@mixin notification2-layout {\n  display: grid;\n  gap: $notification2-gap;\n}\n\n.notification2-shell { @include notification2-layout; }"
   },
   {
     "language": "scss",
@@ -917,7 +917,7 @@
     "project": "component-library",
     "level": "block",
     "source": "keyloop:generated:scss:115",
-    "text": "@include media-breakpoint-up(md) {\n  .preference-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "text": ".preference2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
   },
   {
     "language": "scss",
@@ -925,7 +925,7 @@
     "project": "bootstrap-dashboard",
     "level": "block",
     "source": "keyloop:generated:scss:116",
-    "text": ".workspace-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+    "text": "@mixin workspace2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
   },
   {
     "language": "scss",
@@ -933,7 +933,7 @@
     "project": "scss-theme",
     "level": "block",
     "source": "keyloop:generated:scss:117",
-    "text": "@mixin deployment-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+    "text": "@each $tone, $value in $deployment2-tones {\n  .deployment2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
@@ -941,7 +941,7 @@
     "project": "sass-toolkit",
     "level": "block",
     "source": "keyloop:generated:scss:118",
-    "text": "@each $tone, $value in $subscription-tones {\n  .subscription-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+    "text": ".subscription2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
   },
   {
     "language": "scss",
@@ -949,14 +949,3854 @@
     "project": "token-pipeline",
     "level": "block",
     "source": "keyloop:generated:scss:119",
-    "text": ".payment-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+    "text": "@include media-breakpoint-up(md) {\n  .payment2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:120",
+    "text": "$account2-gap: $space-4;\n\n@mixin account2-layout {\n  display: grid;\n  gap: $account2-gap;\n}\n\n.account2-shell { @include account2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:121",
+    "text": ".draft2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:122",
+    "text": "@mixin activity2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:123",
+    "text": "@each $tone, $value in $report2-tones {\n  .report2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:124",
+    "text": ".pipeline2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:125",
+    "text": "@include media-breakpoint-up(md) {\n  .token2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:126",
+    "text": "$permission2-gap: $space-4;\n\n@mixin permission2-layout {\n  display: grid;\n  gap: $permission2-gap;\n}\n\n.permission2-shell { @include permission2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:127",
+    "text": ".contact2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:128",
+    "text": "@mixin order2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:129",
+    "text": "@each $tone, $value in $ticket2-tones {\n  .ticket2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:130",
+    "text": ".release2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:131",
+    "text": "@include media-breakpoint-up(md) {\n  .bundle2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "file",
+    "source": "keyloop:generated:scss:132",
+    "text": "$audit2-gap: $space-4;\n\n@mixin audit2-layout {\n  display: grid;\n  gap: $audit2-gap;\n}\n\n.audit2-shell { @include audit2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:133",
+    "text": ".bookmark2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:134",
+    "text": "@mixin campaign2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:135",
+    "text": "@each $tone, $value in $channel2-tones {\n  .channel2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
   },
   {
     "language": "scss",
     "framework": "bootstrap",
     "project": "bootstrap-theme",
     "level": "block",
-    "source": "keyloop:generated:scss:120",
-    "text": "@include media-breakpoint-up(md) {\n  .account-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+    "source": "keyloop:generated:scss:136",
+    "text": ".checkout2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:137",
+    "text": "@include media-breakpoint-up(md) {\n  .collection2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "file",
+    "source": "keyloop:generated:scss:138",
+    "text": "$credential2-gap: $space-4;\n\n@mixin credential2-layout {\n  display: grid;\n  gap: $credential2-gap;\n}\n\n.credential2-shell { @include credential2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:139",
+    "text": ".dashboard2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:140",
+    "text": "@mixin dataset2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:141",
+    "text": "@each $tone, $value in $device2-tones {\n  .device2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:142",
+    "text": ".document2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:143",
+    "text": "@include media-breakpoint-up(md) {\n  .endpoint2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "file",
+    "source": "keyloop:generated:scss:144",
+    "text": "$experiment2-gap: $space-4;\n\n@mixin experiment2-layout {\n  display: grid;\n  gap: $experiment2-gap;\n}\n\n.experiment2-shell { @include experiment2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:145",
+    "text": ".feature2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:146",
+    "text": "@mixin feed2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:147",
+    "text": "@each $tone, $value in $gateway2-tones {\n  .gateway2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:148",
+    "text": ".group2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:149",
+    "text": "@include media-breakpoint-up(md) {\n  .identity2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "file",
+    "source": "keyloop:generated:scss:150",
+    "text": "$integration2-gap: $space-4;\n\n@mixin integration2-layout {\n  display: grid;\n  gap: $integration2-gap;\n}\n\n.integration2-shell { @include integration2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:151",
+    "text": ".invite2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:152",
+    "text": "@mixin issue2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:153",
+    "text": "@each $tone, $value in $job2-tones {\n  .job2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:154",
+    "text": ".layout2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:155",
+    "text": "@include media-breakpoint-up(md) {\n  .ledger2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "file",
+    "source": "keyloop:generated:scss:156",
+    "text": "$member2-gap: $space-4;\n\n@mixin member2-layout {\n  display: grid;\n  gap: $member2-gap;\n}\n\n.member2-shell { @include member2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:157",
+    "text": ".metric2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:158",
+    "text": "@mixin module2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:159",
+    "text": "@each $tone, $value in $notice2-tones {\n  .notice2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:160",
+    "text": ".operator2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:161",
+    "text": "@include media-breakpoint-up(md) {\n  .organization2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "file",
+    "source": "keyloop:generated:scss:162",
+    "text": "$package2-gap: $space-4;\n\n@mixin package2-layout {\n  display: grid;\n  gap: $package2-gap;\n}\n\n.package2-shell { @include package2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:163",
+    "text": ".policy2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:164",
+    "text": "@mixin preset2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:165",
+    "text": "@each $tone, $value in $preview2-tones {\n  .preview2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:166",
+    "text": ".product2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:167",
+    "text": "@include media-breakpoint-up(md) {\n  .queue2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:168",
+    "text": "$quota2-gap: $space-4;\n\n@mixin quota2-layout {\n  display: grid;\n  gap: $quota2-gap;\n}\n\n.quota2-shell { @include quota2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:169",
+    "text": ".receipt2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:170",
+    "text": "@mixin registry2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:171",
+    "text": "@each $tone, $value in $request2-tones {\n  .request2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:172",
+    "text": ".resource2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:173",
+    "text": "@include media-breakpoint-up(md) {\n  .review2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:174",
+    "text": "$role2-gap: $space-4;\n\n@mixin role2-layout {\n  display: grid;\n  gap: $role2-gap;\n}\n\n.role2-shell { @include role2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:175",
+    "text": ".rule2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:176",
+    "text": "@mixin schedule2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:177",
+    "text": "@each $tone, $value in $schema2-tones {\n  .schema2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:178",
+    "text": ".section2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:179",
+    "text": "@include media-breakpoint-up(md) {\n  .segment2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "file",
+    "source": "keyloop:generated:scss:180",
+    "text": "$setting2-gap: $space-4;\n\n@mixin setting2-layout {\n  display: grid;\n  gap: $setting2-gap;\n}\n\n.setting2-shell { @include setting2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:181",
+    "text": ".snapshot2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:182",
+    "text": "@mixin space2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:183",
+    "text": "@each $tone, $value in $stream2-tones {\n  .stream2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:184",
+    "text": ".task2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:185",
+    "text": "@include media-breakpoint-up(md) {\n  .template2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "file",
+    "source": "keyloop:generated:scss:186",
+    "text": "$thread2-gap: $space-4;\n\n@mixin thread2-layout {\n  display: grid;\n  gap: $thread2-gap;\n}\n\n.thread2-shell { @include thread2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:187",
+    "text": ".transaction2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:188",
+    "text": "@mixin trigger2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:189",
+    "text": "@each $tone, $value in $upload2-tones {\n  .upload2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:190",
+    "text": ".user2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:191",
+    "text": "@include media-breakpoint-up(md) {\n  .variant2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "file",
+    "source": "keyloop:generated:scss:192",
+    "text": "$vault2-gap: $space-4;\n\n@mixin vault2-layout {\n  display: grid;\n  gap: $vault2-gap;\n}\n\n.vault2-shell { @include vault2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:193",
+    "text": ".version2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:194",
+    "text": "@mixin view2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:195",
+    "text": "@each $tone, $value in $webhook2-tones {\n  .webhook2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:196",
+    "text": ".workflow2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:197",
+    "text": "@include media-breakpoint-up(md) {\n  .zone2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "file",
+    "source": "keyloop:generated:scss:198",
+    "text": "$anchor2-gap: $space-4;\n\n@mixin anchor2-layout {\n  display: grid;\n  gap: $anchor2-gap;\n}\n\n.anchor2-shell { @include anchor2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:199",
+    "text": ".batch2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:200",
+    "text": "@mixin cache2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:201",
+    "text": "@each $tone, $value in $cell2-tones {\n  .cell2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:202",
+    "text": ".delta2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:203",
+    "text": "@include media-breakpoint-up(md) {\n  .entry2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "file",
+    "source": "keyloop:generated:scss:204",
+    "text": "$field2-gap: $space-4;\n\n@mixin field2-layout {\n  display: grid;\n  gap: $field2-gap;\n}\n\n.field2-shell { @include field2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:205",
+    "text": ".filter2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:206",
+    "text": "@mixin handle2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:207",
+    "text": "@each $tone, $value in $index2-tones {\n  .index2-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:208",
+    "text": ".journey2-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:209",
+    "text": "@include media-breakpoint-up(md) {\n  .kernel2-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "file",
+    "source": "keyloop:generated:scss:210",
+    "text": "$layer2-gap: $space-4;\n\n@mixin layer2-layout {\n  display: grid;\n  gap: $layer2-gap;\n}\n\n.layer2-shell { @include layer2-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:211",
+    "text": ".matrix2-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:212",
+    "text": "@mixin node2-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:213",
+    "text": "@each $tone, $value in $profile3-tones {\n  .profile3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:214",
+    "text": ".session3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:215",
+    "text": "@include media-breakpoint-up(md) {\n  .invoice3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:216",
+    "text": "$wallet3-gap: $space-4;\n\n@mixin wallet3-layout {\n  display: grid;\n  gap: $wallet3-gap;\n}\n\n.wallet3-shell { @include wallet3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:217",
+    "text": ".message3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:218",
+    "text": "@mixin project3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:219",
+    "text": "@each $tone, $value in $comment3-tones {\n  .comment3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:220",
+    "text": ".notification3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:221",
+    "text": "@include media-breakpoint-up(md) {\n  .preference3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:222",
+    "text": "$workspace3-gap: $space-4;\n\n@mixin workspace3-layout {\n  display: grid;\n  gap: $workspace3-gap;\n}\n\n.workspace3-shell { @include workspace3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:223",
+    "text": ".deployment3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:224",
+    "text": "@mixin subscription3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:225",
+    "text": "@each $tone, $value in $payment3-tones {\n  .payment3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:226",
+    "text": ".account3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:227",
+    "text": "@include media-breakpoint-up(md) {\n  .draft3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "file",
+    "source": "keyloop:generated:scss:228",
+    "text": "$activity3-gap: $space-4;\n\n@mixin activity3-layout {\n  display: grid;\n  gap: $activity3-gap;\n}\n\n.activity3-shell { @include activity3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:229",
+    "text": ".report3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:230",
+    "text": "@mixin pipeline3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:231",
+    "text": "@each $tone, $value in $token3-tones {\n  .token3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:232",
+    "text": ".permission3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:233",
+    "text": "@include media-breakpoint-up(md) {\n  .contact3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "file",
+    "source": "keyloop:generated:scss:234",
+    "text": "$order3-gap: $space-4;\n\n@mixin order3-layout {\n  display: grid;\n  gap: $order3-gap;\n}\n\n.order3-shell { @include order3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:235",
+    "text": ".ticket3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:236",
+    "text": "@mixin release3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:237",
+    "text": "@each $tone, $value in $bundle3-tones {\n  .bundle3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:238",
+    "text": ".audit3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:239",
+    "text": "@include media-breakpoint-up(md) {\n  .bookmark3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "file",
+    "source": "keyloop:generated:scss:240",
+    "text": "$campaign3-gap: $space-4;\n\n@mixin campaign3-layout {\n  display: grid;\n  gap: $campaign3-gap;\n}\n\n.campaign3-shell { @include campaign3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:241",
+    "text": ".channel3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:242",
+    "text": "@mixin checkout3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:243",
+    "text": "@each $tone, $value in $collection3-tones {\n  .collection3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:244",
+    "text": ".credential3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:245",
+    "text": "@include media-breakpoint-up(md) {\n  .dashboard3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "file",
+    "source": "keyloop:generated:scss:246",
+    "text": "$dataset3-gap: $space-4;\n\n@mixin dataset3-layout {\n  display: grid;\n  gap: $dataset3-gap;\n}\n\n.dataset3-shell { @include dataset3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:247",
+    "text": ".device3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:248",
+    "text": "@mixin document3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:249",
+    "text": "@each $tone, $value in $endpoint3-tones {\n  .endpoint3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:250",
+    "text": ".experiment3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:251",
+    "text": "@include media-breakpoint-up(md) {\n  .feature3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "file",
+    "source": "keyloop:generated:scss:252",
+    "text": "$feed3-gap: $space-4;\n\n@mixin feed3-layout {\n  display: grid;\n  gap: $feed3-gap;\n}\n\n.feed3-shell { @include feed3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:253",
+    "text": ".gateway3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:254",
+    "text": "@mixin group3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:255",
+    "text": "@each $tone, $value in $identity3-tones {\n  .identity3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:256",
+    "text": ".integration3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:257",
+    "text": "@include media-breakpoint-up(md) {\n  .invite3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "file",
+    "source": "keyloop:generated:scss:258",
+    "text": "$issue3-gap: $space-4;\n\n@mixin issue3-layout {\n  display: grid;\n  gap: $issue3-gap;\n}\n\n.issue3-shell { @include issue3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:259",
+    "text": ".job3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:260",
+    "text": "@mixin layout3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:261",
+    "text": "@each $tone, $value in $ledger3-tones {\n  .ledger3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:262",
+    "text": ".member3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:263",
+    "text": "@include media-breakpoint-up(md) {\n  .metric3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:264",
+    "text": "$module3-gap: $space-4;\n\n@mixin module3-layout {\n  display: grid;\n  gap: $module3-gap;\n}\n\n.module3-shell { @include module3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:265",
+    "text": ".notice3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:266",
+    "text": "@mixin operator3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:267",
+    "text": "@each $tone, $value in $organization3-tones {\n  .organization3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:268",
+    "text": ".package3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:269",
+    "text": "@include media-breakpoint-up(md) {\n  .policy3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:270",
+    "text": "$preset3-gap: $space-4;\n\n@mixin preset3-layout {\n  display: grid;\n  gap: $preset3-gap;\n}\n\n.preset3-shell { @include preset3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:271",
+    "text": ".preview3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:272",
+    "text": "@mixin product3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:273",
+    "text": "@each $tone, $value in $queue3-tones {\n  .queue3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:274",
+    "text": ".quota3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:275",
+    "text": "@include media-breakpoint-up(md) {\n  .receipt3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "file",
+    "source": "keyloop:generated:scss:276",
+    "text": "$registry3-gap: $space-4;\n\n@mixin registry3-layout {\n  display: grid;\n  gap: $registry3-gap;\n}\n\n.registry3-shell { @include registry3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:277",
+    "text": ".request3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:278",
+    "text": "@mixin resource3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:279",
+    "text": "@each $tone, $value in $review3-tones {\n  .review3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:280",
+    "text": ".role3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:281",
+    "text": "@include media-breakpoint-up(md) {\n  .rule3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "file",
+    "source": "keyloop:generated:scss:282",
+    "text": "$schedule3-gap: $space-4;\n\n@mixin schedule3-layout {\n  display: grid;\n  gap: $schedule3-gap;\n}\n\n.schedule3-shell { @include schedule3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:283",
+    "text": ".schema3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:284",
+    "text": "@mixin section3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:285",
+    "text": "@each $tone, $value in $segment3-tones {\n  .segment3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:286",
+    "text": ".setting3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:287",
+    "text": "@include media-breakpoint-up(md) {\n  .snapshot3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "file",
+    "source": "keyloop:generated:scss:288",
+    "text": "$space3-gap: $space-4;\n\n@mixin space3-layout {\n  display: grid;\n  gap: $space3-gap;\n}\n\n.space3-shell { @include space3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:289",
+    "text": ".stream3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:290",
+    "text": "@mixin task3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:291",
+    "text": "@each $tone, $value in $template3-tones {\n  .template3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:292",
+    "text": ".thread3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:293",
+    "text": "@include media-breakpoint-up(md) {\n  .transaction3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "file",
+    "source": "keyloop:generated:scss:294",
+    "text": "$trigger3-gap: $space-4;\n\n@mixin trigger3-layout {\n  display: grid;\n  gap: $trigger3-gap;\n}\n\n.trigger3-shell { @include trigger3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:295",
+    "text": ".upload3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:296",
+    "text": "@mixin user3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:297",
+    "text": "@each $tone, $value in $variant3-tones {\n  .variant3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:298",
+    "text": ".vault3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:299",
+    "text": "@include media-breakpoint-up(md) {\n  .version3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "file",
+    "source": "keyloop:generated:scss:300",
+    "text": "$view3-gap: $space-4;\n\n@mixin view3-layout {\n  display: grid;\n  gap: $view3-gap;\n}\n\n.view3-shell { @include view3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:301",
+    "text": ".webhook3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:302",
+    "text": "@mixin workflow3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:303",
+    "text": "@each $tone, $value in $zone3-tones {\n  .zone3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:304",
+    "text": ".anchor3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:305",
+    "text": "@include media-breakpoint-up(md) {\n  .batch3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "file",
+    "source": "keyloop:generated:scss:306",
+    "text": "$cache3-gap: $space-4;\n\n@mixin cache3-layout {\n  display: grid;\n  gap: $cache3-gap;\n}\n\n.cache3-shell { @include cache3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:307",
+    "text": ".cell3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:308",
+    "text": "@mixin delta3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:309",
+    "text": "@each $tone, $value in $entry3-tones {\n  .entry3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:310",
+    "text": ".field3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:311",
+    "text": "@include media-breakpoint-up(md) {\n  .filter3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:312",
+    "text": "$handle3-gap: $space-4;\n\n@mixin handle3-layout {\n  display: grid;\n  gap: $handle3-gap;\n}\n\n.handle3-shell { @include handle3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:313",
+    "text": ".index3-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:314",
+    "text": "@mixin journey3-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:315",
+    "text": "@each $tone, $value in $kernel3-tones {\n  .kernel3-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:316",
+    "text": ".layer3-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:317",
+    "text": "@include media-breakpoint-up(md) {\n  .matrix3-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:318",
+    "text": "$node3-gap: $space-4;\n\n@mixin node3-layout {\n  display: grid;\n  gap: $node3-gap;\n}\n\n.node3-shell { @include node3-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:319",
+    "text": ".profile4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:320",
+    "text": "@mixin session4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:321",
+    "text": "@each $tone, $value in $invoice4-tones {\n  .invoice4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:322",
+    "text": ".wallet4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:323",
+    "text": "@include media-breakpoint-up(md) {\n  .message4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "file",
+    "source": "keyloop:generated:scss:324",
+    "text": "$project4-gap: $space-4;\n\n@mixin project4-layout {\n  display: grid;\n  gap: $project4-gap;\n}\n\n.project4-shell { @include project4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:325",
+    "text": ".comment4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:326",
+    "text": "@mixin notification4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:327",
+    "text": "@each $tone, $value in $preference4-tones {\n  .preference4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:328",
+    "text": ".workspace4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:329",
+    "text": "@include media-breakpoint-up(md) {\n  .deployment4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "file",
+    "source": "keyloop:generated:scss:330",
+    "text": "$subscription4-gap: $space-4;\n\n@mixin subscription4-layout {\n  display: grid;\n  gap: $subscription4-gap;\n}\n\n.subscription4-shell { @include subscription4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:331",
+    "text": ".payment4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:332",
+    "text": "@mixin account4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:333",
+    "text": "@each $tone, $value in $draft4-tones {\n  .draft4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:334",
+    "text": ".activity4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:335",
+    "text": "@include media-breakpoint-up(md) {\n  .report4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "file",
+    "source": "keyloop:generated:scss:336",
+    "text": "$pipeline4-gap: $space-4;\n\n@mixin pipeline4-layout {\n  display: grid;\n  gap: $pipeline4-gap;\n}\n\n.pipeline4-shell { @include pipeline4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:337",
+    "text": ".token4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:338",
+    "text": "@mixin permission4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:339",
+    "text": "@each $tone, $value in $contact4-tones {\n  .contact4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:340",
+    "text": ".order4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:341",
+    "text": "@include media-breakpoint-up(md) {\n  .ticket4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "file",
+    "source": "keyloop:generated:scss:342",
+    "text": "$release4-gap: $space-4;\n\n@mixin release4-layout {\n  display: grid;\n  gap: $release4-gap;\n}\n\n.release4-shell { @include release4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:343",
+    "text": ".bundle4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:344",
+    "text": "@mixin audit4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:345",
+    "text": "@each $tone, $value in $bookmark4-tones {\n  .bookmark4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:346",
+    "text": ".campaign4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:347",
+    "text": "@include media-breakpoint-up(md) {\n  .channel4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "file",
+    "source": "keyloop:generated:scss:348",
+    "text": "$checkout4-gap: $space-4;\n\n@mixin checkout4-layout {\n  display: grid;\n  gap: $checkout4-gap;\n}\n\n.checkout4-shell { @include checkout4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:349",
+    "text": ".collection4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:350",
+    "text": "@mixin credential4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:351",
+    "text": "@each $tone, $value in $dashboard4-tones {\n  .dashboard4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:352",
+    "text": ".dataset4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:353",
+    "text": "@include media-breakpoint-up(md) {\n  .device4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "file",
+    "source": "keyloop:generated:scss:354",
+    "text": "$document4-gap: $space-4;\n\n@mixin document4-layout {\n  display: grid;\n  gap: $document4-gap;\n}\n\n.document4-shell { @include document4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:355",
+    "text": ".endpoint4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:356",
+    "text": "@mixin experiment4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:357",
+    "text": "@each $tone, $value in $feature4-tones {\n  .feature4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:358",
+    "text": ".feed4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:359",
+    "text": "@include media-breakpoint-up(md) {\n  .gateway4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:360",
+    "text": "$group4-gap: $space-4;\n\n@mixin group4-layout {\n  display: grid;\n  gap: $group4-gap;\n}\n\n.group4-shell { @include group4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:361",
+    "text": ".identity4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:362",
+    "text": "@mixin integration4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:363",
+    "text": "@each $tone, $value in $invite4-tones {\n  .invite4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:364",
+    "text": ".issue4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:365",
+    "text": "@include media-breakpoint-up(md) {\n  .job4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:366",
+    "text": "$layout4-gap: $space-4;\n\n@mixin layout4-layout {\n  display: grid;\n  gap: $layout4-gap;\n}\n\n.layout4-shell { @include layout4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:367",
+    "text": ".ledger4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:368",
+    "text": "@mixin member4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:369",
+    "text": "@each $tone, $value in $metric4-tones {\n  .metric4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:370",
+    "text": ".module4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:371",
+    "text": "@include media-breakpoint-up(md) {\n  .notice4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "file",
+    "source": "keyloop:generated:scss:372",
+    "text": "$operator4-gap: $space-4;\n\n@mixin operator4-layout {\n  display: grid;\n  gap: $operator4-gap;\n}\n\n.operator4-shell { @include operator4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:373",
+    "text": ".organization4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:374",
+    "text": "@mixin package4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:375",
+    "text": "@each $tone, $value in $policy4-tones {\n  .policy4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:376",
+    "text": ".preset4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:377",
+    "text": "@include media-breakpoint-up(md) {\n  .preview4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "file",
+    "source": "keyloop:generated:scss:378",
+    "text": "$product4-gap: $space-4;\n\n@mixin product4-layout {\n  display: grid;\n  gap: $product4-gap;\n}\n\n.product4-shell { @include product4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:379",
+    "text": ".queue4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:380",
+    "text": "@mixin quota4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:381",
+    "text": "@each $tone, $value in $receipt4-tones {\n  .receipt4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:382",
+    "text": ".registry4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:383",
+    "text": "@include media-breakpoint-up(md) {\n  .request4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "file",
+    "source": "keyloop:generated:scss:384",
+    "text": "$resource4-gap: $space-4;\n\n@mixin resource4-layout {\n  display: grid;\n  gap: $resource4-gap;\n}\n\n.resource4-shell { @include resource4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:385",
+    "text": ".review4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:386",
+    "text": "@mixin role4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:387",
+    "text": "@each $tone, $value in $rule4-tones {\n  .rule4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:388",
+    "text": ".schedule4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:389",
+    "text": "@include media-breakpoint-up(md) {\n  .schema4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "file",
+    "source": "keyloop:generated:scss:390",
+    "text": "$section4-gap: $space-4;\n\n@mixin section4-layout {\n  display: grid;\n  gap: $section4-gap;\n}\n\n.section4-shell { @include section4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:391",
+    "text": ".segment4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:392",
+    "text": "@mixin setting4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:393",
+    "text": "@each $tone, $value in $snapshot4-tones {\n  .snapshot4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:394",
+    "text": ".space4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:395",
+    "text": "@include media-breakpoint-up(md) {\n  .stream4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "file",
+    "source": "keyloop:generated:scss:396",
+    "text": "$task4-gap: $space-4;\n\n@mixin task4-layout {\n  display: grid;\n  gap: $task4-gap;\n}\n\n.task4-shell { @include task4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:397",
+    "text": ".template4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:398",
+    "text": "@mixin thread4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:399",
+    "text": "@each $tone, $value in $transaction4-tones {\n  .transaction4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:400",
+    "text": ".trigger4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:401",
+    "text": "@include media-breakpoint-up(md) {\n  .upload4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "file",
+    "source": "keyloop:generated:scss:402",
+    "text": "$user4-gap: $space-4;\n\n@mixin user4-layout {\n  display: grid;\n  gap: $user4-gap;\n}\n\n.user4-shell { @include user4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:403",
+    "text": ".variant4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:404",
+    "text": "@mixin vault4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:405",
+    "text": "@each $tone, $value in $version4-tones {\n  .version4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:406",
+    "text": ".view4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:407",
+    "text": "@include media-breakpoint-up(md) {\n  .webhook4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:408",
+    "text": "$workflow4-gap: $space-4;\n\n@mixin workflow4-layout {\n  display: grid;\n  gap: $workflow4-gap;\n}\n\n.workflow4-shell { @include workflow4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:409",
+    "text": ".zone4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:410",
+    "text": "@mixin anchor4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:411",
+    "text": "@each $tone, $value in $batch4-tones {\n  .batch4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:412",
+    "text": ".cache4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:413",
+    "text": "@include media-breakpoint-up(md) {\n  .cell4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:414",
+    "text": "$delta4-gap: $space-4;\n\n@mixin delta4-layout {\n  display: grid;\n  gap: $delta4-gap;\n}\n\n.delta4-shell { @include delta4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:415",
+    "text": ".entry4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:416",
+    "text": "@mixin field4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:417",
+    "text": "@each $tone, $value in $filter4-tones {\n  .filter4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:418",
+    "text": ".handle4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:419",
+    "text": "@include media-breakpoint-up(md) {\n  .index4-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "file",
+    "source": "keyloop:generated:scss:420",
+    "text": "$journey4-gap: $space-4;\n\n@mixin journey4-layout {\n  display: grid;\n  gap: $journey4-gap;\n}\n\n.journey4-shell { @include journey4-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:421",
+    "text": ".kernel4-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:422",
+    "text": "@mixin layer4-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:423",
+    "text": "@each $tone, $value in $matrix4-tones {\n  .matrix4-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:424",
+    "text": ".node4-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:425",
+    "text": "@include media-breakpoint-up(md) {\n  .profile5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "file",
+    "source": "keyloop:generated:scss:426",
+    "text": "$session5-gap: $space-4;\n\n@mixin session5-layout {\n  display: grid;\n  gap: $session5-gap;\n}\n\n.session5-shell { @include session5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:427",
+    "text": ".invoice5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:428",
+    "text": "@mixin wallet5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:429",
+    "text": "@each $tone, $value in $message5-tones {\n  .message5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:430",
+    "text": ".project5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:431",
+    "text": "@include media-breakpoint-up(md) {\n  .comment5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "file",
+    "source": "keyloop:generated:scss:432",
+    "text": "$notification5-gap: $space-4;\n\n@mixin notification5-layout {\n  display: grid;\n  gap: $notification5-gap;\n}\n\n.notification5-shell { @include notification5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:433",
+    "text": ".preference5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:434",
+    "text": "@mixin workspace5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:435",
+    "text": "@each $tone, $value in $deployment5-tones {\n  .deployment5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:436",
+    "text": ".subscription5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:437",
+    "text": "@include media-breakpoint-up(md) {\n  .payment5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "file",
+    "source": "keyloop:generated:scss:438",
+    "text": "$account5-gap: $space-4;\n\n@mixin account5-layout {\n  display: grid;\n  gap: $account5-gap;\n}\n\n.account5-shell { @include account5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:439",
+    "text": ".draft5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:440",
+    "text": "@mixin activity5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:441",
+    "text": "@each $tone, $value in $report5-tones {\n  .report5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:442",
+    "text": ".pipeline5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:443",
+    "text": "@include media-breakpoint-up(md) {\n  .token5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "file",
+    "source": "keyloop:generated:scss:444",
+    "text": "$permission5-gap: $space-4;\n\n@mixin permission5-layout {\n  display: grid;\n  gap: $permission5-gap;\n}\n\n.permission5-shell { @include permission5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:445",
+    "text": ".contact5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:446",
+    "text": "@mixin order5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:447",
+    "text": "@each $tone, $value in $ticket5-tones {\n  .ticket5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:448",
+    "text": ".release5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:449",
+    "text": "@include media-breakpoint-up(md) {\n  .bundle5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "file",
+    "source": "keyloop:generated:scss:450",
+    "text": "$audit5-gap: $space-4;\n\n@mixin audit5-layout {\n  display: grid;\n  gap: $audit5-gap;\n}\n\n.audit5-shell { @include audit5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:451",
+    "text": ".bookmark5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:452",
+    "text": "@mixin campaign5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:453",
+    "text": "@each $tone, $value in $channel5-tones {\n  .channel5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:454",
+    "text": ".checkout5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:455",
+    "text": "@include media-breakpoint-up(md) {\n  .collection5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:456",
+    "text": "$credential5-gap: $space-4;\n\n@mixin credential5-layout {\n  display: grid;\n  gap: $credential5-gap;\n}\n\n.credential5-shell { @include credential5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:457",
+    "text": ".dashboard5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:458",
+    "text": "@mixin dataset5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:459",
+    "text": "@each $tone, $value in $device5-tones {\n  .device5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:460",
+    "text": ".document5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:461",
+    "text": "@include media-breakpoint-up(md) {\n  .endpoint5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:462",
+    "text": "$experiment5-gap: $space-4;\n\n@mixin experiment5-layout {\n  display: grid;\n  gap: $experiment5-gap;\n}\n\n.experiment5-shell { @include experiment5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:463",
+    "text": ".feature5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:464",
+    "text": "@mixin feed5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:465",
+    "text": "@each $tone, $value in $gateway5-tones {\n  .gateway5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:466",
+    "text": ".group5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:467",
+    "text": "@include media-breakpoint-up(md) {\n  .identity5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "file",
+    "source": "keyloop:generated:scss:468",
+    "text": "$integration5-gap: $space-4;\n\n@mixin integration5-layout {\n  display: grid;\n  gap: $integration5-gap;\n}\n\n.integration5-shell { @include integration5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:469",
+    "text": ".invite5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:470",
+    "text": "@mixin issue5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:471",
+    "text": "@each $tone, $value in $job5-tones {\n  .job5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:472",
+    "text": ".layout5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:473",
+    "text": "@include media-breakpoint-up(md) {\n  .ledger5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "file",
+    "source": "keyloop:generated:scss:474",
+    "text": "$member5-gap: $space-4;\n\n@mixin member5-layout {\n  display: grid;\n  gap: $member5-gap;\n}\n\n.member5-shell { @include member5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:475",
+    "text": ".metric5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:476",
+    "text": "@mixin module5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:477",
+    "text": "@each $tone, $value in $notice5-tones {\n  .notice5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:478",
+    "text": ".operator5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:479",
+    "text": "@include media-breakpoint-up(md) {\n  .organization5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "file",
+    "source": "keyloop:generated:scss:480",
+    "text": "$package5-gap: $space-4;\n\n@mixin package5-layout {\n  display: grid;\n  gap: $package5-gap;\n}\n\n.package5-shell { @include package5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:481",
+    "text": ".policy5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:482",
+    "text": "@mixin preset5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:483",
+    "text": "@each $tone, $value in $preview5-tones {\n  .preview5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:484",
+    "text": ".product5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:485",
+    "text": "@include media-breakpoint-up(md) {\n  .queue5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "file",
+    "source": "keyloop:generated:scss:486",
+    "text": "$quota5-gap: $space-4;\n\n@mixin quota5-layout {\n  display: grid;\n  gap: $quota5-gap;\n}\n\n.quota5-shell { @include quota5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:487",
+    "text": ".receipt5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:488",
+    "text": "@mixin registry5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:489",
+    "text": "@each $tone, $value in $request5-tones {\n  .request5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:490",
+    "text": ".resource5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:491",
+    "text": "@include media-breakpoint-up(md) {\n  .review5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "file",
+    "source": "keyloop:generated:scss:492",
+    "text": "$role5-gap: $space-4;\n\n@mixin role5-layout {\n  display: grid;\n  gap: $role5-gap;\n}\n\n.role5-shell { @include role5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:493",
+    "text": ".rule5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:494",
+    "text": "@mixin schedule5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:495",
+    "text": "@each $tone, $value in $schema5-tones {\n  .schema5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:496",
+    "text": ".section5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:497",
+    "text": "@include media-breakpoint-up(md) {\n  .segment5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "file",
+    "source": "keyloop:generated:scss:498",
+    "text": "$setting5-gap: $space-4;\n\n@mixin setting5-layout {\n  display: grid;\n  gap: $setting5-gap;\n}\n\n.setting5-shell { @include setting5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:499",
+    "text": ".snapshot5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:500",
+    "text": "@mixin space5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:501",
+    "text": "@each $tone, $value in $stream5-tones {\n  .stream5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:502",
+    "text": ".task5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:503",
+    "text": "@include media-breakpoint-up(md) {\n  .template5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:504",
+    "text": "$thread5-gap: $space-4;\n\n@mixin thread5-layout {\n  display: grid;\n  gap: $thread5-gap;\n}\n\n.thread5-shell { @include thread5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:505",
+    "text": ".transaction5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:506",
+    "text": "@mixin trigger5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:507",
+    "text": "@each $tone, $value in $upload5-tones {\n  .upload5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:508",
+    "text": ".user5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:509",
+    "text": "@include media-breakpoint-up(md) {\n  .variant5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:510",
+    "text": "$vault5-gap: $space-4;\n\n@mixin vault5-layout {\n  display: grid;\n  gap: $vault5-gap;\n}\n\n.vault5-shell { @include vault5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:511",
+    "text": ".version5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:512",
+    "text": "@mixin view5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:513",
+    "text": "@each $tone, $value in $webhook5-tones {\n  .webhook5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:514",
+    "text": ".workflow5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:515",
+    "text": "@include media-breakpoint-up(md) {\n  .zone5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "file",
+    "source": "keyloop:generated:scss:516",
+    "text": "$anchor5-gap: $space-4;\n\n@mixin anchor5-layout {\n  display: grid;\n  gap: $anchor5-gap;\n}\n\n.anchor5-shell { @include anchor5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:517",
+    "text": ".batch5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:518",
+    "text": "@mixin cache5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:519",
+    "text": "@each $tone, $value in $cell5-tones {\n  .cell5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:520",
+    "text": ".delta5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:521",
+    "text": "@include media-breakpoint-up(md) {\n  .entry5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "file",
+    "source": "keyloop:generated:scss:522",
+    "text": "$field5-gap: $space-4;\n\n@mixin field5-layout {\n  display: grid;\n  gap: $field5-gap;\n}\n\n.field5-shell { @include field5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:523",
+    "text": ".filter5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:524",
+    "text": "@mixin handle5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:525",
+    "text": "@each $tone, $value in $index5-tones {\n  .index5-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:526",
+    "text": ".journey5-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:527",
+    "text": "@include media-breakpoint-up(md) {\n  .kernel5-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "file",
+    "source": "keyloop:generated:scss:528",
+    "text": "$layer5-gap: $space-4;\n\n@mixin layer5-layout {\n  display: grid;\n  gap: $layer5-gap;\n}\n\n.layer5-shell { @include layer5-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:529",
+    "text": ".matrix5-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:530",
+    "text": "@mixin node5-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:531",
+    "text": "@each $tone, $value in $profile6-tones {\n  .profile6-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:532",
+    "text": ".session6-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:533",
+    "text": "@include media-breakpoint-up(md) {\n  .invoice6-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "file",
+    "source": "keyloop:generated:scss:534",
+    "text": "$wallet6-gap: $space-4;\n\n@mixin wallet6-layout {\n  display: grid;\n  gap: $wallet6-gap;\n}\n\n.wallet6-shell { @include wallet6-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:535",
+    "text": ".message6-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:536",
+    "text": "@mixin project6-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:537",
+    "text": "@each $tone, $value in $comment6-tones {\n  .comment6-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:538",
+    "text": ".notification6-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:539",
+    "text": "@include media-breakpoint-up(md) {\n  .preference6-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "file",
+    "source": "keyloop:generated:scss:540",
+    "text": "$workspace6-gap: $space-4;\n\n@mixin workspace6-layout {\n  display: grid;\n  gap: $workspace6-gap;\n}\n\n.workspace6-shell { @include workspace6-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:541",
+    "text": ".deployment6-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:542",
+    "text": "@mixin subscription6-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:543",
+    "text": "@each $tone, $value in $payment6-tones {\n  .payment6-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:544",
+    "text": ".account6-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:545",
+    "text": "@include media-breakpoint-up(md) {\n  .draft6-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "file",
+    "source": "keyloop:generated:scss:546",
+    "text": "$activity6-gap: $space-4;\n\n@mixin activity6-layout {\n  display: grid;\n  gap: $activity6-gap;\n}\n\n.activity6-shell { @include activity6-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:547",
+    "text": ".report6-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:548",
+    "text": "@mixin pipeline6-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:549",
+    "text": "@each $tone, $value in $token6-tones {\n  .token6-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:550",
+    "text": ".permission6-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:551",
+    "text": "@include media-breakpoint-up(md) {\n  .contact6-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:552",
+    "text": "$order6-gap: $space-4;\n\n@mixin order6-layout {\n  display: grid;\n  gap: $order6-gap;\n}\n\n.order6-shell { @include order6-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:553",
+    "text": ".ticket6-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:554",
+    "text": "@mixin release6-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:555",
+    "text": "@each $tone, $value in $bundle6-tones {\n  .bundle6-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:556",
+    "text": ".audit6-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:557",
+    "text": "@include media-breakpoint-up(md) {\n  .bookmark6-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:558",
+    "text": "$campaign6-gap: $space-4;\n\n@mixin campaign6-layout {\n  display: grid;\n  gap: $campaign6-gap;\n}\n\n.campaign6-shell { @include campaign6-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:559",
+    "text": ".channel6-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:560",
+    "text": "@mixin checkout6-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:561",
+    "text": "@each $tone, $value in $collection6-tones {\n  .collection6-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:562",
+    "text": ".credential6-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:563",
+    "text": "@include media-breakpoint-up(md) {\n  .dashboard6-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "file",
+    "source": "keyloop:generated:scss:564",
+    "text": "$dataset6-gap: $space-4;\n\n@mixin dataset6-layout {\n  display: grid;\n  gap: $dataset6-gap;\n}\n\n.dataset6-shell { @include dataset6-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:565",
+    "text": ".device6-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:566",
+    "text": "@mixin document6-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:567",
+    "text": "@each $tone, $value in $endpoint6-tones {\n  .endpoint6-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:568",
+    "text": ".experiment6-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:569",
+    "text": "@include media-breakpoint-up(md) {\n  .feature6-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "file",
+    "source": "keyloop:generated:scss:570",
+    "text": "$feed6-gap: $space-4;\n\n@mixin feed6-layout {\n  display: grid;\n  gap: $feed6-gap;\n}\n\n.feed6-shell { @include feed6-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:571",
+    "text": ".gateway6-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "block",
+    "source": "keyloop:generated:scss:572",
+    "text": "@mixin group6-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:573",
+    "text": "@each $tone, $value in $identity6-tones {\n  .identity6-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:574",
+    "text": ".integration6-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:575",
+    "text": "@include media-breakpoint-up(md) {\n  .invite6-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "file",
+    "source": "keyloop:generated:scss:576",
+    "text": "$issue6-gap: $space-4;\n\n@mixin issue6-layout {\n  display: grid;\n  gap: $issue6-gap;\n}\n\n.issue6-shell { @include issue6-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:577",
+    "text": ".job6-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "block",
+    "source": "keyloop:generated:scss:578",
+    "text": "@mixin layout6-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:579",
+    "text": "@each $tone, $value in $ledger6-tones {\n  .ledger6-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:580",
+    "text": ".member6-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:581",
+    "text": "@include media-breakpoint-up(md) {\n  .metric6-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "file",
+    "source": "keyloop:generated:scss:582",
+    "text": "$module6-gap: $space-4;\n\n@mixin module6-layout {\n  display: grid;\n  gap: $module6-gap;\n}\n\n.module6-shell { @include module6-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:583",
+    "text": ".notice6-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:584",
+    "text": "@mixin operator6-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:585",
+    "text": "@each $tone, $value in $organization6-tones {\n  .organization6-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-components",
+    "level": "block",
+    "source": "keyloop:generated:scss:586",
+    "text": ".package6-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "storybook-kit",
+    "level": "block",
+    "source": "keyloop:generated:scss:587",
+    "text": "@include media-breakpoint-up(md) {\n  .policy6-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-forms",
+    "level": "file",
+    "source": "keyloop:generated:scss:588",
+    "text": "$preset6-gap: $space-4;\n\n@mixin preset6-layout {\n  display: grid;\n  gap: $preset6-gap;\n}\n\n.preset6-shell { @include preset6-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-layout",
+    "level": "block",
+    "source": "keyloop:generated:scss:589",
+    "text": ".preview6-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:590",
+    "text": "@mixin product6-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "pattern-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:591",
+    "text": "@each $tone, $value in $queue6-tones {\n  .queue6-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-grid",
+    "level": "block",
+    "source": "keyloop:generated:scss:592",
+    "text": ".quota6-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-design-system",
+    "level": "block",
+    "source": "keyloop:generated:scss:593",
+    "text": "@include media-breakpoint-up(md) {\n  .receipt6-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-foundation",
+    "level": "file",
+    "source": "keyloop:generated:scss:594",
+    "text": "$registry6-gap: $space-4;\n\n@mixin registry6-layout {\n  display: grid;\n  gap: $registry6-gap;\n}\n\n.registry6-shell { @include registry6-layout; }"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "component-library",
+    "level": "block",
+    "source": "keyloop:generated:scss:595",
+    "text": ".request6-card {\n  padding: $space-4;\n  border: 1px solid $border-subtle;\n  &__title {\n    font-weight: 600;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-dashboard",
+    "level": "block",
+    "source": "keyloop:generated:scss:596",
+    "text": "@mixin resource6-focus-ring($color) {\n  outline: 2px solid $color;\n  outline-offset: 2px;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "scss",
+    "project": "scss-theme",
+    "level": "block",
+    "source": "keyloop:generated:scss:597",
+    "text": "@each $tone, $value in $review6-tones {\n  .review6-badge--#{$tone} {\n    background-color: $value;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "sass",
+    "project": "sass-toolkit",
+    "level": "block",
+    "source": "keyloop:generated:scss:598",
+    "text": ".role6-stack {\n  display: flex;\n  flex-direction: column;\n  gap: $space-3;\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "design-system",
+    "project": "token-pipeline",
+    "level": "block",
+    "source": "keyloop:generated:scss:599",
+    "text": "@include media-breakpoint-up(md) {\n  .rule6-shell {\n    grid-template-columns: 16rem 1fr;\n  }\n}"
+  },
+  {
+    "language": "scss",
+    "framework": "bootstrap",
+    "project": "bootstrap-theme",
+    "level": "file",
+    "source": "keyloop:generated:scss:600",
+    "text": "$schedule6-gap: $space-4;\n\n@mixin schedule6-layout {\n  display: grid;\n  gap: $schedule6-gap;\n}\n\n.schedule6-shell { @include schedule6-layout; }"
   }
 ]

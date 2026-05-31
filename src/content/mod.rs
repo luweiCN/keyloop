@@ -345,6 +345,7 @@ fn build_lesson(
         LessonKind::CodeBlock => (
             3,
             build_code_lesson_target(
+                context.records,
                 context.repo,
                 context.plan,
                 context.library,
@@ -739,12 +740,14 @@ fn unique_line_items(items: impl IntoIterator<Item = String>) -> String {
 }
 
 fn build_code_lesson_target(
+    records: &[&SessionRecord],
     repo: Option<&Path>,
     plan: &PracticePlan,
     library: &ContentLibrary,
     code_config: &CodePracticeConfig,
     excluded_code_texts: &HashSet<String>,
 ) -> Result<PracticeTarget> {
+    let difficulty = code_difficulty_for_records(records);
     let (snippets, scan_error) = match repo {
         Some(repo) => match extract_snippets(repo) {
             Ok(snippets) => (snippets, None),
@@ -752,21 +755,23 @@ fn build_code_lesson_target(
         },
         None => (Vec::new(), None),
     };
-    let mut picked = snippets::pick_code_snippets_excluding(
+    let mut picked = snippets::pick_code_snippets_excluding_by_difficulty(
         &snippets,
         &plan.focus_code,
         code_config,
         3,
         excluded_code_texts,
+        difficulty,
     );
     let repo_count = picked.len();
     if picked.len() < 3 {
-        for fallback in snippets::pick_builtin_code_excluding(
+        for fallback in snippets::pick_builtin_code_excluding_by_difficulty(
             &library.code_snippets,
             &plan.focus_code,
             code_config,
             3 - picked.len(),
             excluded_code_texts,
+            difficulty,
         ) {
             if !picked.iter().any(|snippet| snippet.text == fallback.text) {
                 picked.push(fallback);
@@ -797,12 +802,13 @@ fn build_code_lesson_target(
         });
     }
 
-    let mut picked = snippets::pick_builtin_code_excluding(
+    let mut picked = snippets::pick_builtin_code_excluding_by_difficulty(
         &library.code_snippets,
         &plan.focus_code,
         code_config,
         4,
         excluded_code_texts,
+        difficulty,
     );
     if picked.len() < 4 {
         for fallback in snippets::pick_builtin_code(
@@ -833,12 +839,14 @@ pub fn build_code_specialist_target(
 ) -> Result<PracticeTarget> {
     let library = library::load()?;
     let used = used_code_snippet_texts(records);
-    let mut picked = snippets::pick_builtin_code_excluding(
+    let difficulty = code_difficulty_for_records(records);
+    let mut picked = snippets::pick_builtin_code_excluding_by_difficulty(
         &library.code_snippets,
         &[],
         code_config,
         count,
         &used,
+        difficulty,
     );
 
     if picked.len() < count {
@@ -878,6 +886,55 @@ fn used_code_snippet_texts(records: &[&SessionRecord]) -> HashSet<String> {
         .filter(|snippet| !snippet.is_empty())
         .map(ToOwned::to_owned)
         .collect()
+}
+
+fn code_difficulty_for_records(records: &[&SessionRecord]) -> Option<&'static str> {
+    let code_records = records
+        .iter()
+        .copied()
+        .filter(|record| record.mode == Mode::Code && record.typed_len > 0)
+        .collect::<Vec<_>>();
+    if code_records.is_empty() {
+        return None;
+    }
+
+    let total_typed = code_records
+        .iter()
+        .map(|record| record.typed_len.max(record.target_len))
+        .sum::<usize>();
+    let total_errors = code_records
+        .iter()
+        .map(|record| record.error_count as usize)
+        .sum::<usize>();
+    let weighted_accuracy = code_records
+        .iter()
+        .map(|record| record.accuracy * record.typed_len.max(1) as f64)
+        .sum::<f64>()
+        / code_records
+            .iter()
+            .map(|record| record.typed_len.max(1) as f64)
+            .sum::<f64>();
+    let weighted_wpm = code_records
+        .iter()
+        .map(|record| record.wpm * record.duration_ms.max(1) as f64)
+        .sum::<f64>()
+        / code_records
+            .iter()
+            .map(|record| record.duration_ms.max(1) as f64)
+            .sum::<f64>();
+    let error_rate = if total_typed == 0 {
+        0.0
+    } else {
+        total_errors as f64 / total_typed as f64 * 100.0
+    };
+
+    if weighted_accuracy >= 97.0 && weighted_wpm >= 24.0 && error_rate <= 3.0 {
+        Some("hard")
+    } else if weighted_accuracy >= 94.0 && weighted_wpm >= 16.0 && error_rate <= 6.0 {
+        Some("medium")
+    } else {
+        Some("easy")
+    }
 }
 
 fn used_foundation_lines(records: &[&SessionRecord], drill_id: &str) -> HashSet<String> {
@@ -1047,7 +1104,7 @@ mod tests {
     }
 
     #[test]
-    fn code_corpus_has_enough_language_and_framework_targets() {
+    fn code_corpus_has_enough_language_framework_and_level_targets() {
         let library = library::load().expect("content json should load");
         for language in [
             "typescript",
@@ -1066,6 +1123,33 @@ mod tests {
                 .filter(|snippet| snippet.language == language)
                 .count();
             assert!(count >= 120, "{language} has only {count} snippets");
+        }
+
+        let frameworks = library
+            .code_snippets
+            .iter()
+            .map(|snippet| snippet.framework.as_str())
+            .collect::<HashSet<_>>();
+        for framework in frameworks {
+            let count = library
+                .code_snippets
+                .iter()
+                .filter(|snippet| snippet.framework == framework)
+                .count();
+            assert!(count >= 100, "{framework} has only {count} snippets");
+        }
+
+        for level in [
+            snippets::CodeSnippetLevel::Block,
+            snippets::CodeSnippetLevel::Function,
+            snippets::CodeSnippetLevel::File,
+        ] {
+            let count = library
+                .code_snippets
+                .iter()
+                .filter(|snippet| snippet.level == level)
+                .count();
+            assert!(count >= 100, "{} has only {count} snippets", level.as_str());
         }
 
         let react_config = CodePracticeConfig {
@@ -1093,6 +1177,50 @@ mod tests {
                 .iter()
                 .all(|snippet| snippet.language.eq_ignore_ascii_case("solidity"))
         );
+    }
+
+    #[test]
+    fn code_difficulty_follows_recent_code_performance() {
+        let strong = SessionRecord {
+            mode: Mode::Code,
+            typed_len: 240,
+            target_len: 240,
+            accuracy: 98.0,
+            wpm: 28.0,
+            error_count: 2,
+            duration_ms: 120_000,
+            ..SessionRecord::default()
+        };
+        let weak = SessionRecord {
+            mode: Mode::Code,
+            typed_len: 100,
+            target_len: 120,
+            accuracy: 88.0,
+            wpm: 8.0,
+            error_count: 20,
+            duration_ms: 120_000,
+            ..SessionRecord::default()
+        };
+
+        assert_eq!(code_difficulty_for_records(&[&strong]), Some("hard"));
+        assert_eq!(code_difficulty_for_records(&[&weak]), Some("easy"));
+        assert_eq!(code_difficulty_for_records(&[]), None);
+    }
+
+    #[test]
+    fn builtin_picker_can_filter_by_difficulty() {
+        let library = library::load().expect("content json should load");
+        let picked = snippets::pick_builtin_code_excluding_by_difficulty(
+            &library.code_snippets,
+            &[],
+            &CodePracticeConfig::default(),
+            8,
+            &HashSet::new(),
+            Some("hard"),
+        );
+
+        assert_eq!(picked.len(), 8);
+        assert!(picked.iter().all(|snippet| snippet.difficulty == "hard"));
     }
 
     #[test]
