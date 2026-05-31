@@ -18,6 +18,7 @@ KeyLoop 是一个面向程序员的终端打字训练工具。它关注真实开
 
 ```text
 ~/.keyloop/sessions.jsonl
+~/.keyloop/preferences.json
 ```
 
 可以用 `KEYLOOP_HOME` 改存储位置。
@@ -104,7 +105,7 @@ cargo run -- plan
 - 综合练习：按今日动态计划练完所有组，计划会跟随错误热区变化。
 - 基础练习：按 Home row、Top row、Bottom row、横向、竖向、手指移动等专项连续练基础键位。
 - 单项练习：只选择其中一个步骤针对性练习。
-- 代码专项：在 TUI 里多选语言、框架或项目，例如同时练 `typescript`、`nestjs` 和 `solidity`；每组完成后按 Enter 会继续生成下一组代码。
+- 代码专项：在 TUI 里多选语言、框架或项目，例如同时练 `typescript`、`nestjs` 和 `solidity`；选过或置顶的过滤项会排在列表顶部，每组完成后按 Enter 会继续生成下一组代码。
 - 数据统计：查看累计总时长、历史最高 WPM、平均正确率、最低错误率、错词/错键热区，并提示下一次综合训练会优先补什么。
 
 ## 内容方向
@@ -146,9 +147,10 @@ KeyLoop 不上传练习数据。默认只写入本机：
 
 ```text
 ~/.keyloop/sessions.jsonl
+~/.keyloop/preferences.json
 ```
 
-记录里会包含目标文本、最终输入、按键事件、错误字符和 token 统计。用 `KEYLOOP_HOME=/path/to/dir` 可以切换数据目录。
+练习记录会包含目标文本、最终输入、按键事件、错误字符和 token 统计；偏好记录会保存代码专项里置顶的语言、框架和项目过滤项。用 `KEYLOOP_HOME=/path/to/dir` 可以切换数据目录。
 
 功能规划见 [docs/ROADMAP.md](docs/ROADMAP.md)。
 
