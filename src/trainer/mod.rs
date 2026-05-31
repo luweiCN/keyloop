@@ -57,6 +57,13 @@ enum StatsView {
     Details,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum LessonStatus {
+    Done,
+    Current,
+    Pending,
+}
+
 struct App {
     phase: Phase,
     language: Language,
@@ -407,11 +414,10 @@ impl App {
             user_input,
             self.events.clone(),
         );
-        record.daily_run_id = self.plan.run_id.clone();
-        if !self.foundation_active
-            && !self.code_specialist_active
+        if self.is_comprehensive_active()
             && let Some(lesson) = self.current_lesson()
         {
+            record.daily_run_id = self.plan.run_id.clone();
             record.lesson_id = lesson.id.clone();
             record.lesson_index = Some(self.lesson_index);
         }
@@ -424,8 +430,7 @@ impl App {
             return;
         };
         self.completed_records.push(record);
-        if !self.foundation_active
-            && !self.code_specialist_active
+        if self.is_comprehensive_active()
             && self.lesson_index < self.plan.lessons.len()
             && !self.completed_lesson_indices.contains(&self.lesson_index)
         {
@@ -550,6 +555,10 @@ impl App {
     fn first_pending_lesson_index(&self) -> usize {
         first_pending_lesson_index(&self.plan, &self.completed_lesson_indices)
     }
+
+    fn is_comprehensive_active(&self) -> bool {
+        !self.foundation_active && !self.code_specialist_active && self.single_lesson.is_none()
+    }
 }
 
 fn completed_lesson_indices_from_records(
@@ -560,6 +569,7 @@ fn completed_lesson_indices_from_records(
         let completed_lesson_ids = records
             .iter()
             .filter(|record| record.daily_run_id == plan.run_id)
+            .filter(|record| !record.lesson_id.trim().is_empty())
             .filter(|record| record.completion_state == CompletionState::Completed)
             .map(|record| record.lesson_id.as_str())
             .collect::<std::collections::HashSet<_>>();
@@ -903,15 +913,16 @@ fn handle_complete_key(app: &mut App, code: KeyCode) {
         KeyCode::Enter => app.begin_next(),
         KeyCode::Char('r') | KeyCode::Char('R') => app.repeat_current(),
         KeyCode::Char('l') | KeyCode::Char('L') => app.language = app.language.toggle(),
-        KeyCode::Esc | KeyCode::Char('q') => app.quit = true,
+        KeyCode::Esc => app.reset_to_menu(),
+        KeyCode::Char('q') | KeyCode::Char('Q') => app.quit = true,
         _ => {}
     }
 }
 
 fn handle_summary_key(app: &mut App, code: KeyCode) {
     match code {
-        KeyCode::Enter => app.reset_to_menu(),
-        KeyCode::Esc | KeyCode::Char('q') => app.quit = true,
+        KeyCode::Enter | KeyCode::Esc => app.reset_to_menu(),
+        KeyCode::Char('q') | KeyCode::Char('Q') => app.quit = true,
         KeyCode::Char('l') | KeyCode::Char('L') => app.language = app.language.toggle(),
         _ => {}
     }
@@ -1136,6 +1147,36 @@ fn menu_line(
     ])
 }
 
+fn lesson_status(app: &App, index: usize) -> LessonStatus {
+    if app.completed_lesson_indices.contains(&index) {
+        LessonStatus::Done
+    } else if index == app.lesson_index && app.single_lesson.is_none() {
+        LessonStatus::Current
+    } else {
+        LessonStatus::Pending
+    }
+}
+
+fn lesson_status_text(status: LessonStatus, language: Language) -> &'static str {
+    match status {
+        LessonStatus::Done => text(language, "done"),
+        LessonStatus::Current => text(language, "current"),
+        LessonStatus::Pending => text(language, "pending"),
+    }
+}
+
+fn lesson_status_style(status: LessonStatus) -> Style {
+    match status {
+        LessonStatus::Done => Style::default()
+            .fg(Color::LightGreen)
+            .add_modifier(Modifier::BOLD),
+        LessonStatus::Current => Style::default()
+            .fg(Color::Yellow)
+            .add_modifier(Modifier::BOLD),
+        LessonStatus::Pending => Style::default().fg(Color::Gray),
+    }
+}
+
 fn render_plan(frame: &mut Frame, area: Rect, app: &App) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
@@ -1143,9 +1184,9 @@ fn render_plan(frame: &mut Frame, area: Rect, app: &App) {
         .constraints([
             Constraint::Length(4),
             Constraint::Length(4),
-            Constraint::Min(8),
-            Constraint::Length(5),
-            Constraint::Length(4),
+            Constraint::Min(7),
+            Constraint::Length(6),
+            Constraint::Length(3),
         ])
         .split(area);
 
@@ -1169,13 +1210,7 @@ fn render_plan(frame: &mut Frame, area: Rect, app: &App) {
         .iter()
         .enumerate()
         .flat_map(|(index, lesson)| {
-            let status = if app.completed_lesson_indices.contains(&index) {
-                text(app.language, "done")
-            } else if index == app.lesson_index {
-                text(app.language, "current")
-            } else {
-                text(app.language, "pending")
-            };
+            let status = lesson_status(app, index);
             let mut lesson_lines = vec![Line::from(vec![
                 Span::styled(
                     format!("{}. ", index + 1),
@@ -1188,7 +1223,10 @@ fn render_plan(frame: &mut Frame, area: Rect, app: &App) {
                         .add_modifier(Modifier::BOLD),
                 ),
                 Span::raw(format!("  {} min  ", lesson.estimated_minutes)),
-                Span::styled(status, Style::default().fg(lesson_color(lesson.kind))),
+                Span::styled(
+                    lesson_status_text(status, app.language),
+                    lesson_status_style(status),
+                ),
             ])];
 
             if !compact_lessons {
@@ -1231,18 +1269,9 @@ fn render_plan(frame: &mut Frame, area: Rect, app: &App) {
 }
 
 fn render_plan_analysis(frame: &mut Frame, area: Rect, app: &App) {
-    let analysis = app
-        .current_lesson()
-        .map(|lesson| {
-            format!(
-                "{}  {}",
-                lesson_title(lesson.kind, app.language),
-                lesson_reason(lesson, app.language)
-            )
-        })
-        .unwrap_or_else(|| text(app.language, "analysis_empty").to_string());
-    let lines = vec![
-        Line::from(vec![
+    let mut lines = Vec::new();
+    if let Some(lesson) = app.current_lesson() {
+        lines.push(Line::from(vec![
             Span::styled(
                 text(app.language, "analysis_current"),
                 Style::default()
@@ -1250,10 +1279,16 @@ fn render_plan_analysis(frame: &mut Frame, area: Rect, app: &App) {
                     .add_modifier(Modifier::BOLD),
             ),
             Span::raw("  "),
-            Span::raw(analysis),
-        ]),
-        Line::from(text(app.language, "analysis_hint")),
-    ];
+            Span::styled(
+                lesson_title(lesson.kind, app.language),
+                Style::default().add_modifier(Modifier::BOLD),
+            ),
+        ]));
+        lines.push(Line::from(lesson_reason(lesson, app.language)));
+    } else {
+        lines.push(Line::from(text(app.language, "analysis_empty")));
+    }
+    lines.push(Line::from(text(app.language, "analysis_hint")));
     frame.render_widget(
         Paragraph::new(lines)
             .block(analysis_block(text(app.language, "analysis_title")))
@@ -1671,7 +1706,8 @@ fn render_running(frame: &mut Frame, area: Rect, app: &App) {
             Constraint::Length(4),
             Constraint::Length(3),
             Constraint::Length(4),
-            Constraint::Min(8),
+            Constraint::Length(4),
+            Constraint::Min(5),
             Constraint::Length(3),
         ])
         .split(area);
@@ -1687,22 +1723,27 @@ fn render_running(frame: &mut Frame, area: Rect, app: &App) {
         centered_width(chunks[1], PRACTICE_PANEL_MAX_WIDTH),
         app,
     );
+    render_lesson_diagnosis(
+        frame,
+        centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH),
+        app,
+    );
     if app.exit_confirm {
         render_exit_confirmation(
             frame,
-            centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH),
+            centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
             app.language,
         );
     } else if app.is_paused() {
         render_pause(
             frame,
-            centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH),
+            centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
             app.language,
         );
     } else {
         render_metrics(
             frame,
-            centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH),
+            centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
             &app.target_chars,
             &app.input,
             &app.events,
@@ -1712,14 +1753,14 @@ fn render_running(frame: &mut Frame, area: Rect, app: &App) {
     }
     render_target(
         frame,
-        centered_width(chunks[3], PRACTICE_PANEL_MAX_WIDTH),
+        centered_width(chunks[4], PRACTICE_PANEL_MAX_WIDTH),
         &app.target_chars,
         &app.input,
         app.language,
     );
     render_progress(
         frame,
-        centered_width(chunks[4], PRACTICE_PANEL_MAX_WIDTH),
+        centered_width(chunks[5], PRACTICE_PANEL_MAX_WIDTH),
         &app.target_chars,
         &app.input,
         app.language,
@@ -2107,7 +2148,11 @@ fn render_lesson_banner(frame: &mut Frame, area: Rect, app: &App) {
             ),
             Span::raw("  "),
             Span::styled(
-                foundation_drill_hint(drill, app.language),
+                format!(
+                    "{} {}",
+                    text(app.language, "lesson"),
+                    app.foundation_group_count.max(1)
+                ),
                 Style::default().fg(Color::Gray),
             ),
         ]);
@@ -2130,7 +2175,12 @@ fn render_lesson_banner(frame: &mut Frame, area: Rect, app: &App) {
         ),
         Span::raw("  "),
         Span::styled(
-            lesson_reason(lesson, app.language),
+            format!(
+                "{} {}/{}",
+                text(app.language, "lesson_progress"),
+                app.lesson_index.min(app.plan.lessons.len()) + 1,
+                app.plan.lessons.len()
+            ),
             Style::default().fg(Color::Gray),
         ),
     ]);
@@ -2138,6 +2188,51 @@ fn render_lesson_banner(frame: &mut Frame, area: Rect, app: &App) {
         Paragraph::new(vec![line]).block(panel_block(text(app.language, "current_lesson"))),
         area,
     );
+}
+
+fn render_lesson_diagnosis(frame: &mut Frame, area: Rect, app: &App) {
+    frame.render_widget(
+        Paragraph::new(current_diagnosis(app))
+            .block(analysis_block(text(app.language, "diagnosis_title")))
+            .wrap(Wrap { trim: false }),
+        area,
+    );
+}
+
+fn current_diagnosis(app: &App) -> String {
+    if app.foundation_active {
+        return app
+            .foundation_drills
+            .get(app.foundation_index)
+            .map(|drill| foundation_drill_hint(drill, app.language).to_string())
+            .unwrap_or_else(|| text(app.language, "diagnosis_empty").to_string());
+    }
+    if app.code_specialist_active {
+        let selected = app.selected_code_labels();
+        if selected.is_empty() {
+            return match app.language {
+                Language::Zh => {
+                    "代码专项使用全部内置代码语料，并尽量避开最近练过的代码块。".to_string()
+                }
+                Language::En => {
+                    "Code focus uses the full corpus and avoids recently practiced snippets."
+                        .to_string()
+                }
+            };
+        }
+        let scope = selected.into_iter().take(6).collect::<Vec<_>>().join(", ");
+        return match app.language {
+            Language::Zh => {
+                format!("代码专项范围：{scope}。会连续生成新代码块，并避开最近练过的内容。")
+            }
+            Language::En => {
+                format!("Code focus scope: {scope}. New groups avoid recently practiced snippets.")
+            }
+        };
+    }
+    app.current_lesson()
+        .map(|lesson| lesson_reason(lesson, app.language))
+        .unwrap_or_else(|| text(app.language, "diagnosis_empty").to_string())
 }
 
 fn render_target(
@@ -3033,6 +3128,72 @@ mod tests {
     }
 
     #[test]
+    fn standalone_foundation_completion_does_not_complete_daily_lesson() {
+        let plan = DailyPracticePlan {
+            run_id: "today-1".to_string(),
+            run_number: 1,
+            target_minutes: 20,
+            completed_ms: 0,
+            lessons: vec![practice_lesson(
+                LessonKind::Foundation,
+                "keyloop:foundation:home-row",
+            )],
+        };
+        let mut app = App::new(
+            plan,
+            Vec::new(),
+            Language::Zh,
+            vec![foundation_drill("home-row")],
+            Vec::new(),
+            UserPreferences::default(),
+        );
+
+        app.phase = Phase::FoundationSetup;
+        handle_foundation_setup_key(&mut app, KeyCode::Enter);
+        app.input = app.target_chars.clone();
+        app.complete();
+
+        assert!(app.completed_lesson_indices.is_empty());
+        let record = app.completed_records.last().expect("foundation record");
+        assert!(record.daily_run_id.is_empty());
+        assert!(record.lesson_id.is_empty());
+        assert_eq!(record.lesson_index, None);
+    }
+
+    #[test]
+    fn standalone_lesson_completion_does_not_complete_comprehensive_plan() {
+        let plan = DailyPracticePlan {
+            run_id: "today-1".to_string(),
+            run_number: 1,
+            target_minutes: 20,
+            completed_ms: 0,
+            lessons: vec![
+                practice_lesson(LessonKind::Foundation, "keyloop:foundation:home-row"),
+                practice_lesson(LessonKind::CodeBlock, "keyloop:code-corpus"),
+            ],
+        };
+        let mut app = App::new(
+            plan,
+            Vec::new(),
+            Language::Zh,
+            Vec::new(),
+            Vec::new(),
+            UserPreferences::default(),
+        );
+
+        app.menu_index = app.lesson_menu_start_index();
+        handle_menu_key(&mut app, KeyCode::Enter);
+        app.input = app.target_chars.clone();
+        app.complete();
+
+        assert!(app.completed_lesson_indices.is_empty());
+        let record = app.completed_records.last().expect("single lesson record");
+        assert!(record.daily_run_id.is_empty());
+        assert!(record.lesson_id.is_empty());
+        assert_eq!(record.lesson_index, None);
+    }
+
+    #[test]
     fn resume_uses_lesson_id_for_repeated_sources() {
         let mut first = practice_lesson(LessonKind::Symbols, "keyloop:symbols");
         first.id = "daily:symbols:1".to_string();
@@ -3161,6 +3322,26 @@ mod tests {
     }
 
     #[test]
+    fn complete_and_summary_escape_return_to_menu_instead_of_quitting() {
+        let mut complete = running_app_with_input();
+        complete.complete();
+
+        handle_complete_key(&mut complete, KeyCode::Esc);
+
+        assert_eq!(complete.phase, Phase::Menu);
+        assert!(!complete.quit);
+        assert_eq!(complete.completed_records.len(), 1);
+
+        let mut summary = empty_app_with_code_options(Vec::new());
+        summary.phase = Phase::Summary;
+
+        handle_summary_key(&mut summary, KeyCode::Esc);
+
+        assert_eq!(summary.phase, Phase::Menu);
+        assert!(!summary.quit);
+    }
+
+    #[test]
     fn active_elapsed_excludes_accumulated_and_current_pause_time() {
         let mut app = running_app_with_input();
         app.started = Some(Instant::now() - Duration::from_secs(60));
@@ -3285,6 +3466,8 @@ mod tests {
 
         let running = running_render_app();
         let running_screen = render_app_to_text(&running, 100, 32);
+        assert!(running_screen.contains("Training diagnosis"));
+        assert!(running_screen.contains("test reason"));
         assert!(running_screen.contains("Ghost text"));
         assert!(running_screen.contains("WPM"));
 

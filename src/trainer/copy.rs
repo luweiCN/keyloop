@@ -119,10 +119,12 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "pending" => "待开始",
             "analysis_title" => "训练依据",
             "analysis_current" => "当前组",
-            "analysis_hint" => "这里展示本轮计划为什么这样安排；菜单只保留稳定入口说明。",
+            "analysis_hint" => "诊断只展示最需要处理的一条原因，避免干扰跟打区域。",
             "analysis_empty" => "暂无当前训练依据。",
+            "diagnosis_title" => "训练诊断",
+            "diagnosis_empty" => "暂无明显弱项，先保持当前节奏。",
             "controls" => "操作",
-            "plan_help" => "Enter：开始今日练习 | L：切换语言 | Esc/Q：退出",
+            "plan_help" => "Enter：开始今日练习 | L：切换语言 | Esc：返回菜单 | Q：退出",
             "daily_goal_hint" => "建议今天练满 20 分钟，可以零碎时间分几次完成。",
             "session_complete" => "本组完成",
             "next_lesson" => "Enter 进入下一组",
@@ -131,8 +133,8 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "next_foundation_group" => "Enter 再来一组基础练习",
             "next_code_group" => "Enter 再来一组代码",
             "finish_today" => "Enter 查看今日总结",
-            "complete_help" => "Enter：继续 | R：重练本组 | L：切换语言 | Esc/Q：保存退出",
-            "summary_help" => "Enter：回到练习菜单 | L：切换语言 | Esc/Q：保存退出",
+            "complete_help" => "Enter：继续 | R：重练本组 | L：切换语言 | Esc：返回菜单 | Q：退出",
+            "summary_help" => "Enter/Esc：回到练习菜单 | L：切换语言 | Q：退出",
             "result_title" => "结果",
             "raw_wpm" => "原始",
             "accuracy" => "正确率",
@@ -213,11 +215,13 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "analysis_title" => "Training rationale",
             "analysis_current" => "Current lesson",
             "analysis_hint" => {
-                "This panel explains why the current plan is scheduled; the menu stays stable."
+                "Diagnosis shows the single most useful reason so the typing area stays focused."
             }
             "analysis_empty" => "No training rationale yet.",
+            "diagnosis_title" => "Training diagnosis",
+            "diagnosis_empty" => "No clear weak spot yet; keep the current pace.",
             "controls" => "Controls",
-            "plan_help" => "Enter: start today's practice | L: language | Esc/Q: quit",
+            "plan_help" => "Enter: start today's practice | L: language | Esc: menu | Q: quit",
             "daily_goal_hint" => "Recommended target is 20 minutes today. Short sessions count.",
             "session_complete" => "Lesson complete",
             "next_lesson" => "Enter for next lesson",
@@ -227,9 +231,9 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "next_code_group" => "Enter for another code group",
             "finish_today" => "Enter for today summary",
             "complete_help" => {
-                "Enter: continue | R: repeat lesson | L: language | Esc/Q: save and exit"
+                "Enter: continue | R: repeat lesson | L: language | Esc: menu | Q: quit"
             }
-            "summary_help" => "Enter: back to practice menu | L: language | Esc/Q: save and exit",
+            "summary_help" => "Enter/Esc: back to practice menu | L: language | Q: quit",
             "result_title" => "Result",
             "raw_wpm" => "raw",
             "accuracy" => "accuracy",
