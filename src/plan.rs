@@ -1,3 +1,4 @@
+use crate::feedback::is_numbered_template_identifier;
 use crate::model::{KeyAction, Language, Mode, SessionRecord, TokenKind};
 use chrono::{Duration, Utc};
 use std::collections::BTreeMap;
@@ -98,6 +99,9 @@ pub fn build_plan(records: &[SessionRecord], language: Language) -> PracticePlan
 
         if record.token_stats.is_empty() {
             for (token, errors) in &record.error_tokens {
+                if is_numbered_template_identifier(token) {
+                    continue;
+                }
                 let aggregate = if is_word_like_token(token) {
                     words.entry(token.clone()).or_default()
                 } else {
@@ -107,6 +111,9 @@ pub fn build_plan(records: &[SessionRecord], language: Language) -> PracticePlan
             }
         } else {
             for stat in &record.token_stats {
+                if is_numbered_template_identifier(&stat.token) {
+                    continue;
+                }
                 let aggregate = match stat.kind {
                     TokenKind::Word => words.entry(stat.token.clone()).or_default(),
                     TokenKind::Symbol => symbols.entry(stat.token.clone()).or_default(),
@@ -348,6 +355,37 @@ mod tests {
 
         assert!(plan.focus_words.contains(&"response".to_string()));
         assert!(plan.focus_symbols.contains(&"=>".to_string()));
+    }
+
+    #[test]
+    fn build_plan_filters_old_numbered_generated_identifiers() {
+        let record = SessionRecord {
+            started_at: Utc::now(),
+            typed_len: 10,
+            accuracy: 80.0,
+            token_stats: vec![
+                crate::model::TokenStat {
+                    token: "transaction5Open".to_string(),
+                    kind: TokenKind::Word,
+                    start_delay_ms: 2_000,
+                    duration_ms: 500,
+                    errors: 5,
+                },
+                crate::model::TokenStat {
+                    token: "response".to_string(),
+                    kind: TokenKind::Word,
+                    start_delay_ms: 500,
+                    duration_ms: 500,
+                    errors: 1,
+                },
+            ],
+            ..SessionRecord::default()
+        };
+
+        let plan = build_plan(&[record], Language::Zh);
+
+        assert!(!plan.focus_words.contains(&"transaction5Open".to_string()));
+        assert!(plan.focus_words.contains(&"response".to_string()));
     }
 
     #[test]

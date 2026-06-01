@@ -1,17 +1,54 @@
 use super::{format_duration_short, format_practice_minutes, text, truncate};
-use crate::model::{KeyAction, Language, SessionRecord};
+use crate::feedback::is_numbered_template_identifier;
+use crate::model::{KeyAction, KeyAggregate, Language, Mode, SessionRecord, TrainingModule};
 use crate::plan::PLAN_HISTORY_DAYS;
 use chrono::{Duration, Local, NaiveDate, Utc};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use std::collections::BTreeMap;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(super) enum KeyStatsSort {
+    SlowestAverage,
+    Fastest,
+    SlowestSingle,
+    HighestErrorRate,
+    LowestConfidence,
+}
+
+impl KeyStatsSort {
+    pub(super) fn next(self) -> Self {
+        match self {
+            KeyStatsSort::SlowestAverage => KeyStatsSort::Fastest,
+            KeyStatsSort::Fastest => KeyStatsSort::SlowestSingle,
+            KeyStatsSort::SlowestSingle => KeyStatsSort::HighestErrorRate,
+            KeyStatsSort::HighestErrorRate => KeyStatsSort::LowestConfidence,
+            KeyStatsSort::LowestConfidence => KeyStatsSort::SlowestAverage,
+        }
+    }
+
+    pub(super) fn label(self, language: Language) -> &'static str {
+        match (language, self) {
+            (Language::Zh, KeyStatsSort::SlowestAverage) => "平均最慢",
+            (Language::Zh, KeyStatsSort::Fastest) => "最快单次",
+            (Language::Zh, KeyStatsSort::SlowestSingle) => "最慢单次",
+            (Language::Zh, KeyStatsSort::HighestErrorRate) => "错误率最高",
+            (Language::Zh, KeyStatsSort::LowestConfidence) => "信心最低",
+            (Language::En, KeyStatsSort::SlowestAverage) => "slowest avg",
+            (Language::En, KeyStatsSort::Fastest) => "fastest",
+            (Language::En, KeyStatsSort::SlowestSingle) => "slowest single",
+            (Language::En, KeyStatsSort::HighestErrorRate) => "highest error",
+            (Language::En, KeyStatsSort::LowestConfidence) => "lowest confidence",
+        }
+    }
+}
+
 fn stats_overview_lines(records: &[&SessionRecord], language: Language) -> Vec<Line<'static>> {
     if records.is_empty() {
         return vec![Line::from(text(language, "stats_empty"))];
     }
 
-    let total_ms = records.iter().map(|record| record.duration_ms).sum::<u64>();
+    let (total_ms, active_ms, idle_ms) = timing_totals(records);
     let dates = stats_dates_from_records(records);
     let best_wpm = records
         .iter()
@@ -47,10 +84,12 @@ fn stats_overview_lines(records: &[&SessionRecord], language: Language) -> Vec<L
     match language {
         Language::Zh => vec![
             Line::from(format!(
-                "总览  {} 次 | {} 天 | 总时长 {}",
+                "总览  {} 次 | {} 天 | 总时长 {} | active {} | idle {}",
                 records.len(),
                 dates.len(),
-                format_duration_short(total_ms, language)
+                format_duration_short(total_ms, language),
+                format_duration_short(active_ms, language),
+                format_duration_short(idle_ms, language)
             )),
             Line::from(format!(
                 "速度  历史最高 WPM {best_wpm:.1} | 平均 WPM {avg_wpm:.1}"
@@ -75,10 +114,12 @@ fn stats_overview_lines(records: &[&SessionRecord], language: Language) -> Vec<L
         ],
         Language::En => vec![
             Line::from(format!(
-                "Overview  {} sessions | {} days | total {}",
+                "Overview  {} sessions | {} days | total {} | active {} | idle {}",
                 records.len(),
                 dates.len(),
-                format_duration_short(total_ms, language)
+                format_duration_short(total_ms, language),
+                format_duration_short(active_ms, language),
+                format_duration_short(idle_ms, language)
             )),
             Line::from(format!(
                 "Speed  best WPM {best_wpm:.1} | average WPM {avg_wpm:.1}"
@@ -135,7 +176,7 @@ fn compact_stats_dashboard_lines(
     max_lines: usize,
     language: Language,
 ) -> Vec<Line<'static>> {
-    let total_ms = records.iter().map(|record| record.duration_ms).sum::<u64>();
+    let (total_ms, active_ms, idle_ms) = timing_totals(records);
     let dates = stats_dates_from_records(records);
     let best_wpm = records
         .iter()
@@ -162,10 +203,12 @@ fn compact_stats_dashboard_lines(
                 &mut lines,
                 max_lines,
                 Line::from(format!(
-                    "总览  {} 次 | {} 天 | 总时长 {}",
+                    "总览  {} 次 | {} 天 | 总时长 {} | active {} | idle {}",
                     records.len(),
                     dates.len(),
-                    format_duration_short(total_ms, language)
+                    format_duration_short(total_ms, language),
+                    format_duration_short(active_ms, language),
+                    format_duration_short(idle_ms, language)
                 )),
             );
             push_stats_line(
@@ -193,10 +236,12 @@ fn compact_stats_dashboard_lines(
                 &mut lines,
                 max_lines,
                 Line::from(format!(
-                    "Overview  {} sessions | {} days | total {}",
+                    "Overview  {} sessions | {} days | total {} | active {} | idle {}",
                     records.len(),
                     dates.len(),
-                    format_duration_short(total_ms, language)
+                    format_duration_short(total_ms, language),
+                    format_duration_short(active_ms, language),
+                    format_duration_short(idle_ms, language)
                 )),
             );
             push_stats_line(
@@ -461,6 +506,386 @@ fn recent_plan_records<'a>(records: &[&'a SessionRecord]) -> Vec<&'a SessionReco
         .collect()
 }
 
+pub(super) fn stats_today_lines(
+    records: &[&SessionRecord],
+    max_lines: usize,
+    language: Language,
+) -> Vec<Line<'static>> {
+    let today = Local::now().date_naive();
+    let todays_records = records
+        .iter()
+        .copied()
+        .filter(|record| record.started_at.with_timezone(&Local).date_naive() == today)
+        .collect::<Vec<_>>();
+    if todays_records.is_empty() {
+        return vec![Line::from(text(language, "stats_empty_day"))];
+    }
+
+    let comprehensive = todays_records
+        .iter()
+        .copied()
+        .filter(|record| is_comprehensive_record(record))
+        .collect::<Vec<_>>();
+    let standalone = todays_records
+        .iter()
+        .copied()
+        .filter(|record| !is_comprehensive_record(record))
+        .collect::<Vec<_>>();
+
+    let mut lines = Vec::new();
+    push_stats_line(
+        &mut lines,
+        max_lines,
+        Line::from(match language {
+            Language::Zh => format!("今日 {} 次练习", todays_records.len()),
+            Language::En => format!("Today {} sessions", todays_records.len()),
+        }),
+    );
+    push_stats_line(
+        &mut lines,
+        max_lines,
+        scope_summary_line(
+            match language {
+                Language::Zh => "综合练习",
+                Language::En => "Full practice",
+            },
+            &comprehensive,
+            language,
+        ),
+    );
+    push_stats_line(
+        &mut lines,
+        max_lines,
+        scope_summary_line(
+            match language {
+                Language::Zh => "专项练习",
+                Language::En => "Standalone",
+            },
+            &standalone,
+            language,
+        ),
+    );
+    push_stats_line(&mut lines, max_lines, Line::from(""));
+    push_stats_line(
+        &mut lines,
+        max_lines,
+        compact_diagnosis_line(
+            match language {
+                Language::Zh => "错词",
+                Language::En => "Words",
+            },
+            Color::LightRed,
+            compact_problem_text(top_problem_tokens(&todays_records, true, 3), language),
+        ),
+    );
+    push_stats_line(
+        &mut lines,
+        max_lines,
+        compact_diagnosis_line(
+            match language {
+                Language::Zh => "键位",
+                Language::En => "Keys",
+            },
+            Color::Yellow,
+            compact_key_text(top_key_errors(&todays_records, 4), language),
+        ),
+    );
+    lines
+}
+
+pub(super) fn stats_comprehensive_lines(
+    records: &[&SessionRecord],
+    max_lines: usize,
+    language: Language,
+) -> Vec<Line<'static>> {
+    let mut runs = BTreeMap::<String, Vec<&SessionRecord>>::new();
+    for record in records
+        .iter()
+        .copied()
+        .filter(|record| is_comprehensive_record(record))
+    {
+        runs.entry(record.daily_run_id.clone())
+            .or_default()
+            .push(record);
+    }
+    if runs.is_empty() {
+        return vec![Line::from(match language {
+            Language::Zh => "还没有综合练习记录。",
+            Language::En => "No full practice runs yet.",
+        })];
+    }
+
+    let mut entries = runs.into_iter().collect::<Vec<_>>();
+    entries.sort_by_key(|(_, records)| std::cmp::Reverse(latest_started_at(records)));
+
+    let mut lines = Vec::new();
+    push_stats_line(
+        &mut lines,
+        max_lines,
+        Line::from(match language {
+            Language::Zh => "综合练习运行",
+            Language::En => "Full practice runs",
+        }),
+    );
+    for (run_id, run_records) in entries {
+        let modules = run_records
+            .iter()
+            .map(|record| record.module)
+            .collect::<std::collections::BTreeSet<_>>()
+            .len();
+        let active_ms = run_records
+            .iter()
+            .map(|record| effective_active_ms(record))
+            .sum::<u64>();
+        let avg_wpm = aggregate_wpm(&run_records);
+        push_stats_line(
+            &mut lines,
+            max_lines,
+            Line::from(match language {
+                Language::Zh => format!(
+                    "{}  {} 组 | {} 模块 | active {} | WPM {:.1}",
+                    truncate(&run_id, 18),
+                    run_records.len(),
+                    modules,
+                    format_duration_short(active_ms, language),
+                    avg_wpm
+                ),
+                Language::En => format!(
+                    "{}  {} groups | {} modules | active {} | WPM {:.1}",
+                    truncate(&run_id, 18),
+                    run_records.len(),
+                    modules,
+                    format_duration_short(active_ms, language),
+                    avg_wpm
+                ),
+            }),
+        );
+    }
+    lines
+}
+
+pub(super) fn stats_module_lines(
+    records: &[&SessionRecord],
+    max_lines: usize,
+    language: Language,
+) -> Vec<Line<'static>> {
+    let mut by_module = BTreeMap::<TrainingModule, Vec<&SessionRecord>>::new();
+    for record in records.iter().copied() {
+        by_module.entry(record.module).or_default().push(record);
+    }
+    if by_module.is_empty() {
+        return vec![Line::from(text(language, "stats_empty"))];
+    }
+
+    let mut summaries = by_module
+        .into_iter()
+        .map(|(module, records)| ModuleSummary::from_records(module, records))
+        .collect::<Vec<_>>();
+    summaries.sort_by(|left, right| {
+        right
+            .error_rate
+            .partial_cmp(&left.error_rate)
+            .unwrap_or(std::cmp::Ordering::Equal)
+            .then_with(|| left.module.cmp(&right.module))
+    });
+
+    let driver = summaries.first().cloned();
+    let mut lines = Vec::new();
+    if let Some(driver) = driver {
+        push_stats_line(
+            &mut lines,
+            max_lines,
+            Line::from(match language {
+                Language::Zh => format!(
+                    "下一轮驱动  {} | 错误率 {:.1}% | 正确率 {:.1}%",
+                    module_label(driver.module, language),
+                    driver.error_rate,
+                    driver.accuracy
+                ),
+                Language::En => format!(
+                    "Next driver  {} | error {:.1}% | accuracy {:.1}%",
+                    module_label(driver.module, language),
+                    driver.error_rate,
+                    driver.accuracy
+                ),
+            }),
+        );
+    }
+    push_stats_line(&mut lines, max_lines, Line::from(""));
+    for summary in summaries {
+        push_stats_line(
+            &mut lines,
+            max_lines,
+            Line::from(match language {
+                Language::Zh => format!(
+                    "{}  {} 次 | active {} | WPM {:.1} | 错误率 {:.1}%",
+                    module_label(summary.module, language),
+                    summary.count,
+                    format_duration_short(summary.active_ms, language),
+                    summary.wpm,
+                    summary.error_rate
+                ),
+                Language::En => format!(
+                    "{}  {} sessions | active {} | WPM {:.1} | error {:.1}%",
+                    module_label(summary.module, language),
+                    summary.count,
+                    format_duration_short(summary.active_ms, language),
+                    summary.wpm,
+                    summary.error_rate
+                ),
+            }),
+        );
+    }
+    lines
+}
+
+pub(super) fn stats_token_lines(
+    records: &[&SessionRecord],
+    max_lines: usize,
+    language: Language,
+) -> Vec<Line<'static>> {
+    let mut lines = Vec::new();
+    push_stats_line(
+        &mut lines,
+        max_lines,
+        Line::from(match language {
+            Language::Zh => "Token 统计",
+            Language::En => "Token stats",
+        }),
+    );
+    append_problem_bars(
+        &mut lines,
+        max_lines,
+        text(language, "stats_error_words"),
+        top_problem_tokens(records, true, 4),
+        language,
+    );
+    append_problem_bars(
+        &mut lines,
+        max_lines,
+        text(language, "stats_error_symbols"),
+        top_problem_tokens(records, false, 4),
+        language,
+    );
+    append_slow_bars(
+        &mut lines,
+        max_lines,
+        text(language, "stats_slow_tokens"),
+        top_slow_tokens(records, 4),
+        language,
+    );
+    lines
+}
+
+pub(super) fn stats_code_lines(
+    records: &[&SessionRecord],
+    max_lines: usize,
+    language: Language,
+) -> Vec<Line<'static>> {
+    let code_records = records
+        .iter()
+        .copied()
+        .filter(|record| record.mode == Mode::Code || record.module == TrainingModule::CodePractice)
+        .collect::<Vec<_>>();
+    if code_records.is_empty() {
+        return vec![Line::from(match language {
+            Language::Zh => "还没有代码实战记录。",
+            Language::En => "No code practice records yet.",
+        })];
+    }
+
+    let mut lines = Vec::new();
+    push_stats_line(
+        &mut lines,
+        max_lines,
+        scope_summary_line(
+            match language {
+                Language::Zh => "代码实战",
+                Language::En => "Code practice",
+            },
+            &code_records,
+            language,
+        ),
+    );
+    push_stats_line(
+        &mut lines,
+        max_lines,
+        compact_diagnosis_line(
+            match language {
+                Language::Zh => "符号",
+                Language::En => "Symbols",
+            },
+            Color::Yellow,
+            compact_problem_text(top_problem_tokens(&code_records, false, 5), language),
+        ),
+    );
+    push_stats_line(
+        &mut lines,
+        max_lines,
+        compact_diagnosis_line(
+            match language {
+                Language::Zh => "慢项",
+                Language::En => "Slow",
+            },
+            Color::LightBlue,
+            compact_slow_text(top_slow_tokens(&code_records, 4), language),
+        ),
+    );
+    lines
+}
+
+pub(super) fn key_stats_lines(
+    aggregates: &[KeyAggregate],
+    sort: KeyStatsSort,
+    max_lines: usize,
+    language: Language,
+) -> Vec<Line<'static>> {
+    if aggregates.is_empty() {
+        return vec![Line::from(match language {
+            Language::Zh => "还没有键位统计。完成练习后这里会显示每个按键的速度和错误率。",
+            Language::En => "No key stats yet. Complete practice to collect per-key timing.",
+        })];
+    }
+
+    let mut entries = aggregates.to_vec();
+    entries.sort_by(|left, right| compare_key_aggregate(left, right, sort));
+
+    let mut lines = Vec::new();
+    push_stats_line(
+        &mut lines,
+        max_lines,
+        Line::from(match language {
+            Language::Zh => format!("键位统计  排序: {}", sort.label(language)),
+            Language::En => format!("Key stats  sort: {}", sort.label(language)),
+        }),
+    );
+    push_stats_line(
+        &mut lines,
+        max_lines,
+        Line::from(match language {
+            Language::Zh => "key        samples  avg   fast  slow  err   conf",
+            Language::En => "key        samples  avg   fast  slow  err   conf",
+        }),
+    );
+    for aggregate in entries {
+        push_stats_line(
+            &mut lines,
+            max_lines,
+            Line::from(format!(
+                "{:<10} {:>7} {:>4.0} {:>5} {:>5} {:>4.0}% {:>5.2}",
+                truncate(&aggregate.key, 10),
+                aggregate.sample_count,
+                aggregate.avg_ms,
+                aggregate.fastest_ms,
+                aggregate.slowest_ms,
+                aggregate.error_rate,
+                aggregate.confidence
+            )),
+        );
+    }
+    lines
+}
+
 pub(super) fn stats_day_lines(
     date: NaiveDate,
     index: usize,
@@ -473,7 +898,7 @@ pub(super) fn stats_day_lines(
         return vec![Line::from(text(language, "stats_empty_day"))];
     }
 
-    let total_ms = records.iter().map(|record| record.duration_ms).sum::<u64>();
+    let (total_ms, active_ms, idle_ms) = timing_totals(records);
     let best_wpm = records
         .iter()
         .map(|record| record.wpm)
@@ -485,7 +910,7 @@ pub(super) fn stats_day_lines(
         .iter()
         .map(|record| record.backspace_count)
         .sum::<u32>();
-    let minutes = total_ms as f64 / 60_000.0;
+    let minutes = active_ms as f64 / 60_000.0;
     let bar = minute_bar(minutes, 20.0, 18);
     let day_words = compact_problem_text(top_problem_tokens(records, true, 2), language);
     let day_keys = compact_key_text(top_key_errors(records, 4), language);
@@ -495,9 +920,11 @@ pub(super) fn stats_day_lines(
             Language::Zh => vec![
                 Line::from(format!("日期 {date} ({}/{})", index + 1, total_dates)),
                 Line::from(format!(
-                    "{} 次 | {} | {} / 20 min",
+                    "{} 次 | {} | active {} | idle {} | {} / 20 min",
                     records.len(),
                     format_duration_short(total_ms, language),
+                    format_duration_short(active_ms, language),
+                    format_duration_short(idle_ms, language),
                     format_practice_minutes(total_ms)
                 )),
                 Line::from(format!("WPM 最高 {best_wpm:.1} | 平均 {avg_wpm:.1}")),
@@ -516,9 +943,11 @@ pub(super) fn stats_day_lines(
             Language::En => vec![
                 Line::from(format!("Date {date} ({}/{})", index + 1, total_dates)),
                 Line::from(format!(
-                    "{} sessions | {} | {} / 20 min",
+                    "{} sessions | {} | active {} | idle {} | {} / 20 min",
                     records.len(),
                     format_duration_short(total_ms, language),
+                    format_duration_short(active_ms, language),
+                    format_duration_short(idle_ms, language),
                     format_practice_minutes(total_ms)
                 )),
                 Line::from(format!("WPM best {best_wpm:.1} | avg {avg_wpm:.1}")),
@@ -546,9 +975,11 @@ pub(super) fn stats_day_lines(
                 total_dates
             )),
             Line::from(format!(
-                "当天 {} 次 | {} | 最高 WPM {best_wpm:.1} | 平均 WPM {avg_wpm:.1} | 正确率 {avg_accuracy:.1}%",
+                "当天 {} 次 | {} | active {} | idle {} | 最高 WPM {best_wpm:.1} | 平均 WPM {avg_wpm:.1} | 正确率 {avg_accuracy:.1}%",
                 records.len(),
-                format_duration_short(total_ms, language)
+                format_duration_short(total_ms, language),
+                format_duration_short(active_ms, language),
+                format_duration_short(idle_ms, language)
             )),
             Line::from(format!(
                 "进度 [{bar}] {minutes:.1} / 20 min | 错误 {error_count} | 退格 {backspace_count}"
@@ -570,9 +1001,11 @@ pub(super) fn stats_day_lines(
                 total_dates
             )),
             Line::from(format!(
-                "Day {} sessions | {} | best WPM {best_wpm:.1} | avg WPM {avg_wpm:.1} | accuracy {avg_accuracy:.1}%",
+                "Day {} sessions | {} | active {} | idle {} | best WPM {best_wpm:.1} | avg WPM {avg_wpm:.1} | accuracy {avg_accuracy:.1}%",
                 records.len(),
-                format_duration_short(total_ms, language)
+                format_duration_short(total_ms, language),
+                format_duration_short(active_ms, language),
+                format_duration_short(idle_ms, language)
             )),
             Line::from(format!(
                 "Target [{bar}] {minutes:.1} / 20 min | errors {error_count} | backspace {backspace_count}"
@@ -602,6 +1035,131 @@ pub(super) fn stats_day_lines(
     }
 
     lines
+}
+
+#[derive(Clone)]
+struct ModuleSummary {
+    module: TrainingModule,
+    count: usize,
+    active_ms: u64,
+    wpm: f64,
+    accuracy: f64,
+    error_rate: f64,
+}
+
+impl ModuleSummary {
+    fn from_records(module: TrainingModule, records: Vec<&SessionRecord>) -> Self {
+        let active_ms = records
+            .iter()
+            .map(|record| effective_active_ms(record))
+            .sum::<u64>();
+        let target_len = records
+            .iter()
+            .map(|record| record.target_len)
+            .sum::<usize>();
+        let errors = records.iter().map(|record| record.error_count).sum::<u32>();
+        let error_rate = if target_len == 0 {
+            0.0
+        } else {
+            f64::from(errors) / target_len as f64 * 100.0
+        };
+        Self {
+            module,
+            count: records.len(),
+            active_ms,
+            wpm: aggregate_wpm(&records),
+            accuracy: weighted_accuracy(&records),
+            error_rate,
+        }
+    }
+}
+
+fn scope_summary_line(
+    title: &'static str,
+    records: &[&SessionRecord],
+    language: Language,
+) -> Line<'static> {
+    let (_, active_ms, _) = timing_totals(records);
+    let wpm = aggregate_wpm(records);
+    let accuracy = weighted_accuracy(records);
+    Line::from(match language {
+        Language::Zh => format!(
+            "{title}  {} 次 | active {} | WPM {:.1} | 正确率 {:.1}%",
+            records.len(),
+            format_duration_short(active_ms, language),
+            wpm,
+            accuracy
+        ),
+        Language::En => format!(
+            "{title}  {} sessions | active {} | WPM {:.1} | accuracy {:.1}%",
+            records.len(),
+            format_duration_short(active_ms, language),
+            wpm,
+            accuracy
+        ),
+    })
+}
+
+fn is_comprehensive_record(record: &SessionRecord) -> bool {
+    !record.daily_run_id.trim().is_empty()
+}
+
+fn latest_started_at(records: &[&SessionRecord]) -> chrono::DateTime<Utc> {
+    records
+        .iter()
+        .map(|record| record.started_at)
+        .max()
+        .unwrap_or_else(Utc::now)
+}
+
+fn module_label(module: TrainingModule, language: Language) -> &'static str {
+    match language {
+        Language::Zh => match module {
+            TrainingModule::Unknown => "未知模块",
+            TrainingModule::Comprehensive => "综合练习",
+            TrainingModule::FoundationInput => "基础输入",
+            TrainingModule::EverydayEnglish => "日常英语",
+            TrainingModule::ProgrammingBasics => "编程基础",
+            TrainingModule::CodePractice => "代码实战",
+        },
+        Language::En => match module {
+            TrainingModule::Unknown => "Unknown",
+            TrainingModule::Comprehensive => "Full practice",
+            TrainingModule::FoundationInput => "Foundation input",
+            TrainingModule::EverydayEnglish => "Everyday English",
+            TrainingModule::ProgrammingBasics => "Programming basics",
+            TrainingModule::CodePractice => "Code practice",
+        },
+    }
+}
+
+fn compare_key_aggregate(
+    left: &KeyAggregate,
+    right: &KeyAggregate,
+    sort: KeyStatsSort,
+) -> std::cmp::Ordering {
+    let ordering = match sort {
+        KeyStatsSort::SlowestAverage => right
+            .avg_ms
+            .partial_cmp(&left.avg_ms)
+            .unwrap_or(std::cmp::Ordering::Equal),
+        KeyStatsSort::Fastest => left
+            .fastest_ms
+            .cmp(&right.fastest_ms)
+            .then_with(|| right.sample_count.cmp(&left.sample_count)),
+        KeyStatsSort::SlowestSingle => right.slowest_ms.cmp(&left.slowest_ms),
+        KeyStatsSort::HighestErrorRate => right
+            .error_rate
+            .partial_cmp(&left.error_rate)
+            .unwrap_or(std::cmp::Ordering::Equal),
+        KeyStatsSort::LowestConfidence => left
+            .confidence
+            .partial_cmp(&right.confidence)
+            .unwrap_or(std::cmp::Ordering::Equal),
+    };
+    ordering
+        .then_with(|| right.sample_count.cmp(&left.sample_count))
+        .then_with(|| left.key.cmp(&right.key))
 }
 
 fn push_stats_line(lines: &mut Vec<Line<'static>>, max_lines: usize, line: Line<'static>) {
@@ -788,7 +1346,10 @@ pub(super) fn top_problem_tokens(
     for record in records {
         if record.token_stats.is_empty() {
             for (token, errors) in &record.error_tokens {
-                if *errors == 0 || is_word_like_token(token) != words {
+                if *errors == 0
+                    || is_numbered_template_identifier(token)
+                    || is_word_like_token(token) != words
+                {
                     continue;
                 }
                 let token = normalize_problem_token(token, words);
@@ -801,7 +1362,10 @@ pub(super) fn top_problem_tokens(
         }
 
         for stat in &record.token_stats {
-            if stat.errors == 0 || is_word_like_token(&stat.token) != words {
+            if stat.errors == 0
+                || is_numbered_template_identifier(&stat.token)
+                || is_word_like_token(&stat.token) != words
+            {
                 continue;
             }
             let token = normalize_problem_token(&stat.token, words);
@@ -820,7 +1384,7 @@ fn top_slow_tokens(records: &[&SessionRecord], limit: usize) -> Vec<ProblemToken
     for record in records {
         if record.token_stats.is_empty() {
             for (token, errors) in &record.error_tokens {
-                if *errors == 0 {
+                if *errors == 0 || is_numbered_template_identifier(token) {
                     continue;
                 }
                 let token = normalize_problem_token(token, is_word_like_token(token));
@@ -833,6 +1397,9 @@ fn top_slow_tokens(records: &[&SessionRecord], limit: usize) -> Vec<ProblemToken
         }
 
         for stat in &record.token_stats {
+            if is_numbered_template_identifier(&stat.token) {
+                continue;
+            }
             let token = normalize_problem_token(&stat.token, is_word_like_token(&stat.token));
             let entry = aggregate.entry(token).or_default();
             entry.errors += stat.errors;
@@ -1277,9 +1844,29 @@ fn effective_typed_len(record: &SessionRecord) -> usize {
     record.user_input.chars().count().max(record.correct_chars)
 }
 
+fn effective_active_ms(record: &SessionRecord) -> u64 {
+    if record.active_ms > 0 {
+        return record.active_ms;
+    }
+    record.duration_ms
+}
+
+fn timing_totals(records: &[&SessionRecord]) -> (u64, u64, u64) {
+    let total_ms = records.iter().map(|record| record.duration_ms).sum::<u64>();
+    let active_ms = records
+        .iter()
+        .map(|record| effective_active_ms(record))
+        .sum::<u64>();
+    let idle_ms = records.iter().map(|record| record.idle_ms).sum::<u64>();
+    (total_ms, active_ms, idle_ms)
+}
+
 pub(super) fn aggregate_wpm(records: &[&SessionRecord]) -> f64 {
-    let duration_ms = records.iter().map(|record| record.duration_ms).sum::<u64>();
-    if duration_ms == 0 {
+    let active_ms = records
+        .iter()
+        .map(|record| effective_active_ms(record))
+        .sum::<u64>();
+    if active_ms == 0 {
         return average(records.iter().map(|record| record.wpm));
     }
 
@@ -1287,13 +1874,27 @@ pub(super) fn aggregate_wpm(records: &[&SessionRecord]) -> f64 {
         .iter()
         .map(|record| record.correct_chars)
         .sum::<usize>();
-    let minutes = duration_ms.max(1) as f64 / 60_000.0;
+    let minutes = active_ms.max(1) as f64 / 60_000.0;
     correct_chars as f64 / 5.0 / minutes
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::model::{CompletionState, KeyAggregate, TrainingCategory, TrainingModule};
+
+    fn plain_lines(lines: Vec<Line<'static>>) -> String {
+        lines
+            .into_iter()
+            .map(|line| {
+                line.spans
+                    .into_iter()
+                    .map(|span| span.content.into_owned())
+                    .collect::<String>()
+            })
+            .collect::<Vec<_>>()
+            .join("\n")
+    }
 
     #[test]
     fn overview_recommendation_uses_recent_plan_window() {
@@ -1323,5 +1924,143 @@ mod tests {
 
         assert!(rendered.contains("下一次综合会保持均衡计划"));
         assert!(!rendered.contains("键位专项：j"));
+    }
+
+    #[test]
+    fn stats_today_lines_split_comprehensive_and_standalone() {
+        let comprehensive = SessionRecord {
+            started_at: Local::now().with_timezone(&Utc),
+            daily_run_id: "20260601-1".to_string(),
+            duration_ms: 60_000,
+            active_ms: 30_000,
+            correct_chars: 150,
+            accuracy: 100.0,
+            ..SessionRecord::default()
+        };
+        let standalone = SessionRecord {
+            started_at: Local::now().with_timezone(&Utc),
+            duration_ms: 120_000,
+            active_ms: 60_000,
+            correct_chars: 100,
+            accuracy: 90.0,
+            ..SessionRecord::default()
+        };
+        let records = vec![&comprehensive, &standalone];
+
+        let rendered = plain_lines(stats_today_lines(&records, 8, Language::Zh));
+
+        assert!(rendered.contains("综合练习  1 次"));
+        assert!(rendered.contains("专项练习  1 次"));
+        assert!(rendered.contains("active 30 秒"));
+        assert!(rendered.contains("active 1 分钟"));
+    }
+
+    #[test]
+    fn comprehensive_run_lines_group_by_daily_run_id() {
+        let first = SessionRecord {
+            daily_run_id: "run-a".to_string(),
+            module: TrainingModule::FoundationInput,
+            completion_state: CompletionState::Completed,
+            active_ms: 30_000,
+            correct_chars: 120,
+            accuracy: 96.0,
+            ..SessionRecord::default()
+        };
+        let second = SessionRecord {
+            daily_run_id: "run-a".to_string(),
+            module: TrainingModule::ProgrammingBasics,
+            completion_state: CompletionState::Completed,
+            active_ms: 60_000,
+            correct_chars: 180,
+            accuracy: 90.0,
+            ..SessionRecord::default()
+        };
+        let standalone = SessionRecord {
+            active_ms: 60_000,
+            ..SessionRecord::default()
+        };
+        let records = vec![&first, &second, &standalone];
+
+        let rendered = plain_lines(stats_comprehensive_lines(&records, 8, Language::En));
+
+        assert!(rendered.contains("run-a"));
+        assert!(rendered.contains("2 groups"));
+        assert!(rendered.contains("2 modules"));
+    }
+
+    #[test]
+    fn module_stats_identifies_weakest_module_driver() {
+        let foundation = SessionRecord {
+            module: TrainingModule::FoundationInput,
+            category: TrainingCategory::FoundationMix,
+            active_ms: 60_000,
+            correct_chars: 180,
+            target_len: 120,
+            error_count: 2,
+            accuracy: 98.0,
+            ..SessionRecord::default()
+        };
+        let code = SessionRecord {
+            module: TrainingModule::CodePractice,
+            category: TrainingCategory::CodeSnippet,
+            active_ms: 60_000,
+            correct_chars: 120,
+            target_len: 100,
+            error_count: 12,
+            accuracy: 88.0,
+            ..SessionRecord::default()
+        };
+        let records = vec![&foundation, &code];
+
+        let rendered = plain_lines(stats_module_lines(&records, 8, Language::En));
+
+        assert!(rendered.contains("Next driver"));
+        assert!(rendered.contains("Code practice"));
+    }
+
+    #[test]
+    fn key_stats_lines_can_sort_by_error_rate_and_show_timing_columns() {
+        let aggregates = vec![
+            KeyAggregate {
+                key: "a".to_string(),
+                sample_count: 10,
+                hit_count: 9,
+                miss_count: 1,
+                avg_ms: 120.0,
+                fastest_ms: 80,
+                slowest_ms: 260,
+                filtered_avg_ms: 120.0,
+                error_rate: 10.0,
+                confidence: 1.8,
+                last_seen_at: None,
+            },
+            KeyAggregate {
+                key: "b".to_string(),
+                sample_count: 5,
+                hit_count: 2,
+                miss_count: 3,
+                avg_ms: 200.0,
+                fastest_ms: 100,
+                slowest_ms: 500,
+                filtered_avg_ms: 200.0,
+                error_rate: 60.0,
+                confidence: 0.8,
+                last_seen_at: None,
+            },
+        ];
+
+        let rendered = plain_lines(key_stats_lines(
+            &aggregates,
+            KeyStatsSort::HighestErrorRate,
+            8,
+            Language::En,
+        ));
+
+        assert!(rendered.contains("fast"));
+        assert!(rendered.contains("avg"));
+        assert!(rendered.contains("slow"));
+        assert!(rendered.contains("err"));
+        assert!(rendered.contains("samples"));
+        assert!(rendered.find("\nb").unwrap() < rendered.find("\na").unwrap());
     }
 }

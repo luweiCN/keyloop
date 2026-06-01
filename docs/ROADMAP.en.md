@@ -24,33 +24,30 @@ Practice menu
 
 1. Comprehensive practice
 2. Foundation practice
-3. Warmup: base keys
-4. Chunks: English spelling chunks
-5. Common words: real English common words
-6. Words: frontend vocabulary
-7. Focus: numbers and symbols
-8. Naming: casing and frontend APIs
-9. Code: short complete code blocks
-10. Code focus
-11. Stats
+3. Everyday practice
+4. Programming basics
+5. Code practice
+6. Stats
 ```
 
-The user can run the adaptive full plan, choose a foundation drill, choose one focused lesson, or enter code focus. The only global runtime setting is language.
+The user can run the adaptive full plan or open a second-level menu for one of the four primary categories. Language, framework, and project filters are saved as a global code scope and reused by code practice and full practice.
 
 ## Practice Pages
 
 ### Menu
 
-- Comprehensive practice: run today's adaptive lesson sequence. With no history it uses the default path; with recent history it adjusts from key, token, symbol, and code hot spots.
-- Foundation practice: row, horizontal, vertical, diagonal, punctuation-edge, and finger movement drills.
-- Focused lesson: practice only one step.
+- Comprehensive practice: run foundation input, everyday English, programming basics, and code practice as module groups. Errors and slow items from each group can influence later module content.
+- Foundation practice: open row, horizontal, vertical, diagonal, punctuation-edge, finger movement, and mixed foundation drills.
+- Everyday practice: open common 100 words, common 500 words, common 1000 words, everyday sentences, and everyday mix. Word entries can switch 10 / 20 / 50 / 100 words per group; the sentence entry switches short / medium / long / mixed inside the same entry.
+- Programming basics: open numbers and symbols, operators/brackets/quotes, naming and camel case, technical terms, and programming basics mix.
+- Code practice: open code blocks, functions, file fragments, or random mix while keeping language/framework/project filters.
 - Stats: review total time, best WPM, weighted accuracy, key heatmap, problem words, daily details, and what the next full practice will prioritize.
 
 ### Plan
 
 The daily plan is generated from local history. With no history, KeyLoop starts from a beginner-friendly plan.
 
-It shows the target time, the expected sequence, and a separate training-rationale panel so personal analysis does not clutter the menu.
+It shows the target time, the module sequence, and a separate training-rationale panel so personal analysis does not clutter the menu.
 
 ### Typing
 
@@ -74,7 +71,7 @@ The main future work is richer content rather than more settings:
 
 - base keys and letter transitions
 - English spelling chunks such as `the`, `tion`, `ing`, `ment`, `pre`, `con`, `str`
-- real English high-frequency words
+- real English high-frequency words, everyday phrases, and workplace sentences from clean KeyLoop-authored or user-local corpora
 - programmer and frontend vocabulary
 - numbers, brackets, quotes, arrows, comparison operators
 - camelCase, PascalCase, DOM/React/API naming

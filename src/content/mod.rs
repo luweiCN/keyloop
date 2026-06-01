@@ -1,16 +1,18 @@
 pub mod library;
 mod snippets;
 
+use crate::feedback;
 use crate::model::{
-    CodePracticeConfig, CodePracticeOption, DailyPracticePlan, LessonKind, Mode, PracticeLesson,
-    PracticeTarget, SessionRecord,
+    CodePracticeConfig, CodePracticeLevel, CodePracticeOption, CompletionState, DailyPracticePlan,
+    EverydayEnglishSettings, EverydaySentenceLength, Language, LessonKind, MixProfile, Mode,
+    PracticeLesson, PracticeTarget, SessionRecord, TrainingCategory, TrainingModule,
 };
-use crate::plan::PracticePlan;
+use crate::plan::{PLAN_HISTORY_DAYS, PracticePlan};
 use anyhow::Result;
-use chrono::Local;
-use library::{ContentLibrary, FoundationDrill};
+use chrono::{Duration, Local, Utc};
+use library::{ContentLibrary, EverydayEntryKind, FoundationDrill};
 use rand::seq::SliceRandom;
-use std::collections::HashSet;
+use std::collections::{BTreeMap, BTreeSet, HashSet};
 use std::path::Path;
 
 pub use snippets::{CodeSnippet, extract_snippets};
@@ -29,6 +31,158 @@ pub fn foundation_drills() -> Result<Vec<FoundationDrill>> {
     Ok(library.foundation_drills)
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum EverydayPracticeScope {
+    Common500,
+    Common1000,
+    Common5000,
+    Sentences,
+    Mix,
+}
+
+impl EverydayPracticeScope {
+    fn source_slug(self) -> &'static str {
+        match self {
+            Self::Common500 => "common-500",
+            Self::Common1000 => "common-1000",
+            Self::Common5000 => "common-5000",
+            Self::Sentences => "sentences",
+            Self::Mix => "mix",
+        }
+    }
+
+    fn tier_limit(self) -> u8 {
+        match self {
+            Self::Common500 => 2,
+            Self::Common1000 | Self::Sentences | Self::Mix => 3,
+            Self::Common5000 => 5,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ProgrammingBasicsPractice {
+    NumberSymbols,
+    Operators,
+    Naming,
+    TechnicalTerms,
+    Mix,
+}
+
+pub fn refresh_module_mix_target(
+    lesson: &PracticeLesson,
+    records: &[&SessionRecord],
+    code_config: &CodePracticeConfig,
+    everyday_settings: &EverydayEnglishSettings,
+) -> Result<PracticeTarget> {
+    let library = library::load()?;
+    let owned_records = records.iter().copied().cloned().collect::<Vec<_>>();
+    let plan = crate::plan::build_plan(&owned_records, Language::Zh);
+    let mut build_state = PlanBuildState::from_records(records);
+    let readiness = ModuleReadiness::from_records(records);
+    let mut context = LessonBuildContext {
+        records,
+        repo: None,
+        plan: &plan,
+        library: &library,
+        code_config,
+        build_state: &mut build_state,
+        readiness: &readiness,
+    };
+
+    match lesson.module {
+        TrainingModule::FoundationInput => Ok(foundation_mix(&mut context)),
+        TrainingModule::EverydayEnglish => Ok(everyday_english_mix(
+            &plan,
+            &library,
+            *everyday_settings,
+            lesson.mix_profile,
+        )),
+        TrainingModule::ProgrammingBasics => Ok(programming_basics_mix(&mut context)),
+        TrainingModule::CodePractice => code_practice_mix(&mut context),
+        _ => Ok(lesson.target.clone()),
+    }
+}
+
+pub fn build_everyday_target(
+    records: &[&SessionRecord],
+    scope: EverydayPracticeScope,
+    settings: EverydayEnglishSettings,
+) -> Result<PracticeTarget> {
+    let library = library::load()?;
+    let owned_records = records.iter().copied().cloned().collect::<Vec<_>>();
+    let plan = crate::plan::build_plan(&owned_records, Language::Zh);
+
+    Ok(match scope {
+        EverydayPracticeScope::Common500
+        | EverydayPracticeScope::Common1000
+        | EverydayPracticeScope::Common5000 => {
+            everyday_word_target(&library, scope, settings.word_count)
+        }
+        EverydayPracticeScope::Sentences => everyday_sentence_target(&library, settings),
+        EverydayPracticeScope::Mix => {
+            everyday_english_mix(&plan, &library, settings, MixProfile::Standalone)
+        }
+    })
+}
+
+pub fn build_programming_basics_target(
+    records: &[&SessionRecord],
+    practice: ProgrammingBasicsPractice,
+    code_config: &CodePracticeConfig,
+) -> Result<PracticeTarget> {
+    let library = library::load()?;
+    let owned_records = records.iter().copied().cloned().collect::<Vec<_>>();
+    let plan = crate::plan::build_plan(&owned_records, Language::Zh);
+
+    Ok(match practice {
+        ProgrammingBasicsPractice::NumberSymbols => {
+            let mut items = Vec::new();
+            append_from(&mut items, &library.number_drills, 4);
+            append_from(&mut items, &library.symbols, 12);
+            PracticeTarget {
+                mode: Mode::Symbols,
+                text: chunk_words(&items, 6).join("\n"),
+                source: "keyloop:module:programming-basics:numbers-symbols".to_string(),
+            }
+        }
+        ProgrammingBasicsPractice::Operators => {
+            let mut items = Vec::new();
+            append_from(&mut items, &language_symbol_items(&library, code_config), 8);
+            fill_from(&mut items, &library.symbols, 18);
+            PracticeTarget {
+                mode: Mode::Symbols,
+                text: chunk_words(&items, 6).join("\n"),
+                source: "keyloop:module:programming-basics:operators-brackets-quotes".to_string(),
+            }
+        }
+        ProgrammingBasicsPractice::Naming => PracticeTarget {
+            mode: Mode::Case,
+            text: build_lesson_naming(&plan, &library),
+            source: "keyloop:module:programming-basics:naming".to_string(),
+        },
+        ProgrammingBasicsPractice::TechnicalTerms => PracticeTarget {
+            mode: Mode::Words,
+            text: build_lesson_words(&plan, &library),
+            source: "keyloop:module:programming-basics:technical-terms".to_string(),
+        },
+        ProgrammingBasicsPractice::Mix => {
+            let mut build_state = PlanBuildState::from_records(records);
+            let readiness = ModuleReadiness::from_records(records);
+            let mut context = LessonBuildContext {
+                records,
+                repo: None,
+                plan: &plan,
+                library: &library,
+                code_config,
+                build_state: &mut build_state,
+                readiness: &readiness,
+            };
+            programming_basics_mix(&mut context)
+        }
+    })
+}
+
 pub fn build_daily_practice_plan(
     records: &[SessionRecord],
     repo: Option<&Path>,
@@ -45,6 +199,7 @@ pub fn build_daily_practice_plan(
 
     let recent_records = records.iter().collect::<Vec<_>>();
     let mut build_state = PlanBuildState::from_records(&recent_records);
+    let readiness = ModuleReadiness::from_records(&recent_records);
     let mut build_context = LessonBuildContext {
         records: &recent_records,
         repo,
@@ -52,12 +207,14 @@ pub fn build_daily_practice_plan(
         library: &library,
         code_config,
         build_state: &mut build_state,
+        readiness: &readiness,
     };
     let mut occurrence_counts = std::collections::BTreeMap::<LessonKind, usize>::new();
     let mut lessons = Vec::new();
-    for kind in adaptive_lesson_sequence(plan) {
+    for (kind, module, category) in comprehensive_module_sequence(&readiness, plan) {
         let lesson_id = next_lesson_id(kind, &mut occurrence_counts);
-        let lesson = build_lesson(lesson_id, kind, &mut build_context)?;
+        let lesson =
+            build_module_mix_lesson(lesson_id, kind, module, category, &mut build_context)?;
         build_context.build_state.observe_lesson(&lesson);
         lessons.push(lesson);
     }
@@ -78,6 +235,7 @@ struct LessonBuildContext<'a> {
     library: &'a ContentLibrary,
     code_config: &'a CodePracticeConfig,
     build_state: &'a mut PlanBuildState,
+    readiness: &'a ModuleReadiness,
 }
 
 #[derive(Debug, Default)]
@@ -130,6 +288,142 @@ impl PlanBuildState {
     }
 }
 
+#[derive(Debug, Default)]
+struct ModuleReadiness {
+    stable_modules: BTreeSet<TrainingModule>,
+    weak_modules: BTreeSet<TrainingModule>,
+}
+
+impl ModuleReadiness {
+    fn from_records(records: &[&SessionRecord]) -> Self {
+        let recent_cutoff = Utc::now() - Duration::days(PLAN_HISTORY_DAYS);
+        let mut stats = BTreeMap::<TrainingModule, ModulePerformance>::new();
+
+        for record in records {
+            if record.started_at < recent_cutoff || !is_adaptive_module(record.module) {
+                continue;
+            }
+            let typed_len = effective_module_typed_len(record);
+            if typed_len == 0 && record.target_len == 0 {
+                continue;
+            }
+            stats
+                .entry(record.module)
+                .or_default()
+                .add(record, typed_len);
+        }
+
+        let mut readiness = Self::default();
+        for (module, performance) in stats {
+            if performance.is_weak() {
+                readiness.weak_modules.insert(module);
+            } else if performance.is_stable() {
+                readiness.stable_modules.insert(module);
+            }
+        }
+        readiness
+    }
+
+    fn is_stable(&self, module: TrainingModule) -> bool {
+        self.stable_modules.contains(&module)
+    }
+
+    fn is_weak(&self, module: TrainingModule) -> bool {
+        self.weak_modules.contains(&module)
+    }
+
+    fn should_skip_module(&self, module: TrainingModule, plan: &PracticePlan) -> bool {
+        module != TrainingModule::CodePractice
+            && self.is_stable(module)
+            && !self.is_weak(module)
+            && !module_has_current_focus(module, plan)
+    }
+}
+
+#[derive(Debug, Default)]
+struct ModulePerformance {
+    samples: u32,
+    completed_samples: u32,
+    typed_len: usize,
+    correct_chars: usize,
+    errors: u32,
+    backspaces: u32,
+}
+
+impl ModulePerformance {
+    fn add(&mut self, record: &SessionRecord, typed_len: usize) {
+        self.samples += 1;
+        if record.completion_state == CompletionState::Completed {
+            self.completed_samples += 1;
+        }
+        self.typed_len += typed_len;
+        self.correct_chars += record
+            .correct_chars
+            .max((record.accuracy.clamp(0.0, 100.0) / 100.0 * typed_len as f64).round() as usize);
+        self.errors += record.error_count;
+        self.backspaces += record.backspace_count;
+    }
+
+    fn accuracy(&self) -> f64 {
+        if self.typed_len == 0 {
+            return 0.0;
+        }
+        self.correct_chars as f64 / self.typed_len as f64 * 100.0
+    }
+
+    fn error_rate(&self) -> f64 {
+        if self.typed_len == 0 {
+            return 0.0;
+        }
+        f64::from(self.errors) / self.typed_len as f64 * 100.0
+    }
+
+    fn is_stable(&self) -> bool {
+        self.completed_samples >= 3
+            && self.typed_len >= 180
+            && self.accuracy() >= 97.0
+            && self.error_rate() <= 2.5
+            && self.backspaces <= self.samples * 4
+    }
+
+    fn is_weak(&self) -> bool {
+        self.samples >= 1
+            && self.typed_len >= 20
+            && (self.accuracy() < 92.0
+                || self.error_rate() >= 8.0
+                || self.backspaces >= self.samples * 12)
+    }
+}
+
+fn is_adaptive_module(module: TrainingModule) -> bool {
+    matches!(
+        module,
+        TrainingModule::FoundationInput
+            | TrainingModule::EverydayEnglish
+            | TrainingModule::ProgrammingBasics
+            | TrainingModule::CodePractice
+    )
+}
+
+fn module_has_current_focus(module: TrainingModule, plan: &PracticePlan) -> bool {
+    match module {
+        TrainingModule::FoundationInput => !plan.focus_keys.is_empty(),
+        TrainingModule::EverydayEnglish => !plan.focus_words.is_empty(),
+        TrainingModule::ProgrammingBasics => {
+            !plan.focus_symbols.is_empty() || !plan.focus_words.is_empty()
+        }
+        TrainingModule::CodePractice => !plan.focus_code.is_empty(),
+        _ => false,
+    }
+}
+
+fn effective_module_typed_len(record: &SessionRecord) -> usize {
+    if record.typed_len > 0 {
+        return record.typed_len;
+    }
+    record.user_input.chars().count().max(record.correct_chars)
+}
+
 pub fn build_foundation_target(
     records: &[&SessionRecord],
     drill_id: &str,
@@ -143,6 +437,25 @@ pub fn build_foundation_target(
         line_count,
         &HashSet::new(),
     ))
+}
+
+pub fn build_foundation_mix_target(records: &[&SessionRecord]) -> Result<PracticeTarget> {
+    let library = library::load()?;
+    let owned_records = records.iter().copied().cloned().collect::<Vec<_>>();
+    let plan = crate::plan::build_plan(&owned_records, Language::Zh);
+    let mut build_state = PlanBuildState::from_records(records);
+    let readiness = ModuleReadiness::from_records(records);
+    let code_config = CodePracticeConfig::default();
+    let mut context = LessonBuildContext {
+        records,
+        repo: None,
+        plan: &plan,
+        library: &library,
+        code_config: &code_config,
+        build_state: &mut build_state,
+        readiness: &readiness,
+    };
+    Ok(foundation_mix(&mut context))
 }
 
 fn build_foundation_target_from_library(
@@ -186,199 +499,79 @@ fn build_foundation_target_from_library(
     }
 }
 
-fn lesson(
-    id: impl Into<String>,
-    kind: LessonKind,
-    estimated_minutes: u16,
-    target: PracticeTarget,
-    reason_zh: impl Into<String>,
-    reason_en: impl Into<String>,
-) -> PracticeLesson {
-    PracticeLesson {
-        id: id.into(),
-        kind,
-        estimated_minutes,
-        target,
-        reason_zh: reason_zh.into(),
-        reason_en: reason_en.into(),
-    }
-}
-
-fn build_lesson(
+fn build_module_mix_lesson(
     id: String,
     kind: LessonKind,
+    module: TrainingModule,
+    category: TrainingCategory,
     context: &mut LessonBuildContext<'_>,
 ) -> Result<PracticeLesson> {
-    let (estimated_minutes, target, reason_zh, reason_en) = match kind {
-        LessonKind::Foundation => {
-            let drill_id = foundation_drill_for_keys(&context.plan.focus_keys);
-            let target = build_foundation_target_from_library(
-                context.library,
-                context.records,
-                drill_id,
-                12,
-                &context.build_state.used_foundation_lines,
-            );
-            (
-                3,
-                target,
-                if context.plan.focus_keys.is_empty() {
-                    "没有明显键位热区，先做基础键位校准。".to_string()
-                } else {
-                    format!(
-                        "高错键位集中在 {}，先做对应基础专项。",
-                        context.plan.focus_keys.join(", ")
-                    )
-                },
-                if context.plan.focus_keys.is_empty() {
-                    "No clear key hot spot yet; calibrate base keys first.".to_string()
-                } else {
-                    format!(
-                        "Key errors cluster around {}; start with a matching foundation drill.",
-                        context.plan.focus_keys.join(", ")
-                    )
-                },
-            )
-        }
-        LessonKind::Warmup => (
-            3,
-            PracticeTarget {
-                mode: Mode::Chars,
-                text: build_lesson_chars(context.library),
-                source: "keyloop:warmup".into(),
-            },
-            "先稳住基础键位，给后面的词块和代码降噪。".to_string(),
-            "Stabilize base keys before word and code work.".to_string(),
+    let target = match module {
+        TrainingModule::FoundationInput => foundation_mix(context),
+        TrainingModule::EverydayEnglish => everyday_english_mix(
+            context.plan,
+            context.library,
+            EverydayEnglishSettings::default(),
+            MixProfile::Comprehensive,
         ),
-        LessonKind::Chunks => (
-            3,
-            PracticeTarget {
-                mode: Mode::Words,
-                text: build_lesson_word_chunks(context.plan, context.library),
-                source: "keyloop:word-chunks".into(),
-            },
-            if context.plan.focus_words.is_empty() {
-                "拆常见英文词块，降低拼写停顿。".to_string()
-            } else {
-                format!(
-                    "把高错词 {} 拆成前缀、后缀和字母块练。",
-                    short_list(&context.plan.focus_words, 4)
-                )
-            },
-            if context.plan.focus_words.is_empty() {
-                "Break common English chunks to reduce spelling pauses.".to_string()
-            } else {
-                format!(
-                    "Break high-error words {} into prefixes, suffixes, and letter chunks.",
-                    short_list(&context.plan.focus_words, 4)
-                )
-            },
-        ),
-        LessonKind::CommonWords => (
-            3,
-            PracticeTarget {
-                mode: Mode::Words,
-                text: build_lesson_common_words(context.plan, context.library),
-                source: "keyloop:common-english".into(),
-            },
-            "补真正高频英文词，避免只会敲代码词。".to_string(),
-            "Practice common English words, not only code vocabulary.".to_string(),
-        ),
-        LessonKind::Words => (
-            3,
-            PracticeTarget {
-                mode: Mode::Words,
-                text: build_lesson_words(context.plan, context.library),
-                source: "keyloop:programming-words".into(),
-            },
-            if context.plan.focus_words.is_empty() {
-                "补前端和程序员高频词。".to_string()
-            } else {
-                format!(
-                    "优先复盘高错词和标识符：{}。",
-                    short_list(&context.plan.focus_words, 5)
-                )
-            },
-            if context.plan.focus_words.is_empty() {
-                "Practice frontend and programming vocabulary.".to_string()
-            } else {
-                format!(
-                    "Prioritize high-error words and identifiers: {}.",
-                    short_list(&context.plan.focus_words, 5)
-                )
-            },
-        ),
-        LessonKind::Symbols => (
-            3,
-            PracticeTarget {
-                mode: Mode::Symbols,
-                text: build_lesson_symbols(context.plan, context.library, context.code_config),
-                source: "keyloop:symbols".into(),
-            },
-            if context.plan.focus_symbols.is_empty() {
-                "补数字、括号、箭头、比较符等代码符号。".to_string()
-            } else {
-                format!(
-                    "符号错误偏高，优先练：{}。",
-                    short_list(&context.plan.focus_symbols, 6)
-                )
-            },
-            if context.plan.focus_symbols.is_empty() {
-                "Practice numbers, brackets, arrows, and comparison symbols.".to_string()
-            } else {
-                format!(
-                    "Symbol errors are high; prioritize {}.",
-                    short_list(&context.plan.focus_symbols, 6)
-                )
-            },
-        ),
-        LessonKind::Naming => (
-            2,
-            PracticeTarget {
-                mode: Mode::Case,
-                text: build_lesson_naming(context.plan, context.library),
-                source: "keyloop:naming".into(),
-            },
-            "补 camelCase、PascalCase 和 API 命名切换。".to_string(),
-            "Practice camelCase, PascalCase, and API naming transitions.".to_string(),
-        ),
-        LessonKind::CodeBlock => (
-            3,
-            build_code_lesson_target(
-                context.records,
-                context.repo,
-                context.plan,
-                context.library,
-                context.code_config,
-                &context.build_state.used_code_snippet_texts,
-            )?,
-            if context.plan.focus_code.is_empty() {
-                "最后进入完整代码块，验证前面专项能不能迁移到真实代码。".to_string()
-            } else {
-                format!(
-                    "把慢项/错项 {} 放回完整代码块里练。",
-                    short_list(&context.plan.focus_code, 4)
-                )
-            },
-            if context.plan.focus_code.is_empty() {
-                "Finish with complete code blocks to transfer drills into real code.".to_string()
-            } else {
-                format!(
-                    "Put slow or error-prone terms {} back into complete code blocks.",
-                    short_list(&context.plan.focus_code, 4)
-                )
-            },
-        ),
+        TrainingModule::ProgrammingBasics => programming_basics_mix(context),
+        TrainingModule::CodePractice => code_practice_mix(context)?,
+        _ => unreachable!("unsupported comprehensive module"),
     };
+    let estimated_minutes = module_estimated_minutes(module, context.readiness);
+    let (reason_zh, reason_en) = module_reason(module, context.readiness);
 
-    Ok(lesson(
+    Ok(PracticeLesson {
         id,
         kind,
+        module,
+        category,
+        mix_profile: MixProfile::Comprehensive,
         estimated_minutes,
         target,
         reason_zh,
         reason_en,
-    ))
+    })
+}
+
+fn module_estimated_minutes(module: TrainingModule, readiness: &ModuleReadiness) -> u16 {
+    if readiness.is_stable(module) && module == TrainingModule::CodePractice {
+        3
+    } else {
+        4
+    }
+}
+
+fn module_reason(module: TrainingModule, readiness: &ModuleReadiness) -> (String, String) {
+    let (mut zh, mut en) = match module {
+        TrainingModule::FoundationInput => (
+            "基础输入综合：覆盖 home/top/bottom row，并加重最近弱键。".to_string(),
+            "Foundation mix: cover rows and increase recent weak keys.".to_string(),
+        ),
+        TrainingModule::EverydayEnglish => (
+            "日常英语综合：常见词、词块和自然英文输入。".to_string(),
+            "Everyday English mix: common words, chunks, and natural English.".to_string(),
+        ),
+        TrainingModule::ProgrammingBasics => (
+            "编程基础综合：数字、符号、命名和技术词。".to_string(),
+            "Programming basics mix: numbers, symbols, naming, and technical terms.".to_string(),
+        ),
+        TrainingModule::CodePractice => (
+            "代码实战综合：把前面的弱点放回完整代码里。".to_string(),
+            "Code practice mix: move weak items back into complete code.".to_string(),
+        ),
+        _ => unreachable!("unsupported comprehensive module"),
+    };
+
+    if readiness.is_weak(module) {
+        zh.push_str(" 短复习：根据最近错项/慢项加权。");
+        en.push_str(" Short review: weighted by recent errors and slow items.");
+    } else if readiness.is_stable(module) {
+        zh.push_str(" 已稳定：本轮降频或缩短。");
+        en.push_str(" Stable: reduced or shortened this round.");
+    }
+
+    (zh, en)
 }
 
 fn next_lesson_id(
@@ -403,77 +596,358 @@ fn lesson_kind_slug(kind: LessonKind) -> &'static str {
     }
 }
 
-fn adaptive_lesson_sequence(plan: &PracticePlan) -> Vec<LessonKind> {
-    if !plan.has_recent_history {
-        return vec![
-            LessonKind::Warmup,
-            LessonKind::Chunks,
+fn comprehensive_module_sequence(
+    readiness: &ModuleReadiness,
+    plan: &PracticePlan,
+) -> Vec<(LessonKind, TrainingModule, TrainingCategory)> {
+    let base = vec![
+        (
+            LessonKind::Foundation,
+            TrainingModule::FoundationInput,
+            TrainingCategory::FoundationMix,
+        ),
+        (
             LessonKind::CommonWords,
-            LessonKind::Words,
+            TrainingModule::EverydayEnglish,
+            TrainingCategory::EverydayMix,
+        ),
+        (
             LessonKind::Symbols,
-            LessonKind::Naming,
+            TrainingModule::ProgrammingBasics,
+            TrainingCategory::ProgrammingBasicsMix,
+        ),
+        (
             LessonKind::CodeBlock,
-        ];
-    }
+            TrainingModule::CodePractice,
+            TrainingCategory::CodeMix,
+        ),
+    ];
+    let filtered = base
+        .iter()
+        .copied()
+        .filter(|(_, module, _)| !readiness.should_skip_module(*module, plan))
+        .collect::<Vec<_>>();
 
-    let mut sequence = Vec::new();
-    sequence.push(if plan.focus_keys.is_empty() {
-        LessonKind::Warmup
-    } else {
-        LessonKind::Foundation
-    });
-    sequence.push(LessonKind::Chunks);
-
-    if plan.recommended_mode == Mode::Symbols {
-        sequence.push(LessonKind::Symbols);
-        sequence.push(LessonKind::Words);
-    } else {
-        sequence.push(LessonKind::Words);
-        sequence.push(LessonKind::Symbols);
-    }
-
-    sequence.push(LessonKind::Naming);
-    sequence.push(LessonKind::CodeBlock);
-
-    let boosters = adaptive_boosters(plan);
-    let target_len = 6 + boosters.len().clamp(1, 2);
-    for booster in boosters {
-        if sequence.len() >= target_len {
-            break;
-        }
-        sequence.push(booster);
-    }
-    for fallback in [
-        LessonKind::CommonWords,
-        LessonKind::Symbols,
-        LessonKind::Words,
-        LessonKind::CodeBlock,
-    ] {
-        if sequence.len() >= target_len {
-            break;
-        }
-        sequence.push(fallback);
-    }
-
-    sequence.truncate(target_len);
-    sequence
+    if filtered.len() >= 3 { filtered } else { base }
 }
 
-fn adaptive_boosters(plan: &PracticePlan) -> Vec<LessonKind> {
-    let mut boosters = Vec::new();
-    if plan.focus_keys.len() >= 2 {
-        boosters.push(LessonKind::Foundation);
+fn foundation_mix(context: &mut LessonBuildContext<'_>) -> PracticeTarget {
+    let drill_id = foundation_drill_for_keys(&context.plan.focus_keys);
+    let mut target = build_foundation_target_from_library(
+        context.library,
+        context.records,
+        drill_id,
+        if context.plan.has_recent_history {
+            8
+        } else {
+            6
+        },
+        &context.build_state.used_foundation_lines,
+    );
+    let mut warmup = repeat_pool(&context.library.warmup, 4);
+    warmup.truncate(4);
+    if !warmup.is_empty() {
+        target.text = format!("{}\n{}", warmup.join("\n"), target.text);
     }
-    if plan.focus_symbols.len() >= 2 {
-        boosters.push(LessonKind::Symbols);
+    target.source = format!("keyloop:module:foundation-mix:{drill_id}");
+    target
+}
+
+fn everyday_english_mix(
+    plan: &PracticePlan,
+    library: &ContentLibrary,
+    settings: EverydayEnglishSettings,
+    profile: MixProfile,
+) -> PracticeTarget {
+    let corpus_words = everyday_words(library, 3);
+    let common = corpus_words
+        .iter()
+        .chain(library.common_words.iter())
+        .map(|word| word.as_str())
+        .collect::<HashSet<_>>();
+    let mut chosen = plan
+        .focus_words
+        .iter()
+        .map(|word| word.to_ascii_lowercase())
+        .filter(|word| common.contains(word.as_str()))
+        .collect::<Vec<_>>();
+    if corpus_words.is_empty() {
+        fill_from(&mut chosen, &library.common_words, settings.word_count);
+    } else {
+        fill_from(&mut chosen, &corpus_words, settings.word_count);
     }
-    if plan.focus_words.len() >= 2 {
-        boosters.push(LessonKind::Words);
+    let per_line = match profile {
+        MixProfile::Comprehensive => 8,
+        MixProfile::Standalone => 10,
+        MixProfile::Review => 6,
+    };
+    let mut lines = chunk_words(&chosen, per_line);
+    if settings.include_phrases {
+        let phrases = everyday_phrases(library);
+        if phrases.is_empty() {
+            lines.push(build_lesson_word_chunks(plan, library));
+        } else {
+            lines.extend(chunk_words(&phrases, 3).into_iter().take(2));
+        }
     }
-    if plan.focus_code.len() >= 2 {
-        boosters.push(LessonKind::CodeBlock);
+    let sentences = everyday_sentences(library, settings.sentence_length);
+    if !sentences.is_empty() {
+        lines.extend(sentences.into_iter().take(match profile {
+            MixProfile::Comprehensive => 3,
+            MixProfile::Standalone => 5,
+            MixProfile::Review => 2,
+        }));
     }
-    boosters
+    PracticeTarget {
+        mode: Mode::Words,
+        text: lines.join("\n"),
+        source: format!(
+            "keyloop:module:everyday-english:words-{}:sentences-{}",
+            settings.word_count,
+            sentence_length_slug(settings.sentence_length)
+        ),
+    }
+}
+
+fn everyday_word_target(
+    library: &ContentLibrary,
+    scope: EverydayPracticeScope,
+    word_count: usize,
+) -> PracticeTarget {
+    let mut pool = everyday_words(library, scope.tier_limit());
+    for word in &library.common_words {
+        if pool.len() >= word_count {
+            break;
+        }
+        if !pool.iter().any(|existing| existing == word) {
+            pool.push(word.clone());
+        }
+    }
+    pool.shuffle(&mut rand::thread_rng());
+    pool.truncate(word_count);
+
+    PracticeTarget {
+        mode: Mode::Words,
+        text: pool.join(" "),
+        source: format!(
+            "keyloop:module:everyday-english:{}:words-{}",
+            scope.source_slug(),
+            word_count
+        ),
+    }
+}
+
+fn everyday_sentence_target(
+    library: &ContentLibrary,
+    settings: EverydayEnglishSettings,
+) -> PracticeTarget {
+    let mut sentences = everyday_sentences(library, settings.sentence_length);
+    sentences.shuffle(&mut rand::thread_rng());
+    sentences.truncate(6);
+
+    PracticeTarget {
+        mode: Mode::Words,
+        text: sentences.join("\n"),
+        source: format!(
+            "keyloop:module:everyday-english:sentences-{}",
+            sentence_length_slug(settings.sentence_length)
+        ),
+    }
+}
+
+fn everyday_words(library: &ContentLibrary, tier_limit: u8) -> Vec<String> {
+    library
+        .everyday_english
+        .entries
+        .iter()
+        .filter(|entry| !entry.source_id.trim().is_empty())
+        .filter(|entry| {
+            matches!(
+                entry.domain,
+                library::EverydayEntryDomain::Everyday | library::EverydayEntryDomain::Workplace
+            )
+        })
+        .filter(|entry| entry.kind == EverydayEntryKind::Word)
+        .filter(|entry| entry.tier.unwrap_or(u8::MAX) <= tier_limit)
+        .map(|entry| entry.text.clone())
+        .collect()
+}
+
+fn everyday_phrases(library: &ContentLibrary) -> Vec<String> {
+    library
+        .everyday_english
+        .entries
+        .iter()
+        .filter(|entry| !entry.source_id.trim().is_empty())
+        .filter(|entry| {
+            matches!(
+                entry.domain,
+                library::EverydayEntryDomain::Everyday | library::EverydayEntryDomain::Workplace
+            )
+        })
+        .filter(|entry| entry.kind == EverydayEntryKind::Phrase)
+        .map(|entry| entry.text.clone())
+        .collect()
+}
+
+fn everyday_sentences(library: &ContentLibrary, length: EverydaySentenceLength) -> Vec<String> {
+    library
+        .everyday_english
+        .entries
+        .iter()
+        .filter(|entry| !entry.source_id.trim().is_empty())
+        .filter(|entry| {
+            matches!(
+                entry.domain,
+                library::EverydayEntryDomain::Everyday | library::EverydayEntryDomain::Workplace
+            )
+        })
+        .filter(|entry| entry.kind == EverydayEntryKind::Sentence)
+        .filter(|entry| length == EverydaySentenceLength::Mixed || entry.length == Some(length))
+        .map(|entry| entry.text.clone())
+        .collect()
+}
+
+#[cfg(test)]
+fn everyday_meaning_lines(text: &str, max_words: usize) -> Vec<String> {
+    let mut seen = BTreeSet::new();
+    text.split(|ch: char| !ch.is_ascii_alphabetic())
+        .filter(|word| !word.is_empty())
+        .filter_map(|word| {
+            let key = word.to_ascii_lowercase();
+            let meaning = everyday_meaning_zh(&key)?;
+            if !seen.insert(key.clone()) {
+                return None;
+            }
+            Some(format!("{key}: {meaning}"))
+        })
+        .take(max_words)
+        .collect()
+}
+
+pub fn everyday_word_meaning(word: &str) -> Option<&'static str> {
+    everyday_meaning_zh(&word.to_ascii_lowercase())
+}
+
+fn everyday_meaning_zh(word: &str) -> Option<&'static str> {
+    Some(match word {
+        "about" => "关于",
+        "after" => "在之后",
+        "again" => "再次",
+        "always" => "总是",
+        "around" => "周围",
+        "before" => "在之前",
+        "better" => "更好",
+        "between" => "在之间",
+        "change" => "改变",
+        "during" => "在期间",
+        "enough" => "足够",
+        "family" => "家庭",
+        "friend" => "朋友",
+        "garden" => "花园",
+        "happen" => "发生",
+        "inside" => "里面",
+        "listen" => "听",
+        "market" => "市场",
+        "morning" => "早晨",
+        "outside" => "外面",
+        "practice" => "练习",
+        "question" => "问题",
+        "really" => "确实",
+        "simple" => "简单",
+        "today" => "今天",
+        "tomorrow" => "明天",
+        "together" => "一起",
+        "usually" => "通常",
+        "weather" => "天气",
+        "without" => "没有",
+        "already" => "已经",
+        "another" => "另一个",
+        "careful" => "小心的",
+        "compare" => "比较",
+        "deliver" => "交付",
+        "discuss" => "讨论",
+        "explain" => "解释",
+        "follow" => "跟随",
+        "improve" => "改进",
+        "prepare" => "准备",
+        "request" => "请求",
+        "schedule" => "安排",
+        "support" => "支持",
+        "update" => "更新",
+        "confirm" => "确认",
+        "deadline" => "截止时间",
+        "feedback" => "反馈",
+        "priority" => "优先级",
+        "progress" => "进展",
+        "proposal" => "提案",
+        "review" => "复盘/审查",
+        "timeline" => "时间线",
+        _ => return None,
+    })
+}
+
+fn sentence_length_slug(length: EverydaySentenceLength) -> &'static str {
+    match length {
+        EverydaySentenceLength::Short => "short",
+        EverydaySentenceLength::Medium => "medium",
+        EverydaySentenceLength::Long => "long",
+        EverydaySentenceLength::Mixed => "mixed",
+    }
+}
+
+fn programming_basics_mix(context: &mut LessonBuildContext<'_>) -> PracticeTarget {
+    let mut lines = Vec::new();
+    let feedback_terms = recent_feedback_terms(context.records);
+    if !feedback_terms.is_empty() {
+        lines.push(chunk_words(&feedback_terms, 4).join("\n"));
+    }
+    lines.push(build_lesson_symbols(
+        context.plan,
+        context.library,
+        context.code_config,
+    ));
+    lines.push(build_lesson_naming(context.plan, context.library));
+    lines.push(build_lesson_words(context.plan, context.library));
+    PracticeTarget {
+        mode: Mode::Symbols,
+        text: lines.join("\n"),
+        source: "keyloop:module:programming-basics-mix".to_string(),
+    }
+}
+
+fn recent_feedback_terms(records: &[&SessionRecord]) -> Vec<String> {
+    let mut terms = records
+        .iter()
+        .rev()
+        .take(4)
+        .flat_map(|record| {
+            let feedback = feedback::group_feedback(record);
+            feedback
+                .error_tokens
+                .into_iter()
+                .map(|(token, _)| token)
+                .chain(feedback.slow_tokens.into_iter().map(|(token, _)| token))
+                .chain(feedback.error_keys.into_iter().map(|(key, _)| key))
+        })
+        .filter(|term| !term.trim().is_empty())
+        .collect::<Vec<_>>();
+    terms = unique_focus(&terms);
+    terms.truncate(12);
+    terms
+}
+
+fn code_practice_mix(context: &mut LessonBuildContext<'_>) -> Result<PracticeTarget> {
+    let mut target = build_code_lesson_target(
+        context.records,
+        context.repo,
+        context.plan,
+        context.library,
+        context.code_config,
+        &context.build_state.used_code_snippet_texts,
+    )?;
+    target.source = "keyloop:module:code-practice-mix".to_string();
+    Ok(target)
 }
 
 fn foundation_drill_for_keys(keys: &[String]) -> &'static str {
@@ -514,33 +988,6 @@ fn foundation_drill_for_keys(keys: &[String]) -> &'static str {
     "home-row"
 }
 
-fn short_list(items: &[String], limit: usize) -> String {
-    let mut picked = items
-        .iter()
-        .filter(|item| !item.trim().is_empty())
-        .take(limit)
-        .map(|item| short_item(item, 18))
-        .collect::<Vec<_>>();
-    if picked.is_empty() {
-        return "none".to_string();
-    }
-    if items.len() > picked.len() {
-        picked.push("...".to_string());
-    }
-    picked.join(", ")
-}
-
-fn short_item(item: &str, max_chars: usize) -> String {
-    if item.chars().count() <= max_chars {
-        return item.to_string();
-    }
-    let head = item
-        .chars()
-        .take(max_chars.saturating_sub(3))
-        .collect::<String>();
-    format!("{head}...")
-}
-
 fn build_lesson_chars(library: &ContentLibrary) -> String {
     let mut chunks = repeat_pool(&library.warmup, 10);
     chunks.truncate(10);
@@ -555,27 +1002,11 @@ fn build_lesson_word_chunks(plan: &PracticePlan, library: &ContentLibrary) -> St
     chunks.join("\n")
 }
 
-fn build_lesson_common_words(plan: &PracticePlan, library: &ContentLibrary) -> String {
-    let common = library
-        .common_words
-        .iter()
-        .map(|word| word.as_str())
-        .collect::<HashSet<_>>();
-    let mut chosen = plan
-        .focus_words
-        .iter()
-        .map(|word| word.to_ascii_lowercase())
-        .filter(|word| common.contains(word.as_str()))
-        .take(8)
-        .collect::<Vec<_>>();
-    fill_from(&mut chosen, &library.common_words, 56);
-    chunk_words(&chosen, 8).join("\n")
-}
-
 fn build_lesson_words(plan: &PracticePlan, library: &ContentLibrary) -> String {
     let mut chosen = unique_focus(&plan.focus_words);
-    fill_from(&mut chosen, &library.programming_words, 35);
-    chunk_words(&chosen, 7).join("\n")
+    fill_from(&mut chosen, &library.programming_words, 16);
+    chosen.truncate(16);
+    chunk_words(&chosen, 4).join("\n")
 }
 
 fn build_lesson_symbols(
@@ -586,10 +1017,11 @@ fn build_lesson_symbols(
     let mut chosen = unique_focus(&plan.focus_symbols);
     let mut specific = language_symbol_items(library, code_config);
     specific.shuffle(&mut rand::thread_rng());
-    append_from(&mut chosen, &specific, 16);
-    fill_from(&mut chosen, &library.symbols, 48);
-    append_from(&mut chosen, &library.number_drills, 3);
-    chunk_words(&chosen, 8).join("\n")
+    append_from(&mut chosen, &specific, 6);
+    fill_from(&mut chosen, &library.symbols, 18);
+    append_from(&mut chosen, &library.number_drills, 2);
+    chosen.truncate(26);
+    chunk_words(&chosen, 5).join("\n")
 }
 
 fn language_symbol_items(
@@ -632,9 +1064,9 @@ fn symbol_set_matches(value: Option<&str>, single: &Option<String>, many: &[Stri
 
 fn build_lesson_naming(plan: &PracticePlan, library: &ContentLibrary) -> String {
     let mut chunks = focus_naming_lines(&plan.focus_words);
-    let remaining = 8usize.saturating_sub(chunks.len());
+    let remaining = 5usize.saturating_sub(chunks.len());
     append_from(&mut chunks, &library.naming, remaining);
-    chunks.truncate(8);
+    chunks.truncate(5);
     chunks.join("\n")
 }
 
@@ -995,19 +1427,25 @@ fn used_foundation_lines(records: &[&SessionRecord], drill_id: &str) -> HashSet<
 }
 
 fn code_specialist_source(config: &CodePracticeConfig, picked_count: usize) -> String {
-    let mut parts = Vec::new();
+    let mut parts = vec![format!("level={}", code_level_slug(config.level))];
     append_filter_label(&mut parts, "lang", &config.languages);
     append_filter_label(&mut parts, "framework", &config.frameworks);
     append_filter_label(&mut parts, "project", &config.projects);
-    if parts.is_empty() {
-        parts.push("all".to_string());
-    }
     format!("keyloop:code-specialist:{}:{picked_count}", parts.join("+"))
 }
 
 fn append_filter_label(parts: &mut Vec<String>, label: &str, values: &[String]) {
     if !values.is_empty() {
         parts.push(format!("{label}={}", values.join(",")));
+    }
+}
+
+fn code_level_slug(level: Option<CodePracticeLevel>) -> &'static str {
+    match level {
+        Some(CodePracticeLevel::Block) => "block",
+        Some(CodePracticeLevel::Function) => "function",
+        Some(CodePracticeLevel::File) => "file",
+        None => "mixed",
     }
 }
 
@@ -1071,6 +1509,7 @@ fn chunk_words(items: &[String], chunk_size: usize) -> Vec<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::model::{CompletionState, TokenKind, TokenStat};
 
     #[test]
     fn content_library_loads_external_json() {
@@ -1103,6 +1542,89 @@ mod tests {
                 && !source.retrieved_at.is_empty()
                 && !source.notes.is_empty()
         }));
+    }
+
+    #[test]
+    fn everyday_corpus_entries_have_source_metadata() {
+        let library = library::load().expect("content json should load");
+
+        assert!(library.everyday_english.entries.len() >= 80);
+        for entry in &library.everyday_english.entries {
+            assert!(!entry.text.trim().is_empty());
+            assert!(
+                library
+                    .everyday_english
+                    .sources
+                    .iter()
+                    .any(|source| source.source_id == entry.source_id),
+                "missing source metadata for {}",
+                entry.text
+            );
+        }
+        for source in &library.everyday_english.sources {
+            assert!(!source.source_name.trim().is_empty());
+            assert!(!source.source_url.trim().is_empty());
+            assert!(!source.license.trim().is_empty());
+            assert!(!source.generation_script.trim().is_empty());
+            assert!(!source.included_fields.is_empty());
+        }
+    }
+
+    #[test]
+    fn everyday_corpus_can_merge_user_local_entries() {
+        let mut base = library::EverydayEnglishCorpus {
+            sources: vec![library::EverydayCorpusSource {
+                source_id: "keyloop:base".to_string(),
+                source_name: "Base corpus".to_string(),
+                source_url: "keyloop://base".to_string(),
+                license: "MIT".to_string(),
+                retrieved_at: "2026-06-01".to_string(),
+                generation_script: "manual-curation".to_string(),
+                included_fields: vec!["text".to_string(), "source_id".to_string()],
+                notes: "Base test corpus.".to_string(),
+            }],
+            entries: vec![library::EverydayCorpusEntry {
+                text: "today".to_string(),
+                kind: EverydayEntryKind::Word,
+                tier: Some(1),
+                length: None,
+                domain: library::EverydayEntryDomain::Everyday,
+                source_id: "keyloop:base".to_string(),
+            }],
+        };
+        let extra = library::EverydayEnglishCorpus {
+            sources: vec![library::EverydayCorpusSource {
+                source_id: "user:daily".to_string(),
+                source_name: "User daily English".to_string(),
+                source_url: "file:///tmp/daily.json".to_string(),
+                license: "user-provided".to_string(),
+                retrieved_at: "2026-06-01".to_string(),
+                generation_script: "user-local-json".to_string(),
+                included_fields: vec!["text".to_string(), "kind".to_string()],
+                notes: "Local user corpus.".to_string(),
+            }],
+            entries: vec![library::EverydayCorpusEntry {
+                text: "standup summary".to_string(),
+                kind: EverydayEntryKind::Phrase,
+                tier: Some(2),
+                length: None,
+                domain: library::EverydayEntryDomain::Workplace,
+                source_id: "user:daily".to_string(),
+            }],
+        };
+
+        library::merge_everyday_corpus(&mut base, extra);
+
+        assert!(
+            base.sources
+                .iter()
+                .any(|source| source.source_id == "user:daily")
+        );
+        assert!(
+            base.entries
+                .iter()
+                .any(|entry| entry.text == "standup summary")
+        );
     }
 
     #[test]
@@ -1270,6 +1792,24 @@ mod tests {
     }
 
     #[test]
+    fn code_practice_can_filter_by_level() {
+        let library = library::load().expect("content json should load");
+        let config = CodePracticeConfig {
+            level: Some(CodePracticeLevel::Function),
+            ..CodePracticeConfig::default()
+        };
+
+        let picked = snippets::pick_builtin_code(&library.code_snippets, &[], &config, 12);
+
+        assert_eq!(picked.len(), 12);
+        assert!(
+            picked
+                .iter()
+                .all(|snippet| snippet.level == snippets::CodeSnippetLevel::Function)
+        );
+    }
+
+    #[test]
     fn generated_code_corpus_does_not_repeat_snippet_text() {
         let library = library::load().expect("content json should load");
         let mut seen = HashSet::new();
@@ -1283,6 +1823,24 @@ mod tests {
                 seen.insert(snippet.text.as_str()),
                 "duplicate generated snippet: {}",
                 snippet.source
+            );
+        }
+    }
+
+    #[test]
+    fn generated_code_corpus_avoids_numbered_template_identifiers() {
+        let library = library::load().expect("content json should load");
+
+        for snippet in library
+            .code_snippets
+            .iter()
+            .filter(|snippet| snippet.source.starts_with("keyloop:generated:"))
+        {
+            assert!(
+                numbered_template_identifier(&snippet.text).is_none(),
+                "numbered generated identifier in {}: {}",
+                snippet.source,
+                snippet.text
             );
         }
     }
@@ -1422,7 +1980,7 @@ mod tests {
     }
 
     #[test]
-    fn build_daily_plan_keeps_seven_lesson_flow() {
+    fn daily_plan_has_one_main_group_per_module() {
         let plan = PracticePlan {
             focus_words: Vec::new(),
             focus_symbols: Vec::new(),
@@ -1436,11 +1994,283 @@ mod tests {
             .expect("plan should build");
 
         assert_eq!(daily.target_minutes, 20);
-        assert_eq!(daily.lessons.len(), 7);
-        assert_eq!(daily.lessons[0].kind, LessonKind::Warmup);
-        assert_eq!(daily.lessons[6].kind, LessonKind::CodeBlock);
-        assert_eq!(daily.lessons[6].target.source, "keyloop:code-corpus");
-        assert!(!daily.lessons[6].target.text.trim().is_empty());
+        assert_eq!(daily.lessons.len(), 4);
+        let modules = daily
+            .lessons
+            .iter()
+            .map(|lesson| lesson.module)
+            .collect::<Vec<_>>();
+        assert_eq!(
+            modules,
+            vec![
+                TrainingModule::FoundationInput,
+                TrainingModule::EverydayEnglish,
+                TrainingModule::ProgrammingBasics,
+                TrainingModule::CodePractice,
+            ]
+        );
+        assert_eq!(daily.lessons[3].kind, LessonKind::CodeBlock);
+        assert_eq!(
+            daily.lessons[3].target.source,
+            "keyloop:module:code-practice-mix"
+        );
+        assert!(!daily.lessons[3].target.text.trim().is_empty());
+    }
+
+    #[test]
+    fn everyday_mix_honors_word_count_setting() {
+        let library = library::load().expect("library loads");
+        let target = everyday_english_mix(
+            &PracticePlan {
+                focus_words: Vec::new(),
+                focus_symbols: Vec::new(),
+                focus_code: Vec::new(),
+                focus_keys: Vec::new(),
+                advice: Vec::new(),
+                recommended_mode: Mode::Words,
+                has_recent_history: false,
+            },
+            &library,
+            EverydayEnglishSettings {
+                word_count: 25,
+                include_phrases: false,
+                ..EverydayEnglishSettings::default()
+            },
+            MixProfile::Standalone,
+        );
+
+        let word_count = target
+            .text
+            .lines()
+            .take_while(|line| !line.ends_with(['.', '!', '?']))
+            .flat_map(str::split_whitespace)
+            .count();
+        assert!(word_count >= 25, "word_count={word_count}");
+        assert!(word_count <= 40, "word_count={word_count}");
+    }
+
+    #[test]
+    fn everyday_mix_uses_sentence_length_setting_from_clean_corpus() {
+        let library = library::load().expect("library loads");
+        let target = everyday_english_mix(
+            &PracticePlan {
+                focus_words: Vec::new(),
+                focus_symbols: Vec::new(),
+                focus_code: Vec::new(),
+                focus_keys: Vec::new(),
+                advice: Vec::new(),
+                recommended_mode: Mode::Words,
+                has_recent_history: false,
+            },
+            &library,
+            EverydayEnglishSettings {
+                word_count: 25,
+                sentence_length: crate::model::EverydaySentenceLength::Short,
+                include_phrases: true,
+            },
+            MixProfile::Standalone,
+        );
+
+        assert!(target.source.contains("sentences-short"));
+        assert!(target.text.lines().any(|line| line.contains('.')));
+    }
+
+    #[test]
+    fn everyday_word_target_respects_scope_and_group_word_count() {
+        let target = build_everyday_target(
+            &[],
+            EverydayPracticeScope::Common500,
+            EverydayEnglishSettings {
+                word_count: 10,
+                include_phrases: false,
+                sentence_length: EverydaySentenceLength::Mixed,
+            },
+        )
+        .expect("everyday target should build");
+
+        assert_eq!(target.mode, Mode::Words);
+        assert!(target.source.contains("common-500"));
+        assert!(target.source.contains("words-10"));
+        assert!(target.text.split_whitespace().count() >= 10);
+        assert!(!target.text.contains('\n'));
+        assert!(!target.text.contains('.'));
+    }
+
+    #[test]
+    fn everyday_meaning_lines_returns_chinese_glosses_for_displayed_words() {
+        let lines = everyday_meaning_lines("practice today before unknown practice", 4);
+
+        assert_eq!(
+            lines,
+            vec!["practice: 练习", "today: 今天", "before: 在之前"]
+        );
+    }
+
+    fn numbered_template_identifier(text: &str) -> Option<String> {
+        let chars = text.chars().collect::<Vec<_>>();
+        let mut index = 0usize;
+        while index < chars.len() {
+            if !chars[index].is_ascii_alphabetic() {
+                index += 1;
+                continue;
+            }
+            let start = index;
+            index += 1;
+            while index < chars.len()
+                && (chars[index].is_ascii_alphanumeric()
+                    || chars[index] == '_'
+                    || chars[index] == '-')
+            {
+                index += 1;
+            }
+            let token = chars[start..index].iter().collect::<String>();
+            let token_chars = token.chars().collect::<Vec<_>>();
+            let mut digit_index = 1usize;
+            while digit_index + 1 < token_chars.len() {
+                if !token_chars[digit_index].is_ascii_digit() {
+                    digit_index += 1;
+                    continue;
+                }
+                let mut after_digits = digit_index + 1;
+                while after_digits < token_chars.len() && token_chars[after_digits].is_ascii_digit()
+                {
+                    after_digits += 1;
+                }
+                if after_digits < token_chars.len()
+                    && (token_chars[after_digits].is_ascii_alphabetic()
+                        || token_chars[after_digits] == '_'
+                        || token_chars[after_digits] == '-')
+                {
+                    return Some(token);
+                }
+                digit_index = after_digits;
+            }
+        }
+        None
+    }
+
+    #[test]
+    fn everyday_sentence_target_uses_single_entry_with_switchable_length() {
+        let target = build_everyday_target(
+            &[],
+            EverydayPracticeScope::Sentences,
+            EverydayEnglishSettings {
+                word_count: 50,
+                include_phrases: false,
+                sentence_length: EverydaySentenceLength::Short,
+            },
+        )
+        .expect("sentence target should build");
+
+        assert_eq!(target.mode, Mode::Words);
+        assert!(target.source.contains("sentences-short"));
+        assert!(
+            target
+                .text
+                .lines()
+                .all(|line| line.ends_with(['.', '!', '?']))
+        );
+    }
+
+    #[test]
+    fn programming_basics_specialist_targets_have_distinct_sources() {
+        let records = Vec::<&SessionRecord>::new();
+
+        let naming = build_programming_basics_target(
+            &records,
+            ProgrammingBasicsPractice::Naming,
+            &CodePracticeConfig::default(),
+        )
+        .expect("naming target should build");
+        let terms = build_programming_basics_target(
+            &records,
+            ProgrammingBasicsPractice::TechnicalTerms,
+            &CodePracticeConfig::default(),
+        )
+        .expect("technical terms target should build");
+
+        assert!(naming.source.contains("naming"));
+        assert!(terms.source.contains("technical-terms"));
+        assert_ne!(naming.text, terms.text);
+    }
+
+    #[test]
+    fn programming_basics_targets_stay_lightweight() {
+        let records = Vec::<&SessionRecord>::new();
+        for practice in [
+            ProgrammingBasicsPractice::NumberSymbols,
+            ProgrammingBasicsPractice::Operators,
+            ProgrammingBasicsPractice::Naming,
+            ProgrammingBasicsPractice::TechnicalTerms,
+        ] {
+            let target =
+                build_programming_basics_target(&records, practice, &CodePracticeConfig::default())
+                    .expect("specialist target should build");
+
+            assert!(
+                target.text.chars().count() <= 650,
+                "{practice:?} produced {} chars",
+                target.text.chars().count()
+            );
+        }
+    }
+
+    #[test]
+    fn programming_basics_mix_stays_shorter_than_code_practice() {
+        let records = Vec::<&SessionRecord>::new();
+        let target = build_programming_basics_target(
+            &records,
+            ProgrammingBasicsPractice::Mix,
+            &CodePracticeConfig::default(),
+        )
+        .expect("mix target should build");
+
+        assert!(
+            target.text.chars().count() <= 850,
+            "programming basics mix produced {} chars",
+            target.text.chars().count()
+        );
+    }
+
+    #[test]
+    fn refresh_module_mix_target_uses_latest_symbol_errors() {
+        let lesson = PracticeLesson {
+            id: "daily:programming:1".to_string(),
+            kind: LessonKind::Symbols,
+            module: TrainingModule::ProgrammingBasics,
+            category: TrainingCategory::ProgrammingBasicsMix,
+            mix_profile: MixProfile::Comprehensive,
+            estimated_minutes: 4,
+            target: PracticeTarget {
+                mode: Mode::Symbols,
+                text: "fallback".to_string(),
+                source: "test:fallback".to_string(),
+            },
+            reason_zh: "测试".to_string(),
+            reason_en: "test".to_string(),
+        };
+        let record = SessionRecord {
+            token_stats: vec![TokenStat {
+                token: "=>".to_string(),
+                kind: TokenKind::Symbol,
+                start_delay_ms: 100,
+                duration_ms: 100,
+                errors: 3,
+            }],
+            ..SessionRecord::default()
+        };
+        let records = vec![&record];
+
+        let target = refresh_module_mix_target(
+            &lesson,
+            &records,
+            &CodePracticeConfig::default(),
+            &EverydayEnglishSettings::default(),
+        )
+        .expect("target should refresh");
+
+        assert!(target.text.contains("=>"));
+        assert_eq!(target.source, "keyloop:module:programming-basics-mix");
     }
 
     #[test]
@@ -1457,14 +2287,14 @@ mod tests {
         let daily = build_daily_practice_plan(&[], None, &plan, &CodePracticeConfig::default())
             .expect("adaptive plan should build");
 
-        assert!((7..=8).contains(&daily.lessons.len()));
+        assert_eq!(daily.lessons.len(), 4);
         assert_eq!(daily.lessons[0].kind, LessonKind::Foundation);
         assert_eq!(daily.lessons[2].kind, LessonKind::Symbols);
         assert!(
             daily
                 .lessons
                 .iter()
-                .any(|lesson| lesson.reason_zh.contains("高错"))
+                .any(|lesson| lesson.reason_zh.contains("弱键"))
         );
         assert!(
             daily
@@ -1499,7 +2329,7 @@ mod tests {
             daily
                 .lessons
                 .iter()
-                .any(|lesson| lesson.id == "daily:code-block:2")
+                .any(|lesson| lesson.id == "daily:code-block:1")
         );
     }
 
@@ -1530,7 +2360,106 @@ mod tests {
             }
         }
 
-        assert!(code_lesson_count >= 2);
+        assert_eq!(code_lesson_count, 1);
+    }
+
+    #[test]
+    fn stable_foundation_module_reduces_daily_frequency() {
+        let records = stable_module_records(
+            TrainingModule::FoundationInput,
+            TrainingCategory::FoundationMix,
+        );
+        let plan = PracticePlan {
+            focus_words: Vec::new(),
+            focus_symbols: Vec::new(),
+            focus_code: Vec::new(),
+            focus_keys: Vec::new(),
+            advice: Vec::new(),
+            recommended_mode: Mode::Mixed,
+            has_recent_history: true,
+        };
+
+        let daily =
+            build_daily_practice_plan(&records, None, &plan, &CodePracticeConfig::default())
+                .expect("adaptive plan should build");
+
+        assert!(
+            !daily
+                .lessons
+                .iter()
+                .any(|lesson| lesson.module == TrainingModule::FoundationInput)
+        );
+        assert!(daily.lessons.len() >= 3);
+    }
+
+    #[test]
+    fn weak_foundation_module_stays_single_short_review_group() {
+        let records = weak_module_records(
+            TrainingModule::FoundationInput,
+            TrainingCategory::FoundationMix,
+        );
+        let plan = PracticePlan {
+            focus_words: Vec::new(),
+            focus_symbols: Vec::new(),
+            focus_code: Vec::new(),
+            focus_keys: vec!["j".to_string(), ";".to_string()],
+            advice: Vec::new(),
+            recommended_mode: Mode::Chars,
+            has_recent_history: true,
+        };
+
+        let daily =
+            build_daily_practice_plan(&records, None, &plan, &CodePracticeConfig::default())
+                .expect("adaptive plan should build");
+        let foundation = daily
+            .lessons
+            .iter()
+            .filter(|lesson| lesson.module == TrainingModule::FoundationInput)
+            .collect::<Vec<_>>();
+
+        assert_eq!(foundation.len(), 1);
+        assert!(foundation[0].estimated_minutes <= 4);
+        assert!(foundation[0].reason_zh.contains("短复习"));
+    }
+
+    fn stable_module_records(
+        module: TrainingModule,
+        category: TrainingCategory,
+    ) -> Vec<SessionRecord> {
+        (0..3)
+            .map(|_| SessionRecord {
+                module,
+                category,
+                typed_len: 120,
+                target_len: 120,
+                correct_chars: 118,
+                accuracy: 98.5,
+                error_count: 1,
+                backspace_count: 1,
+                completion_state: CompletionState::Completed,
+                started_at: chrono::Utc::now(),
+                ..SessionRecord::default()
+            })
+            .collect()
+    }
+
+    fn weak_module_records(
+        module: TrainingModule,
+        category: TrainingCategory,
+    ) -> Vec<SessionRecord> {
+        vec![SessionRecord {
+            module,
+            category,
+            typed_len: 100,
+            target_len: 100,
+            correct_chars: 84,
+            accuracy: 84.0,
+            error_count: 16,
+            backspace_count: 18,
+            completion_state: CompletionState::Completed,
+            started_at: chrono::Utc::now(),
+            ..SessionRecord::default()
+        }]
     }
 
     #[test]

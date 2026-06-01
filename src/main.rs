@@ -1,5 +1,6 @@
 mod cli;
 mod content;
+mod feedback;
 mod metrics;
 mod model;
 mod plan;
@@ -10,7 +11,7 @@ mod trainer;
 use anyhow::Result;
 use clap::Parser;
 use cli::{Cli, Command, ReportScope};
-use model::{CodePracticeConfig, Language, Mode};
+use model::{CodePracticeConfig, CodePracticeFacet, Language, Mode, UserPreferences};
 use std::path::PathBuf;
 
 fn main() -> Result<()> {
@@ -63,38 +64,64 @@ fn main() -> Result<()> {
 
 fn start(
     _mode: Mode,
-    language: Language,
+    _language: Language,
     repo: Option<PathBuf>,
     code_config: CodePracticeConfig,
 ) -> Result<()> {
     let records = storage::load_sessions()?;
+    let preferences = storage::load_preferences()?;
+    let language = preferences.interface_language;
+    let effective_code_config = if code_config.is_empty() {
+        code_config_from_preferences(&preferences)
+    } else {
+        code_config
+    };
     let plan = plan::build_plan(&records, language);
-    let fresh_daily_plan =
-        content::build_daily_practice_plan(&records, repo.as_deref(), &plan, &code_config)?;
+    let fresh_daily_plan = content::build_daily_practice_plan(
+        &records,
+        repo.as_deref(),
+        &plan,
+        &effective_code_config,
+    )?;
     let daily_plan = storage::load_or_create_daily_practice_plan(fresh_daily_plan, &records)?;
-    let completed = trainer::run(daily_plan, records, language)?;
+    let run_result = trainer::run(daily_plan, records, language)?;
 
-    if completed.is_empty() {
+    if run_result.completed_records.is_empty() {
         match language {
             Language::Zh => println!("没有完成的练习记录，未保存。"),
             Language::En => println!("No completed sessions were saved."),
         }
-    } else {
-        let mut last_saved = None;
-        for record in &completed {
-            let saved_to = storage::append_session(record)?;
-            last_saved = Some((record, saved_to));
-        }
-        if let Some((record, saved_to)) = last_saved {
-            println!("{}", report::session_summary(record, &saved_to, language));
-            if completed.len() > 1 {
-                match language {
-                    Language::Zh => println!("\n已保存 {} 次练习。", completed.len()),
-                    Language::En => println!("\nSaved {} sessions.", completed.len()),
+    } else if let (Some(record), Some(saved_to)) = (
+        run_result.completed_records.last(),
+        run_result.last_saved_to.as_ref(),
+    ) {
+        println!("{}", report::session_summary(record, saved_to, language));
+        if run_result.completed_records.len() > 1 {
+            match language {
+                Language::Zh => {
+                    println!("\n已保存 {} 次练习。", run_result.completed_records.len())
+                }
+                Language::En => {
+                    println!("\nSaved {} sessions.", run_result.completed_records.len())
                 }
             }
         }
     }
 
     Ok(())
+}
+
+fn code_config_from_preferences(preferences: &UserPreferences) -> CodePracticeConfig {
+    let mut config = CodePracticeConfig {
+        match_any: true,
+        ..CodePracticeConfig::default()
+    };
+    for filter in &preferences.global_code_filters {
+        match filter.facet {
+            CodePracticeFacet::Language => config.languages.push(filter.value.clone()),
+            CodePracticeFacet::Framework => config.frameworks.push(filter.value.clone()),
+            CodePracticeFacet::Project => config.projects.push(filter.value.clone()),
+        }
+    }
+    config
 }
