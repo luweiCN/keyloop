@@ -4,20 +4,12 @@ use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::fmt;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, ValueEnum)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize, ValueEnum)]
 #[serde(rename_all = "lowercase")]
 pub enum Language {
+    #[default]
     Zh,
     En,
-}
-
-impl Language {
-    pub fn toggle(self) -> Self {
-        match self {
-            Language::Zh => Language::En,
-            Language::En => Language::Zh,
-        }
-    }
 }
 
 impl fmt::Display for Language {
@@ -55,6 +47,151 @@ pub enum LessonKind {
     CodeBlock,
 }
 
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum TrainingModule {
+    #[default]
+    Unknown,
+    Comprehensive,
+    FoundationInput,
+    EverydayEnglish,
+    ProgrammingBasics,
+    CodePractice,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum TrainingCategory {
+    #[default]
+    Unknown,
+    FoundationMix,
+    HomeRow,
+    TopRow,
+    BottomRow,
+    FingerTransitions,
+    PunctuationEdges,
+    LetterCombinations,
+    BasicWords,
+    EverydayWords,
+    EverydayPhrases,
+    EverydaySentences,
+    EverydayMix,
+    NumbersSymbols,
+    OperatorsBracketsQuotes,
+    ProgrammingTerms,
+    NamingStyles,
+    ProgrammingBasicsMix,
+    CodeSnippet,
+    CodeFunction,
+    CodeFileFragment,
+    CodeMix,
+    Review,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum MixProfile {
+    #[default]
+    Standalone,
+    Comprehensive,
+    Review,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum EverydaySentenceLength {
+    Short,
+    Medium,
+    Long,
+    #[default]
+    Mixed,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct EverydayEnglishSettings {
+    pub word_count: usize,
+    pub sentence_length: EverydaySentenceLength,
+    pub include_phrases: bool,
+}
+
+impl Default for EverydayEnglishSettings {
+    fn default() -> Self {
+        Self {
+            word_count: 50,
+            sentence_length: EverydaySentenceLength::Mixed,
+            include_phrases: true,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct GroupFeedback {
+    #[serde(default)]
+    pub error_keys: Vec<(String, u32)>,
+    #[serde(default)]
+    pub slow_keys: Vec<(String, u64)>,
+    #[serde(default)]
+    pub error_tokens: Vec<(String, u32)>,
+    #[serde(default)]
+    pub slow_tokens: Vec<(String, u64)>,
+    #[serde(default)]
+    pub missed_symbols: Vec<(String, u32)>,
+    #[serde(default)]
+    pub backspace_clusters: Vec<(String, u32)>,
+}
+
+impl GroupFeedback {
+    pub fn normalize(&mut self) {
+        self.error_keys.sort();
+        self.error_keys.dedup();
+        self.slow_keys.sort();
+        self.slow_keys.dedup();
+        self.error_tokens.sort();
+        self.error_tokens.dedup();
+        self.slow_tokens.sort();
+        self.slow_tokens.dedup();
+        self.missed_symbols.sort();
+        self.missed_symbols.dedup();
+        self.backspace_clusters.sort();
+        self.backspace_clusters.dedup();
+    }
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CharStats {
+    pub correct: usize,
+    pub incorrect: usize,
+    pub extra: usize,
+    pub missed: usize,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+pub struct KeyAggregate {
+    pub key: String,
+    pub sample_count: u64,
+    pub hit_count: u64,
+    pub miss_count: u64,
+    pub avg_ms: f64,
+    pub fastest_ms: u64,
+    pub slowest_ms: u64,
+    pub filtered_avg_ms: f64,
+    pub error_rate: f64,
+    pub confidence: f64,
+    pub last_seen_at: Option<DateTime<Utc>>,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+pub struct SessionCheckpoint {
+    pub target_id: String,
+    pub target_hash: String,
+    pub input_len: usize,
+    pub active_ms: u64,
+    pub idle_ms: u64,
+    pub key_sample_count: usize,
+    #[serde(default)]
+    pub key_aggregates: Vec<KeyAggregate>,
+}
+
 impl LessonKind {
     pub fn slug(self) -> &'static str {
         match self {
@@ -86,6 +223,12 @@ pub struct PracticeLesson {
     #[serde(default)]
     pub id: String,
     pub kind: LessonKind,
+    #[serde(default = "default_lesson_module")]
+    pub module: TrainingModule,
+    #[serde(default = "default_lesson_category")]
+    pub category: TrainingCategory,
+    #[serde(default)]
+    pub mix_profile: MixProfile,
     pub estimated_minutes: u16,
     pub target: PracticeTarget,
     pub reason_zh: String,
@@ -121,6 +264,7 @@ pub struct CodePracticeConfig {
     pub languages: Vec<String>,
     pub frameworks: Vec<String>,
     pub projects: Vec<String>,
+    pub level: Option<CodePracticeLevel>,
     pub match_any: bool,
 }
 
@@ -132,7 +276,16 @@ impl CodePracticeConfig {
             && self.languages.is_empty()
             && self.frameworks.is_empty()
             && self.projects.is_empty()
+            && self.level.is_none()
     }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum CodePracticeLevel {
+    Block,
+    Function,
+    File,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
@@ -168,7 +321,13 @@ impl CodeFilterPreference {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct UserPreferences {
     #[serde(default)]
+    pub interface_language: Language,
+    #[serde(default)]
     pub pinned_code_filters: Vec<CodeFilterPreference>,
+    #[serde(default)]
+    pub global_code_filters: Vec<CodeFilterPreference>,
+    #[serde(default)]
+    pub everyday_english: EverydayEnglishSettings,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -190,7 +349,25 @@ pub struct SessionRecord {
     #[serde(default)]
     pub completion_state: CompletionState,
     #[serde(default)]
+    pub module: TrainingModule,
+    #[serde(default)]
+    pub category: TrainingCategory,
+    #[serde(default)]
     pub duration_ms: u64,
+    #[serde(default)]
+    pub active_ms: u64,
+    #[serde(default)]
+    pub idle_ms: u64,
+    #[serde(default)]
+    pub manual_pause_ms: u64,
+    #[serde(default)]
+    pub idle_pause_count: u32,
+    #[serde(default)]
+    pub start_to_first_key_ms: u64,
+    #[serde(default)]
+    pub last_key_to_end_ms: u64,
+    #[serde(default)]
+    pub char_stats: CharStats,
     #[serde(default)]
     pub target_text: String,
     #[serde(default)]
@@ -234,7 +411,16 @@ impl Default for SessionRecord {
             lesson_id: String::new(),
             lesson_index: None,
             completion_state: CompletionState::default(),
+            module: TrainingModule::default(),
+            category: TrainingCategory::default(),
             duration_ms: 0,
+            active_ms: 0,
+            idle_ms: 0,
+            manual_pause_ms: 0,
+            idle_pause_count: 0,
+            start_to_first_key_ms: 0,
+            last_key_to_end_ms: 0,
+            char_stats: CharStats::default(),
             target_text: String::new(),
             user_input: String::new(),
             target_len: 0,
@@ -315,6 +501,14 @@ fn default_started_at() -> DateTime<Utc> {
     DateTime::<Utc>::from(std::time::UNIX_EPOCH)
 }
 
+fn default_lesson_module() -> TrainingModule {
+    TrainingModule::ProgrammingBasics
+}
+
+fn default_lesson_category() -> TrainingCategory {
+    TrainingCategory::ProgrammingTerms
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -348,5 +542,81 @@ mod tests {
         assert!(record.slow_tokens.is_empty());
         assert!(record.token_stats.is_empty());
         assert!(record.key_events.is_empty());
+    }
+
+    #[test]
+    fn lesson_defaults_missing_module_fields() {
+        let lesson: PracticeLesson = serde_json::from_str(
+            r#"{
+                "id": "daily:words:1",
+                "kind": "words",
+                "estimated_minutes": 3,
+                "target": {"mode": "words", "text": "return value", "source": "test"},
+                "reason_zh": "测试",
+                "reason_en": "test"
+            }"#,
+        )
+        .expect("legacy lesson should deserialize");
+
+        assert_eq!(lesson.module, TrainingModule::ProgrammingBasics);
+        assert_eq!(lesson.category, TrainingCategory::ProgrammingTerms);
+        assert_eq!(lesson.mix_profile, MixProfile::Standalone);
+    }
+
+    #[test]
+    fn session_defaults_missing_module_fields() {
+        let record: SessionRecord = serde_json::from_str(
+            r#"{
+                "started_at": "2026-05-30T00:00:00Z",
+                "mode": "words",
+                "source": "legacy",
+                "duration_ms": 60000,
+                "target_text": "hello",
+                "user_input": "hello",
+                "target_len": 5,
+                "typed_len": 5,
+                "correct_chars": 5,
+                "wpm": 10.0,
+                "raw_wpm": 10.0,
+                "accuracy": 100.0,
+                "error_count": 0,
+                "backspace_count": 0
+            }"#,
+        )
+        .expect("legacy session should deserialize");
+
+        assert_eq!(record.module, TrainingModule::Unknown);
+        assert_eq!(record.category, TrainingCategory::Unknown);
+    }
+
+    #[test]
+    fn session_record_defaults_missing_timing_fields() {
+        let record: SessionRecord = serde_json::from_str(
+            r#"{
+                "started_at": "2026-05-30T00:00:00Z",
+                "mode": "words",
+                "source": "legacy",
+                "duration_ms": 60000,
+                "target_text": "hello",
+                "user_input": "hello",
+                "target_len": 5,
+                "typed_len": 5,
+                "correct_chars": 5,
+                "wpm": 10.0,
+                "raw_wpm": 10.0,
+                "accuracy": 100.0,
+                "error_count": 0,
+                "backspace_count": 0
+            }"#,
+        )
+        .expect("legacy session should deserialize");
+
+        assert_eq!(record.active_ms, 0);
+        assert_eq!(record.idle_ms, 0);
+        assert_eq!(record.manual_pause_ms, 0);
+        assert_eq!(record.idle_pause_count, 0);
+        assert_eq!(record.start_to_first_key_ms, 0);
+        assert_eq!(record.last_key_to_end_ms, 0);
+        assert_eq!(record.char_stats.correct, 0);
     }
 }

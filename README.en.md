@@ -91,25 +91,31 @@ cargo run -- plan
 
 The default daily target is 20 minutes. You can finish it in one session or in several short sessions. Each completed lesson adds to today's progress.
 
-Built-in content lives in the root `content/` directory. See [docs/content/CATALOG.md](docs/content/CATALOG.md). Code indentation is normalized before practice by removing the shared outer indentation while preserving relative indentation inside functions, HTML/Vue trees, and CSS nesting. In code mode, pressing Enter automatically inserts the expected leading indentation for the next line.
+Built-in content lives in the root `content/` directory. See [docs/content/CATALOG.md](docs/content/CATALOG.md). Everyday English uses `content/everyday_english.json`, a KeyLoop hand-authored clean corpus for everyday/workplace words, phrases, and short/medium/long sentences. It does not copy external typing-site word lists. Set `KEYLOOP_EVERYDAY_CORPUS=/path/to/everyday.json` to merge a local private corpus with the same schema.
+
+Code indentation is normalized before practice by removing the shared outer indentation while preserving relative indentation inside functions, HTML/Vue trees, and CSS nesting. In code mode, pressing Enter automatically inserts the expected leading indentation for the next line.
 
 Without enough history, full practice starts from this default path:
 
-1. Warmup: base keys
-2. Chunks: English spelling chunks such as `the`, `tion`, `ing`, `ment`, `pre`, `con`, `str`
-3. Common words: real high-frequency English words without mixed casing
-4. Words: frontend and programmer vocabulary
-5. Focus: numbers and symbols
-6. Naming: casing and frontend APIs
-7. Code blocks: complete snippets with at least 100 built-in entries for every supported language and framework, covering block, function, and file levels
+1. Foundation input: Home/Top/Bottom row, transitions, and recent weak keys
+2. Everyday English: common words, chunks, and natural English input
+3. Programming basics: numbers, symbols, naming, and technical terms
+4. Code practice: complete code blocks and multi-line structure
 
-After there is recent history, full practice becomes adaptive: key hot spots add foundation drills, symbol errors add symbol groups, high-error words and identifiers feed chunk/word groups, and slow terms are pushed back into complete code blocks. The plan page keeps the training rationale in one place while the menu stays stable.
+After there is recent history, full practice becomes adaptive inside each module: key hot spots increase matching foundation material, symbol errors feed programming basics, high-error words and identifiers feed everyday English or programming basics, and slow terms are pushed back into complete code blocks. Errors and slow items from a completed group can influence later groups in the same run without adding a second full symbol or Top row drill.
 
 Code difficulty is selected from recent code-practice accuracy, WPM, and error rate, then mapped to easy, medium, or hard snippets.
 
 Symbol practice has a generic layer plus language/framework-specific sets, for example TS/JS `=>`, `?.`, `??`, Rust `::`, `->`, `'a`, CSS/Sass `@media`, `&`, `:root`, and Solidity `indexed`, `payable`, `mapping`.
 
-The menu also includes Foundation practice and Code focus mode. Foundation practice has row, horizontal, vertical, and finger-movement drills that continue into another group after each completion. Code focus lets you multi-select languages, frameworks, and projects, keeps used or pinned filters near the top, then continues into another generated code group.
+The menu has 6 fixed entries:
+
+- Full practice: run the adaptive sequence across foundation practice, everyday practice, programming basics, and code practice.
+- Foundation practice: open a second-level menu for Home row, Top row, Bottom row, horizontal, vertical, finger movement, and a bottom mixed foundation entry.
+- Everyday practice: open common 100 words, common 500 words, common 1000 words, everyday sentences, or everyday mix. Word entries can switch each group between 10 / 20 / 50 / 100 words. The sentence entry switches short / medium / long / mixed inside the same entry.
+- Programming basics: open numbers and symbols, operators/brackets/quotes, naming and camel case, technical terms, or programming basics mix.
+- Code practice: open code blocks, functions, file fragments, or random mix while keeping language/framework/project multi-select filters. Used or pinned filters stay near the top and are saved as the global code scope.
+- Stats: review total time, best WPM, weighted accuracy, key heatmap, problem words, daily details, and what the next full practice will prioritize.
 
 ## Metrics
 

@@ -155,7 +155,7 @@ def noun_at(index: int) -> str:
     cycle = index // len(NOUNS)
     if cycle == 0:
         return base
-    return f"{base}{cycle + 1}"
+    return f"{ADJECTIVES[(cycle - 1) % len(ADJECTIVES)]}_{base}"
 
 
 PROJECTS_BY_FRAMEWORK = {

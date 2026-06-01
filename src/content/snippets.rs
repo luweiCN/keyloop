@@ -1,4 +1,4 @@
-use crate::model::{CodePracticeConfig, CodePracticeFacet, CodePracticeOption};
+use crate::model::{CodePracticeConfig, CodePracticeFacet, CodePracticeLevel, CodePracticeOption};
 use anyhow::{Context, Result};
 use ignore::WalkBuilder;
 use rand::seq::SliceRandom;
@@ -306,7 +306,17 @@ fn is_practice_code_block(text: &str) -> bool {
 }
 
 fn matches_code_config(snippet: &CodeSnippet, config: &CodePracticeConfig) -> bool {
-    if config.is_empty() {
+    if !matches_code_level(snippet.level, config.level) {
+        return false;
+    }
+
+    let has_tag_filters = config.language.is_some()
+        || config.framework.is_some()
+        || config.project.is_some()
+        || !config.languages.is_empty()
+        || !config.frameworks.is_empty()
+        || !config.projects.is_empty();
+    if !has_tag_filters {
         return true;
     }
 
@@ -329,6 +339,18 @@ fn matches_code_config(snippet: &CodeSnippet, config: &CodePracticeConfig) -> bo
         config.project.as_deref(),
         &config.projects,
     )
+}
+
+fn matches_code_level(
+    snippet_level: CodeSnippetLevel,
+    selected: Option<CodePracticeLevel>,
+) -> bool {
+    match selected {
+        None => true,
+        Some(CodePracticeLevel::Block) => snippet_level == CodeSnippetLevel::Block,
+        Some(CodePracticeLevel::Function) => snippet_level == CodeSnippetLevel::Function,
+        Some(CodePracticeLevel::File) => snippet_level == CodeSnippetLevel::File,
+    }
 }
 
 fn matches_optional(value: &str, expected: Option<&str>, expected_many: &[String]) -> bool {

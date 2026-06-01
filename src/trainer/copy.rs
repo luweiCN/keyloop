@@ -17,24 +17,24 @@ pub(super) fn lesson_color(kind: LessonKind) -> Color {
 pub(super) fn lesson_title(kind: LessonKind, language: Language) -> &'static str {
     match language {
         Language::Zh => match kind {
-            LessonKind::Foundation => "基础：键位专项",
+            LessonKind::Foundation => "基础输入：综合键位",
             LessonKind::Warmup => "热身：基础键位",
             LessonKind::Chunks => "词块：英文拼写块",
-            LessonKind::CommonWords => "高频词：英语常用词",
-            LessonKind::Words => "单词：前端高频词",
-            LessonKind::Symbols => "专项：数字和符号",
+            LessonKind::CommonWords => "日常英语：常用词句",
+            LessonKind::Words => "编程基础：技术词汇",
+            LessonKind::Symbols => "编程基础：符号和命名",
             LessonKind::Naming => "命名：大小写和前端 API",
-            LessonKind::CodeBlock => "代码块：多语言完整片段",
+            LessonKind::CodeBlock => "代码实战：完整代码块",
         },
         Language::En => match kind {
-            LessonKind::Foundation => "Foundation: key drills",
+            LessonKind::Foundation => "Foundation input: mixed keys",
             LessonKind::Warmup => "Warmup: base keys",
             LessonKind::Chunks => "Chunks: English spelling blocks",
-            LessonKind::CommonWords => "High frequency: common English words",
-            LessonKind::Words => "Words: frontend vocabulary",
-            LessonKind::Symbols => "Drill: numbers and symbols",
+            LessonKind::CommonWords => "Everyday English: words and sentences",
+            LessonKind::Words => "Programming basics: technical words",
+            LessonKind::Symbols => "Programming basics: symbols and naming",
             LessonKind::Naming => "Naming: case and frontend APIs",
-            LessonKind::CodeBlock => "Code blocks: complete multi-language snippets",
+            LessonKind::CodeBlock => "Code practice: complete code",
         },
     }
 }
@@ -72,12 +72,18 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "menu_comprehensive" => "综合练习",
             "menu_comprehensive_hint" => "按今日动态计划练完所有组",
             "menu_foundation" => "基础练习",
-            "menu_foundation_hint" => "按键盘行位、横向、竖向和手指移动专项练",
-            "menu_code_specialist" => "代码专项",
-            "menu_code_specialist_hint" => "选择语言、框架或项目，连续练代码块",
+            "menu_foundation_hint" => "Home/top/bottom row、过渡和基础词专项",
+            "menu_everyday" => "日常练习",
+            "menu_everyday_hint" => "常见词、日常句子和日常综合",
+            "menu_programming" => "编程基础",
+            "menu_programming_hint" => "数字符号、操作符、命名和技术词专项",
+            "menu_code_specialist" => "编程实战",
+            "menu_code_specialist_hint" => "使用全局语言/框架范围练完整代码块",
+            "menu_settings" => "全局设置",
+            "menu_settings_hint" => "设置界面语言和代码语言/框架范围",
             "menu_stats" => "数据统计",
             "menu_stats_hint" => "查看总览、热力图、弱项和每天练习明细",
-            "menu_help" => "↑/↓ 或 J/K：选择 | Enter：开始/进入 | L：切换语言 | Esc/Q：退出",
+            "menu_help" => "↑/↓ 或 J/K：选择 | Enter：开始/进入 | Esc/Q：退出",
             "menu_mode_label" => "今日计划",
             "status_title" => "状态",
             "stats_title" => "数据统计",
@@ -87,7 +93,7 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "stats_details" => "每日明细",
             "stats_diagnosis" => "弱项诊断",
             "stats_by_day" => "按日期",
-            "stats_help" => "←/→ 日期 | Home/End 最新/最早 | L 语言 | Esc 返回 | Q 退出",
+            "stats_help" => "←/→ 日期 | Home/End 最新/最早 | Esc 返回 | Q 退出",
             "stats_empty" => "还没有练习记录。完成一次练习后这里会显示统计数据。",
             "stats_empty_day" => "这一天没有练习记录。",
             "stats_no_recent" => "暂无最近记录",
@@ -97,16 +103,28 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "stats_error_symbols" => "高错符号",
             "stats_key_heat" => "键位热力图",
             "stats_slow_tokens" => "慢词块",
-            "foundation_title" => "基础练习",
+            "foundation_title" => "基础输入",
             "foundation_selected" => "当前专项",
-            "foundation_empty" => "没有可用基础练习。",
+            "foundation_empty" => "没有可用基础输入练习。",
             "foundation_help" => "↑/↓ 或 J/K：选择专项 | 1-9：快速选择 | Enter：开始 | Esc：返回",
-            "code_setup_title" => "代码专项设置",
+            "everyday_title" => "日常练习",
+            "everyday_help" => "↑/↓ 或 J/K：选择 | ←/→：切换设置 | Enter：开始 | Esc：返回",
+            "programming_title" => "编程基础",
+            "programming_help" => "↑/↓ 或 J/K：选择专项 | Enter：开始 | Esc：返回",
+            "code_setup_title" => "代码实战设置",
             "code_setup_selected" => "已选范围（匹配任一条件）",
             "code_setup_all" => "全部代码语料（未筛选）",
             "code_setup_empty" => "没有可用代码语料。",
             "code_setup_help" => {
-                "↑/↓ 或 J/K：选择 | Space：勾选 | F：置顶/取消 | D：删除置顶 | A：全选 | C：清空 | Enter：开始 | Esc：返回"
+                "↑/↓/←/→ 或 1-4：切换代码块/函数/文件/随机 | Enter：开始 | Esc：返回"
+            }
+            "settings_title" => "全局设置",
+            "settings_menu_help" => "↑/↓：选择设置项 | Enter：进入 | Esc：返回",
+            "language_settings_title" => "界面语言设置",
+            "language_settings_help" => "↑/↓ 或 ←/→：选择语言 | Enter/Space：应用 | Esc：返回设置",
+            "code_filter_settings_title" => "编程语言设置",
+            "code_filter_settings_help" => {
+                "↑/↓：选择 | Enter/Space：勾选范围 | F：置顶/取消 | D：删除置顶 | Esc：返回设置"
             }
             "today_plan" => "今日练习",
             "today_summary" => "今日总结",
@@ -130,7 +148,9 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "next_lesson" => "Enter 进入下一组",
             "next_reason" => "下一组原因",
             "adaptive_reason" => "安排原因",
-            "next_foundation_group" => "Enter 再来一组基础练习",
+            "next_foundation_group" => "Enter 再来一组基础输入",
+            "next_everyday_group" => "Enter 再来一组日常练习",
+            "next_programming_group" => "Enter 再来一组编程基础",
             "next_code_group" => "Enter 再来一组代码",
             "finish_today" => "Enter 查看今日总结",
             "complete_help" => "Enter：继续 | R：重练本组 | L：切换语言 | Esc：返回菜单 | Q：退出",
@@ -163,14 +183,20 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "menu_comprehensive" => "Full practice",
             "menu_comprehensive_hint" => "Follow today's adaptive plan",
             "menu_foundation" => "Foundation practice",
-            "menu_foundation_hint" => "Rows, horizontal/vertical movement, and finger drills",
-            "menu_code_specialist" => "Code focus",
+            "menu_foundation_hint" => "Home/top/bottom rows, transitions, and basic words",
+            "menu_everyday" => "Everyday practice",
+            "menu_everyday_hint" => "Common words, daily sentences, and mixed everyday practice",
+            "menu_programming" => "Programming basics",
+            "menu_programming_hint" => "Numbers, symbols, operators, naming, and technical terms",
+            "menu_code_specialist" => "Code practice",
             "menu_code_specialist_hint" => {
-                "Choose languages, frameworks, or projects for code drills"
+                "Use the global language/framework scope for complete code"
             }
+            "menu_settings" => "Settings",
+            "menu_settings_hint" => "Language and code language/framework scope",
             "menu_stats" => "Stats",
             "menu_stats_hint" => "Overview, heatmap, weak spots, and daily details",
-            "menu_help" => "Up/Down or J/K: choose | Enter: start/open | L: language | Esc/Q: quit",
+            "menu_help" => "Up/Down or J/K: choose | Enter: start/open | Esc/Q: quit",
             "menu_mode_label" => "plan",
             "status_title" => "Status",
             "stats_title" => "Stats",
@@ -180,9 +206,7 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "stats_details" => "Daily detail",
             "stats_diagnosis" => "Diagnosis",
             "stats_by_day" => "By date",
-            "stats_help" => {
-                "Left/Right date | Home/End newest/oldest | L language | Esc menu | Q quit"
-            }
+            "stats_help" => "Left/Right date | Home/End newest/oldest | Esc menu | Q quit",
             "stats_empty" => "No practice records yet. Complete a session to see statistics.",
             "stats_empty_day" => "No practice records on this day.",
             "stats_no_recent" => "no recent records",
@@ -192,16 +216,30 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "stats_error_symbols" => "High-error symbols",
             "stats_key_heat" => "Key heatmap",
             "stats_slow_tokens" => "Slow tokens",
-            "foundation_title" => "Foundation practice",
+            "foundation_title" => "Foundation input",
             "foundation_selected" => "Current drill",
-            "foundation_empty" => "No foundation drills are available.",
+            "foundation_empty" => "No foundation input drills are available.",
             "foundation_help" => "Up/Down or J/K: choose | 1-9: jump | Enter: start | Esc: back",
-            "code_setup_title" => "Code focus setup",
+            "everyday_title" => "Everyday practice",
+            "everyday_help" => {
+                "Up/Down or J/K: choose | Left/Right: setting | Enter: start | Esc: back"
+            }
+            "programming_title" => "Programming basics",
+            "programming_help" => "Up/Down or J/K: choose | Enter: start | Esc: back",
+            "code_setup_title" => "Code practice setup",
             "code_setup_selected" => "Selected scope (match any)",
             "code_setup_all" => "all code corpus (no filter)",
             "code_setup_empty" => "No code corpus is available.",
-            "code_setup_help" => {
-                "Up/Down or J/K: choose | Space: toggle | F: pin/unpin | D: delete pin | A: all | C: clear | Enter: start | Esc: back"
+            "code_setup_help" => "Up/Down/Left/Right or 1-4: level | Enter: start | Esc: back",
+            "settings_title" => "Settings",
+            "settings_menu_help" => "Up/Down: choose setting | Enter: open | Esc: back",
+            "language_settings_title" => "Interface language",
+            "language_settings_help" => {
+                "Up/Down or Left/Right: choose | Enter/Space: apply | Esc: settings"
+            }
+            "code_filter_settings_title" => "Programming language scope",
+            "code_filter_settings_help" => {
+                "Up/Down: choose | Enter/Space: toggle scope | F: pin/unpin | D: delete pin | Esc: settings"
             }
             "today_plan" => "Today's practice",
             "today_summary" => "Today summary",
@@ -228,6 +266,8 @@ pub(super) fn text(language: Language, key: &str) -> &'static str {
             "next_reason" => "Next reason",
             "adaptive_reason" => "Reason",
             "next_foundation_group" => "Enter for another foundation group",
+            "next_everyday_group" => "Enter for another everyday group",
+            "next_programming_group" => "Enter for another programming basics group",
             "next_code_group" => "Enter for another code group",
             "finish_today" => "Enter for today summary",
             "complete_help" => {

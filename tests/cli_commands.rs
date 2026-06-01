@@ -122,4 +122,8 @@ fn sources_command_lists_corpus_provenance() {
 
     assert!(stdout.contains("代码语料来源"));
     assert!(stdout.contains("github:"));
+    assert!(stdout.contains("keyloop:everyday-english:hand-authored"));
+    assert!(stdout.contains("manual-curation"));
+    assert!(!stdout.to_ascii_lowercase().contains("monkeytype"));
+    assert!(!stdout.to_ascii_lowercase().contains("keybr"));
 }

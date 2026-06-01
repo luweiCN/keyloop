@@ -1,4 +1,5 @@
 use crate::content::{CodeSnippet, library::SourceCatalogEntry};
+use crate::feedback::is_numbered_template_identifier;
 use crate::model::{Language, Mode, SessionRecord, TokenKind, TokenStat};
 use crate::plan::PracticePlan;
 use chrono::Local;
@@ -70,6 +71,18 @@ pub fn today_report(records: &[SessionRecord], plan: &PracticePlan, language: La
         .iter()
         .map(|record| record.duration_ms)
         .sum::<u64>();
+    let active_ms = todays_records
+        .iter()
+        .map(|record| effective_active_ms(record))
+        .sum::<u64>();
+    let idle_ms = todays_records
+        .iter()
+        .map(|record| record.idle_ms)
+        .sum::<u64>();
+    let manual_pause_ms = todays_records
+        .iter()
+        .map(|record| record.manual_pause_ms)
+        .sum::<u64>();
     let target_len = todays_records
         .iter()
         .map(|record| record.target_len)
@@ -91,7 +104,7 @@ pub fn today_report(records: &[SessionRecord], plan: &PracticePlan, language: La
         .map(|record| record.backspace_count)
         .sum::<u32>();
 
-    let minutes = duration_ms.max(1) as f64 / 60_000.0;
+    let minutes = active_ms.max(1) as f64 / 60_000.0;
     let raw_wpm = typed_len as f64 / 5.0 / minutes;
     let wpm = correct_chars as f64 / 5.0 / minutes;
     let weighted_correct = todays_records
@@ -110,12 +123,15 @@ pub fn today_report(records: &[SessionRecord], plan: &PracticePlan, language: La
 
     let mut by_kind = BTreeMap::<TokenKind, BTreeMap<String, TokenAggregate>>::new();
     let mut error_chars = BTreeMap::<String, u32>::new();
-    for record in todays_records {
+    for record in &todays_records {
         for (ch, count) in &record.error_chars {
             *error_chars.entry(ch.clone()).or_default() += count;
         }
         if record.token_stats.is_empty() {
             for (token, errors) in &record.error_tokens {
+                if is_numbered_template_identifier(token) {
+                    continue;
+                }
                 let kind = if is_word_like_token(token) {
                     TokenKind::Word
                 } else {
@@ -130,6 +146,9 @@ pub fn today_report(records: &[SessionRecord], plan: &PracticePlan, language: La
             }
         } else {
             for stat in &record.token_stats {
+                if is_numbered_template_identifier(&stat.token) {
+                    continue;
+                }
                 by_kind
                     .entry(stat.kind)
                     .or_default()
@@ -196,6 +215,48 @@ pub fn today_report(records: &[SessionRecord], plan: &PracticePlan, language: La
         },
         backspaces
     );
+    let _ = writeln!(
+        output,
+        "  {}: active {} | idle {} | pause {}",
+        match language {
+            Language::Zh => "计时",
+            Language::En => "Timing",
+        },
+        format_duration(active_ms, language),
+        format_duration(idle_ms, language),
+        format_duration(manual_pause_ms, language)
+    );
+    let (comprehensive, standalone) = scoped_record_counts(&todays_records);
+    let _ = writeln!(
+        output,
+        "  {}: {} {} / active {}",
+        match language {
+            Language::Zh => "综合练习",
+            Language::En => "Full practice",
+        },
+        comprehensive.0,
+        match language {
+            Language::Zh => "次",
+            Language::En if comprehensive.0 == 1 => "session",
+            Language::En => "sessions",
+        },
+        format_duration(comprehensive.1, language)
+    );
+    let _ = writeln!(
+        output,
+        "  {}: {} {} / active {}",
+        match language {
+            Language::Zh => "专项练习",
+            Language::En => "Standalone",
+        },
+        standalone.0,
+        match language {
+            Language::Zh => "次",
+            Language::En if standalone.0 == 1 => "session",
+            Language::En => "sessions",
+        },
+        format_duration(standalone.1, language)
+    );
 
     append_token_section(
         &mut output,
@@ -259,7 +320,7 @@ pub fn plan_report(plan: &PracticePlan, language: Language) -> String {
             let _ = writeln!(output, "每日目标: 20 分钟");
             let _ = writeln!(
                 output,
-                "默认路径: 热身 -> 英文词块 -> 英语高频词 -> 前端单词 -> 数字/符号 -> 命名 -> 短代码块"
+                "默认路径: 基础输入 -> 日常英语 -> 编程基础 -> 代码实战"
             );
             let _ = writeln!(
                 output,
@@ -271,7 +332,7 @@ pub fn plan_report(plan: &PracticePlan, language: Language) -> String {
             let _ = writeln!(output, "Daily target: 20 minutes");
             let _ = writeln!(
                 output,
-                "Default path: warmup -> word chunks -> common English words -> frontend words -> numbers/symbols -> naming -> short code blocks"
+                "Default path: foundation input -> everyday English -> programming basics -> code practice"
             );
             let _ = writeln!(
                 output,
@@ -308,7 +369,7 @@ pub fn plan_report(plan: &PracticePlan, language: Language) -> String {
         &mut output,
         match language {
             Language::Zh => "代码重点",
-            Language::En => "Code focus",
+            Language::En => "Code practice",
         },
         &plan.focus_code,
     );
@@ -330,13 +391,10 @@ pub fn plan_report(plan: &PracticePlan, language: Language) -> String {
             let _ = writeln!(output, "课程形态：");
             let _ = writeln!(
                 output,
-                "  1. 打开软件后直接看到今日动态练习，难度由历史表现自动调整。"
+                "  1. 综合训练按基础输入、日常英语、编程基础、代码实战四个模块推进。"
             );
             let _ = writeln!(output, "  2. 可以零碎练，每次完成都会累计到今日进度。");
-            let _ = writeln!(
-                output,
-                "  3. 综合训练会根据键位、错词、符号和代码慢项调整组别。"
-            );
+            let _ = writeln!(output, "  3. 每组完成后的错项和慢项会影响后续模块内容。");
             let _ = writeln!(
                 output,
                 "  4. 代码块覆盖 TS/JS/Vue/Solidity/Rust/HTML/CSS/Less/Sass。"
@@ -346,7 +404,7 @@ pub fn plan_report(plan: &PracticePlan, language: Language) -> String {
             let _ = writeln!(output, "Lesson model:");
             let _ = writeln!(
                 output,
-                "  1. Open KeyLoop and start today's adaptive plan directly."
+                "  1. Full practice runs foundation input, everyday English, programming basics, and code practice."
             );
             let _ = writeln!(
                 output,
@@ -354,7 +412,7 @@ pub fn plan_report(plan: &PracticePlan, language: Language) -> String {
             );
             let _ = writeln!(
                 output,
-                "  3. Full practice adapts from key, word, symbol, and code hot spots."
+                "  3. Errors and slow items from each group influence later module content."
             );
             let _ = writeln!(
                 output,
@@ -455,36 +513,68 @@ pub fn source_catalog_report(sources: &[SourceCatalogEntry], language: Language)
     let mut output = String::new();
     match language {
         Language::Zh => {
-            let _ = writeln!(output, "推荐代码语料来源（{} 个）", sources.len());
             let _ = writeln!(
                 output,
-                "这些来源用于内置语料选型和后续精确抽取；直接复制外部代码时需要保留 commit、path 和 line range。"
+                "推荐语料来源（含代码语料来源，{} 个）",
+                sources.len()
+            );
+            let _ = writeln!(
+                output,
+                "这些来源用于内置语料选型和后续精确抽取；外部内容进入仓库前必须保留 license 和来源。"
             );
         }
         Language::En => {
             let _ = writeln!(
                 output,
-                "Recommended code corpus sources ({})",
+                "Recommended corpus sources, including code corpus sources ({})",
                 sources.len()
             );
             let _ = writeln!(
                 output,
-                "These entries guide the built-in corpus and future exact extraction; directly copied external code must keep commit, path, and line-range metadata."
+                "These entries guide built-in corpora and future exact extraction; external content must keep license and provenance metadata."
             );
         }
     }
 
     for source in sources {
+        let label = if source.source_name.trim().is_empty() {
+            source.repo.as_str()
+        } else {
+            source.source_name.as_str()
+        };
+        let url = if source.source_url.trim().is_empty() {
+            source.repo_url.as_str()
+        } else {
+            source.source_url.as_str()
+        };
+        let corpus = if source.corpus.trim().is_empty() {
+            "code"
+        } else {
+            source.corpus.as_str()
+        };
+        let generation = if source.generation_script.trim().is_empty() {
+            "direct"
+        } else {
+            source.generation_script.as_str()
+        };
+        let fields = if source.included_fields.is_empty() {
+            "-".to_string()
+        } else {
+            source.included_fields.join(",")
+        };
         let _ = writeln!(
             output,
-            "- {} [{}] {} | {} | {} | {} | {} | {}",
-            source.repo,
+            "- {} [{}] {} | {} | {} | {} | {} | {} | {} | {} | {}",
+            label,
             source.license_spdx,
-            source.repo_url,
+            url,
             source.source_id,
             source.retrieved_at,
+            corpus,
+            generation,
             source.languages.join(", "),
             source.frameworks.join(", "),
+            fields,
             source.notes
         );
     }
@@ -643,6 +733,32 @@ fn effective_typed_len(record: &SessionRecord) -> usize {
     record.user_input.chars().count().max(record.correct_chars)
 }
 
+fn effective_active_ms(record: &SessionRecord) -> u64 {
+    if record.active_ms > 0 {
+        return record.active_ms;
+    }
+    record.duration_ms
+}
+
+fn scoped_record_counts(records: &[&SessionRecord]) -> ((usize, u64), (usize, u64)) {
+    let mut comprehensive = (0usize, 0u64);
+    let mut standalone = (0usize, 0u64);
+    for record in records {
+        let bucket = if is_comprehensive_record(record) {
+            &mut comprehensive
+        } else {
+            &mut standalone
+        };
+        bucket.0 += 1;
+        bucket.1 += effective_active_ms(record);
+    }
+    (comprehensive, standalone)
+}
+
+fn is_comprehensive_record(record: &SessionRecord) -> bool {
+    !record.daily_run_id.trim().is_empty()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -684,6 +800,14 @@ mod tests {
     }
 
     #[test]
+    fn plan_report_uses_new_module_path() {
+        let report = plan_report(&empty_plan(), Language::Zh);
+
+        assert!(report.contains("默认路径: 基础输入 -> 日常英语 -> 编程基础 -> 代码实战"));
+        assert!(!report.contains("热身 -> 英文词块"));
+    }
+
+    #[test]
     fn today_report_uses_effective_typed_len_for_legacy_records() {
         let mut legacy = today_record();
         legacy.typed_len = 0;
@@ -697,6 +821,41 @@ mod tests {
         let report = today_report(&[legacy, modern], &empty_plan(), Language::Zh);
 
         assert!(report.contains("正确率: 62.5%"));
+    }
+
+    #[test]
+    fn today_report_uses_active_time_for_wpm_and_shows_idle_time() {
+        let mut record = today_record();
+        record.duration_ms = 60_000;
+        record.active_ms = 30_000;
+        record.idle_ms = 30_000;
+        record.typed_len = 150;
+        record.correct_chars = 150;
+        record.accuracy = 100.0;
+
+        let report = today_report(&[record], &empty_plan(), Language::En);
+
+        assert!(report.contains("WPM: 60.0"));
+        assert!(report.contains("active 30s"));
+        assert!(report.contains("idle 30s"));
+    }
+
+    #[test]
+    fn today_report_separates_comprehensive_and_standalone_totals() {
+        let mut comprehensive = today_record();
+        comprehensive.daily_run_id = "20260601-1".to_string();
+        comprehensive.duration_ms = 60_000;
+        comprehensive.active_ms = 30_000;
+
+        let mut standalone = today_record();
+        standalone.daily_run_id = String::new();
+        standalone.duration_ms = 120_000;
+        standalone.active_ms = 60_000;
+
+        let report = today_report(&[comprehensive, standalone], &empty_plan(), Language::Zh);
+
+        assert!(report.contains("综合练习: 1 次 / active 30 秒"));
+        assert!(report.contains("专项练习: 1 次 / active 1 分 0 秒"));
     }
 
     #[test]
