@@ -205,6 +205,7 @@ export type OpenTuiRoute =
       target?: PracticeTarget;
       live?: OpenTuiRunningLiveState;
       result_visible: boolean;
+      captured_words?: number;
     }
   | {
       screen: "summary";

@@ -179,3 +179,10 @@ export function isAsciiLiveCharacter(value: string): boolean {
   const codePoint = char?.codePointAt(0);
   return codePoint !== undefined && codePoint <= 0x7f;
 }
+
+export function isCaptureWordsEvent(event: OpenTuiKeyEvent): boolean {
+  if (event.ctrl || event.meta) {
+    return false;
+  }
+  return event.sequence.toLowerCase() === "a" || event.name.toLowerCase() === "a";
+}

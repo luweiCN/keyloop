@@ -162,6 +162,7 @@ export interface StartRunnerContext {
   now?: Date;
   saveCheckpoint?: (lesson: PracticeLesson, target: PracticeTarget) => Promise<void>;
   saveRecord?: (record: SessionRecord) => Promise<void>;
+  captureVocabulary?: (words: string[]) => Promise<number>;
 }
 
 export interface StartRunnerResult {
@@ -925,6 +926,30 @@ async function runStartRunner(
       await saveLessonCheckpoint(context, dataDir, lesson, target);
     },
     saveRecord,
+    captureVocabulary: async (words) => {
+      const vocabPath = vocabularyPath(dataDir);
+      let store = await loadVocabularyStoreFromPath(vocabPath);
+      const existing = new Set(
+        store.entries.filter((e) => !e.archived).map((e) => e.text.toLowerCase()),
+      );
+      let added = 0;
+      for (const word of words) {
+        if (existing.has(word.toLowerCase())) {
+          continue;
+        }
+        existing.add(word.toLowerCase());
+        const entry = createPersonalVocabularyEntry(
+          { text: word, tags: ["mistakes"] },
+          vocabularyCreateOptions(options),
+        );
+        store = upsertPersonalVocabularyEntry(store, entry, entry.updated_at);
+        added += 1;
+      }
+      if (added > 0) {
+        await saveVocabularyStoreToPath(store, vocabPath);
+      }
+      return added;
+    },
   });
 
   for (const record of result.completedRecords) {

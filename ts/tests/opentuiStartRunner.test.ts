@@ -349,6 +349,49 @@ describe("OpenTUI start runner", () => {
     expect(kit.destroyed).toBe(1);
   });
 
+  test("pressing A on the completion popup captures error words", async () => {
+    const kit = fakeKit({ keyInput: true });
+    let nowMs = 1_000;
+    const captured: string[][] = [];
+    const runner = createOpenTuiStartRunner({
+      kit,
+      nowMs: () => nowMs,
+    });
+
+    const runPromise = runner({
+      ...contextWithPlan(testSingleLessonPlan("note book")),
+      captureVocabulary: async (words) => {
+        captured.push(words);
+        return words.length;
+      },
+    });
+    await kit.waitForKeyListener(1);
+
+    // type "nose book" -> mistakes inside the word "note"
+    for (const ch of "nose book") {
+      nowMs += 100;
+      kit.emitKey({ name: ch === " " ? "space" : ch, sequence: ch });
+    }
+    await kit.waitForKeyListener(2);
+
+    kit.emitKey({ name: "a", sequence: "a" });
+    for (let attempt = 0; attempt < 50; attempt += 1) {
+      if (flattenContent(kit.addedNodes).includes("Captured 1 error words")) {
+        break;
+      }
+      await delay(10);
+    }
+
+    expect(captured).toEqual([["note"]]);
+    expect(flattenContent(kit.addedNodes)).toContain("Captured 1 error words");
+
+    await dismissCompletionResult(kit);
+    kit.emitKey({ name: "enter", sequence: "\r" });
+    await kit.waitForKeyListener(3);
+    kit.emitKey({ name: "enter", sequence: "\r" });
+    await runPromise;
+  });
+
   test("typing updates the running screen with live metrics", async () => {
     const kit = fakeKit({ keyInput: true });
     let nowMs = 1_000;

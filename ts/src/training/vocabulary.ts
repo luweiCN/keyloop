@@ -392,3 +392,55 @@ function normalizeStringList(values: string[] | undefined): string[] {
 function vocabularyTextKey(value: string): string {
   return value.trim().toLowerCase();
 }
+
+/**
+ * Words the user mistyped in a completed session: any target word whose
+ * span contains at least one mismatched character. Returns the correct
+ * spellings, deduplicated, longest mistakes first, capped at 10.
+ */
+export function errorWordsFromRecord(record: {
+  target_text: string;
+  user_input: string;
+  key_events?: readonly { action: string; position: number; correct: boolean }[];
+}): string[] {
+  const target = record.target_text;
+  const input = record.user_input;
+  const wrong = new Set<number>();
+  const max = Math.min(target.length, input.length);
+  for (let index = 0; index < max; index += 1) {
+    if (target[index] !== input[index]) {
+      wrong.add(index);
+    }
+  }
+  for (const event of record.key_events ?? []) {
+    if (event.action === "insert" && !event.correct) {
+      wrong.add(event.position);
+    }
+  }
+  if (wrong.size === 0) {
+    return [];
+  }
+  const seen = new Set<string>();
+  const words: string[] = [];
+  for (const match of target.matchAll(/[A-Za-z][A-Za-z'-]*/g)) {
+    const start = match.index ?? 0;
+    const end = start + match[0].length;
+    let hasError = false;
+    for (let index = start; index < end; index += 1) {
+      if (wrong.has(index)) {
+        hasError = true;
+        break;
+      }
+    }
+    if (!hasError || match[0].length < 3) {
+      continue;
+    }
+    const key = match[0].toLowerCase();
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    words.push(match[0]);
+  }
+  return words.sort((a, b) => b.length - a.length).slice(0, 10);
+}

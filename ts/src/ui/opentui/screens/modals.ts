@@ -400,8 +400,8 @@ export function renderCompletionPopup(state: OpenTuiAppState, kit: OpenTuiRender
     "keyloop-complete",
     openTuiRouteTitle(state),
     state.language === "zh"
-      ? "Enter 关闭 · R 重练 · Q 退出"
-      : "Enter close · R repeat · Q quit",
+      ? "Enter 关闭 · A 收录错词 · R 重练 · Q 退出"
+      : "Enter close · A capture · R repeat · Q quit",
     "good",
     kit,
     {
@@ -455,6 +455,25 @@ export function renderCompletionPopup(state: OpenTuiAppState, kit: OpenTuiRender
         ),
         renderCompletionDetails(record, state.language, kit),
         ...renderCompletionKeyDiagnostics(record, state.language, kit),
+        ...(state.route.captured_words === undefined
+          ? []
+          : [
+              kit.Text({
+                id: "keyloop-complete-captured",
+                content:
+                  state.language === "zh"
+                    ? state.route.captured_words === 0
+                      ? "没有新的错词可收录"
+                      : `已收录 ${state.route.captured_words} 个错词 → 我的单词（mistakes）`
+                    : state.route.captured_words === 0
+                      ? "No new error words to capture"
+                      : `Captured ${state.route.captured_words} error words into My words (mistakes)`,
+                fg: theme.accent,
+                attributes: TEXT_BOLD,
+                height: 1,
+                truncate: true,
+              }),
+            ]),
         ...(next === undefined
           ? []
           : [kit.Text({ content: next, fg: theme.cyan, id: "keyloop-complete-next" })]),
@@ -741,6 +760,7 @@ export function modalHints(route: ModalRoute, zh: boolean): KeyHint[] {
       ];
     case "complete":
       return [
+        { key: "A", label: zh ? "收录错词" : "capture errors" },
         {
           key: "Enter",
           label: zh
