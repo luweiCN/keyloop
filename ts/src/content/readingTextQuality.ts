@@ -14,12 +14,16 @@ export type ReadingTextQualityIssue =
   | "sentence_fragment";
 
 const sourceResiduePattern =
-  /project gutenberg|gutenberg ebook|transcriber'?s note|table of contents|copyright|all rights reserved|footnote|illustration/iu;
+  /project gutenberg|gutenberg ebook|transcriber'?s note|table of contents|copyright|all rights reserved|footnote|illustration|library of liberal classics|published by|monograph supplement|academy of sciences|national museum|annals/iu;
 const headingPattern =
   /^(?:chapter|section|book|part|volume)\s+(?:[ivxlcdm]+|\d+)\.?$/iu;
 const terminalPattern = /[.!?]["')\]]*$/u;
 const leadingFragmentPattern = /^[,;:!?)}\]]/u;
 const trailingFragmentPattern = /[,;:([{]$/u;
+const layoutMarkerPattern = /^(?:=+|-{2,}|_{1,})/u;
+const inlineMarkupPattern = /[_=]/u;
+const incompleteInitialPattern = /\b[A-Z]\.$/u;
+const editorialCreditPattern = /\bit is edited by\b/iu;
 const controlCharacterPattern = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/u;
 const cjkSourcePattern = /[\p{Script=Han}，。？！；：“”‘’（）【】]/u;
 
@@ -47,6 +51,14 @@ export function readingSentenceQualityIssues(text: string): ReadingTextQualityIs
   }
   if (headingPattern.test(trimmed)) {
     issues.push("heading_or_caption");
+  }
+  if (
+    layoutMarkerPattern.test(trimmed) ||
+    inlineMarkupPattern.test(trimmed) ||
+    incompleteInitialPattern.test(trimmed) ||
+    editorialCreditPattern.test(trimmed)
+  ) {
+    issues.push("source_residue");
   }
   if (!hasBalancedQuotes(trimmed)) {
     issues.push("unbalanced_quotes");

@@ -9,7 +9,7 @@ import type { EverydayLevel, EverydaySentenceLength } from "../domain/model";
 type ReadingLength = Exclude<EverydaySentenceLength, "mixed">;
 
 interface TranslatedBatch {
-  level: EverydayLevel;
+  level?: EverydayLevel;
   sources: EverydayCorpusSource[];
   sentences: TranslatedSentence[];
   articles: TranslatedArticle[];
@@ -81,11 +81,8 @@ const defaultOutputPath = fileURLToPath(
 async function main(): Promise<void> {
   const inputDir = resolve(optionValue("--input-dir") ?? defaultInputDir);
   const outputPath = resolve(optionValue("--output") ?? defaultOutputPath);
-  const batches = await Promise.all(
-    readingLevelOrder.map(async (level) =>
-      JSON.parse(await readFile(`${inputDir}/${level}.json`, "utf8")) as TranslatedBatch,
-    ),
-  );
+  const supplementPaths = optionValues("--supplement");
+  const batches = await loadTranslatedBatches(inputDir, supplementPaths);
   const seed = mergeTranslatedBatches(batches);
 
   await mkdir(dirname(outputPath), { recursive: true });
@@ -98,6 +95,21 @@ async function main(): Promise<void> {
       `Output: ${outputPath}`,
     ].join(" | "),
   );
+}
+
+async function loadTranslatedBatches(
+  inputDir: string,
+  supplementPaths: readonly string[],
+): Promise<TranslatedBatch[]> {
+  const batches = await Promise.all(
+    readingLevelOrder.map(async (level) =>
+      JSON.parse(await readFile(`${inputDir}/${level}.json`, "utf8")) as TranslatedBatch,
+    ),
+  );
+  for (const supplementPath of supplementPaths) {
+    batches.push(JSON.parse(await readFile(resolve(supplementPath), "utf8")) as TranslatedBatch);
+  }
+  return batches;
 }
 
 export function mergeTranslatedBatches(batches: readonly TranslatedBatch[]): ReadingSeed {
@@ -147,9 +159,24 @@ export function mergeTranslatedBatches(batches: readonly TranslatedBatch[]): Rea
     }
   }
   return {
-    sources: [...sources.values()],
+    sources: [...sources.values()].map(translatedSource),
     sentences,
     articles,
+  };
+}
+
+function translatedSource(source: EverydayCorpusSource): EverydayCorpusSource {
+  const fields = new Set([
+    ...source.included_fields,
+    "translation_zh",
+  ]);
+  return {
+    ...source,
+    generation_script:
+      "ts/src/tools/collectEverydayReadingCandidates.ts + GPT-5.4 translation batches",
+    included_fields: [...fields],
+    notes:
+      `${source.notes} Chinese translations are filled and quality-checked by GPT-5.4 translation batches before merge.`,
   };
 }
 
@@ -159,6 +186,16 @@ function optionValue(name: string): string | undefined {
     return undefined;
   }
   return process.argv[index + 1];
+}
+
+function optionValues(name: string): string[] {
+  const values: string[] = [];
+  for (let index = 0; index < process.argv.length; index += 1) {
+    if (process.argv[index] === name && process.argv[index + 1] !== undefined) {
+      values.push(process.argv[index + 1]!);
+    }
+  }
+  return values;
 }
 
 if (import.meta.main) {

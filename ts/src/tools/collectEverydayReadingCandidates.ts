@@ -92,9 +92,6 @@ const defaultEverydayWordsPath = fileURLToPath(
   new URL("../../content/everyday_words.json", import.meta.url),
 );
 
-const sentenceTargetPerCell = 100;
-const articleTargetPerCell = 50;
-
 const sentenceRanges: Record<ReadingLength, readonly [number, number]> = {
   short: [6, 12],
   medium: [13, 22],
@@ -186,13 +183,18 @@ async function main(): Promise<void> {
   const everydayWordsPath = resolve(optionValue("--everyday-words") ?? defaultEverydayWordsPath);
   const wikinewsPages = Number(optionValue("--wikinews-pages") ?? "900");
   const wikipediaPages = Number(optionValue("--wikipedia-pages") ?? "0");
+  const sentenceTargetPerCell = Number(optionValue("--sentence-target-per-cell") ?? "100");
+  const articleTargetPerCell = Number(optionValue("--article-target-per-cell") ?? "50");
   const vocabulary = await loadReadingVocabulary(everydayWordsPath);
   const sections = [
     ...await collectGutenbergSections(),
     ...await collectWikinewsSections(wikinewsPages),
     ...await collectWikipediaSections(wikipediaPages),
   ];
-  const candidates = buildCandidateCorpus(sections, vocabulary);
+  const candidates = buildCandidateCorpus(sections, vocabulary, {
+    sentenceTargetPerCell,
+    articleTargetPerCell,
+  });
 
   await mkdir(dirname(output), { recursive: true });
   await writeFile(output, `${JSON.stringify(candidates, null, 2)}\n`);
@@ -286,15 +288,19 @@ async function collectWikinewsSections(maxPages: number): Promise<TextSection[]>
 function buildCandidateCorpus(
   sections: readonly TextSection[],
   vocabulary: ReadingVocabularyProfile,
+  targets: {
+    sentenceTargetPerCell: number;
+    articleTargetPerCell: number;
+  },
 ): ReadingCandidateCorpus {
   const sources = readingSources([...gutenbergSources, wikinewsSource, wikipediaSource]);
   const articles = selectByCell(
     sections.flatMap((section) => articleCandidate(section, vocabulary) ?? []),
-    articleTargetPerCell,
+    targets.articleTargetPerCell,
   );
   const sentences = selectByCell(
     sections.flatMap((section) => sentenceCandidates(section, vocabulary)),
-    sentenceTargetPerCell,
+    targets.sentenceTargetPerCell,
   );
   const articleCounts = cellCounts(articles);
   const sentenceCounts = cellCounts(sentences);
@@ -303,12 +309,12 @@ function buildCandidateCorpus(
     sentences,
     articles,
     stats: {
-      sentence_target_per_cell: sentenceTargetPerCell,
-      article_target_per_cell: articleTargetPerCell,
+      sentence_target_per_cell: targets.sentenceTargetPerCell,
+      article_target_per_cell: targets.articleTargetPerCell,
       sentence_counts: sentenceCounts,
       article_counts: articleCounts,
-      missing_sentence_cells: missingCells(sentenceCounts, sentenceTargetPerCell),
-      missing_article_cells: missingCells(articleCounts, articleTargetPerCell),
+      missing_sentence_cells: missingCells(sentenceCounts, targets.sentenceTargetPerCell),
+      missing_article_cells: missingCells(articleCounts, targets.articleTargetPerCell),
     },
   };
 }
@@ -319,6 +325,9 @@ function articleCandidate(
 ): ReadingArticleCandidate[] {
   const paragraphs = section.paragraphs.map(cleanBodyText).filter((text) => text.length > 0);
   const text = paragraphs.join(" ");
+  if (isBadArticleTitle(section.title)) {
+    return [];
+  }
   if (!isCompleteReadingArticleText(text)) {
     return [];
   }
@@ -545,6 +554,10 @@ function wikinewsSection(page: { title: string; extract?: string; fullurl?: stri
     source: wikinewsSource,
     paragraphs: body,
   };
+}
+
+function isBadArticleTitle(title: string): boolean {
+  return /(?:notes? and questions?|examples?|try this|vocabulary|pronunciation|phonics|bibliography|contents)/iu.test(title);
 }
 
 async function wikipediaRandomExtracts(limit: number): Promise<Array<{

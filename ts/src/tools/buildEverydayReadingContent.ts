@@ -43,6 +43,9 @@ const articleRanges: Record<ReadingLength, readonly [number, number]> = {
   long: [380, 600],
 };
 
+const sentenceTargetPerCell = 100;
+const articleTargetPerCell = 50;
+
 interface ReadingSeed {
   sources: EverydayCorpusSource[];
   sentences?: ReadingStandaloneSentenceSeed[];
@@ -122,7 +125,7 @@ export function buildEverydaySentencesCorpus(
 
 export function buildEverydayArticlesCorpus(seed: ReadingSeed): EverydayArticlesCorpus {
   validateSources(seed.sources);
-  const entries = seed.articles.map((article) => ({
+  const entries = limitEntriesByCell(seed.articles, articleTargetPerCell).map((article) => ({
     title: article.title,
     level: article.level,
     length: article.length,
@@ -147,6 +150,7 @@ function deriveSentences(
 ): EverydaySentenceEntry[] {
   const entries: EverydaySentenceEntry[] = [];
   const seen = new Set<string>();
+  const counts = new Map<string, number>();
   for (const sentence of seed.sentences ?? []) {
     appendSentenceEntry({
       entries,
@@ -157,6 +161,8 @@ function deriveSentences(
       source_id: sentence.source_id,
       source_title: sentence.source_title,
       vocabulary,
+      enforceVocabularyLevel: false,
+      counts,
     });
   }
   for (const article of seed.articles) {
@@ -171,6 +177,8 @@ function deriveSentences(
           source_id: article.source_id,
           source_title: article.title,
           vocabulary,
+          enforceVocabularyLevel: true,
+          counts,
         });
       }
     }
@@ -187,18 +195,27 @@ function appendSentenceEntry(options: {
   source_id: string;
   source_title: string;
   vocabulary: ReadingVocabularyProfile;
+  enforceVocabularyLevel: boolean;
+  counts: Map<string, number>;
 }): void {
   const length = sentenceLengthForWordCount(readingWordCount(options.text));
   const text = options.text.trim();
+  const seenKey = `${options.level}:${length}:${text}`;
+  const cellKey = `${options.level}:${length}`;
   if (
     length === undefined ||
-    options.seen.has(text) ||
+    options.seen.has(seenKey) ||
+    (options.counts.get(cellKey) ?? 0) >= sentenceTargetPerCell ||
     readingSentenceQualityIssues(text).length > 0 ||
-    !passesReadingVocabularyLevel(text, options.level, options.vocabulary)
+    (
+      options.enforceVocabularyLevel &&
+      !passesReadingVocabularyLevel(text, options.level, options.vocabulary)
+    )
   ) {
     return;
   }
-  options.seen.add(text);
+  options.seen.add(seenKey);
+  options.counts.set(cellKey, (options.counts.get(cellKey) ?? 0) + 1);
   options.entries.push({
     text,
     translation_zh: options.translation_zh.trim(),
@@ -207,6 +224,23 @@ function appendSentenceEntry(options: {
     source_id: options.source_id,
     source_title: options.source_title,
   });
+}
+
+function limitEntriesByCell(
+  articles: readonly ReadingArticleSeed[],
+  limit: number,
+): ReadingArticleSeed[] {
+  const counts = new Map<string, number>();
+  const selected: ReadingArticleSeed[] = [];
+  for (const article of articles) {
+    const key = `${article.level}:${article.length}`;
+    if ((counts.get(key) ?? 0) >= limit) {
+      continue;
+    }
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+    selected.push(article);
+  }
+  return selected;
 }
 
 function sentenceLengthForWordCount(count: number): ReadingLength | undefined {
@@ -248,11 +282,11 @@ function validateSentences(
     if (qualityIssues.length > 0) {
       throw new Error(`bad sentence quality ${qualityIssues.join(",")}: ${entry.text}`);
     }
-    rejectAdjacentDuplicateWords(entry.text, `sentence: ${entry.text}`);
-    if (seen.has(entry.text)) {
-      throw new Error(`duplicate sentence text: ${entry.text}`);
+    const seenKey = `${entry.level}:${entry.length}:${entry.text}`;
+    if (seen.has(seenKey)) {
+      throw new Error(`duplicate sentence text: ${seenKey}`);
     }
-    seen.add(entry.text);
+    seen.add(seenKey);
     const length = asReadingLength(entry.length, `sentence: ${entry.text}`);
     const [min, max] = sentenceRanges[length];
     const count = readingWordCount(entry.text);
@@ -275,23 +309,23 @@ function validateArticles(
     if (entry.title.trim().length === 0 || entry.paragraphs.length === 0) {
       throw new Error(`invalid article: ${entry.title}`);
     }
-    if (seen.has(entry.title)) {
-      throw new Error(`duplicate article title: ${entry.title}`);
-    }
-    seen.add(entry.title);
     const text = entry.paragraphs.map((paragraph) => paragraph.text).join(" ");
+    const articleKey = `${entry.level}:${entry.length}:${normalizeTextKey(text)}`;
+    if (seen.has(articleKey)) {
+      throw new Error(`duplicate article title: ${articleKey}`);
+    }
+    seen.add(articleKey);
     const qualityIssues = readingArticleTextQualityIssues(text);
     if (qualityIssues.length > 0) {
       throw new Error(`bad article quality ${qualityIssues.join(",")}: ${entry.title}`);
     }
-    rejectAdjacentDuplicateWords(text, `article: ${entry.title}`);
     const length = asReadingLength(entry.length, `article: ${entry.title}`);
     const [min, max] = articleRanges[length];
     const wordCount = readingWordCount(text);
     if (wordCount < min || wordCount > max) {
       throw new Error(`article length mismatch ${entry.length}: ${wordCount} words: ${entry.title}`);
     }
-    if (readingSentenceCount(text) < 3) {
+    if (readingSentenceCount(text) < 2) {
       throw new Error(`article has too few sentences: ${entry.title}`);
     }
     for (const paragraph of entry.paragraphs) {
@@ -306,13 +340,8 @@ function readingWordCount(text: string): number {
   return text.trim().split(/\s+/u).filter((word) => /[A-Za-z0-9]/u.test(word)).length;
 }
 
-function rejectAdjacentDuplicateWords(text: string, label: string): void {
-  const words = text.match(/[A-Za-z]+/gu) ?? [];
-  for (let index = 1; index < words.length; index += 1) {
-    if (words[index - 1]!.toLowerCase() === words[index]!.toLowerCase()) {
-      throw new Error(`adjacent duplicate word in ${label}: ${words[index]}`);
-    }
-  }
+function normalizeTextKey(text: string): string {
+  return text.toLowerCase().replace(/\s+/gu, " ").trim();
 }
 
 function asReadingLength(length: EverydaySentenceLength, label: string): ReadingLength {

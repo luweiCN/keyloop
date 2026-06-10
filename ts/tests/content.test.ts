@@ -238,6 +238,11 @@ describe("content library", () => {
     expect(isCompleteReadingSentence("and then the room became quiet.")).toBe(false);
     expect(isCompleteReadingSentence("CHAPTER I.")).toBe(false);
     expect(isCompleteReadingSentence("Project Gutenberg offers free ebooks.")).toBe(false);
+    expect(isCompleteReadingSentence("=Future of the New York Canals.")).toBe(false);
+    expect(isCompleteReadingSentence("New York: Library of Liberal Classics.")).toBe(false);
+    expect(isCompleteReadingSentence("(Published by the author, New York.)")).toBe(false);
+    expect(isCompleteReadingSentence("It is edited by _George E.")).toBe(false);
+    expect(isCompleteReadingSentence("--New York Academy of Sciences: Annals.")).toBe(false);
     expect(isCompleteReadingSentence("This English sentence should not contain 中文。")).toBe(false);
     expect(readingSentenceQualityIssues("Stop this moment, I tell you!\"")).toContain(
       "unbalanced_quotes",

@@ -1,0 +1,1 @@
+{"text":"// Value with comma\n.selector-24 {\n  @include rfs(0 0 2rem #f00 #{\",\"} 0 0 3rem #0f0, box-shadow);\n}","source":"v4-scss-twbs-rfs-examples-scss-src-main-scss-114-117-0003","language":"scss","syntax_language":"scss","framework":"general","project":"keyloop-corpus","level":"block","difficulty":"hard","score":11}

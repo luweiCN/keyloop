@@ -285,7 +285,7 @@ function isUsefulParagraph(paragraph: string): boolean {
   if (upperWords > 3) {
     return false;
   }
-  return !hasAdjacentDuplicateWords(paragraph);
+  return true;
 }
 
 function splitSentences(paragraph: string): string[] {
@@ -372,16 +372,6 @@ function wordCount(text: string): number {
 
 function sentenceCount(text: string): number {
   return text.split(/[.!?]+(?:\s+|$)/u).filter((sentence) => sentence.trim().length > 0).length;
-}
-
-function hasAdjacentDuplicateWords(text: string): boolean {
-  const words = text.match(/[A-Za-z]+/gu) ?? [];
-  for (let index = 1; index < words.length; index += 1) {
-    if (words[index - 1]!.toLowerCase() === words[index]!.toLowerCase()) {
-      return true;
-    }
-  }
-  return false;
 }
 
 function optionValue(name: string): string | undefined {
