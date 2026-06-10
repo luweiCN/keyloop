@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { basename, dirname, join } from "node:path";
 
 import {
@@ -17,6 +17,7 @@ import {
   type SessionRecord,
   type UserPreferences,
 } from "../domain/model";
+import type { CustomLibrary } from "../training/customLibrary";
 import {
   emptyPersonalArticlesStore,
   emptyPersonalSentencesStore,
@@ -105,6 +106,42 @@ export function personalSentencesPath(dataDir: string): string {
 
 export function personalArticlesPath(dataDir: string): string {
   return join(dataDir, "articles.json");
+}
+
+export function customLibrariesDirPath(dataDir: string): string {
+  return join(dataDir, "libraries");
+}
+
+export async function loadCustomLibrariesFromDir(dir: string): Promise<CustomLibrary[]> {
+  let files: string[];
+  try {
+    files = await readdir(dir);
+  } catch {
+    return [];
+  }
+  const libraries: CustomLibrary[] = [];
+  for (const file of files.filter((name) => name.endsWith(".json")).sort()) {
+    try {
+      const parsed = JSON.parse(await readFile(join(dir, file), "utf8")) as CustomLibrary;
+      if (parsed.version === 1 && typeof parsed.slug === "string") {
+        libraries.push(parsed);
+      }
+    } catch {
+      continue; // 损坏文件跳过，不影响其他库
+    }
+  }
+  return libraries;
+}
+
+export async function saveCustomLibraryToDir(
+  library: CustomLibrary,
+  dir: string,
+): Promise<void> {
+  await writePrettyJson(join(dir, `${library.slug}.json`), library);
+}
+
+export async function deleteCustomLibraryAtDir(slug: string, dir: string): Promise<void> {
+  await rm(join(dir, `${slug}.json`), { force: true });
 }
 
 export async function appendSessionToPath(

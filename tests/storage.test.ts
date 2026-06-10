@@ -6,8 +6,13 @@ import { describe, expect, test } from "bun:test";
 import {
   appendSessionToPath,
   clearSessionCheckpointAtPath,
+  customLibrariesDirPath,
   defaultSessionRecord,
+  deleteCustomLibraryAtDir,
   keyloopDataDir,
+  loadCustomLibrariesFromDir,
+  saveCustomLibraryToDir,
+  type CustomLibrary,
   loadOrCreateDailyPracticePlanFromPath,
   loadKeyAggregatesFromPath,
   loadPreferencesFromPath,
@@ -630,6 +635,38 @@ function insertEvent(
     correct,
   };
 }
+
+describe("custom library store", () => {
+  const sample: CustomLibrary = {
+    version: 1,
+    slug: "kaoyan",
+    name: "考研英语",
+    created_at: "2026-06-11T00:00:00.000Z",
+    words: [{ id: "w1", text: "abandon", kind: "word", meaning_zh: "放弃", source: "dict" }],
+    sentences: [],
+    articles: [],
+  };
+
+  test("save, load, delete round-trip", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "keyloop-lib-"));
+    const librariesDir = customLibrariesDirPath(dir);
+    expect(await loadCustomLibrariesFromDir(librariesDir)).toEqual([]);
+    await saveCustomLibraryToDir(sample, librariesDir);
+    expect(await loadCustomLibrariesFromDir(librariesDir)).toEqual([sample]);
+    await deleteCustomLibraryAtDir("kaoyan", librariesDir);
+    expect(await loadCustomLibrariesFromDir(librariesDir)).toEqual([]);
+    await rm(dir, { recursive: true, force: true });
+  });
+
+  test("corrupt json file is skipped", async () => {
+    const dir = await mkdtemp(join(tmpdir(), "keyloop-lib-"));
+    const librariesDir = customLibrariesDirPath(dir);
+    await saveCustomLibraryToDir(sample, librariesDir);
+    await writeFile(join(librariesDir, "broken.json"), "{not json");
+    expect(await loadCustomLibrariesFromDir(librariesDir)).toEqual([sample]);
+    await rm(dir, { recursive: true, force: true });
+  });
+});
 
 async function expectRejectsWith(promise: Promise<unknown>, message: string): Promise<void> {
   try {

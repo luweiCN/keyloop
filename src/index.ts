@@ -7,6 +7,7 @@ export * from "./training/vocabulary";
 export * from "./training/liveSession";
 export * from "./training/typingDifficulty";
 export * from "./storage/keyloopStore";
+export * from "./training/customLibrary";
 export * from "./content/library";
 export * from "./content/snippets";
 export * from "./content/codeFormatter";
