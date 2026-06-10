@@ -564,3 +564,106 @@ describe("dictionary status in settings", () => {
     );
   });
 });
+
+import { Dictionary } from "../src/content/dictionary";
+import { renderOpenTuiAppOnce } from "../src/index";
+
+describe("acceptance: real mini dictionary lookup", () => {
+  test("bundled dictionary_mini.json resolves common words", async () => {
+    const dictionary = await Dictionary.open({ miniPath: "contents/dictionary_mini.json" });
+    expect(dictionary.tier).toBe("mini");
+    expect(dictionary.lookup("abandon")?.translation_zh).toContain("放弃");
+    expect(dictionary.lookup("The")?.translation_zh).toBeDefined();
+    expect(dictionary.lookup("zzzqqqxxx")).toBeNull();
+  });
+});
+
+describe("acceptance: all library screens render without throwing", () => {
+  const routes: OpenTuiRoute[] = [
+    { screen: "library_menu", slug: "web", selected_index: 0 },
+    { screen: "library_create", name: "考研" },
+    { screen: "library_manage", selected_index: 0 },
+    { screen: "library_actions", slug: "web", selected_index: 2 },
+    {
+      screen: "library_input",
+      slug: "web",
+      kind: "words",
+      phase: "body",
+      article_title: "",
+      text: "abandon\nfoo: 释义",
+    },
+    {
+      screen: "library_input",
+      slug: "web",
+      kind: "article",
+      phase: "title",
+      article_title: "My Day",
+      text: "",
+    },
+    {
+      screen: "library_preview",
+      slug: "web",
+      payload: {
+        kind: "words",
+        raw_text: "abandon",
+        entries: [
+          { text: "abandon", word_kind: "word", meaning_zh: "v. 放弃", source: "dict" },
+          { text: "missing", word_kind: "word", source: "dict" },
+        ],
+        error_lines: ["第 3 行：苹果"],
+      },
+    },
+    { screen: "library_browse", slug: "web", entry_type: "words", query: "ab", index: 0 },
+    { screen: "library_delete_confirm", slug: "web" },
+  ];
+
+  for (const route of routes) {
+    test(`renders ${route.screen}${"kind" in route ? `:${route.kind}:${route.phase}` : ""}`, async () => {
+      const state = stateAt(route, {
+        customLibraries: [
+          {
+            ...emptyLibrary("web"),
+            words: [{ id: "w1", text: "abandon", kind: "word", meaning_zh: "v. 放弃", source: "dict" }],
+          },
+        ],
+      });
+      const kit = fakeRenderKit();
+      await renderOpenTuiAppOnce(state, kit);
+      expect(kit.addedNodes.length).toBeGreaterThan(0);
+    });
+  }
+});
+
+interface FakeRenderNode {
+  type: string;
+  props: Record<string, unknown>;
+  children: FakeRenderNode[];
+}
+
+function fakeRenderKit(): Parameters<typeof renderOpenTuiAppOnce>[1] & {
+  addedNodes: FakeRenderNode[];
+} {
+  const addedNodes: FakeRenderNode[] = [];
+  return {
+    addedNodes,
+    Box: (props: Record<string, unknown>, ...children: FakeRenderNode[]) => ({
+      type: "Box",
+      props,
+      children,
+    }),
+    ScrollBox: (props: Record<string, unknown>, ...children: FakeRenderNode[]) => ({
+      type: "ScrollBox",
+      props,
+      children,
+    }),
+    Text: (props: Record<string, unknown>) => ({ type: "Text", props, children: [] }),
+    createCliRenderer: async () => ({
+      root: {
+        add: (node: FakeRenderNode) => {
+          addedNodes.push(node);
+        },
+      },
+      destroy: () => {},
+    }),
+  } as never;
+}
