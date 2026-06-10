@@ -1,0 +1,2334 @@
+{
+ "sources": [
+  {
+   "source_id": "gutenberg:19994",
+   "source_name": "Project Gutenberg: The Aesop for Children",
+   "source_url": "https://www.gutenberg.org/cache/epub/19994/pg19994.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: high_school."
+  },
+  {
+   "source_id": "gutenberg:11",
+   "source_name": "Project Gutenberg: Alice's Adventures in Wonderland",
+   "source_url": "https://www.gutenberg.org/cache/epub/11/pg11.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: high_school."
+  },
+  {
+   "source_id": "gutenberg:113",
+   "source_name": "Project Gutenberg: The Secret Garden",
+   "source_url": "https://www.gutenberg.org/cache/epub/113/pg113.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: high_school."
+  },
+  {
+   "source_id": "gutenberg:45",
+   "source_name": "Project Gutenberg: Anne of Green Gables",
+   "source_url": "https://www.gutenberg.org/cache/epub/45/pg45.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: cet4."
+  },
+  {
+   "source_id": "gutenberg:514",
+   "source_name": "Project Gutenberg: Little Women",
+   "source_url": "https://www.gutenberg.org/cache/epub/514/pg514.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: cet4."
+  },
+  {
+   "source_id": "gutenberg:103",
+   "source_name": "Project Gutenberg: Around the World in Eighty Days",
+   "source_url": "https://www.gutenberg.org/cache/epub/103/pg103.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: cet4."
+  },
+  {
+   "source_id": "gutenberg:120",
+   "source_name": "Project Gutenberg: Treasure Island",
+   "source_url": "https://www.gutenberg.org/cache/epub/120/pg120.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: cet4."
+  },
+  {
+   "source_id": "gutenberg:1661",
+   "source_name": "Project Gutenberg: The Adventures of Sherlock Holmes",
+   "source_url": "https://www.gutenberg.org/cache/epub/1661/pg1661.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: cet6."
+  },
+  {
+   "source_id": "gutenberg:1342",
+   "source_name": "Project Gutenberg: Pride and Prejudice",
+   "source_url": "https://www.gutenberg.org/cache/epub/1342/pg1342.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: cet6."
+  },
+  {
+   "source_id": "gutenberg:35",
+   "source_name": "Project Gutenberg: The Time Machine",
+   "source_url": "https://www.gutenberg.org/cache/epub/35/pg35.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: cet6."
+  },
+  {
+   "source_id": "gutenberg:76",
+   "source_name": "Project Gutenberg: Adventures of Huckleberry Finn",
+   "source_url": "https://www.gutenberg.org/cache/epub/76/pg76.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: cet6."
+  },
+  {
+   "source_id": "gutenberg:1404",
+   "source_name": "Project Gutenberg: The Federalist Papers",
+   "source_url": "https://www.gutenberg.org/cache/epub/1404/pg1404.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: postgraduate."
+  },
+  {
+   "source_id": "gutenberg:2680",
+   "source_name": "Project Gutenberg: Meditations",
+   "source_url": "https://www.gutenberg.org/cache/epub/2680/pg2680.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: postgraduate."
+  },
+  {
+   "source_id": "gutenberg:1228",
+   "source_name": "Project Gutenberg: On the Origin of Species",
+   "source_url": "https://www.gutenberg.org/cache/epub/1228/pg1228.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: postgraduate."
+  },
+  {
+   "source_id": "gutenberg:16792",
+   "source_name": "Project Gutenberg: Scientific American Supplement, No. 508",
+   "source_url": "https://www.gutenberg.org/cache/epub/16792/pg16792.txt",
+   "license": "Public domain in the USA",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "ts/src/tools/collectEverydayReadingSeed.ts",
+   "included_fields": [
+    "text",
+    "translation_zh",
+    "level",
+    "length",
+    "source_id",
+    "source_title",
+    "paragraphs"
+   ],
+   "notes": "English passages collected from Project Gutenberg public-domain text. Passages are filtered by length and cumulative vocabulary coverage against everyday_words.json. Chinese translations are machine generated after collection. Level hint: toefl_ielts."
+  },
+  {
+   "source_id": "keyloop:authored-everyday-v1",
+   "source_name": "KeyLoop authored everyday English corpus v1",
+   "source_url": "https://github.com/keyloop/keyloop",
+   "license": "CC0-1.0",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "authored for KeyLoop after the collected Gutenberg corpus failed quality gates; reviewed for level fit, ASCII purity, and natural modern usage",
+   "included_fields": [
+    "title",
+    "level",
+    "length",
+    "paragraphs"
+   ],
+   "notes": "Modern everyday English articles (daily life, work, study, culture) authored to complement the literary Gutenberg base corpus."
+  },
+  {
+   "source_id": "voa:learning-english",
+   "source_name": "VOA Learning English",
+   "source_url": "https://learningenglish.voanews.com/",
+   "license": "Public domain (U.S. federal government work; VOA original text only, wire-agency content excluded)",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "tools/fetchVoaCandidates.py + tools/gateVoaCandidates.ts + tools/mergeVoaArticles.ts",
+   "included_fields": [
+    "title",
+    "level",
+    "length",
+    "paragraphs"
+   ],
+   "notes": "Modern graded articles written by VOA Learning English editors for English learners; broadcast framing and host sign-offs trimmed; Chinese paragraph translations authored for KeyLoop and reviewed."
+  }
+ ],
+ "entries": [
+  {
+   "title": "The Aesop for Children: Aesop Passage A",
+   "level": "high_school",
+   "length": "short",
+   "source_id": "gutenberg:19994",
+   "paragraphs": [
+    {
+     "text": "The Tortoise, you know, carries his house on his back. No matter how hard he tries, he cannot leave home. They say that Jupiter punished him so, because he was such a lazy stay-at-home that he would not go to Jupiter's wedding, even when especially invited.",
+     "translation_zh": "你知道，乌龟背着他的房子。无论他如何努力，他都无法离开家。他们说朱庇特如此惩罚他，因为他是如此懒惰的宅家，以至于即使受到特别邀请，他也不会参加朱庇特的婚礼。"
+    },
+    {
+     "text": "After many years, Tortoise began to wish he had gone to that wedding. When he saw how gaily the birds flew about and how the Hare and the Chipmunk and all the other animals ran nimbly by, always eager to see everything there was to be seen, the Tortoise felt very sad and discontented. He wanted to see the world too, and there he was with a house on his back and little short legs that could hardly drag him along.",
+     "translation_zh": "许多年后，乌龟开始希望自己没有去参加那场婚礼。当他看到鸟儿欢快地飞来飞去，野兔、花栗鼠和其他动物敏捷地跑过，总是渴望看到一切可看的东西时，乌龟感到非常悲伤和不满。他也想去看看这个世界，而他的背上背着一座房子，小短腿几乎拖不动他。"
+    }
+   ]
+  },
+  {
+   "title": "Alice's Adventures in Wonderland: Alice Passage A",
+   "level": "high_school",
+   "length": "short",
+   "source_id": "gutenberg:11",
+   "paragraphs": [
+    {
+     "text": "Poor Alice! It was as much as she could do, lying down on one side, to look through into the garden with one eye; but to get through was more hopeless than ever: she sat down and began to cry again.",
+     "translation_zh": "可怜的爱丽丝！她只能侧身躺下，用一只眼睛向花园里看去。但要度过难关比以往任何时候都更加无望：她坐下来，又开始哭泣。"
+    },
+    {
+     "text": "\"You ought to be ashamed of yourself,\" said Alice, \"a great girl like you,\" (she might well say this), \"to go on crying in this way! Stop this moment, I tell you!\" But she went on all the same, shedding gallons of tears, until there was a large pool all round her, about four inches deep and reaching half down the hall.",
+     "translation_zh": "“你应该为自己感到羞耻，”爱丽丝说，“像你这样一个伟大的女孩，”（她很可能会这样说），“继续这样哭泣！我告诉你，现在就停下来！”但她还是继续说下去，流下了无数的眼泪，直到她周围出现一个大水池，大约四英寸深，延伸到大厅的一半。"
+    }
+   ]
+  },
+  {
+   "title": "Alice's Adventures in Wonderland: Alice Passage B",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "gutenberg:11",
+   "paragraphs": [
+    {
+     "text": "Poor Alice! It was as much as she could do, lying down on one side, to look through into the garden with one eye; but to get through was more hopeless than ever: she sat down and began to cry again.",
+     "translation_zh": "可怜的爱丽丝！她只能侧身躺下，用一只眼睛向花园里看去。但要度过难关比以往任何时候都更加无望：她坐下来，又开始哭泣。"
+    },
+    {
+     "text": "\"You ought to be ashamed of yourself,\" said Alice, \"a great girl like you,\" (she might well say this), \"to go on crying in this way! Stop this moment, I tell you!\" But she went on all the same, shedding gallons of tears, until there was a large pool all round her, about four inches deep and reaching half down the hall.",
+     "translation_zh": "“你应该为自己感到羞耻，”爱丽丝说，“像你这样一个伟大的女孩，”（她很可能会这样说），“继续这样哭泣！我告诉你，现在就停下来！”但她还是继续说下去，流下了无数的眼泪，直到她周围出现一个大水池，大约四英寸深，延伸到大厅的一半。"
+    },
+    {
+     "text": "After a time she heard a little pattering of feet in the distance, and she hastily dried her eyes to see what was coming. It was the White Rabbit returning, splendidly dressed, with a pair of white kid gloves in one hand and a large fan in the other: he came trotting along in a great hurry, muttering to himself as he came, \"Oh! the Duchess, the Duchess! Oh! won't she be savage if I've kept her waiting!\" Alice felt so desperate that she was ready to ask help of any one; so, when the Rabbit came near her, she began, in a low, timid voice, \"If you please, sir—\" The Rabbit started violently, dropped the white kid gloves and the fan, and skurried away into the darkness as hard as he could go.",
+     "translation_zh": "过了一会儿，她听到远处传来轻微的脚步声，她赶紧擦干眼睛看看接下来会发生什么。原来是白兔回来了，衣冠楚楚，一手戴着白羊皮手套，一手拿着一把大扇，小跑着走来，一边走一边自言自语道：“哎哟！公爵夫人，公爵夫人！哦！如果我让她久等了，她会不会太野蛮了！”爱丽丝感到非常绝望，她准备向任何人寻求帮助。于是，当兔子走近她时，她用低沉、胆怯的声音开始说道：“先生，请您——”兔子猛地一惊，丢下白羊皮手套和扇子，拼命地跑进黑暗中。"
+    }
+   ]
+  },
+  {
+   "title": "The Secret Garden: Secret Garden Passage A",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "gutenberg:113",
+   "paragraphs": [
+    {
+     "text": "But Mrs. Medlock was not in the least disturbed by her and her thoughts. She was the kind of woman who would \"stand no nonsense from young ones.\" At least, that is what she would have said if she had been asked. She had not wanted to go to London just when her sister Maria's daughter was going to be married, but she had a comfortable, well paid place as housekeeper at Misselthwaite Manor and the only way in which she could keep it was to do at once what Mr. Archibald Craven told her to do. She never dared even to ask a question.",
+     "translation_zh": "但梅德劳克太太丝毫没有被她和她的想法所困扰。她是那种“不能忍受年轻人胡言乱语”的女人。至少，如果有人问她的话，她会这么说。当她姐姐玛丽亚的女儿即将结婚时，她不想去伦敦，但她在米瑟斯韦特庄园有一个舒适、报酬丰厚的管家职位，而她能保住这个职位的唯一方法就是立即按照阿奇博尔德·克雷文先生的吩咐去做。她连问题都不敢问。"
+    },
+    {
+     "text": "\"Captain Lennox and his wife died of the cholera,\" Mr. Craven had said in his short, cold way. \"Captain Lennox was my wife's brother and I am their daughter's guardian. The child is to be brought here. You must go to London and bring her yourself.\"",
+     "translation_zh": "“伦诺克斯船长和他的妻子死于霍乱，”克雷文先生用他简短而冷酷的语气说道。“伦诺克斯船长是我妻子的兄弟，我是他们女儿的监护人。孩子要被带到这里来。你必须亲自去伦敦带她来。”"
+    },
+    {
+     "text": "Mary sat in her corner of the railway carriage and looked plain and fretful. She had nothing to read or to look at, and she had folded her thin little black-gloved hands in her lap. Her black dress made her look yellower than ever, and her limp light hair straggled from under her black crêpe hat.",
+     "translation_zh": "玛丽坐在火车车厢的角落里，看上去平淡而焦躁。她没有什么可读或可看的，她把戴着黑手套的瘦小手交叠在腿上。她的黑色连衣裙使她看起来比以前更黄，柔软的浅色头发从黑色绉纱帽下散落下来。"
+    }
+   ]
+  },
+  {
+   "title": "The Secret Garden: Secret Garden Passage B",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "gutenberg:113",
+   "paragraphs": [
+    {
+     "text": "For a moment Basil looked angry, and then he began to tease. He was always teasing his sisters. He danced round and round her and made faces and sang and laughed.",
+     "translation_zh": "巴兹尔一时显得很生气，然后他开始取笑。他总是捉弄他的姐妹们。他围着她跳舞、做鬼脸、唱歌、大笑。"
+    },
+    {
+     "text": "\"She doesn't know where home is!\" said Basil, with seven-year-old scorn. \"It's England, of course. Our grandmama lives there and our sister Mabel was sent to her last year. You are not going to your grandmama. You have none. You are going to your uncle. His name is Mr. Archibald Craven.\"",
+     "translation_zh": "“她不知道家在哪里！”巴兹尔带着七岁孩子的轻蔑说道。“当然是英格兰。我们的祖母住在那里，我们的妹妹梅布尔去年被送到她那里。你不会去你奶奶那里。你没有。你要去你叔叔那里。他的名字是阿奇博尔德·克雷文先生。”"
+    },
+    {
+     "text": "\"I know you don't,\" Basil answered. \"You don't know anything. Girls never do. I heard father and mother talking about him. He lives in a great, big, desolate old house in the country and no one goes near him. He's so cross he won't let them, and they wouldn't come if he would let them. He's a hunchback, and he's horrid.\"",
+     "translation_zh": "“我知道你不知道，”巴兹尔回答。“你什么都不知道。女孩子从来不这样。我听到爸爸和妈妈谈论他。他住在乡下一栋又大又大又荒凉的老房子里，没有人靠近他。他太生气了，他不让他们来，即使他让他们来，他们也不会来。他是个驼背，而且很可怕。”"
+    },
+    {
+     "text": "But she thought over it a great deal afterward; and when Mrs. Crawford told her that night that she was going to sail away to England in a few days and go to her uncle, Mr. Archibald Craven, who lived at Misselthwaite Manor, she looked so stony and stubbornly uninterested that they did not know what to think about her. They tried to be kind to her, but she only turned her face away when Mrs. Crawford attempted to kiss her, and held herself stiffly when Mr. Crawford patted her shoulder.",
+     "translation_zh": "但事后她想了很多；那天晚上，当克劳福德夫人告诉她，几天后她将乘船前往英国，去找她住在米瑟斯韦特庄园的叔叔阿奇博尔德·克雷文先生时，她看上去那么冷漠、顽固地漠不关心，以至于他们不知道该怎么看待她。他们试图对她友善，但当克劳福德夫人试图亲吻她时，她只是把脸转开，当克劳福德先生拍拍她的肩膀时，她僵硬地保持着自己的姿势。"
+    },
+    {
+     "text": "\"She is such a plain child,\" Mrs. Crawford said pityingly, afterward. \"And her mother was such a pretty creature. She had a very pretty manner, too, and Mary has the most unattractive ways I ever saw in a child. The children call her 'Mistress Mary Quite Contrary,' and though it's naughty of them, one can't help understanding it.\"",
+     "translation_zh": "“她真是个平凡的孩子，”克劳福德夫人事后怜悯地说。“她的母亲是一个非常漂亮的人。她的举止也非常漂亮，而玛丽的举止是我在孩子身上见过的最没有吸引力的。孩子们称她为‘完全相反的玛丽小姐’，虽然这很顽皮，但人们还是不能不理解。”"
+    },
+    {
+     "text": "\"Perhaps if her mother had carried her pretty face and her pretty manners oftener into the nursery Mary might have learned some pretty ways too. It is very sad, now the poor beautiful thing is gone, to remember that many people never even knew that she had a child at all.\"",
+     "translation_zh": "“如果她妈妈经常把她漂亮的脸蛋和漂亮的举止带进育儿室，也许玛丽也能学到一些漂亮的方法。令人非常难过的是，现在这个可怜的美丽的东西已经消失了，要记住很多人甚至根本不知道她有一个孩子。”"
+    },
+    {
+     "text": "\"I believe she scarcely ever looked at her,\" sighed Mrs. Crawford. \"When her Ayah was dead there was no one to give a thought to the little thing. Think of the servants running away and leaving her all alone in that deserted bungalow. Colonel McGrew said he nearly jumped out of his skin when he opened the door and found her standing by herself in the middle of the room.\"",
+     "translation_zh": "“我相信她几乎没有看她一眼，”克劳福德夫人叹了口气。“当她的阿亚死后，没有人会想到这个小东西。想象一下仆人们逃跑了，把她独自留在那间废弃的平房里。麦克格鲁上校说，当他打开门并发现她独自站在房间中央时，他差点惊慌失措。”"
+    },
+    {
+     "text": "Mary made the long voyage to England under the care of an officer's wife, who was taking her children to leave them in a boarding-school. She was very much absorbed in her own little boy and girl, and was rather glad to hand the child over to the woman Mr. Archibald Craven sent to meet her, in London. The woman was his housekeeper at Misselthwaite Manor, and her name was Mrs. Medlock. She was a stout woman, with very red cheeks and sharp black eyes. She wore a very purple dress, a black silk mantle with jet fringe on it and a black bonnet with purple velvet flowers which stuck up and trembled when she moved her head. Mary did not like her at all, but as she very seldom liked people there was nothing remarkable in that; besides which it was very evident Mrs. Medlock did not think much of her.",
+     "translation_zh": "玛丽在一位军官的妻子的照顾下长途航行到了英国，她带着她的孩子们把他们留在了寄宿学校。她非常专注于自己的小男孩和小女孩，并很高兴将孩子交给阿奇博尔德·克雷文先生派来伦敦接她的女人。这个女人是他在米瑟斯韦特庄园的管家，她的名字叫莫德洛克夫人。她是个身材矮胖的女人，脸颊通红，黑眼睛锐利。她穿着一件非常紫色的衣服，一件黑色的丝绸斗篷，上面有黑色的流苏，戴着一顶黑色的帽子，帽子上有紫色的天鹅绒花朵，当她移动头部时，帽子会竖起来并颤抖。玛丽根本不喜欢她，但由于她很少喜欢别人，所以这没什么了不起的。除此之外，很明显梅德洛克夫人对她评价不高。"
+    }
+   ]
+  },
+  {
+   "title": "Anne of Green Gables: Anne Passage A",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "gutenberg:45",
+   "paragraphs": [
+    {
+     "text": "Yet Matthew wished to keep her, of all unaccountable things! Marilla felt that he wanted it just as much this morning as he had the night before, and that he would go on wanting it. That was Matthew's way--take a whim into his head and cling to it with the most amazing silent persistency--a persistency ten times more potent and effectual in its very silence than if he had talked it out.",
+     "translation_zh": "然而马修却想留下她，这是最不负责任的事情！马瑞拉觉得他今天早上和前一天晚上一样想要它，而且他会继续想要它。这就是马修的方式——脑子里突发奇想，然后以最惊人的沉默坚持不懈——这种坚持在沉默中比他把它说出来要强大和有效十倍。"
+    },
+    {
+     "text": "\"Pretty well. I'm better at looking after children, though. I've had so much experience at that. It's such a pity you haven't any here for me to look after.\"",
+     "translation_zh": "“很好。不过我更擅长照顾孩子。我在这方面有很多经验。可惜你这里没有人可以让我照顾。”"
+    },
+    {
+     "text": "\"I think he's lovely,\" said Anne reproachfully. \"He is so very sympathetic. He didn't mind how much I talked--he seemed to like it. I felt that he was a kindred spirit as soon as ever I saw him.\"",
+     "translation_zh": "“我觉得他很可爱。”安妮责备地说。“他非常富有同情心。他并不介意我说了多少——他似乎很喜欢。我一见到他就觉得他是志同道合的人。”"
+    },
+    {
+     "text": "\"You're both queer enough, if that's what you mean by kindred spirits,\" said Marilla with a sniff. \"Yes, you may wash the dishes. Take plenty of hot water, and be sure you dry them well. I've got enough to attend to this morning for I'll have to drive over to White Sands in the afternoon and see Mrs. Spencer. You'll come with me and we'll settle what's to be done with you. After you've finished the dishes go up-stairs and make your bed.\"",
+     "translation_zh": "“你们俩都够奇怪的了，如果这就是你们所说的志趣相投的话。”玛丽拉嗤之以鼻地说。“是的，你可以洗碗。准备充足的热水，并确保将它们充分擦干。今天早上我有足够的事情要做，因为下午我必须开车去白沙去见斯宾塞夫人。你跟我来，我们会商量如何处置你。洗完了碗，就上楼去整理床铺吧。”"
+    },
+    {
+     "text": "Anne washed the dishes deftly enough, as Marilla, who kept a sharp eye on the process, discerned. Later on she made her bed less successfully, for she had never learned the art of wrestling with a feather tick. But it was done somehow and smoothed down; and then Marilla, to get rid of her, told her she might go out-of-doors and amuse herself until dinnertime.",
+     "translation_zh": "安妮洗碗的动作非常熟练，玛丽拉敏锐地观察着整个过程，她发现了这一点。后来她整理床铺就不那么成功了，因为她从来没有学过与羽毛蜱摔跤的艺术。但不知何故，事情已经解决了，并且平息下来了。然后玛丽拉为了摆脱她，告诉她可以出去玩直到晚餐时间。"
+    },
+    {
+     "text": "Anne flew to the door, face alight, eyes glowing. On the very threshold she stopped short, wheeled about, came back and sat down by the table, light and glow as effectually blotted out as if some one had clapped an extinguisher on her.",
+     "translation_zh": "安妮飞奔到门口，脸上容光焕发，眼睛闪闪发光。就在门口，她突然停了下来，转了个身，回来坐在桌边，光线和光芒实际上被遮蔽了，就像有人把灭火器拍到了她身上一样。"
+    },
+    {
+     "text": "\"Oh, I don't mean that sort of a name. I mean just a name you gave it yourself. Didn't you give it a name? May I give it one then? May I call it--let me see--Bonny would do--may I call it Bonny while I'm here? Oh, do let me!\"",
+     "translation_zh": "“哦，我不是指那种名字。我的意思只是你自己给它起的名字。你没给它起名字吗？那我可以给它一个吗？我可以叫它——让我想想——邦尼会吗——我在这儿的时候可以叫它邦尼吗？噢，让我来吧！”"
+    },
+    {
+     "text": "\"Oh, I like things to have handles even if they are only geraniums. It makes them seem more like people. How do you know but that it hurts a geranium's feelings just to be called a geranium and nothing else? You wouldn't like to be called nothing but a woman all the time. Yes, I shall call it Bonny. I named that cherry-tree outside my bedroom window this morning. I called it Snow Queen because it was so white. Of course, it won't always be in blossom, but one can imagine that it is, can't one?\"",
+     "translation_zh": "“哦，我喜欢有把手的东西，即使它们只是天竺葵。这让他们看起来更像人。你怎么知道仅仅被称为天竺葵而不是别的就伤害了天竺葵的感情？你不希望一直被称为女人。是的，我会叫它邦尼。今天早上我给卧室窗外的那棵樱桃树起了名字。我称它为雪女王，因为它太白了。当然，它不会永远盛开，但人们可以想象它是盛开的，不是吗？”"
+    },
+    {
+     "text": "Anne had relapsed into reverie, with her chin in her hands and her eyes on the sky, when Marilla returned from her cellar pilgrimage. There Marilla left her until the early dinner was on the table.",
+     "translation_zh": "当玛丽拉从地窖朝圣回来时，安妮双手托着下巴，眼睛望着天空，再次陷入沉思。玛丽拉离开了她，直到早饭上桌。"
+    },
+    {
+     "text": "\"I'm going to drive over to White Sands and settle this thing. I'll take Anne with me and Mrs. Spencer will probably make arrangements to send her back to Nova Scotia at once. I'll set your tea out for you and I'll be home in time to milk the cows.\"",
+     "translation_zh": "“我要开车去白沙解决这件事。我会带安妮一起去，斯宾塞夫人可能会立即安排将她送回新斯科舍省。我会为你准备茶，然后我会及时回家挤牛奶。”"
+    }
+   ]
+  },
+  {
+   "title": "Little Women: Little Women Passage A",
+   "level": "cet4",
+   "length": "short",
+   "source_id": "gutenberg:514",
+   "paragraphs": [
+    {
+     "text": "\"You don't have half such a hard time as I do,\" said Jo. \"How would you like to be shut up for hours with a nervous, fussy old lady, who keeps you trotting, is never satisfied, and worries you till you're ready to fly out the window or cry?\"",
+     "translation_zh": "“你的困难没有我一半多，”乔说。“你愿意和一个紧张、挑剔的老太太关上几个小时吗？她让你不停地小跑，永远不会满足，还担心你，直到你准备飞出窗外或哭泣？”"
+    },
+    {
+     "text": "\"It's naughty to fret, but I do think washing dishes and keeping things tidy is the worst work in the world. It makes me cross, and my hands get so stiff, I can't practice well at all.\" And Beth looked at her rough hands with a sigh that any one could hear that time.",
+     "translation_zh": "“担心是很顽皮的，但我确实认为洗碗和保持东西整洁是世界上最糟糕的工作。这让我很生气，我的手变得很僵硬，根本练不好。”贝丝看着她粗糙的双手，叹了口气，当时任何人都能听到。"
+    }
+   ]
+  },
+  {
+   "title": "Around the World in Eighty Days: Around the World Passage A",
+   "level": "cet4",
+   "length": "short",
+   "source_id": "gutenberg:103",
+   "paragraphs": [
+    {
+     "text": "A memorandum of the wager was at once drawn up and signed by the six parties, during which Phileas Fogg preserved a stoical composure. He certainly did not bet to win, and had only staked the twenty thousand pounds, half of his fortune, because he foresaw that he might have to expend the other half to carry out this difficult, not to say unattainable, project. As for his antagonists, they seemed much agitated; not so much by the value of their stake, as because they had some scruples about betting under conditions so difficult to their friend.",
+     "translation_zh": "六方立即起草并签署了一份打赌备忘录，期间菲利斯·福格保持着坚忍的镇静。他当然不是赌赢，只赌了两万英镑，即他一半的财产，因为他预见到他可能需要花费另一半来完成这个困难的，甚至可以说是遥不可及的项目。至于他的对手，他们似乎很激动。与其说是因为他们的赌注价值，不如说是因为他们对在对他们的朋友来说如此困难的条件下下注有一些顾虑。"
+    }
+   ]
+  },
+  {
+   "title": "Anne of Green Gables: Anne Passage B",
+   "level": "cet4",
+   "length": "medium",
+   "source_id": "gutenberg:45",
+   "paragraphs": [
+    {
+     "text": "Matthew, much to his own surprise, was enjoying himself. Like most quiet folks he liked talkative people when they were willing to do the talking themselves and did not expect him to keep up his end of it. But he had never expected to enjoy the society of a little girl. Women were bad enough in all conscience, but little girls were worse. He detested the way they had of sidling past him timidly, with sidewise glances, as if they expected him to gobble them up at a mouthful if they ventured to say a word. That was the Avonlea type of well-bred little girl. But this freckled witch was very different, and although he found it rather difficult for his slower intelligence to keep up with her brisk mental processes he thought that he \"kind of liked her chatter.\"",
+     "translation_zh": "令马修自己惊讶的是，他玩得很开心。像大多数安静的人一样，他喜欢健谈的人，因为他们愿意自己说话，并且不希望他继续说下去。但他没想到会喜欢和一个小女孩交往。凭良心来说，女人已经够糟糕的了，但小女孩更糟糕。他讨厌他们胆怯地从他身边侧过，斜视着，仿佛他们期待着如果他们敢说一句话，他就会把他们一口吞掉。那是埃文利类型的有教养的小女孩。但这个长着雀斑的女巫却很不一样，尽管他发现自己较慢的智力很难跟上她敏捷的思维过程，但他认为自己“有点喜欢她的喋喋不休”。"
+    },
+    {
+     "text": "\"Oh, I'm so glad. I know you and I are going to get along together fine. It's such a relief to talk when one wants to and not be told that children should be seen and not heard. I've had that said to me a million times if I have once. And people laugh at me because I use big words. But if you have big ideas you have to use big words to express them, haven't you?\"",
+     "translation_zh": "“哦，我很高兴。我知道你和我会相处得很好。当一个人想说话的时候就可以说话，而不是被告知孩子应该被看到而不是被听到，这真是一种解脱。这句话我已经听过一百万次了（如果有的话）。人们嘲笑我，因为我用了大词。但如果你有伟大的想法，你就必须用伟大的词语来表达它们，不是吗？”"
+    },
+    {
+     "text": "\"Fancy. It's always been one of my dreams to live near a brook. I never expected I would, though. Dreams don't often come true, do they? Wouldn't it be nice if they did? But just now I feel pretty nearly perfectly happy. I can't feel exactly perfectly happy because--well, what color would you call this?\"",
+     "translation_zh": "“想要。住在小溪附近一直是我的梦想之一。但我从没想过我会这么做。梦想通常不会成真，不是吗？如果他们这样做不是很好吗？但现在我感觉几乎非常幸福。我感觉不到完全的快乐，因为——好吧，你觉得这是什么颜色？”"
+    }
+   ]
+  },
+  {
+   "title": "Little Women: Little Women Passage B",
+   "level": "cet4",
+   "length": "medium",
+   "source_id": "gutenberg:514",
+   "paragraphs": [
+    {
+     "text": "\"Glad to find you so merry, my girls,\" said a cheery voice at the door, and actors and audience turned to welcome a tall, motherly lady with a 'can I help you' look about her which was truly delightful. She was not elegantly dressed, but a noble-looking woman, and the girls thought the gray cloak and unfashionable bonnet covered the most splendid mother in the world.",
+     "translation_zh": "“很高兴看到你们如此快乐，我的女儿们，”门口传来一个欢快的声音，演员和观众转过身来欢迎一位身材高大、慈母般的女士，她的表情是“我可以帮你吗”，这真是令人愉快。她的衣着并不华丽，但却是一位相貌高贵的女人，女孩们认为灰色的斗篷和不合时宜的帽子掩盖了世界上最辉煌的母亲。"
+    },
+    {
+     "text": "\"Well, dearies, how have you got on today? There was so much to do, getting the boxes ready to go tomorrow, that I didn't come home to dinner. Has anyone called, Beth? How is your cold, Meg? Jo, you look tired to death. Come and kiss me, baby.\"",
+     "translation_zh": "“嗯，亲爱的，今天过得怎么样？有太多事情要做，要准备好明天要走的箱子，所以我没有回家吃晚饭。贝丝，有人打电话来吗？梅格，你感冒怎么样？乔，你看起来累得要死。过来吻我吧，宝贝。”"
+    },
+    {
+     "text": "While making these maternal inquiries Mrs. March got her wet things off, her warm slippers on, and sitting down in the easy chair, drew Amy to her lap, preparing to enjoy the happiest hour of her busy day. The girls flew about, trying to make things comfortable, each in her own way. Meg arranged the tea table, Jo brought wood and set chairs, dropping, over-turning, and clattering everything she touched. Beth trotted to and fro between parlor kitchen, quiet and busy, while Amy gave directions to everyone, as she sat with her hands folded.",
+     "translation_zh": "马奇夫人一边做着这些母亲般的询问，一边脱掉湿漉漉的衣服，穿上温暖的拖鞋，坐在安乐椅上，把艾米拉到腿上，准备享受忙碌一天中最快乐的时光。女孩们飞来飞去，试图以自己的方式让一切变得舒适。梅格摆好茶几，乔拿来木头和椅子，她碰过的所有东西都掉落、翻倒、叮当作响。贝丝在客厅厨房之间小跑着，安静而忙碌，而艾米则双手交叉坐着，给每个人指路。"
+    }
+   ]
+  },
+  {
+   "title": "Around the World in Eighty Days: Around the World Passage B",
+   "level": "cet4",
+   "length": "long",
+   "source_id": "gutenberg:103",
+   "paragraphs": [
+    {
+     "text": "\"A true Englishman doesn't joke when he is talking about so serious a thing as a wager,\" replied Phileas Fogg, solemnly. \"I will bet twenty thousand pounds against anyone who wishes that I will make the tour of the world in eighty days or less; in nineteen hundred and twenty hours, or a hundred and fifteen thousand two hundred minutes. Do you accept?\"",
+     "translation_zh": "“一个真正的英国人在谈论打赌这样严肃的事情时是不会开玩笑的，”菲利斯·福格严肃地回答道。“如果有人希望我能在八十天或更短的时间内、在一千九百二十小时内，或者在十一万五千二百分钟内环游世界，我将与任何人打赌两万英镑。你接受吗？”"
+    },
+    {
+     "text": "\"This very evening,\" returned Phileas Fogg. He took out and consulted a pocket almanac, and added, \"As today is Wednesday, the 2nd of October, I shall be due in London in this very room of the Reform Club, on Saturday, the 21st of December, at a quarter before nine p. m. ; or else the twenty thousand pounds, now deposited in my name at Baring's, will belong to you, in fact and in right, gentlemen. Here is a cheque for the amount.\"",
+     "translation_zh": "“就在今天晚上，”菲利斯·福格回答道。他拿出一本袖珍年鉴，补充道：“今天是 10 月 2 日星期三，我将于 12 月 21 日星期六晚上 9 点差一刻抵达伦敦改革俱乐部的这个房间。米。;否则，现在以我的名义存入巴林银行的两万英镑将属于你们，事实上，先生们，这是正确的。这是一张金额的支票。”"
+    },
+    {
+     "text": "A memorandum of the wager was at once drawn up and signed by the six parties, during which Phileas Fogg preserved a stoical composure. He certainly did not bet to win, and had only staked the twenty thousand pounds, half of his fortune, because he foresaw that he might have to expend the other half to carry out this difficult, not to say unattainable, project. As for his antagonists, they seemed much agitated; not so much by the value of their stake, as because they had some scruples about betting under conditions so difficult to their friend.",
+     "translation_zh": "六方立即起草并签署了一份打赌备忘录，期间菲利斯·福格保持着坚忍的镇静。他当然不是赌赢，只赌了两万英镑，即他一半的财产，因为他预见到他可能需要花费另一半来完成这个困难的，甚至可以说是遥不可及的项目。至于他的对手，他们似乎很激动。与其说是因为他们的赌注价值，不如说是因为他们对在对他们的朋友来说如此困难的条件下下注有一些顾虑。"
+    },
+    {
+     "text": "\"We'll have no trunks; only a carpet-bag, with two shirts and three pairs of stockings for me, and the same for you. We'll buy our clothes on the way. Bring down my mackintosh and traveling-cloak, and some stout shoes, though we shall do little walking. Make haste!\"",
+     "translation_zh": "“我们没有行李箱；只有一个地毯袋，我有两件衬衫和三双袜子，你也一样。我们会在路上买衣服。带上我的雨衣和旅行斗篷，还有一些结实的鞋子，尽管我们很少走路。赶快！”"
+    },
+    {
+     "text": "Passepartout tried to reply, but could not. He went out, mounted to his own room, fell into a chair, and muttered: \"That's good, that is! And I, who wanted to remain quiet!\"",
+     "translation_zh": "路路通试图回复，但无法回复。他走出去，爬上自己的房间，一屁股坐在椅子上，嘀咕道：“那就好！而我，本想保持安静！”"
+    },
+    {
+     "text": "He mechanically set about making the preparations for departure. Around the world in eighty days! Was his master a fool? No. Was this a joke, then? They were going to Dover; good! To Calais; good again! After all, Passepartout, who had been away from France five years, would not be sorry to set foot on his native soil again. Perhaps they would go as far as Paris, and it would do his eyes good to see Paris once more. But surely a gentleman so chary of his steps would stop there; no doubt—but, then, it was none the less true that he was going away, this so domestic person hitherto!",
+     "translation_zh": "他机械地开始准备出发。八十天环游世界！他的主人是个傻子吗？不。那么这是一个笑话吗？他们要去多佛；好的！前往加莱；又好了！毕竟，离开法国五年的路路通，再次踏上祖国的土地，不会感到遗憾。也许他们会一直走到巴黎，再次见到巴黎对他的眼睛会有好处。但一位如此小心谨慎的绅士肯定会就此止步。毫无疑问——但是，话虽如此，他还是要离开，这个迄今为止如此居家的人！"
+    },
+    {
+     "text": "By eight o'clock Passepartout had packed the modest carpet-bag, containing the wardrobes of his master and himself; then, still troubled in mind, he carefully shut the door of his room, and descended to Mr. Fogg.",
+     "translation_zh": "到了八点钟，路路通已经收拾好了那个朴素的地毯袋，里面装着他主人和他自己的衣柜。然后，心里仍然不安，他小心翼翼地关上房门，下楼到福格先生身边。"
+    }
+   ]
+  },
+  {
+   "title": "Treasure Island: Treasure Island Passage A",
+   "level": "cet4",
+   "length": "long",
+   "source_id": "gutenberg:120",
+   "paragraphs": [
+    {
+     "text": "\"That's you, Bill,\" returned Black Dog, \"you're in the right of it, Billy. I'll have a glass of rum from this dear child here, as I've took such a liking to; and we'll sit down, if you please, and talk square, like old shipmates.\"",
+     "translation_zh": "“就是你，比尔，”黑狗回答道，“你是对的，比利。我要喝一杯这个亲爱的孩子给我的朗姆酒，因为我非常喜欢；如果你愿意的话，我们可以坐下来，像老船友一样开诚布公地谈谈。”"
+    },
+    {
+     "text": "He bade me go and leave the door wide open. \"None of your keyholes for me, sonny,\" he said; and I left them together and retired into the bar.",
+     "translation_zh": "他吩咐我走，把门敞开。“儿子，你的钥匙孔不适合我，”他说。我把他们留在了一起，然后退进了酒吧。"
+    },
+    {
+     "text": "Then all of a sudden there was a tremendous explosion of oaths and other noises--the chair and table went over in a lump, a clash of steel followed, and then a cry of pain, and the next instant I saw Black Dog in full flight, and the captain hotly pursuing, both with drawn cutlasses, and the former streaming blood from the left shoulder. Just at the door the captain aimed at the fugitive one last tremendous cut, which would certainly have split him to the chine had it not been intercepted by our big signboard of Admiral Benbow. You may see the notch on the lower side of the frame to this day.",
+     "translation_zh": "然后突然爆发出一阵巨大的咒骂声和其他声音——椅子和桌子一起倒了下去，接着是一声钢铁撞击声，然后是一声痛苦的叫声，下一瞬间我看到黑狗全速逃跑，而船长则紧追不舍，两人都拿着拔出的弯刀，前者的左肩流着血。就在门口，船长瞄准了逃亡者最后一击，如果不是我们的本博海军上将的大招牌拦截的话，这肯定会把他劈成脊椎骨。直到今天，您仍然可以在框架下侧看到凹口。"
+    },
+    {
+     "text": "That blow was the last of the battle. Once out upon the road, Black Dog, in spite of his wound, showed a wonderful clean pair of heels and disappeared over the edge of the hill in half a minute. The captain, for his part, stood staring at the signboard like a bewildered man. Then he passed his hand over his eyes several times and at last turned back into the house.",
+     "translation_zh": "那一击是战斗的最后一击。一上路，黑狗尽管受了伤，却露出了一双干净的高跟鞋，半分钟后就消失在山边了。船长则站在那儿，像个困惑的人一样盯着招牌。然后他用手捂住眼睛好几次，最后才转身进屋。"
+    },
+    {
+     "text": "I ran to fetch it, but I was quite unsteadied by all that had fallen out, and I broke one glass and fouled the tap, and while I was still getting in my own way, I heard a loud fall in the parlour, and running in, beheld the captain lying full length upon the floor. At the same instant my mother, alarmed by the cries and fighting, came running downstairs to help me. Between us we raised his head. He was breathing very loud and hard, but his eyes were closed and his face a horrible colour.",
+     "translation_zh": "我跑去拿它，但我因为掉下来的东西而站不稳，我打碎了一个玻璃杯，弄脏了水龙头，当我还在妨碍自己的时候，我听到客厅里摔倒的一声巨响，我跑进去，看到船长全身躺在地板上。与此同时，我的母亲被哭声和打斗声吓坏了，跑下楼来帮助我。我们在我们之间抬起了头。他的呼吸声很大很急促，但他的眼睛紧闭，脸色惨白。"
+    },
+    {
+     "text": "In the meantime, we had no idea what to do to help the captain, nor any other thought but that he had got his death-hurt in the scuffle with the stranger. I got the rum, to be sure, and tried to put it down his throat, but his teeth were tightly shut and his jaws as strong as iron. It was a happy relief for us when the door opened and Doctor Livesey came in, on his visit to my father.",
+     "translation_zh": "与此同时，我们不知道该怎么帮助船长，除了他在与陌生人的扭打中受重伤而死之外，我们也没有任何其他想法。当然，我拿到了朗姆酒，试图把它放进他的喉咙里，但他的牙齿紧闭，下巴坚如铁。当门打开，利夫西医生进来探望我父亲时，我们感到很高兴。"
+    },
+    {
+     "text": "\"Wounded? A fiddle-stick's end!\" said the doctor. \"No more wounded than you or I. The man has had a stroke, as I warned him. Now, Mrs. Hawkins, just you run upstairs to your husband and tell him, if possible, nothing about it. For my part, I must do my best to save this fellow's trebly worthless life; Jim, you get me a basin.\"",
+     "translation_zh": "“受伤了？小提琴棒的尽头！”医生说。“受伤的人数并不比你我更多。正如我警告过他的那样，这个人中风了。现在，霍金斯太太，你跑上楼去找你丈夫，如果可能的话，什么也不告诉他。就我而言，我必须尽力挽救这个家伙毫无价值的生命；吉姆，你给我一个脸盆。”"
+    },
+    {
+     "text": "When I got back with the basin, the doctor had already ripped up the captain's sleeve and exposed his great sinewy arm. It was tattooed in several places. \"Here's luck,\" \"A fair wind,\" and \"Billy Bones his fancy,\" were very neatly and clearly executed on the forearm; and up near the shoulder there was a sketch of a gallows and a man hanging from it--done, as I thought, with great spirit.",
+     "translation_zh": "当我拿着脸盆回来时，医生已经撕开了船长的袖子，露出了他粗壮的大臂。它的几个地方都有纹身。“祝你好运”、“一阵好风”和“比利·骨头，他的幻想”，非常整齐、清晰地写在前臂上；在靠近肩膀的地方，有一个绞刑架的草图，上面挂着一个人——我认为，这是用伟大的精神完成的。"
+    }
+   ]
+  },
+  {
+   "title": "The Adventures of Sherlock Holmes: Sherlock Passage A",
+   "level": "cet6",
+   "length": "short",
+   "source_id": "gutenberg:1661",
+   "paragraphs": [
+    {
+     "text": "\"Quite so,\" he answered, lighting a cigarette, and throwing himself down into an armchair. \"You see, but you do not observe. The distinction is clear. For example, you have frequently seen the steps which lead up from the hall to this room.\"",
+     "translation_zh": "“确实如此，”他回答道，点燃一支香烟，然后坐到扶手椅上。“你看，但你没有观察。区别很明显。例如，你经常看到从大厅通向这个房间的台阶。”"
+    },
+    {
+     "text": "\"Quite so! You have not observed. And yet you have seen. That is just my point. Now, I know that there are seventeen steps, because I have both seen and observed. By the way, since you are interested in these little problems, and since you are good enough to chronicle one or two of my trifling experiences, you may be interested in this.\" He threw over a sheet of thick, pink-tinted notepaper which had been lying open upon the table. \"It came by the last post,\" said he. \"Read it aloud.\"",
+     "translation_zh": "“正是如此！你没有观察到。然而你已经看到了。这就是我的观点。现在，我知道有十七个步骤，因为我既看到又观察。顺便说一句，既然你对这些小问题感兴趣，又能够记录我的一两件琐碎经历，那么你可能会对这个感兴趣。”他扔了一张厚厚的粉红色信纸，这张信纸一直放在桌子上。“这是最后一个帖子来的，”他说。“大声读出来。”"
+    }
+   ]
+  },
+  {
+   "title": "Pride and Prejudice: Pride and Prejudice Passage A",
+   "level": "cet6",
+   "length": "short",
+   "source_id": "gutenberg:1342",
+   "paragraphs": [
+    {
+     "text": "being gone to London only to get a large party for the ball; and a report soon followed that Mr. Bingley was to bring twelve ladies and seven gentlemen with him to the assembly. The girls grieved over such a number of ladies; but were comforted the day before the ball by hearing that, instead of twelve, he had brought only six with him from London, his five sisters and a cousin. And when the party entered the assembly-room, it consisted of only five altogether: Mr. Bingley, his two sisters, the husband of the eldest, and another young man.",
+     "translation_zh": "去伦敦只是为了举办一场大型舞会；很快就有报道称宾利先生将带着十二位女士和七位先生参加集会。女孩们为这么多的女士感到悲伤。但在舞会前一天，当得知他从伦敦只带来了六个人而不是十二个，即他的五个姐妹和一个表弟时，我们感到很欣慰。当一行人进入会议室时，总共只有五个人：彬格莱先生、他的两个姐妹、长子的丈夫和另一个年轻人。"
+    }
+   ]
+  },
+  {
+   "title": "The Adventures of Sherlock Holmes: Sherlock Passage B",
+   "level": "cet6",
+   "length": "medium",
+   "source_id": "gutenberg:1661",
+   "paragraphs": [
+    {
+     "text": "\"Not a bit, Doctor. Stay where you are. I am lost without my Boswell. And this promises to be interesting. It would be a pity to miss it.\"",
+     "translation_zh": "“一点也不，博士。呆在原地。没有我的博斯韦尔，我就迷失了。这肯定会很有趣。错过了就可惜了。”"
+    },
+    {
+     "text": "A slow and heavy step, which had been heard upon the stairs and in the passage, paused immediately outside the door. Then there was a loud and authoritative tap.",
+     "translation_zh": "楼梯上和过道上传来的缓慢而沉重的脚步声立刻在门外停了下来。然后是响亮而权威的敲击声。"
+    },
+    {
+     "text": "\"You had my note?\" he asked with a deep harsh voice and a strongly marked German accent. \"I told you that I would call.\" He looked from one to the other of us, as if uncertain which to address.",
+     "translation_zh": "“你有我的字条吗？”他用低沉刺耳的声音问道，带着浓重的德国口音。“我说过我会打电话的。”他看看我们中的一个，又看看另一个，似乎不确定该跟谁说话。"
+    },
+    {
+     "text": "\"Pray take a seat,\" said Holmes. \"This is my friend and colleague, Dr. Watson, who is occasionally good enough to help me in my cases. Whom have I the honour to address?\"",
+     "translation_zh": "“请坐，”福尔摩斯说。“这是我的朋友和同事，沃森医生，他偶尔会在我的案件中提供足够的帮助。我有幸向谁讲话？”"
+    },
+    {
+     "text": "\"You may address me as the Count Von Kramm, a Bohemian nobleman. I understand that this gentleman, your friend, is a man of honour and discretion, whom I may trust with a matter of the most extreme importance. If not, I should much prefer to communicate with you alone.\"",
+     "translation_zh": "“你可以称我为冯·克拉姆伯爵，一位波西米亚贵族。我知道这位先生，你的朋友，是一个有荣誉感和谨慎的人，我可以信任他来处理最重要的事情。如果没有的话，我更愿意单独和你交流。”"
+    },
+    {
+     "text": "I rose to go, but Holmes caught me by the wrist and pushed me back into my chair. \"It is both, or none,\" said he. \"You may say before this gentleman anything which you may say to me.\"",
+     "translation_zh": "我起身要走，但福尔摩斯抓住了我的手腕，把我推回到椅子上。“要么两者兼而有之，要么都没有，”他说。“你对我说的话都可以在这位先生面前说。”"
+    }
+   ]
+  },
+  {
+   "title": "Pride and Prejudice: Pride and Prejudice Passage B",
+   "level": "cet6",
+   "length": "medium",
+   "source_id": "gutenberg:1342",
+   "paragraphs": [
+    {
+     "text": "Mr. Bingley inherited property to the amount of nearly a hundred thousand pounds from his father, who had intended to purchase an estate, but did not live to do it. Mr. Bingley intended it likewise, and sometimes made choice of his county; but, as he was now provided with a good house and the liberty of a manor, it was doubtful to many of those who best knew the easiness of his temper, whether he might not spend the remainder of his days at Netherfield, and leave the next generation to purchase.",
+     "translation_zh": "宾利先生从他父亲那里继承了近十万英镑的财产，他父亲原本打算购买一处庄园，但未能活着。彬格莱先生也有同样的意图，有时他会选择他的县。但是，由于他现在拥有一栋好房子和庄园的自由，许多最了解他脾气暴躁的人都怀疑他是否会在尼日斐花园度过余生，并留给下一代购买。"
+    },
+    {
+     "text": "His sisters were very anxious for his having an estate of his own; but though he was now established only as a tenant, Miss Bingley was by no means unwilling to preside at his table; nor was Mrs. Hurst, who had married a man of more fashion than fortune, less disposed to consider his house as her home when it suited her. Mr. Bingley had not been of age two years when he was tempted, by an accidental recommendation, to look at Netherfield House. He did look at it, and into it, for half an hour; was pleased with the situation and the principal rooms, satisfied with what the owner said in its praise, and took it immediately.",
+     "translation_zh": "他的姐妹们非常渴望他拥有自己的庄园。尽管他现在只是作为一个佃户，彬格莱小姐却一点也不愿意主持他的餐桌。赫斯特夫人嫁给了一个比财富更时尚的男人，当她觉得合适的时候，她也毫不犹豫地把他的房子当作她的家。宾利先生在一次偶然的推荐下，想去参观尼日斐宫时，还不满两岁。他确实看了半个小时。对情况和正房很满意，对业主夸奖的话很满意，立即入住。"
+    }
+   ]
+  },
+  {
+   "title": "The Time Machine: Time Machine Passage A",
+   "level": "cet6",
+   "length": "long",
+   "source_id": "gutenberg:35",
+   "paragraphs": [
+    {
+     "text": "There was a minute's pause perhaps. The Psychologist seemed about to speak to me, but changed his mind. Then the Time Traveller put forth his finger towards the lever. \"No,\" he said suddenly. \"Lend me your hand.\" And turning to the Psychologist, he took that individual's hand in his own and told him to put out his forefinger. So that it was the Psychologist himself who sent forth the model Time Machine on its interminable voyage. We all saw the lever turn. I am absolutely certain there was no trickery. There was a breath of wind, and the lamp flame jumped. One of the candles on the mantel was blown out, and the little machine suddenly swung round, became indistinct, was seen as a ghost for a second perhaps, as an eddy of faintly glittering brass and ivory; and it was gone—vanished! Save for the lamp the table was bare.",
+     "translation_zh": "也许停顿了一分钟。心理学家似乎想跟我说话，但后来改变了主意。然后时间旅行者将手指伸向控制杆。“不，”他突然说道。“把手借给我。”然后转向心理学家，他握住那个人的手，让他伸出食指。因此，正是心理学家本人将时间机器模型送上了无尽的航程。我们都看到杠杆转动了。我绝对确定没有任何诡计。一阵风吹过，灯火跳动。壁炉架上的一根蜡烛被吹灭了，那台小机器突然旋转起来，变得模糊不清，一瞬间被视为幽灵，就像一个微弱闪光的黄铜和象牙的漩涡；然后它就消失了——消失了！除了台灯，桌子上空无一物。"
+    },
+    {
+     "text": "The Psychologist recovered from his stupor, and suddenly looked under the table. At that the Time Traveller laughed cheerfully. \"Well?\" he said, with a reminiscence of the Psychologist. Then, getting up, he went to the tobacco jar on the mantel, and with his back to us began to fill his pipe.",
+     "translation_zh": "心理学家从恍惚中回过神来，突然看向桌子底下。时间旅行者闻言哈哈大笑。“出色地？”他回忆起心理学家说道。然后，他站起来，走向壁炉架上的烟草罐，背对着我们开始给他的烟斗装满烟斗。"
+    },
+    {
+     "text": "\"Certainly,\" said the Time Traveller, stooping to light a spill at the fire. Then he turned, lighting his pipe, to look at the Psychologist's face. (The Psychologist, to show that he was not unhinged, helped himself to a cigar and tried to light it uncut.) \"What is more, I have a big machine nearly finished in there\"—he indicated the laboratory—\"and when that is put together I mean to have a journey on my own account.\"",
+     "translation_zh": "“当然，”时间旅行者说着，弯下腰去点燃火堆。然后他转过身来，点着烟斗，看着心理学家的脸。（为了表明他没有精神错乱，心理学家给自己拿了一支雪茄，并试图将其点燃。）“更重要的是，我那里有一台即将完工的大机器”——他指着实验室——“当它组装起来时，我打算独自进行一次旅行。”"
+    },
+    {
+     "text": "\"Would you like to see the Time Machine itself?\" asked the Time Traveller. And therewith, taking the lamp in his hand, he led the way down the long, draughty corridor to his laboratory. I remember vividly the flickering light, his queer, broad head in silhouette, the dance of the shadows, how we all followed him, puzzled but incredulous, and how there in the laboratory we beheld a larger edition of the little mechanism which we had seen vanish from before our eyes. Parts were of nickel, parts of ivory, parts had certainly been filed or sawn out of rock crystal. The thing was generally complete, but the twisted crystalline bars lay unfinished upon the bench beside some sheets of drawings, and I took one up for a better look at it. Quartz it seemed to be.",
+     "translation_zh": "“你想看看时间机器吗？”时间旅行者问道。说完，他手里拿着灯，沿着通风良好的长走廊，来到了他的实验室。我清楚地记得闪烁的灯光、他那奇怪、宽阔的头部轮廓、舞动的阴影、我们如何跟随他，困惑但难以置信，以及在实验室里我们如何看到一个放大版的小装置，而它却从我们眼前消失了。部分是镍的，部分是象牙的，部分肯定是用水晶锉或锯出来的。东西基本上已经完成了，但是扭曲的水晶棒还没有完成，放在长凳上，旁边还有几张图纸，我拿起一张以便更好地观察它。看起来是石英的。"
+    },
+    {
+     "text": "The next Thursday I went again to Richmond—I suppose I was one of the Time Traveller's most constant guests—and, arriving late, found four or five men already assembled in his drawing-room. The Medical Man was standing before the fire with a sheet of paper in one hand and his watch in the other. I looked round for the Time Traveller, and—\"It's half-past seven now,\" said the Medical Man. \"I suppose we'd better have dinner?\"",
+     "translation_zh": "下周四，我再次前往里士满——我想我是时间旅行者最常来的客人之一——到达较晚，发现四五个人已经聚集在他的客厅里。医生站在火边，一手拿着一张纸，另一只手拿着手表。我环顾四周寻找时间旅行者，然后——“现在已经七点半了，”医生说。“我想我们最好吃晚饭吧？”"
+    },
+    {
+     "text": "\"You've just come? It's rather odd. He's unavoidably detained. He asks me in this note to lead off with dinner at seven if he's not back. Says he'll explain when he comes.\"",
+     "translation_zh": "“你才来啊？这很奇怪。他不可避免地被拘留了。他在这张便条中要求我如果他没有回来的话，就在七点开始吃晚饭。说他来的时候会解释的。”"
+    }
+   ]
+  },
+  {
+   "title": "Adventures of Huckleberry Finn: Huckleberry Finn Passage A",
+   "level": "cet6",
+   "length": "long",
+   "source_id": "gutenberg:76",
+   "paragraphs": [
+    {
+     "text": "\"Yes, he's got a father, but you can't never find him these days. He used to lay drunk with the hogs in the tanyard, but he hain't been seen in these parts for a year or more.\"",
+     "translation_zh": "“是的，他有父亲，但现在你永远找不到他了。他过去常常和制革厂里的猪一起喝醉，但已经有一年多没有在这些地方见过他了。”"
+    },
+    {
+     "text": "They talked it over, and they was going to rule me out, because they said every boy must have a family or somebody to kill, or else it wouldn't be fair and square for the others. Well, nobody could think of anything to do—everybody was stumped, and set still. I was most ready to cry; but all at once I thought of a way, and so I offered them Miss Watson—they could kill her.",
+     "translation_zh": "他们商量了一下，打算把我排除在外，因为他们说每个男孩都必须有一个家庭或一个可以杀死的人，否则对其他人来说就不公平。好吧，没有人想出什么办法——每个人都被难住了，一动不动。我快要哭了。但我突然想到了一个办法，于是我向他们提供了沃森小姐——他们可以杀了她。"
+    },
+    {
+     "text": "\"Stuff! stealing cattle and such things ain't robbery; it's burglary,\" says Tom Sawyer. \"We ain't burglars. That ain't no sort of style. We are highwaymen. We stop stages and carriages on the road, with masks on, and kill the people and take their watches and money.\"",
+     "translation_zh": "“东西！偷牛等行为不是抢劫；这是入室盗窃，”汤姆·索亚说。“我们不是窃贼。这可不是什么风格。我们是强盗。我们戴着面具，拦住路上的舞台和马车，杀死人们，拿走他们的手表和钱。”"
+    },
+    {
+     "text": "\"Oh, certainly. It's best. Some authorities think different, but mostly it's considered best to kill them—except some that you bring to the cave here, and keep them till they're ransomed.\"",
+     "translation_zh": "“哦，当然。最好了。有些当局有不同的看法，但大多数人认为最好杀死他们——除了一些你带到这里的山洞里的人，并保留他们直到他们被赎回。”"
+    },
+    {
+     "text": "\"Well, Ben Rogers, if I was as ignorant as you I wouldn't let on. Kill the women? No; nobody ever saw anything in the books like that. You fetch them to the cave, and you're always as polite as pie to them; and by-and-by they fall in love with you, and never want to go home any more.\"",
+     "translation_zh": "“好吧，本·罗杰斯，如果我像你一样无知，我就不会表露出来。杀女人？不;没有人在书中看到过这样的内容。你把他们带到山洞里，对他们总是彬彬有礼。渐渐地，他们就爱上了你，再也不想回家了。”"
+    },
+    {
+     "text": "\"Well, if that's the way I'm agreed, but I don't take no stock in it. Mighty soon we'll have the cave so cluttered up with women, and fellows waiting to be ransomed, that there won't be no place for the robbers. But go ahead, I ain't got nothing to say.\"",
+     "translation_zh": "“好吧，如果我同意的话，但我不会对此置之不理。很快我们的山洞就会挤满女人和等待赎回的人，强盗将无处容身。不过你说吧，我没什么可说的。”"
+    },
+    {
+     "text": "So they all made fun of him, and called him cry-baby, and that made him mad, and he said he would go straight and tell all the secrets. But Tom give him five cents to keep quiet, and said we would all go home and meet next week, and rob somebody and kill some people.",
+     "translation_zh": "所以他们都取笑他，叫他爱哭鬼，这让他很生气，他说他会直接告诉他所有的秘密。但汤姆给了他五美分让他保持安静，并说我们下周都会回家见面，抢劫一些人，杀死一些人。"
+    },
+    {
+     "text": "Ben Rogers said he couldn't get out much, only Sundays, and so he wanted to begin next Sunday; but all the boys said it would be wicked to do it on Sunday, and that settled the thing. They agreed to get together and fix a day as soon as they could, and then we elected Tom Sawyer first captain and Jo Harper second captain of the Gang, and so started home.",
+     "translation_zh": "本·罗杰斯说他不能出去太多，只能在周日出去，所以他想从下周日开始。但所有的男孩都说周日这样做是邪恶的，事情就这么解决了。他们同意尽快聚在一起并确定一天，然后我们选举汤姆·索亚为帮派第一队长，乔·哈珀为帮派第二队长，然后就开始回家了。"
+    },
+    {
+     "text": "I clumb up the shed and crept into my window just before day was breaking. My new clothes was all greased up and clayey, and I was dog-tired.",
+     "translation_zh": "天亮之前，我爬上棚屋，爬进窗户。我的新衣服沾满了油污，沾满泥土，我累坏了。"
+    },
+    {
+     "text": "Well, I got a good going-over in the morning from old Miss Watson on account of my clothes; but the widow she didn't scold, but only cleaned off the grease and clay, and looked so sorry that I thought I would behave a while if I could. Then Miss Watson she took me in the closet and prayed, but nothing come of it. She told me to pray every day, and whatever I asked for I would get it. But it warn't so. I tried it. Once I got a fish-line, but no hooks. It warn't any good to me without hooks. I tried for the hooks three or four times, but somehow I couldn't make it work. By-and-by, one day, I asked Miss Watson to try for me, but she said I was a fool. She never told me why, and I couldn't make it out no way.",
+     "translation_zh": "嗯，早上老沃森小姐因为我的衣服问题对我进行了仔细的检查。但寡妇她并没有责骂，只是把油污和泥土清理干净，一脸抱歉的样子，我想如果可以的话我还是乖一点吧。然后沃森小姐把我带到衣柜里祈祷，但没有任何结果。她告诉我每天祈祷，无论我祈求什么，我都会得到。但事实并非如此。我试过了。有一次我得到了一条鱼线，但没有鱼钩。没有钩子对我来说没有任何好处。我尝试了三四次钩子，但不知何故我无法让它发挥作用。有一天，我请沃森小姐为我试一试，但她说我是个傻瓜。她从来没有告诉过我原因，我也无法理解。"
+    }
+   ]
+  },
+  {
+   "title": "The Federalist Papers: Federalist Passage A",
+   "level": "postgraduate",
+   "length": "short",
+   "source_id": "gutenberg:1404",
+   "paragraphs": [
+    {
+     "text": "Among the many objects to which a wise and free people find it necessary to direct their attention, that of providing for their SAFETY seems to be the first. The SAFETY of the people doubtless has relation to a great variety of circumstances and considerations, and consequently affords great latitude to those who wish to define it precisely and comprehensively.",
+     "translation_zh": "在明智和自由的人们发现有必要关注的许多目标中，保障他们的安全似乎是首要的。人民的安全无疑与各种各样的情况和考虑因素有关，因此为那些希望准确而全面地定义它的人提供了很大的自由度。"
+    },
+    {
+     "text": "The JUST causes of war, for the most part, arise either from violation of treaties or from direct violence. America has already formed treaties with no less than six foreign nations, and all of them, except Prussia, are maritime, and therefore able to annoy and injure us. She has also extensive commerce with Portugal, Spain, and Britain, and, with respect to the two latter, has, in addition, the circumstance of neighborhood to attend to.",
+     "translation_zh": "战争的正义起因在很大程度上要么源于违反条约，要么源于直接暴力。美国已经与不少于六个国家签订了条约，而除普鲁士外，所有这些国家都是海上国家，因此能够骚扰和伤害我们。她还与葡萄牙、西班牙和英国有广泛的贸易往来，对于后两者，她还需要注意邻里的情况。"
+    }
+   ]
+  },
+  {
+   "title": "Meditations: Meditations Passage A",
+   "level": "postgraduate",
+   "length": "short",
+   "source_id": "gutenberg:2680",
+   "paragraphs": [
+    {
+     "text": "XXII. Either this world is a κόσμος or comely piece, because all disposed and governed by certain order: or if it be a mixture, though confused, yet still it is a comely piece. For is it possible that in thee there should be any beauty at all, and that in the whole world there should be nothing but disorder and confusion? and all things in it too, by natural different properties one from another differenced and distinguished; and yet all through diffused, and by natural sympathy, one to another united, as they are?",
+     "translation_zh": "第二十二．要么这个世界是一个 κόσμος 或美丽的部分，因为一切都由一定的秩序安排和支配；或者如果它是一个混合物，尽管混乱，但它仍然是一个美丽的部分。因为有可能在你身上有任何美丽，而在整个世界上除了无序和混乱之外什么都没有吗？其中的所有事物也因自然不同的属性而彼此区别和区别。然而，所有这些都是通过分散的、自然的同情心，使彼此之间团结起来，就像他们现在这样吗？"
+    }
+   ]
+  },
+  {
+   "title": "The Federalist Papers: Federalist Passage B",
+   "level": "postgraduate",
+   "length": "medium",
+   "source_id": "gutenberg:1404",
+   "paragraphs": [
+    {
+     "text": "Whenever, and from whatever causes, it might happen, and happen it would, that any one of these nations or confederacies should rise on the scale of political importance much above the degree of her neighbors, that moment would those neighbors behold her with envy and with fear. Both those passions would lead them to countenance, if not to promote, whatever might promise to diminish her importance; and would also restrain them from measures calculated to advance or even to secure her prosperity. Much time would not be necessary to enable her to discern these unfriendly dispositions. She would soon begin, not only to lose confidence in her neighbors, but also to feel a disposition equally unfavorable to them. Distrust naturally creates distrust, and by nothing is good-will and kind conduct more speedily changed than by invidious jealousies and uncandid imputations, whether expressed or implied.",
+     "translation_zh": "无论何时，无论出于何种原因，这些国家或联盟中的任何一个国家或联盟的政治重要性将远远高于其邻国，那一刻，那些邻国就会以嫉妒和恐惧的目光注视着她。这两种热情都会导致他们支持（如果不是提倡的话）任何可能削弱她重要性的事情。并且还会限制他们采取旨在促进甚至确保她的繁荣的措施。她不需要太多时间就能辨别出这些不友好的性格。她很快就会开始不仅对邻居失去信心，而且也会感到一种对他们同样不利的性格。不信任自然会产生不信任，没有什么比恶意的嫉妒和不诚实的指责（无论是明示的还是暗示的）更能更快地改变善意和善良的行为。"
+    },
+    {
+     "text": "The North is generally the region of strength, and many local circumstances render it probable that the most Northern of the proposed confederacies would, at a period not very distant, be unquestionably more formidable than any of the others. No sooner would this become evident than the NORTHERN HIVE would excite the same ideas and sensations in the more southern parts of America which it formerly did in the southern parts of Europe. Nor does it appear to be a rash conjecture that its young swarms might often be tempted to gather honey in the more blooming fields and milder air of their luxurious and more delicate neighbors.",
+     "translation_zh": "北方通常是实力较强的地区，许多当地情况使得拟议中的同盟中最北方的一个在不久的将来无疑会比其他任何一个同盟都更强大。一旦这一点变得明显，北方蜂巢就会在美国南部地区激起与以前在欧洲南部地区相同的想法和感觉。这似乎也不是一个轻率的猜想，它的幼蜂群可能经常受到诱惑，到它们奢华而精致的邻居的更盛开的田野和更温和的空气中采集蜂蜜。"
+    }
+   ]
+  },
+  {
+   "title": "Meditations: Meditations Passage B",
+   "level": "postgraduate",
+   "length": "medium",
+   "source_id": "gutenberg:2680",
+   "paragraphs": [
+    {
+     "text": "XXXVII. Let that of Heraclitus never be out of thy mind, that the death of earth, is water, and the death of water, is air; and the death of air, is fire; and so on the contrary. Remember him also who was ignorant whither the way did lead, and how that reason being the thing by which all things in the world are administered, and which men are continually and most inwardly conversant with: yet is the thing, which ordinarily they are most in opposition with, and how those things which daily happen among them, cease not daily to be strange unto them, and that we should not either speak, or do anything as men in their sleep, by opinion and bare imagination: for then we think we speak and do, and that we must not be as children, who follow their father's example; for best reason alleging their bare καθότι παρειλήφαμεν; or, as by successive tradition from our forefathers we have received it.",
+     "translation_zh": "三十七。永远不要忘记赫拉克利特的观点：大地的死亡是水，水的死亡是空气；空气的死亡就是火；反之亦然。还要记住他，他不知道这条路通向何方，以及理性是如何管理世界上所有事物的，人们不断地、最内心地熟悉理性：然而，理性是他们通常最反对的东西，以及每天发生在他们中间的事情如何对他们来说每天都不是陌生的，我们不应该像人在睡梦中那样，通过意见和纯粹的想象来说话或做任何事情：因为那时我们认为我们在说话和做事，而我们不能像孩子一样，跟随父亲的脚步；出于最好的理由声称他们裸露 καθότι παρειλήφαμεν；或者，按照我们祖先的连续传统，我们已经接受了它。"
+    },
+    {
+     "text": "XXXVIII. Even as if any of the gods should tell thee, Thou shalt certainly die to-morrow, or next day, thou wouldst not, except thou wert extremely base and pusillanimous, take it for a great benefit, rather to die the next day after, than to-morrow; (for alas, what is the difference!) so, for the same reason, think it no great matter to die rather many years after, than the very next day.",
+     "translation_zh": "三十八。即使任何一位神明告诉你，你明天或后天肯定会死，除非你极其卑鄙和胆怯，否则你不会认为这是一个巨大的好处，宁愿后天死，也不愿明天死；除非你极其卑鄙和胆怯，否则你不会认为这是一个巨大的好处。 （唉，有什么区别！）因此，出于同样的原因，认为多年之后死去比第二天死去也没什么大不了的。"
+    }
+   ]
+  },
+  {
+   "title": "On the Origin of Species: Origin of Species Passage A",
+   "level": "postgraduate",
+   "length": "long",
+   "source_id": "gutenberg:1228",
+   "paragraphs": [
+    {
+     "text": "Close investigation, in most cases, will bring naturalists to an agreement how to rank doubtful forms. Yet it must be confessed, that it is in the best-known countries that we find the greatest number of forms of doubtful value. I have been struck with the fact, that if any animal or plant in a state of nature be highly useful to man, or from any cause closely attract his attention, varieties of it will almost universally be found recorded. These varieties, moreover, will be often ranked by some authors as species. Look at the common oak, how closely it has been studied; yet a German author makes more than a dozen species out of forms, which are very generally considered as varieties; and in this country the highest botanical authorities and practical men can be quoted to show that the sessile and pedunculated oaks are either good and distinct species or mere varieties.",
+     "translation_zh": "在大多数情况下，仔细的调查将使博物学家就如何对可疑形式进行排序达成一致。但必须承认，正是在最著名的国家，我们发现了最多数量的可疑价值形式。令我震惊的事实是，如果任何自然状态下的动物或植物对人类非常有用，或者出于某种原因密切吸引人类的注意，那么它的各种变体几乎都会被记录下来。此外，一些作者经常将这些变种列为物种。看看普通橡树，它被研究得多么仔细；然而，一位德国作家却从形式中创造了十几个物种，这些形式通常被认为是变体；在这个国家，可以引用最高植物学权威和实干家的话说，无梗橡树和有蒂橡树要么是优良的独特物种，要么只是品种。"
+    },
+    {
+     "text": "Certainly no clear line of demarcation has as yet been drawn between species and sub-species—that is, the forms which in the opinion of some naturalists come very near to, but do not quite arrive at the rank of species; or, again, between sub-species and well-marked varieties, or between lesser varieties and individual differences. These differences blend into each other in an insensible series; and a series impresses the mind with the idea of an actual passage.",
+     "translation_zh": "当然，物种和亚种之间还没有明确的界限——也就是说，在一些博物学家看来，这些形式非常接近物种的等级，但还没有完全达到物种的等级；或者，亚种和明显品种之间，或较小品种和个体差异之间。这些差异在一个不明显的系列中相互融合；一系列作品以真实段落的想法给人们留下深刻的印象。"
+    },
+    {
+     "text": "It need not be supposed that all varieties or incipient species necessarily attain the rank of species. They may whilst in this incipient state become extinct, or they may endure as varieties for very long periods, as has been shown to be the case by Mr. Wollaston with the varieties of certain fossil land-shells in Madeira. If a variety were to flourish so as to exceed in numbers the parent species, it would then rank as the species, and the species as the variety; or it might come to supplant and exterminate the parent species; or both might co-exist, and both rank as independent species. But we shall hereafter have to return to this subject.",
+     "translation_zh": "不必假设所有变种或初期物种都必然达到物种的等级。它们可能在这个初期状态就灭绝了，或者它们可能作为变种持续很长一段时间，正如沃拉斯顿先生对马德拉群岛某些化石陆地贝壳变种的情况所表明的那样。如果一个变种繁衍生息，数量超过其亲本种，那么它就被列为物种，而该物种则被列为变种；或者它可能会取代并消灭亲本物种；或者两者可能共存，并且都被列为独立物种。但我们稍后将不得不回到这个话题。"
+    },
+    {
+     "text": "From these remarks it will be seen that I look at the term species, as one arbitrarily given for the sake of convenience to a set of individuals closely resembling each other, and that it does not essentially differ from the term variety, which is given to less distinct and more fluctuating forms. The term variety, again, in comparison with mere individual differences, is also applied arbitrarily, and for mere convenience sake.",
+     "translation_zh": "从这些评论中可以看出，我将“物种”一词视为为了方便起见而任意赋予一组彼此非常相似的个体的术语，并且它与“多样性”一词没有本质上的区别，后者被赋予不太明显和更波动的形式。同样，与单纯的个体差异相比，“多样性”一词也是任意使用的，并且仅仅是为了方便起见。"
+    }
+   ]
+  },
+  {
+   "title": "The Federalist Papers: Federalist Passage C",
+   "level": "postgraduate",
+   "length": "long",
+   "source_id": "gutenberg:1404",
+   "paragraphs": [
+    {
+     "text": "Carthage, though a commercial republic, was the aggressor in the very war that ended in her destruction. Hannibal had carried her arms into the heart of Italy and to the gates of Rome, before Scipio, in turn, gave him an overthrow in the territories of Carthage, and made a conquest of the commonwealth.",
+     "translation_zh": "迦太基虽然是一个商业共和国，但却是那场最终导致其毁灭的战争的侵略者。汉尼拔带着她的武器进入了意大利的心脏地带，直抵罗马的大门，然后西庇阿反过来在迦太基领土上推翻了他，并征服了联邦。"
+    },
+    {
+     "text": "Venice, in later times, figured more than once in wars of ambition, till, becoming an object to the other Italian states, Pope Julius II. found means to accomplish that formidable league,(9) which gave a deadly blow to the power and pride of this haughty republic.",
+     "translation_zh": "在后来的时代，威尼斯不止一次地出现在野心战争中，直到成为教皇朱利叶斯二世（Pope Julius II）其他意大利国家的目标。找到了实现这一强大联盟的方法，（9）这对这个傲慢的共和国的权力和骄傲造成了致命的打击。"
+    },
+    {
+     "text": "The provinces of Holland, till they were overwhelmed in debts and taxes, took a leading and conspicuous part in the wars of Europe. They had furious contests with England for the dominion of the sea, and were among the most persevering and most implacable of the opponents of Louis XIV.",
+     "translation_zh": "荷兰各省在债务和税收不堪重负之前，一直在欧洲战争中发挥着主导作用。他们与英国争夺制海权，展开了激烈的争夺，是路易十四最顽强、最顽固的反对者之一。"
+    },
+    {
+     "text": "In the government of Britain the representatives of the people compose one branch of the national legislature. Commerce has been for ages the predominant pursuit of that country. Few nations, nevertheless, have been more frequently engaged in war; and the wars in which that kingdom has been engaged have, in numerous instances, proceeded from the people.",
+     "translation_zh": "在英国政府中，人民代表组成国家立法机关的一个分支。多年来，商业一直是该国的主要追求。然而，很少有国家比它更频繁地卷入战争。在许多情况下，该王国所参与的战争都是由人民发起的。"
+    },
+    {
+     "text": "There have been, if I may so express it, almost as many popular as royal wars. The cries of the nation and the importunities of their representatives have, upon various occasions, dragged their monarchs into war, or continued them in it, contrary to their inclinations, and sometimes contrary to the real interests of the State. In that memorable struggle for superiority between the rival houses of AUSTRIA and BOURBON, which so long kept Europe in a flame, it is well known that the antipathies of the English against the French, seconding the ambition, or rather the avarice, of a favorite leader,(10) protracted the war beyond the limits marked out by sound policy, and for a considerable time in opposition to the views of the court.",
+     "translation_zh": "如果我可以这样表达的话，几乎和皇家战争一样受欢迎。民族的呼声和代表们的强求，在不同的场合将他们的君主拖入战争，或让他们继续卷入战争，这违背了他们的意愿，有时甚至违背了国家的真正利益。在奥地利和波旁王朝之间令人难忘的争夺优势的斗争中，这场斗争长期以来让欧洲陷入了困境，众所周知，英国人对法国人的反感，支持了一位最喜欢的领导人的野心，或者更确切地说是贪婪，（10）使战争超出了合理政策所规定的范围，并且在相当长的时间内与宫廷的观点相悖。"
+    },
+    {
+     "text": "From this summary of what has taken place in other countries, whose situations have borne the nearest resemblance to our own, what reason can we have to confide in those reveries which would seduce us into an expectation of peace and cordiality between the members of the present confederacy, in a state of separation? Have we not already seen enough of the fallacy and extravagance of those idle theories which have amused us with promises of an exemption from the imperfections, weaknesses and evils incident to society in every shape? Is it not time to awake from the deceitful dream of a golden age, and to adopt as a practical maxim for the direction of our political conduct that we, as well as the other inhabitants of the globe, are yet remote from the happy empire of perfect wisdom and perfect virtue?",
+     "translation_zh": "从对其他国家所发生的事情的总结来看，这些国家的情况与我们国家的情况最相似，我们有什么理由相信那些会诱使我们期待目前处于分离状态的邦联成员之间和平与友好的幻想呢？我们还没有充分认识到那些空洞的理论的谬误和夸张吗？这些理论曾许诺我们可以免受各种形式的社会所带来的不完美、弱点和邪恶的影响，从而使我们感到可笑？难道现在还不是从黄金时代的欺骗性梦想中醒来，并把我们以及地球上的其他居民都远离完美智慧和完美美德的幸福帝国作为我们政治行为方向的实际格言的时候吗？"
+    },
+    {
+     "text": "IT IS sometimes asked, with an air of seeming triumph, what inducements could the States have, if disunited, to make war upon each other? It would be a full answer to this question to say--precisely the same inducements which have, at different times, deluged in blood all the nations in the world. But, unfortunately for us, the question admits of a more particular answer. There are causes of differences within our immediate contemplation, of the tendency of which, even under the restraints of a federal constitution, we have had sufficient experience to enable us to form a judgment of what might be expected if those restraints were removed.",
+     "translation_zh": "有时有人带着看似胜利的神情问，如果各州不团结，有什么诱因相互发动战争？这将是对这个问题的完整回答——正是同样的诱因，在不同的时期，使世界上所有国家都陷入了鲜血之中。但是，对我们来说不幸的是，这个问题有一个更具体的答案。在我们直接考虑的范围内存在着一些差异的原因，即使在联邦宪法的限制下，我们也有足够的经验使我们能够对这些限制被消除后可能出现的情况做出判断。"
+    }
+   ]
+  },
+  {
+   "title": "Scientific American Supplement, No. 508: Scientific American Passage A",
+   "level": "toefl_ielts",
+   "length": "short",
+   "source_id": "gutenberg:16792",
+   "paragraphs": [
+    {
+     "text": "On the 20th of December, 1884, my excavating was finished. To-day the Oubliettes of Gargas are obstructed with the clay that it was impossible to carry elsewhere. The animals that I thus collected in the well were the following: The great bear (in abundance), the little bear (a variety of the preceding), the hyena, and the wolf. The pockets contained nearly entire skeletons of these species. How had the animals been able to penetrate this well? It is difficult to admit that it was through the aperture that I have mentioned. I endeavored to ascertain whether there was not another communication with the Gargas grotto, and had the satisfaction of finding a fissure that ended in the cave, and that probably was wider at the epoch at which the place served as a lair for the bear and hyena.",
+     "translation_zh": "1884年12月20日，我的挖掘工作结束了。如今，加尔加斯的地牢被无法运往其他地方的粘土所堵塞。我在井里收集的动物如下：大熊（大量）、小熊（前面的变种）、鬣狗和狼。这些口袋里几乎装满了这些物种的整个骨骼。动物们是如何钻进这口井的呢？很难承认它是通过我提到的光圈进行的。我努力确定是否与加尔加斯石窟没有其他联系，并满意地发现了一条终止于洞穴的裂缝，并且在该地方作为熊和鬣狗的巢穴的时代，这条裂缝可能更宽。"
+    }
+   ]
+  },
+  {
+   "title": "The Time Machine: Time Machine Passage B",
+   "level": "toefl_ielts",
+   "length": "short",
+   "source_id": "gutenberg:35",
+   "paragraphs": [
+    {
+     "text": "\"Presently I thought what a fool I was to get wet. I stood up and looked round me. A colossal figure, carved apparently in some white stone, loomed indistinctly beyond the rhododendrons through the hazy downpour. But all else of the world was invisible.",
+     "translation_zh": "“现在我觉得自己被淋湿真是个傻瓜。我站起来环顾四周。一个巨大的人物，显然是用白色石头雕刻而成的，在朦胧的倾盆大雨中，在杜鹃花丛中若隐若现。但世界上的其他一切都是看不见的。"
+    },
+    {
+     "text": "\"I looked up again at the crouching white shape, and the full temerity of my voyage came suddenly upon me. What might appear when that hazy curtain was altogether withdrawn? What might not have happened to men? What if cruelty had grown into a common passion? What if in this interval the race had lost its manliness, and had developed into something inhuman, unsympathetic, and overwhelmingly powerful? I might seem some old-world savage animal, only the more dreadful and disgusting for our common likeness—a foul creature to be incontinently slain.",
+     "translation_zh": "“我再次抬头看着那蹲伏的白色身影，我的航行突然充满了鲁莽。当那层朦胧的帷幕完全拉开时，会出现什么？有什么事情可能不会发生在男人身上呢？如果残忍已经发展成为一种共同的激情怎么办？如果在这段时间里，人类失去了男子气概，并发展成为一种不人道、缺乏同情心、极其强大的东西，那又会怎样呢？我可能看起来像某种旧世界的野蛮动物，只是比我们共同的相似之处更可怕和恶心——一种被不节制地杀死的肮脏生物。"
+    }
+   ]
+  },
+  {
+   "title": "Scientific American Supplement, No. 508: Scientific American Passage B",
+   "level": "toefl_ielts",
+   "length": "medium",
+   "source_id": "gutenberg:16792",
+   "paragraphs": [
+    {
+     "text": "The pitcher plant undoubtedly derives its principal nourishment from the insects it eats. It, too--unlike most other carnivorous plants, which, when the quantity of food with which they have to deal is in excess of their powers of digestion, succumb to the effort and die--appears to find it easy to devour any number of insects, small or large, the operation being with it simply a question of time. Flies, beetles, or even cockroaches, at the expiration of three or four days at most, disappear, nothing being left of them save their wings and other hard, parts of their bodies.",
+     "translation_zh": "毫无疑问，猪笼草的主要营养来自它所吃的昆虫。它也不像大多数其他食肉植物，当它们必须处理的食物量超过它们的消化能力时，就会屈服于努力并死亡——它似乎很容易吞食任何数量的昆虫，无论大小，行动只是时间问题。苍蝇、甲虫，甚至蟑螂，最多三四天后就会消失，除了翅膀和身体其他坚硬的部分外，什么也没有留下。"
+    },
+    {
+     "text": "But our object now is less to point out how buds are to be developed into fully expanded flowers than to show how they were to be formed in plenty, and the plants preserved in robust health year after year. One of the simplest and surest modes of reaching this desirable end is to adopt a system of semi-tropical treatment for two months or so after flowering. The moment or even before the late blooms fade, the plants should be pruned if necessary. Few plants bear the knife better than camellias, though it is folly to cut them unless they are too tall or too large for their quarters or have grown out of form. As a rule healthy camellias produce sufficient or even a redundancy of shoots without cutting back; but should they need pruning, after flowering is the best time to perform the operation.",
+     "translation_zh": "但我们现在的目的不是指出花蕾如何发育成完全展开的花朵，而是展示它们如何大量形成，以及植物如何年复一年地保持健康。达到这一理想目标的最简单、最可靠的方式之一是在开花后采用两个月左右的亚热带处理系统。如有必要，应在晚花凋谢时或什至之前对植物进行修剪。很少有植物比山茶花更耐刀，不过除非山茶花太高或太大，或者已经长得不合适，否则砍它们是愚蠢的。一般来说，健康的山茶花会产生足够甚至多余的芽，而不会减少芽。但如果需要修剪，开花后是进行手术的最佳时间。"
+    }
+   ]
+  },
+  {
+   "title": "On the Origin of Species: Origin of Species Passage B",
+   "level": "toefl_ielts",
+   "length": "medium",
+   "source_id": "gutenberg:1228",
+   "paragraphs": [
+    {
+     "text": "I am well aware that this doctrine of natural selection, exemplified in the above imaginary instances, is open to the same objections which were at first urged against Sir Charles Lyell's noble views on \"the modern changes of the earth, as illustrative of geology;\" but we now very seldom hear the action, for instance, of the coast-waves, called a trifling and insignificant cause, when applied to the excavation of gigantic valleys or to the formation of the longest lines of inland cliffs. Natural selection can act only by the preservation and accumulation of infinitesimally small inherited modifications, each profitable to the preserved being; and as modern geology has almost banished such views as the excavation of a great valley by a single diluvial wave, so will natural selection, if it be a true principle, banish the belief of the continued creation of new organic beings, or of any great and sudden modification in their structure.",
+     "translation_zh": "我很清楚，在上述想象的例子中所例证的自然选择学说，也可能会招致同样的反对意见，这些反对意见最初是针对查尔斯·莱尔爵士关于“地球的现代变化，作为地质学的例证”的崇高观点提出的。但是，我们现在很少听到海岸波浪的作用，当它应用于开挖巨大的山谷或形成最长的内陆悬崖时，海岸波浪被称为微不足道的和微不足道的原因。自然选择只能通过保存和积累无限小的遗传修饰来发挥作用，每一个修饰都对被保存的生物有利。正如现代地质学几乎消除了诸如一次洪流冲刷出一个大山谷之类的观点一样，自然选择如果是一个真实的原理，也将消除新的有机生物不断创造的信念，或者其结构发生任何巨大而突然的改变的信念。"
+    },
+    {
+     "text": "It must have struck most naturalists as a strange anomaly that, in the case of both animals and plants, species of the same family and even of the same genus, though agreeing closely with each other in almost their whole organisation, yet are not rarely, some of them hermaphrodites, and some of them unisexual. But if, in fact, all hermaphrodites do occasionally intercross with other individuals, the difference between hermaphrodites and unisexual species, as far as function is concerned, becomes very small.",
+     "translation_zh": "大多数博物学家肯定认为这是一种奇怪的反常现象，就动物和植物而言，同一科甚至同一属的物种虽然在几乎整个组织上彼此非常一致，但并不罕见，其中有些是雌雄同体，有些是单性的。但事实上，如果所有雌雄同体偶尔与其他个体杂交，那么就功能而言，雌雄同体和单性物种之间的差异就变得非常小。"
+    }
+   ]
+  },
+  {
+   "title": "Scientific American Supplement, No. 508: Scientific American Passage C",
+   "level": "toefl_ielts",
+   "length": "long",
+   "source_id": "gutenberg:16792",
+   "paragraphs": [
+    {
+     "text": "Yucatan is, and has been for ages past, quite free from earthquakes, while all surrounding countries are from time to time convulsed. This immunity may be due to the vast caverns and numerous great wells existing throughout the land. Pliny the Elder was of opinion that if numerous deep wells were made in the earth to serve as outlets for the gases that disturb its upper strata, the strength of the earthquakes would be diminished, and if we may judge by Yucatan, Pliny was right in his conjectures. After him, other scientists who have carefully studied the subject have expressed the same opinion with regard to the efficacy of large wells.",
+     "translation_zh": "尤卡坦半岛多年来一直没有发生地震，而周边国家却时不时发生地震。这种免疫力可能是由于这片土地上存在着巨大的洞穴和众多的大井。老普林尼认为，如果在地球上打许多深井，作为扰动上层地层的气体的出口，地震的强度就会减弱，如果我们可以根据尤卡坦半岛来判断，普林尼的猜想是正确的。在他之后，其他仔细研究该主题的科学家也对大井的功效表达了相同的观点。"
+    },
+    {
+     "text": "It will be observed that this insect is composed of thirteen segments from head to tail, which is a distinctive characteristic of all insects both in the larval and perfect states; but in the case of this and most other caterpillars these segments are sharply defined and readily recognized. It will also be noticed that the three segments or \"joints\" nearest the head bear a pair of legs each; these are the real feet, or claspers, as they are sometimes termed, which develop into the feet of the future butterfly. There are four pairs of false feet or suckers, which adhere to the ground by suction, and which disappear in the butterfly. On the last or tail end is a fifth pair of suckers also, which can attach themselves to a surface with considerable force, as any one can attest who has noticed the wrigglings of one of these caterpillars when feeling for new feeding ground.",
+     "translation_zh": "可以观察到，这种昆虫从头到尾由十三节组成，这是所有昆虫在幼虫和完美状态下的显着特征；但对于这种毛毛虫和大多数其他毛毛虫来说，这些部分的界限很明确并且很容易识别。还应该注意到，最靠近头部的三个节段或“关节”各有一对腿；这些是真正的脚，或者有时被称为“脚掌”，它们会发育成未来蝴蝶的脚。有四对假脚或吸盘，通过吸力粘附在地面上，并消失在蝴蝶体内。最后或尾端还有第五对吸盘，它们可以用相当大的力将自己附着在表面上，任何人都可以证明谁注意到这些毛毛虫在寻找新的觅食地时会蠕动。"
+    },
+    {
+     "text": "The wings derive their chief coloring from the covering of scales, which lie on like slates on a roof, and are attached in a similar manner. A small portion of the wing magnified is represented at the bottom right hand corner, and detached scales more highly magnified next to it, exhibiting somewhat the form of battledoors.",
+     "translation_zh": "翅膀的主要颜色来自于鳞片的覆盖，鳞片就像屋顶上的石板一样，并以类似的方式连接。机翼的一小部分被放大显示在右下角，旁边的分离鳞片被放大得更高，呈现出战门的形状。"
+    },
+    {
+     "text": "Another well known insect is illustrated in the figure in the upper portion--the peacock butterfly (Vanessa Io). The curious spiked and spotted caterpillar feeds upon the common nettle. This beautiful butterfly--common in most districts--is brilliantly colored and figured on the upper side of the wings, but only of a mottled brown on the under surface, somewhat resembling a dried and brown leaf, so that it is no easy matter to detect the conspicuous, brightly-decked insect when it alights from flight upon foliage, and brings its wings together over its back after the manner of butterflies. At the left-hand corner is seen the head of the insect, magnified, showing the long spiral tongue.",
+     "translation_zh": "上图展示了另一种众所周知的昆虫——孔雀蝴蝶（Vanessa Io）。好奇的尖刺和斑点毛毛虫以荨麻为食。这种美丽的蝴蝶在大多数地区都很常见，颜色鲜艳，翅膀上侧有图案，但下表面只有棕色斑点，有点像干枯的棕色叶子，因此，当这种引人注目的、装饰鲜艳的昆虫从树叶上飞下来，并像蝴蝶一样将翅膀并拢在背上时，很难发现它。在左角可以看到放大的昆虫头部，显示出长长的螺旋舌头。"
+    },
+    {
+     "text": "Mrs. Mary Treat, an American naturalist, made, a few years ago, several experiments upon the plants of this species to be found in Florida; and to the labors of this lady the writer has been indebted, in some measure, in the preparation of this paper.",
+     "translation_zh": "几年前，美国博物学家玛丽·特雷特夫人对佛罗里达州发现的这种植物进行了多次实验。在某种程度上，作者在准备本文的过程中要感谢这位女士的辛劳。"
+    },
+    {
+     "text": "In instances in which experiments have been made with fresh, raw beef or mutton, the meat has been covered in a few hours with the secretions of the leaves, and the blood extracted from it. There is, however, one difference between the digesting powers of the leaves when exercised upon insects or upon meat. Even if the bodies of insects have become putrid, the plant, as has already been stated, has no difficulty in assimilating them; but as regards meat, it is only when it is perfectly sweet that the secretions of the leaves will act upon it.",
+     "translation_zh": "在用新鲜的生牛肉或羊肉进行实验的情况下，肉在几个小时内就被叶子的分泌物和从中提取的血液覆盖。然而，当对昆虫或肉类进行叶子的消化能力时，它们之间存在一个差异。即使昆虫的尸体已经腐烂，正如已经说过的，植物也能毫无困难地吸收它们；但对于肉来说，只有在完全甜的时候，叶子的分泌物才会作用于它。"
+    }
+   ]
+  },
+  {
+   "title": "On the Origin of Species: Origin of Species Passage C",
+   "level": "toefl_ielts",
+   "length": "long",
+   "source_id": "gutenberg:1228",
+   "paragraphs": [
+    {
+     "text": "Bears on natural selection. The term used in a wide sense. Geometrical powers of increase. Rapid increase of naturalised animals and plants. Nature of the checks to increase. Competition universal. Effects of climate. Protection from the number of individuals. Complex relations of all animals and plants throughout nature. Struggle for life most severe between individuals and varieties of the same species; often severe between species of the same genus. The relation of organism to organism the most important of all relations.",
+     "translation_zh": "取决于自然选择。该术语的使用范围很广。几何增长幂。归化动植物迅速增加。检查性质增加。竞争普遍。气候的影响。保护免受人数的影响。自然界中所有动物和植物之间的复杂关系。同一物种的个体和变体之间的生存斗争最为激烈；同一属的物种之间通常很严重。有机体与有机体的关系是所有关系中最重要的。"
+    },
+    {
+     "text": "A struggle for existence inevitably follows from the high rate at which all organic beings tend to increase. Every being, which during its natural lifetime produces several eggs or seeds, must suffer destruction during some period of its life, and during some season or occasional year, otherwise, on the principle of geometrical increase, its numbers would quickly become so inordinately great that no country could support the product. Hence, as more individuals are produced than can possibly survive, there must in every case be a struggle for existence, either one individual with another of the same species, or with the individuals of distinct species, or with the physical conditions of life. It is the doctrine of Malthus applied with manifold force to the whole animal and vegetable kingdoms; for in this case there can be no artificial increase of food, and no prudential restraint from marriage. Although some species may be now increasing, more or less rapidly, in numbers, all cannot do so, for the world would not hold them.",
+     "translation_zh": "所有有机生物的高速增长不可避免地会导致生存斗争。每一个生物，在其自然寿命中产生数个卵或种子，都必须在其生命的某个时期、某个季节或偶尔的一年中遭受毁灭，否则，根据几何增长的原理，其数量将很快变得如此巨大，以至于没有一个国家能够支持这种产品。因此，当产生的个体数量超过了可能生存的数量时，在任何情况下都必然存在生存斗争，要么是一个个体与同一物种的另一个个体，要么是与不同物种的个体，或者是与生命的物理条件。这是马尔萨斯的学说，以多方面的力量应用于整个动物和植物界。因为在这种情况下，就不能人为地增加食物，也不能审慎地限制婚姻。尽管某些物种的数量现在可能或多或少地迅速增加，但所有物种都不能这样做，因为世界容不下它们。"
+    },
+    {
+     "text": "In a state of nature almost every plant produces seed, and amongst animals there are very few which do not annually pair. Hence we may confidently assert, that all plants and animals are tending to increase at a geometrical ratio, that all would most rapidly stock every station in which they could any how exist, and that the geometrical tendency to increase must be checked by destruction at some period of life. Our familiarity with the larger domestic animals tends, I think, to mislead us: we see no great destruction falling on them, and we forget that thousands are annually slaughtered for food, and that in a state of nature an equal number would have somehow to be disposed of.",
+     "translation_zh": "在自然状态下，几乎所有植物都会产生种子，而动物中也很少有不每年配对的。因此，我们可以自信地断言，所有植物和动物都倾向于以几何比例增长，所有植物和动物都会以最快的速度在它们可能存在的每一个站点上储存，并且几何增长的趋势必须通过在生命的某个时期的破坏来抑制。我认为，我们对大型家养动物的熟悉往往会误导我们：我们没有看到它们遭受重大破坏，而且我们忘记了每年有数千只动物被宰杀作为食物，而在自然状态下，同样数量的动物会以某种方式被处理掉。"
+    },
+    {
+     "text": "In looking at Nature, it is most necessary to keep the foregoing considerations always in mind—never to forget that every single organic being around us may be said to be striving to the utmost to increase in numbers; that each lives by a struggle at some period of its life; that heavy destruction inevitably falls either on the young or old, during each generation or at recurrent intervals. Lighten any check, mitigate the destruction ever so little, and the number of the species will almost instantaneously increase to any amount. The face of Nature may be compared to a yielding surface, with ten thousand sharp wedges packed close together and driven inwards by incessant blows, sometimes one wedge being struck, and then another with greater force.",
+     "translation_zh": "在观察自然时，最有必要牢记上述考虑——永远不要忘记，我们周围的每一个有机生物都可以说是在竭尽全力地增加数量；每个人在其一生的某个时期都在奋斗中生活；这种严重的破坏不可避免地降临在年轻人或老年人身上，无论是在每一代还是在周期性的时间间隔内。减轻任何限制，稍微减轻破坏，物种的数量几乎会立即增加到任意数量。大自然的表面可以比作一个屈服的表面，有一万个锋利的楔子紧密地挤在一起，并通过不断的打击向内推进，有时一个楔子被击中，然后另一个楔子受到更大的力量击打。"
+    }
+   ]
+  },
+  {
+   "title": "A Morning at the Market",
+   "level": "high_school",
+   "length": "short",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "Every Saturday morning, my mother and I walk to the market near the river. We bring two big bags and a small list of things to buy. The air is cool, and the street is full of people, bikes, and the smell of fresh bread.",
+     "translation_zh": "每个周六早上，我和妈妈步行去河边的市场。我们带上两个大袋子和一张小购物清单。空气凉爽，街上满是行人、自行车和新鲜面包的香味。"
+    },
+    {
+     "text": "We always stop at the same fruit stand first. The old man there knows us well, and he often gives me an apple for free. Mother picks the vegetables slowly and asks about the price of fish.",
+     "translation_zh": "我们总是先在同一个水果摊停下。摊主老爷爷很熟悉我们，常常免费送我一个苹果。妈妈慢慢挑着蔬菜，还问鱼的价格。"
+    },
+    {
+     "text": "On the way home, the bags are heavy, but I like to carry them. We talk about what to cook for lunch, and the morning always feels too short.",
+     "translation_zh": "回家的路上袋子很重，但我喜欢提着它们。我们聊着午饭做什么，总觉得早晨过得太快。"
+    }
+   ]
+  },
+  {
+   "title": "My First Day at a New School",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "Last year my family moved to a new city because of my father's work. I was happy about the bigger house, but I was afraid of one thing: the new school. I did not know anyone there, and I am not good at talking to new people.",
+     "translation_zh": "去年因为爸爸的工作，我们全家搬到了一个新城市。我对更大的房子很满意，但有一件事让我害怕：新学校。那里我谁都不认识，而且我不擅长和陌生人说话。"
+    },
+    {
+     "text": "On the first morning, I stood at the school gate for a long time. Students walked past me in groups, laughing and talking. I felt very small. Then a tall boy stopped and asked if I was new. He said his name was Daniel and that his family had moved here two years ago, so he knew how I felt.",
+     "translation_zh": "第一天早上，我在校门口站了很久。学生们成群结队地走过，又说又笑。我觉得自己很渺小。这时一个高个子男生停下来，问我是不是新来的。他说他叫丹尼尔，两年前他家也搬来这里，所以他懂我的感受。"
+    },
+    {
+     "text": "Daniel showed me where my classroom was and sat with me at lunch. In the afternoon, he introduced me to his friends, and one of them lived on my street. By the end of the day, the school did not feel so strange anymore.",
+     "translation_zh": "丹尼尔带我找到教室，午饭时还和我坐在一起。下午他把我介绍给他的朋友们，其中一个就住在我家那条街上。一天结束时，学校已经不再那么陌生了。"
+    },
+    {
+     "text": "Now, when I see a new student standing alone at the gate, I always walk over and say hello first. I remember how much one small hello can change a whole year.",
+     "translation_zh": "现在，每当我看到新同学独自站在校门口，我总会主动走过去打招呼。我记得一句小小的问候能改变整整一年。"
+    }
+   ]
+  },
+  {
+   "title": "The Garden Project",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "Our class started a small garden behind the school library last spring. The idea came from our science teacher, Miss Lee. She said that we could learn more from growing real plants than from reading about them in books. At first, many of us thought it would be boring work.",
+     "translation_zh": "去年春天，我们班在学校图书馆后面开辟了一个小菜园。这个主意来自我们的科学老师李老师。她说，亲手种植物比在书本上读到的学得更多。起初，我们很多人觉得这会是无聊的活儿。"
+    },
+    {
+     "text": "We were wrong. There was so much to do and to decide. Which plants need full sun? How often should we water them? Why did the tomatoes grow well on one side but not on the other? Every week brought a new problem, and we had to find the answers together.",
+     "translation_zh": "我们错了。要做的事和要做的决定太多了。哪些植物需要充足的阳光？多久浇一次水？为什么西红柿在一边长得好，另一边却不行？每周都有新问题，我们必须一起寻找答案。"
+    },
+    {
+     "text": "The hardest time came in July. The weather was very hot, and school was closed for the holiday. We made a plan: every student took two days each month to come and water the garden. Nobody wanted to be the one who let the plants die, so everyone kept their promise.",
+     "translation_zh": "最难的时候是七月。天气非常热，学校又放假了。我们订了一个计划：每个学生每月负责两天来浇水。谁都不想成为让植物枯死的那个人，所以每个人都信守了承诺。"
+    },
+    {
+     "text": "In September, we picked our first full harvest: tomatoes, beans, and more green vegetables than our class could eat. We sold some at the school gate and gave the rest to the teachers. With the money, we bought seeds for next year.",
+     "translation_zh": "九月，我们迎来了第一次大丰收：西红柿、豆角，还有多到全班吃不完的绿叶蔬菜。我们在校门口卖掉了一些，剩下的送给了老师们。用赚来的钱，我们买了来年的种子。"
+    },
+    {
+     "text": "Looking back, I think Miss Lee was right, but not only about science. The garden taught us how to share work, how to keep going when things get hard, and how good it feels to build something with your own hands.",
+     "translation_zh": "回头看，我觉得李老师说得对，但不仅仅是关于科学。菜园教会了我们如何分担工作，如何在困难时坚持下去，以及亲手创造一样东西的感觉有多好。"
+    }
+   ]
+  },
+  {
+   "title": "Why I Stopped Buying Coffee Every Day",
+   "level": "cet4",
+   "length": "short",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "For three years, I bought a cup of coffee on my way to work every single morning. It was a small pleasure, and I never thought about the cost. Then one evening, I did the math on my phone: the habit was costing me more than a holiday trip every year.",
+     "translation_zh": "整整三年，我每天早上上班路上都会买一杯咖啡。这是个小小的享受，我从没想过它的花销。直到一天晚上，我用手机算了一笔账：这个习惯每年花掉的钱比一次度假旅行还多。"
+    },
+    {
+     "text": "I did not give up coffee. Instead, I bought a simple machine and started making it at home. The first week felt strange, but soon I actually began to enjoy the quiet ten minutes in my kitchen before leaving the house.",
+     "translation_zh": "我没有戒掉咖啡，而是买了一台简单的咖啡机，开始在家自己做。第一周感觉很别扭，但很快我竟开始享受出门前在厨房里安静的十分钟。"
+    },
+    {
+     "text": "Now I put the money I save into a small account. It is not about the coffee anymore. It is about noticing the small choices that quietly shape a whole year.",
+     "translation_zh": "现在我把省下的钱存进一个小账户。这已经不再是咖啡的问题，而是学会留意那些悄悄塑造一整年的小选择。"
+    }
+   ]
+  },
+  {
+   "title": "The Lost Phone",
+   "level": "cet4",
+   "length": "medium",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "Last month, I left my phone in a taxi. I realized it only after the car had driven away, and for a moment I just stood on the street, not knowing what to do. My whole life seemed to be in that phone: photos, messages, bank cards, and the numbers of everyone I know.",
+     "translation_zh": "上个月，我把手机落在了出租车上。直到车开走我才发现，那一刻我呆站在街头，不知所措。我的整个生活似乎都在那部手机里：照片、信息、银行卡，还有所有认识的人的号码。"
+    },
+    {
+     "text": "I borrowed a stranger's phone to call my own number. No one answered the first time, or the second. I was ready to give up when, on the third try, a voice said hello. It was the driver. He had found the phone on the back seat and had already turned around to look for me.",
+     "translation_zh": "我借了一位路人的手机拨打自己的号码。第一次没人接，第二次也没有。我正准备放弃时，第三次拨打有人应了一声。是那位司机。他在后座发现了手机，并且已经掉头回来找我。"
+    },
+    {
+     "text": "Twenty minutes later, he handed it back and refused to take any money. He said that last year someone had returned his daughter's lost bag, and he was simply passing the kindness on. I thanked him again and again, and he just smiled and drove away.",
+     "translation_zh": "二十分钟后，他把手机还给我，并拒绝收任何酬谢。他说去年有人把他女儿丢失的包送了回来，他只是把这份善意传递下去。我一再道谢，他只是笑笑，开车走了。"
+    },
+    {
+     "text": "That evening I added a new contact to my phone: the driver's number, saved under the name A Friend. The city feels different when you know it is full of people like him.",
+     "translation_zh": "那天晚上，我在手机里存了一个新联系人：那位司机的号码，名字存的是“一位朋友”。当你知道城市里满是这样的人时，它给你的感觉都不一样了。"
+    }
+   ]
+  },
+  {
+   "title": "Learning to Cook Changed My Life",
+   "level": "cet4",
+   "length": "medium",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "When I moved to the city for my first job, I knew how to cook exactly three things: instant noodles, fried eggs, and rice. For the first few months, I ate out for almost every meal. It was easy and fast, but by the end of each month, my wallet was empty and I felt tired all the time.",
+     "translation_zh": "刚到城市开始第一份工作时，我只会做三样东西：泡面、煎蛋和米饭。头几个月，我几乎顿顿在外面吃。这样又方便又快，但每到月底钱包就空了，而且我总觉得疲惫。"
+    },
+    {
+     "text": "The change started with a video my sister sent me. It showed a simple tomato soup, made in fifteen minutes with five things from any supermarket. I tried it on a Sunday evening. The kitchen was a mess afterwards, and the soup was too salty, but I had made it myself, and it was warm and real.",
+     "translation_zh": "改变始于姐姐发给我的一个视频。视频里是一道简单的番茄汤，用超市随处可买的五样东西，十五分钟就能做好。我在一个周日晚上试了试。事后厨房一片狼藉，汤也太咸了，但那是我亲手做的，温暖而真实。"
+    },
+    {
+     "text": "After that, I cooked one new dish every weekend. Some were terrible. I once forgot a chicken in the oven for two hours, and my smoke alarm became famous in the building. But slowly, I built a small list of meals I could make well, and then a bigger one.",
+     "translation_zh": "从那以后，我每个周末学做一道新菜。有些做得很糟。有一次我把一只鸡忘在烤箱里两个小时，烟雾报警器在整栋楼都出了名。但慢慢地，我攒下了一小份拿手菜清单，后来清单越来越长。"
+    },
+    {
+     "text": "Cooking changed more than my dinner. I started inviting friends over instead of meeting them in noisy restaurants. We talked more and spent less. I began to visit the morning market near my street, where shopping is slower but the food is fresher and the sellers remember your face.",
+     "translation_zh": "做饭改变的不只是我的晚餐。我开始邀请朋友来家里，而不是在嘈杂的餐馆见面。我们聊得更多，花得更少。我开始逛家附近的早市，在那里买东西节奏更慢，但食材更新鲜，摊主还会记住你的脸。"
+    },
+    {
+     "text": "Two years later, I still keep the first recipe my sister sent me. The paper is marked with oil and sauce, and the soup is still sometimes too salty. But every time I make it, I remember that big changes often begin with one small, simple step.",
+     "translation_zh": "两年后的今天，我仍然保留着姐姐发给我的第一份食谱。纸上沾满了油渍和酱汁，汤有时还是会太咸。但每次做这道汤，我都会想起：大的改变往往始于一个小而简单的开始。"
+    }
+   ]
+  },
+  {
+   "title": "The Quiet Power of Walking Meetings",
+   "level": "cet6",
+   "length": "short",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "My manager has an unusual habit: when a discussion needs only two people, she refuses to book a meeting room. Instead, we walk. There is a small park behind our office building, and one slow loop around it takes about twenty minutes, which is exactly the length of a useful conversation.",
+     "translation_zh": "我的经理有个不寻常的习惯：只需要两个人讨论的事情，她从不订会议室，而是带你去散步。我们办公楼后面有个小公园，慢慢绕一圈大约二十分钟，恰好是一次有效谈话的长度。"
+    },
+    {
+     "text": "At first I found it strange to discuss serious work without a screen between us. But walking side by side changes the conversation. Nobody checks messages. Difficult points feel less like an attack when you are both facing the same direction.",
+     "translation_zh": "起初我觉得不对着屏幕谈正事很奇怪。但并肩行走改变了谈话本身。没有人查看消息。当两个人面朝同一个方向时，尖锐的问题听起来也不那么像指责了。"
+    },
+    {
+     "text": "Research supports her habit, apparently, but she never quotes it. She simply says that the best ideas in her career arrived somewhere between the second corner and the third bench.",
+     "translation_zh": "据说研究也支持她的习惯，但她从不引用。她只是说，她职业生涯中最好的想法，都出现在第二个拐角和第三条长椅之间的某个地方。"
+    }
+   ]
+  },
+  {
+   "title": "When the Lights Went Out",
+   "level": "cet6",
+   "length": "medium",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "The storm hit our neighborhood on a Friday night, and by ten the whole district had lost power. At first, everyone treated it as a small adventure. We lit candles, found the old radio, and the children thought the dark staircase was the best game of the year.",
+     "translation_zh": "暴风雨在周五晚上袭击了我们的街区，十点钟整个片区都停了电。起初，大家都把这当成一场小小的冒险。我们点起蜡烛，翻出旧收音机，孩子们觉得漆黑的楼梯是今年最好玩的游戏。"
+    },
+    {
+     "text": "By the second day, the adventure had worn off. Food in the fridge was going bad, phones were dead, and the elderly couple on the fourth floor could not manage the stairs in the dark. That was when the building chat group, usually full of complaints about parking, quietly changed its character.",
+     "translation_zh": "到了第二天，新鲜感消失了。冰箱里的食物开始变质，手机没了电，四楼的老两口在黑暗中爬不了楼梯。就在这时，平时满是停车抱怨的楼栋群，悄悄变了样。"
+    },
+    {
+     "text": "Someone with a gas stove offered to boil water for the whole floor. A young man collected everyone's power banks and charged them at his office across the city. Two teenagers made a list of elderly neighbors and knocked on their doors twice a day, carrying water and asking what they needed.",
+     "translation_zh": "有煤气灶的人主动为整层楼烧开水。一个小伙子收齐了大家的充电宝，带到城另一头的办公室去充电。两个中学生列了一份独居老人名单，每天敲两次门，送水并询问他们需要什么。"
+    },
+    {
+     "text": "Power returned on the fourth evening, and the building lit up window by window to the sound of cheering. The chat group went back to arguing about parking spaces within a week. But something had changed: now the arguments end sooner, and they always end politely.",
+     "translation_zh": "第四天傍晚来电了，整栋楼的窗户在欢呼声中一扇接一扇亮起。不到一周，群里又开始为车位争吵。但有些东西变了：如今的争吵结束得更快，而且总是以客气收场。"
+    }
+   ]
+  },
+  {
+   "title": "The Second Life of an Old Factory",
+   "level": "cet6",
+   "length": "medium",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "The textile factory at the edge of our city closed down when I was still in primary school. For fifteen years, the long brick buildings stood empty behind a rusting fence, and the only visitors were stray cats and teenagers looking for somewhere to be alone. Most people assumed the site would eventually be cleared for apartment towers.",
+     "translation_zh": "我还在上小学时，城边的那家纺织厂就倒闭了。十五年里，长长的砖楼空荡荡地立在锈蚀的围栏后面，唯一的访客是流浪猫和想找地方独处的少年。大多数人以为这块地最终会被推平，盖起公寓楼。"
+    },
+    {
+     "text": "The plan that actually arrived was stranger and better. A group of young architects rented the main hall for almost nothing and turned one corner into a workshop. Furniture makers followed, then a bakery that needed cheap space for its ovens, then a climbing gym under the high ceilings where machines once stood.",
+     "translation_zh": "实际到来的计划更出人意料，也更好。一群年轻建筑师以近乎免费的价格租下主厂房，把一个角落改成了工作室。家具匠人跟着来了，然后是一家需要廉价空间放烤炉的面包店，再后来，曾经摆放机器的高大车间里开起了攀岩馆。"
+    },
+    {
+     "text": "The city government, to its credit, resisted the urge to over-plan. It repaired the roofs, installed proper wiring, and then largely stepped back. Rents stayed low on one condition: every business had to open its doors to the public a few days each month, whether for classes, tours, or simple conversation.",
+     "translation_zh": "值得称道的是，市政府克制住了过度规划的冲动。他们修好屋顶，装好电路，然后基本退到一旁。低租金只有一个条件：每家店每月必须向公众开放几天，无论是办课程、做参观，还是单纯聊天。"
+    },
+    {
+     "text": "My grandmother worked in that factory for twenty years, and last spring I finally brought her back. She walked through the bakery that now fills her old workshop, touched the brick wall by the window, and stood quietly for a while. Then she bought two loaves of bread and told the young baker, with great authority, that the light in this corner had always been the best in the building.",
+     "translation_zh": "我祖母曾在那家工厂工作了二十年，去年春天我终于带她故地重游。她穿过如今开在她旧车间里的面包店，摸了摸窗边的砖墙，安静地站了一会儿。然后她买了两条面包，以十足权威的口吻告诉年轻的面包师：这个角落的光线从来都是整栋楼里最好的。"
+    },
+    {
+     "text": "Cities are often praised for what they build and criticized for what they tear down. The old factory taught our city a third option: keep the walls, change the life inside them, and let memory and the future share the same address.",
+     "translation_zh": "城市常因建造了什么而受赞扬，因拆除了什么而被批评。这座老工厂教会了我们的城市第三种选择：留住墙体，更换墙内的生活，让记忆与未来共用同一个地址。"
+    }
+   ]
+  },
+  {
+   "title": "The Reading Group Experiment",
+   "level": "postgraduate",
+   "length": "short",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "Our department tried a small experiment last term: a reading group where doctoral students from completely different fields discussed one difficult paper each week. A historian, two biologists, an economist, and a computer scientist around one table sounds like the opening of a joke, and for the first month it often felt like one.",
+     "translation_zh": "上学期我们系做了个小实验：组织一个读书会，让来自完全不同领域的博士生每周讨论一篇难懂的论文。一位历史学家、两位生物学家、一位经济学家和一位计算机科学家围坐一桌，听起来像笑话的开头——头一个月也确实常常像个笑话。"
+    },
+    {
+     "text": "The discomfort turned out to be the point. Forced to explain methods without jargon, we discovered how many of our certainties were habits rather than arguments. The economist's questions about my data were naive in form and devastating in substance.",
+     "translation_zh": "但这种不适恰恰是关键。被迫用大白话解释研究方法时，我们发现自己的许多确信只是习惯，而非论证。经济学家对我数据的提问，形式上天真，实质上致命。"
+    },
+    {
+     "text": "Attendance was voluntary, and yet nobody quit. Whatever we lost in comfort, we gained in sharper questions, and sharper questions, we slowly realized, are the true currency of research.",
+     "translation_zh": "读书会自愿参加，却没有一个人退出。我们失去的是舒适，换来的是更锐利的问题——而我们慢慢明白，更锐利的问题才是研究的真正通货。"
+    }
+   ]
+  },
+  {
+   "title": "On Keeping a Failure Log",
+   "level": "postgraduate",
+   "length": "medium",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "Midway through my second year, my supervisor gave me the strangest advice I had received in graduate school: start writing down your failures, she said, with the same care you give your results. Not as confession, but as data. I thought the idea was slightly absurd and started the log mainly to please her.",
+     "translation_zh": "研二过半时，导师给了我读研以来最奇怪的建议：开始记录你的失败，她说，要像对待成果一样认真。不是当作忏悔，而是当作数据。我觉得这主意有点荒唐，记日志最初主要是为了让她满意。"
+    },
+    {
+     "text": "The early entries were painful to write. A promising method that collapsed after three weeks of work. A beautiful hypothesis killed by an ugly control experiment. An interview study that taught me mostly about my own poor questions. Reading them back, I expected to feel discouraged.",
+     "translation_zh": "最初的几条写起来很痛苦。一个看起来大有希望的方法，三周的工作后宣告失败。一个漂亮的假设，被一个难看的对照实验干掉。一项访谈研究，主要教会了我自己的提问有多差。重读这些记录时，我以为自己会泄气。"
+    },
+    {
+     "text": "Instead, patterns appeared. My failures were not random; they clustered. I trusted clean simulations too early and real participants too late. I designed experiments to confirm ideas rather than to break them. The log did not make me fail less, at first, but it made me fail differently, which turned out to matter more.",
+     "translation_zh": "结果却浮现出规律。我的失败不是随机的，而是成簇出现的。我过早相信干净的模拟，过晚才接触真实的参与者。我设计实验是为了证实想法，而不是推翻想法。这本日志起初并没有让我少失败，但让我以不同的方式失败——事实证明这更重要。"
+    },
+    {
+     "text": "I still keep the log, now in its fourth notebook. The results sections of my papers are built, page by page, on everything those notebooks contain and the papers never mention.",
+     "translation_zh": "这本日志我至今还在记，已经是第四个本子了。我论文里的结果部分，正是一页一页建立在这些本子所记录、而论文从不提及的一切之上。"
+    }
+   ]
+  },
+  {
+   "title": "What the Archive Did Not Say",
+   "level": "postgraduate",
+   "length": "long",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "I went into the city archive looking for a clean story. My thesis, in its early outline, argued that the great school reform of the 1950s had been designed in the capital and simply rolled out across the provinces. The official documents, neatly bound and stamped, seemed to agree with me. Plans were issued; circulars followed; reports of successful implementation flowed back. On paper, the machine turned smoothly.",
+     "translation_zh": "我走进市档案馆时，想找的是一个干净利落的故事。我的论文初稿主张：上世纪五十年代的大教育改革由首都设计，然后简单地推行到各省。那些装订整齐、盖着公章的官方文件似乎也同意我的观点。计划下发，通知跟进，成功执行的报告源源不断地回流。在纸面上，这部机器运转顺畅。"
+    },
+    {
+     "text": "The trouble began in a box of unsorted correspondence that the archivist almost did not show me. Letters from school principals, written in careful and formal language, kept asking the same strange question in different ways: how were they to apply rules written for large city schools in villages where one teacher taught four grades in a single room? The capital's replies were polite and almost entirely empty.",
+     "translation_zh": "麻烦始于一箱未经整理的来往信件——档案管理员差点没拿给我看。校长们的来信措辞谨慎而正式，却用不同的方式反复追问同一个奇怪的问题：为大城市学校制定的规则，要如何应用到一位教师在一间教室里同时教四个年级的乡村学校？而首都的回复客气，却几乎全是空话。"
+    },
+    {
+     "text": "Reading further, I found the real mechanism. Provincial inspectors, caught between impossible instructions and real classrooms, had quietly developed their own translations of the reform. They reported compliance upward in the language the capital expected, while teaching principals, in person and off the record, which parts of the rules could be bent and which must be obeyed. The reform that reached the children was written neither in the capital nor in the provinces, but in that unrecorded space between them.",
+     "translation_zh": "继续读下去，我找到了真正的机制。夹在不可能完成的指令与真实课堂之间的省级督学，悄悄发展出了他们自己对改革的“翻译”。他们用首都期待的语言向上汇报合规情况，同时当面、不留记录地告诉校长们：规则的哪些部分可以变通，哪些必须遵守。最终抵达孩子们的那场改革，既不是在首都写就的，也不是在各省写就的，而是诞生于两者之间那个没有记录的空间。"
+    },
+    {
+     "text": "My thesis survived, but only after its central claim had been turned inside out. The reform succeeded, where it did, not because the plan was strong but because the system quietly allowed it to be weak in the right places. The stamped documents told the story the state wished to remember; the unsorted box held the story as it happened.",
+     "translation_zh": "我的论文活了下来，但其核心论点被彻底翻转。改革在成功的地方之所以成功，不是因为计划强大，而是因为这个体系悄悄允许它在恰当的地方保持弱势。盖章的文件讲述的是国家希望被记住的故事；那箱未经整理的信件里，装着事情真实发生的样子。"
+    },
+    {
+     "text": "The discovery changed my method as much as my argument. I stopped reading reports as records of events and began reading them as performances, asking in each case who the intended audience was and what the writer needed that audience to believe. A document, I learned, is an action before it is a source, and the question of what it does must come before the question of what it says.",
+     "translation_zh": "这个发现改变我的方法，正如它改变我的论点。我不再把报告当作事件的记录来读，而是当作表演来读，每一次都追问：预期的读者是谁，写作者需要这位读者相信什么。我学到：一份文件在成为史料之前，首先是一个动作；先问它做了什么，才能问它说了什么。"
+    },
+    {
+     "text": "I now tell new students in our group two things before their first archive visit. First, read everything that was filed, because that is the skeleton of your story. Second, ask the archivist what nobody has requested in years, because somewhere in the unrequested boxes lives the part of the past that did not fit the forms.",
+     "translation_zh": "如今，每当组里有新生第一次去档案馆，我都会叮嘱两件事。第一，把归档的东西全部读完，因为那是你故事的骨架。第二，问问档案管理员有什么是多年来无人调阅的——因为在那些无人问津的箱子里，住着那段装不进表格的过去。"
+    }
+   ]
+  },
+  {
+   "title": "The Honest Map",
+   "level": "toefl_ielts",
+   "length": "short",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "Every transit map lies a little. Lines that twist through old neighborhoods are drawn straight; stations separated by a difficult hill appear side by side. Designers defend these lies as kindness: a map that showed every curve would be accurate, unreadable, and useless to the passenger trying to catch a train.",
+     "translation_zh": "每一张交通图都会撒一点谎。穿过老城区的曲折线路被画成直线；隔着一座难爬的山丘的两个车站，看起来近在咫尺。设计师为这些谎言辩护，称之为善意：一张画出每个弯道的图固然准确，却没法阅读，对赶车的乘客毫无用处。"
+    },
+    {
+     "text": "The interesting question is where kindness ends. A famous redesign once made the river vanish entirely, and tourists, trusting the map over the ground, walked confidently into dead ends for years.",
+     "translation_zh": "有趣的问题在于善意的边界在哪里。一次著名的改版曾让整条河从图上彻底消失，而相信地图胜过相信脚下的游客们，多年来自信地走进一条条死路。"
+    },
+    {
+     "text": "Good maps, like good explanations, simplify the truth without betraying it. The test is simple: does the lie help the reader arrive, or only help the drawing look clean?",
+     "translation_zh": "好地图和好的解释一样，简化真相而不背叛真相。检验标准很简单：这个谎言是帮读者抵达目的地，还是只是让图面显得干净？"
+    }
+   ]
+  },
+  {
+   "title": "The Slow Death of the Phone Call",
+   "level": "toefl_ielts",
+   "length": "medium",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "My grandmother treats an unanswered phone call as a minor emergency; my younger colleagues treat an unannounced one as a minor offense. Between these two reactions lies a quiet revolution in manners. In barely two decades, the voice call has moved from the default form of distant communication to something close to an intrusion, reserved for emergencies, deliveries, and the very old.",
+     "translation_zh": "我祖母把没人接的电话当作小型紧急事件；我的年轻同事则把未经预约的来电当作一种轻微的冒犯。在这两种反应之间，藏着一场礼仪的静悄悄的革命。短短二十年间，语音通话从远距离交流的默认方式，变成了近乎打扰的东西——只留给急事、快递和年纪很大的人。"
+    },
+    {
+     "text": "The usual explanation blames convenience: text can wait, voice cannot. But convenience alone misses the deeper shift. A call demands that two attentions meet at the same moment; a message politely declines that demand. We have collectively decided that another person's time is not ours to claim without warning, and the decision has costs as well as courtesies.",
+     "translation_zh": "通常的解释归因于便利：文字可以等，语音不能。但仅凭便利无法说明更深层的变化。一通电话要求两个人的注意力在同一时刻相遇；而一条消息礼貌地拒绝了这种要求。我们集体决定：他人的时间不容我们不打招呼就占用。这个决定带来了礼貌，也带来了代价。"
+    },
+    {
+     "text": "Something is lost when every conversation is scheduled. The accidental call that ran long, the voice that betrayed worry beneath cheerful words, the argument resolved in ten minutes because neither side could hide behind careful editing: these were not interruptions of relationships but part of their fabric.",
+     "translation_zh": "当每一次交谈都需要预约时，有些东西就丢失了。那通意外聊了很久的电话，那个在欢快言辞下泄露出担忧的声音，那场十分钟就化解的争执——因为谁也无法躲在字斟句酌的编辑背后。这些从来不是关系的打扰，而是关系的织体本身。"
+    },
+    {
+     "text": "I do not expect the trend to reverse, and mostly I do not want it to. But once a month I call an old friend without warning, and we both pretend, for an hour, that it is still an ordinary thing to do.",
+     "translation_zh": "我不指望这个趋势逆转，大体上也不希望它逆转。但每个月我都会不打招呼地给一位老友打个电话，然后我们俩在一个小时里假装：这仍是一件再平常不过的事。"
+    }
+   ]
+  },
+  {
+   "title": "In Defense of Difficult Books",
+   "level": "toefl_ielts",
+   "length": "long",
+   "source_id": "keyloop:authored-everyday-v1",
+   "paragraphs": [
+    {
+     "text": "There is a moment, familiar to every serious reader, when a book stops cooperating. The sentences grow long and strange; the argument disappears around a corner; the characters refuse to explain themselves. The modern instinct, trained by interfaces that apologize for every second of friction, is to conclude that the book has failed and to reach for something smoother. I want to argue the opposite: that this moment of resistance is precisely where the value of reading begins.",
+     "translation_zh": "每个认真的读者都熟悉这样一个时刻：一本书突然不再配合。句子变得冗长而陌生；论证在某个拐角消失不见；人物拒绝解释自己。被那些为每一秒钟阻力道歉的界面训练出来的现代直觉会断定：这本书失败了，然后伸手去拿更顺滑的东西。我想论证的恰恰相反：这个产生抗拒的时刻，正是阅读价值的起点。"
+    },
+    {
+     "text": "Ease is a wonderful property in tools and a suspicious one in ideas. A difficult book forces a confession that easy media never demand: the admission that your current mental furniture cannot seat this thought. Confusion, in this light, is not a failure state but a diagnostic one. It marks, with great precision, the exact edge of what you currently understand, which is information no comfortable book can provide.",
+     "translation_zh": "省力是工具的美德，却是思想的可疑品质。一本难读的书会迫使你做出轻松媒介从不要求的坦白：承认你现有的思维家具安放不下这个想法。这样看来，困惑不是失败状态，而是诊断状态。它以极高的精度标出了你当前理解力的确切边界——这是任何一本舒适的书都无法提供的信息。"
+    },
+    {
+     "text": "The skill that difficult books train is not intelligence but a kind of tolerance: the ability to keep walking while lost. Researchers call this staying in the problem; readers know it as the strange discipline of continuing past the point where understanding fails, trusting that the fog is part of the landscape and not a sign that the road has ended. Every demanding field, from mathematics to medicine, ultimately rests on this tolerance, and almost nothing in contemporary life exercises it.",
+     "translation_zh": "难读的书训练的不是智力，而是一种耐受力：迷路时继续行走的能力。研究者称之为“待在问题里”；读者则知道这是一种奇特的纪律——在理解失效之处继续前行，并相信迷雾是风景的一部分，而非道路终结的标志。从数学到医学，每一个高要求的领域最终都建立在这种耐受力之上，而当代生活中几乎没有什么东西在锻炼它。"
+    },
+    {
+     "text": "None of this is a defense of obscurity for its own sake. Some books are difficult because they protect weak ideas with strong vocabulary, and learning to tell honest difficulty from decorative difficulty is itself part of the discipline. The honest kind repays every hour: the argument that finally assembles itself, three chapters late, arrives with a force that no summary could carry, precisely because you built the road it traveled on.",
+     "translation_zh": "这一切并不是在为故弄玄虚辩护。有些书之所以难读，是因为它们用强悍的词汇保护贫弱的思想；而学会分辨诚实的困难与装饰性的困难，本身就是这门纪律的一部分。诚实的困难会偿还你的每一个小时：那个迟到了三章才终于自行组装完成的论证，抵达时携带着任何摘要都无法承载的力量——恰恰因为它走过的路是你亲手修建的。"
+    },
+    {
+     "text": "So I keep a shelf of books that have defeated me, and I return to it the way climbers return to a mountain that turned them back. Some will defeat me again. But every few years, one of them quietly opens, and I am reminded that the border of the readable is not fixed; it moves outward exactly as far as we are willing to push it, and each book that opens makes the next one on the shelf look a little less impossible than it did before.",
+     "translation_zh": "所以我专门留了一格书架，放那些曾经打败过我的书，并像登山者重返曾把自己劝退的山峰那样回到它面前。有些书会再次打败我。但每隔几年，其中一本会悄然敞开。它提醒我：可读性的边界并非固定——我们愿意推多远，它就向外移多远；而每一本敞开的书，都会让书架上的下一本看起来不再那么高不可攀。"
+    }
+   ]
+  },
+  {
+   "title": "American Inventors: Rocket Scientist Robert Goddard",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Today rocket launches and space missions are common. But in the early 1900s, space travel seemed like a dream.",
+     "translation_zh": "如今，火箭发射和太空任务已是寻常事。但在二十世纪初，太空旅行还像是一场梦。"
+    },
+    {
+     "text": "One of the most influential people in the field of rocket science was American Robert Goddard.",
+     "translation_zh": "在火箭科学领域，最有影响力的人物之一是美国人罗伯特·戈达德。"
+    },
+    {
+     "text": "The American space agency NASA describes Goddard as \"the father of modern rocket propulsion .\"",
+     "translation_zh": "美国航天局 NASA 称戈达德为“现代火箭推进之父”。"
+    },
+    {
+     "text": "Robert Goddard once said that \"the dream of yesterday is the hope of today and the reality of tomorrow.\" His scientific work gave hope to many dreams about space travel. He turned some of those dreams into reality.",
+     "translation_zh": "罗伯特·戈达德曾说：“昨天的梦想是今天的希望，也是明天的现实。”他的科学工作给许多太空旅行的梦想带来了希望。他还把其中一些梦想变成了现实。"
+    },
+    {
+     "text": "More than one hundred years ago, Goddard carried out studies and tests of rocket engines.",
+     "translation_zh": "一百多年前，戈达德就开展了火箭发动机的研究和试验。"
+    },
+    {
+     "text": "He developed and flew many rockets that got their power from solid fuels: chemicals that formed a hard substance. In 1925, he made and tested the first rocket engine using a soft chemical fuel. The next year, he successfully launched the world's first liquid-fuel rocket.",
+     "translation_zh": "他研制并试飞了多枚以固体燃料——一种凝固成硬块的化学物质——为动力的火箭。1925 年，他制造并测试了第一台使用软质化学燃料的火箭发动机。次年，他成功发射了世界上第一枚液体燃料火箭。"
+    },
+    {
+     "text": "Many historians consider liquid-fuel rocket flight to be as important as the first airplane flight by the American brothers Orville and Wilbur Wright.",
+     "translation_zh": "许多历史学家认为，液体燃料火箭的飞行与美国莱特兄弟的首次飞机飞行同等重要。"
+    },
+    {
+     "text": "Goddard's work proved that machines could travel outside of Earth's atmosphere and into space.",
+     "translation_zh": "戈达德的工作证明，机器可以飞出地球大气层进入太空。"
+    },
+    {
+     "text": "During his early research, he received money and support from the U.S. Smithsonian Institution. The Smithsonian published several reports about his efforts.",
+     "translation_zh": "在早期研究中，他得到了美国史密森学会的资助和支持。学会发表了多份关于他研究工作的报告。"
+    },
+    {
+     "text": "One publication, called \"A Method of Reaching Extreme Altitudes,\" wrote about his search for ways to send weather recording instruments higher than balloons could fly. It described how he developed the mathematical theories for rocket flight.",
+     "translation_zh": "其中一份题为《到达极限高度的方法》的出版物，介绍了他如何寻找把气象记录仪器送到比气球更高处的办法，并阐述了他为火箭飞行建立的数学理论。"
+    }
+   ]
+  },
+  {
+   "title": "Knitting While Watching Movies Gains Popularity",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Nearly 200 people in Vienna, Austria, gathered recently to enjoy two fun activities at the same time.",
+     "translation_zh": "近日，奥地利维也纳有近两百人聚在一起，同时享受两件趣事。"
+    },
+    {
+     "text": "They worked with needles and yarn . And they watched a movie together called The Devil Wears Prada .",
+     "translation_zh": "他们一边摆弄棒针和毛线，一边一起观看电影《穿普拉达的女王》。"
+    },
+    {
+     "text": "\"It sounds a bit like a grandmother, but it's relaxing . And...what's wrong with letting the grandmother in us express herself,\" joked Austrian Alexander Koch. He is a 28-year-old who crochets .",
+     "translation_zh": "“听起来是有点像老奶奶，但这很放松。再说……让我们心里的那位老奶奶表达一下自己，又有什么不好呢？”28 岁的奥地利人亚历山大·科赫开玩笑说。他的爱好是钩针编织。"
+    },
+    {
+     "text": "Knitting or crocheting while watching movies has gained popularity in Europe.",
+     "translation_zh": "一边看电影一边织毛线或钩花，正在欧洲流行起来。"
+    },
+    {
+     "text": "Luisa Palmer was one of the organizers of the event. Palmer said that, during the COVID-19 pandemic, \"A lot of people started knitting during the lockdown alone at home.\" Palmer launched the knitting evenings once a month at Votiv Kino, a place to watch movies in the center of the Austrian capital.",
+     "translation_zh": "路易莎·帕尔默是这次活动的组织者之一。她说，新冠疫情期间，“很多人在居家隔离时独自开始织毛线”。帕尔默在维也纳市中心的 Votiv Kino 影院发起了每月一次的编织电影夜。"
+    },
+    {
+     "text": "\"Now we need to find ourselves...\" in real life, the 30-year-old told the French News Agency (AFP) before the event.",
+     "translation_zh": "这位 30 岁的组织者在活动开始前对法新社说：“现在我们需要在现实生活中重新找到自己……”"
+    },
+    {
+     "text": "People are knitting, eating, or even breastfeeding babies while watching a movie. This movement is the latest attempt to add different things to the movie-watching experience, said Lisa Stolze. She is a spokesperson for Votiv Kino, the movie house.",
+     "translation_zh": "影院发言人丽莎·施托尔策说，观众一边看电影一边织毛线、吃东西，甚至给婴儿喂奶。这场风潮是为观影体验添加新元素的最新尝试。"
+    },
+    {
+     "text": "To avoid knitting mistakes, a soft light remains on during the movie. This also helps to increase exchanges between the attendees.",
+     "translation_zh": "为了避免织错针脚，放映期间会保留一盏柔和的灯。这也促进了观众之间的交流。"
+    },
+    {
+     "text": "Organizers based their event on similar ones in the United States, Northern Europe, Germany and France. Since launching in December of 2024, the movie events in Vienna are usually full.",
+     "translation_zh": "组织者借鉴了美国、北欧、德国和法国的类似活动。自 2024 年 12 月启动以来，维也纳的这些电影场次通常场场爆满。"
+    },
+    {
+     "text": "\"I usually knit while watching movies or listening to podcasts at home, so movie theaters are the perfect place for this activity,\" said Kaja Vospernik. She is a 23-year-old fashion student.",
+     "translation_zh": "“我平时就在家里边看电影或听播客边织毛线，所以电影院正是做这件事的完美场所。”23 岁的时装专业学生卡娅·沃斯佩尼克说。"
+    },
+    {
+     "text": "As the movie plays, the colorful projects take shape. The film takes a back seat, meaning it is less important than the work of knitting or crocheting. Everyone shows off their work. Experienced knitters and crocheters help beginners learn new skills.",
+     "translation_zh": "随着电影播放，五彩的织物渐渐成形。电影反而退居其次，没有手里的编织重要。每个人都展示自己的作品，熟手帮新手学习新技巧。"
+    },
+    {
+     "text": "She is another organizer of the event.",
+     "translation_zh": "她是这次活动的另一位组织者。"
+    },
+    {
+     "text": "People attend the events for several reasons. Some say the events let them reconnect with something real that is not on a computer. Others say they can \"slow down a little.\"",
+     "translation_zh": "人们参加活动的原因各不相同。有人说，这让他们重新接触到电脑之外真实的东西；也有人说，可以“让节奏慢下来一点”。"
+    },
+    {
+     "text": "Palmer said, \"Doing something with your ten fingers is still more rewarding ...\" than working at a computer all day.",
+     "translation_zh": "帕尔默说：“用自己的十根手指做点东西，还是比对着电脑坐一整天更有成就感……”"
+    },
+    {
+     "text": "She added that picking the right movie is also important. Palmer likes to watch a good \" cozy comedy\" that she has already seen. She joked that it is best to avoid scary movies. They can make you jump causing you to lose your place in your knitting.",
+     "translation_zh": "她补充说，选对电影也很重要。帕尔默喜欢看自己已经看过的“温馨喜剧”。她开玩笑说最好别放恐怖片——吓一跳的时候，手里的针脚就乱了。"
+    }
+   ]
+  },
+  {
+   "title": "Mary Kay: A Leader in the Beauty Product Industry",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Mary Kay Cosmetics is an international company that sells beauty products.",
+     "translation_zh": "玫琳凯化妆品是一家销售美容产品的国际公司。"
+    },
+    {
+     "text": "One woman started the business in the 1960s with an investment of $5,000.",
+     "translation_zh": "上世纪六十年代，一位女性用五千美元的投资创办了这家企业。"
+    },
+    {
+     "text": "Mary Kathlyn Wagner was born in the state of Texas in 1918. For much of her childhood, she cared for her sick father while her mother worked long hours at a restaurant.",
+     "translation_zh": "玛丽·凯瑟琳·瓦格纳 1918 年出生于得克萨斯州。童年的大部分时间里，母亲在餐馆长时间工作，她则在家照顾生病的父亲。"
+    },
+    {
+     "text": "Mary Kay married Ben Rogers when she was 17 years old. They had three children before he left home to serve in World War Two. When he returned, their marriage ended. Mary Kay looked for a job so she could support her children.",
+     "translation_zh": "玛丽·凯 17 岁时嫁给本·罗杰斯。两人育有三个孩子，后来丈夫离家参加第二次世界大战。战后归来，婚姻走到了尽头。为了养活孩子，玛丽·凯开始找工作。"
+    },
+    {
+     "text": "She began selling different kinds of products. One night, Mary Kay was showing products at the home of Ova Heath Spoonemore. Ms. Spoonemore began giving her guests some homemade skin care products. The products were developed by her father, J.W. Heath, in Arkansas. Mary Kay tried the skin care products and liked them.",
+     "translation_zh": "她做过多种产品的销售。一天晚上，玛丽·凯在奥娃·希思·斯普恩莫尔家中展示产品时，女主人拿出一些自制的护肤品招待客人。这些产品是她父亲 J.W. 希思在阿肯色州研制的。玛丽·凯试用之后非常喜欢。"
+    },
+    {
+     "text": "She bought the rights to Heath's skin care products and started her own company. She paid $500 for the legal rights to the products. And in 1963, The Mary Kay Cosmetics company began operating in Dallas, Texas.",
+     "translation_zh": "她买下了希思护肤品的产品权，开创了自己的公司。这笔产品法律权利花了她五百美元。1963 年，玫琳凯化妆品公司在得克萨斯州达拉斯开业。"
+    },
+    {
+     "text": "The idea was to sell skin care products through demonstrations in homes and offices. Independent sales representatives bought beauty products from the company and sold them at higher prices.",
+     "translation_zh": "公司的思路是通过在住宅和办公室里做演示来销售护肤品。独立销售代表从公司购进美容产品，再以更高的价格卖出。"
+    },
+    {
+     "text": "Mary Kay decided that each representative who brought other saleswomen into the company would receive part of the new person's earnings. That way, experienced sales representatives would be willing to train new ones.",
+     "translation_zh": "玛丽·凯规定，每位介绍其他女性加入公司的代表，都能从新人的收入中分得一部分。这样，有经验的销售代表就愿意培养新人。"
+    },
+    {
+     "text": "By 1965, the company was selling almost one million dollars in products.",
+     "translation_zh": "到 1965 年，公司的产品销售额已接近一百万美元。"
+    },
+    {
+     "text": "Mary Kay Cosmetics became one of the most successful direct sellers of skin care products in America. It continues to have sales offices and representatives in many different countries.",
+     "translation_zh": "玫琳凯化妆品成为美国最成功的护肤品直销企业之一，至今仍在许多国家设有销售机构和代表。"
+    },
+    {
+     "text": "Mary Kay aimed to grow sales based on the idea that it is best to compete against yourself. That means every individual is trying to beat their own sales records. Prizes for high sales marks included special paid holidays and jewelry. Until a few years ago, a pink Cadillac was a top prize.",
+     "translation_zh": "玛丽·凯立志让销售增长建立在“和自己竞争”的理念之上，也就是每个人都努力打破自己的销售纪录。销售佳绩的奖品包括带薪假期和珠宝。直到几年前，粉色凯迪拉克轿车一直是最高奖。"
+    },
+    {
+     "text": "After her third husband, Mel Ash, died of cancer in 1980, she wanted to help find a cure for the disease. At first, she helped organizations raise money for research.",
+     "translation_zh": "1980 年，她的第三任丈夫梅尔·阿什死于癌症，她由此希望帮助找到治愈这种疾病的方法。起初，她协助各类组织为研究筹款。"
+    },
+    {
+     "text": "Later, she started the Mary Kay Ash Charitable Foundation, a nonprofit group that provides money to support research on cancers affecting women. In 2001, the company and foundation expanded their goals to help prevent violence against women.",
+     "translation_zh": "后来，她创立了玛丽·凯·阿什慈善基金会，这家非营利机构资助针对女性癌症的研究。2001 年，公司和基金会扩大了目标，加入了防止针对女性的暴力。"
+    },
+    {
+     "text": "Mary Kay Ash also wrote three books. She worked in her business until she suffered a stroke in 1996. She died in 2001.",
+     "translation_zh": "玛丽·凯·阿什还写了三本书。她一直工作到 1996 年中风，2001 年去世。"
+    },
+    {
+     "text": "Sales representatives say Mary Kay developed a way for women to earn money and still spend time with their families.",
+     "translation_zh": "销售代表们说，玛丽·凯开创了一条让女性既能挣钱又能陪伴家人的道路。"
+    }
+   ]
+  },
+  {
+   "title": "Researchers Uncover a Bathhouse Complex in Ancient Pompeii",
+   "level": "cet4",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Archeological research has uncovered another treasure of the ancient Roman city of Pompeii: a large private bathhouse .",
+     "translation_zh": "考古研究又发现了古罗马城市庞贝的一处珍宝：一座大型私人浴场。"
+    },
+    {
+     "text": "The explosion of Mount Vesuvius in 70 AD buried Pompeii in thick ash, wreckage, and lava, or hot liquid rock. Archeologists are continuing to find remains of the city under the ground.",
+     "translation_zh": "公元 70 年，维苏威火山喷发，厚厚的火山灰、瓦砾和熔岩（炽热的液态岩石）掩埋了庞贝。考古学家仍在地下不断发现这座城市的遗迹。"
+    },
+    {
+     "text": "The bathhouse was part of a large private house, the scientists said. The bathhouse holds a series of rooms that would have provided hot, warm, or cold conditions. The art and design of the complex, including mosaic works, also suggest the owner was wealthy.",
+     "translation_zh": "科学家说，这座浴场属于一处大型私宅。浴场内有一系列房间，可分别提供热水、温水或冷水。浴场的艺术与设计，包括马赛克镶嵌作品，也表明主人十分富有。"
+    },
+    {
+     "text": "\"We have here perhaps the largest thermal complex in a private house in Pompeii,\" said Gabriel Zuchtriegel, director of the Pompeii Archaeological Park.",
+     "translation_zh": "庞贝考古公园主任加布里埃尔·楚赫特里格尔说：“这里也许是庞贝私宅中最大的浴场建筑群。”"
+    },
+    {
+     "text": "He explained that Pompeii's powerful and wealthy set up large spaces at their homes to hold major gatherings for ceremonies and other purposes.",
+     "translation_zh": "他解释说，庞贝的权贵富人会在家中布置大型空间，用于举办仪式等重要聚会。"
+    },
+    {
+     "text": "\"It was an opportunity to show the wealth in which they lived and also to have a nice thermal treatment,\" he said.",
+     "translation_zh": "他说：“这是一个机会，既能炫耀他们的富足生活，又能享受舒适的温泉护理。”"
+    },
+    {
+     "text": "The baths were unearthed in the so-called Regio IX, a large central area of Pompeii Park that is still unexplored.",
+     "translation_zh": "浴场是在所谓的第九区出土的。这是庞贝公园中部一大片尚未勘探的区域。"
+    },
+    {
+     "text": "Recently, archeologists working in the same area found a bakery , a laundry and two homes. They also found the bones of three people who died in the volcanic burst.",
+     "translation_zh": "最近，在同一区域工作的考古学家还发现了一家面包房、一家洗衣坊和两处住宅，并发现了三名死于火山喷发者的遗骨。"
+    },
+    {
+     "text": "Pompeii was not the only city destroyed in the explosion. It also buried the city of Herculaneum.",
+     "translation_zh": "庞贝并非那次喷发中毁灭的唯一城市。赫库兰尼姆城也一同被掩埋。"
+    },
+    {
+     "text": "Zuchtriegel said wealthy citizens of Pompeii often would first take a bath and then attend a banquet, or a big meal. The private thermal complex permitted them to do so together at the home where the banquet was held.",
+     "translation_zh": "楚赫特里格尔说，庞贝的富人往往先沐浴，再出席盛大的宴会。私人浴场让他们可以在举办宴会的宅邸里把两件事一并完成。"
+    }
+   ]
+  },
+  {
+   "title": "What Is Art Deco and Why Is It Popular Again?",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Art Deco is an international artistic style that was popular in the 1920s and 1930s.",
+     "translation_zh": "装饰艺术（Art Deco）是一种国际艺术风格，流行于二十世纪二三十年代。"
+    },
+    {
+     "text": "Now, interest in the style and its qualities is growing. A new generation is enjoying the style's roots and turning it into something new.",
+     "translation_zh": "如今，人们对这种风格及其特质的兴趣再度升温。新一代人欣赏它的根源，并把它变成新的东西。"
+    },
+    {
+     "text": "A public showing, or exhibition, at the Museum of the City of New York provides a look at the style that helped define the city 100 years ago.",
+     "translation_zh": "纽约市博物馆的一场公开展览，让人们得以一窥一百年前塑造了这座城市的这种风格。"
+    },
+    {
+     "text": "Famous Art Deco buildings include the Chrysler Building, the Empire State Building, Rockefeller Center and Radio City Music Hall.",
+     "translation_zh": "著名的装饰艺术建筑包括克莱斯勒大厦、帝国大厦、洛克菲勒中心和无线电城音乐厅。"
+    },
+    {
+     "text": "The public showing, called \"Art Deco City: New York Postcards from the Leonard A. Lauder Collection,\" also has clothing and film clips from the time.",
+     "translation_zh": "这场名为“装饰艺术之城：伦纳德·A·劳德收藏中的纽约明信片”的展览，还展出了那个时代的服装和电影片段。"
+    },
+    {
+     "text": "In London, the Victoria and Albert Museum has a collection of day and evening clothing, jewelry and more. The collection comes from Les Ballets Russes, a dance company that had a major effect on fashion .",
+     "translation_zh": "在伦敦，维多利亚与艾尔伯特博物馆收藏了日装、晚装、珠宝等众多展品。这批藏品来自对时尚影响深远的俄罗斯芭蕾舞团。"
+    },
+    {
+     "text": "And in Paris, organizers of the 2024 Olympics created Art Deco posters last year to celebrate the games and mark the one hundred years since the 1924 Olympics, which Paris also hosted.",
+     "translation_zh": "在巴黎，2024 年奥运会的组织者去年创作了装饰艺术风格的海报，以庆祝奥运会，并纪念巴黎主办 1924 年奥运会一百周年。"
+    },
+    {
+     "text": "A style of the 1920s and 30s",
+     "translation_zh": "二三十年代的一种风格"
+    },
+    {
+     "text": "Appearing after World War I, the first Art Deco era had a spirit of creativity and freedom. With the aim of appearing modern, the style became one of the most important forms of design in the 1920s and early 1930s.",
+     "translation_zh": "第一个装饰艺术时代出现在第一次世界大战之后，洋溢着创造与自由的精神。这种以摩登为追求的风格，成为二十年代和三十年代初最重要的设计形式之一。"
+    },
+    {
+     "text": "The Art Deco style is believed to have first appeared at the 1925 International Exhibition of Modern Decorative and Industrial Arts, in Paris.",
+     "translation_zh": "人们认为，装饰艺术风格最早亮相于 1925 年在巴黎举办的国际现代装饰与工业艺术博览会。"
+    }
+   ]
+  },
+  {
+   "title": "Danish-Swedish Farmdog Is American Kennel Club's Newest Breed",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "The American Kennel Club, or AKC, has named another kind of dog to its registry.",
+     "translation_zh": "美国养犬俱乐部（AKC）的名录中又添了一个犬种。"
+    },
+    {
+     "text": "Say hello to the Danish-Swedish farmdog. Or maybe say \"hej,\" the word for hello in Swedish and Danish.",
+     "translation_zh": "来跟丹麦-瑞典农场犬打个招呼吧。或许该说一声“hej”——这是瑞典语和丹麦语里的“你好”。"
+    },
+    {
+     "text": "AKC officials announced the addition to its list on January 2. The recognition means the breed now may compete for many best in show prizes. It also will probably create wider interest in the small, lively dogs. Fans of the breed are happy for the honor, but some also worry about the effect increased attention will have on the dog.",
+     "translation_zh": "AKC 官员于 1 月 2 日宣布了这一新增犬种。获得认可意味着该犬种今后可以角逐众多“全场总冠军”奖项，也可能让更多人关注这种活泼的小型犬。该犬种的爱好者为这份荣誉感到高兴，但也有人担心关注度上升会给这种狗带来影响。"
+    },
+    {
+     "text": "Carey Segebart is one of the people who worked to get Danish-Swedish farmdogs recognized by the AKC. \"We're excited about it. We're looking forward to it,\" she said. She plans to show one of her own at a dog show this month near her home in the American state of Iowa.",
+     "translation_zh": "凯莉·塞格巴特是推动丹麦-瑞典农场犬获得 AKC 认可的人士之一。“我们很兴奋，也很期待。”她说。她打算本月在艾奥瓦州家附近的犬展上展示自己的一只爱犬。"
+    },
+    {
+     "text": "Still, she thinks more attention can have both good and bad results for the breed. \"We don't want the breed to just explode too quickly,\" she said.",
+     "translation_zh": "不过她认为，更多的关注对这个犬种来说有利也有弊。“我们不希望这个犬种一下子火得太快。”她说。"
+    },
+    {
+     "text": "The Danish-Swedish Farmdog Club of America says the breed, DSF for short, goes back centuries in parts of what are now Denmark, southern Sweden and some other European countries.",
+     "translation_zh": "美国丹麦-瑞典农场犬俱乐部介绍说，这个简称 DSF 的犬种，在如今的丹麦、瑞典南部及欧洲一些其他地区已有数百年历史。"
+    },
+    {
+     "text": "\"They're interesting, fun little dogs,\" said Segebart, who has owned them since 2011 and is the club's incoming president. She said they will try anything and \"succeed at most everything.\"",
+     "translation_zh": "“它们是有趣又好玩的小狗。”塞格巴特说。她从 2011 年起饲养这种犬，即将出任俱乐部主席。她说它们什么都愿意尝试，而且“几乎样样都能做好”。"
+    },
+    {
+     "text": "In their homelands, the dogs' main job was to control small animals called rodents. However, they also can herd , act as watchdogs and be playful with children. The club says some Danish-Swedish farmdogs have even performed in circuses .",
+     "translation_zh": "在原产地，这种狗的主要工作是控制啮齿类小动物。不过它们也会放牧、看家护院，还能陪孩子玩耍。俱乐部说，有些丹麦-瑞典农场犬甚至上过马戏团的舞台。"
+    },
+    {
+     "text": "After Denmark and Sweden became more developed in the 20th century, DSF fans decided to make the breed official in both nations. Kennel clubs there began registering the breed in 1987.",
+     "translation_zh": "二十世纪，丹麦和瑞典的发展程度提高之后，DSF 的爱好者决定让这一犬种在两国都获得官方地位。两国的养犬俱乐部于 1987 年开始为该犬种登记。"
+    },
+    {
+     "text": "In the United States, many of the about 350 Danish-Swedish farmdogs nationwide already compete in agility , obedience or other sports that are open to all dogs, including mixed breeds.",
+     "translation_zh": "在美国，全国约 350 只丹麦-瑞典农场犬中，许多已经在敏捷、服从等向所有犬只（包括混种犬）开放的运动项目中参赛。"
+    },
+    {
+     "text": "Until now, the dogs could not enter the traditional breed-by-breed judging that leads to best in show prizes at major dog shows. They may appear later this year at two major televised events, the National Dog Show and the AKC National Championship.",
+     "translation_zh": "在此之前，这些狗无法参加按犬种逐一评审、最终决出全场总冠军的大型犬展传统赛制。今年晚些时候，它们可能亮相两大电视转播赛事：全国犬展和 AKC 全国锦标赛。"
+    },
+    {
+     "text": "The Danish-Swedish farmdog is the AKC's 202nd breed and \"a wonderful addition to a family that is able to provide it with the exercise and mental stimulation that it needs,\" said the AKC's Gina DiNardo.",
+     "translation_zh": "丹麦-瑞典农场犬是 AKC 认可的第 202 个犬种。AKC 的吉娜·迪纳尔多说，对能够满足其运动量和动脑需求的家庭来说，它是“极好的新成员”。"
+    },
+    {
+     "text": "Danish-Swedish farmdog lovers talked for several years about whether they should try to get AKC recognition and the attention that is likely to come with it, Segebart said. The number of people wanting to buy a young farmdog, or puppy, has grown quickly over the last ten years. The wait for a DSF puppy is usually a year or more, she said.",
+     "translation_zh": "塞格巴特说，丹麦-瑞典农场犬的爱好者们讨论了好几年，才决定是否争取 AKC 认可以及随之而来的关注。过去十年，想买一只农场犬幼犬的人迅速增多，如今等一只 DSF 幼犬通常要一年以上。"
+    },
+    {
+     "text": "Fans of the breed worry that its appealing, relatively easy-care nature could make it quickly become too popular for its own good. They are not the first to worry. Similar concerns surround the French bulldog, which the AKC now says is the most popular breed in the country. Breeding for desired qualities has led to many health problems for the dogs.",
+     "translation_zh": "该犬种的爱好者担心，它讨喜又相对好养的天性，可能让它红得太快反受其害。有这种担忧的不止他们。类似的忧虑也围绕着法国斗牛犬——AKC 称其如今是全美最受欢迎的犬种，而对特定特征的选育已给这种狗带来了许多健康问题。"
+    }
+   ]
+  },
+  {
+   "title": "Green Means Spring and Other Things",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Green is an important color in nature. It is the color of grass and the leaves on trees. It is also the color of most growing plants.",
+     "translation_zh": "绿色是大自然中重要的颜色。它是青草和树叶的颜色，也是大多数生长中的植物的颜色。"
+    },
+    {
+     "text": "Sometimes, the word green means young, fresh and growing. Sometimes, it describes something that is not yet ripe or finished.",
+     "translation_zh": "有时，green 这个词表示年轻、新鲜、正在成长；有时，它形容尚未成熟或尚未完成的东西。"
+    },
+    {
+     "text": "For example, a greenhorn is someone who has no experience, who is new to a situation. In the fifteenth century, a greenhorn was a young cow or ox whose horns had not yet developed. A century or so later, a greenhorn was a soldier who had not yet had any experience in battle. By the eighteenth century, a greenhorn had the meaning it has today - a person who is new in a job.",
+     "translation_zh": "比如，greenhorn 指没有经验的新手。十五世纪时，greenhorn 是指犄角还没长出来的小牛。大约一个世纪后，它指还没上过战场的士兵。到了十八世纪，greenhorn 有了今天的含义——工作上的新人。"
+    },
+    {
+     "text": "About one hundred years ago, greenhorn was a popular expression in the American west. Old-timers used it to describe a man who had just arrived from one of the big cities back east. The greenhorn lacked the skills he would need to live in the hard, rough country.",
+     "translation_zh": "大约一百年前，greenhorn 在美国西部是个流行词。老住户用它形容刚从东部大城市来的人——这种新来的人缺乏在艰苦粗粝的乡野生存所需的本领。"
+    },
+    {
+     "text": "Someone who has the ability to grow plants well is said to have a green thumb. The expression comes from the early 1900s.",
+     "translation_zh": "擅长种植物的人，我们说他有 green thumb（绿拇指）。这个说法出现于二十世纪初。"
+    },
+    {
+     "text": "A person with a green thumb seems to have a magic touch that makes plants grow quickly and well. You might say that the woman next door has a green thumb if her garden continues to grow long after your plants have died.",
+     "translation_zh": "有绿拇指的人仿佛有一双魔法之手，能让植物长得又快又好。如果你的植物早就枯死了，隔壁太太的花园却生机勃勃，你就可以说她有绿拇指。"
+    },
+    {
+     "text": "The Green Revolution is the name given some years ago to the development of new kinds of rice and other grains. The new plants produced much larger crops. The Green Revolution was the result of hard work by agricultural scientists who had green thumbs.",
+     "translation_zh": "Green Revolution（绿色革命）是多年前人们给水稻等新品种谷物的培育起的名字。新品种带来了大得多的收成。绿色革命正是那些有绿拇指的农业科学家辛勤工作的成果。"
+    },
+    {
+     "text": "Green is also the color used to describe the powerful emotion, jealousy. The green-eyed monster is not a frightening creature from outer space. It is an expression used about four hundred years ago by British writer William Shakespeare in his play \"Othello.\"",
+     "translation_zh": "绿色还被用来形容一种强烈的情绪——嫉妒。green-eyed monster（绿眼怪物）不是来自外太空的可怕生物，而是大约四百年前英国作家莎士比亚在戏剧《奥赛罗》中用过的一个说法。"
+    },
+    {
+     "text": "It describes the unpleasant feeling a person has when someone has something he wants. A young man may suffer from the green-eyed monster if his girlfriend begins going out with someone else. Or, that green-eyed monster may affect your friend if you get a pay raise and she does not.",
+     "translation_zh": "它描述的是别人拥有你想要的东西时，你心里那种不舒服的感觉。女朋友开始和别人约会，小伙子可能会被绿眼怪物缠上；你加了薪而朋友没有，绿眼怪物也可能找上她。"
+    },
+    {
+     "text": "In most places in the world, a green light is a sign to move ahead. A green light on a traffic signal means your car can continue on. In everyday speech, a green light means approval to continue with a project. We want you to know we have a green light to continue this series next week.",
+     "translation_zh": "在世界上大多数地方，绿灯都是前进的信号。交通信号的绿灯亮起，车辆就可以继续行驶。在日常用语里，green light 表示对一个项目的放行批准。"
+    }
+   ]
+  },
+  {
+   "title": "How to 'Dish Up' Something Good",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Food is a popular subject with many people around the world. It is fun to talk about our favorite dishes. It is even more fun to share a favorite dish with others.",
+     "translation_zh": "食物是世界各地许多人喜爱的话题。聊聊自己最爱的菜式很有乐趣，与人分享一道拿手菜就更有乐趣了。"
+    },
+    {
+     "text": "Today we talk about the word \"dish.\" A dish can be the object on which you serve food. But, a dish can also mean a specially prepared food.",
+     "translation_zh": "今天我们来聊聊 dish 这个词。dish 可以指盛食物的器皿，也可以指一道精心烹制的菜肴。"
+    },
+    {
+     "text": "Do you have a signature dish ? Our signature is how we sign our names. So, a signature dish is a dish we are known for making well. In a way, it identifies us.",
+     "translation_zh": "你有 signature dish（招牌菜）吗？signature 本指我们的签名，所以招牌菜就是我们以做得好而出名的菜。某种意义上，它代表了我们。"
+    },
+    {
+     "text": "My signature dish is sweet potato rosemary dinner rolls. I am often asked to make them, especially for holiday parties. In my circle of friends, I am known for this dish. When the rolls are on the table, people know that I made them.",
+     "translation_zh": "我的招牌菜是迷迭香红薯餐包。朋友们常请我做这道点心，尤其是节日聚会的时候。在我的朋友圈里，我以这道菜闻名。餐包一上桌，大家就知道是我做的。"
+    },
+    {
+     "text": "A tasty dish is something that makes a table look good and inviting. Sometimes the same can be said about a person. Someone who is good-looking can be called a dish. While this usage might be a bit dated, it is still used.",
+     "translation_zh": "一道漂亮的菜能让餐桌赏心悦目、令人胃口大开。有时这话也可以用来形容人：长得好看的人也可以被称作 a dish。这个用法虽然有点过时，但仍有人在用。"
+    },
+    {
+     "text": "Now, let's talk about the verb \"dish.\"",
+     "translation_zh": "现在来说说动词 dish。"
+    },
+    {
+     "text": "\"To dish\" can mean to talk about private or personal information. It might be gossip . But I can also dish about myself. For example, a friend may ask me to dish about my new job.",
+     "translation_zh": "to dish 可以指谈论私密或个人的信息，可能是说八卦，但也可以是聊自己。比如，朋友可能让我 dish 一下我的新工作。"
+    },
+    {
+     "text": "I could also use a phrasal verb form and say my friend want me to dish out all the interesting details.",
+     "translation_zh": "我也可以用短语动词的形式，说朋友想让我 dish out（和盘托出）所有有趣的细节。"
+    },
+    {
+     "text": "Now, to dish up something means to put food on a dish for someone to eat. However, it can also mean sharing personal details, our own and others.",
+     "translation_zh": "to dish up 的本义是把食物盛进盘子端给别人吃，但它同样可以表示分享个人内幕——自己的或别人的。"
+    }
+   ]
+  },
+  {
+   "title": "The Importance of Being 'Dialed In'",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Technology is always progressing. Today, many modern devices can be controlled by touch or voice. This has led to some traditional electronic controls - such as dials and switches - being replaced with new technologies.",
+     "translation_zh": "技术总在进步。如今，许多现代设备可以用触摸或语音控制，这让一些传统的电子控制部件——比如旋钮和开关——被新技术取代。"
+    },
+    {
+     "text": "Digital displays have also become increasingly common. For example, digital number readouts have long replaced the hands on many clocks.",
+     "translation_zh": "数字显示屏也越来越常见。例如，数字读数早已取代了许多钟表上的指针。"
+    },
+    {
+     "text": "Many other devices also now operate purely with digital tools instead of mechanical systems.",
+     "translation_zh": "许多其他设备如今也完全靠数字工具运行，而不再使用机械系统。"
+    },
+    {
+     "text": "But some expressions and idioms used by English speakers still describe older technologies.",
+     "translation_zh": "但英语使用者的一些习语和表达，描述的仍然是旧技术。"
+    },
+    {
+     "text": "First, let's talk about dials. These controls are used for changing settings on a piece of equipment, like a radio or old television. We use the dial to tune in to a specific channel.",
+     "translation_zh": "先说说旋钮（dial）。这种控制部件用来调节设备的设置，比如收音机或老式电视机。我们转动旋钮，调到想听的频道。"
+    },
+    {
+     "text": "That's where the expressions dialed in and tuned in come from. If we are dialed in or tuned in to a radio or television program, we can hear it clearly. There is no noise or static .",
+     "translation_zh": "dialed in 和 tuned in 这两个表达就来源于此。如果我们 dialed in 或 tuned in 到某个广播或电视节目，就能听得清清楚楚，没有杂音和干扰。"
+    },
+    {
+     "text": "The same can be said when using these terms in personal conversations . For example, if you are dialed in to a project or problem, you know exactly what needs to be done. You are thinking clearly about it and remain very focused .",
+     "translation_zh": "在日常交流中使用这两个词组也是同样的意思。比如，如果你对一个项目或问题 dialed in，你清楚地知道该做什么，思路清晰，注意力高度集中。"
+    },
+    {
+     "text": "And when you are tuned in , you understand clearly what is going on around you.",
+     "translation_zh": "而当你 tuned in 时，你对周围发生的事情了然于心。"
+    },
+    {
+     "text": "\"Don't touch that dial\" and \"stay tuned\" are two ways to tell someone to keep watching or listening to a program.",
+     "translation_zh": "“别转台”（Don't touch that dial）和“锁定频道”（stay tuned）是让人继续收看或收听节目的两种说法。"
+    },
+    {
+     "text": "Now, let's talk about switches.",
+     "translation_zh": "接下来聊聊开关（switch）。"
+    },
+    {
+     "text": "These are built to either be off or on. There are no in-between settings like with a dial. So, when we flip the switch , we make something happen quickly and easily. It can also mean that we suddenly change something.",
+     "translation_zh": "开关只有开和关两个状态，不像旋钮有中间档位。所以当我们 flip the switch（按下开关）时，是让某件事快速轻松地发生，也可以表示突然改变某件事。"
+    }
+   ]
+  },
+  {
+   "title": "What Does It Take to Be a 'Power Couple'?",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "In American English, we use many expressions to describe when two people have a lot of similarities or are very close. Here are some examples.",
+     "translation_zh": "在美式英语中，我们用许多表达来形容两个人非常相似或非常亲密。下面是一些例子。"
+    },
+    {
+     "text": "If we say two people are joined at the hip, they are nearly always together. If we describe individuals as thick as thieves , it means they are very close. People considered two peas in a pod have many things in common. And we use the term kindred spirits to describe people who often share the same opinions and interests.",
+     "translation_zh": "如果说两个人 joined at the hip（连在胯上），就是说他们几乎形影不离。形容两个人 thick as thieves（亲如窃贼），意思是他们关系非常紧密。被称作 two peas in a pod（一荚双豆）的人有许多共同点。而 kindred spirits（灵魂相契的人）指观点和兴趣常常一致的人。"
+    },
+    {
+     "text": "These expressions can represent people who grew closer for different reasons. Maybe they complemented each other well in certain ways. Or maybe their situations brought them together for the purpose of completing something important or meaningful.",
+     "translation_zh": "这些表达描述的人因为不同的原因而走近：也许他们在某些方面互补，也许境遇让他们为完成某件重要的事走到了一起。"
+    },
+    {
+     "text": "But today we are going to discuss a very special kind of relationship - one that involves two people who are romantically involved and very successful.",
+     "translation_zh": "但今天我们要谈一种非常特别的关系——两个人既是恋人，又都事业有成。"
+    },
+    {
+     "text": "People in such relationships can be described as power couples .",
+     "translation_zh": "处于这种关系中的人，可以被称作 power couple（强强联合的夫妻档）。"
+    },
+    {
+     "text": "There are many examples of famous power couples, including successful movie stars, musicians and others in the performing arts. But power couples can exist in many other industries and communities, as well. And, the two people do not have to work in the same industry.",
+     "translation_zh": "著名的 power couple 例子很多，包括成功的影星、音乐人和其他表演艺术领域的名人。但权力夫妻档也存在于许多其他行业和圈子，而且两个人不一定在同一行业。"
+    },
+    {
+     "text": "If they do, however, that can make them even more powerful. For example, a well-known architect who builds homes could be partnered with a famous designer who decorates them. Or, one person in a power couple may be a music producer, while the other is a famous singer.",
+     "translation_zh": "不过若是同行，他们可能更加强强联手。比如，著名建筑师盖房子，伴侣是著名设计师做装潢；或者一位是音乐制作人，另一位是著名歌手。"
+    },
+    {
+     "text": "Even though power couples involve highly successful people, one person could describe their partner as their better half . This is a way to compliment their \"other half\" in the relationship. For example, one might say during a meeting with a friend, \"Hello! How are you? And more importantly, how is your better half?\"",
+     "translation_zh": "尽管 power couple 说的是两位高度成功的人，其中一方仍可能称另一方为 better half（更好的那一半）。这是对感情中“另一半”的恭维。比如和朋友见面时可以说：“你好！最近怎么样？更要紧的是，你那位‘更好的一半’怎么样？”"
+    },
+    {
+     "text": "Now, let's hear two friends use some of these expressions.",
+     "translation_zh": "现在来听两位朋友怎么使用这些表达。"
+    },
+    {
+     "text": "A: Hey, I'm not used to seeing you alone. Where's your sidekick ?",
+     "translation_zh": "甲：嘿，很少见你一个人啊。你的跟班呢？"
+    },
+    {
+     "text": "B: Huh? Who are you talking about?",
+     "translation_zh": "乙：啊？你说谁？"
+    },
+    {
+     "text": "A: Ben. You guys have been joined at the hip for weeks. Looks like you're thick as thieves.",
+     "translation_zh": "甲：本啊。你们俩这几周都快长在一起了，简直亲如窃贼。"
+    },
+    {
+     "text": "B: Well, the project is pretty important for the company. So, we're putting in a lot of hours.",
+     "translation_zh": "乙：嗯，这个项目对公司很重要，所以我们投入了很多时间。"
+    },
+    {
+     "text": "A: Are you becoming kindred spirits from working so much together?",
+     "translation_zh": "甲：天天泡在一起，都成灵魂知己了吧？"
+    },
+    {
+     "text": "B: No. It's just keeping us both very busy.",
+     "translation_zh": "乙：没有，只是把我们俩都忙坏了。"
+    },
+    {
+     "text": "A: Busy trying to become the new power couple in the office?",
+     "translation_zh": "甲：忙着成为办公室新晋的最强组合？"
+    },
+    {
+     "text": "B: What are you talking about?? We're not thick as thieves or kindred spirits, and we're definitely not a power couple. We are just working hard on the same project!",
+     "translation_zh": "乙：你说什么呢？？我们既不是什么亲如窃贼，也不是灵魂知己，更绝对不是什么最强组合。我们只是在努力做同一个项目！"
+    }
+   ]
+  },
+  {
+   "title": "'Kitchen-Table' Is a Type of Politics",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Today we talk about different kinds of politics.",
+     "translation_zh": "今天我们聊聊几种不同的“政治”。"
+    },
+    {
+     "text": "We start with kitchen-table politics . The kitchen is often considered the hub, or center, of the home. It is where we gather to not only share a meal but to talk about the events of the day. We often discuss issues of importance with our family and friends around the dining room table.",
+     "translation_zh": "先说 kitchen-table politics（餐桌政治）。厨房常被视为家庭的中枢。我们不仅在那里吃饭，也在那里谈论一天的见闻。我们常常围着餐桌与家人朋友讨论要紧的事。"
+    },
+    {
+     "text": "So, kitchen-table issues are those that affect individuals and their families daily. A family might discuss these issues at the kitchen table during mealtimes.",
+     "translation_zh": "所以，kitchen-table issues（餐桌议题）指那些每天影响个人和家庭的事务。一家人吃饭时，可能就在餐桌上讨论这些问题。"
+    },
+    {
+     "text": "Rising gas and food prices are two good examples of kitchen-table politics. These issues affect decisions we make day to day. They are sometimes also called dinner -table politics. Or we could describe them as bread-and-butter issues.",
+     "translation_zh": "油价和食品价格上涨就是餐桌政治的两个好例子。这些问题影响我们每天的决定。它们有时也被称为 dinner-table politics，或者 bread-and-butter issues（面包黄油议题）。"
+    },
+    {
+     "text": "Merriam Webster dictionary defines bread-and-butter issues as \"being as basic as the earning of one's livelihood .\" The online Cambridge Dictionary defines a bread-and-butter issue as \"a subject or problem that relates directly to most people's needs and interests.\"",
+     "translation_zh": "《韦氏词典》将 bread-and-butter issues 定义为“与谋生同样基本的事务”。《剑桥在线词典》则解释为“与大多数人的需求和利益直接相关的话题或问题”。"
+    },
+    {
+     "text": "For example, affordable food prices and availability of good healthcare are the kinds of bread-and-butter political issues that people vote on.",
+     "translation_zh": "例如，亲民的食品价格、便利的优质医疗，都是人们投票时关心的面包黄油式政治议题。"
+    },
+    {
+     "text": "The noun bread and butter means a way of making a living. For example, for a creative writer, her ideas are her bread and butter.",
+     "translation_zh": "名词 bread and butter 指谋生的手段。例如，对一位创意作家来说，她的点子就是她的饭碗。"
+    },
+    {
+     "text": "So, bread-and-butter political issues deal with our ability to provide for the needs of ourselves and our families.",
+     "translation_zh": "因此，面包黄油式的政治议题，关乎我们养活自己和家人的能力。"
+    },
+    {
+     "text": "Next, let's talk about green politics . These political issues deal with caring for the natural environment. Green politics can cover ideas such as environmental sustainability , recycling , and threats to wildlife. The natural world is central to green politics.",
+     "translation_zh": "接下来说 green politics（绿色政治）。这类政治议题关注爱护自然环境，涵盖环境可持续、回收利用、野生动物面临的威胁等议题。自然界是绿色政治的核心。"
+    }
+   ]
+  },
+  {
+   "title": "Sometimes We 'Spread Ourself Too Thin'",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Today we talk about our busy lives. Many people have family and work responsibilities. We might have religious or community activities. Taking care of our health is also important. And let's not forget about our personal projects, our interests, and our friendships.",
+     "translation_zh": "今天聊聊我们忙碌的生活。许多人有家庭和工作的责任，可能还有宗教或社区活动。照顾好身体同样重要。更别忘了个人项目、兴趣爱好和友情。"
+    },
+    {
+     "text": "With everything on our plate , it is easy to feel overwhelmed , overextended, and overcommitted .",
+     "translation_zh": "盘子里堆了这么多事（everything on our plate），人很容易感到不堪重负、分身乏术、应接不暇。"
+    },
+    {
+     "text": "However, if we try to do too much, we may spread ourselves too thin . This expression means we have taken on too much. We are pushed to the limit .",
+     "translation_zh": "然而，如果试图做太多事，我们就可能 spread ourselves too thin（把自己摊得太薄）。这个表达的意思是揽下了过多的事情，被逼到了极限。"
+    },
+    {
+     "text": "People who are spread too thin , take on too many jobs, projects, or goals. The heavy load requires more energy or attention than they possess.",
+     "translation_zh": "把自己摊得太薄的人，接了太多工作、项目或目标。沉重的担子需要的精力和注意力超出了他们的所有。"
+    },
+    {
+     "text": "If we work on many projects simultaneously, or at the same time, it is possible that none will get done well, if they get done at all. And it is possible such multitasking could stress us out.",
+     "translation_zh": "如果同时（simultaneously）推进许多项目，很可能没有一件能做好——如果还能做完的话。这样多线作战还可能让我们压力爆表。"
+    },
+    {
+     "text": "Being spread too thin can also be described as biting off more than we can chew . When we bite off more than we can chew, we attempt to do more than is possible.",
+     "translation_zh": "把自己摊得太薄，也可以说成 biting off more than we can chew（咬下嚼不动的一大口）：企图做超出自己能力的事。"
+    }
+   ]
+  },
+  {
+   "title": "Knee Jerk and Gut Reactions: When We Are Not in Control",
+   "level": "cet4",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "In life, some of our decisions and actions are well thought out. They involve research, examination, and time for thought. And other decisions and actions are not well thought out. We make them quickly, without thinking, almost like a pure physical reaction.",
+     "translation_zh": "人生中，我们有些决定和行动经过深思熟虑，有研究、有考察、有思考的时间；而另一些决定和行动则未经斟酌——我们不假思索地快速做出，几乎像纯粹的生理反应。"
+    },
+    {
+     "text": "We can call these decisions, actions or reactions knee-jerk .",
+     "translation_zh": "这类决定、行动或反应，我们可以称为 knee-jerk（膝跳式）。"
+    },
+    {
+     "text": "This term comes from a medical process. Meriam Webster defines the noun \"knee jerk\" as \"an involuntary forward kick produced by a light blow on the tendon below the kneecap.\" It is an involuntary action. It's automatic.",
+     "translation_zh": "这个词来自一种医学检查。《韦氏词典》把名词 knee jerk 定义为“轻敲膝盖骨下方肌腱引起的不自主前踢”。它是不自主的、自动发生的。"
+    },
+    {
+     "text": "The words \"involuntary\" and \"automatic\" are important when understanding the term \"knee jerk\" and when to use it. Knee-jerk reactions seem to happen automatically without a decision-making process.",
+     "translation_zh": "“不自主”和“自动”是理解和使用 knee jerk 的关键。膝跳式反应仿佛自动发生，不经过决策过程。"
+    },
+    {
+     "text": "We often use \"knee jerk\" as an adjective.",
+     "translation_zh": "我们常把 knee-jerk 用作形容词。"
+    },
+    {
+     "text": "Like hitting your kneecap to move your leg, knee-jerk reactions or statements also seem like an involuntary reflex .",
+     "translation_zh": "就像敲击膝盖腿就会动一样，膝跳式的反应或言论也像一种不受控制的反射。"
+    },
+    {
+     "text": "\"Knee jerk\" also describes predictable behavior. Again, hit the knee, the leg will kick every time. So \"knee jerk\" describes someone who always reacts quickly and without enough thought.",
+     "translation_zh": "knee jerk 还形容可以预料的行为——敲一下膝盖，腿每次都会踢。所以它也形容那种总是反应飞快却欠考虑的人。"
+    },
+    {
+     "text": "For example, let's say you are on a team with someone who never faces responsibility for their mistakes in the game. If brought to account, the player always blames the dropped ball on other teammates. You can say that player is having a knee-jerk reaction to criticism. They have a go-to response. It's like a reflex they can't control.",
+     "translation_zh": "举个例子。假设你的队友从不为自己在比赛中的失误承担责任，一被追问，就总把丢球怪到其他队友头上。你可以说这名球员对批评有膝跳式反应：他有一套现成的应对，就像无法控制的反射。"
+    },
+    {
+     "text": "We often use knee-jerk in a criticizing or negative way.",
+     "translation_zh": "knee-jerk 通常带着批评或负面的意味。"
+    },
+    {
+     "text": "Now, a gut reaction also happens without thinking. But it is a bit different than a knee-jerk response. A gut reaction is a feeling. When we have a gut reaction, our instincts are telling us that something may not be right. Gut reactions are instinctual warnings.",
+     "translation_zh": "而 gut reaction（直觉反应）同样不经思考，却与膝跳式反应有些不同。直觉反应是一种感觉：当我们产生直觉反应时，是本能在告诉我们事情可能不对劲。直觉反应是发自本能的警告。"
+    },
+    {
+     "text": "So, we also use this expression a bit differently than \"knee jerk.\" We usually talk about our own gut reactions or impulses, not others.",
+     "translation_zh": "因此这个表达的用法也和 knee jerk 略有不同：我们通常谈论自己的直觉反应或冲动，而不是别人的。"
+    },
+    {
+     "text": "One day, I was hiking on a mountain in California. I had hiked for about two hours and was near the top. The view, I was told, was truly beautiful. I couldn't wait to see it! Then, suddenly, I had a strange feeling. Something just didn't feel right. I can't explain why, but my gut instinct was to turn around and head back down the mountain. I later found out that a dangerous bear had been sighted in the same area that I had fled. I am so thankful I listened to my gut instinct.",
+     "translation_zh": "有一天，我在加利福尼亚爬山。爬了大约两小时，快到山顶了。听说山顶的景色美极了，我迫不及待想看到。突然，我产生了一种奇怪的感觉——说不上为什么，就是觉得不对劲。我的直觉让我掉头下山。后来我得知，就在我逃离的那片区域，有人目击到一头危险的熊。我真庆幸自己听从了直觉。"
+    }
+   ]
+  },
+  {
+   "title": "'The Celebrated Jumping Frog of Calaveras County,' by Mark Twain",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "A friend of mine in the East asked me to visit old Simon Wheeler, to ask about my friends friend, Leonidas W. Smiley. I did as my friend asked me to do and this story is the result.",
+     "translation_zh": "东部的一位朋友托我去拜访西蒙·威勒老头，打听他朋友的朋友列昂尼达斯·W·斯迈利的下落。我照朋友的嘱托做了，这篇故事就是结果。"
+    },
+    {
+     "text": "I found Simon Wheeler sleeping by the stove in the ruined mining camp of Angels.",
+     "translation_zh": "我在天使矿营的废墟里找到了西蒙·威勒，他正靠着火炉打盹。"
+    },
+    {
+     "text": "I saw that he was fat and had no hair, and had a gentle and simple look upon his peaceful face. He woke up, and gave me \"good-day.\"",
+     "translation_zh": "我看他身材肥胖，头顶光秃，平和的脸上带着安详质朴的神情。他醒过来，向我道了声“日安”。"
+    },
+    {
+     "text": "I told him a friend had asked me to find out about a friend named Leonidas W. Smiley, who he heard was at one time living in Angels Camp. I added that if Mr. Wheeler could tell me anything about this Leonidas W. Smiley, I would feel a great responsibility to him.",
+     "translation_zh": "我告诉他，一位朋友托我打听一个叫列昂尼达斯·W·斯迈利的人，听说此人一度住在天使营。我还说，要是威勒先生能告诉我这位斯迈利的任何消息，我将感激不尽。"
+    },
+    {
+     "text": "Simon Wheeler forced me into a corner with his chair and began telling me this long story. He never smiled, he never frowned. But all through the endless story there was a feeling of great seriousness and honesty. This showed me plainly that he thought the heroes of the story were men of great intelligence.",
+     "translation_zh": "西蒙·威勒用椅子把我逼到墙角，开始讲这个长长的故事。他从不微笑，也从不皱眉。但在这没完没了的故事里，始终有一种郑重其事的诚恳。这分明让我看出，他真心认为故事里的主人公都是了不起的聪明人。"
+    },
+    {
+     "text": "I let him go on in his own way, and never stopped him once. This is the story Simon Wheeler told.",
+     "translation_zh": "我由着他按自己的方式讲下去，一次也没打断。下面就是西蒙·威勒讲的故事。"
+    },
+    {
+     "text": "Leonidas W. .... hm... Le... well, there was a man here once by the name of Jim Smiley, in the winter of 1849 -- or may be it was the spring of 1850. Anyway, he was the strangest man. He was always making money on anything that turned up if he could get anybody to try to make money on the other side. And if he could not do that, he would change sides.",
+     "translation_zh": "列昂尼达斯·W……嗯……列……对了，这儿从前倒有过一个叫吉姆·斯迈利的人，那是 1849 年冬天——也可能是 1850 年春天。反正他是个最古怪的人。只要能找到人跟他对赌，碰上什么事他都要赌钱；要是找不着，他就换到另一边去赌。"
+    },
+    {
+     "text": "And he was lucky, uncommon lucky. He most always was a winner. If there was a dog-fight, he would try to win money on it. If there was a cat-fight, he would take the risk. If there was a chicken-fight, he would try to win money on it. Why, if there was two birds setting on a fence, he would want you to decide which one would fly first so he could win money.",
+     "translation_zh": "而且他手气好，出奇地好，十赌九赢。有斗狗的，他要赌钱；有斗猫的，他也敢下注；有斗鸡的，他还是要赌。嘿，就是两只鸟落在篱笆上，他也要你猜哪只先飞，好赌上一把。"
+    },
+    {
+     "text": "Lots of the boys here have seen that Smiley and can tell you about him. Why, it did not matter to him. He would try to make money on anything. He was the most unusual man. Parson Walker's wife was very sick once, for a long time, and it seemed as if they were not going to save her.",
+     "translation_zh": "这儿的小伙子很多都见过那个斯迈利，都能给你讲讲他。嘿，对他来说赌什么都无所谓，什么都能拿来赌钱，他就是这么个怪人。沃克牧师的太太有一回病得很重，病了好久，眼看就救不活了。"
+    },
+    {
+     "text": "But one morning he come in, and Smiley asked him how was his wife, and he said she was better, thank God. And Smiley, before he thought, says, \"Well, I'll risk my money she will not get well.\"",
+     "translation_zh": "可是有一天早上牧师走进来，斯迈利问他太太怎么样了。牧师说好多了，感谢上帝。斯迈利想都没想，张口就说：“好吧，我押钱赌她好不了。”"
+    },
+    {
+     "text": "And Smiley had a little small dog. To look at the dog, you would think he was not worth anything but to sit around and look mean and look for a chance to steal something. But as soon as there was money, he was a different dog. Another dog might attack and throw him around two or three times. Then all of a sudden Smiley's dog would grab that other dog by his back leg and hang on till the men said it was over.",
+     "translation_zh": "斯迈利还养过一条小狗。光看模样，你会觉得这狗一文不值，只会闲坐着等机会偷东西。可是一旦押上了钱，它就变成另一条狗了。别的狗能把它扑倒，甩来甩去摔上两三回，然后冷不防地，斯迈利的狗就咬住对方的后腿不松口，直到人们认输为止。"
+    }
+   ]
+  },
+  {
+   "title": "Raise Your English Level with More Vocabulary",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Let's look at two English learners. One knows about 500 words and understands how they are used in a sentence. The other knows about 1,000 words but has some problems with grammar.",
+     "translation_zh": "来看两位英语学习者：一位认识大约 500 个单词，并且理解它们在句子里的用法；另一位认识约 1000 个单词，但语法上有些问题。"
+    },
+    {
+     "text": "Which person can understand and communicate more in English?",
+     "translation_zh": "哪一位能用英语理解和交流得更多？"
+    },
+    {
+     "text": "Clearly, it is the person who knows 1,000 words.",
+     "translation_zh": "显然是认识 1000 个单词的那位。"
+    },
+    {
+     "text": "Some studies have shown that for learners to fully understand a written work, they need to know 95 percent or more of the words in it. That means that if there are only five or more words you do not know in a 100-word text, you might not really understand it!",
+     "translation_zh": "一些研究表明，学习者要完全读懂一篇文章，需要认识其中 95% 以上的单词。也就是说，一篇 100 词的文章里只要有五个以上生词，你可能就读不太懂了！"
+    },
+    {
+     "text": "In today's program, we will give you some advice for building up your vocabulary. \"Vocabulary\" can mean a single word, two words such as phrasal verbs , or many words together, such as an expression.",
+     "translation_zh": "在今天的节目里，我们给你一些扩充词汇量的建议。“词汇”可以是单个单词，可以是短语动词这样的两个词，也可以是多个词构成的表达。"
+    },
+    {
+     "text": "There are two important things to keep in mind when trying to learn new vocabulary.",
+     "translation_zh": "学习新词汇时，有两件重要的事要记住。"
+    },
+    {
+     "text": "First, connect new words to a story or a situation. This makes it easier to remember vocabulary than studying words from lists.",
+     "translation_zh": "第一，把生词和一个故事或情境联系起来。这比对着单词表死记硬背更容易记住。"
+    },
+    {
+     "text": "Second, be active , not passive . Make yourself use the new words.",
+     "translation_zh": "第二，要主动，不要被动。逼自己使用新学的词。"
+    }
+   ]
+  },
+  {
+   "title": "Learn New Skills with Microcredentials",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "In today's workplace, what you learned in the usual college courses may not be very useful later in life.",
+     "translation_zh": "在当今的职场，大学常规课程里学到的东西，日后可能派不上多大用场。"
+    },
+    {
+     "text": "For example, in the field of information technology, workers might never use BASIC, the computer language that was taught in the 1990s. But they might need to know Python or SQL.",
+     "translation_zh": "比如在信息技术领域，员工可能永远用不上 BASIC——上世纪九十年代教的计算机语言，但他们可能需要会 Python 或 SQL。"
+    },
+    {
+     "text": "The answer for students or workers is a professional certificate program, or what is called microcredential.",
+     "translation_zh": "对学生和职场人来说，答案是职业证书课程，也就是所谓的微证书（microcredential）。"
+    },
+    {
+     "text": "UNESCO, the world's education agency, defines microcredential as professional certification that centers on a set of learning outcomes in a narrow field. It is completed over a shorter time than a traditional university program, from a week to a month.",
+     "translation_zh": "联合国教科文组织把微证书定义为聚焦于某个狭窄领域一组学习成果的职业认证。它的学时比传统大学课程短，从一周到一个月不等。"
+    },
+    {
+     "text": "The most popular fields in which microcredentials appear are data analytics , information technology support and cybersecurity . The courses are often developed by technology businesses like Google, Salesforce, Meta, Intuit and IBM. The businesses provide a certificate when a student finishes the course.",
+     "translation_zh": "微证书最热门的领域是数据分析、信息技术支持和网络安全。这些课程通常由谷歌、Salesforce、Meta、Intuit 和 IBM 等科技企业开发，学生修完课程后由企业颁发证书。"
+    },
+    {
+     "text": "Coursera, an online educational service, recently released a report on how microcredentials are preparing students for jobs and affecting higher education schools. It says that 51 percent of colleges in the United States that offer microcredentials also provide school credit and more plan to do so in the next few years.",
+     "translation_zh": "在线教育平台 Coursera 最近发布报告，分析微证书如何帮学生为就业做准备，又如何影响高校。报告说，美国提供微证书的高校中有 51% 同时给予学分，未来几年还会有更多高校跟进。"
+    },
+    {
+     "text": "Some colleges include one or more courses leading to microcredentials as part of their usual programs. At Hawaii Pacific University, school leaders say including professional certifications in its business program has sharply increased the number of interested students.",
+     "translation_zh": "一些大学把通往微证书的课程纳入常规项目。夏威夷太平洋大学的负责人说，把职业认证纳入商科项目后，感兴趣的学生人数大幅增加。"
+    },
+    {
+     "text": "How to find the right microcredential?",
+     "translation_zh": "如何找到合适的微证书？"
+    },
+    {
+     "text": "For students, Credential Finder offers a way to search for the right microcredential offerings by field of study or industry.",
+     "translation_zh": "学生可以用 Credential Finder 按学科或行业检索合适的微证书项目。"
+    },
+    {
+     "text": "For example, if you are studying information science, you may take Google Data Analytics or an IBM Data Analyst course. If you are working toward a degree in business administration, you may take a Google Project Management course. Your university program's advisors should be helpful in identifying the best certificate programs for your area of study.",
+     "translation_zh": "比如，学信息科学的可以修谷歌数据分析或 IBM 数据分析师课程；攻读工商管理学位的可以修谷歌项目管理课程。所在院系的导师也能帮你找到最适合你专业方向的证书项目。"
+    },
+    {
+     "text": "Be sure to check with your country's government for more information on special training programs. One example is Ukraine, which is aiming to meet its shortage of skilled workers with its ReSkill UA initiative . It provides help with finding training and employment.",
+     "translation_zh": "还可以向所在国家的政府了解专项培训计划。乌克兰就是一例：该国正通过 ReSkill UA 计划应对技术工人短缺，提供培训和就业方面的帮助。"
+    },
+    {
+     "text": "How much do microcredentials cost?",
+     "translation_zh": "微证书要花多少钱？"
+    },
+    {
+     "text": "Many of the course providers permit learners to use the materials for free, but to earn a certification, payment is required.",
+     "translation_zh": "许多课程提供方允许免费使用学习材料，但要获得认证就需要付费。"
+    },
+    {
+     "text": "Coursera has a monthly fee of $59 or a yearly fee of $399 for its Coursera Plus membership. For courses that universities offer for credit, the payment will depend on the price set by the school.",
+     "translation_zh": "Coursera 的月费为 59 美元，Coursera Plus 会员年费 399 美元。大学提供学分的课程，费用由学校定价。"
+    }
+   ]
+  },
+  {
+   "title": "In Uganda, Cost of Attending School Keeps Children Home",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "The World Bank said last year that 54 percent of adults in Africa south of the Sahara Desert ranked the issue of paying school costs higher than medical or other costs.",
+     "translation_zh": "世界银行去年表示，撒哈拉以南非洲有 54% 的成年人认为，支付学费的压力比医疗等其他开支更大。"
+    },
+    {
+     "text": "The aid organization said school fees were the biggest financial worry for 40 percent of people in Uganda. In that country, a top government-supported school reportedly costs $700 for a three-month term. That is a lot of money in a country where yearly economic activity per person was $864 in 2023.",
+     "translation_zh": "该机构说，在乌干达，学费是 40% 的人最大的经济顾虑。据报道，该国一所顶尖公立学校一个学期（三个月）的费用是 700 美元——在一个 2023 年人均年经济产出仅 864 美元的国家，这是一大笔钱。"
+    },
+    {
+     "text": "World Bank information shows that African countries in the area also have the highest rates of children out of school in the world. Parents in Uganda report unpredictable increases in the cost of attending school, or tuition, as a cause of tension. Some critics are calling for laws to protect parents from exploitation.",
+     "translation_zh": "世界银行的数据显示，该地区的非洲国家失学儿童比例也是全球最高的。乌干达的家长反映，上学费用（学费）的上涨难以预料，造成了紧张情绪。一些批评者呼吁立法保护家长免受盘剥。"
+    },
+    {
+     "text": "The Equal Opportunities Commission is a government agency that reports on the issues of inequality and discrimination. It released a report in September that called for punishment against government-supported schools that demand fees that are too high. It warned that arbitrarily raising fees can force children to drop out of school.",
+     "translation_zh": "平等机会委员会是负责报告不平等和歧视问题的政府机构。它在九月发布报告，呼吁惩处收费过高的公立学校，并警告说任意涨价会迫使孩子辍学。"
+    },
+    {
+     "text": "The Uganda Bureau of Statistics says that children's attendance in early grades is about 68 percent. But the percentage falls to 22 percent for secondary school. The main reason given is financial difficulty.",
+     "translation_zh": "乌干达统计局称，低年级儿童的入学率约为 68%，但到中学阶段骤降至 22%，主要原因就是经济困难。"
+    },
+    {
+     "text": "Uganda has a program of secondary education for all students. It was introduced in 2007. However, schools are not in good condition. The schools usually do not require tuition , but parents must pay for uniforms , textbooks and other costs.",
+     "translation_zh": "乌干达 2007 年起推行面向所有学生的中等教育计划。然而学校条件不佳。这些学校通常不收学费，但家长必须支付校服、课本等费用。"
+    },
+    {
+     "text": "Private schools are more popular but also more costly. Spokesperson for the Ministry of Education Dennis Mugimba said the government is not interested in making rules about prices. Mugimba said setting private school fees is \"purely administrative and it is adjusted according to the business environment.\" But he said costs linked to \"capital development\" should not be the responsibility of parents.",
+     "translation_zh": "私立学校更受欢迎，但也更昂贵。教育部发言人丹尼斯·穆吉姆巴说，政府无意对价格定规矩。他说私立学校的收费“纯属行政事务，会根据经营环境调整”，但与“基本建设”相关的费用不应由家长承担。"
+    },
+    {
+     "text": "The number of private schools across Uganda has increased. The Associated Press (AP) reports that they are now a majority of the country's schools. But some people with ties to education say placing importance on the profitability of education as a business is worrying.",
+     "translation_zh": "乌干达各地的私立学校数量不断增加。美联社报道说，私立学校如今已占全国学校的多数。但一些教育界人士担心，把教育当生意、把盈利放在首位的倾向令人忧虑。"
+    },
+    {
+     "text": "Fagil Mandy is a former inspector of schools. Mandy said there should be standardized rules to make school fees predictable for everyone.",
+     "translation_zh": "法吉尔·曼迪曾任学校督学。他说应当制定统一规则，让所有人都能预知学费。"
+    },
+    {
+     "text": "It is normal for both private and government-supported schools to request money for many projects. These can include buying a bus or purchasing laboratory equipment.",
+     "translation_zh": "公立和私立学校为各种项目筹钱都很常见，比如购买校车或实验室设备。"
+    },
+    {
+     "text": "Shalom Mirembe is a student who spoke to the AP. Her mother takes care of four children. Her father recently died.",
+     "translation_zh": "沙洛姆·米伦贝是一位接受美联社采访的学生。她的母亲要照顾四个孩子，父亲不久前去世了。"
+    },
+    {
+     "text": "The school Mirembe attends near Kampala costs $300 per term. But her mother sends Mirembe to school without paying. She is depending on the mercy of officials.",
+     "translation_zh": "米伦贝就读的学校在坎帕拉附近，每学期收费 300 美元。母亲没交钱就把她送去上学，全凭校方的怜悯。"
+    },
+    {
+     "text": "But Joanita Seguya, a teacher at Wampewo Ntakke Secondary, said schools are taking measures to bar students from school if their parents do not pay. Seguya said of the school's 2100 students, 400 are from families that struggle to pay fees.",
+     "translation_zh": "但万佩沃·恩塔克中学的教师乔安妮塔·塞古亚说，学校正在采取措施，把家长欠费的学生拒之门外。她说全校 2100 名学生中，有 400 人来自交费困难的家庭。"
+    },
+    {
+     "text": "Twenty-year-old Mirembe is taking her final exams this year. At one point, school officials were going to bar her from school because her mother had failed to pay the fees. But when school administrators found out that her father had died recently, they permitted her to return. Some of her teachers attended the funeral.",
+     "translation_zh": "二十岁的米伦贝今年要参加毕业考试。学校一度因为母亲欠费要将她拒之门外，但当校方得知她父亲刚刚去世后，允许她返校。她的几位老师还参加了葬礼。"
+    },
+    {
+     "text": "But other families are not so fortunate.",
+     "translation_zh": "但其他家庭就没有这么幸运了。"
+    },
+    {
+     "text": "Moses Serikomawa is jobless with seven children. He said paying $200 in school fees each term is too much when the family lacks food sometimes. But he added, \"The children still want to go back to school.\"",
+     "translation_zh": "莫塞斯·塞里科马瓦失业在家，有七个孩子。他说家里有时连饭都吃不上，每学期 200 美元的学费实在难以负担。但他补充道：“孩子们还是想回学校。”"
+    }
+   ]
+  },
+  {
+   "title": "Learning How to Ask Questions",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Suzanne Meyer, the assistant director of the English Language Institute at the University of Tennessee, Knoxville, says that many students need to develop critical thinking skills.",
+     "translation_zh": "田纳西大学诺克斯维尔分校英语语言学院助理主任苏珊娜·迈耶说，许多学生需要培养批判性思维能力。"
+    },
+    {
+     "text": "In other words, students need to learn how to collect information, and then evaluate the information and apply it to a new context .",
+     "translation_zh": "换句话说，学生需要学会收集信息，然后评估信息，并把它应用到新的语境中。"
+    },
+    {
+     "text": "\"We need to get students actively engaged in inquiry , from the beginning levels on, into those levels where they really are close to professional and university contexts.\"",
+     "translation_zh": "“我们要让学生从入门阶段起就主动参与探究，一直到接近专业和大学语境的阶段。”"
+    },
+    {
+     "text": "One way to develop critical thinking skills, Meyer says, is to teach students to be creative about the types of questions that they ask.",
+     "translation_zh": "迈耶说，培养批判性思维的一种方法，是教学生在提问的类型上发挥创造力。"
+    },
+    {
+     "text": "Benefits of question-asking for English learners",
+     "translation_zh": "提问对英语学习者的好处"
+    },
+    {
+     "text": "Meyer says that there are many benefits to using question-asking activities with English learners. Question-asking activities help students to become better language learners.",
+     "translation_zh": "迈耶说，提问练习对英语学习者益处很多。它能帮助学生成为更好的语言学习者。"
+    },
+    {
+     "text": "\"Question-asking overall helps students be better language learners. Not for the obvious, because you ask a question you get an answer. Often, questions are the first point of contact. And so if my question is not good, then that's going to direct the level of our conversation.\"",
+     "translation_zh": "“总体而言，提问能让学生更善于学语言。原因不只是显而易见的‘有问必有答’。问题往往是交流的第一触点。如果我的问题不好，对话的层次也就上不去。”"
+    },
+    {
+     "text": "Meyer also says that question-asking may help develop critical thinking skills by allowing for more interactions :",
+     "translation_zh": "迈耶还说，提问能带来更多互动，从而有助于培养批判性思维："
+    },
+    {
+     "text": "\"People who can ask questions are very confident. And when you are confident, you can have more interaction. That extra interaction might lead to critical thinking. Because you are more likely to actually integrate in some fashion into a new setting if you are in an ESL scenario. So, I think overall, just the whole question-asking idea has so many benefits.\"",
+     "translation_zh": "“会提问的人很自信。自信了，互动就多。额外的互动可能催生批判性思维。因为如果你身处第二语言环境，互动越多，你就越可能真正融入新环境。所以总的来说，提问这件事好处太多了。”"
+    }
+   ]
+  }
+ ]
+}

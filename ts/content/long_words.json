@@ -1,0 +1,124 @@
+[
+  {
+    "word": "internationalization",
+    "parts": ["international", "ization"],
+    "aliases": ["i18n"],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "国际化"
+  },
+  {
+    "word": "accessibility",
+    "parts": ["access", "ibility"],
+    "aliases": ["a11y"],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "可访问性"
+  },
+  {
+    "word": "authentication",
+    "parts": ["authentic", "ation"],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "认证"
+  },
+  {
+    "word": "authorization",
+    "parts": ["author", "ization"],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "授权"
+  },
+  {
+    "word": "configuration",
+    "parts": ["configur", "ation"],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "配置"
+  },
+  {
+    "word": "initialization",
+    "parts": ["initial", "ization"],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "初始化"
+  },
+  {
+    "word": "serialization",
+    "parts": ["serial", "ization"],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "序列化"
+  },
+  {
+    "word": "synchronization",
+    "parts": ["synchron", "ization"],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "同步"
+  },
+  {
+    "word": "compatibility",
+    "parts": ["compat", "ibility"],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "兼容性"
+  },
+  {
+    "word": "performance",
+    "parts": ["perform", "ance"],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "性能"
+  },
+  {
+    "word": "communication",
+    "parts": ["communi", "cation"],
+    "domain": "workplace",
+    "tier": 2,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "沟通"
+  },
+  {
+    "word": "collaboration",
+    "parts": ["collabor", "ation"],
+    "domain": "workplace",
+    "tier": 2,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "协作"
+  },
+  {
+    "word": "responsibility",
+    "parts": ["respons", "ibility"],
+    "domain": "workplace",
+    "tier": 3,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "责任"
+  },
+  {
+    "word": "conversation",
+    "parts": ["convers", "ation"],
+    "domain": "everyday",
+    "tier": 2,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "对话"
+  },
+  {
+    "word": "opportunity",
+    "parts": ["opportun", "ity"],
+    "domain": "everyday",
+    "tier": 3,
+    "source_id": "keyloop:long-words:manual",
+    "note_zh": "机会"
+  }
+]

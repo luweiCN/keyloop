@@ -1,0 +1,132 @@
+[
+  {
+    "id": "typescript-modern",
+    "language": "typescript",
+    "framework": null,
+    "items": [
+      "=> ?. ?? as const satisfies",
+      "Record<string, unknown> Array<T>",
+      "${value} `template ${name}`",
+      "items?.map((item) => item.id) ?? []",
+      "value !== null && value !== undefined",
+      "type Props<T> = { value: T }"
+    ]
+  },
+  {
+    "id": "javascript-modern",
+    "language": "javascript",
+    "framework": null,
+    "items": [
+      "=> ?. ?? ...rest",
+      "const { data = [] } = response",
+      "items.filter((item) => item.enabled)",
+      "await import(`./${name}.js`)",
+      "value !== null && value !== undefined",
+      "new Map(Object.entries(cache))"
+    ]
+  },
+  {
+    "id": "vue-template",
+    "language": "vue",
+    "framework": "vue",
+    "items": [
+      "v-if v-else v-for :key @click",
+      "{{ item.name }} :class=\"classes\"",
+      "defineProps<{ modelValue: string }>()",
+      "computed(() => items.value.filter(Boolean))",
+      "watch(() => route.params.id, load)",
+      "<template #default=\"{ item }\">"
+    ]
+  },
+  {
+    "id": "rust-core",
+    "language": "rust",
+    "framework": null,
+    "items": [
+      ":: -> => ? 'a",
+      "Result<T, E> Option<&str>",
+      "match value { Some(item) => item, None => return }",
+      "items.iter().filter(|item| item.enabled)",
+      "#[derive(Debug, Clone)]",
+      "Arc<Mutex<VecDeque<Event>>>"
+    ]
+  },
+  {
+    "id": "solidity-evm",
+    "language": "solidity",
+    "framework": "evm",
+    "items": [
+      "=> indexed payable external",
+      "mapping(address => uint256) private balances",
+      "event Transfer(address indexed from, address indexed to)",
+      "require(value > 0, \"invalid value\")",
+      "modifier onlyOwner() { _; }",
+      "uint256[] memory ids = new uint256[](count)"
+    ]
+  },
+  {
+    "id": "css-family",
+    "language": "css",
+    "framework": null,
+    "items": [
+      "@media (min-width: 48rem)",
+      ":root { --accent: #2563eb; }",
+      ".card[data-state=\"active\"]",
+      "grid-template-columns: minmax(0, 1fr)",
+      "color-mix(in srgb, var(--accent) 20%, transparent)",
+      ".stack > * + *"
+    ]
+  },
+  {
+    "id": "scss-sass",
+    "language": "scss",
+    "framework": "scss",
+    "items": [
+      "$space-4 !default",
+      "@mixin focus-ring($color)",
+      "@include media-breakpoint-up(md)",
+      "&__title { font-weight: 600; }",
+      "@each $tone, $value in $tones",
+      ".button--#{$tone}"
+    ]
+  },
+  {
+    "id": "less-antd",
+    "language": "less",
+    "framework": "less",
+    "items": [
+      "@primary-color: #1677ff;",
+      ".button(@color) { color: @color; }",
+      "&:hover { border-color: @primary-color; }",
+      "@media (min-width: @screen-md)",
+      ".badge[data-state=\"@{state}\"]",
+      ".layout() { display: grid; }"
+    ]
+  },
+  {
+    "id": "react-jsx",
+    "language": "typescript",
+    "framework": "react",
+    "items": [
+      "useEffect(() => { return () => cleanup(); }, [])",
+      "<Button onClick={() => setOpen(true)} />",
+      "const [value, setValue] = useState<string>(\"\")",
+      "children?: React.ReactNode",
+      "event.currentTarget.value",
+      "memo(forwardRef<HTMLDivElement, Props>(Component))"
+    ]
+  },
+  {
+    "id": "nestjs-decorators",
+    "language": "typescript",
+    "framework": "nestjs",
+    "items": [
+      "@Controller(\"users\") @Get(\":id\")",
+      "@Injectable() constructor(private readonly service: UserService)",
+      "@Param(\"id\") id: string",
+      "@Body() input: CreateUserDto",
+      "Promise<UserDto[]>",
+      "throw new NotFoundException()"
+    ]
+  }
+]
