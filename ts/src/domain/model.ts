@@ -25,6 +25,7 @@ export type TrainingModule =
   | "foundation_input"
   | "everyday_english"
   | "programming_basics"
+  | "custom_corpus"
   | "code_practice";
 
 export type TrainingCategory =

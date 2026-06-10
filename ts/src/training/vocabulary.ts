@@ -16,6 +16,45 @@ export interface PersonalVocabularyEntry {
   archived: boolean;
 }
 
+export interface CorpusCollectionMeta {
+  slug: string;
+  name: string;
+  description?: string;
+  created_at: string;
+  archived: boolean;
+}
+
+export interface CorpusCollectionsStore {
+  version: 1;
+  collections: CorpusCollectionMeta[];
+}
+
+export function emptyCollectionsStore(): CorpusCollectionsStore {
+  return { version: 1, collections: [] };
+}
+
+export function upsertCorpusCollection(
+  store: CorpusCollectionsStore,
+  meta: CorpusCollectionMeta,
+): CorpusCollectionsStore {
+  const others = store.collections.filter((c) => c.slug !== meta.slug);
+  return { version: 1, collections: [...others, meta] };
+}
+
+/** Count active vocabulary entries per tag, for topic-collection menus. */
+export function collectionTagCounts(
+  entries: readonly PersonalVocabularyEntry[],
+): Map<string, number> {
+  const counts = new Map<string, number>();
+  for (const entry of entries) {
+    if (entry.archived) continue;
+    for (const tag of entry.tags) {
+      counts.set(tag, (counts.get(tag) ?? 0) + 1);
+    }
+  }
+  return counts;
+}
+
 export interface PersonalVocabularyStore {
   version: 1;
   entries: PersonalVocabularyEntry[];

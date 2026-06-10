@@ -22,7 +22,12 @@ import {
   codeLengthLabel,
   everydayLengthLabel,
 } from "./labels";
-import type { OpenTuiMenuItem, OpenTuiMenuItemId, OpenTuiSubmenu } from "./menuItems";
+import type {
+  CustomCorpusSummary,
+  OpenTuiMenuItem,
+  OpenTuiMenuItemId,
+  OpenTuiSubmenu,
+} from "./menuItems";
 import type { OpenTuiSettingsView } from "./settingsItems";
 import {
   aggregateSpeed,
@@ -141,6 +146,7 @@ export interface OpenTuiStateOptions {
   practiceOptions?: OpenTuiPracticeOptionsState | undefined;
   speedUnit?: SpeedUnit | undefined;
   todayElapsedMs?: number | undefined;
+  customCorpus?: CustomCorpusSummary | undefined;
 }
 
 export type OpenTuiReturnRoute =
@@ -221,6 +227,7 @@ export interface OpenTuiSessionState {
   codeStyleSettings?: CodeStyleSettings | undefined;
   everydaySettings?: EverydayEnglishSettings | undefined;
   wordFormSettings?: OpenTuiWordFormSettings | undefined;
+  customCorpus?: CustomCorpusSummary | undefined;
   today_elapsed_ms?: number | undefined;
 }
 
@@ -591,6 +598,7 @@ function activateMainMenuItem(
     case "everyday":
     case "programming":
     case "code":
+    case "custom":
       return appState(
         state.language,
         { screen: "submenu", menu: itemId, selected_index: 0 },
@@ -612,6 +620,25 @@ function activateSubmenuItem(
   itemId: OpenTuiMenuItemId,
   context: BuildTargetContext,
 ): OpenTuiAppState {
+  if (itemId.startsWith("custom_tag_")) {
+    const tag = itemId.slice("custom_tag_".length);
+    const vocabularyContext = buildTargetContextForState(state, context, "standalone");
+    return runningState(
+      state.language,
+      itemId,
+      buildPersonalVocabularyPracticeTarget(
+        vocabularyContext.personalVocabulary ?? [],
+        vocabularyContext.records,
+        {
+          maxItems: vocabularyContext.personalVocabularyLimit ?? 8,
+          tag,
+          ...(vocabularyContext.now === undefined ? {} : { now: vocabularyContext.now }),
+        },
+      ),
+      undefined,
+      stateOptions(state),
+    );
+  }
   const effectiveContext = buildTargetContextForState(state, context);
   const foundationDrillId = foundationDrillForMenuItem(itemId);
   if (foundationDrillId !== undefined) {
@@ -720,6 +747,23 @@ function activateSubmenuItem(
         undefined,
         stateOptions(state),
       );
+    case "custom_my_words": {
+      const vocabularyContext = buildTargetContextForState(state, context, "standalone");
+      return runningState(
+        state.language,
+        itemId,
+        buildPersonalVocabularyPracticeTarget(
+          vocabularyContext.personalVocabulary ?? [],
+          vocabularyContext.records,
+          {
+            maxItems: vocabularyContext.personalVocabularyLimit ?? 8,
+            ...(vocabularyContext.now === undefined ? {} : { now: vocabularyContext.now }),
+          },
+        ),
+        undefined,
+        stateOptions(state),
+      );
+    }
     case "my_vocabulary": {
       const vocabularyContext = buildTargetContextForState(
         state,
@@ -932,6 +976,12 @@ function appState(
   if (options.wordFormSettings !== undefined) {
     state.wordFormSettings = cloneWordFormSettings(options.wordFormSettings);
   }
+  if (options.customCorpus !== undefined) {
+    state.customCorpus = {
+      totalWords: options.customCorpus.totalWords,
+      collections: options.customCorpus.collections.map((c) => ({ ...c })),
+    };
+  }
   if (options.todayElapsedMs !== undefined) {
     state.today_elapsed_ms = options.todayElapsedMs;
   }
@@ -996,6 +1046,9 @@ export function stateOptions(state: OpenTuiAppState): OpenTuiStateOptions {
   }
   if (state.wordFormSettings !== undefined) {
     options.wordFormSettings = state.wordFormSettings;
+  }
+  if (state.customCorpus !== undefined) {
+    options.customCorpus = state.customCorpus;
   }
   if (state.today_elapsed_ms !== undefined) {
     options.todayElapsedMs = state.today_elapsed_ms;
@@ -1158,6 +1211,7 @@ function clampIndex(index: number, length: number): number {
 
 export {
   liveOptionsAvailableForSource,
+  type CustomCorpusSummary,
   mainMenuItems,
   openTuiMenuItems,
   submenuForStandaloneItem,

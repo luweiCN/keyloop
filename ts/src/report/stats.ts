@@ -781,6 +781,7 @@ function moduleLabel(module: TrainingModule, language: Language): string {
     foundation_input: "基础输入",
     everyday_english: "日常英语",
     programming_basics: "编程基础",
+    custom_corpus: "自建语料库",
     code_practice: "代码实战",
   };
   const en: Record<TrainingModule, string> = {
@@ -789,6 +790,7 @@ function moduleLabel(module: TrainingModule, language: Language): string {
     foundation_input: "Foundation input",
     everyday_english: "Everyday English",
     programming_basics: "Programming basics",
+    custom_corpus: "My corpus",
     code_practice: "Code practice",
   };
   return language === "zh" ? zh[module] : en[module];

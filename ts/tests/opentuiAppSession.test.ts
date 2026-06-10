@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import {
   createOpenTuiInitialState,
+  openTuiMenuItems,
   defaultKeyAggregate,
   defaultSessionRecord,
   openTuiRouteLines,
@@ -26,7 +27,7 @@ describe("OpenTUI app session", () => {
     const context = appContext();
     const stats = reduceOpenTuiAppKey(
       createOpenTuiInitialState("en"),
-      key("7", "7"),
+      key("8", "8"),
       context,
     );
 
@@ -78,6 +79,82 @@ describe("OpenTUI app session", () => {
     expect(quit.state.route.screen).toBe("main_menu");
   });
 
+  test("custom corpus submenu lists collections and starts tag practice", () => {
+    const context: OpenTuiAppSessionContext = {
+      ...appContext(),
+      personalVocabulary: [
+        {
+          id: "v1",
+          text: "staking",
+          kind: "word",
+          meaning_zh: "质押",
+          tags: ["web3"],
+          priority: 2,
+          created_at: "2026-06-01T00:00:00.000Z",
+          updated_at: "2026-06-01T00:00:00.000Z",
+          archived: false,
+        },
+        {
+          id: "v2",
+          text: "oracle",
+          kind: "word",
+          tags: ["web3"],
+          priority: 2,
+          created_at: "2026-06-01T00:00:00.000Z",
+          updated_at: "2026-06-01T00:00:00.000Z",
+          archived: false,
+        },
+        {
+          id: "v3",
+          text: "refactor",
+          kind: "word",
+          tags: [],
+          priority: 2,
+          created_at: "2026-06-01T00:00:00.000Z",
+          updated_at: "2026-06-01T00:00:00.000Z",
+          archived: false,
+        },
+      ],
+      customCollections: [
+        {
+          slug: "web3",
+          name: "Web3 terms",
+          created_at: "2026-06-01T00:00:00.000Z",
+          archived: false,
+        },
+      ],
+    };
+
+    const initial = createOpenTuiInitialState("en", {
+      customCorpus: {
+        totalWords: 3,
+        collections: [{ slug: "web3", name: "Web3 terms", wordCount: 2 }],
+      },
+    });
+    const submenu = reduceOpenTuiAppKey(initial, key("6", "6"), context);
+    expect(submenu.state.route.screen).toBe("submenu");
+    if (submenu.state.route.screen !== "submenu") {
+      throw new Error("expected submenu");
+    }
+    expect(submenu.state.route.menu).toBe("custom");
+    const items = openTuiMenuItems(submenu.state);
+    expect(items.map((item) => item.id)).toEqual(["custom_my_words", "custom_tag_web3"]);
+    expect(items[1]?.label).toBe("Web3 terms");
+    expect(items[1]?.hint).toBe("2 words");
+
+    const running = reduceOpenTuiAppKey(submenu.state, key("2", "2"), context);
+    expect(running.action).toBe("start");
+    expect(running.state.route.screen).toBe("running");
+    if (running.state.route.screen !== "running") {
+      throw new Error("expected running route");
+    }
+    expect(running.state.route.source_item).toBe("custom_tag_web3");
+    expect(running.state.route.target.source).toBe("keyloop:custom:web3");
+    expect(running.state.route.target.text).toContain("staking");
+    expect(running.state.route.target.text).toContain("oracle");
+    expect(running.state.route.target.text).not.toContain("refactor");
+  });
+
   test("reducer supports arrow selection and enter in the main menu", () => {
     const context = appContext();
     const foundationSelected = reduceOpenTuiAppKey(
@@ -106,7 +183,7 @@ describe("OpenTUI app session", () => {
     const context = appContextWithCodeOptions();
     const settings = reduceOpenTuiAppKey(
       createOpenTuiInitialState("en"),
-      key("6", "6"),
+      key("7", "7"),
       context,
     );
     let speedRow = reduceOpenTuiAppKey(settings.state, key("down", ""), context).state;
@@ -167,7 +244,7 @@ describe("OpenTUI app session", () => {
     const context = appContext();
     const settings = reduceOpenTuiAppKey(
       createOpenTuiInitialState("zh"),
-      key("6", "6"),
+      key("7", "7"),
       context,
     );
     const english = reduceOpenTuiAppKey(settings.state, key("right", ""), context);
@@ -190,7 +267,7 @@ describe("OpenTUI app session", () => {
     const context = appContextWithCodeOptions();
     const settings = reduceOpenTuiAppKey(
       createOpenTuiInitialState("en"),
-      key("6", "6"),
+      key("7", "7"),
       context,
     );
     const codeFilterRow = pressSettingsDown(settings.state, context, 2);
@@ -222,7 +299,7 @@ describe("OpenTUI app session", () => {
     const context = appContextWithCodeOptions();
     const settings = reduceOpenTuiAppKey(
       createOpenTuiInitialState("en"),
-      key("6", "6"),
+      key("7", "7"),
       context,
     );
     let state = pressSettingsDown(settings.state, context, 2);
@@ -256,7 +333,7 @@ describe("OpenTUI app session", () => {
     const context = appContextWithCodeOptions();
     const settings = reduceOpenTuiAppKey(
       createOpenTuiInitialState("en"),
-      key("6", "6"),
+      key("7", "7"),
       context,
     );
     let state = pressSettingsDown(settings.state, context, 2);
@@ -294,7 +371,7 @@ describe("OpenTUI app session", () => {
     const context = appContextWithCodeOptions();
     const settings = reduceOpenTuiAppKey(
       createOpenTuiInitialState("en"),
-      key("6", "6"),
+      key("7", "7"),
       context,
     );
     let state = pressSettingsDown(settings.state, context, 2);
@@ -318,7 +395,7 @@ describe("OpenTUI app session", () => {
     const context = appContextWithCodeDifficultyOptions();
     const settings = reduceOpenTuiAppKey(
       createOpenTuiInitialState("en"),
-      key("6", "6"),
+      key("7", "7"),
       context,
     );
     let difficultyState = pressSettingsDown(settings.state, context, 3);
@@ -347,7 +424,7 @@ describe("OpenTUI app session", () => {
     const context = appContextWithCodeStyleSnippet();
     const settings = reduceOpenTuiAppKey(
       createOpenTuiInitialState("en"),
-      key("6", "6"),
+      key("7", "7"),
       context,
     );
     const semicolonRow = pressSettingsDown(settings.state, context, 6);
@@ -379,7 +456,7 @@ describe("OpenTUI app session", () => {
     const context = appContextWithEverydayCorpus();
     const settings = reduceOpenTuiAppKey(
       createOpenTuiInitialState("en"),
-      key("6", "6"),
+      key("7", "7"),
       context,
     );
 
@@ -425,7 +502,7 @@ describe("OpenTUI app session", () => {
     };
     const settings = reduceOpenTuiAppKey(
       createOpenTuiInitialState("en"),
-      key("6", "6"),
+      key("7", "7"),
       context,
     );
 
@@ -452,7 +529,7 @@ describe("OpenTUI app session", () => {
     await kit.waitForKeyListener(1);
     expect(flattenContent(kit.addedNodes)).toContain("KeyLoop");
 
-    kit.emitKey({ name: "7", sequence: "7" });
+    kit.emitKey({ name: "8", sequence: "8" });
     await kit.waitForKeyListener(2);
     expect(flattenContent(kit.addedNodes)).toContain("Stats");
     expect(flattenContent(kit.addedNodes)).toContain("Overview  2 sessions");
@@ -594,7 +671,7 @@ describe("OpenTUI app session", () => {
     expect(backToMenu.state.route.screen).toBe("main_menu");
     expect(backToMenu.state.today_elapsed_ms).toBe(28 * 60_000 + 24_000);
 
-    const settings = reduceOpenTuiAppKey(backToMenu.state, key("6", "6"), context);
+    const settings = reduceOpenTuiAppKey(backToMenu.state, key("7", "7"), context);
     const backAgain = reduceOpenTuiAppKey(settings.state, key("escape", "\x1b"), context);
     expect(backAgain.state.route.screen).toBe("main_menu");
     expect(backAgain.state.today_elapsed_ms).toBe(28 * 60_000 + 24_000);

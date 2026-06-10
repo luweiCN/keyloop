@@ -32,6 +32,7 @@ describe("OpenTUI app model", () => {
       "everyday",
       "programming",
       "code",
+      "custom",
       "settings",
       "stats",
       "ansi_palette",

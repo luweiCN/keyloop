@@ -8,6 +8,7 @@ export type OpenTuiMainMenuId =
   | "everyday"
   | "programming"
   | "code"
+  | "custom"
   | "settings"
   | "stats"
   | "ansi_palette";
@@ -49,10 +50,12 @@ export type OpenTuiSubmenuId =
   | "code_blocks"
   | "code_functions"
   | "code_file_fragments"
-  | "code_mix";
+  | "code_mix"
+  | "custom_my_words"
+  | `custom_tag_${string}`;
 
 export type OpenTuiMenuItemId = OpenTuiMainMenuId | OpenTuiSubmenuId;
-export type OpenTuiSubmenu = "foundation" | "everyday" | "programming" | "code";
+export type OpenTuiSubmenu = "foundation" | "everyday" | "programming" | "code" | "custom";
 
 export interface OpenTuiMenuItem {
   id: OpenTuiMenuItemId;
@@ -65,6 +68,9 @@ export function openTuiMenuItems(state: OpenTuiAppState): OpenTuiMenuItem[] {
     case "main_menu":
       return mainMenuItems(state.language);
     case "submenu":
+      if (state.route.menu === "custom") {
+        return customSubmenuItems(state);
+      }
       return submenuItems(state.route.menu, state.language);
     case "settings":
     case "stats":
@@ -86,14 +92,42 @@ export function mainMenuItems(language: Language): OpenTuiMenuItem[] {
     item("everyday", "日常练习", "Everyday practice", language),
     item("programming", "编程基础", "Programming basics", language),
     item("code", "代码实战", "Code practice", language),
+    item("custom", "自建语料库", "My corpus", language),
     item("settings", "设置", "Settings", language),
     item("stats", "统计", "Stats", language),
     item("ansi_palette", "调试色板", "ANSI palette", language),
   ];
 }
 
+export interface CustomCorpusSummary {
+  totalWords: number;
+  collections: { slug: string; name: string; wordCount: number }[];
+}
+
+function customSubmenuItems(state: OpenTuiAppState): OpenTuiMenuItem[] {
+  const summary = state.customCorpus;
+  const zh = state.language === "zh";
+  const items: OpenTuiMenuItem[] = [
+    {
+      id: "custom_my_words",
+      label: zh ? "我的单词" : "My words",
+      hint: `${summary?.totalWords ?? 0}${zh ? " 词" : " words"}`,
+    },
+  ];
+  for (const collection of summary?.collections ?? []) {
+    items.push({
+      id: `custom_tag_${collection.slug}`,
+      label: collection.name,
+      hint: `${collection.wordCount}${zh ? " 词" : " words"}`,
+    });
+  }
+  return items;
+}
+
 export function submenuItems(menu: OpenTuiSubmenu, language: Language): OpenTuiMenuItem[] {
   switch (menu) {
+    case "custom":
+      return []; // custom submenu items are state-derived; see customSubmenuItems
     case "foundation":
       return [
         item("foundation_home_row", "Home Row", "Home Row", language),
@@ -161,6 +195,8 @@ export function item(
 
 export function submenuTitle(menu: OpenTuiSubmenu): string {
   switch (menu) {
+    case "custom":
+      return "My corpus";
     case "foundation":
       return "Foundation practice";
     case "everyday":
@@ -246,7 +282,16 @@ export function targetRefreshAvailableForSource(sourceItem: string): boolean {
 }
 
 export function menuItemTag(item: { id: string }): string {
-  switch (item.id as OpenTuiMenuItemId | OpenTuiSettingsMenuItemId) {
+  if (item.id === "custom") {
+    return "mine";
+  }
+  if (item.id === "custom_my_words") {
+    return "words";
+  }
+  if (item.id.startsWith("custom_tag_")) {
+    return "topic";
+  }
+  switch (item.id as Exclude<OpenTuiMenuItemId, `custom_tag_${string}`> | OpenTuiSettingsMenuItemId) {
     case "comprehensive":
       return "adaptive";
     case "foundation":
@@ -308,11 +353,22 @@ export function menuItemTag(item: { id: string }): string {
       return "level";
     case "settings-code-style":
       return "style";
+    default:
+      return "item";
   }
 }
 
 export function menuItemDescription(item: { id: string }): string {
-  switch (item.id as OpenTuiMenuItemId | OpenTuiSettingsMenuItemId) {
+  if (item.id === "custom") {
+    return "我的单词和主题词库，练你自己收集的语料。";
+  }
+  if (item.id === "custom_my_words") {
+    return "练你添加的全部词条，按弱项优先排序。";
+  }
+  if (item.id.startsWith("custom_tag_")) {
+    return "按主题词库练习，keyloop corpus import 可批量导入。";
+  }
+  switch (item.id as Exclude<OpenTuiMenuItemId, `custom_tag_${string}`> | OpenTuiSettingsMenuItemId) {
     case "comprehensive":
       return "按今日动态计划练完所有组，弱项会影响后续内容。";
     case "foundation":
@@ -408,5 +464,7 @@ export function menuItemDescription(item: { id: string }): string {
       return "选择代码练习默认抽取难度。";
     case "settings-code-style":
       return "设置格式化、缩进、分号、引号和尾逗号风格。";
+    default:
+      return "";
   }
 }

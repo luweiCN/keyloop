@@ -27,6 +27,9 @@ import {
   saveVocabularyStoreToPath,
   sessionLogPath,
   vocabularyPath,
+  collectionsPath,
+  loadCollectionsStoreFromPath,
+  saveCollectionsStoreToPath,
 } from "./storage/keyloopStore";
 import {
   defaultCodePracticeConfig,
@@ -64,6 +67,8 @@ import {
   upsertPersonalVocabularyEntry,
   type PersonalVocabularyKind,
   type PersonalVocabularyPriority,
+  collectionTagCounts,
+  upsertCorpusCollection,
 } from "./training/vocabulary";
 import {
   runOpenTuiAppSession,
@@ -81,6 +86,7 @@ import type { OpenTuiRenderer } from "./ui/opentui/renderer";
 export type ParsedCommand =
   | ParsedStartCommand
   | { kind: "vocab"; action: ParsedVocabAction }
+  | { kind: "corpus"; action: ParsedCorpusAction }
   | { kind: "report"; scope: "today" }
   | { kind: "help" }
   | { kind: "plan" }
@@ -100,6 +106,13 @@ export interface ParsedStartCommand {
   code_framework?: string;
   code_project?: string;
 }
+
+export type ParsedCorpusAction =
+  | { kind: "new"; slug: string; name?: string; description?: string }
+  | { kind: "list" }
+  | { kind: "import"; slug: string; path: string }
+  | { kind: "archive"; slug: string }
+  | { kind: "restore"; slug: string };
 
 export type ParsedVocabAction =
   | ParsedVocabAddAction
@@ -223,6 +236,8 @@ export function parseCliArgs(args: string[]): ParsedCli {
       return { language, command: { kind: "sources" } };
     case "vocab":
       return { language, command: parseVocabCommand(remaining) };
+    case "corpus":
+      return { language, command: parseCorpusCommand(remaining) };
     default:
       throw new Error(`Unknown command: ${commandName}`);
   }
@@ -266,6 +281,8 @@ export async function runCli(
     }
     case "vocab":
       return runVocab(command.action, dataDir, parsed.language, options);
+    case "corpus":
+      return runCorpus(command.action, dataDir, parsed.language, options);
   }
 }
 
@@ -364,6 +381,9 @@ async function runApp(
       context.now = options.now;
     }
     context.personalVocabulary = vocabularyStore.entries;
+    context.customCollections = (
+      await loadCollectionsStoreFromPath(collectionsPath(dataDir))
+    ).collections;
     context.personalVocabularyLimit =
       preferences.personal_vocabulary.daily_review_limit;
 
@@ -668,6 +688,65 @@ function parseReportCommand(args: string[]): ParsedCommand {
   }
   ensureNoExtraArgs("report", args);
   return { kind: "report", scope };
+}
+
+function parseCorpusCommand(args: string[]): ParsedCommand {
+  const actionName = args.shift();
+  switch (actionName) {
+    case "new": {
+      const slug = requireCorpusSlug(args.shift());
+      const action: ParsedCorpusAction = { kind: "new", slug };
+      while (args.length > 0) {
+        const option = splitOptionToken(args.shift());
+        switch (option.name) {
+          case "--name":
+            action.name = optionValue(option, args);
+            break;
+          case "--desc":
+          case "--description":
+            action.description = optionValue(option, args);
+            break;
+          default:
+            throw new Error(`Unknown corpus new option: ${option.name}`);
+        }
+      }
+      return { kind: "corpus", action };
+    }
+    case "list":
+      ensureNoExtraArgs("corpus list", args);
+      return { kind: "corpus", action: { kind: "list" } };
+    case "import": {
+      const slug = requireCorpusSlug(args.shift());
+      const path = args.shift();
+      if (path === undefined) {
+        throw new Error("corpus import requires a file path");
+      }
+      ensureNoExtraArgs("corpus import", args);
+      return { kind: "corpus", action: { kind: "import", slug, path } };
+    }
+    case "archive": {
+      const slug = requireCorpusSlug(args.shift());
+      ensureNoExtraArgs("corpus archive", args);
+      return { kind: "corpus", action: { kind: "archive", slug } };
+    }
+    case "restore": {
+      const slug = requireCorpusSlug(args.shift());
+      ensureNoExtraArgs("corpus restore", args);
+      return { kind: "corpus", action: { kind: "restore", slug } };
+    }
+    default:
+      throw new Error("corpus supports: new, list, import, archive, restore");
+  }
+}
+
+function requireCorpusSlug(value: string | undefined): string {
+  if (value === undefined || value.trim() === "") {
+    throw new Error("corpus command requires a collection slug");
+  }
+  if (!/^[a-z0-9][a-z0-9-]*$/u.test(value)) {
+    throw new Error("collection slug must be lowercase letters, digits, and dashes");
+  }
+  return value;
 }
 
 function parseVocabCommand(args: string[]): ParsedCommand {
@@ -1027,6 +1106,13 @@ function standaloneLessonFromRoute(route: OpenTuiRunningRoute): PracticeLesson {
 function standaloneLessonMetadata(
   sourceItem: OpenTuiRunningRoute["source_item"],
 ): Pick<PracticeLesson, "kind" | "module" | "category"> {
+  if (sourceItem.startsWith("custom_tag_")) {
+    return {
+      kind: "words",
+      module: "custom_corpus",
+      category: "personal_vocabulary",
+    };
+  }
   switch (sourceItem) {
     case "foundation_home_row":
       return {
@@ -1155,6 +1241,12 @@ function standaloneLessonMetadata(
       return {
         kind: "words",
         module: "programming_basics",
+        category: "personal_vocabulary",
+      };
+    case "custom_my_words":
+      return {
+        kind: "words",
+        module: "custom_corpus",
         category: "personal_vocabulary",
       };
     case "programming_basics_mix":
@@ -1351,6 +1443,143 @@ async function runPlan(
   const records = await loadSessionsFromPath(sessionLogPath(dataDir));
   const plan = buildPlan(records, language, now);
   return { stdout: planReport(plan, language) };
+}
+
+async function runCorpus(
+  action: ParsedCorpusAction,
+  dataDir: string,
+  language: Language,
+  options: RunCliOptions,
+): Promise<RunCliResult> {
+  const path = collectionsPath(dataDir);
+  const vocabPath = vocabularyPath(dataDir);
+  const now = (options.now ?? new Date()).toISOString();
+  switch (action.kind) {
+    case "new": {
+      const store = await loadCollectionsStoreFromPath(path);
+      if (store.collections.some((c) => c.slug === action.slug && !c.archived)) {
+        throw new Error(`collection already exists: ${action.slug}`);
+      }
+      const meta = {
+        slug: action.slug,
+        name: action.name ?? action.slug,
+        ...(action.description === undefined ? {} : { description: action.description }),
+        created_at: now,
+        archived: false,
+      };
+      await saveCollectionsStoreToPath(upsertCorpusCollection(store, meta), path);
+      return {
+        stdout:
+          language === "zh"
+            ? `已创建主题词库 ${meta.slug}（${meta.name}）。用 keyloop corpus import ${meta.slug} 文件 导入词条。\n`
+            : `Created collection ${meta.slug} (${meta.name}). Import entries with: keyloop corpus import ${meta.slug} FILE\n`,
+      };
+    }
+    case "list": {
+      const store = await loadCollectionsStoreFromPath(path);
+      const vocabulary = await loadVocabularyStoreFromPath(vocabPath);
+      const counts = collectionTagCounts(vocabulary.entries);
+      if (store.collections.length === 0 && counts.size === 0) {
+        return {
+          stdout:
+            language === "zh"
+              ? "暂无主题词库。用 keyloop corpus new 名称 创建一个。\n"
+              : "No collections yet. Create one with: keyloop corpus new SLUG\n",
+        };
+      }
+      const known = new Set(store.collections.map((c) => c.slug));
+      const lines = [
+        ...store.collections
+          .sort((a, b) => a.slug.localeCompare(b.slug))
+          .map((c) => {
+            const status = c.archived ? (language === "zh" ? "已归档" : "archived") : "";
+            return `${c.slug}\t${c.name}\t${counts.get(c.slug) ?? 0}\t${status}`.trimEnd();
+          }),
+        ...[...counts.keys()]
+          .filter((tag) => !known.has(tag))
+          .sort()
+          .map((tag) => `${tag}\t${tag}\t${counts.get(tag) ?? 0}`),
+      ];
+      const heading = language === "zh" ? "主题词库" : "Collections";
+      return { stdout: `${heading}\n${lines.join("\n")}\n` };
+    }
+    case "import": {
+      const raw = await readFile(action.path, "utf8");
+      const store = await loadCollectionsStoreFromPath(path);
+      if (!store.collections.some((c) => c.slug === action.slug)) {
+        const meta = {
+          slug: action.slug,
+          name: action.slug,
+          created_at: now,
+          archived: false,
+        };
+        await saveCollectionsStoreToPath(upsertCorpusCollection(store, meta), path);
+      }
+      let vocabulary = await loadVocabularyStoreFromPath(vocabPath);
+      const existing = new Set(
+        vocabulary.entries
+          .filter((e) => !e.archived)
+          .map((e) => e.text.toLowerCase()),
+      );
+      const createOptions = vocabularyCreateOptions(options);
+      let added = 0;
+      const skipped: string[] = [];
+      for (const line of raw.split("\n")) {
+        const trimmed = line.trim();
+        if (trimmed === "" || trimmed.startsWith("#")) continue;
+        const [text, meaning] = trimmed.split("\t").map((part) => part.trim());
+        if (text === undefined || text === "") continue;
+        if ([...text].some((ch) => ch.charCodeAt(0) > 127)) {
+          skipped.push(text);
+          continue;
+        }
+        if (existing.has(text.toLowerCase())) {
+          skipped.push(text);
+          continue;
+        }
+        existing.add(text.toLowerCase());
+        const entry = createPersonalVocabularyEntry(
+          {
+            text,
+            tags: [action.slug],
+            ...(meaning === undefined || meaning === "" ? {} : { meaning_zh: meaning }),
+          },
+          createOptions,
+        );
+        vocabulary = upsertPersonalVocabularyEntry(vocabulary, entry, entry.updated_at);
+        added += 1;
+      }
+      await saveVocabularyStoreToPath(vocabulary, vocabPath);
+      const skippedNote =
+        skipped.length === 0
+          ? ""
+          : language === "zh"
+            ? `（跳过 ${skipped.length} 条：重复或含不可打字字符）`
+            : ` (skipped ${skipped.length}: duplicates or untypable characters)`;
+      return {
+        stdout:
+          language === "zh"
+            ? `已向 ${action.slug} 导入 ${added} 条词条${skippedNote}。\n`
+            : `Imported ${added} entries into ${action.slug}${skippedNote}.\n`,
+      };
+    }
+    case "archive":
+    case "restore": {
+      const store = await loadCollectionsStoreFromPath(path);
+      const meta = store.collections.find((c) => c.slug === action.slug);
+      if (meta === undefined) {
+        throw new Error(`unknown collection: ${action.slug}`);
+      }
+      const updated = { ...meta, archived: action.kind === "archive" };
+      await saveCollectionsStoreToPath(upsertCorpusCollection(store, updated), path);
+      return {
+        stdout:
+          language === "zh"
+            ? `${action.kind === "archive" ? "已归档" : "已恢复"}主题词库 ${action.slug}。\n`
+            : `Collection ${action.slug} ${action.kind === "archive" ? "archived" : "restored"}.\n`,
+      };
+    }
+  }
 }
 
 async function runVocab(

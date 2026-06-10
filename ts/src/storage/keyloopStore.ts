@@ -17,9 +17,12 @@ import {
   type SessionRecord,
   type UserPreferences,
 } from "../domain/model";
-import type {
-  PersonalVocabularyEntry,
-  PersonalVocabularyStore,
+import {
+  emptyCollectionsStore,
+  type CorpusCollectionMeta,
+  type CorpusCollectionsStore,
+  type PersonalVocabularyEntry,
+  type PersonalVocabularyStore,
 } from "../training/vocabulary";
 
 export interface DataDirOptions {
@@ -84,6 +87,10 @@ export function vocabularyPath(dataDir: string): string {
   return join(dataDir, "vocabulary.json");
 }
 
+export function collectionsPath(dataDir: string): string {
+  return join(dataDir, "collections.json");
+}
+
 export async function appendSessionToPath(
   record: SessionRecord,
   path: string,
@@ -137,6 +144,45 @@ export async function loadVocabularyStoreFromPath(
 ): Promise<PersonalVocabularyStore> {
   const value = await readJsonIfExists(path);
   return value === null ? emptyVocabularyStore() : parseVocabularyStore(objectStoreValue(value, path));
+}
+
+export async function saveCollectionsStoreToPath(
+  store: CorpusCollectionsStore,
+  path: string,
+): Promise<void> {
+  await writePrettyJson(path, store);
+}
+
+export async function loadCollectionsStoreFromPath(
+  path: string,
+): Promise<CorpusCollectionsStore> {
+  const value = await readJsonIfExists(path);
+  if (value === null) {
+    return emptyCollectionsStore();
+  }
+  const object = objectStoreValue(value, path);
+  const list = Array.isArray(object.collections) ? object.collections : [];
+  return {
+    version: 1,
+    collections: list.map((item) => parseCollectionMeta(item, path)),
+  };
+}
+
+function parseCollectionMeta(value: unknown, path: string): CorpusCollectionMeta {
+  if (typeof value !== "object" || value === null) {
+    throw new Error(`${basename(path)} contains an invalid collection entry`);
+  }
+  const object = value as Record<string, unknown>;
+  if (typeof object.slug !== "string" || object.slug.trim() === "") {
+    throw new Error(`${basename(path)} collection entry requires a slug`);
+  }
+  return {
+    slug: object.slug,
+    name: typeof object.name === "string" && object.name.trim() !== "" ? object.name : object.slug,
+    ...(typeof object.description === "string" ? { description: object.description } : {}),
+    created_at: typeof object.created_at === "string" ? object.created_at : new Date(0).toISOString(),
+    archived: object.archived === true,
+  };
 }
 
 export async function saveKeyAggregatesToPath(

@@ -12,6 +12,7 @@ import {
   type UserPreferences,
 } from "../../domain/model";
 import { codePracticeOptionsForLibrary } from "../../content/library";
+import { collectionTagCounts, type CorpusCollectionMeta } from "../../training/vocabulary";
 import type { BuildTargetContext } from "../../training/targets";
 import {
   activateOpenTuiMenuItem,
@@ -37,6 +38,7 @@ import {
   type OpenTuiStatsStateOptions,
   type OpenTuiStatsView,
   type OpenTuiWordFormSettings,
+  type CustomCorpusSummary,
 } from "./appModel";
 import {
   renderOpenTuiAppOnce,
@@ -74,6 +76,7 @@ export interface OpenTuiAppSessionContext extends BuildTargetContext {
   personalVocabularySettings?: UserPreferences["personal_vocabulary"];
   speedUnit?: SpeedUnit;
   todayElapsedMs?: number;
+  customCollections?: CorpusCollectionMeta[];
 }
 
 export interface OpenTuiAppSessionOptions {
@@ -164,6 +167,7 @@ export async function runOpenTuiAppSession(
       everydaySettings: everydaySettingsFromContext(context),
       wordFormSettings: wordFormSettingsFromContext(context),
       speedUnit: speedUnitFromContext(context),
+      customCorpus: customCorpusFromContext(context),
       todayElapsedMs: todayElapsedMsFromContext(context),
     });
   let state =
@@ -197,6 +201,31 @@ export async function runOpenTuiAppSession(
       await renderer.renderState?.(state);
     }
   }
+}
+
+function customCorpusFromContext(
+  context: OpenTuiAppSessionContext,
+): CustomCorpusSummary {
+  const entries = context.personalVocabulary ?? [];
+  const counts = collectionTagCounts(entries);
+  const known = new Map(
+    (context.customCollections ?? [])
+      .filter((c) => !c.archived)
+      .map((c) => [c.slug, c.name]),
+  );
+  const slugs = new Set([...known.keys(), ...counts.keys()]);
+  const collections = [...slugs]
+    .sort()
+    .map((slug) => ({
+      slug,
+      name: known.get(slug) ?? slug,
+      wordCount: counts.get(slug) ?? 0,
+    }))
+    .filter((c) => c.wordCount > 0 || known.has(c.slug));
+  return {
+    totalWords: entries.filter((entry) => !entry.archived).length,
+    collections,
+  };
 }
 
 function todayElapsedMsFromContext(context: OpenTuiAppSessionContext): number {

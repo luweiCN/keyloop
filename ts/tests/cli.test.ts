@@ -584,7 +584,7 @@ describe("TS CLI command dispatch", () => {
         appRunner: async (context) => {
           const settings = reduceOpenTuiAppKey(
             createOpenTuiInitialState(context.language),
-            key("6", "6"),
+            key("7", "7"),
             context,
           );
           const english = reduceOpenTuiAppKey(settings.state, key("right", ""), context);
@@ -671,7 +671,7 @@ describe("TS CLI command dispatch", () => {
         appRunner: async (context) => {
           const settings = reduceOpenTuiAppKey(
             createOpenTuiInitialState(context.language),
-            key("6", "6"),
+            key("7", "7"),
             context,
           );
           let hardState = pressSettingsDown(settings.state, context, 3);

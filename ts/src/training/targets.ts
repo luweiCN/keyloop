@@ -60,6 +60,7 @@ export interface BuildLongWordBreakdownPracticeOptions {
 export interface BuildPersonalVocabularyPracticeOptions {
   maxItems: number;
   now?: Date;
+  tag?: string | undefined;
 }
 
 export type EverydayPracticeTargetKind =
@@ -580,7 +581,11 @@ export function buildPersonalVocabularyPracticeTarget(
   options: BuildPersonalVocabularyPracticeOptions,
 ): PracticeTarget {
   const maxItems = normalizedMaxItems(options.maxItems);
-  const ranked = rankPersonalVocabulary(entries, records, {
+  const pool =
+    options.tag === undefined
+      ? entries
+      : entries.filter((entry) => entry.tags.includes(options.tag as string));
+  const ranked = rankPersonalVocabulary(pool, records, {
     limit: maxItems,
     ...(options.now === undefined ? {} : { now: options.now }),
   }).map((item) => item.entry);
@@ -588,7 +593,10 @@ export function buildPersonalVocabularyPracticeTarget(
   return {
     mode: "words",
     text: ranked.flatMap(personalVocabularyStandaloneLines).join("\n"),
-    source: "keyloop:module:personal-vocabulary",
+    source:
+      options.tag === undefined
+        ? "keyloop:module:personal-vocabulary"
+        : `keyloop:custom:${options.tag}`,
   };
 }
 
