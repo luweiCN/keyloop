@@ -281,7 +281,7 @@ export function resolveCodeContentRoot(
       return candidate;
     }
   }
-  return candidates[0] ?? join(process.cwd(), "ts", "content");
+  return candidates[0] ?? join(process.cwd(), "contents");
 }
 
 export function codeCorpusPracticeOptions(corpus: CodeCorpus): CodePracticeOption[] {
@@ -526,7 +526,7 @@ function codeContentRootCandidates(options: ResolveCodeContentRootOptions): stri
 
   addPathAdjacentTsContentCandidates(candidates, options.argv1 ?? process.argv[1]);
   addPathAdjacentTsContentCandidates(candidates, options.execPath ?? process.execPath);
-  candidates.push(join(process.cwd(), "ts", "content"));
+  candidates.push(join(process.cwd(), "contents"));
   return [...new Set(candidates)];
 }
 
@@ -538,9 +538,9 @@ function addPathAdjacentTsContentCandidates(
     return;
   }
   const base = dirname(resolve(path));
-  candidates.push(join(base, "ts", "content"));
-  candidates.push(join(base, "..", "ts", "content"));
-  candidates.push(join(base, "..", "..", "ts", "content"));
+  candidates.push(join(base, "contents"));
+  candidates.push(join(base, "..", "contents"));
+  candidates.push(join(base, "..", "..", "contents"));
 }
 
 function codeContentRootExists(path: string): boolean {

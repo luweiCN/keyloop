@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 describe("build code corpus snapshot CLI", () => {
   test("builds a runtime snapshot from a corpus v4 directory", async () => {
     const root = mkdtempSync(join(tmpdir(), "keyloop-corpus-v4-snapshot-"));
-    const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
+    const repoRoot = fileURLToPath(new URL("..", import.meta.url));
     const input = join(root, "input");
     const output = join(root, "output");
     try {
@@ -16,7 +16,7 @@ describe("build code corpus snapshot CLI", () => {
       const result = Bun.spawnSync({
         cmd: [
           "bun",
-          "ts/src/tools/buildCodeCorpusSnapshot.ts",
+          "src/tools/buildCodeCorpusSnapshot.ts",
           "--input",
           input,
           "--output",
@@ -48,7 +48,7 @@ describe("build code corpus snapshot CLI", () => {
 describe("analyze corpus typing difficulty CLI", () => {
   test("analyzes records from a corpus v4 directory", async () => {
     const root = mkdtempSync(join(tmpdir(), "keyloop-corpus-v4-analysis-"));
-    const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
+    const repoRoot = fileURLToPath(new URL("..", import.meta.url));
     const input = join(root, "input");
     const output = join(root, "report.json");
     try {
@@ -57,7 +57,7 @@ describe("analyze corpus typing difficulty CLI", () => {
       const result = Bun.spawnSync({
         cmd: [
           "bun",
-          "ts/src/tools/analyzeCorpusTypingDifficulty.ts",
+          "src/tools/analyzeCorpusTypingDifficulty.ts",
           "--input",
           input,
           "--output",
@@ -86,7 +86,7 @@ describe("analyze corpus typing difficulty CLI", () => {
 describe("build everyday word decomposition content CLI", () => {
   test("imports only explicit word splits from local TSV", async () => {
     const root = mkdtempSync(join(tmpdir(), "keyloop-word-decomposition-"));
-    const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
+    const repoRoot = fileURLToPath(new URL("..", import.meta.url));
     const input = join(root, "input.tsv");
     const output = join(root, "everyday_word_decomposition.json");
     try {
@@ -103,7 +103,7 @@ describe("build everyday word decomposition content CLI", () => {
       const result = Bun.spawnSync({
         cmd: [
           "bun",
-          "ts/src/tools/buildEverydayWordDecompositionContent.ts",
+          "src/tools/buildEverydayWordDecompositionContent.ts",
           "--input",
           input,
           "--output",
@@ -143,7 +143,7 @@ describe("build everyday word decomposition content CLI", () => {
 
   test("rejects records without explicit parts", () => {
     const root = mkdtempSync(join(tmpdir(), "keyloop-word-decomposition-invalid-"));
-    const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
+    const repoRoot = fileURLToPath(new URL("..", import.meta.url));
     const input = join(root, "input.json");
     const output = join(root, "everyday_word_decomposition.json");
     try {
@@ -162,7 +162,7 @@ describe("build everyday word decomposition content CLI", () => {
       const result = Bun.spawnSync({
         cmd: [
           "bun",
-          "ts/src/tools/buildEverydayWordDecompositionContent.ts",
+          "src/tools/buildEverydayWordDecompositionContent.ts",
           "--input",
           input,
           "--output",
@@ -182,7 +182,7 @@ describe("build everyday word decomposition content CLI", () => {
 
   test("rejects inferred or generated split sources", () => {
     const root = mkdtempSync(join(tmpdir(), "keyloop-word-decomposition-generated-"));
-    const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
+    const repoRoot = fileURLToPath(new URL("..", import.meta.url));
     const input = join(root, "input.json");
     const output = join(root, "everyday_word_decomposition.json");
     try {
@@ -216,7 +216,7 @@ describe("build everyday word decomposition content CLI", () => {
       const result = Bun.spawnSync({
         cmd: [
           "bun",
-          "ts/src/tools/buildEverydayWordDecompositionContent.ts",
+          "src/tools/buildEverydayWordDecompositionContent.ts",
           "--input",
           input,
           "--output",
@@ -238,7 +238,7 @@ describe("build everyday word decomposition content CLI", () => {
 describe("build everyday words content CLI", () => {
   test("joins MonkeyType word order with dictionary translations", async () => {
     const root = mkdtempSync(join(tmpdir(), "keyloop-everyday-words-"));
-    const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
+    const repoRoot = fileURLToPath(new URL("..", import.meta.url));
     const words = join(root, "words.json");
     const dictionary = join(root, "ecdict.csv");
     const output = join(root, "everyday_words.json");
@@ -260,7 +260,7 @@ describe("build everyday words content CLI", () => {
       const result = Bun.spawnSync({
         cmd: [
           "bun",
-          "ts/src/tools/buildEverydayWordsContent.ts",
+          "src/tools/buildEverydayWordsContent.ts",
           "--words-source",
           words,
           "--dictionary-source",
@@ -297,14 +297,14 @@ describe("build everyday words content CLI", () => {
 describe("build everyday reading content CLI", () => {
   test("writes sourced sentence and article corpora", async () => {
     const root = mkdtempSync(join(tmpdir(), "keyloop-everyday-reading-"));
-    const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
+    const repoRoot = fileURLToPath(new URL("..", import.meta.url));
     const sentences = join(root, "everyday_sentences.json");
     const articles = join(root, "everyday_articles.json");
     try {
       const result = Bun.spawnSync({
         cmd: [
           "bun",
-          "ts/src/tools/buildEverydayReadingContent.ts",
+          "src/tools/buildEverydayReadingContent.ts",
           "--sentences-output",
           sentences,
           "--articles-output",
@@ -384,7 +384,7 @@ describe("build everyday reading content CLI", () => {
 describe("build Moby word decomposition content CLI", () => {
   test("builds translated explicit splits from Moby hyphenation data", async () => {
     const root = mkdtempSync(join(tmpdir(), "keyloop-moby-decomposition-"));
-    const repoRoot = fileURLToPath(new URL("../..", import.meta.url));
+    const repoRoot = fileURLToPath(new URL("..", import.meta.url));
     const hyphenation = join(root, "mhyph.txt");
     const words = join(root, "everyday_words.json");
     const output = join(root, "everyday_word_decomposition.json");
@@ -432,7 +432,7 @@ describe("build Moby word decomposition content CLI", () => {
       const result = Bun.spawnSync({
         cmd: [
           "bun",
-          "ts/src/tools/buildEverydayWordDecompositionFromMoby.ts",
+          "src/tools/buildEverydayWordDecompositionFromMoby.ts",
           "--hyphenation-source",
           hyphenation,
           "--words-corpus",

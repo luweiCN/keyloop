@@ -37,7 +37,7 @@ interface BuildResult {
 }
 
 const defaultInput = "raw/everyday-word-decomposition";
-const defaultOutput = "ts/content/everyday_word_decomposition.json";
+const defaultOutput = "contents/everyday_word_decomposition.json";
 const levels = [
   "high_school",
   "cet4",

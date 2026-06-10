@@ -12,7 +12,7 @@ interface GeneratedCodeCorpusStats extends BuildCodeCorpusSnapshotStats {
 }
 
 const defaultInput = "content/corpus-v4/final";
-const defaultOutput = "ts/content/code";
+const defaultOutput = "contents/code";
 const defaultCellLimit = 30;
 
 async function main(): Promise<void> {

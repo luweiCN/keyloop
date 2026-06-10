@@ -32,7 +32,7 @@ const defaultWordsSource =
   "https://raw.githubusercontent.com/monkeytypegame/monkeytype/master/frontend/static/languages/english_10k.json";
 const defaultDictionarySource =
   "https://raw.githubusercontent.com/skywind3000/ECDICT/master/ecdict.csv";
-const defaultOutput = "ts/content/everyday_words.json";
+const defaultOutput = "contents/everyday_words.json";
 
 async function main(): Promise<void> {
   const wordsSource = optionValue("--words-source") ?? defaultWordsSource;
@@ -246,7 +246,7 @@ function source(
     source_url: sourceUrl,
     license: "CC-BY-SA-4.0 + MIT",
     retrieved_at: retrievedAt,
-    generation_script: "ts/src/tools/buildEverydayWordsContent.ts",
+    generation_script: "src/tools/buildEverydayWordsContent.ts",
     included_fields: ["word", "rank", "range", "level", "translation_zh", "source_id"],
     notes: "Words keep MonkeyType frequency order. Chinese translations are imported from ECDICT when present.",
   };

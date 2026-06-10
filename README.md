@@ -162,7 +162,7 @@ KeyLoop 不上传练习数据。默认只写入本机：
 
 ```bash
 bun run typecheck
-bun test ts/tests
+bun test tests
 bun run smoke
 ```
 

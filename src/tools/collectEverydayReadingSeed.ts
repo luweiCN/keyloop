@@ -50,10 +50,10 @@ interface SourceText {
 }
 
 const defaultOutput = fileURLToPath(
-  new URL("../../content/everyday_reading_seed.json", import.meta.url),
+  new URL("../../contents/everyday_reading_seed.json", import.meta.url),
 );
 const defaultEverydayWordsPath = fileURLToPath(
-  new URL("../../content/everyday_words.json", import.meta.url),
+  new URL("../../contents/everyday_words.json", import.meta.url),
 );
 
 const sourceCatalog = new Map<number, { title: string; levelHint: EverydayLevel }>([
@@ -340,7 +340,7 @@ function sourceForEbook(ebookId: number): EverydayCorpusSource {
     source_url: gutenbergTextUrl(ebookId),
     license: "Public domain in the USA",
     retrieved_at: "2026-06-10",
-    generation_script: "ts/src/tools/collectEverydayReadingSeed.ts",
+    generation_script: "src/tools/collectEverydayReadingSeed.ts",
     included_fields: [
       "text",
       "translation_zh",

@@ -72,10 +72,10 @@ interface ReadingSentenceSeed {
 }
 
 const defaultInputDir = fileURLToPath(
-  new URL("../../content/everyday_reading_translated", import.meta.url),
+  new URL("../../contents/everyday_reading_translated", import.meta.url),
 );
 const defaultOutputPath = fileURLToPath(
-  new URL("../../content/everyday_reading_seed.json", import.meta.url),
+  new URL("../../contents/everyday_reading_seed.json", import.meta.url),
 );
 
 async function main(): Promise<void> {
@@ -173,7 +173,7 @@ function translatedSource(source: EverydayCorpusSource): EverydayCorpusSource {
   return {
     ...source,
     generation_script:
-      "ts/src/tools/collectEverydayReadingCandidates.ts + GPT-5.4 translation batches",
+      "src/tools/collectEverydayReadingCandidates.ts + GPT-5.4 translation batches",
     included_fields: [...fields],
     notes:
       `${source.notes} Chinese translations are filled and quality-checked by GPT-5.4 translation batches before merge.`,

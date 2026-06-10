@@ -400,11 +400,11 @@ describe("content library", () => {
   });
 
   test("content root resolver falls back to binary-adjacent ts content", async () => {
-    const expectedRoot = "/Users/luwei/code/ai/keyloop/ts/content";
+    const expectedRoot = "/Users/luwei/code/ai/keyloop/contents";
     const checkedPaths: string[] = [];
 
     const resolvedRoot = await resolveContentRoot({
-      moduleUrl: "file:///Users/luwei/code/ai/keyloop/ts/src/content/library.js",
+      moduleUrl: "file:///Users/luwei/code/ai/keyloop/src/content/library.js",
       execPath: "/Users/luwei/code/ai/keyloop/dist/keyloop-ts",
       argv1: "/Users/luwei/code/ai/keyloop/dist/keyloop-ts",
       env: {},
@@ -421,7 +421,7 @@ describe("content library", () => {
   test("generated TypeScript content snapshot is not used", () => {
     expect(
       existsSync(
-        "/Users/luwei/code/ai/keyloop/ts/src/content/generated/codeCorpusV2.ts",
+        "/Users/luwei/code/ai/keyloop/src/content/generated/codeCorpusV2.ts",
       ),
     ).toBe(false);
   });

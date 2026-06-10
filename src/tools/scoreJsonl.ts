@@ -3,7 +3,7 @@ import { scoreTypingDifficulty } from "../training/typingDifficulty";
 
 const inputPath = process.argv[2];
 if (inputPath === undefined) {
-  console.error("Usage: bun ts/src/tools/scoreJsonl.ts <input.jsonl> [output.jsonl]");
+  console.error("Usage: bun src/tools/scoreJsonl.ts <input.jsonl> [output.jsonl]");
   process.exit(1);
 }
 const outputPath = process.argv[3] ?? inputPath;

@@ -244,7 +244,7 @@ export async function resolveContentRoot(
       return candidate;
     }
   }
-  return candidates[0] ?? join(process.cwd(), "content");
+  return candidates[0] ?? join(process.cwd(), "contents");
 }
 
 export function mergeEverydayCorpus(
@@ -351,7 +351,7 @@ function contentRootCandidates(options: ResolveContentRootOptions): string[] {
     candidates.push(
       join(
         dirname(dirname(dirname(fileURLToPath(moduleUrl)))),
-        "content",
+        "contents",
       ),
     );
   } catch {
@@ -360,8 +360,7 @@ function contentRootCandidates(options: ResolveContentRootOptions): string[] {
 
   addPathAdjacentContentCandidates(candidates, options.argv1 ?? process.argv[1]);
   addPathAdjacentContentCandidates(candidates, options.execPath ?? process.execPath);
-  candidates.push(join(process.cwd(), "ts", "content"));
-  candidates.push(join(process.cwd(), "content"));
+  candidates.push(join(process.cwd(), "contents"));
 
   return [...new Set(candidates)];
 }
@@ -374,14 +373,10 @@ function addPathAdjacentContentCandidates(
     return;
   }
   const base = dirname(resolve(path));
-  candidates.push(join(base, "ts", "content"));
-  candidates.push(join(base, "..", "ts", "content"));
-  candidates.push(join(base, "..", "..", "ts", "content"));
-  candidates.push(join(base, "..", "..", "..", "ts", "content"));
-  candidates.push(join(base, "content"));
-  candidates.push(join(base, "..", "content"));
-  candidates.push(join(base, "..", "..", "content"));
-  candidates.push(join(base, "..", "..", "..", "content"));
+  candidates.push(join(base, "contents"));
+  candidates.push(join(base, "..", "contents"));
+  candidates.push(join(base, "..", "..", "contents"));
+  candidates.push(join(base, "..", "..", "..", "contents"));
 }
 
 async function contentRootExists(path: string): Promise<boolean> {

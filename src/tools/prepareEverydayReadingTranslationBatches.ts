@@ -85,16 +85,16 @@ interface LegacyAudit {
 }
 
 const defaultCandidatesPath = fileURLToPath(
-  new URL("../../content/everyday_reading_candidates.json", import.meta.url),
+  new URL("../../contents/everyday_reading_candidates.json", import.meta.url),
 );
 const defaultOutputDir = fileURLToPath(
-  new URL("../../content/everyday_reading_translation_batches", import.meta.url),
+  new URL("../../contents/everyday_reading_translation_batches", import.meta.url),
 );
 const defaultLegacySentencesPath = fileURLToPath(
-  new URL("../../content/everyday_sentences.json", import.meta.url),
+  new URL("../../contents/everyday_sentences.json", import.meta.url),
 );
 const defaultLegacyArticlesPath = fileURLToPath(
-  new URL("../../content/everyday_articles.json", import.meta.url),
+  new URL("../../contents/everyday_articles.json", import.meta.url),
 );
 
 async function main(): Promise<void> {

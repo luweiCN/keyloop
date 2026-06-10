@@ -22,13 +22,13 @@ import type { EverydayLevel, EverydaySentenceLength } from "../domain/model";
 
 type ReadingLength = Exclude<EverydaySentenceLength, "mixed">;
 
-const defaultSentencesOutput = "ts/content/everyday_sentences.json";
-const defaultArticlesOutput = "ts/content/everyday_articles.json";
+const defaultSentencesOutput = "contents/everyday_sentences.json";
+const defaultArticlesOutput = "contents/everyday_articles.json";
 const defaultSeedPath = fileURLToPath(
-  new URL("../../content/everyday_reading_seed.json", import.meta.url),
+  new URL("../../contents/everyday_reading_seed.json", import.meta.url),
 );
 const defaultEverydayWordsPath = fileURLToPath(
-  new URL("../../content/everyday_words.json", import.meta.url),
+  new URL("../../contents/everyday_words.json", import.meta.url),
 );
 
 const sentenceRanges: Record<ReadingLength, readonly [number, number]> = {

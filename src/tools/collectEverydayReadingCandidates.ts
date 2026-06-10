@@ -86,10 +86,10 @@ interface TextSection {
 }
 
 const defaultOutput = fileURLToPath(
-  new URL("../../content/everyday_reading_candidates.json", import.meta.url),
+  new URL("../../contents/everyday_reading_candidates.json", import.meta.url),
 );
 const defaultEverydayWordsPath = fileURLToPath(
-  new URL("../../content/everyday_words.json", import.meta.url),
+  new URL("../../contents/everyday_words.json", import.meta.url),
 );
 
 const sentenceRanges: Record<ReadingLength, readonly [number, number]> = {
@@ -737,7 +737,7 @@ function readingSources(sources: readonly ReadingSourcePlan[]): EverydayCorpusSo
     source_url: source.source_url,
     license: source.license,
     retrieved_at: "2026-06-10",
-    generation_script: "ts/src/tools/collectEverydayReadingCandidates.ts",
+    generation_script: "src/tools/collectEverydayReadingCandidates.ts",
     included_fields: [
       "text",
       "level",

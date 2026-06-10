@@ -41,16 +41,16 @@ interface SupplementBatch {
 }
 
 const defaultCandidatesPath = fileURLToPath(
-  new URL("../../content/everyday_reading_candidates.json", import.meta.url),
+  new URL("../../contents/everyday_reading_candidates.json", import.meta.url),
 );
 const defaultCurrentSentencesPath = fileURLToPath(
-  new URL("../../content/everyday_sentences.json", import.meta.url),
+  new URL("../../contents/everyday_sentences.json", import.meta.url),
 );
 const defaultTranslatedDir = fileURLToPath(
-  new URL("../../content/everyday_reading_translated", import.meta.url),
+  new URL("../../contents/everyday_reading_translated", import.meta.url),
 );
 const defaultOutputPath = fileURLToPath(
-  new URL("../../content/everyday_reading_translation_batches/final_sentence_supplement.json", import.meta.url),
+  new URL("../../contents/everyday_reading_translation_batches/final_sentence_supplement.json", import.meta.url),
 );
 
 const targetPerCell = 100;

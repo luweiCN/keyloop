@@ -9,8 +9,8 @@ import type {
 } from "../content/library";
 
 const defaultHyphenationSource = "https://www.gutenberg.org/files/3204/files/mhyph.txt";
-const defaultWordsCorpus = "ts/content/everyday_words.json";
-const defaultOutput = "ts/content/everyday_word_decomposition.json";
+const defaultWordsCorpus = "contents/everyday_words.json";
+const defaultOutput = "contents/everyday_word_decomposition.json";
 const defaultLimit = 2000;
 
 interface BuildMobyOptions {
@@ -137,7 +137,7 @@ function source(retrievedAt: string): EverydayCorpusSource {
     source_url: "https://www.gutenberg.org/ebooks/3204",
     license: "Public domain in the USA + CC-BY-SA-4.0 + MIT",
     retrieved_at: retrievedAt,
-    generation_script: "ts/src/tools/buildEverydayWordDecompositionFromMoby.ts",
+    generation_script: "src/tools/buildEverydayWordDecompositionFromMoby.ts",
     included_fields: ["word", "parts", "translation_zh", "level", "source_id"],
     notes: "Word parts come from the explicit Moby Hyphenation List. The builder validates and filters; it does not infer or generate missing splits.",
   };

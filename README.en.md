@@ -151,7 +151,7 @@ Session records include target text, final input, key events, error characters, 
 
 ```bash
 bun run typecheck
-bun test ts/tests
+bun test tests
 bun run smoke
 ```
 

@@ -72,13 +72,13 @@ interface SupplementArticle extends Omit<CandidateArticle, "paragraphs"> {
 }
 
 const defaultCandidatesPath = fileURLToPath(
-  new URL("../../content/everyday_reading_candidates.json", import.meta.url),
+  new URL("../../contents/everyday_reading_candidates.json", import.meta.url),
 );
 const defaultTranslatedDir = fileURLToPath(
-  new URL("../../content/everyday_reading_translated", import.meta.url),
+  new URL("../../contents/everyday_reading_translated", import.meta.url),
 );
 const defaultOutputPath = fileURLToPath(
-  new URL("../../content/everyday_reading_translation_batches/supplement.json", import.meta.url),
+  new URL("../../contents/everyday_reading_translation_batches/supplement.json", import.meta.url),
 );
 
 const targetSentencesPerCell = 100;

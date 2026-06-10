@@ -29,7 +29,7 @@ jobs:
         run: bun run typecheck
 
       - name: Test
-        run: bun test ts/tests
+        run: bun test tests
 
       - name: Build
         run: |

@@ -76,7 +76,7 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Build release binary
-        run: bun build ts/src/main.ts --compile --target "${{ matrix.target }}" --outfile dist/keyloop
+        run: bun build src/main.ts --compile --target "${{ matrix.target }}" --outfile dist/keyloop
 
       - name: Package archive
         env:
