@@ -1,4 +1,6 @@
 import { Database } from "bun:sqlite";
+import { mkdir, readdir, rename, rm } from "node:fs/promises";
+import { dirname, join } from "node:path";
 
 export interface DictionaryEntry {
   phonetic?: string;
@@ -93,5 +95,56 @@ export class Dictionary {
       ...(row.phonetic === null || row.phonetic === "" ? {} : { phonetic: row.phonetic }),
       translation_zh: translation,
     };
+  }
+}
+
+export const ECDICT_SQLITE_URL =
+  "https://github.com/skywind3000/ECDICT/releases/download/1.0.28/ecdict-sqlite-28.zip";
+
+export async function ensureFullDictionary(options: {
+  dbPath: string;
+  url?: string;
+  fetchImpl?: (url: string) => Promise<Response> | Response;
+  unzipImpl?: (zipPath: string, destDir: string) => Promise<void>;
+}): Promise<"exists" | "downloaded" | "failed"> {
+  const { dbPath } = options;
+  if (await Bun.file(dbPath).exists()) {
+    return "exists";
+  }
+  const url = options.url ?? ECDICT_SQLITE_URL;
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const unzipImpl = options.unzipImpl ?? systemUnzip;
+  const zipPath = `${dbPath}.download.zip`;
+  const extractDir = `${dbPath}.extract`;
+  try {
+    const response = await fetchImpl(url);
+    if (!response.ok) {
+      return "failed";
+    }
+    await mkdir(dirname(dbPath), { recursive: true });
+    await Bun.write(zipPath, response);
+    await unzipImpl(zipPath, extractDir);
+    const dbFile = (await readdir(extractDir)).find((name) => name.endsWith(".db"));
+    if (dbFile === undefined) {
+      return "failed";
+    }
+    await rename(join(extractDir, dbFile), dbPath); // 原子就位：存在即完整
+    return "downloaded";
+  } catch {
+    return "failed";
+  } finally {
+    await rm(zipPath, { force: true });
+    await rm(extractDir, { recursive: true, force: true });
+  }
+}
+
+async function systemUnzip(zipPath: string, destDir: string): Promise<void> {
+  await mkdir(destDir, { recursive: true });
+  const proc = Bun.spawn(["unzip", "-o", zipPath, "-d", destDir], {
+    stdout: "ignore",
+    stderr: "ignore",
+  });
+  if ((await proc.exited) !== 0) {
+    throw new Error("unzip failed");
   }
 }
