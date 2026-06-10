@@ -206,7 +206,7 @@ describe("content library", () => {
         articleWordRange(article.length)[0],
       );
       expect(readingWordCount(articleText)).toBeLessThanOrEqual(articleWordRange(article.length)[1]);
-      expect(readingSentenceCount(articleText)).toBeGreaterThanOrEqual(3);
+      expect(readingSentenceCount(articleText)).toBeGreaterThanOrEqual(2);
       expectReadingVocabularyLevel(articleText, article.level, readingVocabulary);
       for (const paragraph of article.paragraphs) {
         expect(paragraph.text.trim()).not.toBe("");

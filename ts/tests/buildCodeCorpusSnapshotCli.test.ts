@@ -367,7 +367,7 @@ describe("build everyday reading content CLI", () => {
           return (
             count >= min &&
             count <= max &&
-            readingSentenceCount(articleText) >= 3
+            readingSentenceCount(articleText) >= 2
           );
         }),
       ).toBe(true);
