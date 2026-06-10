@@ -8,6 +8,7 @@ import {
   selectedFlatSettingsIndex,
 } from "./appModel";
 import type {
+  EverydayEnglishSettings,
   KeyEventRecord,
   Mode,
   PracticeTargetAnnotation,
@@ -1368,10 +1369,10 @@ function renderPracticeOverview(
           ? `当前计划检测到 ${category} 需要复习，本组保留完整上下文。`
           : `Current plan is focusing ${category}; this group keeps the full context.`
         : undefined;
-  const codeStatus =
+  const contentStatus =
     route.target.mode === "code"
       ? codeStatusContent(route.target, input, state.language)
-      : undefined;
+      : everydayStatusContent(route.source_item, state.everydaySettings, state.language);
   return kit.Box(
     {
       id: "keyloop-practice-overview",
@@ -1403,12 +1404,12 @@ function renderPracticeOverview(
               truncate: true,
             }),
           ]),
-      ...(codeStatus === undefined
+      ...(contentStatus === undefined
         ? []
         : [
             kit.Text({
               id: "keyloop-practice-code-status",
-              content: codeStatus,
+              content: contentStatus,
               fg: theme.info,
               height: 1,
               truncate: true,
@@ -1417,6 +1418,98 @@ function renderPracticeOverview(
     ),
     renderPracticeTimeStack(state, kit),
   );
+}
+
+function everydayStatusContent(
+  sourceItem: string,
+  settings: OpenTuiAppState["everydaySettings"],
+  language: OpenTuiAppState["language"],
+): string | undefined {
+  if (settings === undefined) {
+    return undefined;
+  }
+  const zh = language === "zh";
+  switch (sourceItem) {
+    case "everyday_words":
+      return zh
+        ? `词库 ${everydayWordRangeStatusLabel(settings.word_range, language)} · 每组 ${settings.word_count} 词`
+        : `Range ${everydayWordRangeStatusLabel(settings.word_range, language)} · ${settings.word_count} words/group`;
+    case "everyday_sentences":
+      return zh
+        ? `词汇量 ${everydayLevelStatusLabel(settings.sentence_level, language)} · 长度 ${everydayLengthStatusLabel(settings.sentence_length, language)} · 每组 ${settings.sentence_count} 句`
+        : `Vocabulary ${everydayLevelStatusLabel(settings.sentence_level, language)} · Length ${everydayLengthStatusLabel(settings.sentence_length, language)} · ${settings.sentence_count} sentences/group`;
+    case "everyday_articles":
+      return zh
+        ? `词汇量 ${everydayLevelStatusLabel(settings.article_level, language)} · 长度 ${everydayLengthStatusLabel(settings.article_length, language)}`
+        : `Vocabulary ${everydayLevelStatusLabel(settings.article_level, language)} · Length ${everydayLengthStatusLabel(settings.article_length, language)}`;
+    case "everyday_word_decomposition":
+      return zh
+        ? `词汇量 ${everydayLevelStatusLabel(settings.decomposition_level, language)} · 每组 ${settings.decomposition_word_count} 词 · 拆分×${settings.decomposition_part_repeats} · 全词×${settings.decomposition_word_repeats}`
+        : `Vocabulary ${everydayLevelStatusLabel(settings.decomposition_level, language)} · ${settings.decomposition_word_count} words/group · parts ×${settings.decomposition_part_repeats} · whole ×${settings.decomposition_word_repeats}`;
+    default:
+      return undefined;
+  }
+}
+
+function everydayWordRangeStatusLabel(
+  value: EverydayEnglishSettings["word_range"],
+  language: OpenTuiAppState["language"],
+): string {
+  const labels =
+    language === "zh"
+      ? {
+          "200": "基础 200",
+          "1000": "常用 1000",
+          "5000": "进阶 5000",
+          "10000": "扩展 10000",
+        }
+      : {
+          "200": "Basic 200",
+          "1000": "Common 1000",
+          "5000": "Advanced 5000",
+          "10000": "Extended 10000",
+        };
+  return labels[value];
+}
+
+function everydayLevelStatusLabel(
+  value: EverydayEnglishSettings["sentence_level"],
+  language: OpenTuiAppState["language"],
+): string {
+  if (language !== "zh") {
+    const labels: Record<string, string> = {
+      high_school: "High school",
+      cet4: "CET-4",
+      cet6: "CET-6",
+      postgraduate: "Postgraduate",
+      toefl_ielts: "TOEFL/IELTS",
+    };
+    return labels[value] ?? value;
+  }
+  const labels: Record<string, string> = {
+    high_school: "高中",
+    cet4: "四级",
+    cet6: "六级",
+    postgraduate: "考研",
+    toefl_ielts: "托福雅思",
+  };
+  return labels[value] ?? value;
+}
+
+function everydayLengthStatusLabel(
+  value: EverydayEnglishSettings["sentence_length"],
+  language: OpenTuiAppState["language"],
+): string {
+  if (language !== "zh") {
+    return titleCase(value);
+  }
+  const labels: Record<string, string> = {
+    short: "短",
+    medium: "中",
+    long: "长",
+    mixed: "混合",
+  };
+  return labels[value] ?? value;
 }
 
 function renderPracticeTimeStack(state: OpenTuiAppState, kit: OpenTuiRendererKit): unknown {
@@ -1522,7 +1615,7 @@ function codeStatusContent(
   const scope = codeBlockScopeLabel(currentBlock);
   const difficulty = codeDifficultyStatusText(currentBlock?.difficulty, language);
   const size = codeSizeStatusText(currentBlock?.size, language);
-  const meta = [scope, difficulty, size].filter((item) => item.length > 0).join("  |  ");
+  const meta = [scope, difficulty, size].filter((item) => item.length > 0).join(" · ");
   return meta.length > 0 ? `${blockLabel}  ${meta}` : blockLabel;
 }
 
