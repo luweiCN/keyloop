@@ -23,7 +23,9 @@ import {
   openTuiCodeFilterPickerItems,
   openTuiFlatSettingsItems,
   openTuiMenuItems,
+  openTuiStatsViews,
   selectedFlatSettingsIndex,
+  stateOptions,
   type OpenTuiAppState,
   type OpenTuiCodeSettings,
   type OpenTuiFlatSettingsItem,
@@ -77,16 +79,6 @@ export interface OpenTuiAppSessionResult {
   renderer?: OpenTuiRenderer;
 }
 
-const statsViewsByNumber: OpenTuiStatsView[] = [
-  "overview",
-  "today",
-  "comprehensive",
-  "modules",
-  "keys",
-  "tokens",
-  "code",
-  "daily",
-];
 
 const keyStatsSorts: KeyStatsSort[] = [
   "slowest_average",
@@ -151,15 +143,7 @@ export function reduceOpenTuiAppKey(
       return { state, action: "quit" };
     }
     if (state.route.screen === "settings" && state.route.view !== "menu") {
-      const menuState = createOpenTuiSettingsState(state.language, "menu", {
-        codeFilters: state.codeFilters,
-        codeSettings: state.codeSettings,
-        codeStyleSettings: state.codeStyleSettings,
-        everydaySettings: state.everydaySettings,
-        wordFormSettings: state.wordFormSettings,
-        speedUnit: state.speed_unit,
-        todayElapsedMs: state.today_elapsed_ms,
-      });
+      const menuState = createOpenTuiSettingsState(state.language, "menu", stateOptions(state));
       return {
         state: flatSettingsSelectionState(
           menuState,
@@ -169,15 +153,7 @@ export function reduceOpenTuiAppKey(
       };
     }
     return {
-      state: createOpenTuiInitialState(state.language, {
-        codeFilters: state.codeFilters,
-        codeSettings: state.codeSettings,
-        codeStyleSettings: state.codeStyleSettings,
-        everydaySettings: state.everydaySettings,
-        wordFormSettings: state.wordFormSettings,
-        speedUnit: state.speed_unit,
-        todayElapsedMs: state.today_elapsed_ms,
-      }),
+      state: createOpenTuiInitialState(state.language, stateOptions(state)),
       action: "continue",
     };
   }
@@ -895,13 +871,8 @@ function wordFormSettingsResult(
 ): OpenTuiAppKeyResult {
   return {
     state: createOpenTuiSettingsState(language, "word_forms", {
-      codeFilters: state.codeFilters,
-      codeSettings: state.codeSettings,
-      codeStyleSettings: state.codeStyleSettings,
-      everydaySettings: state.everydaySettings,
+      ...stateOptions(state),
       wordFormSettings: settings,
-      speedUnit: state.speed_unit,
-      todayElapsedMs: state.today_elapsed_ms,
     }),
     action: "continue",
   };
@@ -975,13 +946,8 @@ function codeDifficultySettingsResult(
 ): OpenTuiAppKeyResult {
   return {
     state: createOpenTuiSettingsState(language, "code_difficulty", {
-      codeFilters: state.codeFilters,
+      ...stateOptions(state),
       codeSettings: settings,
-      codeStyleSettings: state.codeStyleSettings,
-      everydaySettings: state.everydaySettings,
-      wordFormSettings: state.wordFormSettings,
-      speedUnit: state.speed_unit,
-      todayElapsedMs: state.today_elapsed_ms,
     }),
     action: "continue",
   };
@@ -1051,13 +1017,8 @@ function codeStyleSettingsResult(
   selectedIndex: number,
 ): OpenTuiAppKeyResult {
   const nextState = createOpenTuiSettingsState(language, "code_style", {
-    codeFilters: state.codeFilters,
-    codeSettings: state.codeSettings,
+    ...stateOptions(state),
     codeStyleSettings: settings,
-    everydaySettings: state.everydaySettings,
-    wordFormSettings: state.wordFormSettings,
-    speedUnit: state.speed_unit,
-      todayElapsedMs: state.today_elapsed_ms,
   });
   return {
     state: {
@@ -1141,13 +1102,8 @@ function everydaySettingsResult(
 ): OpenTuiAppKeyResult {
   return {
     state: createOpenTuiSettingsState(language, "everyday", {
-      codeFilters: state.codeFilters,
-      codeSettings: state.codeSettings,
-      codeStyleSettings: state.codeStyleSettings,
+      ...stateOptions(state),
       everydaySettings: settings,
-      wordFormSettings: state.wordFormSettings,
-      speedUnit: state.speed_unit,
-      todayElapsedMs: state.today_elapsed_ms,
     }),
     action: "continue",
   };
@@ -1371,15 +1327,7 @@ function codeFilterPickerState(
   state: OpenTuiAppState,
   filters: NonNullable<OpenTuiAppState["codeFilters"]>,
 ): OpenTuiAppState {
-  return createOpenTuiSettingsState(state.language, "code_filters", {
-    codeFilters: filters,
-    codeSettings: state.codeSettings,
-    codeStyleSettings: state.codeStyleSettings,
-    everydaySettings: state.everydaySettings,
-    wordFormSettings: state.wordFormSettings,
-    speedUnit: state.speed_unit,
-    todayElapsedMs: state.today_elapsed_ms,
-  });
+  return createOpenTuiSettingsState(state.language, "code_filters", { ...stateOptions(state), codeFilters: filters });
 }
 
 function codeFilterSettingsResult(
@@ -1409,15 +1357,7 @@ function codeFilterSettingsResult(
     }
   }
   return {
-    state: createOpenTuiSettingsState(state.language, "code_filters", {
-      codeFilters: nextFilters,
-      codeSettings: state.codeSettings,
-      codeStyleSettings: state.codeStyleSettings,
-      everydaySettings: state.everydaySettings,
-      wordFormSettings: state.wordFormSettings,
-      speedUnit: state.speed_unit,
-      todayElapsedMs: state.today_elapsed_ms,
-    }),
+    state: createOpenTuiSettingsState(state.language, "code_filters", { ...stateOptions(state), codeFilters: nextFilters }),
     action: "continue",
   };
 }
@@ -1531,7 +1471,7 @@ function reduceStatsKey(
 
   const index = numberKeyIndex(event);
   if (index !== undefined) {
-    const view = statsViewsByNumber[index];
+    const view = openTuiStatsViews[index];
     if (view !== undefined) {
       const options: OpenTuiStatsStateOptions =
         view === "daily" ? { view, dailyIndex: state.route.dailyIndex ?? 0 } : { view };

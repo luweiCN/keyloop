@@ -3,6 +3,7 @@ import {
   openTuiCodeFilterPickerItems,
   openTuiFlatSettingsItems,
   openTuiMenuItems,
+  openTuiStatsViews,
   openTuiRouteLines,
   openTuiRouteTitle,
   selectedFlatSettingsIndex,
@@ -297,18 +298,8 @@ async function renderRoute(state: OpenTuiAppState, kit: OpenTuiRendererKit): Pro
   }
 }
 
-const statsViews = [
-  "overview",
-  "today",
-  "comprehensive",
-  "modules",
-  "keys",
-  "tokens",
-  "code",
-  "daily",
-] as const;
 
-function statsViewLabel(view: (typeof statsViews)[number], zh: boolean): string {
+function statsViewLabel(view: (typeof openTuiStatsViews)[number], zh: boolean): string {
   switch (view) {
     case "overview":
       return zh ? "总览" : "Overview";
@@ -350,7 +341,7 @@ function renderStatsScreen(state: OpenTuiAppState, kit: OpenTuiRendererKit): unk
     },
     tabStrip(
       "keyloop-stats-tabs",
-      statsViews.map((view) => ({
+      openTuiStatsViews.map((view) => ({
         id: view,
         label: statsViewLabel(view, zh),
         active: view === activeView,

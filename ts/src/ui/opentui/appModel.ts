@@ -122,15 +122,18 @@ export type OpenTuiSettingsMenuItemId =
   | "settings-code-filters"
   | "settings-code-difficulty"
   | "settings-code-style";
-export type OpenTuiStatsView =
-  | "overview"
-  | "today"
-  | "comprehensive"
-  | "modules"
-  | "keys"
-  | "tokens"
-  | "code"
-  | "daily";
+export const openTuiStatsViews = [
+  "overview",
+  "today",
+  "comprehensive",
+  "modules",
+  "keys",
+  "tokens",
+  "code",
+  "daily",
+] as const;
+
+export type OpenTuiStatsView = (typeof openTuiStatsViews)[number];
 
 export interface OpenTuiMenuItem {
   id: OpenTuiMenuItemId;
@@ -1641,7 +1644,7 @@ function buildTargetContextForState(
   };
 }
 
-function stateOptions(state: OpenTuiAppState): OpenTuiStateOptions {
+export function stateOptions(state: OpenTuiAppState): OpenTuiStateOptions {
   const options: OpenTuiStateOptions = {};
   if (state.speed_unit !== undefined) {
     options.speedUnit = state.speed_unit;
@@ -1938,24 +1941,8 @@ function statsDailyRouteLines(
 }
 
 function nextStatsView(view: OpenTuiStatsView): OpenTuiStatsView {
-  switch (view) {
-    case "overview":
-      return "today";
-    case "today":
-      return "comprehensive";
-    case "comprehensive":
-      return "modules";
-    case "modules":
-      return "keys";
-    case "keys":
-      return "tokens";
-    case "tokens":
-      return "code";
-    case "code":
-      return "daily";
-    case "daily":
-      return "overview";
-  }
+  const index = openTuiStatsViews.indexOf(view);
+  return openTuiStatsViews[(index + 1) % openTuiStatsViews.length] ?? "overview";
 }
 
 function clampIndex(index: number, length: number): number {
