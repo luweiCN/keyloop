@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KeyLoop OpenTUI Direction Mockup</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --page-bg: #101214;
+        --terminal-bg: #15191d;
+        --terminal-bg-2: #1b2025;
+        --terminal-bg-3: #20262c;
+        --terminal-fg: #d7dde3;
+        --terminal-muted: #7c858f;
+        --terminal-dim: #5f6872;
+        --ansi-black: #15191d;
+        --ansi-red: #e06c75;
+        --ansi-green: #98c379;
+        --ansi-yellow: #e5c07b;
+        --ansi-blue: #61afef;
+        --ansi-magenta: #c678dd;
+        --ansi-cyan: #56b6c2;
+        --ansi-white: #d7dde3;
+        --ansi-bright-black: #626c76;
+        --ansi-bright-red: #ff7b86;
+        --ansi-bright-green: #b7e08a;
+        --ansi-bright-yellow: #ffd277;
+        --ansi-bright-blue: #7cc7ff;
+        --ansi-bright-magenta: #dda3ff;
+        --ansi-bright-cyan: #72d7e0;
+        --border: color-mix(in srgb, var(--terminal-fg), transparent 63%);
+        --border-soft: color-mix(in srgb, var(--terminal-fg), transparent 78%);
+        --shadow: rgba(0, 0, 0, 0.42);
+        --font: "JetBrains Mono", "SFMono-Regular", "Menlo", "Consolas", monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        min-height: 100%;
+      }
+
+      body {
+        margin: 0;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 260px),
+          linear-gradient(90deg, rgba(86, 182, 194, 0.035), transparent 18%, transparent 82%, rgba(152, 195, 121, 0.035)),
+          var(--page-bg);
+        color: var(--terminal-fg);
+        font-family: var(--font);
+      }
+
+      button {
+        font: inherit;
+      }
+
+      .page {
+        min-height: 100vh;
+        padding: 28px;
+      }
+
+      .brief {
+        max-width: 1180px;
+        margin: 0 auto 18px;
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .brief h1 {
+        margin: 0 0 8px;
+        font-size: 20px;
+        line-height: 1.2;
+        letter-spacing: 0;
+        font-weight: 700;
+      }
+
+      .brief p {
+        margin: 0;
+        max-width: 760px;
+        color: #a9b0b8;
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .switcher {
+        display: inline-flex;
+        border: 1px solid var(--border-soft);
+        background: rgba(255, 255, 255, 0.025);
+        padding: 3px;
+        gap: 3px;
+      }
+
+      .switcher button {
+        border: 0;
+        color: #aeb6bf;
+        background: transparent;
+        padding: 7px 10px;
+        cursor: pointer;
+        min-width: 78px;
+        white-space: nowrap;
+      }
+
+      .switcher button[aria-pressed="true"] {
+        color: var(--ansi-black);
+        background: var(--ansi-bright-green);
+      }
+
+      .terminal {
+        width: min(1180px, calc(100vw - 56px));
+        min-height: 720px;
+        margin: 0 auto;
+        background: linear-gradient(180deg, var(--terminal-bg), #12161a);
+        border: 1px solid var(--border);
+        box-shadow: 0 22px 70px var(--shadow);
+        padding: 14px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .terminal::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.018) 50%, transparent 50%) 0 0 / 100% 4px,
+          linear-gradient(90deg, rgba(255, 255, 255, 0.018), transparent 20%, transparent 80%, rgba(255, 255, 255, 0.018));
+        opacity: 0.38;
+      }
+
+      .terminal-inner {
+        position: relative;
+        min-height: 690px;
+        display: grid;
+        grid-template-rows: auto auto 1fr auto;
+        gap: 12px;
+      }
+
+      .topbar,
+      .helpbar {
+        border: 1px solid var(--border-soft);
+        background: rgba(255, 255, 255, 0.026);
+        padding: 10px 12px;
+      }
+
+      .topbar {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 18px;
+        align-items: center;
+      }
+
+      .brandline {
+        display: flex;
+        gap: 12px;
+        align-items: baseline;
+        min-width: 0;
+      }
+
+      .brand {
+        color: var(--ansi-bright-green);
+        font-weight: 800;
+      }
+
+      .route {
+        color: var(--terminal-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .session-state {
+        color: var(--terminal-muted);
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        white-space: nowrap;
+      }
+
+      .led {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: var(--ansi-bright-green);
+        box-shadow: 0 0 12px var(--ansi-green);
+      }
+
+      .progress-shell {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 10px;
+        color: var(--terminal-muted);
+        font-size: 12px;
+      }
+
+      .progress-track {
+        height: 8px;
+        background: var(--terminal-bg-3);
+        border: 1px solid var(--border-soft);
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        width: 42%;
+        height: 100%;
+        background: linear-gradient(90deg, var(--ansi-green), var(--ansi-cyan));
+      }
+
+      .screen {
+        display: none;
+        min-height: 0;
+      }
+
+      .screen.active {
+        display: grid;
+      }
+
+      .menu-screen {
+        grid-template-columns: 1fr;
+        align-content: start;
+        gap: 12px;
+      }
+
+      .panel {
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.018);
+      }
+
+      .panel-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid var(--border-soft);
+        padding: 9px 12px;
+        color: var(--ansi-cyan);
+      }
+
+      .panel-body {
+        padding: 12px;
+      }
+
+      .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .command {
+        display: grid;
+        grid-template-columns: 44px 1fr auto;
+        gap: 12px;
+        align-items: center;
+        min-height: 76px;
+        border: 1px solid var(--border-soft);
+        background: color-mix(in srgb, var(--terminal-bg-2), transparent 18%);
+        padding: 12px;
+      }
+
+      .command.primary {
+        border-color: color-mix(in srgb, var(--ansi-green), transparent 28%);
+        background:
+          linear-gradient(90deg, rgba(152, 195, 121, 0.13), transparent 45%),
+          var(--terminal-bg-2);
+      }
+
+      .command-index {
+        color: var(--ansi-black);
+        background: var(--ansi-yellow);
+        text-align: center;
+        padding: 8px 0;
+        font-weight: 800;
+      }
+
+      .command.primary .command-index {
+        background: var(--ansi-bright-green);
+      }
+
+      .command-title {
+        color: var(--terminal-fg);
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+
+      .command-hint {
+        color: var(--terminal-muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .command-signal {
+        color: var(--ansi-cyan);
+        font-size: 12px;
+      }
+
+      .status-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+
+      .stat {
+        border: 1px solid var(--border-soft);
+        padding: 10px 12px;
+        background: rgba(255, 255, 255, 0.018);
+      }
+
+      .stat-label {
+        color: var(--terminal-muted);
+        font-size: 11px;
+        margin-bottom: 8px;
+      }
+
+      .stat-value {
+        color: var(--terminal-fg);
+        font-weight: 750;
+      }
+
+      .run-screen {
+        grid-template-rows: auto auto 1fr;
+        gap: 12px;
+      }
+
+      .lesson-banner {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        border: 1px solid var(--border);
+        background: linear-gradient(90deg, rgba(97, 175, 239, 0.10), rgba(152, 195, 121, 0.06));
+        padding: 12px;
+      }
+
+      .lesson-title {
+        color: var(--ansi-bright-blue);
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+
+      .lesson-reason {
+        color: var(--terminal-muted);
+        font-size: 12px;
+      }
+
+      .lesson-chip {
+        align-self: start;
+        color: var(--ansi-black);
+        background: var(--ansi-cyan);
+        padding: 5px 8px;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .practice-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 280px;
+        gap: 12px;
+        min-height: 0;
+      }
+
+      .live-meter {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        align-items: stretch;
+      }
+
+      .ghost {
+        min-height: 420px;
+      }
+
+      .code-lines {
+        counter-reset: line;
+        font-size: 14px;
+        line-height: 1.72;
+        white-space: pre;
+        overflow: hidden;
+      }
+
+      .code-line {
+        display: block;
+        min-height: 24px;
+      }
+
+      .code-line::before {
+        counter-increment: line;
+        content: counter(line, decimal-leading-zero) "  ";
+        color: var(--terminal-dim);
+      }
+
+      .pending {
+        color: var(--terminal-dim);
+      }
+
+      .typed {
+        color: var(--ansi-bright-green);
+      }
+
+      .wrong {
+        color: var(--ansi-bright-red);
+        text-decoration-line: underline;
+        text-decoration-style: wavy;
+        text-decoration-color: var(--ansi-bright-red);
+        font-weight: 800;
+      }
+
+      .cursor {
+        color: var(--ansi-black);
+        background: var(--ansi-bright-yellow);
+        font-weight: 800;
+      }
+
+      .kw {
+        color: var(--ansi-magenta);
+      }
+
+      .fn {
+        color: var(--ansi-blue);
+      }
+
+      .type {
+        color: var(--ansi-cyan);
+      }
+
+      .prop {
+        color: var(--ansi-bright-blue);
+      }
+
+      .str {
+        color: var(--ansi-yellow);
+      }
+
+      .op {
+        color: var(--ansi-bright-cyan);
+      }
+
+      .comment {
+        color: var(--terminal-muted);
+      }
+
+      .return-symbol {
+        color: var(--terminal-dim);
+      }
+
+      .diagnostics {
+        display: grid;
+        grid-template-rows: auto auto;
+        gap: 10px;
+        align-content: start;
+      }
+
+      .metric-strip {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .metric {
+        border: 1px solid var(--border-soft);
+        background: var(--terminal-bg-2);
+        padding: 10px;
+      }
+
+      .metric b {
+        display: block;
+        color: var(--terminal-muted);
+        font-size: 11px;
+        font-weight: 500;
+        margin-bottom: 7px;
+      }
+
+      .metric span {
+        color: var(--terminal-fg);
+        font-weight: 850;
+      }
+
+      .metric.good span {
+        color: var(--ansi-bright-green);
+      }
+
+      .metric.warn span {
+        color: var(--ansi-bright-yellow);
+      }
+
+      .metric.bad span {
+        color: var(--ansi-bright-red);
+      }
+
+      .mini-list {
+        display: grid;
+        gap: 8px;
+        color: var(--terminal-muted);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .mini-list strong {
+        color: var(--ansi-yellow);
+        font-weight: 700;
+      }
+
+      .complete-screen {
+        align-content: center;
+        gap: 12px;
+      }
+
+      .complete-card {
+        max-width: 860px;
+        margin: 0 auto;
+        border: 1px solid color-mix(in srgb, var(--ansi-green), transparent 40%);
+        background:
+          linear-gradient(180deg, rgba(152, 195, 121, 0.11), rgba(255, 255, 255, 0.02)),
+          var(--terminal-bg);
+      }
+
+      .complete-hero {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 18px;
+        padding: 18px;
+        border-bottom: 1px solid var(--border-soft);
+      }
+
+      .complete-title {
+        color: var(--ansi-bright-green);
+        font-size: 18px;
+        font-weight: 850;
+        margin-bottom: 8px;
+      }
+
+      .complete-subtitle {
+        color: var(--terminal-muted);
+        font-size: 13px;
+      }
+
+      .score-badge {
+        color: var(--ansi-black);
+        background: var(--ansi-bright-green);
+        padding: 10px 14px;
+        font-weight: 900;
+        align-self: start;
+      }
+
+      .complete-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        padding: 14px;
+      }
+
+      .next-box {
+        margin: 0 14px 14px;
+        border: 1px solid var(--border-soft);
+        padding: 12px;
+        color: var(--terminal-muted);
+        background: rgba(255, 255, 255, 0.018);
+      }
+
+      .next-box strong {
+        color: var(--ansi-cyan);
+      }
+
+      .helpbar {
+        color: var(--terminal-muted);
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        font-size: 12px;
+      }
+
+      .key {
+        color: var(--ansi-black);
+        background: var(--terminal-fg);
+        padding: 1px 5px;
+        margin-right: 4px;
+        font-weight: 800;
+      }
+
+      .warning-note {
+        color: var(--ansi-yellow);
+      }
+
+      @media (max-width: 920px) {
+        .page {
+          padding: 14px;
+        }
+
+        .brief {
+          display: grid;
+        }
+
+        .terminal {
+          width: calc(100vw - 28px);
+        }
+
+        .menu-grid,
+        .practice-shell,
+        .status-row,
+        .complete-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .live-meter {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="brief">
+        <div>
+          <h1>KeyLoop OpenTUI visual direction</h1>
+          <p>
+            轻量 HTML 设计稿：用 Web 模拟终端字符网格，确认 OpenTUI 版本的布局、ANSI 语义色、
+            灰态待输入文本、错误下划线和完成反馈。不是 Web 版产品。
+          </p>
+        </div>
+        <nav class="switcher" aria-label="切换设计稿页面">
+          <button type="button" aria-pressed="true" data-view="menu">主菜单</button>
+          <button type="button" aria-pressed="false" data-view="run">练习中</button>
+          <button type="button" aria-pressed="false" data-view="complete">完成页</button>
+        </nav>
+      </header>
+
+      <section class="terminal" aria-label="KeyLoop terminal mockup">
+        <div class="terminal-inner">
+          <div class="topbar">
+            <div class="brandline">
+              <span class="brand">KeyLoop</span>
+              <span class="route" data-route>练习菜单 / 今日自适应计划</span>
+            </div>
+            <div class="session-state">
+              <span class="led"></span>
+              <span>ANSI theme aware</span>
+              <span>UTF-8 grid</span>
+            </div>
+          </div>
+
+          <div class="progress-shell">
+            <span>今日进度</span>
+            <span class="progress-track"><span class="progress-fill"></span></span>
+            <span>8.4 / 20 min</span>
+          </div>
+
+          <section class="screen menu-screen active" data-screen="menu">
+            <div class="panel">
+              <div class="panel-title">
+                <span>练习菜单</span>
+                <span class="warning-note">推荐：综合练习</span>
+              </div>
+              <div class="panel-body menu-grid">
+                <div class="command primary">
+                  <div class="command-index">1</div>
+                  <div>
+                    <div class="command-title">综合练习</div>
+                    <div class="command-hint">按今日动态计划练完所有组，弱项会影响后续内容。</div>
+                  </div>
+                  <div class="command-signal">adaptive</div>
+                </div>
+                <div class="command">
+                  <div class="command-index">2</div>
+                  <div>
+                    <div class="command-title">基础输入</div>
+                    <div class="command-hint">Home/top/bottom row、过渡、符号边缘键。</div>
+                  </div>
+                  <div class="command-signal">keys</div>
+                </div>
+                <div class="command">
+                  <div class="command-index">3</div>
+                  <div>
+                    <div class="command-title">日常练习</div>
+                    <div class="command-hint">常用词、句子、长词拆解，适合补英文自动化。</div>
+                  </div>
+                  <div class="command-signal">words</div>
+                </div>
+                <div class="command">
+                  <div class="command-index">4</div>
+                  <div>
+                    <div class="command-title">编程基础</div>
+                    <div class="command-hint">操作符、括号、命名、技术长词和个人词库。</div>
+                  </div>
+                  <div class="command-signal">symbols</div>
+                </div>
+                <div class="command">
+                  <div class="command-index">5</div>
+                  <div>
+                    <div class="command-title">代码实战</div>
+                    <div class="command-hint">按语言/框架范围练完整代码块、函数和文件片段。</div>
+                  </div>
+                  <div class="command-signal">code</div>
+                </div>
+                <div class="command">
+                  <div class="command-index">7</div>
+                  <div>
+                    <div class="command-title">数据统计</div>
+                    <div class="command-hint">热力图、慢词块、高错键、综合练习完成情况。</div>
+                  </div>
+                  <div class="command-signal">stats</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="status-row">
+              <div class="stat">
+                <div class="stat-label">下一组重点</div>
+                <div class="stat-value">operators + identifiers</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">最近正确率</div>
+                <div class="stat-value">95.5%</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">慢项</div>
+                <div class="stat-value">selectedPreference</div>
+              </div>
+              <div class="stat">
+                <div class="stat-label">今日建议</div>
+                <div class="stat-value">先稳符号组</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="screen run-screen" data-screen="run">
+            <div class="lesson-banner">
+              <div>
+                <div class="lesson-title">代码实战：TypeScript 函数片段</div>
+                <div class="lesson-reason">
+                  当前计划检测到符号和长标识符掉速，本组保留完整代码上下文。
+                </div>
+              </div>
+              <div class="lesson-chip">lesson 3 / 4</div>
+            </div>
+
+            <div class="live-meter" aria-label="实时练习指标">
+              <div class="metric good"><b>WPM</b><span>43.8</span></div>
+              <div class="metric"><b>Raw</b><span>51.2</span></div>
+              <div class="metric warn"><b>Accuracy</b><span>94.7%</span></div>
+              <div class="metric bad"><b>Errors</b><span>3</span></div>
+            </div>
+
+            <div class="practice-shell">
+              <div class="panel ghost">
+                <div class="panel-title">
+                  <span>跟打文本</span>
+                  <span>代码高亮跟打</span>
+                </div>
+                <div class="panel-body">
+                  <div class="code-lines" aria-label="代码跟打区域">
+                    <span class="code-line"><span class="typed kw">export</span><span class="typed"> </span><span class="typed kw">async</span><span class="typed"> </span><span class="typed kw">function</span><span class="typed"> </span><span class="typed fn">loadSelectedDraft</span><span class="typed">(</span><span class="typed prop">id</span><span class="typed">: </span><span class="typed type">string</span><span class="typed">): </span><span class="typed type">Promise</span><span class="typed">&lt;</span><span class="typed type">SelectedDraft</span><span class="typed">&gt; {</span><span class="typed return-symbol">⏎</span></span>
+                    <span class="code-line"><span class="typed">  </span><span class="typed kw">const</span><span class="typed"> response </span><span class="typed op">=</span><span class="typed"> </span><span class="typed prop">api</span><span class="typed">.</span><span class="typed fn">get</span><span class="typed">&lt;</span><span class="typed type">SelectedDraft</span><span class="typed">&gt;(</span><span class="typed str">`/selected_drafts/</span><span class="wrong">${</span><span class="cursor">i</span><span class="pending">d}</span><span class="pending str">`</span><span class="pending">);</span><span class="pending return-symbol">⏎</span></span>
+                    <span class="code-line"><span class="pending">  return response.data;</span><span class="pending return-symbol">⏎</span></span>
+                    <span class="code-line"><span class="pending">}</span><span class="pending return-symbol">⏎</span></span>
+                    <span class="code-line"><span class="pending"></span></span>
+                    <span class="code-line"><span class="pending kw">function</span><span class="pending"> </span><span class="pending fn">groupRegistrysByOwner</span><span class="pending">(</span><span class="pending prop">items</span><span class="pending">: </span><span class="pending type">Registry</span><span class="pending">[]) {</span><span class="pending return-symbol">⏎</span></span>
+                    <span class="code-line"><span class="pending">  return items.reduce&lt;Record&lt;string, Registry[]&gt;&gt;((groups, item) =&gt; {</span><span class="pending return-symbol">⏎</span></span>
+                    <span class="code-line"><span class="pending">    (groups[item.ownerId] ??= []).push(item);</span><span class="pending return-symbol">⏎</span></span>
+                    <span class="code-line"><span class="pending">    return groups;</span><span class="pending return-symbol">⏎</span></span>
+                    <span class="code-line"><span class="pending">  }, {});</span></span>
+                  </div>
+                </div>
+              </div>
+
+              <aside class="diagnostics">
+                <div class="panel">
+                  <div class="panel-title"><span>训练诊断</span><span>adaptive</span></div>
+                  <div class="panel-body mini-list">
+                    <div><strong>慢词：</strong>selectedDraft, ownerId, Registry</div>
+                    <div><strong>热键：</strong>{ } _ = Enter</div>
+                    <div><strong>建议：</strong>保持手位回稳，不要逐键摸索。</div>
+                  </div>
+                </div>
+                <div class="panel">
+                  <div class="panel-title"><span>本组进度</span><span>68%</span></div>
+                  <div class="panel-body mini-list">
+                    <div>correct chars 214 / 316</div>
+                    <div>backspace 7</div>
+                    <div>active 2m 12s</div>
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </section>
+
+          <section class="screen complete-screen" data-screen="complete">
+            <div class="complete-card">
+              <div class="complete-hero">
+                <div>
+                  <div class="complete-title">本组完成</div>
+                  <div class="complete-subtitle">
+                    代码实战：TypeScript 函数片段。错项会进入下一组编程基础和个人词库复习。
+                  </div>
+                </div>
+                <div class="score-badge">A- / steady</div>
+              </div>
+              <div class="complete-grid">
+                <div class="metric good"><b>WPM</b><span>42.6</span></div>
+                <div class="metric"><b>Raw WPM</b><span>49.8</span></div>
+                <div class="metric warn"><b>Accuracy</b><span>95.5%</span></div>
+                <div class="metric bad"><b>Errors</b><span>12</span></div>
+              </div>
+              <div class="next-box">
+                <strong>下一组：</strong>编程基础 mix 会加入 <span class="typed">selectedDraft</span>、
+                <span class="typed">ownerId</span> 和 <span class="typed">{}</span> 的符号过渡。
+              </div>
+            </div>
+          </section>
+
+          <footer class="helpbar">
+            <span><span class="key">↑↓</span>选择 <span class="key">Enter</span>开始/继续 <span class="key">Esc</span>返回</span>
+            <span><span class="key">Ctrl+P</span>暂停 <span class="key">R</span>重练 <span class="key">Q</span>退出</span>
+          </footer>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const buttons = Array.from(document.querySelectorAll("[data-view]"));
+      const screens = Array.from(document.querySelectorAll("[data-screen]"));
+      const route = document.querySelector("[data-route]");
+      const routeText = {
+        menu: "练习菜单 / 今日自适应计划",
+        run: "代码实战 / TypeScript 函数片段 / 跟打中",
+        complete: "结果 / 本组完成 / 下一组建议",
+      };
+
+      for (const button of buttons) {
+        button.addEventListener("click", () => {
+          const view = button.dataset.view;
+          for (const item of buttons) {
+            item.setAttribute("aria-pressed", String(item === button));
+          }
+          for (const screen of screens) {
+            screen.classList.toggle("active", screen.dataset.screen === view);
+          }
+          if (route && view) {
+            route.textContent = routeText[view];
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

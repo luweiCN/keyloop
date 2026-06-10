@@ -11,3 +11,21 @@
 # redirected local data out of the repository as well.
 .keyloop/
 sessions.jsonl
+
+# Corpus collection workspaces (hundreds of MB of raw scraped data).
+# Runtime content lives in ts/content; these are pipeline inputs only.
+/content/corpus-v2/
+/content/corpus-v3/
+/content/corpus-v4/
+/content/final/
+/content/reports/
+/raw/
+
+# Everyday-reading pipeline intermediates (sources for ts/content builds).
+/ts/content/everyday_reading_candidates.json
+/ts/content/everyday_reading_seed.json
+/ts/content/everyday_reading_translated/
+/ts/content/everyday_reading_translation_batches/
+
+# Stray artifact
+/--verbose

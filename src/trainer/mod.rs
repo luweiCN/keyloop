@@ -2383,10 +2383,7 @@ fn render_code_filter_settings(frame: &mut Frame, area: Rect, app: &App) {
 
     let options_area = centered_width(chunks[2], PRACTICE_PANEL_MAX_WIDTH);
     let mut lines = Vec::new();
-    let visible_rows = options_area
-        .height
-        .saturating_sub(2 + lines.len() as u16)
-        .max(1) as usize;
+    let visible_rows = options_area.height.saturating_sub(2).max(1) as usize;
     let active_filter_index = app.code_filter_index;
     let (start, end) = visible_window(active_filter_index, app.code_options.len(), visible_rows);
     if app.code_options.is_empty() {

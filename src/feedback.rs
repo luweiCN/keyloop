@@ -42,11 +42,17 @@ pub fn is_numbered_template_identifier(token: &str) -> bool {
             index += 1;
             continue;
         }
+        let stem_len = chars[..index]
+            .iter()
+            .rev()
+            .take_while(|ch| ch.is_ascii_alphabetic())
+            .count();
         let mut after_digits = index + 1;
         while after_digits < chars.len() && chars[after_digits].is_ascii_digit() {
             after_digits += 1;
         }
-        if after_digits < chars.len()
+        if stem_len >= 5
+            && after_digits < chars.len()
             && (chars[after_digits].is_ascii_alphabetic()
                 || chars[after_digits] == '_'
                 || chars[after_digits] == '-')
@@ -102,10 +108,15 @@ mod tests {
     #[test]
     fn numbered_template_identifier_detection_avoids_common_code_names() {
         assert!(is_numbered_template_identifier("transaction5Open"));
+        assert!(is_numbered_template_identifier("transaction10Open"));
         assert!(is_numbered_template_identifier("Module6Config"));
+        assert!(is_numbered_template_identifier("Module12Config"));
         assert!(is_numbered_template_identifier("module3-list"));
         assert!(!is_numbered_template_identifier("uint256"));
         assert!(!is_numbered_template_identifier("ERC20"));
         assert!(!is_numbered_template_identifier("H2Title"));
+        assert!(!is_numbered_template_identifier("r2d2"));
+        assert!(!is_numbered_template_identifier("s3Bucket"));
+        assert!(!is_numbered_template_identifier("sha256Sum"));
     }
 }
