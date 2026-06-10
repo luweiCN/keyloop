@@ -26,6 +26,7 @@ import {
   openTuiStatsViews,
   selectedFlatSettingsIndex,
   stateOptions,
+  withRoute,
   type OpenTuiAppState,
   type OpenTuiCodeSettings,
   type OpenTuiFlatSettingsItem,
@@ -153,7 +154,7 @@ export function reduceOpenTuiAppKey(
       };
     }
     return {
-      state: createOpenTuiInitialState(state.language, stateOptions(state)),
+      state: withRoute(state, { screen: "main_menu", selected_index: 0 }),
       action: "continue",
     };
   }
