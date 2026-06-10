@@ -1262,3 +1262,62 @@ function codeMenuLibrary(): ContentLibrary {
     ],
   };
 }
+
+describe("custom library menus", () => {
+  const sampleLibrary = {
+    version: 1 as const,
+    slug: "kaoyan",
+    name: "考研英语",
+    created_at: "2026-06-11T00:00:00.000Z",
+    words: [
+      { id: "w1", text: "abandon", kind: "word" as const, meaning_zh: "v. 放弃", source: "dict" as const },
+      { id: "w2", text: "machine learning", kind: "phrase" as const, source: "manual" as const },
+    ],
+    sentences: [{ id: "s1", text: "Hello there.", translation_zh: "你好。" }],
+    articles: [],
+  };
+
+  function libraryState(): OpenTuiAppState {
+    const base = createOpenTuiInitialState("zh", { customLibraries: [sampleLibrary] });
+    return { ...base, route: { screen: "submenu", menu: "custom", selected_index: 0 } };
+  }
+
+  test("custom submenu lists libraries plus create and manage entries", () => {
+    const items = openTuiMenuItems(libraryState());
+    expect(items.map((item) => item.id)).toEqual([
+      "library_open_kaoyan",
+      "library_new",
+      "library_manage",
+    ]);
+    expect(items[0]?.label).toBe("考研英语");
+  });
+
+  test("opening a library shows per-kind practice items, empty kinds hidden", () => {
+    const opened = activateOpenTuiMenuItem(libraryState(), "library_open_kaoyan", appContext());
+    expect(opened.route).toMatchObject({ screen: "library_menu", slug: "kaoyan" });
+    const items = openTuiMenuItems(opened);
+    expect(items.map((item) => item.id)).toEqual([
+      "library_kind_kaoyan:words",
+      "library_kind_kaoyan:phrases",
+      "library_kind_kaoyan:sentences",
+      "library_kind_kaoyan:mix",
+    ]);
+  });
+
+  test("selecting a kind starts practice from library content", () => {
+    const opened = activateOpenTuiMenuItem(libraryState(), "library_open_kaoyan", appContext());
+    const running = activateOpenTuiMenuItem(opened, "library_kind_kaoyan:words", appContext());
+    expect(running.route.screen).toBe("running");
+    if (running.route.screen === "running") {
+      expect(running.route.target.text).toContain("abandon");
+      expect(running.route.target.source).toBe("keyloop:library:kaoyan:words");
+    }
+  });
+
+  test("create and manage entries route to their screens", () => {
+    const create = activateOpenTuiMenuItem(libraryState(), "library_new", appContext());
+    expect(create.route).toEqual({ screen: "library_create", name: "" });
+    const manage = activateOpenTuiMenuItem(libraryState(), "library_manage", appContext());
+    expect(manage.route).toEqual({ screen: "library_manage", selected_index: 0 });
+  });
+});

@@ -54,7 +54,11 @@ export type OpenTuiSubmenuId =
   | "custom_my_words"
   | "custom_my_sentences"
   | "custom_my_articles"
-  | `custom_tag_${string}`;
+  | `custom_tag_${string}`
+  | "library_new"
+  | "library_manage"
+  | `library_open_${string}`
+  | `library_kind_${string}`;
 
 export type OpenTuiMenuItemId = OpenTuiMainMenuId | OpenTuiSubmenuId;
 export type OpenTuiSubmenu = "foundation" | "everyday" | "programming" | "code" | "custom";
@@ -74,6 +78,8 @@ export function openTuiMenuItems(state: OpenTuiAppState): OpenTuiMenuItem[] {
         return customSubmenuItems(state);
       }
       return submenuItems(state.route.menu, state.language);
+    case "library_menu":
+      return libraryMenuItems(state, state.route.slug);
     case "settings":
     case "stats":
     case "running":
@@ -83,6 +89,13 @@ export function openTuiMenuItems(state: OpenTuiAppState): OpenTuiMenuItem[] {
     case "complete":
     case "summary":
     case "ansi_palette":
+    case "library_create":
+    case "library_manage":
+    case "library_actions":
+    case "library_input":
+    case "library_preview":
+    case "library_browse":
+    case "library_delete_confirm":
       return [];
   }
 }
@@ -109,30 +122,74 @@ export interface CustomCorpusSummary {
 }
 
 function customSubmenuItems(state: OpenTuiAppState): OpenTuiMenuItem[] {
-  const summary = state.customCorpus;
   const zh = state.language === "zh";
-  const items: OpenTuiMenuItem[] = [
-    {
-      id: "custom_my_words",
-      label: zh ? "我的单词" : "My words",
-      hint: `${summary?.totalWords ?? 0}${zh ? " 词" : " words"}`,
-    },
-    {
-      id: "custom_my_sentences",
-      label: zh ? "我的句子" : "My sentences",
-      hint: `${summary?.totalSentences ?? 0}${zh ? " 句" : " sentences"}`,
-    },
-    {
-      id: "custom_my_articles",
-      label: zh ? "我的文章" : "My articles",
-      hint: `${summary?.totalArticles ?? 0}${zh ? " 篇" : " articles"}`,
-    },
-  ];
-  for (const collection of summary?.collections ?? []) {
+  const items: OpenTuiMenuItem[] = [];
+  for (const library of state.customLibraries ?? []) {
+    const wordCount = library.words.filter((word) => word.kind === "word").length;
+    const phraseCount = library.words.length - wordCount;
     items.push({
-      id: `custom_tag_${collection.slug}`,
-      label: collection.name,
-      hint: `${collection.wordCount}${zh ? " 词" : " words"}`,
+      id: `library_open_${library.slug}`,
+      label: library.name,
+      hint: zh
+        ? `${wordCount} 词 · ${phraseCount} 组 · ${library.sentences.length} 句 · ${library.articles.length} 篇`
+        : `${wordCount}w · ${phraseCount}p · ${library.sentences.length}s · ${library.articles.length}a`,
+    });
+  }
+  items.push({
+    id: "library_new",
+    label: zh ? "新建语料库" : "New library",
+    hint: zh ? "输入名称创建" : "create with a name",
+  });
+  items.push({
+    id: "library_manage",
+    label: zh ? "管理语料库" : "Manage libraries",
+    hint: zh ? "添加 · 编辑 · 删除" : "add · edit · delete",
+  });
+  return items;
+}
+
+export function libraryMenuItems(state: OpenTuiAppState, slug: string): OpenTuiMenuItem[] {
+  const zh = state.language === "zh";
+  const library = (state.customLibraries ?? []).find((entry) => entry.slug === slug);
+  if (library === undefined) {
+    return [];
+  }
+  const wordCount = library.words.filter((word) => word.kind === "word").length;
+  const phraseCount = library.words.length - wordCount;
+  const items: OpenTuiMenuItem[] = [];
+  if (wordCount > 0) {
+    items.push({
+      id: `library_kind_${slug}:words`,
+      label: zh ? "单词练习" : "Words",
+      hint: zh ? `${wordCount} 词` : `${wordCount} words`,
+    });
+  }
+  if (phraseCount > 0) {
+    items.push({
+      id: `library_kind_${slug}:phrases`,
+      label: zh ? "词组练习" : "Phrases",
+      hint: zh ? `${phraseCount} 条` : `${phraseCount} phrases`,
+    });
+  }
+  if (library.sentences.length > 0) {
+    items.push({
+      id: `library_kind_${slug}:sentences`,
+      label: zh ? "句子练习" : "Sentences",
+      hint: zh ? `${library.sentences.length} 句` : `${library.sentences.length} sentences`,
+    });
+  }
+  if (library.articles.length > 0) {
+    items.push({
+      id: `library_kind_${slug}:articles`,
+      label: zh ? "文章练习" : "Articles",
+      hint: zh ? `${library.articles.length} 篇` : `${library.articles.length} articles`,
+    });
+  }
+  if (items.length > 0) {
+    items.push({
+      id: `library_kind_${slug}:mix`,
+      label: zh ? "混合练习" : "Mixed",
+      hint: zh ? "单词 · 词组 · 句子 · 文章" : "words · phrases · sentences · articles",
     });
   }
   return items;

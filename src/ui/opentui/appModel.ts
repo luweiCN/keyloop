@@ -1,3 +1,12 @@
+import type { DictionaryTier } from "../../content/dictionary";
+import type { CustomLibrary } from "../../training/customLibrary";
+import {
+  buildLibraryArticleTarget,
+  buildLibraryMixTarget,
+  buildLibraryPhrasesTarget,
+  buildLibrarySentencesTarget,
+  buildLibraryWordsTarget,
+} from "../../training/customLibraryTargets";
 import {
   defaultCodePracticeConfig,
   defaultCodeStyleSettings,
@@ -151,11 +160,14 @@ export interface OpenTuiStateOptions {
   speedUnit?: SpeedUnit | undefined;
   todayElapsedMs?: number | undefined;
   customCorpus?: CustomCorpusSummary | undefined;
+  customLibraries?: CustomLibrary[] | undefined;
+  dictionaryTier?: DictionaryTier | undefined;
 }
 
 export type OpenTuiReturnRoute =
   | { screen: "main_menu"; selected_index?: number }
-  | { screen: "submenu"; menu: OpenTuiSubmenu; selected_index?: number };
+  | { screen: "submenu"; menu: OpenTuiSubmenu; selected_index?: number }
+  | { screen: "library_menu"; slug: string; selected_index?: number };
 
 export type OpenTuiRoute =
   | { screen: "main_menu"; selected_index?: number }
@@ -216,7 +228,58 @@ export type OpenTuiRoute =
       records: SessionRecord[];
       daily_run_id?: string;
     }
-  | { screen: "ansi_palette" };
+  | { screen: "ansi_palette" }
+  | { screen: "library_menu"; slug: string; selected_index?: number }
+  | { screen: "library_create"; name: string }
+  | { screen: "library_manage"; selected_index?: number }
+  | { screen: "library_actions"; slug: string; selected_index?: number }
+  | {
+      screen: "library_input";
+      slug: string;
+      kind: "words" | "sentences" | "article";
+      phase: "title" | "body";
+      article_title: string;
+      text: string;
+      editing_id?: string;
+    }
+  | { screen: "library_preview"; slug: string; payload: LibraryPreviewPayload }
+  | {
+      screen: "library_browse";
+      slug: string;
+      entry_type: "words" | "sentences" | "articles";
+      query: string;
+      index: number;
+    }
+  | { screen: "library_delete_confirm"; slug: string };
+
+export type LibraryPreviewPayload =
+  | {
+      kind: "words";
+      raw_text: string;
+      entries: {
+        text: string;
+        word_kind: "word" | "phrase";
+        meaning_zh?: string;
+        phonetic?: string;
+        source: "dict" | "manual";
+      }[];
+      error_lines: string[];
+      editing_id?: string;
+    }
+  | {
+      kind: "sentences";
+      raw_text: string;
+      entries: { text: string; translation_zh?: string }[];
+      editing_id?: string;
+    }
+  | {
+      kind: "article";
+      raw_text: string;
+      title: string;
+      paragraphs: { text: string; translation_zh?: string }[];
+      warnings: string[];
+      editing_id?: string;
+    };
 
 /**
  * Session-scoped fields that survive every screen change. Anything added
@@ -233,6 +296,8 @@ export interface OpenTuiSessionState {
   everydaySettings?: EverydayEnglishSettings | undefined;
   wordFormSettings?: OpenTuiWordFormSettings | undefined;
   customCorpus?: CustomCorpusSummary | undefined;
+  customLibraries?: CustomLibrary[] | undefined;
+  dictionaryTier?: DictionaryTier | undefined;
   today_elapsed_ms?: number | undefined;
 }
 
@@ -573,6 +638,8 @@ export function activateOpenTuiMenuItem(
       return activateMainMenuItem(state, itemId, context);
     case "submenu":
       return activateSubmenuItem(state, itemId, context);
+    case "library_menu":
+      return activateLibraryMenuItem(state, itemId);
     case "settings":
     case "stats":
     case "running":
@@ -582,6 +649,13 @@ export function activateOpenTuiMenuItem(
     case "complete":
     case "summary":
     case "ansi_palette":
+    case "library_create":
+    case "library_manage":
+    case "library_actions":
+    case "library_input":
+    case "library_preview":
+    case "library_browse":
+    case "library_delete_confirm":
       return state;
   }
 }
@@ -620,11 +694,57 @@ function activateMainMenuItem(
   }
 }
 
+function activateLibraryMenuItem(
+  state: OpenTuiAppState,
+  itemId: OpenTuiMenuItemId,
+): OpenTuiAppState {
+  if (!itemId.startsWith("library_kind_")) {
+    return state;
+  }
+  const spec = itemId.slice("library_kind_".length);
+  const separator = spec.lastIndexOf(":");
+  if (separator === -1) {
+    return state;
+  }
+  const slug = spec.slice(0, separator);
+  const kind = spec.slice(separator + 1);
+  const library = (state.customLibraries ?? []).find((entry) => entry.slug === slug);
+  if (library === undefined) {
+    return state;
+  }
+  const target =
+    kind === "words"
+      ? buildLibraryWordsTarget(library)
+      : kind === "phrases"
+        ? buildLibraryPhrasesTarget(library)
+        : kind === "sentences"
+          ? buildLibrarySentencesTarget(library)
+          : kind === "articles"
+            ? buildLibraryArticleTarget(library)
+            : kind === "mix"
+              ? buildLibraryMixTarget(library)
+              : undefined;
+  if (target === undefined || target.text === "") {
+    return state;
+  }
+  return runningState(state.language, itemId, target, undefined, stateOptions(state));
+}
+
 function activateSubmenuItem(
   state: OpenTuiAppState,
   itemId: OpenTuiMenuItemId,
   context: BuildTargetContext,
 ): OpenTuiAppState {
+  if (itemId.startsWith("library_open_")) {
+    const slug = itemId.slice("library_open_".length);
+    return withRoute(state, { screen: "library_menu", slug, selected_index: 0 });
+  }
+  if (itemId === "library_new") {
+    return withRoute(state, { screen: "library_create", name: "" });
+  }
+  if (itemId === "library_manage") {
+    return withRoute(state, { screen: "library_manage", selected_index: 0 });
+  }
   if (itemId.startsWith("custom_tag_")) {
     const tag = itemId.slice("custom_tag_".length);
     const vocabularyContext = buildTargetContextForState(state, context, "standalone");
@@ -999,6 +1119,12 @@ function appState(
   if (options.wordFormSettings !== undefined) {
     state.wordFormSettings = cloneWordFormSettings(options.wordFormSettings);
   }
+  if (options.customLibraries !== undefined) {
+    state.customLibraries = options.customLibraries;
+  }
+  if (options.dictionaryTier !== undefined) {
+    state.dictionaryTier = options.dictionaryTier;
+  }
   if (options.customCorpus !== undefined) {
     state.customCorpus = {
       totalWords: options.customCorpus.totalWords,
@@ -1071,6 +1197,12 @@ export function stateOptions(state: OpenTuiAppState): OpenTuiStateOptions {
   }
   if (state.wordFormSettings !== undefined) {
     options.wordFormSettings = state.wordFormSettings;
+  }
+  if (state.customLibraries !== undefined) {
+    options.customLibraries = state.customLibraries;
+  }
+  if (state.dictionaryTier !== undefined) {
+    options.dictionaryTier = state.dictionaryTier;
   }
   if (state.customCorpus !== undefined) {
     options.customCorpus = state.customCorpus;

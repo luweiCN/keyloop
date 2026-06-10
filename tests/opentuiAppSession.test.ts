@@ -79,59 +79,27 @@ describe("OpenTUI app session", () => {
     expect(quit.state.route.screen).toBe("main_menu");
   });
 
-  test("custom corpus submenu lists collections and starts tag practice", () => {
+  test("custom submenu lists libraries and starts library practice", () => {
     const context: OpenTuiAppSessionContext = {
       ...appContext(),
-      personalVocabulary: [
+      customLibraries: [
         {
-          id: "v1",
-          text: "staking",
-          kind: "word",
-          meaning_zh: "质押",
-          tags: ["web3"],
-          priority: 2,
-          created_at: "2026-06-01T00:00:00.000Z",
-          updated_at: "2026-06-01T00:00:00.000Z",
-          archived: false,
-        },
-        {
-          id: "v2",
-          text: "oracle",
-          kind: "word",
-          tags: ["web3"],
-          priority: 2,
-          created_at: "2026-06-01T00:00:00.000Z",
-          updated_at: "2026-06-01T00:00:00.000Z",
-          archived: false,
-        },
-        {
-          id: "v3",
-          text: "refactor",
-          kind: "word",
-          tags: [],
-          priority: 2,
-          created_at: "2026-06-01T00:00:00.000Z",
-          updated_at: "2026-06-01T00:00:00.000Z",
-          archived: false,
-        },
-      ],
-      customCollections: [
-        {
+          version: 1,
           slug: "web3",
           name: "Web3 terms",
           created_at: "2026-06-01T00:00:00.000Z",
-          archived: false,
+          words: [
+            { id: "w1", text: "staking", kind: "word", meaning_zh: "质押", source: "manual" },
+            { id: "w2", text: "oracle", kind: "word", source: "dict" },
+          ],
+          sentences: [],
+          articles: [],
         },
       ],
     };
 
     const initial = createOpenTuiInitialState("en", {
-      customCorpus: {
-        totalWords: 3,
-        totalSentences: 0,
-        totalArticles: 0,
-        collections: [{ slug: "web3", name: "Web3 terms", wordCount: 2 }],
-      },
+      customLibraries: context.customLibraries,
     });
     const submenu = reduceOpenTuiAppKey(initial, key("6", "6"), context);
     expect(submenu.state.route.screen).toBe("submenu");
@@ -141,25 +109,24 @@ describe("OpenTUI app session", () => {
     expect(submenu.state.route.menu).toBe("custom");
     const items = openTuiMenuItems(submenu.state);
     expect(items.map((item) => item.id)).toEqual([
-      "custom_my_words",
-      "custom_my_sentences",
-      "custom_my_articles",
-      "custom_tag_web3",
+      "library_open_web3",
+      "library_new",
+      "library_manage",
     ]);
-    expect(items[3]?.label).toBe("Web3 terms");
-    expect(items[3]?.hint).toBe("2 words");
+    expect(items[0]?.label).toBe("Web3 terms");
 
-    const running = reduceOpenTuiAppKey(submenu.state, key("4", "4"), context);
+    const opened = reduceOpenTuiAppKey(submenu.state, key("1", "1"), context);
+    expect(opened.state.route).toMatchObject({ screen: "library_menu", slug: "web3" });
+    const running = reduceOpenTuiAppKey(opened.state, key("1", "1"), context);
     expect(running.action).toBe("start");
     expect(running.state.route.screen).toBe("running");
     if (running.state.route.screen !== "running") {
       throw new Error("expected running route");
     }
-    expect(running.state.route.source_item).toBe("custom_tag_web3");
-    expect(running.state.route.target.source).toBe("keyloop:custom:web3");
+    expect(running.state.route.source_item).toBe("library_kind_web3:words");
+    expect(running.state.route.target.source).toBe("keyloop:library:web3:words");
     expect(running.state.route.target.text).toContain("staking");
     expect(running.state.route.target.text).toContain("oracle");
-    expect(running.state.route.target.text).not.toContain("refactor");
   });
 
   test("reducer supports arrow selection and enter in the main menu", () => {

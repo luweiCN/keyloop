@@ -115,6 +115,19 @@ export function routeHints(state: OpenTuiAppState): KeyHint[] {
     case "main_menu":
     case "submenu":
       return menuHints(state.route.screen, zh);
+    case "library_menu":
+      return menuHints("submenu", zh);
+    case "library_create":
+    case "library_manage":
+    case "library_actions":
+    case "library_input":
+    case "library_preview":
+    case "library_browse":
+    case "library_delete_confirm":
+      return [
+        { key: "Esc", label: zh ? "返回" : "back" },
+        { key: "Q", label: zh ? "退出" : "quit" },
+      ];
     case "settings":
       return settingsHints(state.route.view, zh);
     case "stats":
@@ -162,6 +175,14 @@ export function routeCrumb(state: OpenTuiAppState): string {
     case "practice_options":
     case "summary":
     case "ansi_palette":
+    case "library_menu":
+    case "library_create":
+    case "library_manage":
+    case "library_actions":
+    case "library_input":
+    case "library_preview":
+    case "library_browse":
+    case "library_delete_confirm":
       return openTuiRouteTitle(state);
   }
 }

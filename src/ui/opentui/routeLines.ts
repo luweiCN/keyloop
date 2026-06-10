@@ -70,6 +70,26 @@ export function openTuiRouteTitle(state: OpenTuiAppState): string {
       return state.language === "zh" ? "今日总结" : "Daily summary";
     case "ansi_palette":
       return state.language === "zh" ? "ANSI 色板" : "ANSI palette";
+    case "library_menu": {
+      const library = (state.customLibraries ?? []).find(
+        (entry) => state.route.screen === "library_menu" && entry.slug === state.route.slug,
+      );
+      return library?.name ?? (state.language === "zh" ? "自建语料库" : "My library");
+    }
+    case "library_create":
+      return state.language === "zh" ? "新建语料库" : "New library";
+    case "library_manage":
+      return state.language === "zh" ? "管理语料库" : "Manage libraries";
+    case "library_actions":
+      return state.language === "zh" ? "语料库管理" : "Library actions";
+    case "library_input":
+      return state.language === "zh" ? "录入内容" : "Add content";
+    case "library_preview":
+      return state.language === "zh" ? "预览确认" : "Preview";
+    case "library_browse":
+      return state.language === "zh" ? "浏览内容" : "Browse entries";
+    case "library_delete_confirm":
+      return state.language === "zh" ? "删除确认" : "Delete confirmation";
   }
 }
 
@@ -78,6 +98,7 @@ export function openTuiRouteLines(state: OpenTuiAppState): string[] {
   switch (state.route.screen) {
     case "main_menu":
     case "submenu":
+    case "library_menu":
       return openTuiMenuItems(state).map((item, index) => `${index + 1}. ${item.label}  ${item.hint}`);
     case "settings":
       if (state.route.view === "menu") {
@@ -106,6 +127,14 @@ export function openTuiRouteLines(state: OpenTuiAppState): string[] {
       return summaryLines(state.route.records, state.language, speedUnit);
     case "ansi_palette":
       return ansiPaletteLines(state.language);
+    case "library_create":
+    case "library_manage":
+    case "library_actions":
+    case "library_input":
+    case "library_preview":
+    case "library_browse":
+    case "library_delete_confirm":
+      return [];
   }
 }
 

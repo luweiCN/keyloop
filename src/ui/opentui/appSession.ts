@@ -12,6 +12,12 @@ import {
   type UserPreferences,
 } from "../../domain/model";
 import { codePracticeOptionsForLibrary } from "../../content/library";
+import type { Dictionary } from "../../content/dictionary";
+import type { CustomLibrary } from "../../training/customLibrary";
+import {
+  deleteCustomLibraryAtDir,
+  saveCustomLibraryToDir,
+} from "../../storage/keyloopStore";
 import { collectionTagCounts, type CorpusCollectionMeta } from "../../training/vocabulary";
 import type { BuildTargetContext } from "../../training/targets";
 import {
@@ -77,6 +83,9 @@ export interface OpenTuiAppSessionContext extends BuildTargetContext {
   speedUnit?: SpeedUnit;
   todayElapsedMs?: number;
   customCollections?: CorpusCollectionMeta[];
+  customLibraries?: CustomLibrary[];
+  dictionary?: Dictionary;
+  librariesDir?: string;
 }
 
 export interface OpenTuiAppSessionOptions {
@@ -87,9 +96,14 @@ export interface OpenTuiAppSessionOptions {
 
 export type OpenTuiAppAction = "continue" | "quit" | "start";
 
+export type LibraryPersist =
+  | { kind: "save"; library: CustomLibrary }
+  | { kind: "delete"; slug: string };
+
 export interface OpenTuiAppKeyResult {
   state: OpenTuiAppState;
   action: OpenTuiAppAction;
+  persist?: LibraryPersist;
 }
 
 export interface OpenTuiAppSessionResult {
@@ -114,6 +128,12 @@ export function reduceOpenTuiAppKey(
     if (state.route.screen === "main_menu") {
       return { state, action: "quit" };
     }
+    if (state.route.screen === "library_menu") {
+      return {
+        state: withRoute(state, { screen: "submenu", menu: "custom", selected_index: 0 }),
+        action: "continue",
+      };
+    }
     if (state.route.screen === "settings" && state.route.view !== "menu") {
       const menuState = createOpenTuiSettingsState(state.language, "menu", stateOptions(state));
       return {
@@ -133,7 +153,16 @@ export function reduceOpenTuiAppKey(
   switch (state.route.screen) {
     case "main_menu":
     case "submenu":
+    case "library_menu":
       return reduceMenuKey(state, event, context);
+    case "library_create":
+    case "library_manage":
+    case "library_actions":
+    case "library_input":
+    case "library_preview":
+    case "library_browse":
+    case "library_delete_confirm":
+      return { state, action: "continue" };
     case "stats":
       return reduceStatsKey({ language: state.language, route: state.route }, event);
     case "settings":
@@ -168,6 +197,8 @@ export async function runOpenTuiAppSession(
       wordFormSettings: wordFormSettingsFromContext(context),
       speedUnit: speedUnitFromContext(context),
       customCorpus: customCorpusFromContext(context),
+      customLibraries: context.customLibraries ?? [],
+      dictionaryTier: context.dictionary?.tier ?? "none",
       todayElapsedMs: todayElapsedMsFromContext(context),
     });
   let state =
@@ -188,6 +219,13 @@ export async function runOpenTuiAppSession(
     }
 
     const result = reduceOpenTuiAppKey(state, event, context);
+    if (result.persist !== undefined && context.librariesDir !== undefined) {
+      if (result.persist.kind === "save") {
+        await saveCustomLibraryToDir(result.persist.library, context.librariesDir);
+      } else {
+        await deleteCustomLibraryAtDir(result.persist.slug, context.librariesDir);
+      }
+    }
     const previousState = state;
     state = result.state;
     if (result.action === "quit") {
@@ -282,6 +320,15 @@ function reduceMenuKey(
 }
 
 function returnRouteFromMenuState(state: OpenTuiAppState): OpenTuiReturnRoute {
+  if (state.route.screen === "library_menu") {
+    return {
+      screen: "library_menu",
+      slug: state.route.slug,
+      ...(state.route.selected_index === undefined
+        ? {}
+        : { selected_index: state.route.selected_index }),
+    };
+  }
   if (state.route.screen === "submenu") {
     return {
       screen: "submenu",
@@ -319,7 +366,11 @@ function selectedMenuIndex(state: OpenTuiAppState, itemCount: number): number {
   if (itemCount <= 0) {
     return 0;
   }
-  if (state.route.screen !== "main_menu" && state.route.screen !== "submenu") {
+  if (
+    state.route.screen !== "main_menu" &&
+    state.route.screen !== "submenu" &&
+    state.route.screen !== "library_menu"
+  ) {
     return 0;
   }
   return clampMenuIndex(state.route.selected_index ?? 0, itemCount);
@@ -330,7 +381,11 @@ function menuSelectionState(
   delta: -1 | 1,
   itemCount: number,
 ): OpenTuiAppState {
-  if (state.route.screen !== "main_menu" && state.route.screen !== "submenu") {
+  if (
+    state.route.screen !== "main_menu" &&
+    state.route.screen !== "submenu" &&
+    state.route.screen !== "library_menu"
+  ) {
     return state;
   }
   if (itemCount <= 0) {
@@ -342,6 +397,12 @@ function menuSelectionState(
     return {
       ...state,
       route: { screen: "main_menu", selected_index: nextIndex },
+    };
+  }
+  if (state.route.screen === "library_menu") {
+    return {
+      ...state,
+      route: { screen: "library_menu", slug: state.route.slug, selected_index: nextIndex },
     };
   }
   return {

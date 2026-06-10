@@ -210,7 +210,11 @@ export function selectedMenuIndex(state: OpenTuiAppState, itemCount: number): nu
   if (itemCount <= 0) {
     return 0;
   }
-  if (state.route.screen !== "main_menu" && state.route.screen !== "submenu") {
+  if (
+    state.route.screen !== "main_menu" &&
+    state.route.screen !== "submenu" &&
+    state.route.screen !== "library_menu"
+  ) {
     return 0;
   }
   return Math.min(

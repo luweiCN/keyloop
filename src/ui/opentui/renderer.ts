@@ -62,7 +62,20 @@ async function renderRoute(state: OpenTuiAppState, kit: OpenTuiRendererKit): Pro
   switch (state.route.screen) {
     case "main_menu":
     case "submenu":
+    case "library_menu":
       return renderAppFrame(state, renderMenuScreen(state, kit), kit);
+    case "library_create":
+    case "library_manage":
+    case "library_actions":
+    case "library_input":
+    case "library_preview":
+    case "library_browse":
+    case "library_delete_confirm":
+      return renderAppFrame(
+        state,
+        renderPanel("keyloop-route-panel", openTuiRouteTitle(state), openTuiRouteLines(state), kit),
+        kit,
+      );
     case "running":
       return renderAppFrame(state, await renderRunningScreen(state, kit), kit);
     case "exit_confirmation":

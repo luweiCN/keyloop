@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { basename } from "node:path";
+import { basename, join } from "node:path";
 import {
   createPersonalArticleEntry,
   createPersonalSentenceEntry,
@@ -16,11 +16,13 @@ import { buildPlan } from "./training/plan";
 import {
   appendSessionToPath,
   clearSessionCheckpointAtPath,
+  customLibrariesDirPath,
   dailyRunsPath,
   currentSessionPath,
   keyStatsPath,
   keyloopDataDir,
   loadKeyAggregatesFromPath,
+  loadCustomLibrariesFromDir,
   loadOrCreateDailyPracticePlanFromPath,
   loadPreferencesFromPath,
   loadSessionsFromPath,
@@ -59,8 +61,10 @@ import {
 import {
   codePracticeOptionsForLibrary,
   loadContentLibrary,
+  resolveContentRoot,
   sourceCatalog,
 } from "./content/library";
+import { Dictionary, ensureFullDictionary } from "./content/dictionary";
 import {
   importPreview,
   planReport,
@@ -381,6 +385,17 @@ async function runApp(
   const language = preferences.interface_language;
   const keyAggregates = await loadKeyAggregatesFromPath(keyStatsPath(dataDir));
   const vocabularyStore = await loadVocabularyStoreFromPath(vocabularyPath(dataDir));
+  const librariesDir = customLibrariesDirPath(dataDir);
+  const customLibraries = await loadCustomLibrariesFromDir(librariesDir);
+  const fullDictionaryPath = join(dataDir, "dict", "ecdict.db");
+  const contentRoot = await resolveContentRoot();
+  const dictionary = await Dictionary.open({
+    miniPath: join(contentRoot, "dictionary_mini.json"),
+    fullDbPath: fullDictionaryPath,
+  });
+  if (dictionary.tier !== "full") {
+    void ensureFullDictionary({ dbPath: fullDictionaryPath }); // 后台静默下载，失败下次启动重试
+  }
   let initialState: OpenTuiAppState | undefined;
   let initialRenderer: OpenTuiRenderer | undefined;
 
@@ -423,6 +438,9 @@ async function runApp(
     ).entries;
     context.personalVocabularyLimit =
       preferences.personal_vocabulary.daily_review_limit;
+    context.customLibraries = customLibraries;
+    context.dictionary = dictionary;
+    context.librariesDir = librariesDir;
 
     const appResult =
       options.appRunner === undefined
