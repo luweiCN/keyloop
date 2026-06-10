@@ -76,6 +76,7 @@ export async function renderGhostText(
   annotations: PracticeTargetAnnotation[] | undefined,
   kit: OpenTuiRendererKit,
   completedTitle?: string,
+  spaceGlyph?: "dot",
 ): Promise<unknown> {
   const syntaxRows =
     targetMode === "code"
@@ -85,7 +86,9 @@ export async function renderGhostText(
   const wrapColumns = ghostTextWrapColumns(showLineNumbers);
   const wordColumns = ghostWordColumnRows(targetText, annotations);
   const lineTranslations = ghostLineTranslationRows(targetText, annotations);
-  const sourceRows = ghostRows(targetText, inputText, syntaxRows, targetMode === "code");
+  const sourceRows = ghostRows(targetText, inputText, syntaxRows, targetMode === "code", {
+    spaceDot: spaceGlyph === "dot",
+  });
   const articleTranslation = renderGhostArticleTranslation(annotations, wrapColumns, kit);
   const children: unknown[] = [];
   let visualIndex = 0;
@@ -424,6 +427,7 @@ export function ghostRows(
   inputText: string,
   highlightedRows: HighlightRows | undefined,
   allowFallbackSyntax = false,
+  options: { spaceDot?: boolean } = {},
 ): GhostSegment[][] {
   const target = Array.from(targetText);
   const input = Array.from(inputText);
@@ -452,7 +456,7 @@ export function ghostRows(
     const actual = input[index];
     const state = index === input.length ? "cursor" : ghostState(expected, actual);
     appendGhostSegment(rows[lineIndex] ?? [], {
-      text: expected,
+      text: options.spaceDot === true && expected === " " ? "·" : expected,
       state,
       syntax: syntax?.[index] ?? "plain",
       syntaxFg: highlightedFg(highlightedColors, lineIndex, columnIndex),

@@ -100,7 +100,10 @@ export function buildLibraryPhrasesTarget(
   for (const phrase of chosen) {
     appendLine(state, phrase.text, phrase.meaning_zh);
   }
-  return finish(state, `keyloop:library:${library.slug}:phrases`);
+  return {
+    ...finish(state, `keyloop:library:${library.slug}:phrases`),
+    space_glyph: "dot" as const,
+  };
 }
 
 export function buildLibrarySentencesTarget(

@@ -104,6 +104,8 @@ export interface PracticeTarget {
   source: string;
   code_blocks?: PracticeTargetCodeBlock[];
   annotations?: PracticeTargetAnnotation[];
+  /** 渲染提示：空格显示为中点 ·（输入仍为空格），用于词组练习 */
+  space_glyph?: "dot";
 }
 
 export interface PracticeTargetAnnotation {

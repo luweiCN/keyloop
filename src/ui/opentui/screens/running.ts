@@ -62,6 +62,7 @@ export async function renderRunningScreen(
         ? "✓ 本组完成 · Enter 下一组"
         : "✓ Group complete · Enter for next"
       : undefined,
+    route.target.space_glyph,
   );
   return kit.Box(
     {

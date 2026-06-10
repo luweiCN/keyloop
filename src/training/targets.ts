@@ -1335,6 +1335,7 @@ function everydayPhrasesTarget(context: BuildTargetContext): PracticeTarget {
       settings.word_count,
       20,
     )}`,
+    space_glyph: "dot",
   };
 }
 

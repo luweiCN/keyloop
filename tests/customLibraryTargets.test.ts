@@ -92,3 +92,14 @@ describe("custom library targets", () => {
     expect(empty.text).toContain("abandon");
   });
 });
+
+describe("phrase space glyph", () => {
+  test("phrases target marks space_glyph dot", () => {
+    expect(buildLibraryPhrasesTarget(library, { random: fixedRandom }).space_glyph).toBe("dot");
+  });
+
+  test("words and sentences targets do not mark space_glyph", () => {
+    expect(buildLibraryWordsTarget(library, { random: fixedRandom }).space_glyph).toBeUndefined();
+    expect(buildLibrarySentencesTarget(library, { random: fixedRandom }).space_glyph).toBeUndefined();
+  });
+});

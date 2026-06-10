@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 
+import { ghostRows } from "../src/ui/opentui/screens/ghostText";
 import {
   activateOpenTuiMenuItem,
   createOpenTuiCompletionState,
@@ -2364,3 +2365,17 @@ function testLibrary(): ContentLibrary {
     long_words: [],
   };
 }
+
+describe("ghostRows space glyph", () => {
+  test("renders interior spaces as middle dot when spaceDot enabled", () => {
+    const rows = ghostRows("give up", "give", undefined, false, { spaceDot: true });
+    const texts = (rows[0] ?? []).map((segment) => segment.text).join("");
+    expect(texts).toBe("give·up");
+  });
+
+  test("default keeps plain spaces", () => {
+    const rows = ghostRows("give up", "", undefined, false);
+    const texts = (rows[0] ?? []).map((segment) => segment.text).join("");
+    expect(texts).toBe("give up");
+  });
+});
