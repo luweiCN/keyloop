@@ -1407,17 +1407,43 @@ function renderPracticeOverview(
       ...(contentStatus === undefined
         ? []
         : [
-            kit.Text({
-              id: "keyloop-practice-code-status",
-              content: contentStatus,
-              fg: theme.info,
-              height: 1,
-              truncate: true,
-            }),
+            kit.Box(
+              {
+                id: "keyloop-practice-status-line",
+                flexDirection: "row",
+                gap: 1,
+                width: "100%",
+                height: 1,
+                overflow: "hidden",
+              },
+              kit.Text({
+                id: "keyloop-practice-code-status",
+                content: contentStatus,
+                fg: theme.info,
+                height: 1,
+                truncate: true,
+              }),
+              ...(practiceOptionsAvailable(route)
+                ? [
+                    kit.Text({
+                      id: "keyloop-practice-options-hint",
+                      content: state.language === "zh" ? "· Ctrl+O 调整" : "· Ctrl+O to adjust",
+                      fg: theme.muted,
+                      height: 1,
+                      flexShrink: 0,
+                      wrapMode: "none",
+                    }),
+                  ]
+                : []),
+            ),
           ]),
     ),
     renderPracticeTimeStack(state, kit),
   );
+}
+
+function practiceOptionsAvailable(route: RunningRoute): boolean {
+  return route.target.mode === "code" || route.source_item.startsWith("everyday_");
 }
 
 function everydayStatusContent(
@@ -1605,18 +1631,19 @@ function codeStatusContent(
   const blockIndex =
     currentBlock === undefined ? -1 : blocks.findIndex((block) => block === currentBlock);
   const blockLabel =
-    currentBlock === undefined || blockIndex < 0
+    blocks.length > 1 && blockIndex >= 0
       ? language === "zh"
-        ? "代码块"
-        : "Code block"
-      : language === "zh"
-        ? `代码块 ${blockIndex + 1}/${Math.max(blocks.length, 1)}`
-        : `Block ${blockIndex + 1}/${Math.max(blocks.length, 1)}`;
+        ? `代码块 ${blockIndex + 1}/${blocks.length}`
+        : `Block ${blockIndex + 1}/${blocks.length}`
+      : "";
   const scope = codeBlockScopeLabel(currentBlock);
   const difficulty = codeDifficultyStatusText(currentBlock?.difficulty, language);
   const size = codeSizeStatusText(currentBlock?.size, language);
-  const meta = [scope, difficulty, size].filter((item) => item.length > 0).join(" · ");
-  return meta.length > 0 ? `${blockLabel}  ${meta}` : blockLabel;
+  const parts = [blockLabel, scope, difficulty, size].filter((item) => item.length > 0);
+  if (parts.length === 0) {
+    return language === "zh" ? "代码" : "Code";
+  }
+  return parts.join(" · ");
 }
 
 function currentCodeBlock(
