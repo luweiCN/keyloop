@@ -244,3 +244,108 @@ describe("library screens dispatch through reduceOpenTuiAppKey", () => {
     });
   });
 });
+
+describe("library sentences and article input flow", () => {
+  test("sentences paste parses interleaved blocks into preview and saves", () => {
+    let state = stateAt(
+      {
+        screen: "library_input",
+        slug: "web",
+        kind: "sentences",
+        phase: "body",
+        article_title: "",
+        text: "The weather is nice.\n今天天气很好。\n\nSee you tomorrow.",
+      },
+      { customLibraries: [emptyLibrary("web")] },
+    );
+    state = reduceLibraryInputKey(state, ctrlD, fakeContext()).state;
+    expect(state.route.screen).toBe("library_preview");
+    if (state.route.screen !== "library_preview") throw new Error("expected preview");
+    expect(state.route.payload).toMatchObject({
+      kind: "sentences",
+      entries: [
+        { text: "The weather is nice.", translation_zh: "今天天气很好。" },
+        { text: "See you tomorrow." },
+      ],
+    });
+    const saved = reduceLibraryPreviewKey(state, keyEvent("enter", "\r"));
+    expect(saved.persist?.kind).toBe("save");
+    expect(saved.state.customLibraries?.[0]?.sentences.length).toBe(2);
+  });
+
+  test("article title phase collects title then body paste pairs paragraphs", () => {
+    let state = stateAt(
+      {
+        screen: "library_input",
+        slug: "web",
+        kind: "article",
+        phase: "title",
+        article_title: "",
+        text: "",
+      },
+      { customLibraries: [emptyLibrary("web")] },
+    );
+    for (const char of "My Day") {
+      state = reduceLibraryInputKey(state, charEvent(char), fakeContext()).state;
+    }
+    state = reduceLibraryInputKey(state, keyEvent("enter", "\r"), fakeContext()).state;
+    if (state.route.screen !== "library_input") throw new Error("expected input");
+    expect(state.route.phase).toBe("body");
+    expect(state.route.article_title).toBe("My Day");
+
+    state = {
+      ...state,
+      route: { ...state.route, text: "First para.\nSecond para.\n\n第一段。\n第二段。" },
+    };
+    state = reduceLibraryInputKey(state, ctrlD, fakeContext()).state;
+    if (state.route.screen !== "library_preview") throw new Error("expected preview");
+    expect(state.route.payload).toMatchObject({
+      kind: "article",
+      title: "My Day",
+      paragraphs: [
+        { text: "First para.", translation_zh: "第一段。" },
+        { text: "Second para.", translation_zh: "第二段。" },
+      ],
+      warnings: [],
+    });
+    const saved = reduceLibraryPreviewKey(state, keyEvent("enter", "\r"));
+    expect(saved.persist?.kind).toBe("save");
+    const article = saved.state.customLibraries?.[0]?.articles[0];
+    expect(article?.title).toBe("My Day");
+    expect(article?.paragraphs.length).toBe(2);
+  });
+
+  test("article paste with mismatched translation count carries warnings", () => {
+    let state = stateAt(
+      {
+        screen: "library_input",
+        slug: "web",
+        kind: "article",
+        phase: "body",
+        article_title: "T",
+        text: "P1.\nP2.\n\n译一。",
+      },
+      { customLibraries: [emptyLibrary("web")] },
+    );
+    state = reduceLibraryInputKey(state, ctrlD, fakeContext()).state;
+    if (state.route.screen !== "library_preview") throw new Error("expected preview");
+    if (state.route.payload.kind !== "article") throw new Error("expected article payload");
+    expect(state.route.payload.warnings.length).toBe(1);
+  });
+
+  test("empty submit stays on input screen", () => {
+    const state = stateAt(
+      {
+        screen: "library_input",
+        slug: "web",
+        kind: "sentences",
+        phase: "body",
+        article_title: "",
+        text: "  \n ",
+      },
+      { customLibraries: [emptyLibrary("web")] },
+    );
+    const result = reduceLibraryInputKey(state, ctrlD, fakeContext());
+    expect(result.state.route.screen).toBe("library_input");
+  });
+});
