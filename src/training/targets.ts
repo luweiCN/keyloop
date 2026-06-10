@@ -1,8 +1,4 @@
 import type { ContentLibrary } from "../content/library";
-import type {
-  PersonalArticleEntry,
-  PersonalSentenceEntry,
-} from "./personalCorpus";
 import { pickCodeCorpusSnippetsExcludingByDifficulty } from "../content/codeCorpus";
 import { formatCodeSnippetsForPractice } from "../content/codeFormatter";
 import {
@@ -33,8 +29,6 @@ import { recentFeedbackTerms } from "./feedback";
 import { PLAN_HISTORY_DAYS } from "./plan";
 import {
   type LongWordEntry,
-  rankPersonalVocabulary,
-  type PersonalVocabularyEntry,
 } from "./vocabulary";
 
 export interface BuildTargetContext {
@@ -48,10 +42,6 @@ export interface BuildTargetContext {
   localCodeScanError?: string;
   everydaySettings?: Partial<EverydayEnglishSettings>;
   wordBreakdownSettings?: UserPreferences["word_breakdown"];
-  personalVocabulary?: PersonalVocabularyEntry[];
-  personalSentences?: PersonalSentenceEntry[];
-  personalArticles?: PersonalArticleEntry[];
-  personalVocabularyLimit?: number;
   random?: () => number;
   now?: Date;
 }
@@ -63,11 +53,6 @@ export interface BuildLongWordBreakdownPracticeOptions {
   maxItems: number;
 }
 
-export interface BuildPersonalVocabularyPracticeOptions {
-  maxItems: number;
-  now?: Date;
-  tag?: string | undefined;
-}
 
 export type EverydayPracticeTargetKind =
   | "common_500"
@@ -581,30 +566,6 @@ export function buildLongWordBreakdownPracticeTarget(
   };
 }
 
-export function buildPersonalVocabularyPracticeTarget(
-  entries: PersonalVocabularyEntry[],
-  records: SessionRecord[],
-  options: BuildPersonalVocabularyPracticeOptions,
-): PracticeTarget {
-  const maxItems = normalizedMaxItems(options.maxItems);
-  const pool =
-    options.tag === undefined
-      ? entries
-      : entries.filter((entry) => entry.tags.includes(options.tag as string));
-  const ranked = rankPersonalVocabulary(pool, records, {
-    limit: maxItems,
-    ...(options.now === undefined ? {} : { now: options.now }),
-  }).map((item) => item.entry);
-
-  return {
-    mode: "words",
-    text: ranked.flatMap(personalVocabularyStandaloneLines).join("\n"),
-    source:
-      options.tag === undefined
-        ? "keyloop:module:personal-vocabulary"
-        : `keyloop:custom:${options.tag}`,
-  };
-}
 
 export function buildDailyPracticePlan(context: BuildTargetContext): DailyPracticePlan {
   const now = context.now ?? new Date();
@@ -1748,9 +1709,9 @@ function longWordBreakdownLines(
   if (maxEntries === 0) {
     return [];
   }
-  const personalEntries = rankedPersonalVocabularyForProgramming(context).slice(0, maxEntries);
-  const personalLines = personalEntries.flatMap(personalVocabularyBreakdownLines);
-  const usedWords = new Set(personalEntries.map((entry) => entry.text.toLowerCase()));
+  const personalLines: string[] = [];
+  const personalEntries: { text: string }[] = [];
+  const usedWords = new Set<string>();
   const focusCandidates: BreakdownCandidate[] = [];
   for (const word of context.plan.focus_words) {
     if (focusCandidates.length >= maxEntries - personalEntries.length) {
@@ -1796,9 +1757,9 @@ function everydayLongWordBreakdownLines(
   if (maxEntries === 0) {
     return [];
   }
-  const personalEntries = rankedPersonalVocabularyForEveryday(context).slice(0, maxEntries);
-  const personalLines = personalEntries.flatMap(personalVocabularyBreakdownLines);
-  const usedWords = new Set(personalEntries.map((entry) => entry.text.toLowerCase()));
+  const personalLines: string[] = [];
+  const personalEntries: { text: string }[] = [];
+  const usedWords = new Set<string>();
   const dueWords = new Set([
     ...context.plan.focus_words.map((word) => word.toLowerCase()),
     ...recentFeedbackTerms(context.records).map((word) => word.toLowerCase()),
@@ -1858,12 +1819,6 @@ function standaloneLongWordCandidates(
     }
   };
 
-  for (const entry of rankedPersonalVocabularyForStandalone(context, options)) {
-    const candidate = breakdownCandidateFromPersonalVocabulary(entry);
-    if (candidate !== null) {
-      addCandidate(candidate);
-    }
-  }
   for (const word of context.plan.focus_words) {
     const candidate = breakdownCandidateFromFocusWord(
       word,
@@ -1883,37 +1838,7 @@ function standaloneLongWordCandidates(
   return selected;
 }
 
-function rankedPersonalVocabularyForStandalone(
-  context: BuildTargetContext,
-  options: BuildLongWordBreakdownPracticeOptions,
-): PersonalVocabularyEntry[] {
-  const entries = (context.personalVocabulary ?? []).filter(hasPersonalVocabularyParts);
-  if (entries.length === 0) {
-    return [];
-  }
-  return rankPersonalVocabulary(entries, context.records, {
-    limit: entries.length,
-    ...(context.now === undefined ? {} : { now: context.now }),
-  })
-    .map((item) => item.entry)
-    .filter((entry) => matchesPersonalVocabularyDomain(entry, options));
-}
 
-function breakdownCandidateFromPersonalVocabulary(
-  entry: PersonalVocabularyEntry,
-): BreakdownCandidate | null {
-  const parts = entry.parts?.map((part) => part.trim()).filter((part) => part.length > 0) ?? [];
-  if (parts.length === 0) {
-    return null;
-  }
-  return {
-    word: entry.text,
-    parts,
-    aliases: entry.aliases ?? [],
-    identifierForms: entry.kind === "identifier",
-    domain: inferredVocabularyDomain(entry),
-  };
-}
 
 function breakdownCandidateFromFocusWord(
   word: string,
@@ -1966,55 +1891,10 @@ function breakdownCandidateLines(candidate: BreakdownCandidate): string[] {
   return lines;
 }
 
-function personalVocabularyStandaloneLines(entry: PersonalVocabularyEntry): string[] {
-  const candidate = breakdownCandidateFromPersonalVocabulary(entry);
-  return candidate === null ? [`${entry.text} ${entry.text}`] : breakdownCandidateLines(candidate);
-}
 
-function rankedPersonalVocabularyForProgramming(
-  context: BuildTargetContext,
-): PersonalVocabularyEntry[] {
-  const entries = (context.personalVocabulary ?? []).filter(hasPersonalVocabularyParts);
-  const limit = context.personalVocabularyLimit ?? 8;
-  if (entries.length === 0 || limit <= 0) {
-    return [];
-  }
 
-  return rankPersonalVocabulary(entries, context.records, {
-    limit,
-    ...(context.now === undefined ? {} : { now: context.now }),
-  })
-    .map((item) => item.entry)
-    .filter(isProgrammingVocabularyEntry)
-    .slice(0, Math.min(limit, 6));
-}
 
-function rankedPersonalVocabularyForEveryday(
-  context: BuildTargetContext,
-): PersonalVocabularyEntry[] {
-  const entries = (context.personalVocabulary ?? []).filter(hasPersonalVocabularyParts);
-  const limit = context.personalVocabularyLimit ?? 8;
-  if (entries.length === 0 || limit <= 0) {
-    return [];
-  }
 
-  return rankPersonalVocabulary(entries, context.records, {
-    limit,
-    ...(context.now === undefined ? {} : { now: context.now }),
-  })
-    .map((item) => item.entry)
-    .filter(isEverydayVocabularyEntry)
-    .slice(0, Math.min(limit, 6));
-}
-
-function hasPersonalVocabularyParts(entry: PersonalVocabularyEntry): boolean {
-  return entry.parts?.some((part) => part.trim().length > 0) ?? false;
-}
-
-function personalVocabularyBreakdownLines(entry: PersonalVocabularyEntry): string[] {
-  const candidate = breakdownCandidateFromPersonalVocabulary(entry);
-  return candidate === null ? [] : breakdownCandidateLines(candidate);
-}
 
 function firstTrimmedAlias(aliases: string[] | undefined): string | undefined {
   return aliases?.map((value) => value.trim()).find((value) => value.length > 0);
@@ -2027,12 +1907,6 @@ function matchesBreakdownDomain(
   return matchesAllowedDomain(candidate.domain, options);
 }
 
-function matchesPersonalVocabularyDomain(
-  entry: PersonalVocabularyEntry,
-  options: Pick<BuildLongWordBreakdownPracticeOptions, "domain" | "domains">,
-): boolean {
-  return matchesAllowedDomain(inferredVocabularyDomain(entry), options);
-}
 
 function matchesAllowedDomain(
   candidateDomain: LongWordEntry["domain"],
@@ -2057,42 +1931,12 @@ function isProgrammingLongWordEntry(entry: LongWordEntry): boolean {
   return entry.domain === "programming" || entry.domain === "web3";
 }
 
-function isEverydayVocabularyEntry(entry: PersonalVocabularyEntry): boolean {
-  const domain = inferredVocabularyDomain(entry);
-  return domain === "everyday" || domain === "workplace";
-}
 
-function inferredVocabularyDomain(entry: PersonalVocabularyEntry): LongWordEntry["domain"] {
-  const tags = new Set(entry.tags.map((tag) => tag.toLowerCase()));
-  if (tags.has("web3")) {
-    return "web3";
-  }
-  if (tags.has("workplace")) {
-    return "workplace";
-  }
-  if (tags.has("everyday")) {
-    return "everyday";
-  }
-  if (isProgrammingVocabularyEntry(entry)) {
-    return "programming";
-  }
-  return "everyday";
-}
 
 function normalizedMaxItems(value: number): number {
   return Math.max(0, Math.floor(value));
 }
 
-function isProgrammingVocabularyEntry(entry: PersonalVocabularyEntry): boolean {
-  const tags = new Set(entry.tags.map((tag) => tag.toLowerCase()));
-  return (
-    entry.kind === "identifier" ||
-    entry.kind === "code_term" ||
-    tags.has("programming") ||
-    tags.has("code") ||
-    tags.has("web3")
-  );
-}
 
 function buildLessonSymbols(context: BuildTargetContext): string {
   const random = context.random ?? Math.random;

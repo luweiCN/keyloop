@@ -291,14 +291,8 @@ export function settingsRouteLines(state: OpenTuiAppState): string[] {
   if (state.route.view === "word_forms") {
     const settings = state.wordFormSettings ?? defaultWordFormSettings();
     return state.language === "zh"
-      ? [
-          `长词每组  ${settings.word_breakdown.max_items_per_group}`,
-          `词库每日  ${settings.personal_vocabulary.daily_review_limit}`,
-        ]
-      : [
-          `Breakdown items per group  ${settings.word_breakdown.max_items_per_group}`,
-          `Vocabulary daily limit  ${settings.personal_vocabulary.daily_review_limit}`,
-        ];
+      ? [`长词每组  ${settings.word_breakdown.max_items_per_group}`]
+      : [`Breakdown items per group  ${settings.word_breakdown.max_items_per_group}`];
   }
 
   return openTuiSettingsMenuItems(state.language).map((item, index) => `${index + 1}. ${item.label}`);

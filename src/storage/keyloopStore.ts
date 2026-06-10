@@ -18,21 +18,6 @@ import {
   type UserPreferences,
 } from "../domain/model";
 import type { CustomLibrary } from "../training/customLibrary";
-import {
-  emptyPersonalArticlesStore,
-  emptyPersonalSentencesStore,
-  type PersonalArticleEntry,
-  type PersonalArticlesStore,
-  type PersonalSentenceEntry,
-  type PersonalSentencesStore,
-} from "../training/personalCorpus";
-import {
-  emptyCollectionsStore,
-  type CorpusCollectionMeta,
-  type CorpusCollectionsStore,
-  type PersonalVocabularyEntry,
-  type PersonalVocabularyStore,
-} from "../training/vocabulary";
 
 export interface DataDirOptions {
   env?: Record<string, string | undefined>;
@@ -90,22 +75,6 @@ export function keyStatsPath(dataDir: string): string {
 
 export function currentSessionPath(dataDir: string): string {
   return join(dataDir, "current_session.json");
-}
-
-export function vocabularyPath(dataDir: string): string {
-  return join(dataDir, "vocabulary.json");
-}
-
-export function collectionsPath(dataDir: string): string {
-  return join(dataDir, "collections.json");
-}
-
-export function personalSentencesPath(dataDir: string): string {
-  return join(dataDir, "sentences.json");
-}
-
-export function personalArticlesPath(dataDir: string): string {
-  return join(dataDir, "articles.json");
 }
 
 export function customLibrariesDirPath(dataDir: string): string {
@@ -185,143 +154,16 @@ export async function loadPreferencesFromPath(path: string): Promise<UserPrefere
   return value === null ? defaultUserPreferences() : parseUserPreferences(objectStoreValue(value, path));
 }
 
-export async function saveVocabularyStoreToPath(
-  store: PersonalVocabularyStore,
-  path: string,
-): Promise<void> {
-  await writePrettyJson(path, store);
-}
 
-export async function loadVocabularyStoreFromPath(
-  path: string,
-): Promise<PersonalVocabularyStore> {
-  const value = await readJsonIfExists(path);
-  return value === null ? emptyVocabularyStore() : parseVocabularyStore(objectStoreValue(value, path));
-}
 
-export async function saveCollectionsStoreToPath(
-  store: CorpusCollectionsStore,
-  path: string,
-): Promise<void> {
-  await writePrettyJson(path, store);
-}
 
-export async function loadCollectionsStoreFromPath(
-  path: string,
-): Promise<CorpusCollectionsStore> {
-  const value = await readJsonIfExists(path);
-  if (value === null) {
-    return emptyCollectionsStore();
-  }
-  const object = objectStoreValue(value, path);
-  const list = Array.isArray(object.collections) ? object.collections : [];
-  return {
-    version: 1,
-    collections: list.map((item) => parseCollectionMeta(item, path)),
-  };
-}
 
-export async function savePersonalSentencesStoreToPath(
-  store: PersonalSentencesStore,
-  path: string,
-): Promise<void> {
-  await writePrettyJson(path, store);
-}
 
-export async function loadPersonalSentencesStoreFromPath(
-  path: string,
-): Promise<PersonalSentencesStore> {
-  const value = await readJsonIfExists(path);
-  if (value === null) {
-    return emptyPersonalSentencesStore();
-  }
-  const object = objectStoreValue(value, path);
-  const list = Array.isArray(object.entries) ? object.entries : [];
-  return { version: 1, entries: list.map((item) => parsePersonalSentence(item, path)) };
-}
 
-function parsePersonalSentence(value: unknown, path: string): PersonalSentenceEntry {
-  if (typeof value !== "object" || value === null) {
-    throw new Error(`${basename(path)} contains an invalid sentence entry`);
-  }
-  const object = value as Record<string, unknown>;
-  if (typeof object.text !== "string" || object.text.trim() === "") {
-    throw new Error(`${basename(path)} sentence entry requires text`);
-  }
-  return {
-    id: typeof object.id === "string" ? object.id : "",
-    text: object.text,
-    ...(typeof object.translation_zh === "string" ? { translation_zh: object.translation_zh } : {}),
-    ...(typeof object.collection === "string" ? { collection: object.collection } : {}),
-    ...(typeof object.source_note === "string" ? { source_note: object.source_note } : {}),
-    created_at: typeof object.created_at === "string" ? object.created_at : new Date(0).toISOString(),
-    archived: object.archived === true,
-  };
-}
 
-export async function savePersonalArticlesStoreToPath(
-  store: PersonalArticlesStore,
-  path: string,
-): Promise<void> {
-  await writePrettyJson(path, store);
-}
 
-export async function loadPersonalArticlesStoreFromPath(
-  path: string,
-): Promise<PersonalArticlesStore> {
-  const value = await readJsonIfExists(path);
-  if (value === null) {
-    return emptyPersonalArticlesStore();
-  }
-  const object = objectStoreValue(value, path);
-  const list = Array.isArray(object.entries) ? object.entries : [];
-  return { version: 1, entries: list.map((item) => parsePersonalArticle(item, path)) };
-}
 
-function parsePersonalArticle(value: unknown, path: string): PersonalArticleEntry {
-  if (typeof value !== "object" || value === null) {
-    throw new Error(`${basename(path)} contains an invalid article entry`);
-  }
-  const object = value as Record<string, unknown>;
-  if (typeof object.title !== "string" || object.title.trim() === "") {
-    throw new Error(`${basename(path)} article entry requires a title`);
-  }
-  const paragraphs = Array.isArray(object.paragraphs) ? object.paragraphs : [];
-  return {
-    id: typeof object.id === "string" ? object.id : "",
-    title: object.title,
-    paragraphs: paragraphs.map((p) => {
-      const para = (typeof p === "object" && p !== null ? p : {}) as Record<string, unknown>;
-      return {
-        text: typeof para.text === "string" ? para.text : "",
-        ...(typeof para.translation_zh === "string"
-          ? { translation_zh: para.translation_zh }
-          : {}),
-      };
-    }),
-    ...(typeof object.collection === "string" ? { collection: object.collection } : {}),
-    ...(typeof object.source_note === "string" ? { source_note: object.source_note } : {}),
-    created_at: typeof object.created_at === "string" ? object.created_at : new Date(0).toISOString(),
-    archived: object.archived === true,
-  };
-}
 
-function parseCollectionMeta(value: unknown, path: string): CorpusCollectionMeta {
-  if (typeof value !== "object" || value === null) {
-    throw new Error(`${basename(path)} contains an invalid collection entry`);
-  }
-  const object = value as Record<string, unknown>;
-  if (typeof object.slug !== "string" || object.slug.trim() === "") {
-    throw new Error(`${basename(path)} collection entry requires a slug`);
-  }
-  return {
-    slug: object.slug,
-    name: typeof object.name === "string" && object.name.trim() !== "" ? object.name : object.slug,
-    ...(typeof object.description === "string" ? { description: object.description } : {}),
-    created_at: typeof object.created_at === "string" ? object.created_at : new Date(0).toISOString(),
-    archived: object.archived === true,
-  };
-}
 
 export async function saveKeyAggregatesToPath(
   aggregates: KeyAggregate[],
@@ -531,37 +373,7 @@ function parseStoredDailyRun(value: unknown): StoredDailyRun {
   };
 }
 
-function parseVocabularyStore(value: Record<string, unknown>): PersonalVocabularyStore {
-  return {
-    version: 1,
-    entries: Array.isArray(value.entries)
-      ? value.entries.map(parsePersonalVocabularyEntry)
-      : [],
-  };
-}
 
-function parsePersonalVocabularyEntry(value: unknown): PersonalVocabularyEntry {
-  const object =
-    typeof value === "object" && value !== null && !Array.isArray(value)
-      ? (value as Record<string, unknown>)
-      : {};
-  const entry: PersonalVocabularyEntry = {
-    id: stringValue(object.id),
-    text: stringValue(object.text),
-    kind: personalVocabularyKind(object.kind),
-    parts: stringArray(object.parts),
-    aliases: stringArray(object.aliases),
-    tags: stringArray(object.tags),
-    priority: personalVocabularyPriority(object.priority),
-    created_at: stringValue(object.created_at),
-    updated_at: stringValue(object.updated_at),
-    archived: typeof object.archived === "boolean" ? object.archived : false,
-  };
-  if (typeof object.meaning_zh === "string") {
-    entry.meaning_zh = object.meaning_zh;
-  }
-  return entry;
-}
 
 async function readJsonIfExists(path: string): Promise<unknown | null> {
   if (!(await Bun.file(path).exists())) {
@@ -570,12 +382,6 @@ async function readJsonIfExists(path: string): Promise<unknown | null> {
   return JSON.parse(await readFile(path, "utf8")) as unknown;
 }
 
-function emptyVocabularyStore(): PersonalVocabularyStore {
-  return {
-    version: 1,
-    entries: [],
-  };
-}
 
 function objectStoreValue(value: unknown, path: string): Record<string, unknown> {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
@@ -641,15 +447,7 @@ function lessonKindSlug(kind: DailyPracticePlan["lessons"][number]["kind"]): str
   }
 }
 
-function personalVocabularyKind(value: unknown): PersonalVocabularyEntry["kind"] {
-  return value === "phrase" || value === "identifier" || value === "code_term"
-    ? value
-    : "word";
-}
 
-function personalVocabularyPriority(value: unknown): 1 | 2 | 3 {
-  return value === 1 || value === 2 || value === 3 ? value : 2;
-}
 
 function stringArray(value: unknown): string[] {
   return Array.isArray(value)

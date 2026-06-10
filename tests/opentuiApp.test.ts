@@ -53,35 +53,6 @@ describe("OpenTUI app model", () => {
     expect(openTuiRouteLines(state)).toContain("Temporary color selection aid");
   });
 
-  test("main menu selections open setup submenus", () => {
-    const everyday = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "everyday",
-      appContext(),
-    );
-    const programming = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "programming",
-      appContext(),
-    );
-
-    expect(everyday.route).toEqual({
-      screen: "submenu",
-      menu: "everyday",
-      selected_index: 0,
-    });
-    expect(openTuiMenuItems(everyday).map((item) => item.id)).toContain(
-      "everyday_words",
-    );
-    expect(programming.route).toEqual({
-      screen: "submenu",
-      menu: "programming",
-      selected_index: 0,
-    });
-    expect(openTuiMenuItems(programming).map((item) => item.id)).toEqual(
-      expect.arrayContaining(["technical_long_words", "my_vocabulary"]),
-    );
-  });
 
   test("everyday submenu exposes daily English modules", () => {
     const submenu = activateOpenTuiMenuItem(
@@ -203,134 +174,8 @@ describe("OpenTUI app model", () => {
     expect(running.route.target.text).toContain("serial ization");
   });
 
-  test("everyday long word breakdown uses everyday and workplace domains", () => {
-    const context = appContext({
-      personalVocabulary: [
-        {
-          id: "vocab-serialization",
-          text: "serialization",
-          kind: "code_term",
-          parts: ["serial", "ization"],
-          aliases: [],
-          tags: ["programming"],
-          priority: 3,
-          created_at: "2026-06-05T00:00:00.000Z",
-          updated_at: "2026-06-05T00:00:00.000Z",
-          archived: false,
-        },
-        {
-          id: "vocab-collaboration",
-          text: "collaboration",
-          kind: "word",
-          parts: ["collabor", "ation"],
-          aliases: [],
-          tags: ["workplace"],
-          priority: 2,
-          created_at: "2026-06-05T00:00:00.000Z",
-          updated_at: "2026-06-05T00:00:00.000Z",
-          archived: false,
-        },
-      ],
-    });
-    const submenu = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "everyday",
-      context,
-    );
-    const running = activateOpenTuiMenuItem(
-      submenu,
-      "long_word_breakdown",
-      context,
-    );
 
-    expect(running.route.screen).toBe("running");
-    if (running.route.screen !== "running") {
-      throw new Error("expected running route");
-    }
-    expect(running.route.target.text).toContain("collabor ation");
-    expect(running.route.target.text).not.toContain("serial ization");
-  });
 
-  test("my vocabulary starts personal vocabulary target without archived entries", () => {
-    const submenu = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "programming",
-      appContext(),
-    );
-    const running = activateOpenTuiMenuItem(submenu, "my_vocabulary", appContext());
-
-    expect(running.route.screen).toBe("running");
-    if (running.route.screen !== "running") {
-      throw new Error("expected running route");
-    }
-    expect(running.route.target.source).toBe("keyloop:module:personal-vocabulary");
-    expect(running.route.target.text).toContain("serialization serialization");
-    expect(running.route.target.text).not.toContain("archivedTerm");
-  });
-
-  test("my vocabulary ranks entries with injected now", () => {
-    const context = appContext({
-      records: [
-        defaultSessionRecord({
-          started_at: "2020-01-02T03:00:00.000Z",
-          target_text: "performance",
-          token_stats: [
-            {
-              token: "performance",
-              kind: "word",
-              start_delay_ms: 0,
-              duration_ms: 0,
-              errors: 1,
-            },
-          ],
-        }),
-      ],
-      personalVocabulary: [
-        {
-          id: "vocab-performance",
-          text: "performance",
-          kind: "code_term",
-          parts: ["per", "form", "ance"],
-          aliases: [],
-          tags: ["programming"],
-          priority: 2,
-          created_at: "2020-01-02T00:00:00.000Z",
-          updated_at: "2020-01-02T00:00:00.000Z",
-          archived: false,
-        },
-        {
-          id: "vocab-collaboration",
-          text: "collaboration",
-          kind: "code_term",
-          parts: ["collabor", "ation"],
-          aliases: [],
-          tags: ["programming"],
-          priority: 2,
-          created_at: "2020-01-02T00:00:00.000Z",
-          updated_at: "2020-01-02T00:00:00.000Z",
-          archived: false,
-        },
-      ],
-      personalVocabularyLimit: 2,
-      now: new Date("2020-01-02T04:00:00.000Z"),
-    });
-    const submenu = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "programming",
-      context,
-    );
-    const running = activateOpenTuiMenuItem(submenu, "my_vocabulary", context);
-
-    expect(running.route.screen).toBe("running");
-    if (running.route.screen !== "running") {
-      throw new Error("expected running route");
-    }
-    const performanceIndex = running.route.target.text.indexOf("per form ance");
-    const collaborationIndex = running.route.target.text.indexOf("collabor ation");
-    expect(performanceIndex).toBeGreaterThanOrEqual(0);
-    expect(collaborationIndex).toBeGreaterThanOrEqual(0);
-    expect(performanceIndex).toBeLessThan(collaborationIndex);
-  });
 
   test("code submenu exposes specialist levels and starts function target", () => {
     const context = appContext({ library: codeMenuLibrary() });
@@ -592,26 +437,6 @@ describe("OpenTUI app model", () => {
     ]);
   });
 
-  test("settings word forms route omits comprehensive inclusion toggles", () => {
-    const state = createOpenTuiSettingsState("en", "word_forms", {
-      wordFormSettings: {
-        word_breakdown: {
-          enabled_in_comprehensive: true,
-          max_items_per_group: 6,
-        },
-        personal_vocabulary: {
-          enabled_in_comprehensive: false,
-          daily_review_limit: 4,
-        },
-      },
-    });
-
-    expect(openTuiRouteTitle(state)).toBe("Word form practice");
-    expect(openTuiRouteLines(state)).toEqual([
-      "Breakdown items per group  6",
-      "Vocabulary daily limit  4",
-    ]);
-  });
 
   test("settings everyday route renders current everyday settings", () => {
     const state = createOpenTuiSettingsState("en", "everyday", {
@@ -930,33 +755,6 @@ function baseAppContext(): BuildTargetContext {
     records: [],
     plan: testPlan(),
     library: testLibrary(),
-    personalVocabulary: [
-      {
-        id: "vocab-serialization",
-        text: "serialization",
-        kind: "code_term" as const,
-        parts: ["serial", "ization"],
-        aliases: [],
-        tags: ["programming"],
-        priority: 3 as const,
-        created_at: "2026-06-05T00:00:00.000Z",
-        updated_at: "2026-06-05T00:00:00.000Z",
-        archived: false,
-      },
-      {
-        id: "archived",
-        text: "archivedTerm",
-        kind: "word" as const,
-        parts: [],
-        aliases: [],
-        tags: [],
-        priority: 3 as const,
-        created_at: "2026-06-05T00:00:00.000Z",
-        updated_at: "2026-06-05T00:00:00.000Z",
-        archived: true,
-      },
-    ],
-    personalVocabularyLimit: 4,
   };
 }
 

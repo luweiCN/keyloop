@@ -18,7 +18,6 @@ import {
   deleteCustomLibraryAtDir,
   saveCustomLibraryToDir,
 } from "../../storage/keyloopStore";
-import { collectionTagCounts, type CorpusCollectionMeta } from "../../training/vocabulary";
 import type { BuildTargetContext } from "../../training/targets";
 import {
   activateOpenTuiMenuItem,
@@ -44,7 +43,6 @@ import {
   type OpenTuiStatsStateOptions,
   type OpenTuiStatsView,
   type OpenTuiWordFormSettings,
-  type CustomCorpusSummary,
 } from "./appModel";
 import {
   renderOpenTuiAppOnce,
@@ -88,10 +86,8 @@ export interface OpenTuiAppSessionContext extends BuildTargetContext {
   pinnedCodeFilters?: CodeFilterPreference[];
   codeSettings?: OpenTuiCodeSettings;
   codeStyleSettings?: CodeStyleSettings;
-  personalVocabularySettings?: UserPreferences["personal_vocabulary"];
   speedUnit?: SpeedUnit;
   todayElapsedMs?: number;
-  customCollections?: CorpusCollectionMeta[];
   customLibraries?: CustomLibrary[];
   dictionary?: Dictionary;
   librariesDir?: string;
@@ -276,7 +272,6 @@ export async function runOpenTuiAppSession(
       everydaySettings: everydaySettingsFromContext(context),
       wordFormSettings: wordFormSettingsFromContext(context),
       speedUnit: speedUnitFromContext(context),
-      customCorpus: customCorpusFromContext(context),
       customLibraries: context.customLibraries ?? [],
       dictionaryTier: context.dictionary?.tier ?? "none",
       todayElapsedMs: todayElapsedMsFromContext(context),
@@ -321,32 +316,6 @@ export async function runOpenTuiAppSession(
   }
 }
 
-function customCorpusFromContext(
-  context: OpenTuiAppSessionContext,
-): CustomCorpusSummary {
-  const entries = context.personalVocabulary ?? [];
-  const counts = collectionTagCounts(entries);
-  const known = new Map(
-    (context.customCollections ?? [])
-      .filter((c) => !c.archived)
-      .map((c) => [c.slug, c.name]),
-  );
-  const slugs = new Set([...known.keys(), ...counts.keys()]);
-  const collections = [...slugs]
-    .sort()
-    .map((slug) => ({
-      slug,
-      name: known.get(slug) ?? slug,
-      wordCount: counts.get(slug) ?? 0,
-    }))
-    .filter((c) => c.wordCount > 0 || known.has(c.slug));
-  return {
-    totalWords: entries.filter((entry) => !entry.archived).length,
-    totalSentences: (context.personalSentences ?? []).filter((entry) => !entry.archived).length,
-    totalArticles: (context.personalArticles ?? []).filter((entry) => !entry.archived).length,
-    collections,
-  };
-}
 
 function todayElapsedMsFromContext(context: OpenTuiAppSessionContext): number {
   if (context.todayElapsedMs !== undefined) {

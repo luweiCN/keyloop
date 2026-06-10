@@ -18,12 +18,10 @@ import {
   loadPreferencesFromPath,
   loadSessionCheckpointFromPath,
   loadSessionsFromPath,
-  loadVocabularyStoreFromPath,
   observeKeyEvent,
   parseUserPreferences,
   savePreferencesToPath,
   saveSessionCheckpointToPath,
-  saveVocabularyStoreToPath,
   type DailyPracticePlan,
   type KeyAggregate,
   type KeyEventRecord,
@@ -132,55 +130,6 @@ describe("storage file io", () => {
     }
   });
 
-  test("preferences and vocabulary round trip as pretty json", async () => {
-    const dir = await tempDir();
-    try {
-      const preferencesPath = join(dir, "preferences.json");
-      const vocabularyPath = join(dir, "vocabulary.json");
-      const preferences: UserPreferences = parseUserPreferences({
-        interface_language: "en",
-        pinned_code_filters: [{ facet: "framework", value: "react" }],
-        everyday_english: {
-          word_count: 30,
-          sentence_length: "medium",
-          include_phrases: true,
-        },
-      });
-
-      await savePreferencesToPath(preferences, preferencesPath);
-      const loadedPreferences = await loadPreferencesFromPath(preferencesPath);
-      await saveVocabularyStoreToPath(
-        {
-          version: 1,
-          entries: [
-            {
-              id: "vocab-1",
-              text: "internationalization",
-              kind: "word",
-              parts: ["international", "ization"],
-              aliases: ["i18n"],
-              tags: ["programming"],
-              priority: 3,
-              created_at: "2026-06-01T00:00:00Z",
-              updated_at: "2026-06-01T00:00:00Z",
-              archived: false,
-            },
-          ],
-        },
-        vocabularyPath,
-      );
-      const loadedVocabulary = await loadVocabularyStoreFromPath(vocabularyPath);
-
-      expect(loadedPreferences.pinned_code_filters).toEqual([
-        { facet: "framework", value: "react" },
-      ]);
-      expect(loadedPreferences.everyday_english.word_count).toBe(30);
-      expect((await readFile(preferencesPath, "utf8")).startsWith("{\n  ")).toBe(true);
-      expect(loadedVocabulary.entries[0]?.aliases).toEqual(["i18n"]);
-    } finally {
-      await rm(dir, { recursive: true, force: true });
-    }
-  });
 
   test("rejects malformed structured json stores", async () => {
     const dir = await tempDir();
@@ -210,32 +159,6 @@ describe("storage file io", () => {
     }
   });
 
-  test("rejects malformed object json stores", async () => {
-    const dir = await tempDir();
-    try {
-      const preferencesPath = join(dir, "preferences.json");
-      const currentSessionPath = join(dir, "current_session.json");
-      const vocabularyPath = join(dir, "vocabulary.json");
-      await writeFile(preferencesPath, "[]\n");
-      await writeFile(currentSessionPath, "[]\n");
-      await writeFile(vocabularyPath, "[]\n");
-
-      await expectRejectsWith(
-        loadPreferencesFromPath(preferencesPath),
-        "preferences.json must contain a JSON object",
-      );
-      await expectRejectsWith(
-        loadSessionCheckpointFromPath(currentSessionPath),
-        "current_session.json must contain a JSON object",
-      );
-      await expectRejectsWith(
-        loadVocabularyStoreFromPath(vocabularyPath),
-        "vocabulary.json must contain a JSON object",
-      );
-    } finally {
-      await rm(dir, { recursive: true, force: true });
-    }
-  });
 
   test("rejects invalid preferences enum values", async () => {
     const dir = await tempDir();

@@ -47,10 +47,8 @@ import {
   everydayWordRangeLabel,
 } from "./labels";
 
-import { errorWordsFromRecord } from "../../training/vocabulary";
 import {
   codeControlFromEvent,
-  isCaptureWordsEvent,
   codeControlFromSequence,
   isArrowDownEvent,
   isArrowLeftEvent,
@@ -960,7 +958,6 @@ export async function showCompletionPage(
   const action = await waitForPostCompletionAction(renderer, state, {
     codeControlsEnabled: isLiveCodeSettingsEnabled(context),
     destroyOnSettle: false,
-    captureVocabulary: context.captureVocabulary,
   });
   return { action, renderer };
 }
@@ -1003,7 +1000,6 @@ export function waitForPostCompletionAction(
   options: {
     codeControlsEnabled?: boolean;
     destroyOnSettle?: boolean;
-    captureVocabulary?: ((words: string[]) => Promise<number>) | undefined;
   } = {},
 ): Promise<PostCompletionAction> {
   if (renderer.keyInput === undefined) {
@@ -1068,21 +1064,6 @@ export function waitForPostCompletionAction(
       }
       if (isRepeatEvent(event)) {
         settle("repeat");
-        return;
-      }
-      if (
-        isCaptureWordsEvent(event) &&
-        options.captureVocabulary !== undefined &&
-        state.route.screen === "complete" &&
-        state.route.captured_words === undefined
-      ) {
-        const words = errorWordsFromRecord(state.route.record);
-        const captured = words.length === 0 ? 0 : await options.captureVocabulary(words);
-        state = {
-          ...state,
-          route: { ...state.route, captured_words: captured },
-        };
-        await renderer.renderState?.(state);
         return;
       }
       if (isEscapeEvent(event)) {

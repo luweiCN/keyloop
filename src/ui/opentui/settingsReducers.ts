@@ -528,32 +528,6 @@ export function reduceWordFormSettingsKey(
       },
     });
   }
-  if (name === "down" || sequence === "j") {
-    return wordFormSettingsResult(state.language, state, {
-      ...settings,
-      personal_vocabulary: {
-        ...settings.personal_vocabulary,
-        daily_review_limit: cycleNumberOption(
-          personalVocabularyLimits,
-          settings.personal_vocabulary.daily_review_limit,
-          -1,
-        ),
-      },
-    });
-  }
-  if (name === "up" || sequence === "k") {
-    return wordFormSettingsResult(state.language, state, {
-      ...settings,
-      personal_vocabulary: {
-        ...settings.personal_vocabulary,
-        daily_review_limit: cycleNumberOption(
-          personalVocabularyLimits,
-          settings.personal_vocabulary.daily_review_limit,
-          1,
-        ),
-      },
-    });
-  }
 
   return wordFormSettingsResult(state.language, state, settings);
 }
@@ -1064,14 +1038,6 @@ export function wordFormSettingsFromContext(
       enabled_in_comprehensive:
         context.wordBreakdownSettings?.enabled_in_comprehensive ?? true,
       max_items_per_group: context.wordBreakdownSettings?.max_items_per_group ?? 6,
-    },
-    personal_vocabulary: {
-      enabled_in_comprehensive:
-        context.personalVocabularySettings?.enabled_in_comprehensive ?? true,
-      daily_review_limit:
-        context.personalVocabularySettings?.daily_review_limit ??
-        context.personalVocabularyLimit ??
-        8,
     },
   };
 }

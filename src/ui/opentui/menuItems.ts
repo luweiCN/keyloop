@@ -45,16 +45,11 @@ export type OpenTuiSubmenuId =
   | "programming_terms"
   | "naming_styles"
   | "technical_long_words"
-  | "my_vocabulary"
   | "programming_basics_mix"
   | "code_blocks"
   | "code_functions"
   | "code_file_fragments"
   | "code_mix"
-  | "custom_my_words"
-  | "custom_my_sentences"
-  | "custom_my_articles"
-  | `custom_tag_${string}`
   | "library_new"
   | "library_manage"
   | `library_open_${string}`
@@ -112,13 +107,6 @@ export function mainMenuItems(language: Language): OpenTuiMenuItem[] {
     item("stats", "统计", "Stats", language),
     item("ansi_palette", "调试色板", "ANSI palette", language),
   ];
-}
-
-export interface CustomCorpusSummary {
-  totalWords: number;
-  totalSentences: number;
-  totalArticles: number;
-  collections: { slug: string; name: string; wordCount: number }[];
 }
 
 function customSubmenuItems(state: OpenTuiAppState): OpenTuiMenuItem[] {
@@ -238,7 +226,6 @@ export function submenuItems(menu: OpenTuiSubmenu, language: Language): OpenTuiM
         item("programming_terms", "编程常用词", "Programming terms", language),
         item("naming_styles", "命名形式", "Naming styles", language),
         item("technical_long_words", "技术长词", "Technical long words", language),
-        item("my_vocabulary", "我的词库", "My vocabulary", language),
         item("programming_basics_mix", "编程基础综合", "Programming basics mix", language),
       ];
     case "code":
@@ -314,7 +301,6 @@ export function submenuForStandaloneItem(itemId: OpenTuiMenuItemId): OpenTuiSubm
     case "programming_terms":
     case "naming_styles":
     case "technical_long_words":
-    case "my_vocabulary":
     case "programming_basics_mix":
       return "programming";
     case "code_blocks":
@@ -356,19 +342,19 @@ export function menuItemTag(item: { id: string }): string {
   if (item.id === "custom") {
     return "mine";
   }
-  if (item.id === "custom_my_words") {
-    return "words";
+  if (item.id.startsWith("library_open_")) {
+    return "lib";
   }
-  if (item.id === "custom_my_sentences") {
-    return "sent";
+  if (item.id === "library_new") {
+    return "new";
   }
-  if (item.id === "custom_my_articles") {
-    return "text";
+  if (item.id === "library_manage") {
+    return "edit";
   }
-  if (item.id.startsWith("custom_tag_")) {
-    return "topic";
+  if (item.id.startsWith("library_kind_")) {
+    return "drill";
   }
-  switch (item.id as Exclude<OpenTuiMenuItemId, `custom_tag_${string}`> | OpenTuiSettingsMenuItemId) {
+  switch (item.id as OpenTuiMenuItemId | OpenTuiSettingsMenuItemId) {
     case "comprehensive":
       return "adaptive";
     case "foundation":
@@ -408,7 +394,6 @@ export function menuItemTag(item: { id: string }): string {
     case "programming_terms":
     case "naming_styles":
     case "technical_long_words":
-    case "my_vocabulary":
       return "symbols";
     case "code":
     case "code_blocks":
@@ -437,21 +422,21 @@ export function menuItemTag(item: { id: string }): string {
 
 export function menuItemDescription(item: { id: string }): string {
   if (item.id === "custom") {
-    return "我的单词和主题词库，练你自己收集的语料。";
+    return "自建语料库：单词、词组、句子、文章都可自建并练习。";
   }
-  if (item.id === "custom_my_words") {
-    return "练你添加的全部词条，按弱项优先排序。";
+  if (item.id.startsWith("library_open_")) {
+    return "进入该语料库，按单词、词组、句子、文章分项练习。";
   }
-  if (item.id === "custom_my_sentences") {
-    return "跟打你收藏的句子，keyloop sentence add 添加。";
+  if (item.id === "library_new") {
+    return "输入名称创建一个新的自建语料库。";
   }
-  if (item.id === "custom_my_articles") {
-    return "跟打你收藏的文章，keyloop article import 导入。";
+  if (item.id === "library_manage") {
+    return "添加、编辑、删除语料库内容。";
   }
-  if (item.id.startsWith("custom_tag_")) {
-    return "按主题词库练习，keyloop corpus import 可批量导入。";
+  if (item.id.startsWith("library_kind_")) {
+    return "练习该语料库中的所选内容类型。";
   }
-  switch (item.id as Exclude<OpenTuiMenuItemId, `custom_tag_${string}`> | OpenTuiSettingsMenuItemId) {
+  switch (item.id as OpenTuiMenuItemId | OpenTuiSettingsMenuItemId) {
     case "comprehensive":
       return "按今日动态计划练完所有组，弱项会影响后续内容。";
     case "foundation":
@@ -527,8 +512,6 @@ export function menuItemDescription(item: { id: string }): string {
       return "练 camelCase、snake_case、PascalCase 等命名形态。";
     case "technical_long_words":
       return "练 internationalization、serialization 等技术长词拆解。";
-    case "my_vocabulary":
-      return "练你自己添加的业务词、实体名和易错词。";
     case "programming_basics_mix":
       return "编程词、符号、命名和个人词库综合练习。";
     case "code_blocks":

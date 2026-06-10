@@ -1745,7 +1745,7 @@ describe("OpenTUI renderer adapter", () => {
       findNodeById(kit.addedNodes, "keyloop-complete-card")?.props.backgroundColor,
     );
     expect(findNodeById(kit.addedNodes, "keyloop-complete-card")?.props.bottomTitle).toBe(
-      " Enter close · A capture · R repeat · Q quit ",
+      " Enter close · R repeat · Q quit ",
     );
     expect(content).not.toContain("WPM 30.0 | Raw WPM 32.0 | Accuracy 100.0%");
     expect(content).not.toContain("Errors 0 | Backspace 1");
@@ -1870,7 +1870,7 @@ describe("OpenTUI renderer adapter", () => {
     expect(findNodeById(kit.addedNodes, "keyloop-complete-next")).toBeUndefined();
     expect(findNodeById(kit.addedNodes, "keyloop-complete-actions")).toBeUndefined();
     expect(findNodeById(kit.addedNodes, "keyloop-complete-card")?.props.bottomTitle).toBe(
-      " Enter close · A capture · R repeat · Q quit ",
+      " Enter close · R repeat · Q quit ",
     );
   });
 

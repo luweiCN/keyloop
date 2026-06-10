@@ -55,7 +55,8 @@ export type TrainingCategory =
   | "code_mix"
   | "review"
   | "word_breakdown"
-  | "personal_vocabulary";
+  | "personal_vocabulary"
+  | "custom_library";
 
 export type MixProfile = "standalone" | "comprehensive" | "review";
 export type CompletionState = "completed" | "partial";
@@ -363,6 +364,7 @@ const trainingCategories = [
   "review",
   "word_breakdown",
   "personal_vocabulary",
+  "custom_library",
 ] as const;
 const codePracticeLengthSettings = ["adaptive", "short", "medium", "long"] as const;
 const mixProfiles = ["standalone", "comprehensive", "review"] as const;

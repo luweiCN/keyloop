@@ -26,17 +26,12 @@ import {
   type UserPreferences,
 } from "../../domain/model";
 import {
-  buildPersonalArticleTarget,
-  buildPersonalSentencesTarget,
-} from "../../training/personalCorpus";
-import {
   codeDifficultyLabel,
   codeIndentLabel,
   codeLengthLabel,
   everydayLengthLabel,
 } from "./labels";
 import type {
-  CustomCorpusSummary,
   OpenTuiMenuItem,
   OpenTuiMenuItemId,
   OpenTuiSubmenu,
@@ -70,7 +65,6 @@ import {
   buildFoundationPracticeTarget,
   buildFoundationMixPracticeTarget,
   buildLongWordBreakdownPracticeTarget,
-  buildPersonalVocabularyPracticeTarget,
   buildProgrammingBasicsPracticeTarget,
   buildProgrammingBasicsMixTarget,
   type BuildTargetContext,
@@ -123,7 +117,6 @@ export interface OpenTuiCodeFilterState {
 
 export interface OpenTuiWordFormSettings {
   word_breakdown: UserPreferences["word_breakdown"];
-  personal_vocabulary: UserPreferences["personal_vocabulary"];
 }
 
 export interface OpenTuiCodeSettings {
@@ -159,7 +152,6 @@ export interface OpenTuiStateOptions {
   practiceOptions?: OpenTuiPracticeOptionsState | undefined;
   speedUnit?: SpeedUnit | undefined;
   todayElapsedMs?: number | undefined;
-  customCorpus?: CustomCorpusSummary | undefined;
   customLibraries?: CustomLibrary[] | undefined;
   dictionaryTier?: DictionaryTier | undefined;
 }
@@ -221,7 +213,6 @@ export type OpenTuiRoute =
       target?: PracticeTarget;
       live?: OpenTuiRunningLiveState;
       result_visible: boolean;
-      captured_words?: number;
     }
   | {
       screen: "summary";
@@ -295,7 +286,6 @@ export interface OpenTuiSessionState {
   codeStyleSettings?: CodeStyleSettings | undefined;
   everydaySettings?: EverydayEnglishSettings | undefined;
   wordFormSettings?: OpenTuiWordFormSettings | undefined;
-  customCorpus?: CustomCorpusSummary | undefined;
   customLibraries?: CustomLibrary[] | undefined;
   dictionaryTier?: DictionaryTier | undefined;
   today_elapsed_ms?: number | undefined;
@@ -745,25 +735,6 @@ function activateSubmenuItem(
   if (itemId === "library_manage") {
     return withRoute(state, { screen: "library_manage", selected_index: 0 });
   }
-  if (itemId.startsWith("custom_tag_")) {
-    const tag = itemId.slice("custom_tag_".length);
-    const vocabularyContext = buildTargetContextForState(state, context, "standalone");
-    return runningState(
-      state.language,
-      itemId,
-      buildPersonalVocabularyPracticeTarget(
-        vocabularyContext.personalVocabulary ?? [],
-        vocabularyContext.records,
-        {
-          maxItems: vocabularyContext.personalVocabularyLimit ?? 8,
-          tag,
-          ...(vocabularyContext.now === undefined ? {} : { now: vocabularyContext.now }),
-        },
-      ),
-      undefined,
-      stateOptions(state),
-    );
-  }
   const effectiveContext = buildTargetContextForState(state, context);
   const foundationDrillId = foundationDrillForMenuItem(itemId);
   if (foundationDrillId !== undefined) {
@@ -872,64 +843,6 @@ function activateSubmenuItem(
         undefined,
         stateOptions(state),
       );
-    case "custom_my_sentences": {
-      const sentencesContext = buildTargetContextForState(state, context, "standalone");
-      const target = buildPersonalSentencesTarget(sentencesContext.personalSentences ?? [], {
-        ...(sentencesContext.random === undefined ? {} : { random: sentencesContext.random }),
-      });
-      return target.text === ""
-        ? state
-        : runningState(state.language, itemId, target, undefined, stateOptions(state));
-    }
-    case "custom_my_articles": {
-      const articlesContext = buildTargetContextForState(state, context, "standalone");
-      const target = buildPersonalArticleTarget(articlesContext.personalArticles ?? [], {
-        ...(articlesContext.random === undefined ? {} : { random: articlesContext.random }),
-      });
-      return target.text === ""
-        ? state
-        : runningState(state.language, itemId, target, undefined, stateOptions(state));
-    }
-    case "custom_my_words": {
-      const vocabularyContext = buildTargetContextForState(state, context, "standalone");
-      return runningState(
-        state.language,
-        itemId,
-        buildPersonalVocabularyPracticeTarget(
-          vocabularyContext.personalVocabulary ?? [],
-          vocabularyContext.records,
-          {
-            maxItems: vocabularyContext.personalVocabularyLimit ?? 8,
-            ...(vocabularyContext.now === undefined ? {} : { now: vocabularyContext.now }),
-          },
-        ),
-        undefined,
-        stateOptions(state),
-      );
-    }
-    case "my_vocabulary": {
-      const vocabularyContext = buildTargetContextForState(
-        state,
-        context,
-        "standalone",
-      );
-      return runningState(
-        state.language,
-        itemId,
-        buildPersonalVocabularyPracticeTarget(
-          vocabularyContext.personalVocabulary ?? [],
-          vocabularyContext.records,
-          {
-            maxItems: vocabularyContext.personalVocabularyLimit ?? 8,
-            ...(vocabularyContext.now === undefined
-              ? {}
-              : { now: vocabularyContext.now }),
-          },
-        ),
-        undefined,
-        stateOptions(state),
-      );
-    }
     case "everyday_mix":
       return runningState(
         state.language,
@@ -1125,14 +1038,6 @@ function appState(
   if (options.dictionaryTier !== undefined) {
     state.dictionaryTier = options.dictionaryTier;
   }
-  if (options.customCorpus !== undefined) {
-    state.customCorpus = {
-      totalWords: options.customCorpus.totalWords,
-      totalSentences: options.customCorpus.totalSentences,
-      totalArticles: options.customCorpus.totalArticles,
-      collections: options.customCorpus.collections.map((c) => ({ ...c })),
-    };
-  }
   if (options.todayElapsedMs !== undefined) {
     state.today_elapsed_ms = options.todayElapsedMs;
   }
@@ -1156,9 +1061,6 @@ function buildTargetContextForState(
   ) {
     return context;
   }
-  const personalVocabularyEnabled =
-    personalVocabularyScope === "standalone" ||
-    (wordFormSettings?.personal_vocabulary.enabled_in_comprehensive ?? true);
   return {
     ...context,
     ...(codeConfig === undefined ? {} : { codeConfig }),
@@ -1166,15 +1068,7 @@ function buildTargetContextForState(
     ...(everydaySettings === undefined ? {} : { everydaySettings }),
     ...(wordFormSettings === undefined
       ? {}
-      : {
-          wordBreakdownSettings: wordFormSettings.word_breakdown,
-          personalVocabulary: personalVocabularyEnabled
-            ? context.personalVocabulary
-            : [],
-          personalVocabularyLimit: personalVocabularyEnabled
-            ? wordFormSettings.personal_vocabulary.daily_review_limit
-            : 0,
-        }),
+      : { wordBreakdownSettings: wordFormSettings.word_breakdown }),
   };
 }
 
@@ -1203,9 +1097,6 @@ export function stateOptions(state: OpenTuiAppState): OpenTuiStateOptions {
   }
   if (state.dictionaryTier !== undefined) {
     options.dictionaryTier = state.dictionaryTier;
-  }
-  if (state.customCorpus !== undefined) {
-    options.customCorpus = state.customCorpus;
   }
   if (state.today_elapsed_ms !== undefined) {
     options.todayElapsedMs = state.today_elapsed_ms;
@@ -1261,10 +1152,6 @@ export function defaultWordFormSettings(): OpenTuiWordFormSettings {
       enabled_in_comprehensive: true,
       max_items_per_group: 6,
     },
-    personal_vocabulary: {
-      enabled_in_comprehensive: true,
-      daily_review_limit: 8,
-    },
   };
 }
 
@@ -1273,7 +1160,6 @@ function cloneWordFormSettings(
 ): OpenTuiWordFormSettings {
   return {
     word_breakdown: { ...settings.word_breakdown },
-    personal_vocabulary: { ...settings.personal_vocabulary },
   };
 }
 
@@ -1368,7 +1254,6 @@ function clampIndex(index: number, length: number): number {
 
 export {
   liveOptionsAvailableForSource,
-  type CustomCorpusSummary,
   mainMenuItems,
   openTuiMenuItems,
   submenuForStandaloneItem,
