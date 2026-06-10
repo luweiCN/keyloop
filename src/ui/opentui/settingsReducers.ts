@@ -367,6 +367,7 @@ export function reduceFlatSettingsItem(
         codeStyleSettings: cycleCodeStyleSetting(codeStyleSettings, 2, direction),
       });
     case "code_filters":
+    case "dictionary_status":
       return { state, action: "continue" };
   }
 }

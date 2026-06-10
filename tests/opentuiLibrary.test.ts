@@ -544,3 +544,23 @@ describe("library delete confirmation", () => {
     expect(result.persist).toBeUndefined();
   });
 });
+
+import { openTuiFlatSettingsItems } from "../src/ui/opentui/settingsItems";
+
+describe("dictionary status in settings", () => {
+  test("flat settings include dictionary status reflecting tier", () => {
+    const full = openTuiFlatSettingsItems({
+      ...stateAt({ screen: "settings", view: "menu" }),
+      dictionaryTier: "full",
+    });
+    const fullItem = full.find((item) => item.kind === "dictionary_status");
+    expect(fullItem?.value).toBe("完整版已就绪（ECDICT）");
+    const mini = openTuiFlatSettingsItems({
+      ...stateAt({ screen: "settings", view: "menu" }),
+      dictionaryTier: "mini",
+    });
+    expect(mini.find((item) => item.kind === "dictionary_status")?.value).toBe(
+      "精简版（完整版后台下载中）",
+    );
+  });
+});

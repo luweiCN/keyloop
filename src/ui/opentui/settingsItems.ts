@@ -40,7 +40,8 @@ export type OpenTuiFlatSettingsItemKind =
   | "code_indent"
   | "code_semicolons"
   | "code_quotes"
-  | "code_filters";
+  | "code_filters"
+  | "dictionary_status";
 
 export interface OpenTuiFlatSettingsItem {
   kind: OpenTuiFlatSettingsItemKind;
@@ -109,8 +110,25 @@ export function openTuiFlatSettingsItems(state: OpenTuiAppState): OpenTuiFlatSet
       label: language === "zh" ? "代码引号" : "Code quotes",
       value: codeQuoteLabel(codeStyleSettings.quotes, language),
     },
+    {
+      kind: "dictionary_status",
+      label: language === "zh" ? "词典" : "Dictionary",
+      value: dictionaryStatusLabel(state),
+    },
   ];
   return items;
+}
+
+function dictionaryStatusLabel(state: OpenTuiAppState): string {
+  const zh = state.language === "zh";
+  switch (state.dictionaryTier) {
+    case "full":
+      return zh ? "完整版已就绪（ECDICT）" : "Full (ECDICT)";
+    case "mini":
+      return zh ? "精简版（完整版后台下载中）" : "Mini (full downloading in background)";
+    default:
+      return zh ? "未加载" : "Not loaded";
+  }
 }
 
 export function speedUnitSettingLabel(speedUnit: SpeedUnit, language: Language): string {
