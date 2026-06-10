@@ -46,6 +46,16 @@ import {
   vScrollbar,
   type KeyHint,
 } from "./components";
+import {
+  codeDifficultyLabel,
+  codeFacetLabel,
+  codeFilterFacetLabel,
+  codeLengthLabel,
+  everydayLengthLabel,
+  everydayLevelShortLabel,
+  everydayWordRangeLabel,
+  titleCase,
+} from "./labels";
 
 type OpenTuiCoreModule = typeof import("@opentui/core");
 type OpenTuiBoxProps = Record<string, unknown>;
@@ -963,17 +973,6 @@ function renderCodeFilterPickerRow(
   );
 }
 
-function codeFilterFacetLabel(facet: "language" | "framework" | "project", language: "zh" | "en"): string {
-  switch (facet) {
-    case "language":
-      return language === "zh" ? "语言" : "language";
-    case "framework":
-      return language === "zh" ? "框架" : "framework";
-    case "project":
-      return language === "zh" ? "项目" : "project";
-  }
-}
-
 function renderMenuCardList(
   items: MenuCardItem[],
   selectedIndex: number,
@@ -1521,7 +1520,7 @@ function everydayStatusSegments(
       return [
         {
           label: zh ? "词库" : "Range",
-          value: everydayWordRangeStatusLabel(settings.word_range, language),
+          value: everydayWordRangeLabel(settings.word_range, language),
         },
         {
           label: zh ? "每组" : "Per group",
@@ -1532,11 +1531,11 @@ function everydayStatusSegments(
       return [
         {
           label: zh ? "词汇量" : "Vocabulary",
-          value: everydayLevelStatusLabel(settings.sentence_level, language),
+          value: everydayLevelShortLabel(settings.sentence_level, language),
         },
         {
           label: zh ? "长度" : "Length",
-          value: everydayLengthStatusLabel(settings.sentence_length, language),
+          value: everydayLengthLabel(settings.sentence_length, language),
         },
         {
           label: zh ? "每组" : "Per group",
@@ -1547,18 +1546,18 @@ function everydayStatusSegments(
       return [
         {
           label: zh ? "词汇量" : "Vocabulary",
-          value: everydayLevelStatusLabel(settings.article_level, language),
+          value: everydayLevelShortLabel(settings.article_level, language),
         },
         {
           label: zh ? "长度" : "Length",
-          value: everydayLengthStatusLabel(settings.article_length, language),
+          value: everydayLengthLabel(settings.article_length, language),
         },
       ];
     case "everyday_word_decomposition":
       return [
         {
           label: zh ? "词汇量" : "Vocabulary",
-          value: everydayLevelStatusLabel(settings.decomposition_level, language),
+          value: everydayLevelShortLabel(settings.decomposition_level, language),
         },
         {
           label: zh ? "每组" : "Per group",
@@ -1578,67 +1577,6 @@ function everydayStatusSegments(
     default:
       return undefined;
   }
-}
-
-function everydayWordRangeStatusLabel(
-  value: EverydayEnglishSettings["word_range"],
-  language: OpenTuiAppState["language"],
-): string {
-  const labels =
-    language === "zh"
-      ? {
-          "200": "基础 200",
-          "1000": "常用 1000",
-          "5000": "进阶 5000",
-          "10000": "扩展 10000",
-        }
-      : {
-          "200": "Basic 200",
-          "1000": "Common 1000",
-          "5000": "Advanced 5000",
-          "10000": "Extended 10000",
-        };
-  return labels[value];
-}
-
-function everydayLevelStatusLabel(
-  value: EverydayEnglishSettings["sentence_level"],
-  language: OpenTuiAppState["language"],
-): string {
-  if (language !== "zh") {
-    const labels: Record<string, string> = {
-      high_school: "High school",
-      cet4: "CET-4",
-      cet6: "CET-6",
-      postgraduate: "Postgraduate",
-      toefl_ielts: "TOEFL/IELTS",
-    };
-    return labels[value] ?? value;
-  }
-  const labels: Record<string, string> = {
-    high_school: "高中",
-    cet4: "四级",
-    cet6: "六级",
-    postgraduate: "考研",
-    toefl_ielts: "托福雅思",
-  };
-  return labels[value] ?? value;
-}
-
-function everydayLengthStatusLabel(
-  value: EverydayEnglishSettings["sentence_length"],
-  language: OpenTuiAppState["language"],
-): string {
-  if (language !== "zh") {
-    return titleCase(value);
-  }
-  const labels: Record<string, string> = {
-    short: "短",
-    medium: "中",
-    long: "长",
-    mixed: "混合",
-  };
-  return labels[value] ?? value;
 }
 
 function renderPracticeTimeStack(state: OpenTuiAppState, kit: OpenTuiRendererKit): unknown {
@@ -1744,13 +1682,17 @@ function codeStatusSegments(
   if (scope.length > 0) {
     segments.push({ value: scope });
   }
-  const difficulty = codeDifficultyStatusValue(currentBlock?.difficulty, language);
-  if (difficulty.length > 0) {
-    segments.push({ label: language === "zh" ? "难度" : "Difficulty", value: difficulty });
+  if (currentBlock?.difficulty !== undefined) {
+    segments.push({
+      label: language === "zh" ? "难度" : "Difficulty",
+      value: codeDifficultyLabel(currentBlock.difficulty, language),
+    });
   }
-  const size = codeSizeStatusValue(currentBlock?.size, language);
-  if (size.length > 0) {
-    segments.push({ label: language === "zh" ? "长度" : "Length", value: size });
+  if (currentBlock?.size !== undefined) {
+    segments.push({
+      label: language === "zh" ? "长度" : "Length",
+      value: codeLengthLabel(currentBlock.size, language),
+    });
   }
   if (segments.length === 0) {
     segments.push({ value: language === "zh" ? "代码" : "Code" });
@@ -1788,90 +1730,6 @@ function codeBlockScopeLabel(
       ? ""
       : codeFacetLabel(block.framework);
   return framework.length === 0 ? language : `${language} / ${framework}`;
-}
-
-function codeFacetLabel(value: string): string {
-  const aliases: Record<string, string> = {
-    javascript: "JavaScript",
-    typescript: "TypeScript",
-    nextjs: "Next.js",
-    nestjs: "NestJS",
-    nuxt: "Nuxt",
-    vue: "Vue",
-    react: "React",
-    html: "HTML",
-    css: "CSS",
-    scss: "SCSS",
-    sass: "Sass",
-    less: "LESS",
-    php: "PHP",
-    sql: "SQL",
-    rust: "Rust",
-    go: "Go",
-    python: "Python",
-    java: "Java",
-    csharp: "C#",
-    cpp: "C++",
-    solidity: "Solidity",
-    tailwind: "Tailwind",
-    hardhat: "Hardhat",
-    foundry: "Foundry",
-    fastify: "Fastify",
-    fastapi: "FastAPI",
-    django: "Django",
-    rails: "Rails",
-    laravel: "Laravel",
-    angular: "Angular",
-    astro: "Astro",
-    svelte: "Svelte",
-    hono: "Hono",
-    gin: "Gin",
-    axum: "Axum",
-  };
-  return aliases[value] ?? value.split("-").map(titleCase).join("-");
-}
-
-function codeDifficultyStatusValue(
-  value: string | undefined,
-  language: OpenTuiAppState["language"],
-): string {
-  if (value === undefined) {
-    return "";
-  }
-  if (language !== "zh") {
-    return titleCase(value);
-  }
-  const labels: Record<string, string> = {
-    adaptive: "自适应",
-    all: "全部",
-    easy: "简单",
-    medium: "中等",
-    hard: "困难",
-  };
-  return labels[value] ?? value;
-}
-
-function codeSizeStatusValue(
-  value: string | undefined,
-  language: OpenTuiAppState["language"],
-): string {
-  if (value === undefined) {
-    return "";
-  }
-  if (language !== "zh") {
-    return titleCase(value);
-  }
-  const labels: Record<string, string> = {
-    adaptive: "自适应",
-    short: "短",
-    medium: "中等",
-    long: "长",
-  };
-  return labels[value] ?? value;
-}
-
-function titleCase(value: string): string {
-  return value.length === 0 ? value : `${value[0]?.toUpperCase() ?? ""}${value.slice(1)}`;
 }
 
 function renderLiveMetrics(
