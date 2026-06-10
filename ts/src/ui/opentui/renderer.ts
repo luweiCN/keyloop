@@ -1371,8 +1371,8 @@ function renderPracticeOverview(
         : undefined;
   const contentStatus =
     route.target.mode === "code"
-      ? codeStatusContent(route.target, input, state.language)
-      : everydayStatusContent(route.source_item, state.everydaySettings, state.language);
+      ? codeStatusSegments(route.target, input, state.language)
+      : everydayStatusSegments(route.source_item, state.everydaySettings, state.language);
   return kit.Box(
     {
       id: "keyloop-practice-overview",
@@ -1407,34 +1407,11 @@ function renderPracticeOverview(
       ...(contentStatus === undefined
         ? []
         : [
-            kit.Box(
-              {
-                id: "keyloop-practice-status-line",
-                flexDirection: "row",
-                gap: 1,
-                width: "100%",
-                height: 1,
-                overflow: "hidden",
-              },
-              kit.Text({
-                id: "keyloop-practice-code-status",
-                content: contentStatus,
-                fg: theme.info,
-                height: 1,
-                truncate: true,
-              }),
-              ...(practiceOptionsAvailable(route)
-                ? [
-                    kit.Text({
-                      id: "keyloop-practice-options-hint",
-                      content: state.language === "zh" ? "· Ctrl+O 调整" : "· Ctrl+O to adjust",
-                      fg: theme.muted,
-                      height: 1,
-                      flexShrink: 0,
-                      wrapMode: "none",
-                    }),
-                  ]
-                : []),
+            renderPracticeStatusLine(
+              contentStatus,
+              practiceOptionsAvailable(route),
+              state.language,
+              kit,
             ),
           ]),
     ),
@@ -1446,32 +1423,158 @@ function practiceOptionsAvailable(route: RunningRoute): boolean {
   return route.target.mode === "code" || route.source_item.startsWith("everyday_");
 }
 
-function everydayStatusContent(
+interface StatusSegment {
+  readonly label?: string;
+  readonly value: string;
+}
+
+function renderPracticeStatusLine(
+  segments: readonly StatusSegment[],
+  optionsAvailable: boolean,
+  language: OpenTuiAppState["language"],
+  kit: OpenTuiRendererKit,
+): unknown {
+  return kit.Box(
+    {
+      id: "keyloop-practice-status-line",
+      flexDirection: "row",
+      gap: 1,
+      width: "100%",
+      height: 1,
+      overflow: "hidden",
+    },
+    ...segments.flatMap((segment, index) => [
+      ...(index === 0
+        ? []
+        : [
+            kit.Text({
+              id: `keyloop-practice-status-separator-${index - 1}`,
+              content: "·",
+              fg: theme.border,
+              height: 1,
+              wrapMode: "none",
+            }),
+          ]),
+      ...(segment.label === undefined
+        ? []
+        : [
+            kit.Text({
+              id: `keyloop-practice-status-label-${index}`,
+              content: segment.label,
+              fg: theme.muted,
+              height: 1,
+              wrapMode: "none",
+            }),
+          ]),
+      kit.Text({
+        id: `keyloop-practice-status-value-${index}`,
+        content: segment.value,
+        fg: theme.info,
+        height: 1,
+        truncate: true,
+        wrapMode: "none",
+      }),
+    ]),
+    ...(optionsAvailable
+      ? [
+          kit.Text({
+            id: "keyloop-practice-options-hint-separator",
+            content: "·",
+            fg: theme.border,
+            height: 1,
+            flexShrink: 0,
+            wrapMode: "none",
+          }),
+          kit.Text({
+            id: "keyloop-practice-options-hint-key",
+            content: "Ctrl+O",
+            fg: theme.accent,
+            attributes: TEXT_BOLD,
+            height: 1,
+            flexShrink: 0,
+            wrapMode: "none",
+          }),
+          kit.Text({
+            id: "keyloop-practice-options-hint",
+            content: language === "zh" ? "调整" : "adjust",
+            fg: theme.muted,
+            height: 1,
+            flexShrink: 0,
+            wrapMode: "none",
+          }),
+        ]
+      : []),
+  );
+}
+
+function everydayStatusSegments(
   sourceItem: string,
   settings: OpenTuiAppState["everydaySettings"],
   language: OpenTuiAppState["language"],
-): string | undefined {
+): StatusSegment[] | undefined {
   if (settings === undefined) {
     return undefined;
   }
   const zh = language === "zh";
   switch (sourceItem) {
     case "everyday_words":
-      return zh
-        ? `词库 ${everydayWordRangeStatusLabel(settings.word_range, language)} · 每组 ${settings.word_count} 词`
-        : `Range ${everydayWordRangeStatusLabel(settings.word_range, language)} · ${settings.word_count} words/group`;
+      return [
+        {
+          label: zh ? "词库" : "Range",
+          value: everydayWordRangeStatusLabel(settings.word_range, language),
+        },
+        {
+          label: zh ? "每组" : "Per group",
+          value: zh ? `${settings.word_count} 词` : `${settings.word_count} words`,
+        },
+      ];
     case "everyday_sentences":
-      return zh
-        ? `词汇量 ${everydayLevelStatusLabel(settings.sentence_level, language)} · 长度 ${everydayLengthStatusLabel(settings.sentence_length, language)} · 每组 ${settings.sentence_count} 句`
-        : `Vocabulary ${everydayLevelStatusLabel(settings.sentence_level, language)} · Length ${everydayLengthStatusLabel(settings.sentence_length, language)} · ${settings.sentence_count} sentences/group`;
+      return [
+        {
+          label: zh ? "词汇量" : "Vocabulary",
+          value: everydayLevelStatusLabel(settings.sentence_level, language),
+        },
+        {
+          label: zh ? "长度" : "Length",
+          value: everydayLengthStatusLabel(settings.sentence_length, language),
+        },
+        {
+          label: zh ? "每组" : "Per group",
+          value: zh ? `${settings.sentence_count} 句` : `${settings.sentence_count} sentences`,
+        },
+      ];
     case "everyday_articles":
-      return zh
-        ? `词汇量 ${everydayLevelStatusLabel(settings.article_level, language)} · 长度 ${everydayLengthStatusLabel(settings.article_length, language)}`
-        : `Vocabulary ${everydayLevelStatusLabel(settings.article_level, language)} · Length ${everydayLengthStatusLabel(settings.article_length, language)}`;
+      return [
+        {
+          label: zh ? "词汇量" : "Vocabulary",
+          value: everydayLevelStatusLabel(settings.article_level, language),
+        },
+        {
+          label: zh ? "长度" : "Length",
+          value: everydayLengthStatusLabel(settings.article_length, language),
+        },
+      ];
     case "everyday_word_decomposition":
-      return zh
-        ? `词汇量 ${everydayLevelStatusLabel(settings.decomposition_level, language)} · 每组 ${settings.decomposition_word_count} 词 · 拆分×${settings.decomposition_part_repeats} · 全词×${settings.decomposition_word_repeats}`
-        : `Vocabulary ${everydayLevelStatusLabel(settings.decomposition_level, language)} · ${settings.decomposition_word_count} words/group · parts ×${settings.decomposition_part_repeats} · whole ×${settings.decomposition_word_repeats}`;
+      return [
+        {
+          label: zh ? "词汇量" : "Vocabulary",
+          value: everydayLevelStatusLabel(settings.decomposition_level, language),
+        },
+        {
+          label: zh ? "每组" : "Per group",
+          value: zh
+            ? `${settings.decomposition_word_count} 词`
+            : `${settings.decomposition_word_count} words`,
+        },
+        {
+          label: zh ? "拆分" : "Parts",
+          value: `×${settings.decomposition_part_repeats}`,
+        },
+        {
+          label: zh ? "全词" : "Whole",
+          value: `×${settings.decomposition_word_repeats}`,
+        },
+      ];
     default:
       return undefined;
   }
@@ -1621,29 +1724,38 @@ function groupDurationLabel(language: OpenTuiAppState["language"]): string {
   return language === "zh" ? "本组用时" : "Group";
 }
 
-function codeStatusContent(
+function codeStatusSegments(
   target: RunningRoute["target"],
   input: string,
   language: OpenTuiAppState["language"],
-): string {
+): StatusSegment[] {
   const blocks = target.code_blocks ?? [];
   const currentBlock = currentCodeBlock(blocks, input);
   const blockIndex =
     currentBlock === undefined ? -1 : blocks.findIndex((block) => block === currentBlock);
-  const blockLabel =
-    blocks.length > 1 && blockIndex >= 0
-      ? language === "zh"
-        ? `代码块 ${blockIndex + 1}/${blocks.length}`
-        : `Block ${blockIndex + 1}/${blocks.length}`
-      : "";
-  const scope = codeBlockScopeLabel(currentBlock);
-  const difficulty = codeDifficultyStatusText(currentBlock?.difficulty, language);
-  const size = codeSizeStatusText(currentBlock?.size, language);
-  const parts = [blockLabel, scope, difficulty, size].filter((item) => item.length > 0);
-  if (parts.length === 0) {
-    return language === "zh" ? "代码" : "Code";
+  const segments: StatusSegment[] = [];
+  if (blocks.length > 1 && blockIndex >= 0) {
+    segments.push({
+      label: language === "zh" ? "代码块" : "Block",
+      value: `${blockIndex + 1}/${blocks.length}`,
+    });
   }
-  return parts.join(" · ");
+  const scope = codeBlockScopeLabel(currentBlock);
+  if (scope.length > 0) {
+    segments.push({ value: scope });
+  }
+  const difficulty = codeDifficultyStatusValue(currentBlock?.difficulty, language);
+  if (difficulty.length > 0) {
+    segments.push({ label: language === "zh" ? "难度" : "Difficulty", value: difficulty });
+  }
+  const size = codeSizeStatusValue(currentBlock?.size, language);
+  if (size.length > 0) {
+    segments.push({ label: language === "zh" ? "长度" : "Length", value: size });
+  }
+  if (segments.length === 0) {
+    segments.push({ value: language === "zh" ? "代码" : "Code" });
+  }
+  return segments;
 }
 
 function currentCodeBlock(
@@ -1739,17 +1851,6 @@ function codeDifficultyStatusValue(
   return labels[value] ?? value;
 }
 
-function codeDifficultyStatusText(
-  value: string | undefined,
-  language: OpenTuiAppState["language"],
-): string {
-  const label = codeDifficultyStatusValue(value, language);
-  if (label.length === 0) {
-    return "";
-  }
-  return language === "zh" ? `难度：${label}` : `Difficulty: ${label}`;
-}
-
 function codeSizeStatusValue(
   value: string | undefined,
   language: OpenTuiAppState["language"],
@@ -1767,17 +1868,6 @@ function codeSizeStatusValue(
     long: "长",
   };
   return labels[value] ?? value;
-}
-
-function codeSizeStatusText(
-  value: string | undefined,
-  language: OpenTuiAppState["language"],
-): string {
-  const label = codeSizeStatusValue(value, language);
-  if (label.length === 0) {
-    return "";
-  }
-  return language === "zh" ? `长度：${label}` : `Length: ${label}`;
 }
 
 function titleCase(value: string): string {

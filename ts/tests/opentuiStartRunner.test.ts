@@ -1111,7 +1111,7 @@ describe("OpenTUI start runner", () => {
     const content = flattenContent(kit.addedNodes);
     expect(content).toContain("beta");
     expect(content).not.toContain("alphaValue01");
-    expect(content).toContain("Length: Short");
+    expect(content).toContain("Length\nShort");
     expect(findNodeById(kit.addedNodes, "keyloop-practice-options-popup")).toBeDefined();
 
     kit.emitKey({ name: "c", sequence: "c", ctrl: true });
@@ -1357,7 +1357,7 @@ describe("OpenTUI start runner", () => {
     const content = flattenContent(kit.addedNodes);
     expect(content).toContain("beta");
     expect(content).not.toContain("alpha = 1");
-    expect(content).toContain("Length: Short");
+    expect(content).toContain("Length\nShort");
 
     kit.emitKey({ name: "c", sequence: "c", ctrl: true });
     const result = await runPromise;

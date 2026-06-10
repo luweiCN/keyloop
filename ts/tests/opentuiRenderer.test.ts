@@ -1337,10 +1337,34 @@ describe("OpenTUI renderer adapter", () => {
       "keyloop-live-metrics",
       "keyloop-group-progress-bar",
     ]);
-    expect(content).toContain("代码块 2/2");
+    expect(content).toContain("代码块");
+    expect(content).toContain("2/2");
     expect(content).toContain("TypeScript / React");
-    expect(content).toContain("难度：困难");
-    expect(content).toContain("长度：中等");
+    expect(content).toContain("难度");
+    expect(content).toContain("困难");
+    expect(content).toContain("长度");
+    expect(content).toContain("中等");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-practice-status-label-2")?.props.content,
+    ).toBe("难度");
+    expectAnsiSlot(
+      findNodeById(kit.addedNodes, "keyloop-practice-status-label-2")?.props.fg,
+      8,
+      "brightBlack",
+    );
+    expectAnsiSlot(
+      findNodeById(kit.addedNodes, "keyloop-practice-status-value-2")?.props.fg,
+      6,
+      "cyan",
+    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-practice-options-hint-key")?.props.content,
+    ).toBe("Ctrl+O");
+    expectAnsiSlot(
+      findNodeById(kit.addedNodes, "keyloop-practice-options-hint-key")?.props.fg,
+      2,
+      "green",
+    );
     expect(content).not.toContain("专项练习，直接输入开始");
     expect(content).not.toContain("重点符号:");
     expect(content).not.toContain("热键:");
