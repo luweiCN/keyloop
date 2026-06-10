@@ -218,6 +218,40 @@ describe("OpenTUI app session", () => {
     expect(running.state.route.target.text).not.toContain("fn selected_value");
   });
 
+  test("ctrl-p pins and unpins the active code filter option", () => {
+    const context = appContextWithCodeOptions();
+    const settings = reduceOpenTuiAppKey(
+      createOpenTuiInitialState("en"),
+      key("6", "6"),
+      context,
+    );
+    let state = pressSettingsDown(settings.state, context, 2);
+    state = reduceOpenTuiAppKey(state, key("enter", "\r"), context).state;
+    state = reduceOpenTuiAppKey(state, key("down", ""), context).state;
+
+    const ctrlP: OpenTuiKeyEvent = { name: "p", sequence: "\x10", ctrl: true, meta: false };
+    const pinned = reduceOpenTuiAppKey(state, ctrlP, context);
+    if (pinned.state.route.screen !== "settings" || pinned.state.codeFilters === undefined) {
+      throw new Error("expected settings route with code filters");
+    }
+    expect(pinned.state.codeFilters.pinned).toHaveLength(1);
+    const pinnedPreference = pinned.state.codeFilters.pinned[0];
+    expect(openTuiRouteLines(pinned.state).join("\n")).toContain("pinned");
+
+    const pinnedIndex = pinned.state.codeFilters.options.findIndex(
+      (option) =>
+        option.facet === pinnedPreference?.facet && option.value === pinnedPreference?.value,
+    );
+    expect(pinnedIndex).toBe(0);
+    expect(pinned.state.codeFilters.index).toBe(pinnedIndex);
+
+    const unpinned = reduceOpenTuiAppKey(pinned.state, ctrlP, context);
+    if (unpinned.state.route.screen !== "settings" || unpinned.state.codeFilters === undefined) {
+      throw new Error("expected settings route with code filters");
+    }
+    expect(unpinned.state.codeFilters.pinned).toHaveLength(0);
+  });
+
   test("settings code scope picker searches navigates and selects with arrows", () => {
     const context = appContextWithCodeOptions();
     const settings = reduceOpenTuiAppKey(

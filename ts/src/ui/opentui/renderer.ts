@@ -181,11 +181,9 @@ const MIN_GHOST_TEXT_WRAP_COLUMNS = 24;
 const GHOST_TEXT_FRAME_RESERVED_COLUMNS = 8;
 const GHOST_TEXT_LINE_NUMBER_COLUMNS = 4;
 const APP_FRAME_WIDTH = 96;
-const CODE_FILTER_PICKER_HEIGHT = "60%";
-const CODE_FILTER_PICKER_HEIGHT_RATIO = 0.6;
 const CODE_FILTER_PICKER_DEFAULT_LIST_HEIGHT = 12;
 const CODE_FILTER_PICKER_MIN_LIST_HEIGHT = 6;
-const CODE_FILTER_PICKER_VERTICAL_CHROME_ROWS = 7;
+const CODE_FILTER_PICKER_VERTICAL_CHROME_ROWS = 11;
 const CODE_FILTER_PICKER_ROW_HEIGHT = 2;
 const MENU_ITEM_STRIDE = 3;
 const MENU_ITEM_HEIGHT = 2;
@@ -480,6 +478,7 @@ function routeHints(state: OpenTuiAppState): KeyHint[] {
           { key: "↑↓", label: zh ? "选择" : "select" },
           { key: "Enter/→", label: zh ? "选中" : "toggle" },
           { key: "←", label: zh ? "清除" : "clear" },
+          { key: "Ctrl+P", label: zh ? "固定常用" : "pin" },
           { key: "Esc", label: zh ? "返回" : "back" },
         ];
       }
@@ -718,137 +717,111 @@ function renderCodeFilterPickerScreen(
     state.language === "zh" ? `已选 ${selectedCount}` : `${selectedCount} selected`;
   return kit.Box(
     {
-      id: "keyloop-code-filter-picker-screen",
+      id: "keyloop-code-filter-picker",
       flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
+      gap: 1,
       flexGrow: 1,
       width: "100%",
+      height: "100%",
       overflow: "hidden",
     },
     kit.Box(
       {
-        id: "keyloop-code-filter-picker",
+        id: "keyloop-code-filter-picker-search-panel",
         border: true,
         borderStyle: "rounded",
         borderColor: theme.info,
-        title: ` ${openTuiRouteTitle(state)} `,
+        paddingX: 1,
+        height: 3,
+        width: "100%",
+        flexShrink: 0,
         bottomTitle: ` ${selectedLabel} `,
         bottomTitleAlignment: "right",
-        paddingX: 1,
-        flexDirection: "column",
-        gap: 0,
-        width: 84,
-        height: CODE_FILTER_PICKER_HEIGHT,
         overflow: "hidden",
       },
       kit.Box(
         {
-          id: "keyloop-code-filter-picker-search-panel",
-          border: true,
-          borderStyle: "rounded",
-          borderColor: theme.border,
-          paddingX: 1,
-          height: 3,
+          id: "keyloop-code-filter-picker-input",
+          height: 1,
           width: "100%",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 1,
           overflow: "hidden",
         },
-        kit.Box(
-          {
-            id: "keyloop-code-filter-picker-input",
-            height: 1,
-            width: "100%",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 1,
-            overflow: "hidden",
-          },
-          kit.Text({
-            id: "keyloop-code-filter-picker-query-label",
-            content: "⌕",
-            fg: theme.info,
-            attributes: TEXT_BOLD,
-            height: 1,
-            wrapMode: "none",
-          }),
-          kit.Text({
-            id: "keyloop-code-filter-picker-input-value",
-            content:
-              query === ""
-                ? state.language === "zh"
-                  ? "输入语言、框架或项目关键词"
-                  : "type a language, framework, or project"
-                : `${query}▏`,
-            fg: query === "" ? theme.muted : theme.foreground,
-            attributes: query === "" ? undefined : TEXT_BOLD,
-            height: 1,
-            wrapMode: "none",
-            truncate: true,
-            flexGrow: 1,
-          }),
-        ),
+        kit.Text({
+          id: "keyloop-code-filter-picker-query-label",
+          content: "⌕",
+          fg: theme.info,
+          attributes: TEXT_BOLD,
+          height: 1,
+          wrapMode: "none",
+        }),
+        kit.Text({
+          id: "keyloop-code-filter-picker-input-value",
+          content:
+            query === ""
+              ? state.language === "zh"
+                ? "输入语言、框架或项目关键词"
+                : "type a language, framework, or project"
+              : `${query}▏`,
+          fg: query === "" ? theme.muted : theme.foreground,
+          attributes: query === "" ? undefined : TEXT_BOLD,
+          height: 1,
+          wrapMode: "none",
+          truncate: true,
+          flexGrow: 1,
+        }),
       ),
+    ),
+    kit.Box(
+      {
+        id: "keyloop-code-filter-picker-body",
+        flexDirection: "row",
+        gap: 1,
+        width: "100%",
+        flexGrow: 1,
+        overflow: "hidden",
+      },
       kit.Box(
         {
-          id: "keyloop-code-filter-picker-body",
+          id: "keyloop-code-filter-picker-results",
           flexDirection: "row",
           gap: 1,
           width: "100%",
-          flexGrow: 1,
+          height: "100%",
           overflow: "hidden",
         },
         kit.Box(
           {
-            id: "keyloop-code-filter-picker-list-panel",
-            border: true,
-            borderStyle: "rounded",
-            borderColor: theme.border,
-            width: "100%",
+            id: "keyloop-code-filter-picker-list",
+            flexDirection: "column",
+            gap: 0,
             height: "100%",
+            flexGrow: 1,
             overflow: "hidden",
           },
-          kit.Box(
-            {
-              id: "keyloop-code-filter-picker-results",
-              flexDirection: "row",
-              gap: 0,
-              width: "100%",
-              height: "100%",
-              overflow: "hidden",
-            },
-            kit.Box(
-              {
-                id: "keyloop-code-filter-picker-list",
-                flexDirection: "column",
-                gap: 0,
-                height: "100%",
-                flexGrow: 1,
-                overflow: "hidden",
-              },
-              ...(pickerWindow.items.length === 0
-                ? [
-                    kit.Text({
-                      id: "keyloop-code-filter-picker-empty",
-                      content:
-                        filters === undefined || filters.options.length === 0
-                          ? state.language === "zh"
-                            ? "没有可用代码范围"
-                            : "No code filters available"
-                          : state.language === "zh"
-                            ? "没有匹配项"
-                            : "No matches",
-                      fg: theme.muted,
-                      height: 1,
-                      wrapMode: "none",
-                    }),
-                  ]
-                : pickerWindow.items.map((item) =>
-                    renderCodeFilterPickerRow(item, state.language, kit),
-                  )),
-            ),
-            renderCodeFilterPickerScrollbar(pickerWindow, kit),
-          ),
+          ...(pickerWindow.items.length === 0
+            ? [
+                emptyState(
+                  "keyloop-code-filter-picker-empty",
+                  "⌕",
+                  filters === undefined || filters.options.length === 0
+                    ? state.language === "zh"
+                      ? "没有可用代码范围"
+                      : "No code filters available"
+                    : state.language === "zh"
+                      ? "没有匹配项"
+                      : "No matches",
+                  state.language === "zh" ? "换个关键词试试" : "Try another keyword",
+                  kit,
+                ),
+              ]
+            : pickerWindow.items.map((item) =>
+                renderCodeFilterPickerRow(item, state.language, kit),
+              )),
         ),
+        renderCodeFilterPickerScrollbar(pickerWindow, kit),
       ),
     ),
   );
@@ -867,10 +840,9 @@ function codeFilterPickerViewportHeight(): number {
   if (terminalRows === undefined || terminalRows <= 0) {
     return CODE_FILTER_PICKER_DEFAULT_LIST_HEIGHT;
   }
-  const pickerHeight = Math.floor(terminalRows * CODE_FILTER_PICKER_HEIGHT_RATIO);
   return Math.max(
     CODE_FILTER_PICKER_MIN_LIST_HEIGHT,
-    pickerHeight - CODE_FILTER_PICKER_VERTICAL_CHROME_ROWS,
+    terminalRows - CODE_FILTER_PICKER_VERTICAL_CHROME_ROWS,
   );
 }
 
@@ -944,20 +916,42 @@ function renderCodeFilterPickerRow(
         height: 2,
         overflow: "hidden",
       },
-      kit.Text({
-        id: `keyloop-code-filter-picker-row-${item.optionIndex}-label`,
-        content: `${facetLabel}: ${item.option.value}`,
-        fg: item.active ? theme.accent : theme.foreground,
-        attributes: item.active || item.selected ? TEXT_BOLD : undefined,
-        height: 1,
-        wrapMode: "none",
-        truncate: true,
-      }),
+      kit.Box(
+        {
+          id: `keyloop-code-filter-picker-row-${item.optionIndex}-title`,
+          flexDirection: "row",
+          gap: 1,
+          width: "100%",
+          height: 1,
+          overflow: "hidden",
+        },
+        kit.Text({
+          id: `keyloop-code-filter-picker-row-${item.optionIndex}-label`,
+          content: `${facetLabel}: ${item.option.value}`,
+          fg: item.active ? theme.accent : theme.foreground,
+          attributes: item.active || item.selected ? TEXT_BOLD : undefined,
+          height: 1,
+          wrapMode: "none",
+          truncate: true,
+        }),
+        ...(item.pinned
+          ? [
+              kit.Text({
+                id: `keyloop-code-filter-picker-row-${item.optionIndex}-pin`,
+                content: "★",
+                fg: theme.warning,
+                height: 1,
+                flexShrink: 0,
+                wrapMode: "none",
+              }),
+            ]
+          : []),
+      ),
       kit.Text({
         id: `keyloop-code-filter-picker-row-${item.optionIndex}-detail`,
         content:
           language === "zh"
-            ? `${facetLabel} · ${item.option.count} 个片段${item.pinned ? " · 固定" : ""}`
+            ? `${facetLabel} · ${item.option.count} 个片段${item.pinned ? " · 已固定" : ""}`
             : `${facetLabel} · ${item.option.count} matches${item.pinned ? " · pinned" : ""}`,
         fg: theme.muted,
         height: 1,
@@ -1299,6 +1293,7 @@ function colorLabel(color: OpenTuiColorInput): string {
 async function renderRunningScreen(
   state: OpenTuiAppState,
   kit: OpenTuiRendererKit,
+  options: { completed?: boolean } = {},
 ): Promise<unknown> {
   if (state.route.screen !== "running") {
     return renderPanel("keyloop-route-panel", openTuiRouteTitle(state), openTuiRouteLines(state), kit);
@@ -1313,6 +1308,11 @@ async function renderRunningScreen(
     route.target.code_blocks,
     route.target.annotations,
     kit,
+    options.completed === true
+      ? state.language === "zh"
+        ? "✓ 本组完成 · Enter 下一组"
+        : "✓ Group complete · Enter for next"
+      : undefined,
   );
   return kit.Box(
     {
@@ -1818,6 +1818,7 @@ async function renderGhostText(
   codeBlocks: PracticeTargetCodeBlock[] | undefined,
   annotations: PracticeTargetAnnotation[] | undefined,
   kit: OpenTuiRendererKit,
+  completedTitle?: string,
 ): Promise<unknown> {
   const syntaxRows =
     targetMode === "code"
@@ -1865,13 +1866,16 @@ async function renderGhostText(
       children.push(renderGhostLineTranslation(visualIndex - 1, translation, wrapColumns, kit));
     }
   }
+  const completed = completedTitle !== undefined;
   return kit.Box(
     {
       id: "keyloop-ghost-text",
       border: true,
       borderStyle: "rounded",
-      borderColor: targetMode === "code" ? theme.info : theme.border,
+      borderColor: completed ? theme.accent : targetMode === "code" ? theme.info : theme.border,
       title: targetMode === "code" ? " 代码 " : " 跟打文本 ",
+      bottomTitle: completed ? ` ${completedTitle} ` : undefined,
+      bottomTitleAlignment: completed ? "right" : undefined,
       backgroundColor: theme.background,
       paddingX: 1,
       flexGrow: 1,
@@ -2394,13 +2398,11 @@ async function renderCompleteScreen(
         screen: "running",
         target,
         source_item: state.route.source_item,
-        ...(state.route.lesson === undefined
-          ? {}
-          : { lesson: completedSnapshotLesson(state.route.lesson) }),
+        ...(state.route.lesson === undefined ? {} : { lesson: state.route.lesson }),
         live: completedSnapshotLive(state.route.live, state.route.record),
       },
     };
-    const runningScreen = await renderRunningScreen(runningState, kit);
+    const runningScreen = await renderRunningScreen(runningState, kit, { completed: true });
     if (!state.route.result_visible) {
       return runningScreen;
     }
@@ -2539,7 +2541,7 @@ function renderPracticeOptionsPopup(
   return renderModalPopup(
     "keyloop-practice-options",
     language === "zh" ? "练习选项" : "Practice options",
-    undefined,
+    language === "zh" ? "↑↓ 选择 · ←→ 调整 · Enter 继续 · Esc 关闭" : "↑↓ select · ←→ adjust · Enter resume · Esc close",
     "info",
     kit,
     {
@@ -2602,7 +2604,7 @@ function renderCodeSettingsConfirmationPopup(
   return renderModalPopup(
     "keyloop-code-settings-confirmation",
     openTuiRouteTitle(state),
-    undefined,
+    state.language === "zh" ? "Enter 刷新本组 · Esc 取消" : "Enter refresh · Esc cancel",
     "warn",
     kit,
     {
@@ -2647,7 +2649,7 @@ function renderExitConfirmationPopup(
   return renderModalPopup(
     "keyloop-exit-confirmation",
     openTuiRouteTitle(state),
-    undefined,
+    state.language === "zh" ? "Enter 确认退出 · Esc 返回练习" : "Enter confirm exit · Esc keep typing",
     "bad",
     kit,
     {
@@ -2703,16 +2705,6 @@ function completedSnapshotLive(
       errors: record.error_count,
       backspaces: record.backspace_count,
     },
-  };
-}
-
-function completedSnapshotLesson(
-  lesson: NonNullable<RunningRoute["lesson"]>,
-): NonNullable<RunningRoute["lesson"]> {
-  return {
-    ...lesson,
-    reason_zh: "本组已完成，按 Enter 开始下一组。",
-    reason_en: "This group is complete. Press Enter to start the next group.",
   };
 }
 
@@ -2773,7 +2765,9 @@ function renderCompletionPopup(state: OpenTuiAppState, kit: OpenTuiRendererKit):
   return renderModalPopup(
     "keyloop-complete",
     openTuiRouteTitle(state),
-    undefined,
+    state.language === "zh"
+      ? "Enter 关闭 · R 重练 · Q 退出"
+      : "Enter close · R repeat · Q quit",
     "good",
     kit,
     {

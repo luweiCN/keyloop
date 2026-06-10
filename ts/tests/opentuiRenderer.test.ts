@@ -209,16 +209,14 @@ describe("OpenTUI renderer adapter", () => {
 
     const content = flattenContent(kit.addedNodes);
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker")?.props.height).toBe("60%");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker")?.props.borderStyle).toBe("rounded");
+    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker")?.props.height).toBe("100%");
+    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker")?.props.border).toBeUndefined();
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-header")).toBeUndefined();
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-label")).toBeUndefined();
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-search-panel")?.props.border).toBe(true);
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-body")?.type).toBe("Box");
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-body")?.props.flexGrow).toBe(1);
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-body")?.props.height).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-list-panel")?.props.border).toBe(true);
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-list-panel")?.props.width).toBe("100%");
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-results")?.props.height).toBe("100%");
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-list")?.props.height).toBe("100%");
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-preview")).toBeUndefined();
@@ -226,7 +224,9 @@ describe("OpenTUI renderer adapter", () => {
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-input")?.type).toBe("Box");
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-input")?.props.backgroundColor).toBeUndefined();
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-query-label")?.props.content).toBe("⌕");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker")?.props.bottomTitle).toBe(" 0 selected ");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-search-panel")?.props.bottomTitle,
+    ).toBe(" 0 selected ");
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-row-1")?.props.height).toBe(2);
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-row-1-rail")?.type).toBe("Box");
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-row-1-check")?.props.content).toBe("○");
@@ -254,9 +254,11 @@ describe("OpenTUI renderer adapter", () => {
 
     const content = flattenContent(kit.addedNodes);
     expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-query-label")?.props.content).toBe("⌕");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker")?.props.bottomTitle).toBe(" 已选 1 ");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-search-panel")?.props.bottomTitle,
+    ).toBe(" 已选 1 ");
     expect(content).toContain("框架: react");
-    expect(content).toContain("框架 · 30 个片段 · 固定");
+    expect(content).toContain("框架 · 30 个片段 · 已固定");
     expect(content).not.toContain("Search");
     expect(content).not.toContain("matches");
     expect(content).not.toContain("pinned");
@@ -1435,7 +1437,7 @@ describe("OpenTUI renderer adapter", () => {
     expect(popup?.type).toBe("Box");
     expect(popup?.props.title).toBe(" 练习选项 ");
     expect(popup?.props.borderStyle).toBe("double");
-    expect(popup?.props.bottomTitle).toBeUndefined();
+    expect(popup?.props.bottomTitle).toBe(" ↑↓ 选择 · ←→ 调整 · Enter 继续 · Esc 关闭 ");
     expect(
       findNodeById(kit.addedNodes, "keyloop-practice-option-row-1-rail-0")?.props.content,
     ).toBe("▌");
@@ -1717,7 +1719,9 @@ describe("OpenTUI renderer adapter", () => {
     expectDefaultBackground(
       findNodeById(kit.addedNodes, "keyloop-complete-card")?.props.backgroundColor,
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-card")?.props.bottomTitle).toBeUndefined();
+    expect(findNodeById(kit.addedNodes, "keyloop-complete-card")?.props.bottomTitle).toBe(
+      " Enter close · R repeat · Q quit ",
+    );
     expect(content).not.toContain("WPM 30.0 | Raw WPM 32.0 | Accuracy 100.0%");
     expect(content).not.toContain("Errors 0 | Backspace 1");
     expect(findNodeById(kit.addedNodes, "keyloop-complete-stat-row")?.props.border).toBeUndefined();
@@ -1840,7 +1844,9 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).not.toContain("Next: unknown");
     expect(findNodeById(kit.addedNodes, "keyloop-complete-next")).toBeUndefined();
     expect(findNodeById(kit.addedNodes, "keyloop-complete-actions")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-card")?.props.bottomTitle).toBeUndefined();
+    expect(findNodeById(kit.addedNodes, "keyloop-complete-card")?.props.bottomTitle).toBe(
+      " Enter close · R repeat · Q quit ",
+    );
   });
 
   test("renders exit confirmation as a popup over the paused practice", async () => {
@@ -1870,7 +1876,7 @@ describe("OpenTUI renderer adapter", () => {
     expect(findNodeById(kit.addedNodes, "keyloop-exit-confirmation-popup")).toBeDefined();
     expect(
       findNodeById(kit.addedNodes, "keyloop-exit-confirmation-popup")?.props.bottomTitle,
-    ).toBeUndefined();
+    ).toBe(" Enter confirm exit · Esc keep typing ");
 
     expect(findNodeById(kit.addedNodes, "keyloop-route-panel")).toBeUndefined();
     expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")).toBeDefined();
