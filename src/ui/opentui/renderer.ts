@@ -3,6 +3,7 @@ import { openTuiRouteLines, openTuiRouteTitle } from "./appModel";
 import { type OpenTuiRenderer, type OpenTuiRendererKit, loadOpenTuiKit } from "./kit";
 import { OPEN_TUI_ROOT_ID, renderAppFrame } from "./screens/appFrame";
 import { renderPanel } from "./screens/shared";
+import { renderLibraryCreateScreen } from "./screens/library";
 import { renderMenuScreen } from "./screens/menu";
 import { renderSettingsMenuScreen } from "./screens/settings";
 import { renderCodeFilterPickerScreen } from "./screens/codeFilterPicker";
@@ -65,6 +66,7 @@ async function renderRoute(state: OpenTuiAppState, kit: OpenTuiRendererKit): Pro
     case "library_menu":
       return renderAppFrame(state, renderMenuScreen(state, kit), kit);
     case "library_create":
+      return renderAppFrame(state, renderLibraryCreateScreen(state, kit), kit);
     case "library_manage":
     case "library_actions":
     case "library_input":
