@@ -284,6 +284,21 @@
     "paragraphs"
    ],
    "notes": "Modern everyday English articles (daily life, work, study, culture) authored to complement the literary Gutenberg base corpus."
+  },
+  {
+   "source_id": "voa:learning-english",
+   "source_name": "VOA Learning English",
+   "source_url": "https://learningenglish.voanews.com/",
+   "license": "Public domain (U.S. federal government work; VOA original text only, wire-agency content excluded)",
+   "retrieved_at": "2026-06-10",
+   "generation_script": "tools/fetchVoaCandidates.py + tools/gateVoaCandidates.ts + tools/mergeVoaArticles.ts",
+   "included_fields": [
+    "title",
+    "level",
+    "length",
+    "paragraphs"
+   ],
+   "notes": "Modern graded articles written by VOA Learning English editors for English learners; broadcast framing and host sign-offs trimmed; Chinese paragraph translations authored for KeyLoop and reviewed."
   }
  ],
  "entries": [
@@ -1344,6 +1359,974 @@
     {
      "text": "So I keep a shelf of books that have defeated me, and I return to it the way climbers return to a mountain that turned them back. Some will defeat me again. But every few years, one of them quietly opens, and I am reminded that the border of the readable is not fixed; it moves outward exactly as far as we are willing to push it, and each book that opens makes the next one on the shelf look a little less impossible than it did before.",
      "translation_zh": "所以我专门留了一格书架，放那些曾经打败过我的书，并像登山者重返曾把自己劝退的山峰那样回到它面前。有些书会再次打败我。但每隔几年，其中一本会悄然敞开。它提醒我：可读性的边界并非固定——我们愿意推多远，它就向外移多远；而每一本敞开的书，都会让书架上的下一本看起来不再那么高不可攀。"
+    }
+   ]
+  },
+  {
+   "title": "American Inventors: Rocket Scientist Robert Goddard",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Today rocket launches and space missions are common. But in the early 1900s, space travel seemed like a dream.",
+     "translation_zh": "如今，火箭发射和太空任务已是寻常事。但在二十世纪初，太空旅行还像是一场梦。"
+    },
+    {
+     "text": "One of the most influential people in the field of rocket science was American Robert Goddard.",
+     "translation_zh": "在火箭科学领域，最有影响力的人物之一是美国人罗伯特·戈达德。"
+    },
+    {
+     "text": "The American space agency NASA describes Goddard as \"the father of modern rocket propulsion .\"",
+     "translation_zh": "美国航天局 NASA 称戈达德为“现代火箭推进之父”。"
+    },
+    {
+     "text": "Robert Goddard once said that \"the dream of yesterday is the hope of today and the reality of tomorrow.\" His scientific work gave hope to many dreams about space travel. He turned some of those dreams into reality.",
+     "translation_zh": "罗伯特·戈达德曾说：“昨天的梦想是今天的希望，也是明天的现实。”他的科学工作给许多太空旅行的梦想带来了希望。他还把其中一些梦想变成了现实。"
+    },
+    {
+     "text": "More than one hundred years ago, Goddard carried out studies and tests of rocket engines.",
+     "translation_zh": "一百多年前，戈达德就开展了火箭发动机的研究和试验。"
+    },
+    {
+     "text": "He developed and flew many rockets that got their power from solid fuels: chemicals that formed a hard substance. In 1925, he made and tested the first rocket engine using a soft chemical fuel. The next year, he successfully launched the world's first liquid-fuel rocket.",
+     "translation_zh": "他研制并试飞了多枚以固体燃料——一种凝固成硬块的化学物质——为动力的火箭。1925 年，他制造并测试了第一台使用软质化学燃料的火箭发动机。次年，他成功发射了世界上第一枚液体燃料火箭。"
+    },
+    {
+     "text": "Many historians consider liquid-fuel rocket flight to be as important as the first airplane flight by the American brothers Orville and Wilbur Wright.",
+     "translation_zh": "许多历史学家认为，液体燃料火箭的飞行与美国莱特兄弟的首次飞机飞行同等重要。"
+    },
+    {
+     "text": "Goddard's work proved that machines could travel outside of Earth's atmosphere and into space.",
+     "translation_zh": "戈达德的工作证明，机器可以飞出地球大气层进入太空。"
+    },
+    {
+     "text": "During his early research, he received money and support from the U.S. Smithsonian Institution. The Smithsonian published several reports about his efforts.",
+     "translation_zh": "在早期研究中，他得到了美国史密森学会的资助和支持。学会发表了多份关于他研究工作的报告。"
+    },
+    {
+     "text": "One publication, called \"A Method of Reaching Extreme Altitudes,\" wrote about his search for ways to send weather recording instruments higher than balloons could fly. It described how he developed the mathematical theories for rocket flight.",
+     "translation_zh": "其中一份题为《到达极限高度的方法》的出版物，介绍了他如何寻找把气象记录仪器送到比气球更高处的办法，并阐述了他为火箭飞行建立的数学理论。"
+    }
+   ]
+  },
+  {
+   "title": "Knitting While Watching Movies Gains Popularity",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Nearly 200 people in Vienna, Austria, gathered recently to enjoy two fun activities at the same time.",
+     "translation_zh": "近日，奥地利维也纳有近两百人聚在一起，同时享受两件趣事。"
+    },
+    {
+     "text": "They worked with needles and yarn . And they watched a movie together called The Devil Wears Prada .",
+     "translation_zh": "他们一边摆弄棒针和毛线，一边一起观看电影《穿普拉达的女王》。"
+    },
+    {
+     "text": "\"It sounds a bit like a grandmother, but it's relaxing . And...what's wrong with letting the grandmother in us express herself,\" joked Austrian Alexander Koch. He is a 28-year-old who crochets .",
+     "translation_zh": "“听起来是有点像老奶奶，但这很放松。再说……让我们心里的那位老奶奶表达一下自己，又有什么不好呢？”28 岁的奥地利人亚历山大·科赫开玩笑说。他的爱好是钩针编织。"
+    },
+    {
+     "text": "Knitting or crocheting while watching movies has gained popularity in Europe.",
+     "translation_zh": "一边看电影一边织毛线或钩花，正在欧洲流行起来。"
+    },
+    {
+     "text": "Luisa Palmer was one of the organizers of the event. Palmer said that, during the COVID-19 pandemic, \"A lot of people started knitting during the lockdown alone at home.\" Palmer launched the knitting evenings once a month at Votiv Kino, a place to watch movies in the center of the Austrian capital.",
+     "translation_zh": "路易莎·帕尔默是这次活动的组织者之一。她说，新冠疫情期间，“很多人在居家隔离时独自开始织毛线”。帕尔默在维也纳市中心的 Votiv Kino 影院发起了每月一次的编织电影夜。"
+    },
+    {
+     "text": "\"Now we need to find ourselves...\" in real life, the 30-year-old told the French News Agency (AFP) before the event.",
+     "translation_zh": "这位 30 岁的组织者在活动开始前对法新社说：“现在我们需要在现实生活中重新找到自己……”"
+    },
+    {
+     "text": "People are knitting, eating, or even breastfeeding babies while watching a movie. This movement is the latest attempt to add different things to the movie-watching experience, said Lisa Stolze. She is a spokesperson for Votiv Kino, the movie house.",
+     "translation_zh": "影院发言人丽莎·施托尔策说，观众一边看电影一边织毛线、吃东西，甚至给婴儿喂奶。这场风潮是为观影体验添加新元素的最新尝试。"
+    },
+    {
+     "text": "To avoid knitting mistakes, a soft light remains on during the movie. This also helps to increase exchanges between the attendees.",
+     "translation_zh": "为了避免织错针脚，放映期间会保留一盏柔和的灯。这也促进了观众之间的交流。"
+    },
+    {
+     "text": "Organizers based their event on similar ones in the United States, Northern Europe, Germany and France. Since launching in December of 2024, the movie events in Vienna are usually full.",
+     "translation_zh": "组织者借鉴了美国、北欧、德国和法国的类似活动。自 2024 年 12 月启动以来，维也纳的这些电影场次通常场场爆满。"
+    },
+    {
+     "text": "\"I usually knit while watching movies or listening to podcasts at home, so movie theaters are the perfect place for this activity,\" said Kaja Vospernik. She is a 23-year-old fashion student.",
+     "translation_zh": "“我平时就在家里边看电影或听播客边织毛线，所以电影院正是做这件事的完美场所。”23 岁的时装专业学生卡娅·沃斯佩尼克说。"
+    },
+    {
+     "text": "As the movie plays, the colorful projects take shape. The film takes a back seat, meaning it is less important than the work of knitting or crocheting. Everyone shows off their work. Experienced knitters and crocheters help beginners learn new skills.",
+     "translation_zh": "随着电影播放，五彩的织物渐渐成形。电影反而退居其次，没有手里的编织重要。每个人都展示自己的作品，熟手帮新手学习新技巧。"
+    },
+    {
+     "text": "She is another organizer of the event.",
+     "translation_zh": "她是这次活动的另一位组织者。"
+    },
+    {
+     "text": "People attend the events for several reasons. Some say the events let them reconnect with something real that is not on a computer. Others say they can \"slow down a little.\"",
+     "translation_zh": "人们参加活动的原因各不相同。有人说，这让他们重新接触到电脑之外真实的东西；也有人说，可以“让节奏慢下来一点”。"
+    },
+    {
+     "text": "Palmer said, \"Doing something with your ten fingers is still more rewarding ...\" than working at a computer all day.",
+     "translation_zh": "帕尔默说：“用自己的十根手指做点东西，还是比对着电脑坐一整天更有成就感……”"
+    },
+    {
+     "text": "She added that picking the right movie is also important. Palmer likes to watch a good \" cozy comedy\" that she has already seen. She joked that it is best to avoid scary movies. They can make you jump causing you to lose your place in your knitting.",
+     "translation_zh": "她补充说，选对电影也很重要。帕尔默喜欢看自己已经看过的“温馨喜剧”。她开玩笑说最好别放恐怖片——吓一跳的时候，手里的针脚就乱了。"
+    }
+   ]
+  },
+  {
+   "title": "Mary Kay: A Leader in the Beauty Product Industry",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Mary Kay Cosmetics is an international company that sells beauty products.",
+     "translation_zh": "玫琳凯化妆品是一家销售美容产品的国际公司。"
+    },
+    {
+     "text": "One woman started the business in the 1960s with an investment of $5,000.",
+     "translation_zh": "上世纪六十年代，一位女性用五千美元的投资创办了这家企业。"
+    },
+    {
+     "text": "Mary Kathlyn Wagner was born in the state of Texas in 1918. For much of her childhood, she cared for her sick father while her mother worked long hours at a restaurant.",
+     "translation_zh": "玛丽·凯瑟琳·瓦格纳 1918 年出生于得克萨斯州。童年的大部分时间里，母亲在餐馆长时间工作，她则在家照顾生病的父亲。"
+    },
+    {
+     "text": "Mary Kay married Ben Rogers when she was 17 years old. They had three children before he left home to serve in World War Two. When he returned, their marriage ended. Mary Kay looked for a job so she could support her children.",
+     "translation_zh": "玛丽·凯 17 岁时嫁给本·罗杰斯。两人育有三个孩子，后来丈夫离家参加第二次世界大战。战后归来，婚姻走到了尽头。为了养活孩子，玛丽·凯开始找工作。"
+    },
+    {
+     "text": "She began selling different kinds of products. One night, Mary Kay was showing products at the home of Ova Heath Spoonemore. Ms. Spoonemore began giving her guests some homemade skin care products. The products were developed by her father, J.W. Heath, in Arkansas. Mary Kay tried the skin care products and liked them.",
+     "translation_zh": "她做过多种产品的销售。一天晚上，玛丽·凯在奥娃·希思·斯普恩莫尔家中展示产品时，女主人拿出一些自制的护肤品招待客人。这些产品是她父亲 J.W. 希思在阿肯色州研制的。玛丽·凯试用之后非常喜欢。"
+    },
+    {
+     "text": "She bought the rights to Heath's skin care products and started her own company. She paid $500 for the legal rights to the products. And in 1963, The Mary Kay Cosmetics company began operating in Dallas, Texas.",
+     "translation_zh": "她买下了希思护肤品的产品权，开创了自己的公司。这笔产品法律权利花了她五百美元。1963 年，玫琳凯化妆品公司在得克萨斯州达拉斯开业。"
+    },
+    {
+     "text": "The idea was to sell skin care products through demonstrations in homes and offices. Independent sales representatives bought beauty products from the company and sold them at higher prices.",
+     "translation_zh": "公司的思路是通过在住宅和办公室里做演示来销售护肤品。独立销售代表从公司购进美容产品，再以更高的价格卖出。"
+    },
+    {
+     "text": "Mary Kay decided that each representative who brought other saleswomen into the company would receive part of the new person's earnings. That way, experienced sales representatives would be willing to train new ones.",
+     "translation_zh": "玛丽·凯规定，每位介绍其他女性加入公司的代表，都能从新人的收入中分得一部分。这样，有经验的销售代表就愿意培养新人。"
+    },
+    {
+     "text": "By 1965, the company was selling almost one million dollars in products.",
+     "translation_zh": "到 1965 年，公司的产品销售额已接近一百万美元。"
+    },
+    {
+     "text": "Mary Kay Cosmetics became one of the most successful direct sellers of skin care products in America. It continues to have sales offices and representatives in many different countries.",
+     "translation_zh": "玫琳凯化妆品成为美国最成功的护肤品直销企业之一，至今仍在许多国家设有销售机构和代表。"
+    },
+    {
+     "text": "Mary Kay aimed to grow sales based on the idea that it is best to compete against yourself. That means every individual is trying to beat their own sales records. Prizes for high sales marks included special paid holidays and jewelry. Until a few years ago, a pink Cadillac was a top prize.",
+     "translation_zh": "玛丽·凯立志让销售增长建立在“和自己竞争”的理念之上，也就是每个人都努力打破自己的销售纪录。销售佳绩的奖品包括带薪假期和珠宝。直到几年前，粉色凯迪拉克轿车一直是最高奖。"
+    },
+    {
+     "text": "After her third husband, Mel Ash, died of cancer in 1980, she wanted to help find a cure for the disease. At first, she helped organizations raise money for research.",
+     "translation_zh": "1980 年，她的第三任丈夫梅尔·阿什死于癌症，她由此希望帮助找到治愈这种疾病的方法。起初，她协助各类组织为研究筹款。"
+    },
+    {
+     "text": "Later, she started the Mary Kay Ash Charitable Foundation, a nonprofit group that provides money to support research on cancers affecting women. In 2001, the company and foundation expanded their goals to help prevent violence against women.",
+     "translation_zh": "后来，她创立了玛丽·凯·阿什慈善基金会，这家非营利机构资助针对女性癌症的研究。2001 年，公司和基金会扩大了目标，加入了防止针对女性的暴力。"
+    },
+    {
+     "text": "Mary Kay Ash also wrote three books. She worked in her business until she suffered a stroke in 1996. She died in 2001.",
+     "translation_zh": "玛丽·凯·阿什还写了三本书。她一直工作到 1996 年中风，2001 年去世。"
+    },
+    {
+     "text": "Sales representatives say Mary Kay developed a way for women to earn money and still spend time with their families.",
+     "translation_zh": "销售代表们说，玛丽·凯开创了一条让女性既能挣钱又能陪伴家人的道路。"
+    }
+   ]
+  },
+  {
+   "title": "Researchers Uncover a Bathhouse Complex in Ancient Pompeii",
+   "level": "cet4",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Archeological research has uncovered another treasure of the ancient Roman city of Pompeii: a large private bathhouse .",
+     "translation_zh": "考古研究又发现了古罗马城市庞贝的一处珍宝：一座大型私人浴场。"
+    },
+    {
+     "text": "The explosion of Mount Vesuvius in 70 AD buried Pompeii in thick ash, wreckage, and lava, or hot liquid rock. Archeologists are continuing to find remains of the city under the ground.",
+     "translation_zh": "公元 70 年，维苏威火山喷发，厚厚的火山灰、瓦砾和熔岩（炽热的液态岩石）掩埋了庞贝。考古学家仍在地下不断发现这座城市的遗迹。"
+    },
+    {
+     "text": "The bathhouse was part of a large private house, the scientists said. The bathhouse holds a series of rooms that would have provided hot, warm, or cold conditions. The art and design of the complex, including mosaic works, also suggest the owner was wealthy.",
+     "translation_zh": "科学家说，这座浴场属于一处大型私宅。浴场内有一系列房间，可分别提供热水、温水或冷水。浴场的艺术与设计，包括马赛克镶嵌作品，也表明主人十分富有。"
+    },
+    {
+     "text": "\"We have here perhaps the largest thermal complex in a private house in Pompeii,\" said Gabriel Zuchtriegel, director of the Pompeii Archaeological Park.",
+     "translation_zh": "庞贝考古公园主任加布里埃尔·楚赫特里格尔说：“这里也许是庞贝私宅中最大的浴场建筑群。”"
+    },
+    {
+     "text": "He explained that Pompeii's powerful and wealthy set up large spaces at their homes to hold major gatherings for ceremonies and other purposes.",
+     "translation_zh": "他解释说，庞贝的权贵富人会在家中布置大型空间，用于举办仪式等重要聚会。"
+    },
+    {
+     "text": "\"It was an opportunity to show the wealth in which they lived and also to have a nice thermal treatment,\" he said.",
+     "translation_zh": "他说：“这是一个机会，既能炫耀他们的富足生活，又能享受舒适的温泉护理。”"
+    },
+    {
+     "text": "The baths were unearthed in the so-called Regio IX, a large central area of Pompeii Park that is still unexplored.",
+     "translation_zh": "浴场是在所谓的第九区出土的。这是庞贝公园中部一大片尚未勘探的区域。"
+    },
+    {
+     "text": "Recently, archeologists working in the same area found a bakery , a laundry and two homes. They also found the bones of three people who died in the volcanic burst.",
+     "translation_zh": "最近，在同一区域工作的考古学家还发现了一家面包房、一家洗衣坊和两处住宅，并发现了三名死于火山喷发者的遗骨。"
+    },
+    {
+     "text": "Pompeii was not the only city destroyed in the explosion. It also buried the city of Herculaneum.",
+     "translation_zh": "庞贝并非那次喷发中毁灭的唯一城市。赫库兰尼姆城也一同被掩埋。"
+    },
+    {
+     "text": "Zuchtriegel said wealthy citizens of Pompeii often would first take a bath and then attend a banquet, or a big meal. The private thermal complex permitted them to do so together at the home where the banquet was held.",
+     "translation_zh": "楚赫特里格尔说，庞贝的富人往往先沐浴，再出席盛大的宴会。私人浴场让他们可以在举办宴会的宅邸里把两件事一并完成。"
+    }
+   ]
+  },
+  {
+   "title": "What Is Art Deco and Why Is It Popular Again?",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Art Deco is an international artistic style that was popular in the 1920s and 1930s.",
+     "translation_zh": "装饰艺术（Art Deco）是一种国际艺术风格，流行于二十世纪二三十年代。"
+    },
+    {
+     "text": "Now, interest in the style and its qualities is growing. A new generation is enjoying the style's roots and turning it into something new.",
+     "translation_zh": "如今，人们对这种风格及其特质的兴趣再度升温。新一代人欣赏它的根源，并把它变成新的东西。"
+    },
+    {
+     "text": "A public showing, or exhibition, at the Museum of the City of New York provides a look at the style that helped define the city 100 years ago.",
+     "translation_zh": "纽约市博物馆的一场公开展览，让人们得以一窥一百年前塑造了这座城市的这种风格。"
+    },
+    {
+     "text": "Famous Art Deco buildings include the Chrysler Building, the Empire State Building, Rockefeller Center and Radio City Music Hall.",
+     "translation_zh": "著名的装饰艺术建筑包括克莱斯勒大厦、帝国大厦、洛克菲勒中心和无线电城音乐厅。"
+    },
+    {
+     "text": "The public showing, called \"Art Deco City: New York Postcards from the Leonard A. Lauder Collection,\" also has clothing and film clips from the time.",
+     "translation_zh": "这场名为“装饰艺术之城：伦纳德·A·劳德收藏中的纽约明信片”的展览，还展出了那个时代的服装和电影片段。"
+    },
+    {
+     "text": "In London, the Victoria and Albert Museum has a collection of day and evening clothing, jewelry and more. The collection comes from Les Ballets Russes, a dance company that had a major effect on fashion .",
+     "translation_zh": "在伦敦，维多利亚与艾尔伯特博物馆收藏了日装、晚装、珠宝等众多展品。这批藏品来自对时尚影响深远的俄罗斯芭蕾舞团。"
+    },
+    {
+     "text": "And in Paris, organizers of the 2024 Olympics created Art Deco posters last year to celebrate the games and mark the one hundred years since the 1924 Olympics, which Paris also hosted.",
+     "translation_zh": "在巴黎，2024 年奥运会的组织者去年创作了装饰艺术风格的海报，以庆祝奥运会，并纪念巴黎主办 1924 年奥运会一百周年。"
+    },
+    {
+     "text": "A style of the 1920s and 30s",
+     "translation_zh": "二三十年代的一种风格"
+    },
+    {
+     "text": "Appearing after World War I, the first Art Deco era had a spirit of creativity and freedom. With the aim of appearing modern, the style became one of the most important forms of design in the 1920s and early 1930s.",
+     "translation_zh": "第一个装饰艺术时代出现在第一次世界大战之后，洋溢着创造与自由的精神。这种以摩登为追求的风格，成为二十年代和三十年代初最重要的设计形式之一。"
+    },
+    {
+     "text": "The Art Deco style is believed to have first appeared at the 1925 International Exhibition of Modern Decorative and Industrial Arts, in Paris.",
+     "translation_zh": "人们认为，装饰艺术风格最早亮相于 1925 年在巴黎举办的国际现代装饰与工业艺术博览会。"
+    }
+   ]
+  },
+  {
+   "title": "Danish-Swedish Farmdog Is American Kennel Club's Newest Breed",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "The American Kennel Club, or AKC, has named another kind of dog to its registry.",
+     "translation_zh": "美国养犬俱乐部（AKC）的名录中又添了一个犬种。"
+    },
+    {
+     "text": "Say hello to the Danish-Swedish farmdog. Or maybe say \"hej,\" the word for hello in Swedish and Danish.",
+     "translation_zh": "来跟丹麦-瑞典农场犬打个招呼吧。或许该说一声“hej”——这是瑞典语和丹麦语里的“你好”。"
+    },
+    {
+     "text": "AKC officials announced the addition to its list on January 2. The recognition means the breed now may compete for many best in show prizes. It also will probably create wider interest in the small, lively dogs. Fans of the breed are happy for the honor, but some also worry about the effect increased attention will have on the dog.",
+     "translation_zh": "AKC 官员于 1 月 2 日宣布了这一新增犬种。获得认可意味着该犬种今后可以角逐众多“全场总冠军”奖项，也可能让更多人关注这种活泼的小型犬。该犬种的爱好者为这份荣誉感到高兴，但也有人担心关注度上升会给这种狗带来影响。"
+    },
+    {
+     "text": "Carey Segebart is one of the people who worked to get Danish-Swedish farmdogs recognized by the AKC. \"We're excited about it. We're looking forward to it,\" she said. She plans to show one of her own at a dog show this month near her home in the American state of Iowa.",
+     "translation_zh": "凯莉·塞格巴特是推动丹麦-瑞典农场犬获得 AKC 认可的人士之一。“我们很兴奋，也很期待。”她说。她打算本月在艾奥瓦州家附近的犬展上展示自己的一只爱犬。"
+    },
+    {
+     "text": "Still, she thinks more attention can have both good and bad results for the breed. \"We don't want the breed to just explode too quickly,\" she said.",
+     "translation_zh": "不过她认为，更多的关注对这个犬种来说有利也有弊。“我们不希望这个犬种一下子火得太快。”她说。"
+    },
+    {
+     "text": "The Danish-Swedish Farmdog Club of America says the breed, DSF for short, goes back centuries in parts of what are now Denmark, southern Sweden and some other European countries.",
+     "translation_zh": "美国丹麦-瑞典农场犬俱乐部介绍说，这个简称 DSF 的犬种，在如今的丹麦、瑞典南部及欧洲一些其他地区已有数百年历史。"
+    },
+    {
+     "text": "\"They're interesting, fun little dogs,\" said Segebart, who has owned them since 2011 and is the club's incoming president. She said they will try anything and \"succeed at most everything.\"",
+     "translation_zh": "“它们是有趣又好玩的小狗。”塞格巴特说。她从 2011 年起饲养这种犬，即将出任俱乐部主席。她说它们什么都愿意尝试，而且“几乎样样都能做好”。"
+    },
+    {
+     "text": "In their homelands, the dogs' main job was to control small animals called rodents. However, they also can herd , act as watchdogs and be playful with children. The club says some Danish-Swedish farmdogs have even performed in circuses .",
+     "translation_zh": "在原产地，这种狗的主要工作是控制啮齿类小动物。不过它们也会放牧、看家护院，还能陪孩子玩耍。俱乐部说，有些丹麦-瑞典农场犬甚至上过马戏团的舞台。"
+    },
+    {
+     "text": "After Denmark and Sweden became more developed in the 20th century, DSF fans decided to make the breed official in both nations. Kennel clubs there began registering the breed in 1987.",
+     "translation_zh": "二十世纪，丹麦和瑞典的发展程度提高之后，DSF 的爱好者决定让这一犬种在两国都获得官方地位。两国的养犬俱乐部于 1987 年开始为该犬种登记。"
+    },
+    {
+     "text": "In the United States, many of the about 350 Danish-Swedish farmdogs nationwide already compete in agility , obedience or other sports that are open to all dogs, including mixed breeds.",
+     "translation_zh": "在美国，全国约 350 只丹麦-瑞典农场犬中，许多已经在敏捷、服从等向所有犬只（包括混种犬）开放的运动项目中参赛。"
+    },
+    {
+     "text": "Until now, the dogs could not enter the traditional breed-by-breed judging that leads to best in show prizes at major dog shows. They may appear later this year at two major televised events, the National Dog Show and the AKC National Championship.",
+     "translation_zh": "在此之前，这些狗无法参加按犬种逐一评审、最终决出全场总冠军的大型犬展传统赛制。今年晚些时候，它们可能亮相两大电视转播赛事：全国犬展和 AKC 全国锦标赛。"
+    },
+    {
+     "text": "The Danish-Swedish farmdog is the AKC's 202nd breed and \"a wonderful addition to a family that is able to provide it with the exercise and mental stimulation that it needs,\" said the AKC's Gina DiNardo.",
+     "translation_zh": "丹麦-瑞典农场犬是 AKC 认可的第 202 个犬种。AKC 的吉娜·迪纳尔多说，对能够满足其运动量和动脑需求的家庭来说，它是“极好的新成员”。"
+    },
+    {
+     "text": "Danish-Swedish farmdog lovers talked for several years about whether they should try to get AKC recognition and the attention that is likely to come with it, Segebart said. The number of people wanting to buy a young farmdog, or puppy, has grown quickly over the last ten years. The wait for a DSF puppy is usually a year or more, she said.",
+     "translation_zh": "塞格巴特说，丹麦-瑞典农场犬的爱好者们讨论了好几年，才决定是否争取 AKC 认可以及随之而来的关注。过去十年，想买一只农场犬幼犬的人迅速增多，如今等一只 DSF 幼犬通常要一年以上。"
+    },
+    {
+     "text": "Fans of the breed worry that its appealing, relatively easy-care nature could make it quickly become too popular for its own good. They are not the first to worry. Similar concerns surround the French bulldog, which the AKC now says is the most popular breed in the country. Breeding for desired qualities has led to many health problems for the dogs.",
+     "translation_zh": "该犬种的爱好者担心，它讨喜又相对好养的天性，可能让它红得太快反受其害。有这种担忧的不止他们。类似的忧虑也围绕着法国斗牛犬——AKC 称其如今是全美最受欢迎的犬种，而对特定特征的选育已给这种狗带来了许多健康问题。"
+    }
+   ]
+  },
+  {
+   "title": "Green Means Spring and Other Things",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Green is an important color in nature. It is the color of grass and the leaves on trees. It is also the color of most growing plants.",
+     "translation_zh": "绿色是大自然中重要的颜色。它是青草和树叶的颜色，也是大多数生长中的植物的颜色。"
+    },
+    {
+     "text": "Sometimes, the word green means young, fresh and growing. Sometimes, it describes something that is not yet ripe or finished.",
+     "translation_zh": "有时，green 这个词表示年轻、新鲜、正在成长；有时，它形容尚未成熟或尚未完成的东西。"
+    },
+    {
+     "text": "For example, a greenhorn is someone who has no experience, who is new to a situation. In the fifteenth century, a greenhorn was a young cow or ox whose horns had not yet developed. A century or so later, a greenhorn was a soldier who had not yet had any experience in battle. By the eighteenth century, a greenhorn had the meaning it has today - a person who is new in a job.",
+     "translation_zh": "比如，greenhorn 指没有经验的新手。十五世纪时，greenhorn 是指犄角还没长出来的小牛。大约一个世纪后，它指还没上过战场的士兵。到了十八世纪，greenhorn 有了今天的含义——工作上的新人。"
+    },
+    {
+     "text": "About one hundred years ago, greenhorn was a popular expression in the American west. Old-timers used it to describe a man who had just arrived from one of the big cities back east. The greenhorn lacked the skills he would need to live in the hard, rough country.",
+     "translation_zh": "大约一百年前，greenhorn 在美国西部是个流行词。老住户用它形容刚从东部大城市来的人——这种新来的人缺乏在艰苦粗粝的乡野生存所需的本领。"
+    },
+    {
+     "text": "Someone who has the ability to grow plants well is said to have a green thumb. The expression comes from the early 1900s.",
+     "translation_zh": "擅长种植物的人，我们说他有 green thumb（绿拇指）。这个说法出现于二十世纪初。"
+    },
+    {
+     "text": "A person with a green thumb seems to have a magic touch that makes plants grow quickly and well. You might say that the woman next door has a green thumb if her garden continues to grow long after your plants have died.",
+     "translation_zh": "有绿拇指的人仿佛有一双魔法之手，能让植物长得又快又好。如果你的植物早就枯死了，隔壁太太的花园却生机勃勃，你就可以说她有绿拇指。"
+    },
+    {
+     "text": "The Green Revolution is the name given some years ago to the development of new kinds of rice and other grains. The new plants produced much larger crops. The Green Revolution was the result of hard work by agricultural scientists who had green thumbs.",
+     "translation_zh": "Green Revolution（绿色革命）是多年前人们给水稻等新品种谷物的培育起的名字。新品种带来了大得多的收成。绿色革命正是那些有绿拇指的农业科学家辛勤工作的成果。"
+    },
+    {
+     "text": "Green is also the color used to describe the powerful emotion, jealousy. The green-eyed monster is not a frightening creature from outer space. It is an expression used about four hundred years ago by British writer William Shakespeare in his play \"Othello.\"",
+     "translation_zh": "绿色还被用来形容一种强烈的情绪——嫉妒。green-eyed monster（绿眼怪物）不是来自外太空的可怕生物，而是大约四百年前英国作家莎士比亚在戏剧《奥赛罗》中用过的一个说法。"
+    },
+    {
+     "text": "It describes the unpleasant feeling a person has when someone has something he wants. A young man may suffer from the green-eyed monster if his girlfriend begins going out with someone else. Or, that green-eyed monster may affect your friend if you get a pay raise and she does not.",
+     "translation_zh": "它描述的是别人拥有你想要的东西时，你心里那种不舒服的感觉。女朋友开始和别人约会，小伙子可能会被绿眼怪物缠上；你加了薪而朋友没有，绿眼怪物也可能找上她。"
+    },
+    {
+     "text": "In most places in the world, a green light is a sign to move ahead. A green light on a traffic signal means your car can continue on. In everyday speech, a green light means approval to continue with a project. We want you to know we have a green light to continue this series next week.",
+     "translation_zh": "在世界上大多数地方，绿灯都是前进的信号。交通信号的绿灯亮起，车辆就可以继续行驶。在日常用语里，green light 表示对一个项目的放行批准。"
+    }
+   ]
+  },
+  {
+   "title": "How to 'Dish Up' Something Good",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Food is a popular subject with many people around the world. It is fun to talk about our favorite dishes. It is even more fun to share a favorite dish with others.",
+     "translation_zh": "食物是世界各地许多人喜爱的话题。聊聊自己最爱的菜式很有乐趣，与人分享一道拿手菜就更有乐趣了。"
+    },
+    {
+     "text": "Today we talk about the word \"dish.\" A dish can be the object on which you serve food. But, a dish can also mean a specially prepared food.",
+     "translation_zh": "今天我们来聊聊 dish 这个词。dish 可以指盛食物的器皿，也可以指一道精心烹制的菜肴。"
+    },
+    {
+     "text": "Do you have a signature dish ? Our signature is how we sign our names. So, a signature dish is a dish we are known for making well. In a way, it identifies us.",
+     "translation_zh": "你有 signature dish（招牌菜）吗？signature 本指我们的签名，所以招牌菜就是我们以做得好而出名的菜。某种意义上，它代表了我们。"
+    },
+    {
+     "text": "My signature dish is sweet potato rosemary dinner rolls. I am often asked to make them, especially for holiday parties. In my circle of friends, I am known for this dish. When the rolls are on the table, people know that I made them.",
+     "translation_zh": "我的招牌菜是迷迭香红薯餐包。朋友们常请我做这道点心，尤其是节日聚会的时候。在我的朋友圈里，我以这道菜闻名。餐包一上桌，大家就知道是我做的。"
+    },
+    {
+     "text": "A tasty dish is something that makes a table look good and inviting. Sometimes the same can be said about a person. Someone who is good-looking can be called a dish. While this usage might be a bit dated, it is still used.",
+     "translation_zh": "一道漂亮的菜能让餐桌赏心悦目、令人胃口大开。有时这话也可以用来形容人：长得好看的人也可以被称作 a dish。这个用法虽然有点过时，但仍有人在用。"
+    },
+    {
+     "text": "Now, let's talk about the verb \"dish.\"",
+     "translation_zh": "现在来说说动词 dish。"
+    },
+    {
+     "text": "\"To dish\" can mean to talk about private or personal information. It might be gossip . But I can also dish about myself. For example, a friend may ask me to dish about my new job.",
+     "translation_zh": "to dish 可以指谈论私密或个人的信息，可能是说八卦，但也可以是聊自己。比如，朋友可能让我 dish 一下我的新工作。"
+    },
+    {
+     "text": "I could also use a phrasal verb form and say my friend want me to dish out all the interesting details.",
+     "translation_zh": "我也可以用短语动词的形式，说朋友想让我 dish out（和盘托出）所有有趣的细节。"
+    },
+    {
+     "text": "Now, to dish up something means to put food on a dish for someone to eat. However, it can also mean sharing personal details, our own and others.",
+     "translation_zh": "to dish up 的本义是把食物盛进盘子端给别人吃，但它同样可以表示分享个人内幕——自己的或别人的。"
+    }
+   ]
+  },
+  {
+   "title": "The Importance of Being 'Dialed In'",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Technology is always progressing. Today, many modern devices can be controlled by touch or voice. This has led to some traditional electronic controls - such as dials and switches - being replaced with new technologies.",
+     "translation_zh": "技术总在进步。如今，许多现代设备可以用触摸或语音控制，这让一些传统的电子控制部件——比如旋钮和开关——被新技术取代。"
+    },
+    {
+     "text": "Digital displays have also become increasingly common. For example, digital number readouts have long replaced the hands on many clocks.",
+     "translation_zh": "数字显示屏也越来越常见。例如，数字读数早已取代了许多钟表上的指针。"
+    },
+    {
+     "text": "Many other devices also now operate purely with digital tools instead of mechanical systems.",
+     "translation_zh": "许多其他设备如今也完全靠数字工具运行，而不再使用机械系统。"
+    },
+    {
+     "text": "But some expressions and idioms used by English speakers still describe older technologies.",
+     "translation_zh": "但英语使用者的一些习语和表达，描述的仍然是旧技术。"
+    },
+    {
+     "text": "First, let's talk about dials. These controls are used for changing settings on a piece of equipment, like a radio or old television. We use the dial to tune in to a specific channel.",
+     "translation_zh": "先说说旋钮（dial）。这种控制部件用来调节设备的设置，比如收音机或老式电视机。我们转动旋钮，调到想听的频道。"
+    },
+    {
+     "text": "That's where the expressions dialed in and tuned in come from. If we are dialed in or tuned in to a radio or television program, we can hear it clearly. There is no noise or static .",
+     "translation_zh": "dialed in 和 tuned in 这两个表达就来源于此。如果我们 dialed in 或 tuned in 到某个广播或电视节目，就能听得清清楚楚，没有杂音和干扰。"
+    },
+    {
+     "text": "The same can be said when using these terms in personal conversations . For example, if you are dialed in to a project or problem, you know exactly what needs to be done. You are thinking clearly about it and remain very focused .",
+     "translation_zh": "在日常交流中使用这两个词组也是同样的意思。比如，如果你对一个项目或问题 dialed in，你清楚地知道该做什么，思路清晰，注意力高度集中。"
+    },
+    {
+     "text": "And when you are tuned in , you understand clearly what is going on around you.",
+     "translation_zh": "而当你 tuned in 时，你对周围发生的事情了然于心。"
+    },
+    {
+     "text": "\"Don't touch that dial\" and \"stay tuned\" are two ways to tell someone to keep watching or listening to a program.",
+     "translation_zh": "“别转台”（Don't touch that dial）和“锁定频道”（stay tuned）是让人继续收看或收听节目的两种说法。"
+    },
+    {
+     "text": "Now, let's talk about switches.",
+     "translation_zh": "接下来聊聊开关（switch）。"
+    },
+    {
+     "text": "These are built to either be off or on. There are no in-between settings like with a dial. So, when we flip the switch , we make something happen quickly and easily. It can also mean that we suddenly change something.",
+     "translation_zh": "开关只有开和关两个状态，不像旋钮有中间档位。所以当我们 flip the switch（按下开关）时，是让某件事快速轻松地发生，也可以表示突然改变某件事。"
+    }
+   ]
+  },
+  {
+   "title": "What Does It Take to Be a 'Power Couple'?",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "In American English, we use many expressions to describe when two people have a lot of similarities or are very close. Here are some examples.",
+     "translation_zh": "在美式英语中，我们用许多表达来形容两个人非常相似或非常亲密。下面是一些例子。"
+    },
+    {
+     "text": "If we say two people are joined at the hip, they are nearly always together. If we describe individuals as thick as thieves , it means they are very close. People considered two peas in a pod have many things in common. And we use the term kindred spirits to describe people who often share the same opinions and interests.",
+     "translation_zh": "如果说两个人 joined at the hip（连在胯上），就是说他们几乎形影不离。形容两个人 thick as thieves（亲如窃贼），意思是他们关系非常紧密。被称作 two peas in a pod（一荚双豆）的人有许多共同点。而 kindred spirits（灵魂相契的人）指观点和兴趣常常一致的人。"
+    },
+    {
+     "text": "These expressions can represent people who grew closer for different reasons. Maybe they complemented each other well in certain ways. Or maybe their situations brought them together for the purpose of completing something important or meaningful.",
+     "translation_zh": "这些表达描述的人因为不同的原因而走近：也许他们在某些方面互补，也许境遇让他们为完成某件重要的事走到了一起。"
+    },
+    {
+     "text": "But today we are going to discuss a very special kind of relationship - one that involves two people who are romantically involved and very successful.",
+     "translation_zh": "但今天我们要谈一种非常特别的关系——两个人既是恋人，又都事业有成。"
+    },
+    {
+     "text": "People in such relationships can be described as power couples .",
+     "translation_zh": "处于这种关系中的人，可以被称作 power couple（强强联合的夫妻档）。"
+    },
+    {
+     "text": "There are many examples of famous power couples, including successful movie stars, musicians and others in the performing arts. But power couples can exist in many other industries and communities, as well. And, the two people do not have to work in the same industry.",
+     "translation_zh": "著名的 power couple 例子很多，包括成功的影星、音乐人和其他表演艺术领域的名人。但权力夫妻档也存在于许多其他行业和圈子，而且两个人不一定在同一行业。"
+    },
+    {
+     "text": "If they do, however, that can make them even more powerful. For example, a well-known architect who builds homes could be partnered with a famous designer who decorates them. Or, one person in a power couple may be a music producer, while the other is a famous singer.",
+     "translation_zh": "不过若是同行，他们可能更加强强联手。比如，著名建筑师盖房子，伴侣是著名设计师做装潢；或者一位是音乐制作人，另一位是著名歌手。"
+    },
+    {
+     "text": "Even though power couples involve highly successful people, one person could describe their partner as their better half . This is a way to compliment their \"other half\" in the relationship. For example, one might say during a meeting with a friend, \"Hello! How are you? And more importantly, how is your better half?\"",
+     "translation_zh": "尽管 power couple 说的是两位高度成功的人，其中一方仍可能称另一方为 better half（更好的那一半）。这是对感情中“另一半”的恭维。比如和朋友见面时可以说：“你好！最近怎么样？更要紧的是，你那位‘更好的一半’怎么样？”"
+    },
+    {
+     "text": "Now, let's hear two friends use some of these expressions.",
+     "translation_zh": "现在来听两位朋友怎么使用这些表达。"
+    },
+    {
+     "text": "A: Hey, I'm not used to seeing you alone. Where's your sidekick ?",
+     "translation_zh": "甲：嘿，很少见你一个人啊。你的跟班呢？"
+    },
+    {
+     "text": "B: Huh? Who are you talking about?",
+     "translation_zh": "乙：啊？你说谁？"
+    },
+    {
+     "text": "A: Ben. You guys have been joined at the hip for weeks. Looks like you're thick as thieves.",
+     "translation_zh": "甲：本啊。你们俩这几周都快长在一起了，简直亲如窃贼。"
+    },
+    {
+     "text": "B: Well, the project is pretty important for the company. So, we're putting in a lot of hours.",
+     "translation_zh": "乙：嗯，这个项目对公司很重要，所以我们投入了很多时间。"
+    },
+    {
+     "text": "A: Are you becoming kindred spirits from working so much together?",
+     "translation_zh": "甲：天天泡在一起，都成灵魂知己了吧？"
+    },
+    {
+     "text": "B: No. It's just keeping us both very busy.",
+     "translation_zh": "乙：没有，只是把我们俩都忙坏了。"
+    },
+    {
+     "text": "A: Busy trying to become the new power couple in the office?",
+     "translation_zh": "甲：忙着成为办公室新晋的最强组合？"
+    },
+    {
+     "text": "B: What are you talking about?? We're not thick as thieves or kindred spirits, and we're definitely not a power couple. We are just working hard on the same project!",
+     "translation_zh": "乙：你说什么呢？？我们既不是什么亲如窃贼，也不是灵魂知己，更绝对不是什么最强组合。我们只是在努力做同一个项目！"
+    }
+   ]
+  },
+  {
+   "title": "'Kitchen-Table' Is a Type of Politics",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Today we talk about different kinds of politics.",
+     "translation_zh": "今天我们聊聊几种不同的“政治”。"
+    },
+    {
+     "text": "We start with kitchen-table politics . The kitchen is often considered the hub, or center, of the home. It is where we gather to not only share a meal but to talk about the events of the day. We often discuss issues of importance with our family and friends around the dining room table.",
+     "translation_zh": "先说 kitchen-table politics（餐桌政治）。厨房常被视为家庭的中枢。我们不仅在那里吃饭，也在那里谈论一天的见闻。我们常常围着餐桌与家人朋友讨论要紧的事。"
+    },
+    {
+     "text": "So, kitchen-table issues are those that affect individuals and their families daily. A family might discuss these issues at the kitchen table during mealtimes.",
+     "translation_zh": "所以，kitchen-table issues（餐桌议题）指那些每天影响个人和家庭的事务。一家人吃饭时，可能就在餐桌上讨论这些问题。"
+    },
+    {
+     "text": "Rising gas and food prices are two good examples of kitchen-table politics. These issues affect decisions we make day to day. They are sometimes also called dinner -table politics. Or we could describe them as bread-and-butter issues.",
+     "translation_zh": "油价和食品价格上涨就是餐桌政治的两个好例子。这些问题影响我们每天的决定。它们有时也被称为 dinner-table politics，或者 bread-and-butter issues（面包黄油议题）。"
+    },
+    {
+     "text": "Merriam Webster dictionary defines bread-and-butter issues as \"being as basic as the earning of one's livelihood .\" The online Cambridge Dictionary defines a bread-and-butter issue as \"a subject or problem that relates directly to most people's needs and interests.\"",
+     "translation_zh": "《韦氏词典》将 bread-and-butter issues 定义为“与谋生同样基本的事务”。《剑桥在线词典》则解释为“与大多数人的需求和利益直接相关的话题或问题”。"
+    },
+    {
+     "text": "For example, affordable food prices and availability of good healthcare are the kinds of bread-and-butter political issues that people vote on.",
+     "translation_zh": "例如，亲民的食品价格、便利的优质医疗，都是人们投票时关心的面包黄油式政治议题。"
+    },
+    {
+     "text": "The noun bread and butter means a way of making a living. For example, for a creative writer, her ideas are her bread and butter.",
+     "translation_zh": "名词 bread and butter 指谋生的手段。例如，对一位创意作家来说，她的点子就是她的饭碗。"
+    },
+    {
+     "text": "So, bread-and-butter political issues deal with our ability to provide for the needs of ourselves and our families.",
+     "translation_zh": "因此，面包黄油式的政治议题，关乎我们养活自己和家人的能力。"
+    },
+    {
+     "text": "Next, let's talk about green politics . These political issues deal with caring for the natural environment. Green politics can cover ideas such as environmental sustainability , recycling , and threats to wildlife. The natural world is central to green politics.",
+     "translation_zh": "接下来说 green politics（绿色政治）。这类政治议题关注爱护自然环境，涵盖环境可持续、回收利用、野生动物面临的威胁等议题。自然界是绿色政治的核心。"
+    }
+   ]
+  },
+  {
+   "title": "Sometimes We 'Spread Ourself Too Thin'",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Today we talk about our busy lives. Many people have family and work responsibilities. We might have religious or community activities. Taking care of our health is also important. And let's not forget about our personal projects, our interests, and our friendships.",
+     "translation_zh": "今天聊聊我们忙碌的生活。许多人有家庭和工作的责任，可能还有宗教或社区活动。照顾好身体同样重要。更别忘了个人项目、兴趣爱好和友情。"
+    },
+    {
+     "text": "With everything on our plate , it is easy to feel overwhelmed , overextended, and overcommitted .",
+     "translation_zh": "盘子里堆了这么多事（everything on our plate），人很容易感到不堪重负、分身乏术、应接不暇。"
+    },
+    {
+     "text": "However, if we try to do too much, we may spread ourselves too thin . This expression means we have taken on too much. We are pushed to the limit .",
+     "translation_zh": "然而，如果试图做太多事，我们就可能 spread ourselves too thin（把自己摊得太薄）。这个表达的意思是揽下了过多的事情，被逼到了极限。"
+    },
+    {
+     "text": "People who are spread too thin , take on too many jobs, projects, or goals. The heavy load requires more energy or attention than they possess.",
+     "translation_zh": "把自己摊得太薄的人，接了太多工作、项目或目标。沉重的担子需要的精力和注意力超出了他们的所有。"
+    },
+    {
+     "text": "If we work on many projects simultaneously, or at the same time, it is possible that none will get done well, if they get done at all. And it is possible such multitasking could stress us out.",
+     "translation_zh": "如果同时（simultaneously）推进许多项目，很可能没有一件能做好——如果还能做完的话。这样多线作战还可能让我们压力爆表。"
+    },
+    {
+     "text": "Being spread too thin can also be described as biting off more than we can chew . When we bite off more than we can chew, we attempt to do more than is possible.",
+     "translation_zh": "把自己摊得太薄，也可以说成 biting off more than we can chew（咬下嚼不动的一大口）：企图做超出自己能力的事。"
+    }
+   ]
+  },
+  {
+   "title": "Knee Jerk and Gut Reactions: When We Are Not in Control",
+   "level": "cet4",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "In life, some of our decisions and actions are well thought out. They involve research, examination, and time for thought. And other decisions and actions are not well thought out. We make them quickly, without thinking, almost like a pure physical reaction.",
+     "translation_zh": "人生中，我们有些决定和行动经过深思熟虑，有研究、有考察、有思考的时间；而另一些决定和行动则未经斟酌——我们不假思索地快速做出，几乎像纯粹的生理反应。"
+    },
+    {
+     "text": "We can call these decisions, actions or reactions knee-jerk .",
+     "translation_zh": "这类决定、行动或反应，我们可以称为 knee-jerk（膝跳式）。"
+    },
+    {
+     "text": "This term comes from a medical process. Meriam Webster defines the noun \"knee jerk\" as \"an involuntary forward kick produced by a light blow on the tendon below the kneecap.\" It is an involuntary action. It's automatic.",
+     "translation_zh": "这个词来自一种医学检查。《韦氏词典》把名词 knee jerk 定义为“轻敲膝盖骨下方肌腱引起的不自主前踢”。它是不自主的、自动发生的。"
+    },
+    {
+     "text": "The words \"involuntary\" and \"automatic\" are important when understanding the term \"knee jerk\" and when to use it. Knee-jerk reactions seem to happen automatically without a decision-making process.",
+     "translation_zh": "“不自主”和“自动”是理解和使用 knee jerk 的关键。膝跳式反应仿佛自动发生，不经过决策过程。"
+    },
+    {
+     "text": "We often use \"knee jerk\" as an adjective.",
+     "translation_zh": "我们常把 knee-jerk 用作形容词。"
+    },
+    {
+     "text": "Like hitting your kneecap to move your leg, knee-jerk reactions or statements also seem like an involuntary reflex .",
+     "translation_zh": "就像敲击膝盖腿就会动一样，膝跳式的反应或言论也像一种不受控制的反射。"
+    },
+    {
+     "text": "\"Knee jerk\" also describes predictable behavior. Again, hit the knee, the leg will kick every time. So \"knee jerk\" describes someone who always reacts quickly and without enough thought.",
+     "translation_zh": "knee jerk 还形容可以预料的行为——敲一下膝盖，腿每次都会踢。所以它也形容那种总是反应飞快却欠考虑的人。"
+    },
+    {
+     "text": "For example, let's say you are on a team with someone who never faces responsibility for their mistakes in the game. If brought to account, the player always blames the dropped ball on other teammates. You can say that player is having a knee-jerk reaction to criticism. They have a go-to response. It's like a reflex they can't control.",
+     "translation_zh": "举个例子。假设你的队友从不为自己在比赛中的失误承担责任，一被追问，就总把丢球怪到其他队友头上。你可以说这名球员对批评有膝跳式反应：他有一套现成的应对，就像无法控制的反射。"
+    },
+    {
+     "text": "We often use knee-jerk in a criticizing or negative way.",
+     "translation_zh": "knee-jerk 通常带着批评或负面的意味。"
+    },
+    {
+     "text": "Now, a gut reaction also happens without thinking. But it is a bit different than a knee-jerk response. A gut reaction is a feeling. When we have a gut reaction, our instincts are telling us that something may not be right. Gut reactions are instinctual warnings.",
+     "translation_zh": "而 gut reaction（直觉反应）同样不经思考，却与膝跳式反应有些不同。直觉反应是一种感觉：当我们产生直觉反应时，是本能在告诉我们事情可能不对劲。直觉反应是发自本能的警告。"
+    },
+    {
+     "text": "So, we also use this expression a bit differently than \"knee jerk.\" We usually talk about our own gut reactions or impulses, not others.",
+     "translation_zh": "因此这个表达的用法也和 knee jerk 略有不同：我们通常谈论自己的直觉反应或冲动，而不是别人的。"
+    },
+    {
+     "text": "One day, I was hiking on a mountain in California. I had hiked for about two hours and was near the top. The view, I was told, was truly beautiful. I couldn't wait to see it! Then, suddenly, I had a strange feeling. Something just didn't feel right. I can't explain why, but my gut instinct was to turn around and head back down the mountain. I later found out that a dangerous bear had been sighted in the same area that I had fled. I am so thankful I listened to my gut instinct.",
+     "translation_zh": "有一天，我在加利福尼亚爬山。爬了大约两小时，快到山顶了。听说山顶的景色美极了，我迫不及待想看到。突然，我产生了一种奇怪的感觉——说不上为什么，就是觉得不对劲。我的直觉让我掉头下山。后来我得知，就在我逃离的那片区域，有人目击到一头危险的熊。我真庆幸自己听从了直觉。"
+    }
+   ]
+  },
+  {
+   "title": "'The Celebrated Jumping Frog of Calaveras County,' by Mark Twain",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "A friend of mine in the East asked me to visit old Simon Wheeler, to ask about my friends friend, Leonidas W. Smiley. I did as my friend asked me to do and this story is the result.",
+     "translation_zh": "东部的一位朋友托我去拜访西蒙·威勒老头，打听他朋友的朋友列昂尼达斯·W·斯迈利的下落。我照朋友的嘱托做了，这篇故事就是结果。"
+    },
+    {
+     "text": "I found Simon Wheeler sleeping by the stove in the ruined mining camp of Angels.",
+     "translation_zh": "我在天使矿营的废墟里找到了西蒙·威勒，他正靠着火炉打盹。"
+    },
+    {
+     "text": "I saw that he was fat and had no hair, and had a gentle and simple look upon his peaceful face. He woke up, and gave me \"good-day.\"",
+     "translation_zh": "我看他身材肥胖，头顶光秃，平和的脸上带着安详质朴的神情。他醒过来，向我道了声“日安”。"
+    },
+    {
+     "text": "I told him a friend had asked me to find out about a friend named Leonidas W. Smiley, who he heard was at one time living in Angels Camp. I added that if Mr. Wheeler could tell me anything about this Leonidas W. Smiley, I would feel a great responsibility to him.",
+     "translation_zh": "我告诉他，一位朋友托我打听一个叫列昂尼达斯·W·斯迈利的人，听说此人一度住在天使营。我还说，要是威勒先生能告诉我这位斯迈利的任何消息，我将感激不尽。"
+    },
+    {
+     "text": "Simon Wheeler forced me into a corner with his chair and began telling me this long story. He never smiled, he never frowned. But all through the endless story there was a feeling of great seriousness and honesty. This showed me plainly that he thought the heroes of the story were men of great intelligence.",
+     "translation_zh": "西蒙·威勒用椅子把我逼到墙角，开始讲这个长长的故事。他从不微笑，也从不皱眉。但在这没完没了的故事里，始终有一种郑重其事的诚恳。这分明让我看出，他真心认为故事里的主人公都是了不起的聪明人。"
+    },
+    {
+     "text": "I let him go on in his own way, and never stopped him once. This is the story Simon Wheeler told.",
+     "translation_zh": "我由着他按自己的方式讲下去，一次也没打断。下面就是西蒙·威勒讲的故事。"
+    },
+    {
+     "text": "Leonidas W. .... hm... Le... well, there was a man here once by the name of Jim Smiley, in the winter of 1849 -- or may be it was the spring of 1850. Anyway, he was the strangest man. He was always making money on anything that turned up if he could get anybody to try to make money on the other side. And if he could not do that, he would change sides.",
+     "translation_zh": "列昂尼达斯·W……嗯……列……对了，这儿从前倒有过一个叫吉姆·斯迈利的人，那是 1849 年冬天——也可能是 1850 年春天。反正他是个最古怪的人。只要能找到人跟他对赌，碰上什么事他都要赌钱；要是找不着，他就换到另一边去赌。"
+    },
+    {
+     "text": "And he was lucky, uncommon lucky. He most always was a winner. If there was a dog-fight, he would try to win money on it. If there was a cat-fight, he would take the risk. If there was a chicken-fight, he would try to win money on it. Why, if there was two birds setting on a fence, he would want you to decide which one would fly first so he could win money.",
+     "translation_zh": "而且他手气好，出奇地好，十赌九赢。有斗狗的，他要赌钱；有斗猫的，他也敢下注；有斗鸡的，他还是要赌。嘿，就是两只鸟落在篱笆上，他也要你猜哪只先飞，好赌上一把。"
+    },
+    {
+     "text": "Lots of the boys here have seen that Smiley and can tell you about him. Why, it did not matter to him. He would try to make money on anything. He was the most unusual man. Parson Walker's wife was very sick once, for a long time, and it seemed as if they were not going to save her.",
+     "translation_zh": "这儿的小伙子很多都见过那个斯迈利，都能给你讲讲他。嘿，对他来说赌什么都无所谓，什么都能拿来赌钱，他就是这么个怪人。沃克牧师的太太有一回病得很重，病了好久，眼看就救不活了。"
+    },
+    {
+     "text": "But one morning he come in, and Smiley asked him how was his wife, and he said she was better, thank God. And Smiley, before he thought, says, \"Well, I'll risk my money she will not get well.\"",
+     "translation_zh": "可是有一天早上牧师走进来，斯迈利问他太太怎么样了。牧师说好多了，感谢上帝。斯迈利想都没想，张口就说：“好吧，我押钱赌她好不了。”"
+    },
+    {
+     "text": "And Smiley had a little small dog. To look at the dog, you would think he was not worth anything but to sit around and look mean and look for a chance to steal something. But as soon as there was money, he was a different dog. Another dog might attack and throw him around two or three times. Then all of a sudden Smiley's dog would grab that other dog by his back leg and hang on till the men said it was over.",
+     "translation_zh": "斯迈利还养过一条小狗。光看模样，你会觉得这狗一文不值，只会闲坐着等机会偷东西。可是一旦押上了钱，它就变成另一条狗了。别的狗能把它扑倒，甩来甩去摔上两三回，然后冷不防地，斯迈利的狗就咬住对方的后腿不松口，直到人们认输为止。"
+    }
+   ]
+  },
+  {
+   "title": "Raise Your English Level with More Vocabulary",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Let's look at two English learners. One knows about 500 words and understands how they are used in a sentence. The other knows about 1,000 words but has some problems with grammar.",
+     "translation_zh": "来看两位英语学习者：一位认识大约 500 个单词，并且理解它们在句子里的用法；另一位认识约 1000 个单词，但语法上有些问题。"
+    },
+    {
+     "text": "Which person can understand and communicate more in English?",
+     "translation_zh": "哪一位能用英语理解和交流得更多？"
+    },
+    {
+     "text": "Clearly, it is the person who knows 1,000 words.",
+     "translation_zh": "显然是认识 1000 个单词的那位。"
+    },
+    {
+     "text": "Some studies have shown that for learners to fully understand a written work, they need to know 95 percent or more of the words in it. That means that if there are only five or more words you do not know in a 100-word text, you might not really understand it!",
+     "translation_zh": "一些研究表明，学习者要完全读懂一篇文章，需要认识其中 95% 以上的单词。也就是说，一篇 100 词的文章里只要有五个以上生词，你可能就读不太懂了！"
+    },
+    {
+     "text": "In today's program, we will give you some advice for building up your vocabulary. \"Vocabulary\" can mean a single word, two words such as phrasal verbs , or many words together, such as an expression.",
+     "translation_zh": "在今天的节目里，我们给你一些扩充词汇量的建议。“词汇”可以是单个单词，可以是短语动词这样的两个词，也可以是多个词构成的表达。"
+    },
+    {
+     "text": "There are two important things to keep in mind when trying to learn new vocabulary.",
+     "translation_zh": "学习新词汇时，有两件重要的事要记住。"
+    },
+    {
+     "text": "First, connect new words to a story or a situation. This makes it easier to remember vocabulary than studying words from lists.",
+     "translation_zh": "第一，把生词和一个故事或情境联系起来。这比对着单词表死记硬背更容易记住。"
+    },
+    {
+     "text": "Second, be active , not passive . Make yourself use the new words.",
+     "translation_zh": "第二，要主动，不要被动。逼自己使用新学的词。"
+    }
+   ]
+  },
+  {
+   "title": "Learn New Skills with Microcredentials",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "In today's workplace, what you learned in the usual college courses may not be very useful later in life.",
+     "translation_zh": "在当今的职场，大学常规课程里学到的东西，日后可能派不上多大用场。"
+    },
+    {
+     "text": "For example, in the field of information technology, workers might never use BASIC, the computer language that was taught in the 1990s. But they might need to know Python or SQL.",
+     "translation_zh": "比如在信息技术领域，员工可能永远用不上 BASIC——上世纪九十年代教的计算机语言，但他们可能需要会 Python 或 SQL。"
+    },
+    {
+     "text": "The answer for students or workers is a professional certificate program, or what is called microcredential.",
+     "translation_zh": "对学生和职场人来说，答案是职业证书课程，也就是所谓的微证书（microcredential）。"
+    },
+    {
+     "text": "UNESCO, the world's education agency, defines microcredential as professional certification that centers on a set of learning outcomes in a narrow field. It is completed over a shorter time than a traditional university program, from a week to a month.",
+     "translation_zh": "联合国教科文组织把微证书定义为聚焦于某个狭窄领域一组学习成果的职业认证。它的学时比传统大学课程短，从一周到一个月不等。"
+    },
+    {
+     "text": "The most popular fields in which microcredentials appear are data analytics , information technology support and cybersecurity . The courses are often developed by technology businesses like Google, Salesforce, Meta, Intuit and IBM. The businesses provide a certificate when a student finishes the course.",
+     "translation_zh": "微证书最热门的领域是数据分析、信息技术支持和网络安全。这些课程通常由谷歌、Salesforce、Meta、Intuit 和 IBM 等科技企业开发，学生修完课程后由企业颁发证书。"
+    },
+    {
+     "text": "Coursera, an online educational service, recently released a report on how microcredentials are preparing students for jobs and affecting higher education schools. It says that 51 percent of colleges in the United States that offer microcredentials also provide school credit and more plan to do so in the next few years.",
+     "translation_zh": "在线教育平台 Coursera 最近发布报告，分析微证书如何帮学生为就业做准备，又如何影响高校。报告说，美国提供微证书的高校中有 51% 同时给予学分，未来几年还会有更多高校跟进。"
+    },
+    {
+     "text": "Some colleges include one or more courses leading to microcredentials as part of their usual programs. At Hawaii Pacific University, school leaders say including professional certifications in its business program has sharply increased the number of interested students.",
+     "translation_zh": "一些大学把通往微证书的课程纳入常规项目。夏威夷太平洋大学的负责人说，把职业认证纳入商科项目后，感兴趣的学生人数大幅增加。"
+    },
+    {
+     "text": "How to find the right microcredential?",
+     "translation_zh": "如何找到合适的微证书？"
+    },
+    {
+     "text": "For students, Credential Finder offers a way to search for the right microcredential offerings by field of study or industry.",
+     "translation_zh": "学生可以用 Credential Finder 按学科或行业检索合适的微证书项目。"
+    },
+    {
+     "text": "For example, if you are studying information science, you may take Google Data Analytics or an IBM Data Analyst course. If you are working toward a degree in business administration, you may take a Google Project Management course. Your university program's advisors should be helpful in identifying the best certificate programs for your area of study.",
+     "translation_zh": "比如，学信息科学的可以修谷歌数据分析或 IBM 数据分析师课程；攻读工商管理学位的可以修谷歌项目管理课程。所在院系的导师也能帮你找到最适合你专业方向的证书项目。"
+    },
+    {
+     "text": "Be sure to check with your country's government for more information on special training programs. One example is Ukraine, which is aiming to meet its shortage of skilled workers with its ReSkill UA initiative . It provides help with finding training and employment.",
+     "translation_zh": "还可以向所在国家的政府了解专项培训计划。乌克兰就是一例：该国正通过 ReSkill UA 计划应对技术工人短缺，提供培训和就业方面的帮助。"
+    },
+    {
+     "text": "How much do microcredentials cost?",
+     "translation_zh": "微证书要花多少钱？"
+    },
+    {
+     "text": "Many of the course providers permit learners to use the materials for free, but to earn a certification, payment is required.",
+     "translation_zh": "许多课程提供方允许免费使用学习材料，但要获得认证就需要付费。"
+    },
+    {
+     "text": "Coursera has a monthly fee of $59 or a yearly fee of $399 for its Coursera Plus membership. For courses that universities offer for credit, the payment will depend on the price set by the school.",
+     "translation_zh": "Coursera 的月费为 59 美元，Coursera Plus 会员年费 399 美元。大学提供学分的课程，费用由学校定价。"
+    }
+   ]
+  },
+  {
+   "title": "In Uganda, Cost of Attending School Keeps Children Home",
+   "level": "high_school",
+   "length": "long",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "The World Bank said last year that 54 percent of adults in Africa south of the Sahara Desert ranked the issue of paying school costs higher than medical or other costs.",
+     "translation_zh": "世界银行去年表示，撒哈拉以南非洲有 54% 的成年人认为，支付学费的压力比医疗等其他开支更大。"
+    },
+    {
+     "text": "The aid organization said school fees were the biggest financial worry for 40 percent of people in Uganda. In that country, a top government-supported school reportedly costs $700 for a three-month term. That is a lot of money in a country where yearly economic activity per person was $864 in 2023.",
+     "translation_zh": "该机构说，在乌干达，学费是 40% 的人最大的经济顾虑。据报道，该国一所顶尖公立学校一个学期（三个月）的费用是 700 美元——在一个 2023 年人均年经济产出仅 864 美元的国家，这是一大笔钱。"
+    },
+    {
+     "text": "World Bank information shows that African countries in the area also have the highest rates of children out of school in the world. Parents in Uganda report unpredictable increases in the cost of attending school, or tuition, as a cause of tension. Some critics are calling for laws to protect parents from exploitation.",
+     "translation_zh": "世界银行的数据显示，该地区的非洲国家失学儿童比例也是全球最高的。乌干达的家长反映，上学费用（学费）的上涨难以预料，造成了紧张情绪。一些批评者呼吁立法保护家长免受盘剥。"
+    },
+    {
+     "text": "The Equal Opportunities Commission is a government agency that reports on the issues of inequality and discrimination. It released a report in September that called for punishment against government-supported schools that demand fees that are too high. It warned that arbitrarily raising fees can force children to drop out of school.",
+     "translation_zh": "平等机会委员会是负责报告不平等和歧视问题的政府机构。它在九月发布报告，呼吁惩处收费过高的公立学校，并警告说任意涨价会迫使孩子辍学。"
+    },
+    {
+     "text": "The Uganda Bureau of Statistics says that children's attendance in early grades is about 68 percent. But the percentage falls to 22 percent for secondary school. The main reason given is financial difficulty.",
+     "translation_zh": "乌干达统计局称，低年级儿童的入学率约为 68%，但到中学阶段骤降至 22%，主要原因就是经济困难。"
+    },
+    {
+     "text": "Uganda has a program of secondary education for all students. It was introduced in 2007. However, schools are not in good condition. The schools usually do not require tuition , but parents must pay for uniforms , textbooks and other costs.",
+     "translation_zh": "乌干达 2007 年起推行面向所有学生的中等教育计划。然而学校条件不佳。这些学校通常不收学费，但家长必须支付校服、课本等费用。"
+    },
+    {
+     "text": "Private schools are more popular but also more costly. Spokesperson for the Ministry of Education Dennis Mugimba said the government is not interested in making rules about prices. Mugimba said setting private school fees is \"purely administrative and it is adjusted according to the business environment.\" But he said costs linked to \"capital development\" should not be the responsibility of parents.",
+     "translation_zh": "私立学校更受欢迎，但也更昂贵。教育部发言人丹尼斯·穆吉姆巴说，政府无意对价格定规矩。他说私立学校的收费“纯属行政事务，会根据经营环境调整”，但与“基本建设”相关的费用不应由家长承担。"
+    },
+    {
+     "text": "The number of private schools across Uganda has increased. The Associated Press (AP) reports that they are now a majority of the country's schools. But some people with ties to education say placing importance on the profitability of education as a business is worrying.",
+     "translation_zh": "乌干达各地的私立学校数量不断增加。美联社报道说，私立学校如今已占全国学校的多数。但一些教育界人士担心，把教育当生意、把盈利放在首位的倾向令人忧虑。"
+    },
+    {
+     "text": "Fagil Mandy is a former inspector of schools. Mandy said there should be standardized rules to make school fees predictable for everyone.",
+     "translation_zh": "法吉尔·曼迪曾任学校督学。他说应当制定统一规则，让所有人都能预知学费。"
+    },
+    {
+     "text": "It is normal for both private and government-supported schools to request money for many projects. These can include buying a bus or purchasing laboratory equipment.",
+     "translation_zh": "公立和私立学校为各种项目筹钱都很常见，比如购买校车或实验室设备。"
+    },
+    {
+     "text": "Shalom Mirembe is a student who spoke to the AP. Her mother takes care of four children. Her father recently died.",
+     "translation_zh": "沙洛姆·米伦贝是一位接受美联社采访的学生。她的母亲要照顾四个孩子，父亲不久前去世了。"
+    },
+    {
+     "text": "The school Mirembe attends near Kampala costs $300 per term. But her mother sends Mirembe to school without paying. She is depending on the mercy of officials.",
+     "translation_zh": "米伦贝就读的学校在坎帕拉附近，每学期收费 300 美元。母亲没交钱就把她送去上学，全凭校方的怜悯。"
+    },
+    {
+     "text": "But Joanita Seguya, a teacher at Wampewo Ntakke Secondary, said schools are taking measures to bar students from school if their parents do not pay. Seguya said of the school's 2100 students, 400 are from families that struggle to pay fees.",
+     "translation_zh": "但万佩沃·恩塔克中学的教师乔安妮塔·塞古亚说，学校正在采取措施，把家长欠费的学生拒之门外。她说全校 2100 名学生中，有 400 人来自交费困难的家庭。"
+    },
+    {
+     "text": "Twenty-year-old Mirembe is taking her final exams this year. At one point, school officials were going to bar her from school because her mother had failed to pay the fees. But when school administrators found out that her father had died recently, they permitted her to return. Some of her teachers attended the funeral.",
+     "translation_zh": "二十岁的米伦贝今年要参加毕业考试。学校一度因为母亲欠费要将她拒之门外，但当校方得知她父亲刚刚去世后，允许她返校。她的几位老师还参加了葬礼。"
+    },
+    {
+     "text": "But other families are not so fortunate.",
+     "translation_zh": "但其他家庭就没有这么幸运了。"
+    },
+    {
+     "text": "Moses Serikomawa is jobless with seven children. He said paying $200 in school fees each term is too much when the family lacks food sometimes. But he added, \"The children still want to go back to school.\"",
+     "translation_zh": "莫塞斯·塞里科马瓦失业在家，有七个孩子。他说家里有时连饭都吃不上，每学期 200 美元的学费实在难以负担。但他补充道：“孩子们还是想回学校。”"
+    }
+   ]
+  },
+  {
+   "title": "Learning How to Ask Questions",
+   "level": "high_school",
+   "length": "medium",
+   "source_id": "voa:learning-english",
+   "paragraphs": [
+    {
+     "text": "Suzanne Meyer, the assistant director of the English Language Institute at the University of Tennessee, Knoxville, says that many students need to develop critical thinking skills.",
+     "translation_zh": "田纳西大学诺克斯维尔分校英语语言学院助理主任苏珊娜·迈耶说，许多学生需要培养批判性思维能力。"
+    },
+    {
+     "text": "In other words, students need to learn how to collect information, and then evaluate the information and apply it to a new context .",
+     "translation_zh": "换句话说，学生需要学会收集信息，然后评估信息，并把它应用到新的语境中。"
+    },
+    {
+     "text": "\"We need to get students actively engaged in inquiry , from the beginning levels on, into those levels where they really are close to professional and university contexts.\"",
+     "translation_zh": "“我们要让学生从入门阶段起就主动参与探究，一直到接近专业和大学语境的阶段。”"
+    },
+    {
+     "text": "One way to develop critical thinking skills, Meyer says, is to teach students to be creative about the types of questions that they ask.",
+     "translation_zh": "迈耶说，培养批判性思维的一种方法，是教学生在提问的类型上发挥创造力。"
+    },
+    {
+     "text": "Benefits of question-asking for English learners",
+     "translation_zh": "提问对英语学习者的好处"
+    },
+    {
+     "text": "Meyer says that there are many benefits to using question-asking activities with English learners. Question-asking activities help students to become better language learners.",
+     "translation_zh": "迈耶说，提问练习对英语学习者益处很多。它能帮助学生成为更好的语言学习者。"
+    },
+    {
+     "text": "\"Question-asking overall helps students be better language learners. Not for the obvious, because you ask a question you get an answer. Often, questions are the first point of contact. And so if my question is not good, then that's going to direct the level of our conversation.\"",
+     "translation_zh": "“总体而言，提问能让学生更善于学语言。原因不只是显而易见的‘有问必有答’。问题往往是交流的第一触点。如果我的问题不好，对话的层次也就上不去。”"
+    },
+    {
+     "text": "Meyer also says that question-asking may help develop critical thinking skills by allowing for more interactions :",
+     "translation_zh": "迈耶还说，提问能带来更多互动，从而有助于培养批判性思维："
+    },
+    {
+     "text": "\"People who can ask questions are very confident. And when you are confident, you can have more interaction. That extra interaction might lead to critical thinking. Because you are more likely to actually integrate in some fashion into a new setting if you are in an ESL scenario. So, I think overall, just the whole question-asking idea has so many benefits.\"",
+     "translation_zh": "“会提问的人很自信。自信了，互动就多。额外的互动可能催生批判性思维。因为如果你身处第二语言环境，互动越多，你就越可能真正融入新环境。所以总的来说，提问这件事好处太多了。”"
     }
    ]
   }
