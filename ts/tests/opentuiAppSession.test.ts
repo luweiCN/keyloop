@@ -578,6 +578,27 @@ describe("OpenTUI app session", () => {
     kit.emitKey({ name: "q", sequence: "q" });
     await runPromise;
   });
+
+  test("today elapsed time survives navigating into submenus and back", () => {
+    const context = appContext();
+    const initial = {
+      ...createOpenTuiInitialState("en"),
+      today_elapsed_ms: 28 * 60_000 + 24_000,
+    };
+
+    const submenu = reduceOpenTuiAppKey(initial, key("2", "2"), context);
+    expect(submenu.state.route.screen).toBe("submenu");
+    expect(submenu.state.today_elapsed_ms).toBe(28 * 60_000 + 24_000);
+
+    const backToMenu = reduceOpenTuiAppKey(submenu.state, key("escape", "\x1b"), context);
+    expect(backToMenu.state.route.screen).toBe("main_menu");
+    expect(backToMenu.state.today_elapsed_ms).toBe(28 * 60_000 + 24_000);
+
+    const settings = reduceOpenTuiAppKey(backToMenu.state, key("6", "6"), context);
+    const backAgain = reduceOpenTuiAppKey(settings.state, key("escape", "\x1b"), context);
+    expect(backAgain.state.route.screen).toBe("main_menu");
+    expect(backAgain.state.today_elapsed_ms).toBe(28 * 60_000 + 24_000);
+  });
 });
 
 function appContext(): OpenTuiAppSessionContext {

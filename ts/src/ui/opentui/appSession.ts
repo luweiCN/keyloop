@@ -176,6 +176,7 @@ export function reduceOpenTuiAppKey(
         everydaySettings: state.everydaySettings,
         wordFormSettings: state.wordFormSettings,
         speedUnit: state.speed_unit,
+        todayElapsedMs: state.today_elapsed_ms,
       }),
       action: "continue",
     };
@@ -900,6 +901,7 @@ function wordFormSettingsResult(
       everydaySettings: state.everydaySettings,
       wordFormSettings: settings,
       speedUnit: state.speed_unit,
+      todayElapsedMs: state.today_elapsed_ms,
     }),
     action: "continue",
   };
@@ -979,6 +981,7 @@ function codeDifficultySettingsResult(
       everydaySettings: state.everydaySettings,
       wordFormSettings: state.wordFormSettings,
       speedUnit: state.speed_unit,
+      todayElapsedMs: state.today_elapsed_ms,
     }),
     action: "continue",
   };
@@ -1054,6 +1057,7 @@ function codeStyleSettingsResult(
     everydaySettings: state.everydaySettings,
     wordFormSettings: state.wordFormSettings,
     speedUnit: state.speed_unit,
+      todayElapsedMs: state.today_elapsed_ms,
   });
   return {
     state: {
@@ -1143,6 +1147,7 @@ function everydaySettingsResult(
       everydaySettings: settings,
       wordFormSettings: state.wordFormSettings,
       speedUnit: state.speed_unit,
+      todayElapsedMs: state.today_elapsed_ms,
     }),
     action: "continue",
   };
@@ -1411,6 +1416,7 @@ function codeFilterSettingsResult(
       everydaySettings: state.everydaySettings,
       wordFormSettings: state.wordFormSettings,
       speedUnit: state.speed_unit,
+      todayElapsedMs: state.today_elapsed_ms,
     }),
     action: "continue",
   };
