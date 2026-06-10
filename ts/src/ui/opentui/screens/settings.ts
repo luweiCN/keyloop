@@ -1,7 +1,12 @@
 import type { OpenTuiAppState } from "../appModel";
-import { openTuiFlatSettingsItems, openTuiRouteTitle, selectedFlatSettingsIndex } from "../appModel";
+import {
+  openTuiFlatSettingsItems,
+  openTuiRouteTitle,
+  selectedFlatSettingsIndex,
+  type OpenTuiSettingsView,
+} from "../appModel";
 import { TEXT_BOLD, theme } from "../theme";
-import { listRow, sectionLabel } from "../components";
+import { listRow, sectionLabel, type KeyHint } from "../components";
 import type { OpenTuiRendererKit } from "../kit";
 
 export function renderSettingsMenuScreen(state: OpenTuiAppState, kit: OpenTuiRendererKit): unknown {
@@ -115,4 +120,25 @@ export function selectedSettingsMenuIndex(state: OpenTuiAppState, itemCount: num
     Math.max(Math.trunc(state.route.selected_index ?? 0), 0),
     Math.max(itemCount - 1, 0),
   );
+}
+
+export function settingsHints(view: OpenTuiSettingsView, zh: boolean): KeyHint[] {
+  if (view === "code_filters") {
+    return [
+      { key: "↑↓", label: zh ? "选择" : "select" },
+      { key: "Enter/→", label: zh ? "选中" : "toggle" },
+      { key: "←", label: zh ? "清除" : "clear" },
+      { key: "Ctrl+P", label: zh ? "固定常用" : "pin" },
+      { key: "Esc", label: zh ? "返回" : "back" },
+    ];
+  }
+  if (view === "menu") {
+    return [
+      { key: "↑↓", label: zh ? "选择" : "select" },
+      { key: "←→", label: zh ? "调整" : "adjust" },
+      { key: "Enter", label: zh ? "打开" : "open" },
+      { key: "Esc", label: zh ? "返回" : "back" },
+    ];
+  }
+  return [{ key: "Esc", label: zh ? "返回" : "back" }];
 }

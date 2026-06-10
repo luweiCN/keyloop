@@ -7,7 +7,12 @@ import {
 import { TEXT_BOLD, theme } from "../theme";
 import { divider, keyHintBar, type KeyHint } from "../components";
 import type { OpenTuiRendererKit } from "../kit";
-import { formatElapsedTime, type RunningRoute } from "./shared";
+import { formatElapsedTime } from "./shared";
+import { menuHints } from "./menu";
+import { settingsHints } from "./settings";
+import { statsHints } from "./stats";
+import { runningHints } from "./running";
+import { modalHints } from "./modals";
 
 export const OPEN_TUI_ROOT_ID = "keyloop-open-tui-root";
 
@@ -108,80 +113,19 @@ export function routeHints(state: OpenTuiAppState): KeyHint[] {
   const zh = state.language === "zh";
   switch (state.route.screen) {
     case "main_menu":
-      return [
-        { key: "↑↓", label: zh ? "选择" : "select" },
-        { key: "1-9", label: zh ? "直达" : "jump" },
-        { key: "Enter", label: zh ? "进入" : "open" },
-        { key: "Q", label: zh ? "退出" : "quit" },
-      ];
     case "submenu":
-      return [
-        { key: "↑↓", label: zh ? "选择" : "select" },
-        { key: "1-9", label: zh ? "直达" : "jump" },
-        { key: "Enter", label: zh ? "开始" : "start" },
-        { key: "Esc", label: zh ? "返回" : "back" },
-      ];
+      return menuHints(state.route.screen, zh);
     case "settings":
-      if (state.route.view === "code_filters") {
-        return [
-          { key: "↑↓", label: zh ? "选择" : "select" },
-          { key: "Enter/→", label: zh ? "选中" : "toggle" },
-          { key: "←", label: zh ? "清除" : "clear" },
-          { key: "Ctrl+P", label: zh ? "固定常用" : "pin" },
-          { key: "Esc", label: zh ? "返回" : "back" },
-        ];
-      }
-      if (state.route.view === "menu") {
-        return [
-          { key: "↑↓", label: zh ? "选择" : "select" },
-          { key: "←→", label: zh ? "调整" : "adjust" },
-          { key: "Enter", label: zh ? "打开" : "open" },
-          { key: "Esc", label: zh ? "返回" : "back" },
-        ];
-      }
-      return [{ key: "Esc", label: zh ? "返回" : "back" }];
+      return settingsHints(state.route.view, zh);
     case "stats":
-      return [
-        { key: "Tab", label: zh ? "切换视图" : "next view" },
-        ...(state.route.view === "keys"
-          ? [{ key: "S", label: zh ? "排序" : "sort" }]
-          : []),
-        ...(state.route.view === "daily"
-          ? [{ key: "←→", label: zh ? "切换日期" : "change day" }]
-          : []),
-        { key: "Esc", label: zh ? "返回" : "back" },
-      ];
+      return statsHints(state.route.view, zh);
     case "running":
       return runningHints(state.route, zh);
     case "exit_confirmation":
-      return [
-        { key: "Enter", label: zh ? "确认退出" : "confirm exit" },
-        { key: "Esc", label: zh ? "返回练习" : "keep typing" },
-      ];
     case "code_settings_confirmation":
-      return [
-        { key: "Enter", label: zh ? "刷新本组" : "refresh group" },
-        { key: "Esc", label: zh ? "取消" : "cancel" },
-      ];
     case "practice_options":
-      return [
-        { key: "↑↓", label: zh ? "选择" : "select" },
-        { key: "←→", label: zh ? "调整" : "adjust" },
-        { key: "Enter", label: zh ? "继续" : "resume" },
-        { key: "Esc", label: zh ? "关闭" : "close" },
-      ];
     case "complete":
-      return [
-        { key: "Enter", label: zh
-          ? state.route.result_visible
-            ? "关闭结果"
-            : "继续"
-          : state.route.result_visible
-            ? "close result"
-            : "continue" },
-        { key: "R", label: zh ? "重练" : "repeat" },
-        { key: "Q", label: zh ? "退出" : "quit" },
-      ];
+      return modalHints(state.route, zh);
     case "summary":
     case "ansi_palette":
       return [
@@ -189,22 +133,6 @@ export function routeHints(state: OpenTuiAppState): KeyHint[] {
         { key: "Q", label: zh ? "退出" : "quit" },
       ];
   }
-}
-
-export function runningHints(route: RunningRoute, zh: boolean): KeyHint[] {
-  const paused = route.live?.paused === true;
-  const hints: KeyHint[] = [
-    { key: "Ctrl+P", label: zh ? (paused ? "继续" : "暂停") : paused ? "resume" : "pause" },
-    { key: "Ctrl+N", label: zh ? "重打" : "retry" },
-  ];
-  if (liveOptionsAvailableForSource(route.source_item)) {
-    hints.push({ key: "Ctrl+O", label: zh ? "选项" : "options" });
-  }
-  if (targetRefreshAvailableForSource(route.source_item)) {
-    hints.push({ key: "Ctrl+R", label: zh ? "重开" : "refresh" });
-  }
-  hints.push({ key: "Esc", label: zh ? "退出" : "exit" });
-  return hints;
 }
 
 export function todayDurationValue(state: OpenTuiAppState): string {

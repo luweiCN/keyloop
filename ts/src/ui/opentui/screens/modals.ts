@@ -3,7 +3,7 @@ import { openTuiRouteLines, openTuiRouteTitle } from "../appModel";
 import { speedFromWpm, speedUnitLabel } from "../../../report/stats";
 import { heatScaleColor } from "../../heatScale";
 import { TEXT_BOLD, theme, type OpenTuiColorInput, type Tone } from "../theme";
-import { listRow, modal, statCell } from "../components";
+import { listRow, modal, statCell, type KeyHint } from "../components";
 import type { OpenTuiRendererKit } from "../kit";
 import {
   buildKeyDiagnostics,
@@ -711,4 +711,48 @@ export function completionNextLine(
   return language === "zh"
     ? `下一组：${route.next_lesson.module}`
     : `Next: ${route.next_lesson.module}`;
+}
+
+type ModalRoute = Extract<
+  OpenTuiAppState["route"],
+  {
+    screen: "exit_confirmation" | "code_settings_confirmation" | "practice_options" | "complete";
+  }
+>;
+
+export function modalHints(route: ModalRoute, zh: boolean): KeyHint[] {
+  switch (route.screen) {
+    case "exit_confirmation":
+      return [
+        { key: "Enter", label: zh ? "确认退出" : "confirm exit" },
+        { key: "Esc", label: zh ? "返回练习" : "keep typing" },
+      ];
+    case "code_settings_confirmation":
+      return [
+        { key: "Enter", label: zh ? "刷新本组" : "refresh group" },
+        { key: "Esc", label: zh ? "取消" : "cancel" },
+      ];
+    case "practice_options":
+      return [
+        { key: "↑↓", label: zh ? "选择" : "select" },
+        { key: "←→", label: zh ? "调整" : "adjust" },
+        { key: "Enter", label: zh ? "继续" : "resume" },
+        { key: "Esc", label: zh ? "关闭" : "close" },
+      ];
+    case "complete":
+      return [
+        {
+          key: "Enter",
+          label: zh
+            ? route.result_visible
+              ? "关闭结果"
+              : "继续"
+            : route.result_visible
+              ? "close result"
+              : "continue",
+        },
+        { key: "R", label: zh ? "重练" : "repeat" },
+        { key: "Q", label: zh ? "退出" : "quit" },
+      ];
+  }
 }

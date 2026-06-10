@@ -1,7 +1,12 @@
 import type { OpenTuiAppState } from "../appModel";
-import { openTuiRouteLines, openTuiRouteTitle, openTuiStatsViews } from "../appModel";
+import {
+  openTuiRouteLines,
+  openTuiRouteTitle,
+  openTuiStatsViews,
+  type OpenTuiStatsView,
+} from "../appModel";
 import { theme } from "../theme";
-import { emptyState, tabStrip } from "../components";
+import { emptyState, tabStrip, type KeyHint } from "../components";
 import type { OpenTuiRendererKit } from "../kit";
 import { renderPanel } from "./shared";
 
@@ -70,4 +75,13 @@ export function renderStatsScreen(state: OpenTuiAppState, kit: OpenTuiRendererKi
           { flexGrow: 1 },
         ),
   );
+}
+
+export function statsHints(view: OpenTuiStatsView, zh: boolean): KeyHint[] {
+  return [
+    { key: "Tab", label: zh ? "切换视图" : "next view" },
+    ...(view === "keys" ? [{ key: "S", label: zh ? "排序" : "sort" }] : []),
+    ...(view === "daily" ? [{ key: "←→", label: zh ? "切换日期" : "change day" }] : []),
+    { key: "Esc", label: zh ? "返回" : "back" },
+  ];
 }

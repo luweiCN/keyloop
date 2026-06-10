@@ -1,7 +1,7 @@
 import type { OpenTuiAppState } from "../appModel";
 import { openTuiMenuItems } from "../appModel";
 import { TEXT_BOLD, theme } from "../theme";
-import { badge, listRow, vScrollbar } from "../components";
+import { badge, listRow, vScrollbar, type KeyHint } from "../components";
 import type { OpenTuiRendererKit } from "../kit";
 import type { MenuCardItem } from "./shared";
 import { menuItemDescription, menuItemTag } from "../menuItems";
@@ -217,4 +217,18 @@ export function selectedMenuIndex(state: OpenTuiAppState, itemCount: number): nu
     Math.max(Math.trunc(state.route.selected_index ?? 0), 0),
     Math.max(itemCount - 1, 0),
   );
+}
+
+/** Shortcut hints for the main menu and submenus; lives next to the screen it describes. */
+export function menuHints(screen: "main_menu" | "submenu", zh: boolean): KeyHint[] {
+  return [
+    { key: "↑↓", label: zh ? "选择" : "select" },
+    { key: "1-9", label: zh ? "直达" : "jump" },
+    screen === "main_menu"
+      ? { key: "Enter", label: zh ? "进入" : "open" }
+      : { key: "Enter", label: zh ? "开始" : "start" },
+    screen === "main_menu"
+      ? { key: "Q", label: zh ? "退出" : "quit" }
+      : { key: "Esc", label: zh ? "返回" : "back" },
+  ];
 }

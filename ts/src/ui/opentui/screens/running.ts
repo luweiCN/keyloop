@@ -3,12 +3,13 @@ import {
   liveOptionsAvailableForSource,
   openTuiRouteLines,
   openTuiRouteTitle,
+  targetRefreshAvailableForSource,
 } from "../appModel";
 import type { EverydayEnglishSettings, SpeedUnit } from "../../../domain/model";
 import { speedFromWpm, speedUnitLabel } from "../../../report/stats";
 import { heatScaleColor } from "../../heatScale";
 import { TEXT_BOLD, theme, toneColor, type OpenTuiColorInput, type Tone } from "../theme";
-import { panel } from "../components";
+import { panel, type KeyHint } from "../components";
 import {
   codeDifficultyLabel,
   codeFacetLabel,
@@ -743,4 +744,20 @@ export function runningTitlePrefix(sourceItem: string): string {
     return "基础练习";
   }
   return sourceItem.startsWith("code") ? "代码实战" : "练习中";
+}
+
+export function runningHints(route: RunningRoute, zh: boolean): KeyHint[] {
+  const paused = route.live?.paused === true;
+  const hints: KeyHint[] = [
+    { key: "Ctrl+P", label: zh ? (paused ? "继续" : "暂停") : paused ? "resume" : "pause" },
+    { key: "Ctrl+N", label: zh ? "重打" : "retry" },
+  ];
+  if (liveOptionsAvailableForSource(route.source_item)) {
+    hints.push({ key: "Ctrl+O", label: zh ? "选项" : "options" });
+  }
+  if (targetRefreshAvailableForSource(route.source_item)) {
+    hints.push({ key: "Ctrl+R", label: zh ? "重开" : "refresh" });
+  }
+  hints.push({ key: "Esc", label: zh ? "退出" : "exit" });
+  return hints;
 }
