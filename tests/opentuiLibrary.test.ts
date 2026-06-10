@@ -349,3 +349,198 @@ describe("library sentences and article input flow", () => {
     expect(result.state.route.screen).toBe("library_input");
   });
 });
+
+import {
+  libraryActionItems,
+  libraryBrowseMatches,
+  reduceLibraryActionsKey,
+  reduceLibraryBrowseKey,
+  reduceLibraryDeleteConfirmKey,
+  reduceLibraryManageKey,
+} from "../src/ui/opentui/libraryReducers";
+
+function richLibrary(): CustomLibrary {
+  return {
+    version: 1,
+    slug: "web",
+    name: "Web 词汇",
+    created_at: "2026-06-11T00:00:00.000Z",
+    words: [
+      { id: "w1", text: "abandon", kind: "word", meaning_zh: "v. 放弃", source: "dict" },
+      { id: "w2", text: "machine learning", kind: "phrase", meaning_zh: "机器学习", source: "manual" },
+      { id: "w3", text: "vivid", kind: "word", source: "dict" },
+    ],
+    sentences: [{ id: "s1", text: "Hello there.", translation_zh: "你好。" }],
+    articles: [{ id: "a1", title: "My Day", paragraphs: [{ text: "P1.", translation_zh: "一。" }] }],
+  };
+}
+
+describe("library manage screen", () => {
+  test("enter on a library opens its actions screen", () => {
+    const state = stateAt(
+      { screen: "library_manage", selected_index: 0 },
+      { customLibraries: [richLibrary()] },
+    );
+    const result = reduceLibraryManageKey(state, keyEvent("enter", "\r"));
+    expect(result.state.route).toEqual({
+      screen: "library_actions",
+      slug: "web",
+      selected_index: 0,
+    });
+  });
+
+  test("arrow keys move selection across libraries", () => {
+    const state = stateAt(
+      { screen: "library_manage", selected_index: 0 },
+      { customLibraries: [richLibrary(), emptyLibrary("two")] },
+    );
+    const moved = reduceLibraryManageKey(state, keyEvent("down", "\x1b[B"));
+    expect(moved.state.route).toMatchObject({ screen: "library_manage", selected_index: 1 });
+  });
+});
+
+describe("library actions screen", () => {
+  test("action items cover add, browse, and delete", () => {
+    const state = stateAt(
+      { screen: "library_actions", slug: "web", selected_index: 0 },
+      { customLibraries: [richLibrary()] },
+    );
+    expect(libraryActionItems(state, "web").map((item) => item.id)).toEqual([
+      "add_words",
+      "add_sentences",
+      "add_article",
+      "browse_words",
+      "browse_sentences",
+      "browse_articles",
+      "delete_library",
+    ]);
+  });
+
+  test("enter routes to the chosen action", () => {
+    const base = stateAt(
+      { screen: "library_actions", slug: "web", selected_index: 0 },
+      { customLibraries: [richLibrary()] },
+    );
+    const addWords = reduceLibraryActionsKey(base, keyEvent("enter", "\r"));
+    expect(addWords.state.route).toMatchObject({
+      screen: "library_input",
+      kind: "words",
+      phase: "body",
+    });
+    const onDelete = stateAt(
+      { screen: "library_actions", slug: "web", selected_index: 6 },
+      { customLibraries: [richLibrary()] },
+    );
+    const confirm = reduceLibraryActionsKey(onDelete, keyEvent("enter", "\r"));
+    expect(confirm.state.route).toEqual({ screen: "library_delete_confirm", slug: "web" });
+    const onBrowse = stateAt(
+      { screen: "library_actions", slug: "web", selected_index: 3 },
+      { customLibraries: [richLibrary()] },
+    );
+    const browse = reduceLibraryActionsKey(onBrowse, keyEvent("enter", "\r"));
+    expect(browse.state.route).toEqual({
+      screen: "library_browse",
+      slug: "web",
+      entry_type: "words",
+      query: "",
+      index: 0,
+    });
+  });
+
+  test("article action starts at title phase", () => {
+    const onArticle = stateAt(
+      { screen: "library_actions", slug: "web", selected_index: 2 },
+      { customLibraries: [richLibrary()] },
+    );
+    const result = reduceLibraryActionsKey(onArticle, keyEvent("enter", "\r"));
+    expect(result.state.route).toMatchObject({
+      screen: "library_input",
+      kind: "article",
+      phase: "title",
+    });
+  });
+});
+
+describe("library browse screen", () => {
+  function browseState(query = "", index = 0): OpenTuiAppState {
+    return stateAt(
+      { screen: "library_browse", slug: "web", entry_type: "words", query, index },
+      { customLibraries: [richLibrary()] },
+    );
+  }
+
+  test("fuzzy query filters entries by text and meaning", () => {
+    const all = libraryBrowseMatches(browseState());
+    expect(all.map((entry) => entry.id)).toEqual(["w1", "w2", "w3"]);
+    const filtered = libraryBrowseMatches(browseState("mln"));
+    expect(filtered.map((entry) => entry.id)).toEqual(["w2"]);
+  });
+
+  test("typing updates query, enter opens editor prefilled with entry format", () => {
+    let state = browseState();
+    state = reduceLibraryBrowseKey(state, keyEvent("v", "v")).state;
+    if (state.route.screen !== "library_browse") throw new Error("expected browse");
+    expect(state.route.query).toBe("v");
+    const onVivid = reduceLibraryBrowseKey(browseState("vivid"), keyEvent("enter", "\r"));
+    expect(onVivid.state.route).toMatchObject({
+      screen: "library_input",
+      kind: "words",
+      text: "vivid",
+      editing_id: "w3",
+    });
+    const onAbandon = reduceLibraryBrowseKey(browseState("abandon"), keyEvent("enter", "\r"));
+    expect(onAbandon.state.route).toMatchObject({ text: "abandon: v. 放弃", editing_id: "w1" });
+  });
+
+  test("d with empty query deletes the selected entry and persists", () => {
+    const result = reduceLibraryBrowseKey(browseState(), keyEvent("d", "d"));
+    expect(result.persist?.kind).toBe("save");
+    expect(result.state.customLibraries?.[0]?.words.map((word) => word.id)).toEqual(["w2", "w3"]);
+    const filtered = reduceLibraryBrowseKey(browseState("aba"), keyEvent("d", "d"));
+    expect(filtered.persist).toBeUndefined();
+    if (filtered.state.route.screen !== "library_browse") throw new Error("expected browse");
+    expect(filtered.state.route.query).toBe("abad");
+  });
+
+  test("editing an existing word replaces it on save", () => {
+    const edit = reduceLibraryBrowseKey(browseState("vivid"), keyEvent("enter", "\r"));
+    let state = edit.state;
+    for (const char of ": 生动的") {
+      state = reduceLibraryInputKey(state, charEvent(char), fakeContext()).state;
+    }
+    state = reduceLibraryInputKey(state, ctrlD, fakeContext()).state;
+    expect(state.route.screen).toBe("library_preview");
+    const saved = reduceLibraryPreviewKey(state, keyEvent("enter", "\r"));
+    const words = saved.state.customLibraries?.[0]?.words ?? [];
+    expect(words.length).toBe(3);
+    expect(words.find((word) => word.text === "vivid")?.meaning_zh).toBe("生动的");
+    expect(words.some((word) => word.id === "w3")).toBe(false);
+  });
+});
+
+describe("library delete confirmation", () => {
+  test("enter deletes the library and persists deletion", () => {
+    const state = stateAt(
+      { screen: "library_delete_confirm", slug: "web" },
+      { customLibraries: [richLibrary(), emptyLibrary("two")] },
+    );
+    const result = reduceLibraryDeleteConfirmKey(state, keyEvent("enter", "\r"));
+    expect(result.persist).toEqual({ kind: "delete", slug: "web" });
+    expect(result.state.customLibraries?.map((library) => library.slug)).toEqual(["two"]);
+    expect(result.state.route).toEqual({ screen: "library_manage", selected_index: 0 });
+  });
+
+  test("backspace cancels back to actions", () => {
+    const state = stateAt(
+      { screen: "library_delete_confirm", slug: "web" },
+      { customLibraries: [richLibrary()] },
+    );
+    const result = reduceLibraryDeleteConfirmKey(state, keyEvent("backspace", "\x7f"));
+    expect(result.state.route).toEqual({
+      screen: "library_actions",
+      slug: "web",
+      selected_index: 0,
+    });
+    expect(result.persist).toBeUndefined();
+  });
+});

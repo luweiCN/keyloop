@@ -4,8 +4,12 @@ import { type OpenTuiRenderer, type OpenTuiRendererKit, loadOpenTuiKit } from ".
 import { OPEN_TUI_ROOT_ID, renderAppFrame } from "./screens/appFrame";
 import { renderPanel } from "./screens/shared";
 import {
+  renderLibraryActionsScreen,
+  renderLibraryBrowseScreen,
   renderLibraryCreateScreen,
+  renderLibraryDeleteConfirmScreen,
   renderLibraryInputScreen,
+  renderLibraryManageScreen,
   renderLibraryPreviewScreen,
 } from "./screens/library";
 import { renderMenuScreen } from "./screens/menu";
@@ -76,14 +80,13 @@ async function renderRoute(state: OpenTuiAppState, kit: OpenTuiRendererKit): Pro
     case "library_preview":
       return renderAppFrame(state, renderLibraryPreviewScreen(state, kit), kit);
     case "library_manage":
+      return renderAppFrame(state, renderLibraryManageScreen(state, kit), kit);
     case "library_actions":
+      return renderAppFrame(state, renderLibraryActionsScreen(state, kit), kit);
     case "library_browse":
+      return renderAppFrame(state, renderLibraryBrowseScreen(state, kit), kit);
     case "library_delete_confirm":
-      return renderAppFrame(
-        state,
-        renderPanel("keyloop-route-panel", openTuiRouteTitle(state), openTuiRouteLines(state), kit),
-        kit,
-      );
+      return renderAppFrame(state, renderLibraryDeleteConfirmScreen(state, kit), kit);
     case "running":
       return renderAppFrame(state, await renderRunningScreen(state, kit), kit);
     case "exit_confirmation":

@@ -70,8 +70,12 @@ import {
 } from "./settingsReducers";
 import { reduceStatsKey, statsState } from "./statsReducer";
 import {
+  reduceLibraryActionsKey,
+  reduceLibraryBrowseKey,
   reduceLibraryCreateKey,
+  reduceLibraryDeleteConfirmKey,
   reduceLibraryInputKey,
+  reduceLibraryManageKey,
   reduceLibraryPreviewKey,
 } from "./libraryReducers";
 
@@ -215,11 +219,30 @@ export function reduceOpenTuiAppKey(
         ...(result.persist === undefined ? {} : { persist: result.persist }),
       };
     }
-    case "library_manage":
-    case "library_actions":
-    case "library_browse":
-    case "library_delete_confirm":
-      return { state, action: "continue" };
+    case "library_manage": {
+      const result = reduceLibraryManageKey(state, event);
+      return { state: result.state, action: "continue" };
+    }
+    case "library_actions": {
+      const result = reduceLibraryActionsKey(state, event);
+      return { state: result.state, action: "continue" };
+    }
+    case "library_browse": {
+      const result = reduceLibraryBrowseKey(state, event);
+      return {
+        state: result.state,
+        action: "continue",
+        ...(result.persist === undefined ? {} : { persist: result.persist }),
+      };
+    }
+    case "library_delete_confirm": {
+      const result = reduceLibraryDeleteConfirmKey(state, event);
+      return {
+        state: result.state,
+        action: "continue",
+        ...(result.persist === undefined ? {} : { persist: result.persist }),
+      };
+    }
     case "stats":
       return reduceStatsKey({ language: state.language, route: state.route }, event);
     case "settings":

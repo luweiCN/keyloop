@@ -313,3 +313,325 @@ export function renderLibraryPreviewScreen(
     ),
   );
 }
+
+import { listRow } from "../components";
+import { libraryActionItems, libraryBrowseMatches } from "../libraryReducers";
+
+function libraryListRow(
+  id: string,
+  label: string,
+  hint: string,
+  selected: boolean,
+  kit: OpenTuiRendererKit,
+): unknown {
+  return listRow(
+    id,
+    selected,
+    { height: 1, gap: 1 },
+    kit,
+    kit.Text({
+      id: `${id}-label`,
+      content: label,
+      fg: selected ? theme.accent : theme.foreground,
+      attributes: TEXT_BOLD,
+      height: 1,
+      wrapMode: "none",
+      truncate: true,
+      flexShrink: 0,
+    }),
+    kit.Text({
+      id: `${id}-hint`,
+      content: hint,
+      fg: theme.muted,
+      height: 1,
+      wrapMode: "none",
+      truncate: true,
+    }),
+  );
+}
+
+export function renderLibraryManageScreen(
+  state: OpenTuiAppState,
+  kit: OpenTuiRendererKit,
+): unknown {
+  if (state.route.screen !== "library_manage") {
+    return kit.Box({ id: "keyloop-library-manage-empty" });
+  }
+  const zh = state.language === "zh";
+  const libraries = state.customLibraries ?? [];
+  const selected = Math.min(
+    Math.max(state.route.selected_index ?? 0, 0),
+    Math.max(libraries.length - 1, 0),
+  );
+  const children: unknown[] = [];
+  if (libraries.length === 0) {
+    children.push(
+      kit.Text({
+        id: "keyloop-library-manage-empty-hint",
+        content: zh ? "还没有语料库，先从「新建语料库」开始" : "No libraries yet — create one first",
+        fg: theme.muted,
+        height: 1,
+        wrapMode: "none",
+      }),
+    );
+  }
+  for (let index = 0; index < libraries.length; index += 1) {
+    const library = libraries[index]!;
+    const wordCount = library.words.filter((word) => word.kind === "word").length;
+    const phraseCount = library.words.length - wordCount;
+    children.push(
+      libraryListRow(
+        `keyloop-library-manage-row-${index}`,
+        library.name,
+        zh
+          ? `${wordCount} 词 · ${phraseCount} 组 · ${library.sentences.length} 句 · ${library.articles.length} 篇`
+          : `${wordCount}w · ${phraseCount}p · ${library.sentences.length}s · ${library.articles.length}a`,
+        index === selected,
+        kit,
+      ),
+    );
+  }
+  return kit.Box(
+    {
+      id: "keyloop-library-manage",
+      flexDirection: "column",
+      gap: 1,
+      flexGrow: 1,
+      width: "100%",
+    },
+    kit.Box(
+      {
+        id: "keyloop-library-manage-panel",
+        border: true,
+        borderStyle: "rounded",
+        borderColor: theme.info,
+        paddingX: 1,
+        flexGrow: 1,
+        width: "100%",
+        title: zh ? " 管理语料库 " : " Manage libraries ",
+        overflow: "hidden",
+        flexDirection: "column",
+      },
+      ...children,
+    ),
+    helpBar(zh ? "↑↓ 选择 · Enter 进入 · Esc 返回" : "↑↓ select · Enter open · Esc back", kit, "keyloop-library-manage-help"),
+  );
+}
+
+export function renderLibraryActionsScreen(
+  state: OpenTuiAppState,
+  kit: OpenTuiRendererKit,
+): unknown {
+  if (state.route.screen !== "library_actions") {
+    return kit.Box({ id: "keyloop-library-actions-empty" });
+  }
+  const zh = state.language === "zh";
+  const route = state.route;
+  const libraryName =
+    (state.customLibraries ?? []).find((entry) => entry.slug === route.slug)?.name ?? route.slug;
+  const items = libraryActionItems(state, route.slug);
+  const selected = Math.min(Math.max(route.selected_index ?? 0, 0), items.length - 1);
+  return kit.Box(
+    {
+      id: "keyloop-library-actions",
+      flexDirection: "column",
+      gap: 1,
+      flexGrow: 1,
+      width: "100%",
+    },
+    kit.Box(
+      {
+        id: "keyloop-library-actions-panel",
+        border: true,
+        borderStyle: "rounded",
+        borderColor: theme.info,
+        paddingX: 1,
+        flexGrow: 1,
+        width: "100%",
+        title: ` ${libraryName} `,
+        overflow: "hidden",
+        flexDirection: "column",
+      },
+      ...items.map((item, index) =>
+        libraryListRow(
+          `keyloop-library-actions-row-${index}`,
+          item.label,
+          item.hint,
+          index === selected,
+          kit,
+        ),
+      ),
+    ),
+    helpBar(zh ? "↑↓ 选择 · Enter 确认 · Esc 返回" : "↑↓ select · Enter confirm · Esc back", kit, "keyloop-library-actions-help"),
+  );
+}
+
+const BROWSE_VISIBLE_ROWS = 12;
+
+export function renderLibraryBrowseScreen(
+  state: OpenTuiAppState,
+  kit: OpenTuiRendererKit,
+): unknown {
+  if (state.route.screen !== "library_browse") {
+    return kit.Box({ id: "keyloop-library-browse-empty" });
+  }
+  const zh = state.language === "zh";
+  const route = state.route;
+  const matches = libraryBrowseMatches(state);
+  const selected = Math.min(Math.max(route.index, 0), Math.max(matches.length - 1, 0));
+  const typeLabels = {
+    words: zh ? "单词与词组" : "words",
+    sentences: zh ? "句子" : "sentences",
+    articles: zh ? "文章" : "articles",
+  } as const;
+  const rows: unknown[] = [];
+  const windowStart = Math.max(
+    0,
+    Math.min(selected - Math.floor(BROWSE_VISIBLE_ROWS / 2), matches.length - BROWSE_VISIBLE_ROWS),
+  );
+  for (
+    let index = windowStart;
+    index < Math.min(matches.length, windowStart + BROWSE_VISIBLE_ROWS);
+    index += 1
+  ) {
+    const match = matches[index]!;
+    const label =
+      match.entry_type === "words"
+        ? match.entry.text
+        : match.entry_type === "sentences"
+          ? match.entry.text
+          : match.entry.title;
+    const hint =
+      match.entry_type === "words"
+        ? match.entry.meaning_zh ?? (zh ? "（无释义）" : "(no meaning)")
+        : match.entry_type === "sentences"
+          ? match.entry.translation_zh ?? ""
+          : zh
+            ? `${match.entry.paragraphs.length} 段`
+            : `${match.entry.paragraphs.length} paragraphs`;
+    rows.push(
+      libraryListRow(`keyloop-library-browse-row-${index}`, label, hint, index === selected, kit),
+    );
+  }
+  if (matches.length === 0) {
+    rows.push(
+      kit.Text({
+        id: "keyloop-library-browse-no-match",
+        content: zh ? "没有匹配的条目" : "no matching entries",
+        fg: theme.muted,
+        height: 1,
+        wrapMode: "none",
+      }),
+    );
+  }
+  return kit.Box(
+    {
+      id: "keyloop-library-browse",
+      flexDirection: "column",
+      gap: 1,
+      flexGrow: 1,
+      width: "100%",
+    },
+    kit.Box(
+      {
+        id: "keyloop-library-browse-search-panel",
+        border: true,
+        borderStyle: "rounded",
+        borderColor: theme.info,
+        paddingX: 1,
+        height: 3,
+        width: "100%",
+        flexShrink: 0,
+        title: zh ? ` 浏览${typeLabels[route.entry_type]} ` : ` Browse ${typeLabels[route.entry_type]} `,
+        bottomTitle: ` ${matches.length} `,
+        bottomTitleAlignment: "right",
+        overflow: "hidden",
+      },
+      kit.Text({
+        id: "keyloop-library-browse-query",
+        content: route.query === "" ? (zh ? "⌕ 输入关键词模糊搜索" : "⌕ type to fuzzy search") : `⌕ ${route.query}▏`,
+        fg: route.query === "" ? theme.muted : theme.foreground,
+        height: 1,
+        wrapMode: "none",
+      }),
+    ),
+    kit.Box(
+      {
+        id: "keyloop-library-browse-list",
+        border: true,
+        borderStyle: "rounded",
+        borderColor: theme.muted,
+        paddingX: 1,
+        flexGrow: 1,
+        width: "100%",
+        overflow: "hidden",
+        flexDirection: "column",
+      },
+      ...rows,
+    ),
+    helpBar(
+      zh
+        ? "↑↓ 选择 · Enter 编辑 · d 删除（搜索为空时）· Esc 返回"
+        : "↑↓ select · Enter edit · d delete (when query empty) · Esc back",
+      kit,
+      "keyloop-library-browse-help",
+    ),
+  );
+}
+
+export function renderLibraryDeleteConfirmScreen(
+  state: OpenTuiAppState,
+  kit: OpenTuiRendererKit,
+): unknown {
+  if (state.route.screen !== "library_delete_confirm") {
+    return kit.Box({ id: "keyloop-library-delete-empty" });
+  }
+  const zh = state.language === "zh";
+  const route = state.route;
+  const library = (state.customLibraries ?? []).find((entry) => entry.slug === route.slug);
+  const name = library?.name ?? route.slug;
+  return kit.Box(
+    {
+      id: "keyloop-library-delete",
+      flexDirection: "column",
+      gap: 1,
+      flexGrow: 1,
+      width: "100%",
+    },
+    kit.Box(
+      {
+        id: "keyloop-library-delete-panel",
+        border: true,
+        borderStyle: "rounded",
+        borderColor: theme.danger,
+        paddingX: 1,
+        height: 4,
+        width: "100%",
+        flexShrink: 0,
+        title: zh ? " 删除确认 " : " Delete confirmation ",
+        overflow: "hidden",
+        flexDirection: "column",
+      },
+      kit.Text({
+        id: "keyloop-library-delete-question",
+        content: zh
+          ? `删除语料库「${name}」？该操作不可恢复。`
+          : `Delete library "${name}"? This cannot be undone.`,
+        fg: theme.foreground,
+        attributes: TEXT_BOLD,
+        height: 1,
+        wrapMode: "none",
+      }),
+      kit.Text({
+        id: "keyloop-library-delete-detail",
+        content: zh
+          ? `${library?.words.length ?? 0} 条单词/词组 · ${library?.sentences.length ?? 0} 句 · ${library?.articles.length ?? 0} 篇将被删除`
+          : `${library?.words.length ?? 0} words · ${library?.sentences.length ?? 0} sentences · ${library?.articles.length ?? 0} articles will be removed`,
+        fg: theme.muted,
+        height: 1,
+        wrapMode: "none",
+      }),
+    ),
+    helpBar(zh ? "Enter 确认删除 · 退格/Esc 取消" : "Enter to delete · Backspace/Esc to cancel", kit, "keyloop-library-delete-help"),
+  );
+}

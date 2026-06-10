@@ -615,7 +615,7 @@ function codeFilterOptionsMatchingQuery(
   });
 }
 
-function fuzzyIncludes(value: string, query: string): boolean {
+export function fuzzyIncludes(value: string, query: string): boolean {
   let searchIndex = 0;
   const normalizedValue = value.toLowerCase();
   for (const character of query) {
