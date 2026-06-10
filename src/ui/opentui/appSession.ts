@@ -69,6 +69,11 @@ import {
   wordFormSettingsFromContext,
 } from "./settingsReducers";
 import { reduceStatsKey, statsState } from "./statsReducer";
+import {
+  reduceLibraryCreateKey,
+  reduceLibraryInputKey,
+  reduceLibraryPreviewKey,
+} from "./libraryReducers";
 
 export interface OpenTuiAppSessionContext extends BuildTargetContext {
   language: Language;
@@ -134,6 +139,41 @@ export function reduceOpenTuiAppKey(
         action: "continue",
       };
     }
+    if (state.route.screen === "library_input") {
+      return {
+        state: withRoute(state, {
+          screen: "library_actions",
+          slug: state.route.slug,
+          selected_index: 0,
+        }),
+        action: "continue",
+      };
+    }
+    if (state.route.screen === "library_preview") {
+      const payload = state.route.payload;
+      return {
+        state: withRoute(state, {
+          screen: "library_input",
+          slug: state.route.slug,
+          kind: payload.kind === "article" ? "article" : payload.kind,
+          phase: "body",
+          article_title: payload.kind === "article" ? payload.title : "",
+          text: payload.raw_text,
+          ...(payload.editing_id === undefined ? {} : { editing_id: payload.editing_id }),
+        }),
+        action: "continue",
+      };
+    }
+    if (
+      state.route.screen === "library_actions" ||
+      state.route.screen === "library_delete_confirm" ||
+      state.route.screen === "library_browse"
+    ) {
+      return {
+        state: withRoute(state, { screen: "library_manage", selected_index: 0 }),
+        action: "continue",
+      };
+    }
     if (state.route.screen === "settings" && state.route.view !== "menu") {
       const menuState = createOpenTuiSettingsState(state.language, "menu", stateOptions(state));
       return {
@@ -155,11 +195,28 @@ export function reduceOpenTuiAppKey(
     case "submenu":
     case "library_menu":
       return reduceMenuKey(state, event, context);
-    case "library_create":
+    case "library_create": {
+      const result = reduceLibraryCreateKey(state, event);
+      return {
+        state: result.state,
+        action: "continue",
+        ...(result.persist === undefined ? {} : { persist: result.persist }),
+      };
+    }
+    case "library_input": {
+      const result = reduceLibraryInputKey(state, event, context);
+      return { state: result.state, action: "continue" };
+    }
+    case "library_preview": {
+      const result = reduceLibraryPreviewKey(state, event);
+      return {
+        state: result.state,
+        action: "continue",
+        ...(result.persist === undefined ? {} : { persist: result.persist }),
+      };
+    }
     case "library_manage":
     case "library_actions":
-    case "library_input":
-    case "library_preview":
     case "library_browse":
     case "library_delete_confirm":
       return { state, action: "continue" };
