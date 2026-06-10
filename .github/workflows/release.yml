@@ -25,15 +25,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Read Cargo version
+      - name: Read package version
         id: version
         run: |
-          version="$(python3 - <<'PY'
-          import tomllib
-          with open("Cargo.toml", "rb") as fh:
-              print(tomllib.load(fh)["package"]["version"])
-          PY
-          )"
+          version="$(python3 -c 'import json; print(json.load(open("package.json"))["version"])')"
           echo "version=${version}" >> "$GITHUB_OUTPUT"
           echo "tag=v${version}" >> "$GITHUB_OUTPUT"
 
@@ -63,22 +58,25 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
+            target: bun-linux-x64
           - os: macos-15-intel
-            target: x86_64-apple-darwin
+            target: bun-darwin-x64
           - os: macos-latest
-            target: aarch64-apple-darwin
+            target: bun-darwin-arm64
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Install Rust stable
-        run: |
-          rustup toolchain install stable --profile minimal --target "${{ matrix.target }}"
-          rustup default stable
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
 
       - name: Build release binary
-        run: cargo build --release --locked --target "${{ matrix.target }}"
+        run: bun build ts/src/main.ts --compile --target "${{ matrix.target }}" --outfile dist/keyloop
 
       - name: Package archive
         env:
@@ -87,7 +85,7 @@ jobs:
         run: |
           archive="keyloop-${VERSION}-${TARGET}.tar.gz"
           mkdir -p "dist/keyloop-${VERSION}-${TARGET}"
-          cp "target/${TARGET}/release/keyloop" "dist/keyloop-${VERSION}-${TARGET}/"
+          cp dist/keyloop "dist/keyloop-${VERSION}-${TARGET}/"
           cp README.md LICENSE "dist/keyloop-${VERSION}-${TARGET}/"
           tar -C dist -czf "$archive" "keyloop-${VERSION}-${TARGET}"
           shasum -a 256 "$archive" > "${archive}.sha256"

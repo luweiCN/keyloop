@@ -74,15 +74,16 @@ brew install luweiCN/keyloop/keyloop
 也可以从源码安装：
 
 ```bash
-cargo install --path .
+bun install
+bun run build:binary   # 产出 dist/keyloop-ts 单文件二进制
 ```
 
 也可以直接开发运行：
 
 ```bash
-cargo run -- start
-cargo run -- report today
-cargo run -- plan
+bun run keyloop start
+bun run keyloop report today
+bun run keyloop plan
 ```
 
 ## 今日练习
@@ -160,10 +161,9 @@ KeyLoop 不上传练习数据。默认只写入本机：
 ## Development / Quality
 
 ```bash
-cargo fmt
-cargo test
-cargo clippy -- -D warnings
-cargo run -- plan
+bun run typecheck
+bun test ts/tests
+bun run smoke
 ```
 
 更多检查说明见 [docs/QUALITY.md](docs/QUALITY.md)。
@@ -174,7 +174,7 @@ cargo run -- plan
 
 1. 功能分支提交 PR。
 2. PR 通过 CI 后合并到 `main`。
-3. `main` 上的 release workflow 读取 `Cargo.toml` 版本号。
+3. `main` 上的 release workflow 读取 `package.json` 版本号。
 4. 如果对应的 `vX.Y.Z` release 不存在，就自动构建 macOS/Linux 包、创建 GitHub Release，并更新 Homebrew tap。
 
 发布和 Homebrew 说明见 [docs/RELEASE.md](docs/RELEASE.md)。

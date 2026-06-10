@@ -1,11 +1,14 @@
-/target
-
 # Local editor and OS noise
 .DS_Store
 *.swp
 *.swo
 .idea/
 .vscode/
+
+# TypeScript/Bun build artifacts
+node_modules/
+dist/
+coverage/
 
 # Local runtime data. KeyLoop writes to ~/.keyloop by default, but keep
 # redirected local data out of the repository as well.
@@ -27,5 +30,6 @@ sessions.jsonl
 /ts/content/everyday_reading_translated/
 /ts/content/everyday_reading_translation_batches/
 
-# Stray artifact
+# Stray artifacts
 /--verbose
+__pycache__/

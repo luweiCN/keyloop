@@ -7,14 +7,14 @@ KeyLoop 使用 GitHub PR 工作流：
 1. 从功能分支提交 PR。
 2. PR 自动运行 `.github/workflows/ci.yml`。
 3. CI 通过后合并到 `main`。
-4. `.github/workflows/release.yml` 读取 `Cargo.toml` 的 `package.version`。
+4. `.github/workflows/release.yml` 读取 `package.json` 的 `version`。
 5. 如果 `vX.Y.Z` release 不存在，就自动构建 release 包、创建 GitHub Release，并更新 Homebrew tap。
 
-版本发布由 `Cargo.toml` 控制。普通代码合并如果没有改版本号，release workflow 会跳过，避免重复发同一个版本。
+版本发布由 `package.json` 控制。普通代码合并如果没有改版本号，release workflow 会跳过，避免重复发同一个版本。
 
 ### 发布一个新版本
 
-1. 修改 `Cargo.toml` 里的 `version`。
+1. 修改 `package.json` 里的 `version`。
 2. 提交 PR。
 3. 等 CI 通过。
 4. 合并到 `main`。
@@ -60,14 +60,14 @@ KeyLoop uses a GitHub PR workflow:
 1. Open a PR from a feature branch.
 2. CI runs through `.github/workflows/ci.yml`.
 3. Merge into `main` after CI passes.
-4. `.github/workflows/release.yml` reads `package.version` from `Cargo.toml`.
+4. `.github/workflows/release.yml` reads `version` from `package.json`.
 5. If the matching `vX.Y.Z` release does not exist, the workflow builds release packages, creates a GitHub Release, and updates the Homebrew tap.
 
-Releases are version-driven. If a merge to `main` does not change `Cargo.toml` version, the release workflow skips publishing to avoid duplicate releases.
+Releases are version-driven. If a merge to `main` does not change the `package.json` version, the release workflow skips publishing to avoid duplicate releases.
 
 ### Publishing A New Version
 
-1. Change `version` in `Cargo.toml`.
+1. Change `version` in `package.json`.
 2. Open a PR.
 3. Wait for CI.
 4. Merge into `main`.

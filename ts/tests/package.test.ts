@@ -38,15 +38,9 @@ describe("package verification scripts", () => {
     expect(packageJson.scripts?.["verify:migration"]).toBe(
       "bun run typecheck && bun test ts/tests && bun run build && bun run build:binary && bun run smoke",
     );
-    expect(packageJson.scripts?.["smoke:rust-plan"]).toContain(
-      "cargo run --locked -- plan",
-    );
-    expect(packageJson.scripts?.["verify:rust"]).toBe(
-      "cargo fmt --check && cargo test --locked --all-targets && cargo clippy --locked -- -D warnings && bun run smoke:rust-plan && git diff --check",
-    );
-    expect(packageJson.scripts?.["verify:all"]).toBe(
-      "bun run verify:migration && bun run verify:rust",
-    );
-    expect(packageJson.bin?.["keyloop-ts"]).toBe("./ts/src/main.ts");
+    expect(packageJson.scripts?.["smoke:rust-plan"]).toBeUndefined();
+    expect(packageJson.scripts?.["verify:rust"]).toBeUndefined();
+    expect(packageJson.scripts?.["verify:all"]).toBe("bun run verify:migration");
+    expect(packageJson.bin?.keyloop).toBe("./ts/src/main.ts");
   });
 });

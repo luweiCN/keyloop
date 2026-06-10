@@ -76,15 +76,16 @@ brew install luweiCN/keyloop/keyloop
 You can also install from source:
 
 ```bash
-cargo install --path .
+bun install
+bun run build:binary   # produces the dist/keyloop-ts single-file binary
 ```
 
 Development runs:
 
 ```bash
-cargo run -- start
-cargo run -- report today
-cargo run -- plan
+bun run keyloop start
+bun run keyloop report today
+bun run keyloop plan
 ```
 
 ## Daily Practice
@@ -149,10 +150,9 @@ Session records include target text, final input, key events, error characters, 
 ## Development / Quality
 
 ```bash
-cargo fmt --check
-cargo test
-cargo clippy -- -D warnings
-cargo run -- plan
+bun run typecheck
+bun test ts/tests
+bun run smoke
 ```
 
 See [docs/QUALITY.md](docs/QUALITY.md) for review focus.
@@ -163,7 +163,7 @@ This repository uses a PR-based GitHub workflow:
 
 1. Open a PR from a feature branch.
 2. Merge after CI passes.
-3. The release workflow reads the version from `Cargo.toml` on `main`.
+3. The release workflow reads the version from `package.json` on `main`.
 4. If the matching `vX.Y.Z` release does not exist, it builds macOS/Linux packages, creates a GitHub Release, and updates the Homebrew tap.
 
 See [docs/RELEASE.md](docs/RELEASE.md) for release and Homebrew setup.
