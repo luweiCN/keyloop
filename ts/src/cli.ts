@@ -1,4 +1,10 @@
 import { readFile } from "node:fs/promises";
+import { basename } from "node:path";
+import {
+  createPersonalArticleEntry,
+  createPersonalSentenceEntry,
+  parseArticleFile,
+} from "./training/personalCorpus";
 import { TextEncoder } from "node:util";
 
 import {
@@ -30,6 +36,12 @@ import {
   collectionsPath,
   loadCollectionsStoreFromPath,
   saveCollectionsStoreToPath,
+  loadPersonalArticlesStoreFromPath,
+  loadPersonalSentencesStoreFromPath,
+  personalArticlesPath,
+  personalSentencesPath,
+  savePersonalArticlesStoreToPath,
+  savePersonalSentencesStoreToPath,
 } from "./storage/keyloopStore";
 import {
   defaultCodePracticeConfig,
@@ -87,6 +99,8 @@ export type ParsedCommand =
   | ParsedStartCommand
   | { kind: "vocab"; action: ParsedVocabAction }
   | { kind: "corpus"; action: ParsedCorpusAction }
+  | { kind: "sentence"; action: ParsedSentenceAction }
+  | { kind: "article"; action: ParsedArticleAction }
   | { kind: "report"; scope: "today" }
   | { kind: "help" }
   | { kind: "plan" }
@@ -113,6 +127,14 @@ export type ParsedCorpusAction =
   | { kind: "import"; slug: string; path: string }
   | { kind: "archive"; slug: string }
   | { kind: "restore"; slug: string };
+
+export type ParsedSentenceAction =
+  | { kind: "add"; text: string; zh?: string; note?: string; collection?: string }
+  | { kind: "list" };
+
+export type ParsedArticleAction =
+  | { kind: "import"; path: string; title?: string; collection?: string }
+  | { kind: "list" };
 
 export type ParsedVocabAction =
   | ParsedVocabAddAction
@@ -239,6 +261,10 @@ export function parseCliArgs(args: string[]): ParsedCli {
       return { language, command: parseVocabCommand(remaining) };
     case "corpus":
       return { language, command: parseCorpusCommand(remaining) };
+    case "sentence":
+      return { language, command: parseSentenceCommand(remaining) };
+    case "article":
+      return { language, command: parseArticleCommand(remaining) };
     default:
       throw new Error(`Unknown command: ${commandName}`);
   }
@@ -284,6 +310,10 @@ export async function runCli(
       return runVocab(command.action, dataDir, parsed.language, options);
     case "corpus":
       return runCorpus(command.action, dataDir, parsed.language, options);
+    case "sentence":
+      return runSentence(command.action, dataDir, parsed.language, options);
+    case "article":
+      return runArticle(command.action, dataDir, parsed.language, options);
   }
 }
 
@@ -385,6 +415,12 @@ async function runApp(
     context.customCollections = (
       await loadCollectionsStoreFromPath(collectionsPath(dataDir))
     ).collections;
+    context.personalSentences = (
+      await loadPersonalSentencesStoreFromPath(personalSentencesPath(dataDir))
+    ).entries;
+    context.personalArticles = (
+      await loadPersonalArticlesStoreFromPath(personalArticlesPath(dataDir))
+    ).entries;
     context.personalVocabularyLimit =
       preferences.personal_vocabulary.daily_review_limit;
 
@@ -689,6 +725,73 @@ function parseReportCommand(args: string[]): ParsedCommand {
   }
   ensureNoExtraArgs("report", args);
   return { kind: "report", scope };
+}
+
+function parseSentenceCommand(args: string[]): ParsedCommand {
+  const actionName = args.shift();
+  switch (actionName) {
+    case "add": {
+      const text = args.shift();
+      if (text === undefined || text.trim() === "") {
+        throw new Error("sentence add requires text");
+      }
+      const action: ParsedSentenceAction = { kind: "add", text };
+      while (args.length > 0) {
+        const option = splitOptionToken(args.shift());
+        switch (option.name) {
+          case "--zh":
+            action.zh = optionValue(option, args);
+            break;
+          case "--note":
+            action.note = optionValue(option, args);
+            break;
+          case "--collection":
+            action.collection = optionValue(option, args);
+            break;
+          default:
+            throw new Error(`Unknown sentence add option: ${option.name}`);
+        }
+      }
+      return { kind: "sentence", action };
+    }
+    case "list":
+      ensureNoExtraArgs("sentence list", args);
+      return { kind: "sentence", action: { kind: "list" } };
+    default:
+      throw new Error("sentence supports: add, list");
+  }
+}
+
+function parseArticleCommand(args: string[]): ParsedCommand {
+  const actionName = args.shift();
+  switch (actionName) {
+    case "import": {
+      const path = args.shift();
+      if (path === undefined) {
+        throw new Error("article import requires a file path");
+      }
+      const action: ParsedArticleAction = { kind: "import", path };
+      while (args.length > 0) {
+        const option = splitOptionToken(args.shift());
+        switch (option.name) {
+          case "--title":
+            action.title = optionValue(option, args);
+            break;
+          case "--collection":
+            action.collection = optionValue(option, args);
+            break;
+          default:
+            throw new Error(`Unknown article import option: ${option.name}`);
+        }
+      }
+      return { kind: "article", action };
+    }
+    case "list":
+      ensureNoExtraArgs("article list", args);
+      return { kind: "article", action: { kind: "list" } };
+    default:
+      throw new Error("article supports: import, list");
+  }
 }
 
 function parseCorpusCommand(args: string[]): ParsedCommand {
@@ -1274,6 +1377,13 @@ function standaloneLessonMetadata(
         module: "custom_corpus",
         category: "personal_vocabulary",
       };
+    case "custom_my_sentences":
+    case "custom_my_articles":
+      return {
+        kind: "words",
+        module: "custom_corpus",
+        category: "personal_vocabulary",
+      };
     case "programming_basics_mix":
       return {
         kind: "symbols",
@@ -1468,6 +1578,106 @@ async function runPlan(
   const records = await loadSessionsFromPath(sessionLogPath(dataDir));
   const plan = buildPlan(records, language, now);
   return { stdout: planReport(plan, language) };
+}
+
+async function runSentence(
+  action: ParsedSentenceAction,
+  dataDir: string,
+  language: Language,
+  options: RunCliOptions,
+): Promise<RunCliResult> {
+  const path = personalSentencesPath(dataDir);
+  switch (action.kind) {
+    case "add": {
+      const store = await loadPersonalSentencesStoreFromPath(path);
+      const createOptions = vocabularyCreateOptions(options);
+      const entry = createPersonalSentenceEntry(
+        {
+          text: action.text,
+          ...(action.zh === undefined ? {} : { translation_zh: action.zh }),
+          ...(action.note === undefined ? {} : { source_note: action.note }),
+          ...(action.collection === undefined ? {} : { collection: action.collection }),
+        },
+        createOptions,
+      );
+      await savePersonalSentencesStoreToPath(
+        { version: 1, entries: [...store.entries, entry] },
+        path,
+      );
+      return {
+        stdout:
+          language === "zh"
+            ? `已收藏句子：${entry.text}\n`
+            : `Saved sentence: ${entry.text}\n`,
+      };
+    }
+    case "list": {
+      const store = await loadPersonalSentencesStoreFromPath(path);
+      const active = store.entries.filter((entry) => !entry.archived);
+      if (active.length === 0) {
+        return {
+          stdout:
+            language === "zh"
+              ? "暂无收藏的句子。用 keyloop sentence add \"TEXT\" --zh 译文 添加。\n"
+              : 'No saved sentences. Add one with: keyloop sentence add "TEXT" --zh TRANSLATION\n',
+        };
+      }
+      const lines = active.map(
+        (entry) => `${entry.id}\t${entry.text}${entry.translation_zh === undefined ? "" : `\t${entry.translation_zh}`}`,
+      );
+      return { stdout: `${language === "zh" ? "我的句子" : "My sentences"}\n${lines.join("\n")}\n` };
+    }
+  }
+}
+
+async function runArticle(
+  action: ParsedArticleAction,
+  dataDir: string,
+  language: Language,
+  options: RunCliOptions,
+): Promise<RunCliResult> {
+  const path = personalArticlesPath(dataDir);
+  switch (action.kind) {
+    case "import": {
+      const raw = await readFile(action.path, "utf8");
+      const fallbackTitle = basename(action.path).replace(/\.[^.]+$/u, "");
+      const parsedArticle = parseArticleFile(raw, action.title ?? fallbackTitle);
+      const store = await loadPersonalArticlesStoreFromPath(path);
+      const entry = createPersonalArticleEntry(
+        {
+          title: action.title ?? parsedArticle.title,
+          paragraphs: parsedArticle.paragraphs,
+          ...(action.collection === undefined ? {} : { collection: action.collection }),
+          source_note: action.path,
+        },
+        vocabularyCreateOptions(options),
+      );
+      await savePersonalArticlesStoreToPath(
+        { version: 1, entries: [...store.entries, entry] },
+        path,
+      );
+      return {
+        stdout:
+          language === "zh"
+            ? `已收藏文章「${entry.title}」（${entry.paragraphs.length} 段）。\n`
+            : `Saved article "${entry.title}" (${entry.paragraphs.length} paragraphs).\n`,
+      };
+    }
+    case "list": {
+      const store = await loadPersonalArticlesStoreFromPath(path);
+      const active = store.entries.filter((entry) => !entry.archived);
+      if (active.length === 0) {
+        return {
+          stdout:
+            language === "zh"
+              ? "暂无收藏的文章。用 keyloop article import 文件.md 导入。\n"
+              : "No saved articles. Import one with: keyloop article import FILE.md\n",
+        };
+      }
+      const lines = active.map((entry) => `${entry.id}\t${entry.title}\t${entry.paragraphs.length}p`);
+      return { stdout: `${language === "zh" ? "我的文章" : "My articles"}\n${lines.join("\n")}\n` };
+    }
+  }
 }
 
 async function runCorpus(

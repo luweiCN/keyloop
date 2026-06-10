@@ -224,6 +224,8 @@ function customCorpusFromContext(
     .filter((c) => c.wordCount > 0 || known.has(c.slug));
   return {
     totalWords: entries.filter((entry) => !entry.archived).length,
+    totalSentences: (context.personalSentences ?? []).filter((entry) => !entry.archived).length,
+    totalArticles: (context.personalArticles ?? []).filter((entry) => !entry.archived).length,
     collections,
   };
 }

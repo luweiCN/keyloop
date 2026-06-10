@@ -128,6 +128,8 @@ describe("OpenTUI app session", () => {
     const initial = createOpenTuiInitialState("en", {
       customCorpus: {
         totalWords: 3,
+        totalSentences: 0,
+        totalArticles: 0,
         collections: [{ slug: "web3", name: "Web3 terms", wordCount: 2 }],
       },
     });
@@ -138,11 +140,16 @@ describe("OpenTUI app session", () => {
     }
     expect(submenu.state.route.menu).toBe("custom");
     const items = openTuiMenuItems(submenu.state);
-    expect(items.map((item) => item.id)).toEqual(["custom_my_words", "custom_tag_web3"]);
-    expect(items[1]?.label).toBe("Web3 terms");
-    expect(items[1]?.hint).toBe("2 words");
+    expect(items.map((item) => item.id)).toEqual([
+      "custom_my_words",
+      "custom_my_sentences",
+      "custom_my_articles",
+      "custom_tag_web3",
+    ]);
+    expect(items[3]?.label).toBe("Web3 terms");
+    expect(items[3]?.hint).toBe("2 words");
 
-    const running = reduceOpenTuiAppKey(submenu.state, key("2", "2"), context);
+    const running = reduceOpenTuiAppKey(submenu.state, key("4", "4"), context);
     expect(running.action).toBe("start");
     expect(running.state.route.screen).toBe("running");
     if (running.state.route.screen !== "running") {

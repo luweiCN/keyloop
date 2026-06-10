@@ -17,6 +17,10 @@ import {
   type UserPreferences,
 } from "../../domain/model";
 import {
+  buildPersonalArticleTarget,
+  buildPersonalSentencesTarget,
+} from "../../training/personalCorpus";
+import {
   codeDifficultyLabel,
   codeIndentLabel,
   codeLengthLabel,
@@ -748,6 +752,24 @@ function activateSubmenuItem(
         undefined,
         stateOptions(state),
       );
+    case "custom_my_sentences": {
+      const sentencesContext = buildTargetContextForState(state, context, "standalone");
+      const target = buildPersonalSentencesTarget(sentencesContext.personalSentences ?? [], {
+        ...(sentencesContext.random === undefined ? {} : { random: sentencesContext.random }),
+      });
+      return target.text === ""
+        ? state
+        : runningState(state.language, itemId, target, undefined, stateOptions(state));
+    }
+    case "custom_my_articles": {
+      const articlesContext = buildTargetContextForState(state, context, "standalone");
+      const target = buildPersonalArticleTarget(articlesContext.personalArticles ?? [], {
+        ...(articlesContext.random === undefined ? {} : { random: articlesContext.random }),
+      });
+      return target.text === ""
+        ? state
+        : runningState(state.language, itemId, target, undefined, stateOptions(state));
+    }
     case "custom_my_words": {
       const vocabularyContext = buildTargetContextForState(state, context, "standalone");
       return runningState(
@@ -980,6 +1002,8 @@ function appState(
   if (options.customCorpus !== undefined) {
     state.customCorpus = {
       totalWords: options.customCorpus.totalWords,
+      totalSentences: options.customCorpus.totalSentences,
+      totalArticles: options.customCorpus.totalArticles,
       collections: options.customCorpus.collections.map((c) => ({ ...c })),
     };
   }

@@ -1,4 +1,8 @@
 import type { ContentLibrary } from "../content/library";
+import type {
+  PersonalArticleEntry,
+  PersonalSentenceEntry,
+} from "./personalCorpus";
 import { pickCodeCorpusSnippetsExcludingByDifficulty } from "../content/codeCorpus";
 import { formatCodeSnippetsForPractice } from "../content/codeFormatter";
 import {
@@ -45,6 +49,8 @@ export interface BuildTargetContext {
   everydaySettings?: Partial<EverydayEnglishSettings>;
   wordBreakdownSettings?: UserPreferences["word_breakdown"];
   personalVocabulary?: PersonalVocabularyEntry[];
+  personalSentences?: PersonalSentenceEntry[];
+  personalArticles?: PersonalArticleEntry[];
   personalVocabularyLimit?: number;
   random?: () => number;
   now?: Date;

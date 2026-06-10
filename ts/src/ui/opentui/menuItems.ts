@@ -52,6 +52,8 @@ export type OpenTuiSubmenuId =
   | "code_file_fragments"
   | "code_mix"
   | "custom_my_words"
+  | "custom_my_sentences"
+  | "custom_my_articles"
   | `custom_tag_${string}`;
 
 export type OpenTuiMenuItemId = OpenTuiMainMenuId | OpenTuiSubmenuId;
@@ -101,6 +103,8 @@ export function mainMenuItems(language: Language): OpenTuiMenuItem[] {
 
 export interface CustomCorpusSummary {
   totalWords: number;
+  totalSentences: number;
+  totalArticles: number;
   collections: { slug: string; name: string; wordCount: number }[];
 }
 
@@ -112,6 +116,16 @@ function customSubmenuItems(state: OpenTuiAppState): OpenTuiMenuItem[] {
       id: "custom_my_words",
       label: zh ? "我的单词" : "My words",
       hint: `${summary?.totalWords ?? 0}${zh ? " 词" : " words"}`,
+    },
+    {
+      id: "custom_my_sentences",
+      label: zh ? "我的句子" : "My sentences",
+      hint: `${summary?.totalSentences ?? 0}${zh ? " 句" : " sentences"}`,
+    },
+    {
+      id: "custom_my_articles",
+      label: zh ? "我的文章" : "My articles",
+      hint: `${summary?.totalArticles ?? 0}${zh ? " 篇" : " articles"}`,
     },
   ];
   for (const collection of summary?.collections ?? []) {
@@ -288,6 +302,12 @@ export function menuItemTag(item: { id: string }): string {
   if (item.id === "custom_my_words") {
     return "words";
   }
+  if (item.id === "custom_my_sentences") {
+    return "sent";
+  }
+  if (item.id === "custom_my_articles") {
+    return "text";
+  }
   if (item.id.startsWith("custom_tag_")) {
     return "topic";
   }
@@ -364,6 +384,12 @@ export function menuItemDescription(item: { id: string }): string {
   }
   if (item.id === "custom_my_words") {
     return "练你添加的全部词条，按弱项优先排序。";
+  }
+  if (item.id === "custom_my_sentences") {
+    return "跟打你收藏的句子，keyloop sentence add 添加。";
+  }
+  if (item.id === "custom_my_articles") {
+    return "跟打你收藏的文章，keyloop article import 导入。";
   }
   if (item.id.startsWith("custom_tag_")) {
     return "按主题词库练习，keyloop corpus import 可批量导入。";

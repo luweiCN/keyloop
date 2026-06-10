@@ -18,6 +18,14 @@ import {
   type UserPreferences,
 } from "../domain/model";
 import {
+  emptyPersonalArticlesStore,
+  emptyPersonalSentencesStore,
+  type PersonalArticleEntry,
+  type PersonalArticlesStore,
+  type PersonalSentenceEntry,
+  type PersonalSentencesStore,
+} from "../training/personalCorpus";
+import {
   emptyCollectionsStore,
   type CorpusCollectionMeta,
   type CorpusCollectionsStore,
@@ -89,6 +97,14 @@ export function vocabularyPath(dataDir: string): string {
 
 export function collectionsPath(dataDir: string): string {
   return join(dataDir, "collections.json");
+}
+
+export function personalSentencesPath(dataDir: string): string {
+  return join(dataDir, "sentences.json");
+}
+
+export function personalArticlesPath(dataDir: string): string {
+  return join(dataDir, "articles.json");
 }
 
 export async function appendSessionToPath(
@@ -165,6 +181,91 @@ export async function loadCollectionsStoreFromPath(
   return {
     version: 1,
     collections: list.map((item) => parseCollectionMeta(item, path)),
+  };
+}
+
+export async function savePersonalSentencesStoreToPath(
+  store: PersonalSentencesStore,
+  path: string,
+): Promise<void> {
+  await writePrettyJson(path, store);
+}
+
+export async function loadPersonalSentencesStoreFromPath(
+  path: string,
+): Promise<PersonalSentencesStore> {
+  const value = await readJsonIfExists(path);
+  if (value === null) {
+    return emptyPersonalSentencesStore();
+  }
+  const object = objectStoreValue(value, path);
+  const list = Array.isArray(object.entries) ? object.entries : [];
+  return { version: 1, entries: list.map((item) => parsePersonalSentence(item, path)) };
+}
+
+function parsePersonalSentence(value: unknown, path: string): PersonalSentenceEntry {
+  if (typeof value !== "object" || value === null) {
+    throw new Error(`${basename(path)} contains an invalid sentence entry`);
+  }
+  const object = value as Record<string, unknown>;
+  if (typeof object.text !== "string" || object.text.trim() === "") {
+    throw new Error(`${basename(path)} sentence entry requires text`);
+  }
+  return {
+    id: typeof object.id === "string" ? object.id : "",
+    text: object.text,
+    ...(typeof object.translation_zh === "string" ? { translation_zh: object.translation_zh } : {}),
+    ...(typeof object.collection === "string" ? { collection: object.collection } : {}),
+    ...(typeof object.source_note === "string" ? { source_note: object.source_note } : {}),
+    created_at: typeof object.created_at === "string" ? object.created_at : new Date(0).toISOString(),
+    archived: object.archived === true,
+  };
+}
+
+export async function savePersonalArticlesStoreToPath(
+  store: PersonalArticlesStore,
+  path: string,
+): Promise<void> {
+  await writePrettyJson(path, store);
+}
+
+export async function loadPersonalArticlesStoreFromPath(
+  path: string,
+): Promise<PersonalArticlesStore> {
+  const value = await readJsonIfExists(path);
+  if (value === null) {
+    return emptyPersonalArticlesStore();
+  }
+  const object = objectStoreValue(value, path);
+  const list = Array.isArray(object.entries) ? object.entries : [];
+  return { version: 1, entries: list.map((item) => parsePersonalArticle(item, path)) };
+}
+
+function parsePersonalArticle(value: unknown, path: string): PersonalArticleEntry {
+  if (typeof value !== "object" || value === null) {
+    throw new Error(`${basename(path)} contains an invalid article entry`);
+  }
+  const object = value as Record<string, unknown>;
+  if (typeof object.title !== "string" || object.title.trim() === "") {
+    throw new Error(`${basename(path)} article entry requires a title`);
+  }
+  const paragraphs = Array.isArray(object.paragraphs) ? object.paragraphs : [];
+  return {
+    id: typeof object.id === "string" ? object.id : "",
+    title: object.title,
+    paragraphs: paragraphs.map((p) => {
+      const para = (typeof p === "object" && p !== null ? p : {}) as Record<string, unknown>;
+      return {
+        text: typeof para.text === "string" ? para.text : "",
+        ...(typeof para.translation_zh === "string"
+          ? { translation_zh: para.translation_zh }
+          : {}),
+      };
+    }),
+    ...(typeof object.collection === "string" ? { collection: object.collection } : {}),
+    ...(typeof object.source_note === "string" ? { source_note: object.source_note } : {}),
+    created_at: typeof object.created_at === "string" ? object.created_at : new Date(0).toISOString(),
+    archived: object.archived === true,
   };
 }
 
