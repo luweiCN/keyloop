@@ -1,5 +1,9 @@
 import type { OpenTuiAppState } from "../appModel";
-import { openTuiRouteLines, openTuiRouteTitle } from "../appModel";
+import {
+  liveOptionsAvailableForSource,
+  openTuiRouteLines,
+  openTuiRouteTitle,
+} from "../appModel";
 import type { EverydayEnglishSettings, SpeedUnit } from "../../../domain/model";
 import { speedFromWpm, speedUnitLabel } from "../../../report/stats";
 import { heatScaleColor } from "../../heatScale";
@@ -163,7 +167,7 @@ export function renderPracticeOverview(
 }
 
 export function practiceOptionsAvailable(route: RunningRoute): boolean {
-  return route.target.mode === "code" || route.source_item.startsWith("everyday_");
+  return liveOptionsAvailableForSource(route.source_item);
 }
 
 export interface StatusSegment {

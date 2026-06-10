@@ -26,6 +26,7 @@ import {
   type OpenTuiPracticeOptionsState,
   type OpenTuiSubmenu,
   type OpenTuiRunningLiveState,
+  submenuForStandaloneItem,
 } from "./appModel";
 import { buildPlan } from "../../training/plan";
 import {
@@ -98,7 +99,6 @@ import {
   startRunnerContextWithCodeConfig,
   startRunnerContextWithEverydaySettings,
   startRunnerContextWithRuntimeSettings,
-  submenuForStandaloneItem,
   todayElapsedMsForRun,
   type LessonSelection,
 } from "./runnerSelection";

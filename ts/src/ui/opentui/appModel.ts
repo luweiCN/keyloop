@@ -1961,3 +1961,76 @@ function submenuTitle(menu: OpenTuiSubmenu): string {
       return "Code practice";
   }
 }
+
+export function submenuForStandaloneItem(itemId: OpenTuiMenuItemId): OpenTuiSubmenu | undefined {
+  switch (itemId) {
+    case "foundation_home_row":
+    case "foundation_top_row":
+    case "foundation_bottom_row":
+    case "foundation_number_row":
+    case "foundation_symbols":
+    case "foundation_left_hand":
+    case "foundation_right_hand":
+    case "foundation_index_fingers":
+    case "foundation_middle_fingers":
+    case "foundation_ring_fingers":
+    case "foundation_pinky_fingers":
+    case "foundation_horizontal_rolls":
+    case "foundation_vertical_ladders":
+    case "foundation_diagonal_crossovers":
+    case "foundation_letter_combinations":
+    case "foundation_capitalization":
+    case "foundation_mix":
+      return "foundation";
+    case "everyday_common_500":
+    case "everyday_common_1000":
+    case "everyday_common_5000":
+    case "everyday_words":
+    case "everyday_phrases":
+    case "everyday_sentences":
+    case "everyday_articles":
+    case "everyday_word_decomposition":
+    case "long_word_breakdown":
+    case "everyday_mix":
+      return "everyday";
+    case "operators_brackets_quotes":
+    case "programming_terms":
+    case "naming_styles":
+    case "technical_long_words":
+    case "my_vocabulary":
+    case "programming_basics_mix":
+      return "programming";
+    case "code_blocks":
+    case "code_functions":
+    case "code_file_fragments":
+    case "code_mix":
+      return "code";
+    default:
+      return undefined;
+  }
+}
+
+const everydayLiveOptionSources = new Set([
+  "everyday_words",
+  "everyday_sentences",
+  "everyday_articles",
+  "everyday_word_decomposition",
+]);
+
+/**
+ * Whether a running screen for this source item supports the Ctrl+O live
+ * options popup. Single source for both the key handling (startRunner) and
+ * the on-screen shortcut hints (renderer) so they can never disagree.
+ */
+export function liveOptionsAvailableForSource(sourceItem: string): boolean {
+  return (
+    everydayLiveOptionSources.has(sourceItem) ||
+    submenuForStandaloneItem(sourceItem as OpenTuiMenuItemId) === "code"
+  );
+}
+
+/** Whether Ctrl+R (refresh target) applies to this source item. */
+export function targetRefreshAvailableForSource(sourceItem: string): boolean {
+  const submenu = submenuForStandaloneItem(sourceItem as OpenTuiMenuItemId);
+  return submenu === "foundation" || submenu === "everyday" || submenu === "code";
+}

@@ -1,5 +1,9 @@
 import type { OpenTuiAppState } from "../appModel";
-import { openTuiRouteTitle } from "../appModel";
+import {
+  liveOptionsAvailableForSource,
+  openTuiRouteTitle,
+  targetRefreshAvailableForSource,
+} from "../appModel";
 import { TEXT_BOLD, theme } from "../theme";
 import { divider, keyHintBar, type KeyHint } from "../components";
 import type { OpenTuiRendererKit } from "../kit";
@@ -193,12 +197,10 @@ export function runningHints(route: RunningRoute, zh: boolean): KeyHint[] {
     { key: "Ctrl+P", label: zh ? (paused ? "继续" : "暂停") : paused ? "resume" : "pause" },
     { key: "Ctrl+N", label: zh ? "重打" : "retry" },
   ];
-  const mode = route.target.mode;
-  const source = route.source_item;
-  if (mode === "code" || source.startsWith("everyday_")) {
+  if (liveOptionsAvailableForSource(route.source_item)) {
     hints.push({ key: "Ctrl+O", label: zh ? "选项" : "options" });
   }
-  if (mode === "code" || source.startsWith("foundation") || source.startsWith("everyday_")) {
+  if (targetRefreshAvailableForSource(route.source_item)) {
     hints.push({ key: "Ctrl+R", label: zh ? "重开" : "refresh" });
   }
   hints.push({ key: "Esc", label: zh ? "退出" : "exit" });

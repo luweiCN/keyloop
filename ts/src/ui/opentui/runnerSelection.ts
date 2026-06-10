@@ -9,6 +9,8 @@ import { buildPlan } from "../../training/plan";
 import { refreshModuleMixTarget, type BuildTargetContext } from "../../training/targets";
 import {
   activateOpenTuiMenuItem,
+  liveOptionsAvailableForSource,
+  submenuForStandaloneItem,
   type OpenTuiAppState,
   type OpenTuiMenuItemId,
   type OpenTuiSubmenu,
@@ -142,53 +144,6 @@ export function refreshedStandaloneSelection(
   };
 }
 
-export function submenuForStandaloneItem(itemId: OpenTuiMenuItemId): OpenTuiSubmenu | undefined {
-  switch (itemId) {
-    case "foundation_home_row":
-    case "foundation_top_row":
-    case "foundation_bottom_row":
-    case "foundation_number_row":
-    case "foundation_symbols":
-    case "foundation_left_hand":
-    case "foundation_right_hand":
-    case "foundation_index_fingers":
-    case "foundation_middle_fingers":
-    case "foundation_ring_fingers":
-    case "foundation_pinky_fingers":
-    case "foundation_horizontal_rolls":
-    case "foundation_vertical_ladders":
-    case "foundation_diagonal_crossovers":
-    case "foundation_letter_combinations":
-    case "foundation_capitalization":
-    case "foundation_mix":
-      return "foundation";
-    case "everyday_common_500":
-    case "everyday_common_1000":
-    case "everyday_common_5000":
-    case "everyday_words":
-    case "everyday_phrases":
-    case "everyday_sentences":
-    case "everyday_articles":
-    case "everyday_word_decomposition":
-    case "long_word_breakdown":
-    case "everyday_mix":
-      return "everyday";
-    case "operators_brackets_quotes":
-    case "programming_terms":
-    case "naming_styles":
-    case "technical_long_words":
-    case "my_vocabulary":
-    case "programming_basics_mix":
-      return "programming";
-    case "code_blocks":
-    case "code_functions":
-    case "code_file_fragments":
-    case "code_mix":
-      return "code";
-    default:
-      return undefined;
-  }
-}
 
 export function refreshedTargetContext(
   context: StartRunnerContext,
@@ -303,10 +258,9 @@ export function isLiveEverydayOptionsEnabled(context: StartRunnerContext): boole
   return (
     context.dailyPlan.run_id.length === 0 &&
     context.targetContext !== undefined &&
-    (context.sourceItem === "everyday_words" ||
-      context.sourceItem === "everyday_sentences" ||
-      context.sourceItem === "everyday_articles" ||
-      context.sourceItem === "everyday_word_decomposition")
+    context.sourceItem !== undefined &&
+    submenuForStandaloneItem(context.sourceItem) !== "code" &&
+    liveOptionsAvailableForSource(context.sourceItem)
   );
 }
 
