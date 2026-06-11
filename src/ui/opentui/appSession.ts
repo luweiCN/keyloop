@@ -125,7 +125,11 @@ export function reduceOpenTuiAppKey(
   event: OpenTuiKeyEvent,
   context: OpenTuiAppSessionContext,
 ): OpenTuiAppKeyResult {
-  if (isQuitEvent(event) && !isFocusedCodeFilterSearchInput(state)) {
+  if (
+    isQuitEvent(event) &&
+    !isFocusedCodeFilterSearchInput(state) &&
+    !isLibraryTextInputScreen(state)
+  ) {
     return { state, action: "quit" };
   }
 
@@ -493,6 +497,14 @@ function settingsMenuSelectionState(
 interface PasteCapableKeyInput {
   on?(event: "paste", handler: (event: { bytes?: Uint8Array }) => void): void;
   off?(event: "paste", handler: (event: { bytes?: Uint8Array }) => void): void;
+}
+
+function isLibraryTextInputScreen(state: OpenTuiAppState): boolean {
+  return (
+    state.route.screen === "library_create" ||
+    state.route.screen === "library_input" ||
+    state.route.screen === "library_browse"
+  );
 }
 
 function waitForAppKey(renderer: OpenTuiRenderer): Promise<OpenTuiKeyEvent | undefined> {

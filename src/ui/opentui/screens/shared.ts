@@ -430,3 +430,46 @@ export function diagnosticKeyId(label: string): string {
     .map((char) => char.codePointAt(0)?.toString(16) ?? "0")
     .join("-")}`;
 }
+
+/**
+ * 按词边界折行：英文在空格处断行，整词放不下才硬切；CJK 按显示宽度逐字断。
+ */
+export function wrapWordsToDisplayWidth(text: string, maxWidth: number): string[] {
+  const safeWidth = Math.max(1, Math.trunc(maxWidth));
+  const lines: string[] = [];
+  let line = "";
+  let lineWidth = 0;
+  const flush = (): void => {
+    if (line.length > 0) {
+      lines.push(line);
+      line = "";
+      lineWidth = 0;
+    }
+  };
+  for (const word of text.split(" ")) {
+    const wordWidth = displayWidth(word);
+    const separatorWidth = line.length > 0 ? 1 : 0;
+    if (lineWidth + separatorWidth + wordWidth <= safeWidth) {
+      line += `${line.length > 0 ? " " : ""}${word}`;
+      lineWidth += separatorWidth + wordWidth;
+      continue;
+    }
+    flush();
+    if (wordWidth <= safeWidth) {
+      line = word;
+      lineWidth = wordWidth;
+      continue;
+    }
+    // 单词/无空格长串（如 CJK 段落）超宽：按显示宽度硬切
+    for (const piece of wrapToDisplayWidth(word, safeWidth)) {
+      if (displayWidth(piece) === safeWidth || piece !== word) {
+        lines.push(piece);
+      }
+    }
+    const last = lines.pop() ?? "";
+    line = last;
+    lineWidth = displayWidth(last);
+  }
+  flush();
+  return lines.length === 0 ? [] : lines;
+}

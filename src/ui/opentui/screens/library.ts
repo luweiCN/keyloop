@@ -105,7 +105,7 @@ export function renderLibraryInputScreen(
     const isLastLogical = index === logicalLines.length - 1;
     // 真实换行处标 ⏎，与练习屏一致；末行显示光标
     const decorated = `${logicalLines[index] ?? ""}${isLastLogical ? "▏" : " ⏎"}`;
-    const wrapped = wrapToDisplayWidth(decorated, wrapColumns);
+    const wrapped = wrapWordsToDisplayWidth(decorated, wrapColumns);
     visualLines.push(...(wrapped.length === 0 ? [""] : wrapped));
   }
   const visible = visualLines.slice(-INPUT_VISIBLE_LINES);
@@ -307,7 +307,7 @@ export function renderLibraryPreviewScreen(
 
 import { listRow } from "../components";
 import { APP_FRAME_WIDTH } from "./appFrame";
-import { truncateToDisplayWidth, wrapToDisplayWidth } from "./shared";
+import { truncateToDisplayWidth, wrapWordsToDisplayWidth } from "./shared";
 import { libraryActionItems, libraryBrowseMatches } from "../libraryReducers";
 
 function libraryListRow(
@@ -564,8 +564,8 @@ export function renderLibraryBrowseScreen(
     ),
     helpBar(
       zh
-        ? "↑↓ 选择 · Enter 编辑 · d 删除（搜索为空时）· Esc 返回"
-        : "↑↓ select · Enter edit · d delete (when query empty) · Esc back",
+        ? "输入搜索 · ↑↓ 选择 · Enter 编辑 · Ctrl+X 删除 · Ctrl+N 新增 · Esc 返回"
+        : "type to search · ↑↓ select · Enter edit · Ctrl+X delete · Ctrl+N add · Esc back",
       kit,
       "keyloop-library-browse-help",
     ),

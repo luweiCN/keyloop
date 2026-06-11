@@ -465,15 +465,7 @@ describe("library browse screen", () => {
     expect(onAbandon.state.route).toMatchObject({ text: "abandon: v. 放弃", editing_id: "w1" });
   });
 
-  test("d with empty query deletes the selected entry and persists", () => {
-    const result = reduceLibraryBrowseKey(browseState(), keyEvent("d", "d"));
-    expect(result.persist?.kind).toBe("save");
-    expect(result.state.customLibraries?.[0]?.words.map((word) => word.id)).toEqual(["w2", "w3"]);
-    const filtered = reduceLibraryBrowseKey(browseState("aba"), keyEvent("d", "d"));
-    expect(filtered.persist).toBeUndefined();
-    if (filtered.state.route.screen !== "library_browse") throw new Error("expected browse");
-    expect(filtered.state.route.query).toBe("abad");
-  });
+
 
   test("editing an existing word replaces it on save", () => {
     const edit = reduceLibraryBrowseKey(browseState("vivid"), keyEvent("enter", "\r"));
@@ -638,6 +630,7 @@ function fakeRenderKit(): Parameters<typeof renderOpenTuiAppOnce>[1] & {
 }
 
 import { inputTextFromEvent } from "../src/ui/opentui/libraryReducers";
+import { wrapWordsToDisplayWidth } from "../src/ui/opentui/screens/shared";
 
 describe("IME and paste text input", () => {
   test("inputTextFromEvent accepts multi-character IME sequences", () => {
@@ -682,7 +675,7 @@ describe("IME and paste text input", () => {
     expect(state.route.text).toBe("abandon\nmachine learning: 机器学习\n好");
   });
 
-  test("browse query accepts typing but d still deletes when query empty", () => {
+  test("browse query accepts IME chunks", () => {
     const base = stateAt(
       { screen: "library_browse", slug: "web", entry_type: "words", query: "", index: 0 },
       {
@@ -694,10 +687,112 @@ describe("IME and paste text input", () => {
         ],
       },
     );
-    const deleted = reduceLibraryBrowseKey(base, keyEvent("d", "d"));
-    expect(deleted.persist?.kind).toBe("save");
     const typed = reduceLibraryBrowseKey(base, keyEvent("机器", "机器"));
     if (typed.state.route.screen !== "library_browse") throw new Error("expected browse");
     expect(typed.state.route.query).toBe("机器");
+  });
+});
+
+describe("library input screens swallow the global quit key", () => {
+  test("q types into name, body, and query instead of quitting", () => {
+    const create = reduceOpenTuiAppKey(
+      stateAt({ screen: "library_create", name: "" }),
+      keyEvent("q", "q"),
+      fakeContext(),
+    );
+    expect(create.action).toBe("continue");
+    expect(create.state.route).toEqual({ screen: "library_create", name: "q" });
+
+    const input = reduceOpenTuiAppKey(
+      stateAt(
+        { screen: "library_input", slug: "web", kind: "words", text: "" },
+        { customLibraries: [emptyLibrary("web")] },
+      ),
+      keyEvent("q", "q"),
+      fakeContext(),
+    );
+    expect(input.action).toBe("continue");
+    if (input.state.route.screen !== "library_input") throw new Error("expected input");
+    expect(input.state.route.text).toBe("q");
+
+    const browse = reduceOpenTuiAppKey(
+      stateAt(
+        { screen: "library_browse", slug: "web", entry_type: "words", query: "", index: 0 },
+        { customLibraries: [emptyLibrary("web")] },
+      ),
+      keyEvent("q", "q"),
+      fakeContext(),
+    );
+    expect(browse.action).toBe("continue");
+    if (browse.state.route.screen !== "library_browse") throw new Error("expected browse");
+    expect(browse.state.route.query).toBe("q");
+  });
+});
+
+describe("browse entry operations with active query", () => {
+  function browseStateWithWords(query: string): OpenTuiAppState {
+    return stateAt(
+      { screen: "library_browse", slug: "web", entry_type: "words", query, index: 0 },
+      {
+        customLibraries: [
+          {
+            ...emptyLibrary("web"),
+            words: [
+              { id: "w1", text: "abandon", kind: "word", meaning_zh: "v. 放弃", source: "dict" },
+              { id: "w2", text: "vivid", kind: "word", source: "dict" },
+            ],
+          },
+        ],
+      },
+    );
+  }
+
+  test("ctrl+x deletes the selected entry even while searching", () => {
+    const result = reduceLibraryBrowseKey(browseStateWithWords("aban"), {
+      name: "x",
+      sequence: "\x18",
+      ctrl: true,
+      meta: false,
+    });
+    expect(result.persist?.kind).toBe("save");
+    expect(result.state.customLibraries?.[0]?.words.map((word) => word.id)).toEqual(["w2"]);
+  });
+
+  test("ctrl+n jumps to the matching add screen", () => {
+    const result = reduceLibraryBrowseKey(browseStateWithWords("aban"), {
+      name: "n",
+      sequence: "\x0e",
+      ctrl: true,
+      meta: false,
+    });
+    expect(result.state.route).toEqual({
+      screen: "library_input",
+      slug: "web",
+      kind: "words",
+      text: "",
+    });
+  });
+
+  test("plain d is just a search character now", () => {
+    const result = reduceLibraryBrowseKey(browseStateWithWords(""), keyEvent("d", "d"));
+    expect(result.persist).toBeUndefined();
+    if (result.state.route.screen !== "library_browse") throw new Error("expected browse");
+    expect(result.state.route.query).toBe("d");
+  });
+});
+
+describe("word-boundary wrapping", () => {
+  test("wraps at spaces instead of cutting words", () => {
+    const wrapped = wrapWordsToDisplayWidth("the quick brown fox jumps over", 12);
+    expect(wrapped).toEqual(["the quick", "brown fox", "jumps over"]);
+  });
+
+  test("hard-splits a single overlong word and handles cjk width", () => {
+    expect(wrapWordsToDisplayWidth("internationalization", 8)).toEqual([
+      "internat",
+      "ionaliza",
+      "tion",
+    ]);
+    expect(wrapWordsToDisplayWidth("中文段落测试", 8)).toEqual(["中文段落", "测试"]);
   });
 });

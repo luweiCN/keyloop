@@ -332,7 +332,7 @@ export function libraryActionItems(state: OpenTuiAppState, slug: string): Librar
     { id: "add_words", label: zh ? "添加单词 / 词组" : "Add words", hint: zh ? "每行一条，可带释义" : "one per line" },
     { id: "add_sentences", label: zh ? "添加句子" : "Add sentences", hint: zh ? "单次粘贴，英文+翻译交替" : "single paste" },
     { id: "add_article", label: zh ? "添加文章" : "Add article", hint: zh ? "标题 + 整篇粘贴" : "title + paste" },
-    { id: "browse_words", label: zh ? "浏览单词与词组" : "Browse words", hint: zh ? `${wordCount} 条 · 回车编辑 · d 删除` : `${wordCount} entries` },
+    { id: "browse_words", label: zh ? "浏览单词与词组" : "Browse words", hint: zh ? `${wordCount} 条 · 搜索 · 编辑 · 删除` : `${wordCount} entries` },
     { id: "browse_sentences", label: zh ? "浏览句子" : "Browse sentences", hint: zh ? `${sentenceCount} 句` : `${sentenceCount} sentences` },
     { id: "browse_articles", label: zh ? "浏览文章" : "Browse articles", hint: zh ? `${articleCount} 篇` : `${articleCount} articles` },
     { id: "delete_library", label: zh ? "删除语料库" : "Delete library", hint: zh ? "整库删除，需确认" : "confirm required" },
@@ -556,18 +556,28 @@ export function reduceLibraryBrowseKey(
     }
     return { state: withRoute(state, editPrefillRoute(route.slug, match)) };
   }
+  if (event.ctrl && !event.meta && (event.name.toLowerCase() === "x" || event.sequence === "\x18")) {
+    const match = matches[index];
+    if (match === undefined) {
+      return { state };
+    }
+    return deleteBrowseEntry(state, route, match, index);
+  }
+  if (event.ctrl && !event.meta && (event.name.toLowerCase() === "n" || event.sequence === "\x0e")) {
+    return {
+      state: withRoute(state, {
+        screen: "library_input",
+        slug: route.slug,
+        kind: route.entry_type === "articles" ? "article" : route.entry_type,
+        text: "",
+      }),
+    };
+  }
   if (isBackspaceEvent(event)) {
     return { state: withRoute(state, { ...route, query: route.query.slice(0, -1), index: 0 }) };
   }
   const text = inputTextFromEvent(event);
   if (text !== null) {
-    if (text === "d" && event.name !== "paste" && route.query === "") {
-      const match = matches[index];
-      if (match === undefined) {
-        return { state };
-      }
-      return deleteBrowseEntry(state, route, match, index);
-    }
     return { state: withRoute(state, { ...route, query: singleLine(route.query + text), index: 0 }) };
   }
   return { state };
