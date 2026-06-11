@@ -378,9 +378,9 @@ export function libraryActionItems(state: OpenTuiAppState, slug: string): Librar
   const sentenceCount = library?.sentences.length ?? 0;
   const articleCount = library?.articles.length ?? 0;
   return [
-    { id: "add_words", label: zh ? "添加单词 / 词组" : "Add words", hint: zh ? "每行一条，可带释义" : "one per line" },
-    { id: "add_sentences", label: zh ? "添加句子" : "Add sentences", hint: zh ? "单次粘贴，英文+翻译交替" : "single paste" },
-    { id: "add_article", label: zh ? "添加文章" : "Add article", hint: zh ? "标题 + 整篇粘贴" : "title + paste" },
+    { id: "add_words", label: zh ? "添加单词 / 词组" : "Add words", hint: zh ? "自动查词典释义" : "auto dictionary lookup" },
+    { id: "add_sentences", label: zh ? "添加句子" : "Add sentences", hint: zh ? "支持整段粘贴" : "paste-friendly" },
+    { id: "add_article", label: zh ? "添加文章" : "Add article", hint: zh ? "整篇粘贴，标题自动生成" : "whole-article paste" },
     {
       id: "browse_all",
       label: zh ? "浏览内容" : "Browse entries",
@@ -583,6 +583,18 @@ export function reduceLibraryBrowseKey(
   }
   const matches = libraryBrowseMatches(state);
   const index = Math.min(Math.max(route.index, 0), Math.max(matches.length - 1, 0));
+  if (route.confirm_delete_id !== undefined) {
+    const { confirm_delete_id: pendingId, ...rest } = route;
+    if (isEnterEvent(event)) {
+      const match = matches.find((entry) => entry.id === pendingId);
+      if (match === undefined) {
+        return { state: withRoute(state, rest) };
+      }
+      return deleteBrowseEntry({ ...state, route: rest } as OpenTuiAppState & { route: typeof rest }, rest, match, index);
+    }
+    // 其他任意键取消确认
+    return { state: withRoute(state, rest) };
+  }
   if (isArrowDownEvent(event)) {
     return {
       state: withRoute(state, {
@@ -620,7 +632,7 @@ export function reduceLibraryBrowseKey(
     if (match === undefined) {
       return { state };
     }
-    return deleteBrowseEntry(state, route, match, index);
+    return { state: withRoute(state, { ...route, confirm_delete_id: match.id }) };
   }
   if (isBackspaceEvent(event)) {
     return { state: withRoute(state, { ...route, query: route.query.slice(0, -1), index: 0 }) };
@@ -755,18 +767,20 @@ export function reduceLibraryDetailKey(
         }),
       };
     }
-    if (DETAIL_DELETE_KEYS.has(key)) {
-      const browse = backToBrowse();
-      if (browse.state.route.screen !== "library_browse") {
-        return browse;
+    if (route.confirm_delete === true) {
+      if (isEnterEvent(event)) {
+        const browse = backToBrowse();
+        if (browse.state.route.screen !== "library_browse") {
+          return browse;
+        }
+        return deleteBrowseEntry(browse.state, browse.state.route, match, route.return_index);
       }
-      const deleted = deleteBrowseEntry(
-        browse.state,
-        browse.state.route,
-        match,
-        route.return_index,
-      );
-      return deleted;
+      // 其他任意键取消确认
+      const { confirm_delete: _cancel, ...rest } = route;
+      return { state: withRoute(state, rest) };
+    }
+    if (DETAIL_DELETE_KEYS.has(key)) {
+      return { state: withRoute(state, { ...route, confirm_delete: true }) };
     }
     if (isEnterEvent(event)) {
       return backToBrowse();

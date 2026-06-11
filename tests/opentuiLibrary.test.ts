@@ -718,13 +718,14 @@ describe("browse entry operations with active query", () => {
     );
   }
 
-  test("ctrl+x deletes the selected entry even while searching", () => {
-    const result = reduceLibraryBrowseKey(browseStateWithWords("aban"), {
+  test("ctrl+x asks then deletes the selected entry even while searching", () => {
+    const asked = reduceLibraryBrowseKey(browseStateWithWords("aban"), {
       name: "x",
       sequence: "\x18",
       ctrl: true,
       meta: false,
     });
+    const result = reduceLibraryBrowseKey(asked.state, keyEvent("enter", "\r"));
     expect(result.persist?.kind).toBe("save");
     expect(result.state.customLibraries?.[0]?.words.map((word) => word.id)).toEqual(["w2"]);
   });
@@ -828,9 +829,10 @@ describe("browse entry detail popup", () => {
     });
   });
 
-  test("D deletes the entry from the view popup and returns to picker", () => {
+  test("D asks then deletes the entry from the view popup and returns to picker", () => {
     const detail = reduceLibraryBrowseKey(browseBase(), keyEvent("enter", "\r")).state;
-    const result = reduceLibraryDetailKey(detail, keyEvent("d", "d"), fakeContext());
+    const asked = reduceLibraryDetailKey(detail, keyEvent("d", "d"), fakeContext());
+    const result = reduceLibraryDetailKey(asked.state, keyEvent("enter", "\r"), fakeContext());
     expect(result.persist?.kind).toBe("save");
     expect(result.state.customLibraries?.[0]?.words.map((word) => word.id)).toEqual(["w2"]);
     expect(result.state.route.screen).toBe("library_browse");
@@ -882,5 +884,73 @@ describe("detail view wheel scrolling", () => {
     );
     if (up.state.route.screen !== "library_detail") throw new Error("expected detail");
     expect(up.state.route.scroll).toBe(0);
+  });
+});
+
+describe("delete confirmation", () => {
+  function detailState(): OpenTuiAppState {
+    return stateAt(
+      {
+        screen: "library_detail",
+        slug: "web",
+        entry_id: "w1",
+        return_query: "",
+        return_index: 0,
+        scroll: 0,
+      },
+      {
+        customLibraries: [
+          {
+            ...emptyLibrary("web"),
+            words: [{ id: "w1", text: "abandon", kind: "word", source: "dict" }],
+          },
+        ],
+      },
+    );
+  }
+
+  test("D in detail view asks for confirmation first, enter confirms", () => {
+    const asked = reduceLibraryDetailKey(detailState(), keyEvent("d", "d"), fakeContext());
+    expect(asked.persist).toBeUndefined();
+    if (asked.state.route.screen !== "library_detail") throw new Error("expected detail");
+    expect(asked.state.route.confirm_delete).toBe(true);
+    const confirmed = reduceLibraryDetailKey(asked.state, keyEvent("enter", "\r"), fakeContext());
+    expect(confirmed.persist?.kind).toBe("save");
+    expect(confirmed.state.customLibraries?.[0]?.words.length).toBe(0);
+    expect(confirmed.state.route.screen).toBe("library_browse");
+  });
+
+  test("any other key cancels the detail delete confirmation", () => {
+    const asked = reduceLibraryDetailKey(detailState(), keyEvent("d", "d"), fakeContext());
+    const cancelled = reduceLibraryDetailKey(asked.state, keyEvent("x", "x"), fakeContext());
+    if (cancelled.state.route.screen !== "library_detail") throw new Error("expected detail");
+    expect(cancelled.state.route.confirm_delete).toBeUndefined();
+    expect(cancelled.persist).toBeUndefined();
+  });
+
+  test("ctrl+x in browse asks for confirmation, enter confirms", () => {
+    const base = stateAt(
+      { screen: "library_browse", slug: "web", query: "", index: 0 },
+      {
+        customLibraries: [
+          {
+            ...emptyLibrary("web"),
+            words: [{ id: "w1", text: "abandon", kind: "word", source: "dict" }],
+          },
+        ],
+      },
+    );
+    const ctrlX = { name: "x", sequence: "\x18", ctrl: true, meta: false };
+    const asked = reduceLibraryBrowseKey(base, ctrlX);
+    expect(asked.persist).toBeUndefined();
+    if (asked.state.route.screen !== "library_browse") throw new Error("expected browse");
+    expect(asked.state.route.confirm_delete_id).toBe("w1");
+    const confirmed = reduceLibraryBrowseKey(asked.state, keyEvent("enter", "\r"));
+    expect(confirmed.persist?.kind).toBe("save");
+    expect(confirmed.state.customLibraries?.[0]?.words.length).toBe(0);
+    const cancelled = reduceLibraryBrowseKey(asked.state, keyEvent("a", "a"));
+    if (cancelled.state.route.screen !== "library_browse") throw new Error("expected browse");
+    expect(cancelled.state.route.confirm_delete_id).toBeUndefined();
+    expect(cancelled.state.route.query).toBe("");
   });
 });

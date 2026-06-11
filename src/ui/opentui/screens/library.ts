@@ -73,6 +73,106 @@ function libraryInputPaneHeight(): number {
   return Math.max(8, terminalRows - 10); // 扣除标题、边框、帮助栏等
 }
 
+const INPUT_EXAMPLES = {
+  words: {
+    zh: [
+      "▏在此粘贴或输入，每行一条，例如：",
+      "",
+      "  abandon",
+      "  machine learning: 机器学习",
+      "  Kubernetes: 容器编排平台",
+      "",
+      "不带释义的词会自动查词典；",
+      "专有名词可用「词: 释义」手动给出释义。",
+    ],
+    en: [
+      "▏paste or type, one per line, e.g.:",
+      "",
+      "  abandon",
+      "  machine learning: 机器学习",
+      "",
+      "words without a meaning are looked up automatically;",
+      "use \"word: meaning\" for proper nouns.",
+    ],
+  },
+  sentences: {
+    zh: [
+      "▏在此粘贴或输入，例如：",
+      "",
+      "  The weather is nice today.",
+      "  今天天气很好。",
+      "",
+      "  See you tomorrow.",
+      "",
+      "每块第 1 行英文、第 2 行中文（可省略），",
+      "条目之间用空行分隔。",
+    ],
+    en: [
+      "▏paste or type, e.g.:",
+      "",
+      "  The weather is nice today.",
+      "  今天天气很好。",
+      "",
+      "  See you tomorrow.",
+      "",
+      "first line English, second line translation (optional),",
+      "blank line between entries.",
+    ],
+  },
+  article: {
+    zh: [
+      "▏在此粘贴整篇文章，例如：",
+      "",
+      "  First paragraph in English...",
+      "  Second paragraph in English...",
+      "",
+      "  第一段的中文翻译……",
+      "  第二段的中文翻译……",
+      "",
+      "整篇英文在前（每段一行、段间不空行），",
+      "空一行后接整篇中文翻译（按行对应段落，可省略）。",
+    ],
+    en: [
+      "▏paste the whole article, e.g.:",
+      "",
+      "  First paragraph in English...",
+      "  Second paragraph in English...",
+      "",
+      "  第一段的中文翻译……",
+      "",
+      "English paragraphs first (one per line, no blank lines),",
+      "then a blank line, then the translations.",
+    ],
+  },
+} as const;
+
+function renderInputPlaceholder(
+  kind: "words" | "sentences" | "article",
+  zh: boolean,
+  kit: OpenTuiRendererKit,
+): unknown {
+  const lines = INPUT_EXAMPLES[kind][zh ? "zh" : "en"];
+  return kit.Box(
+    {
+      id: "keyloop-library-input-placeholder",
+      flexDirection: "column",
+      flexGrow: 1,
+      width: "100%",
+      overflow: "hidden",
+      paddingX: 1,
+    },
+    ...lines.map((line, index) =>
+      kit.Text({
+        id: `keyloop-library-input-placeholder-${index}`,
+        content: line,
+        fg: theme.muted,
+        height: 1,
+        wrapMode: "none",
+      }),
+    ),
+  );
+}
+
 export function renderLibraryInputScreen(
   state: OpenTuiAppState,
   kit: OpenTuiRendererKit,
@@ -89,30 +189,14 @@ export function renderLibraryInputScreen(
     sentences: zh ? "添加句子" : "Add sentences",
     article: zh ? "添加文章" : "Add article",
   } as const;
-  const helps = {
-    words: zh
-      ? "每行一条：word 或 word: 释义 · Ctrl+D 提交 · Esc 取消"
-      : "one per line: word or word: meaning · Ctrl+D submit · Esc cancel",
-    sentences: zh
-      ? "每块：第 1 行英文，第 2 行中文（可省），空行分隔 · Ctrl+D 提交 · Esc 取消"
-      : "per block: English line, then translation (optional), blank line between · Ctrl+D submit",
-    article: zh
-      ? "整篇英文（每段一行）+ 空行 + 整篇中文 · Ctrl+D 提交 · Esc 取消"
-      : "English paragraphs (one per line), blank line, then translations · Ctrl+D submit",
-  } as const;
+  const help = zh ? "Ctrl+D 提交 · Esc 取消" : "Ctrl+D submit · Esc cancel";
 
   const paneWidth = libraryInputPaneWidth();
   const paneHeight = libraryInputPaneHeight();
   const cursor = Math.min(route.cursor ?? route.text.length, route.text.length);
   const body =
     route.text === ""
-      ? kit.Text({
-          id: "keyloop-library-input-placeholder",
-          content: zh ? "▏在此粘贴或输入内容…" : "▏paste or type content here…",
-          fg: theme.muted,
-          height: 1,
-          wrapMode: "none",
-        })
+      ? renderInputPlaceholder(route.kind, zh, kit)
       : renderTextPane(
           {
             id: "keyloop-library-input-pane",
@@ -149,7 +233,7 @@ export function renderLibraryInputScreen(
       },
       body,
     ),
-    helpBar(helps[route.kind], kit, "keyloop-library-input-help"),
+    helpBar(help, kit, "keyloop-library-input-help"),
   );
 }
 
@@ -541,9 +625,13 @@ export function renderLibraryBrowseScreen(
       ...rows,
     ),
     helpBar(
-      zh
-        ? "输入搜索 · ↑↓ 选择 · Enter 查看详情 · Ctrl+X 快捷删除 · Esc 返回"
-        : "type to search · ↑↓ select · Enter detail · Ctrl+X delete · Esc back",
+      route.confirm_delete_id !== undefined
+        ? zh
+          ? "⚠ 确认删除选中条目？Enter 删除 · 任意键取消"
+          : "⚠ Delete selected entry? Enter to delete · any key cancels"
+        : zh
+          ? "输入搜索 · ↑↓ 选择 · Enter 查看详情 · Ctrl+X 删除 · Esc 返回"
+          : "type to search · ↑↓ select · Enter detail · Ctrl+X delete · Esc back",
       kit,
       "keyloop-library-browse-help",
     ),
@@ -801,19 +889,28 @@ export function renderLibraryDetailScreen(
         id: "keyloop-library-detail-popup",
         border: true,
         borderStyle: "rounded",
-        borderColor: editing === undefined ? theme.info : theme.accent,
+        borderColor:
+          route.confirm_delete === true
+            ? theme.danger
+            : editing === undefined
+              ? theme.info
+              : theme.accent,
         width: size.width,
         height: size.height,
         flexShrink: 0,
         title: editing === undefined ? ` ${typeLabel} ` : zh ? ` 编辑${typeLabel} ` : ` Edit ${typeLabel} `,
         bottomTitle:
-          editing === undefined
+          route.confirm_delete === true
             ? zh
-              ? " ↑↓ 滚动 · E 编辑 · D 删除 · Esc 关闭 "
-              : " arrows scroll · E edit · D delete · Esc close "
-            : zh
-              ? " Ctrl+D 保存 · ←→↑↓ 移动光标 · Esc 取消 "
-              : " Ctrl+D save · arrows move cursor · Esc cancel ",
+              ? " 确认删除该条目？Enter 删除 · 任意键取消 "
+              : " Delete this entry? Enter to delete · any key cancels "
+            : editing === undefined
+              ? zh
+                ? " ↑↓ 滚动 · E 编辑 · D 删除 · Esc 关闭 "
+                : " arrows scroll · E edit · D delete · Esc close "
+              : zh
+                ? " Ctrl+D 保存 · ←→↑↓ 移动光标 · Esc 取消 "
+                : " Ctrl+D save · arrows move cursor · Esc cancel ",
         bottomTitleAlignment: "right",
         overflow: "hidden",
         flexDirection: "column",
