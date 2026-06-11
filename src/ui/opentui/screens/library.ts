@@ -636,7 +636,6 @@ export function renderLibraryBrowseScreen(
   if (route.confirm_delete_id === undefined) {
     return browseScreen;
   }
-  const pending = matches.find((entry) => entry.id === route.confirm_delete_id);
   return kit.Box(
     {
       id: "keyloop-library-browse-with-confirm",
@@ -648,7 +647,7 @@ export function renderLibraryBrowseScreen(
       overflow: "hidden",
     },
     browseScreen,
-    entryDeleteOverlay(pending, zh, kit),
+    entryDeleteOverlay(zh, kit),
   );
 }
 
@@ -775,42 +774,23 @@ export function renderLibraryDeleteConfirmScreen(
   );
 }
 
-function entryDeleteOverlay(
-  match: LibraryBrowseEntry | undefined,
-  zh: boolean,
-  kit: OpenTuiRendererKit,
-): unknown {
-  const summary =
-    match === undefined
-      ? ""
-      : match.entry_type === "articles"
-        ? match.entry.title
-        : match.entry.text;
+function entryDeleteOverlay(zh: boolean, kit: OpenTuiRendererKit): unknown {
   return renderCenteredModalOverlay(
     "keyloop-library-entry-delete-overlay",
-    "64%",
-    "40%",
+    "50%",
+    "30%",
     renderModalPopup(
       "keyloop-library-entry-delete",
       zh ? "删除确认" : "Delete entry",
-      zh ? "Enter 确认删除 · 其他键取消" : "Enter to delete · any key cancels",
+      zh ? "Enter 确认 · 其他键取消" : "Enter to confirm · any key cancels",
       "bad",
       kit,
       {
         popupChildren: [
           kit.Text({
             id: "keyloop-library-entry-delete-message",
-            content: zh
-              ? `删除「${truncateToDisplayWidth(summary, 40)}」？`
-              : `Delete "${truncateToDisplayWidth(summary, 40)}"?`,
+            content: zh ? "确定删除？该操作不可恢复。" : "Delete? This cannot be undone.",
             fg: theme.foreground,
-            height: 1,
-            wrapMode: "none",
-          }),
-          kit.Text({
-            id: "keyloop-library-entry-delete-note",
-            content: zh ? "该操作不可恢复。" : "This cannot be undone.",
-            fg: theme.muted,
             height: 1,
             wrapMode: "none",
           }),
@@ -983,7 +963,7 @@ export function renderLibraryDetailScreen(
       overflow: "hidden",
     },
     popupScreen,
-    entryDeleteOverlay(match, zh, kit),
+    entryDeleteOverlay(zh, kit),
   );
 }
 
