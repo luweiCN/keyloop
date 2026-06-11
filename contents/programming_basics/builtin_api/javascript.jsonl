@@ -1,0 +1,86 @@
+{"text":"const names = users.map((user) => user.name);","topic":"array","api":"Array.map","note_zh":"数组映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const drafts = posts.filter((post) => !post.published);","topic":"array","api":"Array.filter","note_zh":"数组过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const total = prices.reduce((sum, p) => sum + p, 0);","topic":"array","api":"Array.reduce","note_zh":"数组求和","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const admin = members.find((m) => m.role === \"admin\");","topic":"array","api":"Array.find","note_zh":"查找元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const at = list.findIndex((row) => row.id === id);","topic":"array","api":"Array.findIndex","note_zh":"查找下标","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const dirty = fields.some((field) => field.changed);","topic":"array","api":"Array.some","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const valid = inputs.every((input) => input.ok);","topic":"array","api":"Array.every","note_zh":"全量判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const tags = posts.flatMap((post) => post.tags);","topic":"array","api":"Array.flatMap","note_zh":"映射拍平","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (allowed.includes(origin)) {","topic":"array","api":"Array.includes","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rows.sort((a, b) => b.score - a.score);","topic":"array","api":"Array.sort","note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const line = cells.join(\" | \");","topic":"array","api":"Array.join","note_zh":"拼接为行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (Array.isArray(payload)) {","topic":"array","api":"Array.isArray","note_zh":"数组判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const segments = pathname.split(\"/\");","topic":"string","api":"String.split","note_zh":"路径切分","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const slug = title.replace(/\\W+/g, \"-\");","topic":"string","api":"String.replace","note_zh":"正则替换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const keyword = query.trim();","topic":"string","api":"String.trim","note_zh":"去除空白","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (line.startsWith(\"//\")) {","topic":"string","api":"String.startsWith","note_zh":"注释判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (name.endsWith(\".json\")) {","topic":"string","api":"String.endsWith","note_zh":"后缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (ua.includes(\"Mobile\")) {","topic":"string","api":"String.includes","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const cell = label.padEnd(12, \" \");","topic":"string","api":"String.padEnd","note_zh":"尾部补齐","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const rule = \"-\".repeat(40);","topic":"string","api":"String.repeat","note_zh":"重复字符","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const code = currency.toUpperCase();","topic":"string","api":"String.toUpperCase","note_zh":"转大写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const fields = Object.keys(schema);","topic":"object","api":"Object.keys","note_zh":"取对象键","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const totals = Object.values(byMonth);","topic":"object","api":"Object.values","note_zh":"取对象值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"for (const [name, handler] of Object.entries(routes)) {","topic":"object","api":"Object.entries","note_zh":"键值遍历","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const config = Object.assign({}, base, override);","topic":"object","api":"Object.assign","note_zh":"对象合并","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const query = Object.fromEntries(params);","topic":"object","api":"Object.fromEntries","note_zh":"键值对转对象","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const STATUS = Object.freeze({ open: 1, closed: 2 });","topic":"object","api":"Object.freeze","note_zh":"冻结枚举","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const isEmpty = Object.keys(diff).length === 0;","topic":"object","api":"Object.keys","note_zh":"空对象判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const sorted = Object.entries(stats).sort();","topic":"object","api":"Object.entries","note_zh":"条目排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const limit = parseInt(input, 10) || 20;","topic":"number_math","api":"parseInt","note_zh":"解析带默认","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const ratio = parseFloat(style.opacity);","topic":"number_math","api":"parseFloat","note_zh":"解析浮点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (Number.isNaN(parsed)) {","topic":"number_math","api":"Number.isNaN","note_zh":"NaN 判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const label = (bytes / 1024).toFixed(1);","topic":"number_math","api":"Number.toFixed","note_zh":"保留一位小数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const width = Math.max(minWidth, measured);","topic":"number_math","api":"Math.max","note_zh":"下限约束","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const next = Math.min(page + 1, lastPage);","topic":"number_math","api":"Math.min","note_zh":"上限约束","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const pages = Math.ceil(total / pageSize);","topic":"number_math","api":"Math.ceil","note_zh":"向上取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const delta = Math.abs(current - previous);","topic":"number_math","api":"Math.abs","note_zh":"绝对差值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const settings = JSON.parse(stored);","topic":"json_data","api":"JSON.parse","note_zh":"解析 JSON","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const manifest = JSON.parse(await readFile(path, \"utf8\"));","topic":"json_data","api":"JSON.parse","note_zh":"读文件解析","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const payload = JSON.stringify({ id, action });","topic":"json_data","api":"JSON.stringify","note_zh":"序列化对象","source_id":"keyloop:programming-basics:seeds"}
+{"text":"localStorage.setItem(\"cart\", JSON.stringify(cart));","topic":"json_data","api":"JSON.stringify","note_zh":"序列化存储","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const snapshot = structuredClone(board);","topic":"json_data","api":"structuredClone","note_zh":"深拷贝","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const search = new URLSearchParams(location.search);","topic":"json_data","api":"URLSearchParams","note_zh":"解析查询串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const q = encodeURIComponent(term);","topic":"json_data","api":"encodeURIComponent","note_zh":"URL 编码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const raw = decodeURIComponent(slug);","topic":"json_data","api":"decodeURIComponent","note_zh":"URL 解码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const [user, prefs] = await Promise.all([getUser(), getPrefs()]);","topic":"promise","api":"Promise.all","note_zh":"并发解构","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const winner = await Promise.race([fetchData(), timeout(5000)]);","topic":"promise","api":"Promise.race","note_zh":"超时竞速","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const outcomes = await Promise.allSettled(uploads);","topic":"promise","api":"Promise.allSettled","note_zh":"全部落定","source_id":"keyloop:programming-basics:seeds"}
+{"text":"return cached ? Promise.resolve(cached) : load();","topic":"promise","api":"Promise.resolve","note_zh":"缓存短路","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fetchUser(id).then((user) => setProfile(user));","topic":"promise","api":"Promise.then","note_zh":"链式处理","source_id":"keyloop:programming-basics:seeds"}
+{"text":"submit(form).catch((err) => toast(err.message));","topic":"promise","api":"Promise.catch","note_zh":"捕获提示","source_id":"keyloop:programming-basics:seeds"}
+{"text":"mutate().finally(() => setLoading(false));","topic":"promise","api":"Promise.finally","note_zh":"收尾复位","source_id":"keyloop:programming-basics:seeds"}
+{"text":"await Promise.all(ids.map((id) => remove(id)));","topic":"promise","api":"Promise.all","note_zh":"批量并发","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const handler = listeners.get(eventName);","topic":"map_set","api":"Map.get","note_zh":"取监听器","source_id":"keyloop:programming-basics:seeds"}
+{"text":"registry.set(name, factory);","topic":"map_set","api":"Map.set","note_zh":"注册工厂","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (!visited.has(node)) {","topic":"map_set","api":"Map.has","note_zh":"访问判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"pending.delete(requestId);","topic":"map_set","api":"Map.delete","note_zh":"删除条目","source_id":"keyloop:programming-basics:seeds"}
+{"text":"uniqueTags.add(tag);","topic":"map_set","api":"Set.add","note_zh":"集合添加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (blocked.has(userId)) return;","topic":"map_set","api":"Set.has","note_zh":"黑名单判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const distinct = new Set(votes).size;","topic":"map_set","api":"Set.size","note_zh":"唯一计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"for (const [key, count] of usage) {","topic":"map_set","api":"Map.entries","note_zh":"遍历映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const dialog = document.querySelector(\"#confirm\");","topic":"dom","api":"document.querySelector","note_zh":"选择元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const links = document.querySelectorAll(\"a[data-nav]\");","topic":"dom","api":"document.querySelectorAll","note_zh":"批量选择","source_id":"keyloop:programming-basics:seeds"}
+{"text":"window.addEventListener(\"resize\", onResize);","topic":"dom","api":"addEventListener","note_zh":"窗口事件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const row = document.createElement(\"tr\");","topic":"dom","api":"document.createElement","note_zh":"创建元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"card.classList.add(\"selected\");","topic":"dom","api":"classList.add","note_zh":"添加类名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"spinner.classList.remove(\"visible\");","topic":"dom","api":"classList.remove","note_zh":"移除类名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"counter.textContent = String(remaining);","topic":"dom","api":"textContent","note_zh":"设置文本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"input.setAttribute(\"aria-invalid\", \"true\");","topic":"dom","api":"setAttribute","note_zh":"设置属性","source_id":"keyloop:programming-basics:seeds"}
+{"text":"tbody.appendChild(row);","topic":"dom","api":"appendChild","note_zh":"追加子节点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const res = await fetch(\"/api/posts\", { method: \"POST\" });","topic":"bom_web","api":"fetch","note_zh":"POST 请求","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const list = await fetch(api).then((r) => r.json());","topic":"bom_web","api":"fetch","note_zh":"请求取 JSON","source_id":"keyloop:programming-basics:seeds"}
+{"text":"setTimeout(() => banner.remove(), 3000);","topic":"bom_web","api":"setTimeout","note_zh":"延时移除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const heartbeat = setInterval(ping, 30000);","topic":"bom_web","api":"setInterval","note_zh":"心跳轮询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"clearInterval(heartbeat);","topic":"bom_web","api":"clearInterval","note_zh":"停止轮询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const theme = localStorage.getItem(\"theme\") ?? \"light\";","topic":"bom_web","api":"localStorage.getItem","note_zh":"读取带默认","source_id":"keyloop:programming-basics:seeds"}
+{"text":"localStorage.setItem(\"lastSeen\", Date.now().toString());","topic":"bom_web","api":"localStorage.setItem","note_zh":"记录时间戳","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const draft = sessionStorage.getItem(\"draft\");","topic":"bom_web","api":"sessionStorage.getItem","note_zh":"会话存储","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const target = join(outDir, `${name}.html`);","topic":"node","api":"path.join","note_zh":"拼接输出路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const file = basename(fullPath, \".md\");","topic":"node","api":"path.basename","note_zh":"取文件名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const template = readFileSync(\"index.html\", \"utf8\");","topic":"node","api":"readFileSync","note_zh":"同步读模板","source_id":"keyloop:programming-basics:seeds"}
+{"text":"writeFileSync(\"report.json\", output);","topic":"node","api":"writeFileSync","note_zh":"同步写报告","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (existsSync(lockFile)) {","topic":"node","api":"existsSync","note_zh":"锁文件检查","source_id":"keyloop:programming-basics:seeds"}
+{"text":"mkdirSync(cacheDir, { recursive: true });","topic":"node","api":"mkdirSync","note_zh":"递归建目录","source_id":"keyloop:programming-basics:seeds"}
+{"text":"const debug = process.env.DEBUG === \"1\";","topic":"node","api":"process.env","note_zh":"调试开关","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (failed > 0) process.exit(1);","topic":"node","api":"process.exit","note_zh":"失败退出","source_id":"keyloop:programming-basics:seeds"}
