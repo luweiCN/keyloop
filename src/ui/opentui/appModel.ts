@@ -71,7 +71,7 @@ import {
 } from "../../training/targets";
 import {
   buildBuiltinApiTarget,
-  buildNewProgrammingBasicsMixTarget,
+  buildProgrammingBasicsMixTarget,
   buildSymbolsNumbersTarget,
 } from "../../training/programmingBasicsTargets";
 import type { LiveMetrics } from "../../training/liveSession";
@@ -906,7 +906,7 @@ function activateSubmenuItem(
       return runningState(
         state.language,
         itemId,
-        buildNewProgrammingBasicsMixTarget(effectiveContext),
+        buildProgrammingBasicsMixTarget(effectiveContext),
         undefined,
         stateOptions(state),
       );

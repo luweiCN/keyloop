@@ -14,6 +14,8 @@ export * from "./content/codeFormatter";
 export * from "./content/corpusQuality";
 export * from "./content/codeCorpus";
 export * from "./training/targets";
+export * from "./training/programmingBasicsTargets";
+export * from "./content/programmingBasics";
 export * from "./report/report";
 export * from "./report/stats";
 export * from "./cli";

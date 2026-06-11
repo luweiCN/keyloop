@@ -33,10 +33,6 @@ describe("content library", () => {
     expect(library.common_words.length).toBeGreaterThanOrEqual(400);
     expect(library.word_chunks.length).toBeGreaterThanOrEqual(300);
     expect(library.programming_words.length).toBeGreaterThanOrEqual(300);
-    expect(library.symbols.length).toBeGreaterThanOrEqual(200);
-    expect(library.language_symbols.length).toBeGreaterThanOrEqual(8);
-    expect(library.number_drills.length).toBeGreaterThanOrEqual(80);
-    expect(library.naming.length).toBeGreaterThanOrEqual(300);
     expect(library.code_corpus?.index.stats.kept).toBeGreaterThanOrEqual(1000);
     expect(library.long_words.map((entry) => entry.word)).toContain(
       "internationalization",

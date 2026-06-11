@@ -150,7 +150,7 @@ export function namingLinesFromWords(
   return lines;
 }
 
-export function buildNewProgrammingBasicsMixTarget(
+export function buildProgrammingBasicsMixTarget(
   context: BuildTargetContext,
   options: ProgrammingBasicsOptions = {},
 ): PracticeTarget {

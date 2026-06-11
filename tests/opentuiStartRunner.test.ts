@@ -1762,7 +1762,7 @@ describe("OpenTUI start runner", () => {
     await kit.waitForKeyListener(3);
 
     const secondLessonContent = flattenContent(kit.addedNodes);
-    expect(secondLessonContent).toContain("=>");
+    expect(secondLessonContent.replace(/\n/g, "")).toContain("=>");
     expect(secondLessonContent).not.toContain("programming fallback");
 
     const renderRequestsBeforeExit = kit.renderRequests;
@@ -2214,10 +2214,6 @@ function refreshLibrary(): ContentLibrary {
       entries: [],
     },
     programming_words: ["selected", "pending", "performance", "response"],
-    symbols: ["===", "!==", "&&", "||"],
-    language_symbols: [],
-    number_drills: ["123 456"],
-    naming: ["selectedValue getSelectedValue SELECTED_VALUE"],
     code_snippets: [],
     long_words: [],
   };

@@ -976,10 +976,6 @@ function testLibrary(): ContentLibrary {
       "registry",
       "release",
     ],
-    symbols: ["=>", "!==", "&&", "||", "{}", "[]", "()", "_", "-", "="],
-    language_symbols: [],
-    number_drills: ["1 2 3", "0 - =", "7 8 9"],
-    naming: ["selectedPreference SelectedPreference SELECTED_PREFERENCE"],
     code_snippets: [
       {
         language: "typescript",

@@ -18,7 +18,7 @@
     { "topic": "declaration", "template": "class {Element}Service(private val repository: Repository) {", "focus": ["()", "{"], "note_zh": "主构造类" },
     { "topic": "declaration", "template": "data class {Element}(val {field}: String)", "focus": ["()", ":"], "note_zh": "数据类" },
     { "topic": "call", "template": "val labels = {collection}.map { {element} -> {element}.{field} }", "focus": ["{}", "->"], "note_zh": "集合映射" },
-    { "topic": "call", "template": "{collection}.forEach {{ render(it) }}", "focus": ["{}", "()"], "note_zh": "遍历渲染" },
+    { "topic": "call", "template": "{collection}.forEach { render(it) }", "focus": ["{}", "()"], "note_zh": "遍历渲染" },
     { "topic": "call", "template": "repository.save{Element}({element})", "focus": ["()", "."], "note_zh": "保存调用" },
     { "topic": "control", "template": "if ({element}?.{field} != null) {", "focus": ["?.", "!="], "note_zh": "空安全判断" },
     { "topic": "control", "template": "for ({element} in {collection}) {", "focus": ["()", "{"], "note_zh": "for 循环" },

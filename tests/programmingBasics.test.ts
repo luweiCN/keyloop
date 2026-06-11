@@ -9,7 +9,7 @@ import {
 } from "../src/content/programmingBasics";
 import {
   buildBuiltinApiTarget,
-  buildNewProgrammingBasicsMixTarget,
+  buildProgrammingBasicsMixTarget,
   buildSymbolsNumbersTarget,
   resolveProgrammingBasicsLanguage,
 } from "../src/training/programmingBasicsTargets";
@@ -267,7 +267,7 @@ describe("programming basics mix target", () => {
         "filter", "select", "update", "remove", "create", "config", "request", "response",
       ],
     } as ContentLibrary;
-    const target = buildNewProgrammingBasicsMixTarget(context, options);
+    const target = buildProgrammingBasicsMixTarget(context, options);
     expect(target.mode).toBe("code");
     expect(target.source).toBe("keyloop:module:programming-basics-mix:typescript");
     const lines = target.text.split("\n").filter((line) => line.trim().length > 0);

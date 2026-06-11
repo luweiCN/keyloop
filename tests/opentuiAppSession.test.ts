@@ -1000,10 +1000,6 @@ function testLibrary(): ContentLibrary {
     everyday_articles: { sources: [], entries: [] },
     everyday_word_decomposition: { sources: [], entries: [] },
     programming_words: ["selected", "pending", "enabled"],
-    symbols: ["=>", "[]"],
-    language_symbols: [],
-    number_drills: ["1 2 3"],
-    naming: ["selectedValue"],
     code_snippets: [],
     long_words: [],
   };
