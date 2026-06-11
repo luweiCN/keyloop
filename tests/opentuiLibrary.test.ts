@@ -329,6 +329,7 @@ import {
   reduceLibraryActionsKey,
   reduceLibraryBrowseKey,
   reduceLibraryDeleteConfirmKey,
+  reduceLibraryDetailKey,
   reduceLibraryManageKey,
 } from "../src/ui/opentui/libraryReducers";
 
@@ -448,41 +449,9 @@ describe("library browse screen", () => {
     expect(article.map((entry) => entry.id)).toEqual(["a1"]);
   });
 
-  test("typing updates query; enter then edit opens editor prefilled with entry format", () => {
-    let state = browseState();
-    state = reduceLibraryBrowseKey(state, keyEvent("v", "v")).state;
-    if (state.route.screen !== "library_browse") throw new Error("expected browse");
-    expect(state.route.query).toBe("v");
-    const vividMenu = reduceLibraryBrowseKey(browseState("vivid"), keyEvent("enter", "\r")).state;
-    const onVivid = reduceLibraryBrowseKey(vividMenu, keyEvent("enter", "\r"));
-    expect(onVivid.state.route).toMatchObject({
-      screen: "library_input",
-      kind: "words",
-      text: "vivid",
-      editing_id: "w3",
-    });
-    const abandonMenu = reduceLibraryBrowseKey(browseState("abandon"), keyEvent("enter", "\r")).state;
-    const onAbandon = reduceLibraryBrowseKey(abandonMenu, keyEvent("enter", "\r"));
-    expect(onAbandon.state.route).toMatchObject({ text: "abandon: v. 放弃", editing_id: "w1" });
-  });
 
 
 
-  test("editing an existing word replaces it on save", () => {
-    const menu = reduceLibraryBrowseKey(browseState("vivid"), keyEvent("enter", "\r")).state;
-    const edit = reduceLibraryBrowseKey(menu, keyEvent("enter", "\r"));
-    let state = edit.state;
-    for (const char of ": 生动的") {
-      state = reduceLibraryInputKey(state, charEvent(char), fakeContext()).state;
-    }
-    state = reduceLibraryInputKey(state, ctrlD, fakeContext()).state;
-    expect(state.route.screen).toBe("library_preview");
-    const saved = reduceLibraryPreviewKey(state, keyEvent("enter", "\r"));
-    const words = saved.state.customLibraries?.[0]?.words ?? [];
-    expect(words.length).toBe(3);
-    expect(words.find((word) => word.text === "vivid")?.meaning_zh).toBe("生动的");
-    expect(words.some((word) => word.id === "w3")).toBe(false);
-  });
 });
 
 describe("library delete confirmation", () => {
@@ -785,7 +754,7 @@ describe("word-boundary wrapping", () => {
   });
 });
 
-describe("browse entry action menu", () => {
+describe("browse entry detail popup", () => {
   function browseBase(query = "aban"): OpenTuiAppState {
     return stateAt(
       { screen: "library_browse", slug: "web", query, index: 0 },
@@ -803,54 +772,70 @@ describe("browse entry action menu", () => {
     );
   }
 
-  test("enter opens the action menu on the selected entry", () => {
+  test("enter opens the detail popup remembering picker position", () => {
     const result = reduceLibraryBrowseKey(browseBase(), keyEvent("enter", "\r"));
-    expect(result.state.route).toMatchObject({
+    expect(result.state.route).toEqual({
+      screen: "library_detail",
+      slug: "web",
+      entry_id: "w1",
+      return_query: "aban",
+      return_index: 0,
+    });
+  });
+
+  test("E starts inline editing prefilled with entry format", () => {
+    const detail = reduceLibraryBrowseKey(browseBase(), keyEvent("enter", "\r")).state;
+    const editing = reduceLibraryDetailKey(detail, keyEvent("e", "e"), fakeContext());
+    if (editing.state.route.screen !== "library_detail") throw new Error("expected detail");
+    expect(editing.state.route.editing).toEqual({ text: "abandon: v. 放弃", cursor: 0 });
+  });
+
+  test("cursor moves and mid-text edits work inside the popup editor", () => {
+    let state = reduceLibraryBrowseKey(browseBase(), keyEvent("enter", "\r")).state;
+    state = reduceLibraryDetailKey(state, keyEvent("e", "e"), fakeContext()).state;
+    for (let i = 0; i < 7; i += 1) {
+      state = reduceLibraryDetailKey(state, keyEvent("right", "\x1b[C"), fakeContext()).state;
+    }
+    state = reduceLibraryDetailKey(state, keyEvent("s", "s"), fakeContext()).state;
+    if (state.route.screen !== "library_detail") throw new Error("expected detail");
+    expect(state.route.editing?.text).toBe("abandons: v. 放弃");
+    expect(state.route.editing?.cursor).toBe(8);
+  });
+
+  test("ctrl+d saves the edit, replaces the entry, returns to picker", () => {
+    let state = reduceLibraryBrowseKey(browseBase(""), keyEvent("enter", "\r")).state;
+    state = reduceLibraryDetailKey(state, keyEvent("e", "e"), fakeContext()).state;
+    if (state.route.screen !== "library_detail") throw new Error("expected detail");
+    state = {
+      ...state,
+      route: { ...state.route, editing: { text: "abandon: 抛弃", cursor: 0 } },
+    };
+    const saved = reduceLibraryDetailKey(state, ctrlD, fakeContext());
+    expect(saved.persist?.kind).toBe("save");
+    const words = saved.state.customLibraries?.[0]?.words ?? [];
+    expect(words.find((word) => word.text === "abandon")?.meaning_zh).toBe("抛弃");
+    expect(words.some((word) => word.id === "w1")).toBe(false);
+    expect(saved.state.route).toEqual({
       screen: "library_browse",
-      query: "aban",
-      action_menu: 0,
+      slug: "web",
+      query: "",
+      index: 0,
     });
   });
 
-  test("menu enter on edit opens the editor prefilled", () => {
-    let state = reduceLibraryBrowseKey(browseBase(), keyEvent("enter", "\r")).state;
-    const result = reduceLibraryBrowseKey(state, keyEvent("enter", "\r"));
-    expect(result.state.route).toMatchObject({
-      screen: "library_input",
-      kind: "words",
-      text: "abandon: v. 放弃",
-      editing_id: "w1",
-    });
-  });
-
-  test("menu down+enter deletes the entry and closes the menu", () => {
-    let state = reduceLibraryBrowseKey(browseBase(), keyEvent("enter", "\r")).state;
-    state = reduceLibraryBrowseKey(state, keyEvent("down", "\x1b[B")).state;
-    const result = reduceLibraryBrowseKey(state, keyEvent("enter", "\r"));
+  test("D deletes the entry from the view popup and returns to picker", () => {
+    const detail = reduceLibraryBrowseKey(browseBase(), keyEvent("enter", "\r")).state;
+    const result = reduceLibraryDetailKey(detail, keyEvent("d", "d"), fakeContext());
     expect(result.persist?.kind).toBe("save");
     expect(result.state.customLibraries?.[0]?.words.map((word) => word.id)).toEqual(["w2"]);
-    if (result.state.route.screen !== "library_browse") throw new Error("expected browse");
-    expect(result.state.route.action_menu).toBeUndefined();
+    expect(result.state.route.screen).toBe("library_browse");
   });
 
-  test("backspace closes the menu without acting; typing is ignored while open", () => {
-    const open = reduceLibraryBrowseKey(browseBase(), keyEvent("enter", "\r")).state;
-    const closed = reduceLibraryBrowseKey(open, keyEvent("backspace", "\x7f"));
-    if (closed.state.route.screen !== "library_browse") throw new Error("expected browse");
-    expect(closed.state.route.action_menu).toBeUndefined();
-    expect(closed.state.route.query).toBe("aban");
-    const typed = reduceLibraryBrowseKey(open, keyEvent("x", "x"));
-    if (typed.state.route.screen !== "library_browse") throw new Error("expected browse");
-    expect(typed.state.route.query).toBe("aban");
-  });
-
-  test("cancel item closes the menu", () => {
-    let state = reduceLibraryBrowseKey(browseBase(), keyEvent("enter", "\r")).state;
-    state = reduceLibraryBrowseKey(state, keyEvent("down", "\x1b[B")).state;
-    state = reduceLibraryBrowseKey(state, keyEvent("down", "\x1b[B")).state;
-    const result = reduceLibraryBrowseKey(state, keyEvent("enter", "\r"));
-    if (result.state.route.screen !== "library_browse") throw new Error("expected browse");
-    expect(result.state.route.action_menu).toBeUndefined();
-    expect(result.persist).toBeUndefined();
+  test("typing while viewing does not edit; enter closes back to picker", () => {
+    const detail = reduceLibraryBrowseKey(browseBase(), keyEvent("enter", "\r")).state;
+    const typed = reduceLibraryDetailKey(detail, keyEvent("x", "x"), fakeContext());
+    expect(typed.state.route.screen).toBe("library_detail");
+    const closed = reduceLibraryDetailKey(detail, keyEvent("enter", "\r"), fakeContext());
+    expect(closed.state.route).toMatchObject({ screen: "library_browse", query: "aban" });
   });
 });

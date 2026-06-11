@@ -91,6 +91,7 @@ export function openTuiMenuItems(state: OpenTuiAppState): OpenTuiMenuItem[] {
     case "library_preview":
     case "library_browse":
     case "library_delete_confirm":
+    case "library_detail":
       return [];
   }
 }

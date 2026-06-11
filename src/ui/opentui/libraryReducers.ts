@@ -12,6 +12,33 @@ import { fuzzyIncludes, withRoute, type LibraryPreviewPayload, type OpenTuiAppSt
 import type { LibraryPersist, OpenTuiAppSessionContext } from "./appSession";
 import type { OpenTuiKeyEvent } from "./kit";
 import { isArrowDownEvent, isArrowUpEvent, isEnterEvent } from "./runnerEvents";
+import {
+  deleteBeforeCursor,
+  insertAtCursor,
+  moveCursorDown,
+  moveCursorLeft,
+  moveCursorLineEnd,
+  moveCursorLineStart,
+  moveCursorRight,
+  moveCursorUp,
+  type TextEditState,
+} from "./textEdit";
+
+export function isArrowLeftEvent(event: OpenTuiKeyEvent): boolean {
+  return event.name === "left" || event.name === "arrowleft" || event.sequence === "\x1b[D";
+}
+
+export function isArrowRightEvent(event: OpenTuiKeyEvent): boolean {
+  return event.name === "right" || event.name === "arrowright" || event.sequence === "\x1b[C";
+}
+
+export function isHomeEvent(event: OpenTuiKeyEvent): boolean {
+  return event.name === "home" || event.sequence === "\x1b[H" || (event.ctrl && event.name.toLowerCase() === "a");
+}
+
+export function isEndEvent(event: OpenTuiKeyEvent): boolean {
+  return event.name === "end" || event.sequence === "\x1b[F" || (event.ctrl && event.name.toLowerCase() === "e");
+}
 
 export interface LibraryReduceResult {
   state: OpenTuiAppState;
@@ -112,15 +139,37 @@ export function reduceLibraryInputKey(
   if (isSubmitEvent(event)) {
     return submitLibraryInput(state, route, context);
   }
+  const editing: TextEditState = { text: route.text, cursor: route.cursor ?? route.text.length };
+  const apply = (next: TextEditState): LibraryReduceResult => ({
+    state: withRoute(state, { ...route, text: next.text, cursor: next.cursor }),
+  });
+  if (isArrowUpEvent(event)) {
+    return apply(moveCursorUp(editing));
+  }
+  if (isArrowDownEvent(event)) {
+    return apply(moveCursorDown(editing));
+  }
+  if (isArrowLeftEvent(event)) {
+    return apply(moveCursorLeft(editing));
+  }
+  if (isArrowRightEvent(event)) {
+    return apply(moveCursorRight(editing));
+  }
+  if (isHomeEvent(event)) {
+    return apply(moveCursorLineStart(editing));
+  }
+  if (isEndEvent(event)) {
+    return apply(moveCursorLineEnd(editing));
+  }
   if (isEnterEvent(event)) {
-    return { state: withRoute(state, { ...route, text: `${route.text}\n` }) };
+    return apply(insertAtCursor(editing, "\n"));
   }
   if (isBackspaceEvent(event)) {
-    return { state: withRoute(state, { ...route, text: route.text.slice(0, -1) }) };
+    return apply(deleteBeforeCursor(editing));
   }
   const text = inputTextFromEvent(event);
   if (text !== null) {
-    return { state: withRoute(state, { ...route, text: route.text + text }) };
+    return apply(insertAtCursor(editing, text));
   }
   return { state };
 }
@@ -477,32 +526,17 @@ export function libraryBrowseMatches(state: OpenTuiAppState): LibraryBrowseEntry
   return matches;
 }
 
-function editPrefillRoute(
-  slug: string,
-  match: LibraryBrowseEntry,
-): Extract<OpenTuiAppState["route"], { screen: "library_input" }> {
+/** 条目的录入格式文本（编辑预填用） */
+export function entryEditText(match: LibraryBrowseEntry): string {
   if (match.entry_type === "words") {
     const word = match.entry;
-    return {
-      screen: "library_input",
-      slug,
-      kind: "words",
-      text: word.meaning_zh === undefined ? word.text : `${word.text}: ${word.meaning_zh}`,
-      editing_id: word.id,
-    };
+    return word.meaning_zh === undefined ? word.text : `${word.text}: ${word.meaning_zh}`;
   }
   if (match.entry_type === "sentences") {
     const sentence = match.entry;
-    return {
-      screen: "library_input",
-      slug,
-      kind: "sentences",
-      text:
-        sentence.translation_zh === undefined
-          ? sentence.text
-          : `${sentence.text}\n${sentence.translation_zh}`,
-      editing_id: sentence.id,
-    };
+    return sentence.translation_zh === undefined
+      ? sentence.text
+      : `${sentence.text}\n${sentence.translation_zh}`;
   }
   const article = match.entry;
   const english = article.paragraphs.map((paragraph) => paragraph.text).join("\n");
@@ -510,13 +544,31 @@ function editPrefillRoute(
     .map((paragraph) => paragraph.translation_zh ?? "")
     .filter((line) => line !== "")
     .join("\n");
-  return {
-    screen: "library_input",
-    slug,
-    kind: "article",
-    text: chinese === "" ? english : `${english}\n\n${chinese}`,
-    editing_id: article.id,
-  };
+  return chinese === "" ? english : `${english}\n\n${chinese}`;
+}
+
+export function libraryEntryById(
+  state: OpenTuiAppState,
+  slug: string,
+  entryId: string,
+): LibraryBrowseEntry | undefined {
+  const library = (state.customLibraries ?? []).find((entry) => entry.slug === slug);
+  if (library === undefined) {
+    return undefined;
+  }
+  const word = library.words.find((entry) => entry.id === entryId);
+  if (word !== undefined) {
+    return { entry_type: "words", id: word.id, entry: word };
+  }
+  const sentence = library.sentences.find((entry) => entry.id === entryId);
+  if (sentence !== undefined) {
+    return { entry_type: "sentences", id: sentence.id, entry: sentence };
+  }
+  const article = library.articles.find((entry) => entry.id === entryId);
+  if (article !== undefined) {
+    return { entry_type: "articles", id: article.id, entry: article };
+  }
+  return undefined;
 }
 
 export function reduceLibraryBrowseKey(
@@ -529,9 +581,6 @@ export function reduceLibraryBrowseKey(
   }
   const matches = libraryBrowseMatches(state);
   const index = Math.min(Math.max(route.index, 0), Math.max(matches.length - 1, 0));
-  if (route.action_menu !== undefined) {
-    return reduceBrowseActionMenuKey(state, route, event, matches, index);
-  }
   if (isArrowDownEvent(event)) {
     return {
       state: withRoute(state, {
@@ -549,10 +598,19 @@ export function reduceLibraryBrowseKey(
     };
   }
   if (isEnterEvent(event)) {
-    if (matches[index] === undefined) {
+    const match = matches[index];
+    if (match === undefined) {
       return { state };
     }
-    return { state: withRoute(state, { ...route, action_menu: 0 }) };
+    return {
+      state: withRoute(state, {
+        screen: "library_detail",
+        slug: route.slug,
+        entry_id: match.id,
+        return_query: route.query,
+        return_index: index,
+      }),
+    };
   }
   if (event.ctrl && !event.meta && (event.name.toLowerCase() === "x" || event.sequence === "\x18")) {
     const match = matches[index];
@@ -569,62 +627,6 @@ export function reduceLibraryBrowseKey(
     return { state: withRoute(state, { ...route, query: singleLine(route.query + text), index: 0 }) };
   }
   return { state };
-}
-
-const BROWSE_ACTION_COUNT = 3; // 编辑 / 删除 / 取消
-
-function reduceBrowseActionMenuKey(
-  state: OpenTuiAppState,
-  route: Extract<OpenTuiAppState["route"], { screen: "library_browse" }>,
-  event: OpenTuiKeyEvent,
-  matches: LibraryBrowseEntry[],
-  index: number,
-): LibraryReduceResult {
-  const menuIndex = Math.min(Math.max(route.action_menu ?? 0, 0), BROWSE_ACTION_COUNT - 1);
-  if (isArrowDownEvent(event)) {
-    return {
-      state: withRoute(state, { ...route, action_menu: (menuIndex + 1) % BROWSE_ACTION_COUNT }),
-    };
-  }
-  if (isArrowUpEvent(event)) {
-    return {
-      state: withRoute(state, {
-        ...route,
-        action_menu: (menuIndex - 1 + BROWSE_ACTION_COUNT) % BROWSE_ACTION_COUNT,
-      }),
-    };
-  }
-  if (isBackspaceEvent(event)) {
-    return { state: withRoute(state, closedActionMenuRoute(route)) };
-  }
-  if (!isEnterEvent(event)) {
-    return { state }; // 菜单打开时忽略文本输入
-  }
-  const match = matches[index];
-  if (match === undefined) {
-    return { state: withRoute(state, closedActionMenuRoute(route)) };
-  }
-  if (menuIndex === 0) {
-    return { state: withRoute(state, editPrefillRoute(route.slug, match)) };
-  }
-  if (menuIndex === 1) {
-    const deleted = deleteBrowseEntry(state, route, match, index);
-    if (deleted.state.route.screen === "library_browse") {
-      return {
-        ...deleted,
-        state: withRoute(deleted.state, closedActionMenuRoute(deleted.state.route)),
-      };
-    }
-    return deleted;
-  }
-  return { state: withRoute(state, closedActionMenuRoute(route)) };
-}
-
-function closedActionMenuRoute(
-  route: Extract<OpenTuiAppState["route"], { screen: "library_browse" }>,
-): Extract<OpenTuiAppState["route"], { screen: "library_browse" }> {
-  const { action_menu: _closed, ...rest } = route;
-  return rest;
 }
 
 function deleteBrowseEntry(
@@ -687,4 +689,179 @@ export function reduceLibraryDeleteConfirmKey(
     route: { screen: "library_manage", selected_index: 0 },
   };
   return { state: next, persist: { kind: "delete", slug: route.slug } };
+}
+
+const DETAIL_DELETE_KEYS = new Set(["d"]);
+const DETAIL_EDIT_KEYS = new Set(["e", "m"]);
+
+export function reduceLibraryDetailKey(
+  state: OpenTuiAppState,
+  event: OpenTuiKeyEvent,
+  context: OpenTuiAppSessionContext,
+): LibraryReduceResult {
+  const route = state.route;
+  if (route.screen !== "library_detail") {
+    return { state };
+  }
+  const backToBrowse = (): LibraryReduceResult => ({
+    state: withRoute(state, {
+      screen: "library_browse",
+      slug: route.slug,
+      query: route.return_query,
+      index: route.return_index,
+    }),
+  });
+  const match = libraryEntryById(state, route.slug, route.entry_id);
+  if (match === undefined) {
+    return backToBrowse();
+  }
+
+  if (route.editing === undefined) {
+    // 查看态：E/M 编辑，D 删除，Enter/Esc 关闭（Esc 由顶层处理）
+    const key = event.ctrl || event.meta ? "" : event.name.toLowerCase();
+    if (DETAIL_EDIT_KEYS.has(key)) {
+      return {
+        state: withRoute(state, {
+          ...route,
+          editing: { text: entryEditText(match), cursor: 0 },
+        }),
+      };
+    }
+    if (DETAIL_DELETE_KEYS.has(key)) {
+      const browse = backToBrowse();
+      if (browse.state.route.screen !== "library_browse") {
+        return browse;
+      }
+      const deleted = deleteBrowseEntry(
+        browse.state,
+        browse.state.route,
+        match,
+        route.return_index,
+      );
+      return deleted;
+    }
+    if (isEnterEvent(event)) {
+      return backToBrowse();
+    }
+    return { state };
+  }
+
+  // 编辑态
+  const editing = route.editing;
+  const apply = (next: TextEditState): LibraryReduceResult => ({
+    state: withRoute(state, { ...route, editing: { text: next.text, cursor: next.cursor } }),
+  });
+  if (isSubmitEvent(event)) {
+    return saveDetailEdit(state, route, match, editing.text, context);
+  }
+  if (isArrowUpEvent(event)) {
+    return apply(moveCursorUp(editing));
+  }
+  if (isArrowDownEvent(event)) {
+    return apply(moveCursorDown(editing));
+  }
+  if (isArrowLeftEvent(event)) {
+    return apply(moveCursorLeft(editing));
+  }
+  if (isArrowRightEvent(event)) {
+    return apply(moveCursorRight(editing));
+  }
+  if (isHomeEvent(event)) {
+    return apply(moveCursorLineStart(editing));
+  }
+  if (isEndEvent(event)) {
+    return apply(moveCursorLineEnd(editing));
+  }
+  if (isEnterEvent(event)) {
+    return apply(insertAtCursor(editing, "\n"));
+  }
+  if (isBackspaceEvent(event)) {
+    return apply(deleteBeforeCursor(editing));
+  }
+  const text = inputTextFromEvent(event);
+  if (text !== null) {
+    return apply(insertAtCursor(editing, text));
+  }
+  return { state };
+}
+
+function saveDetailEdit(
+  state: OpenTuiAppState,
+  route: Extract<OpenTuiAppState["route"], { screen: "library_detail" }>,
+  match: LibraryBrowseEntry,
+  text: string,
+  context: OpenTuiAppSessionContext,
+): LibraryReduceResult {
+  const libraries = state.customLibraries ?? [];
+  const libraryIndex = libraries.findIndex((library) => library.slug === route.slug);
+  const library = libraries[libraryIndex];
+  if (library === undefined) {
+    return { state };
+  }
+  let payload: LibraryPreviewPayload | null = null;
+  if (match.entry_type === "words") {
+    const parsed = parseWordLines(text);
+    if (parsed.entries.length === 0) {
+      return { state };
+    }
+    payload = {
+      kind: "words",
+      raw_text: text,
+      entries: parsed.entries.map((entry) => {
+        if (entry.meaning_zh !== undefined) {
+          return {
+            text: entry.text,
+            word_kind: entry.kind,
+            meaning_zh: entry.meaning_zh,
+            source: "manual" as const,
+          };
+        }
+        const hit = context.dictionary?.lookup(entry.text) ?? null;
+        return {
+          text: entry.text,
+          word_kind: entry.kind,
+          ...(hit?.translation_zh === undefined ? {} : { meaning_zh: hit.translation_zh }),
+          ...(hit?.phonetic === undefined ? {} : { phonetic: hit.phonetic }),
+          source: "dict" as const,
+        };
+      }),
+      error_lines: [],
+      editing_id: match.id,
+    };
+  } else if (match.entry_type === "sentences") {
+    const entries = parseSentenceBlocks(text);
+    if (entries.length === 0) {
+      return { state };
+    }
+    payload = { kind: "sentences", raw_text: text, entries, editing_id: match.id };
+  } else {
+    const parsed = parseArticlePaste(text);
+    if (parsed.paragraphs.length === 0) {
+      return { state };
+    }
+    payload = {
+      kind: "article",
+      raw_text: text,
+      title: autoArticleTitle(parsed.paragraphs),
+      paragraphs: parsed.paragraphs,
+      warnings: parsed.warnings,
+      editing_id: match.id,
+    };
+  }
+  const updated = applyPreviewToLibrary(library, payload);
+  const next: OpenTuiAppState = {
+    ...state,
+    customLibraries: [
+      ...libraries.slice(0, libraryIndex),
+      updated,
+      ...libraries.slice(libraryIndex + 1),
+    ],
+    route: {
+      screen: "library_browse",
+      slug: route.slug,
+      query: route.return_query,
+      index: route.return_index,
+    },
+  };
+  return { state: next, persist: { kind: "save", library: updated } };
 }

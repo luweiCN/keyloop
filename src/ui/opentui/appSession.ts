@@ -67,7 +67,9 @@ import {
   wordFormSettingsFromContext,
 } from "./settingsReducers";
 import { reduceStatsKey, statsState } from "./statsReducer";
+import { LIBRARY_DETAIL_SCROLLBOX_ID } from "./screens/library";
 import {
+  reduceLibraryDetailKey,
   reduceLibraryActionsKey,
   reduceLibraryBrowseKey,
   reduceLibraryCreateKey,
@@ -166,9 +168,20 @@ export function reduceOpenTuiAppKey(
         action: "continue",
       };
     }
-    if (state.route.screen === "library_browse" && state.route.action_menu !== undefined) {
-      const { action_menu: _closed, ...rest } = state.route;
-      return { state: withRoute(state, rest), action: "continue" };
+    if (state.route.screen === "library_detail") {
+      if (state.route.editing !== undefined) {
+        const { editing: _discard, ...rest } = state.route;
+        return { state: withRoute(state, rest), action: "continue" };
+      }
+      return {
+        state: withRoute(state, {
+          screen: "library_browse",
+          slug: state.route.slug,
+          query: state.route.return_query,
+          index: state.route.return_index,
+        }),
+        action: "continue",
+      };
     }
     if (
       state.route.screen === "library_actions" ||
@@ -215,6 +228,14 @@ export function reduceOpenTuiAppKey(
     }
     case "library_preview": {
       const result = reduceLibraryPreviewKey(state, event);
+      return {
+        state: result.state,
+        action: "continue",
+        ...(result.persist === undefined ? {} : { persist: result.persist }),
+      };
+    }
+    case "library_detail": {
+      const result = reduceLibraryDetailKey(state, event, context);
       return {
         state: result.state,
         action: "continue",
@@ -299,6 +320,13 @@ export async function runOpenTuiAppSession(
       return { state, action: "quit" };
     }
 
+    if (
+      state.route.screen === "library_detail" &&
+      state.route.editing === undefined &&
+      scrollLibraryDetail(renderer, event)
+    ) {
+      continue;
+    }
     const result = reduceOpenTuiAppKey(state, event, context);
     if (result.persist !== undefined && context.librariesDir !== undefined) {
       if (result.persist.kind === "save") {
@@ -498,6 +526,45 @@ function settingsMenuSelectionState(
 
 
 
+interface ScrollableRenderableHost {
+  getRenderable?(id: string): { scrollBy?: (delta: { x?: number; y?: number }) => void } | undefined;
+}
+
+/** 详情弹窗查看态的键盘滚动：直接驱动 ScrollBox 实例，state 不变以保留鼠标滚轮位置 */
+function scrollLibraryDetail(renderer: OpenTuiRenderer, event: OpenTuiKeyEvent): boolean {
+  const delta = detailScrollDelta(event);
+  if (delta === 0) {
+    return false;
+  }
+  const host = renderer.root as unknown as ScrollableRenderableHost;
+  const scrollBox = host.getRenderable?.(LIBRARY_DETAIL_SCROLLBOX_ID);
+  if (scrollBox?.scrollBy === undefined) {
+    return false;
+  }
+  scrollBox.scrollBy({ y: delta });
+  return true;
+}
+
+function detailScrollDelta(event: OpenTuiKeyEvent): number {
+  if (event.ctrl || event.meta) {
+    return 0;
+  }
+  const name = event.name.toLowerCase();
+  if (name === "up" || name === "arrowup" || event.sequence === "\x1b[A") {
+    return -1;
+  }
+  if (name === "down" || name === "arrowdown" || event.sequence === "\x1b[B") {
+    return 1;
+  }
+  if (name === "pageup") {
+    return -10;
+  }
+  if (name === "pagedown") {
+    return 10;
+  }
+  return 0;
+}
+
 interface PasteCapableKeyInput {
   on?(event: "paste", handler: (event: { bytes?: Uint8Array }) => void): void;
   off?(event: "paste", handler: (event: { bytes?: Uint8Array }) => void): void;
@@ -507,7 +574,8 @@ function isLibraryTextInputScreen(state: OpenTuiAppState): boolean {
   return (
     state.route.screen === "library_create" ||
     state.route.screen === "library_input" ||
-    state.route.screen === "library_browse"
+    state.route.screen === "library_browse" ||
+    (state.route.screen === "library_detail" && state.route.editing !== undefined)
   );
 }
 

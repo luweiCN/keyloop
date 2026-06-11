@@ -88,6 +88,8 @@ export function openTuiRouteTitle(state: OpenTuiAppState): string {
       return state.language === "zh" ? "预览确认" : "Preview";
     case "library_browse":
       return state.language === "zh" ? "浏览内容" : "Browse entries";
+    case "library_detail":
+      return state.language === "zh" ? "条目详情" : "Entry detail";
     case "library_delete_confirm":
       return state.language === "zh" ? "删除确认" : "Delete confirmation";
   }
@@ -134,6 +136,7 @@ export function openTuiRouteLines(state: OpenTuiAppState): string[] {
     case "library_preview":
     case "library_browse":
     case "library_delete_confirm":
+    case "library_detail":
       return [];
   }
 }

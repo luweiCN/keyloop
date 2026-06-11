@@ -124,6 +124,7 @@ export function routeHints(state: OpenTuiAppState): KeyHint[] {
     case "library_preview":
     case "library_browse":
     case "library_delete_confirm":
+    case "library_detail":
       return [
         { key: "Esc", label: zh ? "返回" : "back" },
         { key: "Q", label: zh ? "退出" : "quit" },
@@ -183,6 +184,7 @@ export function routeCrumb(state: OpenTuiAppState): string {
     case "library_preview":
     case "library_browse":
     case "library_delete_confirm":
+    case "library_detail":
       return openTuiRouteTitle(state);
   }
 }

@@ -229,6 +229,7 @@ export type OpenTuiRoute =
       slug: string;
       kind: "words" | "sentences" | "article";
       text: string;
+      cursor?: number;
       editing_id?: string;
     }
   | { screen: "library_preview"; slug: string; payload: LibraryPreviewPayload }
@@ -237,8 +238,16 @@ export type OpenTuiRoute =
       slug: string;
       query: string;
       index: number;
-      /** 选中条目上的操作菜单（编辑/删除/取消）；undefined 表示菜单未打开 */
-      action_menu?: number;
+    }
+  | {
+      screen: "library_detail";
+      slug: string;
+      entry_id: string;
+      /** 返回 picker 时恢复的搜索词与选中位置 */
+      return_query: string;
+      return_index: number;
+      /** 编辑态：弹窗内可编辑缓冲；undefined 为查看态 */
+      editing?: { text: string; cursor: number };
     }
   | { screen: "library_delete_confirm"; slug: string };
 
@@ -645,6 +654,7 @@ export function activateOpenTuiMenuItem(
     case "library_preview":
     case "library_browse":
     case "library_delete_confirm":
+    case "library_detail":
       return state;
   }
 }

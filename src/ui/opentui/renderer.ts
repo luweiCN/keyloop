@@ -8,6 +8,7 @@ import {
   renderLibraryBrowseScreen,
   renderLibraryCreateScreen,
   renderLibraryDeleteConfirmScreen,
+  renderLibraryDetailScreen,
   renderLibraryInputScreen,
   renderLibraryManageScreen,
   renderLibraryPreviewScreen,
@@ -85,6 +86,8 @@ async function renderRoute(state: OpenTuiAppState, kit: OpenTuiRendererKit): Pro
       return renderAppFrame(state, renderLibraryActionsScreen(state, kit), kit);
     case "library_browse":
       return renderAppFrame(state, renderLibraryBrowseScreen(state, kit), kit);
+    case "library_detail":
+      return renderAppFrame(state, renderLibraryDetailScreen(state, kit), kit);
     case "library_delete_confirm":
       return renderAppFrame(state, renderLibraryDeleteConfirmScreen(state, kit), kit);
     case "running":

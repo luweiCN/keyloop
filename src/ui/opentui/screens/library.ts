@@ -99,17 +99,34 @@ export function renderLibraryInputScreen(
   } as const;
 
   const wrapColumns = inputWrapColumns();
-  const logicalLines = route.text.split("\n");
+  const cursor = Math.min(route.cursor ?? route.text.length, route.text.length);
+  const withCursor = `${route.text.slice(0, cursor)}▏${route.text.slice(cursor)}`;
+  const logicalLines = withCursor.split("\n");
+  const cursorLogicalLine = withCursor.slice(0, cursor + 1).split("\n").length - 1;
   const visualLines: string[] = [];
+  let cursorVisualLine = 0;
   for (let index = 0; index < logicalLines.length; index += 1) {
     const isLastLogical = index === logicalLines.length - 1;
-    // 真实换行处标 ⏎，与练习屏一致；末行显示光标
-    const decorated = `${logicalLines[index] ?? ""}${isLastLogical ? "▏" : " ⏎"}`;
+    // 真实换行处标 ⏎，与练习屏一致
+    const decorated = `${logicalLines[index] ?? ""}${isLastLogical ? "" : " ⏎"}`;
     const wrapped = wrapWordsToDisplayWidth(decorated, wrapColumns);
-    visualLines.push(...(wrapped.length === 0 ? [""] : wrapped));
+    for (const line of wrapped.length === 0 ? [""] : wrapped) {
+      if (index === cursorLogicalLine && line.includes("▏")) {
+        cursorVisualLine = visualLines.length;
+      }
+      visualLines.push(line);
+    }
   }
-  const visible = visualLines.slice(-INPUT_VISIBLE_LINES);
-  const hiddenCount = visualLines.length - visible.length;
+  // 视窗跟随光标行
+  const windowStart = Math.max(
+    0,
+    Math.min(
+      cursorVisualLine - Math.floor(INPUT_VISIBLE_LINES / 2),
+      visualLines.length - INPUT_VISIBLE_LINES,
+    ),
+  );
+  const visible = visualLines.slice(windowStart, windowStart + INPUT_VISIBLE_LINES);
+  const hiddenCount = windowStart;
   const children: unknown[] = [];
   if (hiddenCount > 0) {
     children.push(
@@ -163,8 +180,8 @@ export function renderLibraryInputScreen(
         width: "100%",
         title: ` ${titles[route.kind]} — ${libraryName} `,
         bottomTitle: zh
-          ? ` ${logicalLines.length} 行 · ${Array.from(route.text).length} 字 `
-          : ` ${logicalLines.length} lines · ${Array.from(route.text).length} chars `,
+          ? ` ${route.text.split("\n").length} 行 · ${Array.from(route.text).length} 字 `
+          : ` ${route.text.split("\n").length} lines · ${Array.from(route.text).length} chars `,
         bottomTitleAlignment: "right",
         overflow: "hidden",
         flexDirection: "column",
@@ -315,6 +332,7 @@ import { truncateToDisplayWidth, wrapWordsToDisplayWidth } from "./shared";
 import {
   libraryActionItems,
   libraryBrowseMatches,
+  libraryEntryById,
   type LibraryBrowseEntry,
 } from "../libraryReducers";
 
@@ -497,9 +515,6 @@ export function renderLibraryBrowseScreen(
     const match = matches[index]!;
     const isSelected = index === selected;
     rows.push(renderBrowseEntryRows(match, index, isSelected, columns, zh, kit));
-    if (isSelected && route.action_menu !== undefined) {
-      rows.push(renderBrowseActionMenu(route.action_menu, zh, kit));
-    }
   }
   if (matches.length === 0) {
     rows.push(
@@ -564,13 +579,9 @@ export function renderLibraryBrowseScreen(
       ...rows,
     ),
     helpBar(
-      route.action_menu === undefined
-        ? zh
-          ? "输入搜索 · ↑↓ 选择 · Enter 操作菜单 · Ctrl+X 快捷删除 · Esc 返回"
-          : "type to search · ↑↓ select · Enter actions · Ctrl+X delete · Esc back"
-        : zh
-          ? "↑↓ 选择操作 · Enter 确认 · Esc/退格 关闭"
-          : "↑↓ choose · Enter confirm · Esc/Backspace close",
+      zh
+        ? "输入搜索 · ↑↓ 选择 · Enter 查看详情 · Ctrl+X 快捷删除 · Esc 返回"
+        : "type to search · ↑↓ select · Enter detail · Ctrl+X delete · Esc back",
       kit,
       "keyloop-library-browse-help",
     ),
@@ -642,36 +653,6 @@ function ellipsize(text: string, maxWidth: number): string {
   return truncated.length < text.length ? `${truncated}…` : truncated;
 }
 
-function renderBrowseActionMenu(
-  menuIndex: number,
-  zh: boolean,
-  kit: OpenTuiRendererKit,
-): unknown {
-  const items = [zh ? "编辑" : "Edit", zh ? "删除" : "Delete", zh ? "取消" : "Cancel"];
-  return kit.Box(
-    {
-      id: "keyloop-library-browse-action-menu",
-      border: true,
-      borderStyle: "rounded",
-      borderColor: theme.accent,
-      paddingX: 1,
-      width: 24,
-      flexShrink: 0,
-      overflow: "hidden",
-      flexDirection: "column",
-    },
-    ...items.map((item, index) =>
-      kit.Text({
-        id: `keyloop-library-browse-action-${index}`,
-        content: `${index === menuIndex ? "▌ " : "  "}${item}`,
-        fg: index === menuIndex ? theme.accent : theme.foreground,
-        ...(index === menuIndex ? { attributes: TEXT_BOLD } : {}),
-        height: 1,
-        wrapMode: "none",
-      }),
-    ),
-  );
-}
 
 export function renderLibraryDeleteConfirmScreen(
   state: OpenTuiAppState,
@@ -727,5 +708,206 @@ export function renderLibraryDeleteConfirmScreen(
       }),
     ),
     helpBar(zh ? "Enter 确认删除 · 退格/Esc 取消" : "Enter to delete · Backspace/Esc to cancel", kit, "keyloop-library-delete-help"),
+  );
+}
+
+export const LIBRARY_DETAIL_SCROLLBOX_ID = "keyloop-library-detail-scroll";
+
+const DETAIL_EDIT_VISIBLE_LINES = 16;
+
+export function renderLibraryDetailScreen(
+  state: OpenTuiAppState,
+  kit: OpenTuiRendererKit,
+): unknown {
+  if (state.route.screen !== "library_detail") {
+    return kit.Box({ id: "keyloop-library-detail-empty" });
+  }
+  const zh = state.language === "zh";
+  const route = state.route;
+  const match = libraryEntryById(state, route.slug, route.entry_id);
+  const terminalColumns = process.stdout.columns ?? APP_FRAME_WIDTH;
+  const terminalRows = process.stdout.rows ?? 32;
+  const popupWidth = Math.max(44, Math.min(Math.floor(terminalColumns * 0.7), APP_FRAME_WIDTH - 4));
+  const popupHeight = Math.max(14, Math.floor(terminalRows * 0.8));
+  const contentWidth = popupWidth - 4;
+
+  const editing = route.editing;
+  const typeLabel =
+    match === undefined
+      ? ""
+      : match.entry_type === "words"
+        ? match.entry.kind === "phrase"
+          ? zh
+            ? "词组"
+            : "Phrase"
+          : zh
+            ? "单词"
+            : "Word"
+        : match.entry_type === "sentences"
+          ? zh
+            ? "句子"
+            : "Sentence"
+          : zh
+            ? "文章"
+            : "Article";
+
+  let body: unknown;
+  if (match === undefined) {
+    body = kit.Text({
+      id: "keyloop-library-detail-missing",
+      content: zh ? "条目不存在" : "entry not found",
+      fg: theme.muted,
+      height: 1,
+      wrapMode: "none",
+    });
+  } else if (editing === undefined) {
+    body = renderDetailViewBody(match, contentWidth, zh, kit);
+  } else {
+    body = renderDetailEditBody(editing, contentWidth, kit);
+  }
+
+  return kit.Box(
+    {
+      id: "keyloop-library-detail-backdrop",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      flexGrow: 1,
+      width: "100%",
+      height: "100%",
+    },
+    kit.Box(
+      {
+        id: "keyloop-library-detail-popup",
+        border: true,
+        borderStyle: "rounded",
+        borderColor: editing === undefined ? theme.info : theme.accent,
+        paddingX: 1,
+        width: popupWidth,
+        height: popupHeight,
+        flexShrink: 0,
+        title: editing === undefined ? ` ${typeLabel} ` : zh ? ` 编辑${typeLabel} ` : ` Edit ${typeLabel} `,
+        bottomTitle:
+          editing === undefined
+            ? zh
+              ? " E 编辑 · D 删除 · Esc 关闭 "
+              : " E edit · D delete · Esc close "
+            : zh
+              ? " Ctrl+D 保存 · ←→↑↓ 移动光标 · Esc 取消 "
+              : " Ctrl+D save · arrows move cursor · Esc cancel ",
+        bottomTitleAlignment: "right",
+        overflow: "hidden",
+        flexDirection: "column",
+      },
+      body,
+    ),
+  );
+}
+
+function renderDetailViewBody(
+  match: LibraryBrowseEntry,
+  contentWidth: number,
+  zh: boolean,
+  kit: OpenTuiRendererKit,
+): unknown {
+  const lines: { content: string; fg: OpenTuiColorInput }[] = [];
+  const pushBlock = (text: string, fg: OpenTuiColorInput): void => {
+    for (const logical of text.split("\n")) {
+      const wrapped = wrapWordsToDisplayWidth(logical, contentWidth);
+      for (const line of wrapped.length === 0 ? [""] : wrapped) {
+        lines.push({ content: line, fg });
+      }
+    }
+  };
+  if (match.entry_type === "words") {
+    pushBlock(match.entry.text, theme.foreground);
+    if (match.entry.phonetic !== undefined) {
+      pushBlock(`/${match.entry.phonetic}/`, theme.info);
+    }
+    pushBlock("", theme.muted);
+    pushBlock(match.entry.meaning_zh ?? (zh ? "（无释义）" : "(no meaning)"), theme.muted);
+  } else if (match.entry_type === "sentences") {
+    pushBlock(match.entry.text, theme.foreground);
+    pushBlock("", theme.muted);
+    pushBlock(match.entry.translation_zh ?? (zh ? "（无翻译）" : "(no translation)"), theme.muted);
+  } else {
+    for (const paragraph of match.entry.paragraphs) {
+      pushBlock(paragraph.text, theme.foreground);
+    }
+    pushBlock("", theme.muted);
+    for (const paragraph of match.entry.paragraphs) {
+      if (paragraph.translation_zh !== undefined) {
+        pushBlock(paragraph.translation_zh, theme.muted);
+      }
+    }
+  }
+  const ScrollBox = kit.ScrollBox ?? kit.Box;
+  return ScrollBox(
+    {
+      id: LIBRARY_DETAIL_SCROLLBOX_ID,
+      flexGrow: 1,
+      width: "100%",
+      flexDirection: "column",
+      overflow: "hidden",
+    },
+    ...lines.map((line, index) =>
+      kit.Text({
+        id: `keyloop-library-detail-line-${index}`,
+        content: line.content,
+        fg: line.fg,
+        height: 1,
+        wrapMode: "none",
+      }),
+    ),
+  );
+}
+
+function renderDetailEditBody(
+  editing: { text: string; cursor: number },
+  contentWidth: number,
+  kit: OpenTuiRendererKit,
+): unknown {
+  // 光标处插入 ▏ 后按逻辑行渲染；视窗自动滚动保证光标行可见
+  const withCursor =
+    editing.text.slice(0, editing.cursor) + "▏" + editing.text.slice(editing.cursor);
+  const logicalLines = withCursor.split("\n");
+  const cursorLineIndex = withCursor.slice(0, editing.cursor + 1).split("\n").length - 1;
+  const visualLines: { content: string; hasCursor: boolean }[] = [];
+  let cursorVisualLine = 0;
+  for (let index = 0; index < logicalLines.length; index += 1) {
+    const decorated = `${logicalLines[index] ?? ""}${index < logicalLines.length - 1 ? " ⏎" : ""}`;
+    const wrapped = wrapWordsToDisplayWidth(decorated, contentWidth);
+    for (const line of wrapped.length === 0 ? [""] : wrapped) {
+      if (index === cursorLineIndex && line.includes("▏")) {
+        cursorVisualLine = visualLines.length;
+      }
+      visualLines.push({ content: line, hasCursor: line.includes("▏") });
+    }
+  }
+  const windowStart = Math.max(
+    0,
+    Math.min(
+      cursorVisualLine - Math.floor(DETAIL_EDIT_VISIBLE_LINES / 2),
+      visualLines.length - DETAIL_EDIT_VISIBLE_LINES,
+    ),
+  );
+  const visible = visualLines.slice(windowStart, windowStart + DETAIL_EDIT_VISIBLE_LINES);
+  return kit.Box(
+    {
+      id: "keyloop-library-detail-edit",
+      flexGrow: 1,
+      width: "100%",
+      flexDirection: "column",
+      overflow: "hidden",
+    },
+    ...visible.map((line, index) =>
+      kit.Text({
+        id: `keyloop-library-detail-edit-line-${index}`,
+        content: line.content,
+        fg: theme.foreground,
+        height: 1,
+        wrapMode: "none",
+      }),
+    ),
   );
 }
