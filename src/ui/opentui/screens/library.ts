@@ -374,6 +374,7 @@ export function renderLibraryPreviewScreen(
 import { listRow } from "../components";
 import { APP_FRAME_WIDTH } from "./appFrame";
 import { renderTextPane, textPaneContentWidth, type TextPaneBlock } from "./textPane";
+import { renderCenteredModalOverlay, renderModalPopup } from "./modals";
 import { truncateToDisplayWidth, wrapWordsToDisplayWidth } from "./shared";
 import {
   libraryActionItems,
@@ -573,7 +574,7 @@ export function renderLibraryBrowseScreen(
       }),
     );
   }
-  return kit.Box(
+  const browseScreen = kit.Box(
     {
       id: "keyloop-library-browse",
       flexDirection: "column",
@@ -625,16 +626,29 @@ export function renderLibraryBrowseScreen(
       ...rows,
     ),
     helpBar(
-      route.confirm_delete_id !== undefined
-        ? zh
-          ? "⚠ 确认删除选中条目？Enter 删除 · 任意键取消"
-          : "⚠ Delete selected entry? Enter to delete · any key cancels"
-        : zh
-          ? "输入搜索 · ↑↓ 选择 · Enter 查看详情 · Ctrl+X 删除 · Esc 返回"
-          : "type to search · ↑↓ select · Enter detail · Ctrl+X delete · Esc back",
+      zh
+        ? "输入搜索 · ↑↓ 选择 · Enter 查看详情 · Ctrl+X 删除 · Esc 返回"
+        : "type to search · ↑↓ select · Enter detail · Ctrl+X delete · Esc back",
       kit,
       "keyloop-library-browse-help",
     ),
+  );
+  if (route.confirm_delete_id === undefined) {
+    return browseScreen;
+  }
+  const pending = matches.find((entry) => entry.id === route.confirm_delete_id);
+  return kit.Box(
+    {
+      id: "keyloop-library-browse-with-confirm",
+      position: "relative",
+      flexDirection: "column",
+      flexGrow: 1,
+      width: "100%",
+      height: "100%",
+      overflow: "hidden",
+    },
+    browseScreen,
+    entryDeleteOverlay(pending, zh, kit),
   );
 }
 
@@ -761,6 +775,52 @@ export function renderLibraryDeleteConfirmScreen(
   );
 }
 
+function entryDeleteOverlay(
+  match: LibraryBrowseEntry | undefined,
+  zh: boolean,
+  kit: OpenTuiRendererKit,
+): unknown {
+  const summary =
+    match === undefined
+      ? ""
+      : match.entry_type === "articles"
+        ? match.entry.title
+        : match.entry.text;
+  return renderCenteredModalOverlay(
+    "keyloop-library-entry-delete-overlay",
+    "64%",
+    "40%",
+    renderModalPopup(
+      "keyloop-library-entry-delete",
+      zh ? "删除确认" : "Delete entry",
+      zh ? "Enter 确认删除 · 其他键取消" : "Enter to delete · any key cancels",
+      "bad",
+      kit,
+      {
+        popupChildren: [
+          kit.Text({
+            id: "keyloop-library-entry-delete-message",
+            content: zh
+              ? `删除「${truncateToDisplayWidth(summary, 40)}」？`
+              : `Delete "${truncateToDisplayWidth(summary, 40)}"?`,
+            fg: theme.foreground,
+            height: 1,
+            wrapMode: "none",
+          }),
+          kit.Text({
+            id: "keyloop-library-entry-delete-note",
+            content: zh ? "该操作不可恢复。" : "This cannot be undone.",
+            fg: theme.muted,
+            height: 1,
+            wrapMode: "none",
+          }),
+        ],
+      },
+    ),
+    kit,
+  );
+}
+
 export interface DetailPopupSize {
   width: number;
   height: number;
@@ -874,7 +934,7 @@ export function renderLibraryDetailScreen(
     );
   }
 
-  return kit.Box(
+  const popupScreen = kit.Box(
     {
       id: "keyloop-library-detail-backdrop",
       flexDirection: "column",
@@ -889,34 +949,41 @@ export function renderLibraryDetailScreen(
         id: "keyloop-library-detail-popup",
         border: true,
         borderStyle: "rounded",
-        borderColor:
-          route.confirm_delete === true
-            ? theme.danger
-            : editing === undefined
-              ? theme.info
-              : theme.accent,
+        borderColor: editing === undefined ? theme.info : theme.accent,
         width: size.width,
         height: size.height,
         flexShrink: 0,
         title: editing === undefined ? ` ${typeLabel} ` : zh ? ` 编辑${typeLabel} ` : ` Edit ${typeLabel} `,
         bottomTitle:
-          route.confirm_delete === true
+          editing === undefined
             ? zh
-              ? " 确认删除该条目？Enter 删除 · 任意键取消 "
-              : " Delete this entry? Enter to delete · any key cancels "
-            : editing === undefined
-              ? zh
-                ? " ↑↓ 滚动 · E 编辑 · D 删除 · Esc 关闭 "
-                : " arrows scroll · E edit · D delete · Esc close "
-              : zh
-                ? " Ctrl+D 保存 · ←→↑↓ 移动光标 · Esc 取消 "
-                : " Ctrl+D save · arrows move cursor · Esc cancel ",
+              ? " ↑↓ 滚动 · E 编辑 · D 删除 · Esc 关闭 "
+              : " arrows scroll · E edit · D delete · Esc close "
+            : zh
+              ? " Ctrl+D 保存 · ←→↑↓ 移动光标 · Esc 取消 "
+              : " Ctrl+D save · arrows move cursor · Esc cancel ",
         bottomTitleAlignment: "right",
         overflow: "hidden",
         flexDirection: "column",
       },
       body,
     ),
+  );
+  if (route.confirm_delete !== true) {
+    return popupScreen;
+  }
+  return kit.Box(
+    {
+      id: "keyloop-library-detail-with-confirm",
+      position: "relative",
+      flexDirection: "column",
+      flexGrow: 1,
+      width: "100%",
+      height: "100%",
+      overflow: "hidden",
+    },
+    popupScreen,
+    entryDeleteOverlay(match, zh, kit),
   );
 }
 
