@@ -787,12 +787,16 @@ describe("browse entry detail popup", () => {
     const detail = reduceLibraryBrowseKey(browseBase(), keyEvent("enter", "\r")).state;
     const editing = reduceLibraryDetailKey(detail, keyEvent("e", "e"), fakeContext());
     if (editing.state.route.screen !== "library_detail") throw new Error("expected detail");
-    expect(editing.state.route.editing).toEqual({ text: "abandon: v. 放弃", cursor: 0 });
+    expect(editing.state.route.editing).toEqual({
+      text: "abandon: v. 放弃",
+      cursor: "abandon: v. 放弃".length,
+    });
   });
 
   test("cursor moves and mid-text edits work inside the popup editor", () => {
     let state = reduceLibraryBrowseKey(browseBase(), keyEvent("enter", "\r")).state;
     state = reduceLibraryDetailKey(state, keyEvent("e", "e"), fakeContext()).state;
+    state = reduceLibraryDetailKey(state, keyEvent("home", "\x1b[H"), fakeContext()).state;
     for (let i = 0; i < 7; i += 1) {
       state = reduceLibraryDetailKey(state, keyEvent("right", "\x1b[C"), fakeContext()).state;
     }
