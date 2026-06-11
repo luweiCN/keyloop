@@ -156,8 +156,6 @@ export function reduceOpenTuiAppKey(
           screen: "library_input",
           slug: state.route.slug,
           kind: payload.kind === "article" ? "article" : payload.kind,
-          phase: "body",
-          article_title: payload.kind === "article" ? payload.title : "",
           text: payload.raw_text,
           ...(payload.editing_id === undefined ? {} : { editing_id: payload.editing_id }),
         }),
@@ -492,22 +490,40 @@ function settingsMenuSelectionState(
 
 
 
+interface PasteCapableKeyInput {
+  on?(event: "paste", handler: (event: { bytes?: Uint8Array }) => void): void;
+  off?(event: "paste", handler: (event: { bytes?: Uint8Array }) => void): void;
+}
+
 function waitForAppKey(renderer: OpenTuiRenderer): Promise<OpenTuiKeyEvent | undefined> {
   if (renderer.keyInput === undefined) {
     return Promise.resolve(undefined);
   }
   const keyInput = renderer.keyInput;
+  const pasteInput = keyInput as unknown as PasteCapableKeyInput;
   return new Promise<OpenTuiKeyEvent>((resolve) => {
     let settled = false;
-    const handleKeypress = (event: OpenTuiKeyEvent): void => {
+    const settle = (event: OpenTuiKeyEvent): void => {
       if (settled) {
         return;
       }
       settled = true;
       keyInput.off("keypress", handleKeypress);
+      pasteInput.off?.("paste", handlePaste);
       resolve(event);
     };
+    const handleKeypress = (event: OpenTuiKeyEvent): void => {
+      settle(event);
+    };
+    const handlePaste = (event: { bytes?: Uint8Array }): void => {
+      const text = event.bytes === undefined ? "" : new TextDecoder().decode(event.bytes);
+      if (text === "") {
+        return;
+      }
+      settle({ name: "paste", sequence: text, ctrl: false, meta: false });
+    };
     keyInput.on("keypress", handleKeypress);
+    pasteInput.on?.("paste", handlePaste);
   });
 }
 

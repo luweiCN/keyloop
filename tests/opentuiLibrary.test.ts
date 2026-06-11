@@ -117,8 +117,6 @@ describe("library words input flow", () => {
         screen: "library_input",
         slug: "web",
         kind: "words",
-        phase: "body",
-        article_title: "",
         text: "",
       },
       { customLibraries: [emptyLibrary("web")] },
@@ -211,8 +209,6 @@ describe("library screens dispatch through reduceOpenTuiAppKey", () => {
         screen: "library_input",
         slug: "web",
         kind: "words",
-        phase: "body",
-        article_title: "",
         text: "abandon",
       },
       { customLibraries: [emptyLibrary("web")] },
@@ -230,8 +226,6 @@ describe("library screens dispatch through reduceOpenTuiAppKey", () => {
         screen: "library_input",
         slug: "web",
         kind: "words",
-        phase: "body",
-        article_title: "",
         text: "abc",
       },
       { customLibraries: [emptyLibrary("web")] },
@@ -252,8 +246,6 @@ describe("library sentences and article input flow", () => {
         screen: "library_input",
         slug: "web",
         kind: "sentences",
-        phase: "body",
-        article_title: "",
         text: "The weather is nice.\n今天天气很好。\n\nSee you tomorrow.",
       },
       { customLibraries: [emptyLibrary("web")] },
@@ -273,37 +265,22 @@ describe("library sentences and article input flow", () => {
     expect(saved.state.customLibraries?.[0]?.sentences.length).toBe(2);
   });
 
-  test("article title phase collects title then body paste pairs paragraphs", () => {
+  test("article paste goes straight to body and derives title from first paragraph", () => {
     let state = stateAt(
       {
         screen: "library_input",
         slug: "web",
         kind: "article",
-        phase: "title",
-        article_title: "",
-        text: "",
+        text: "First para about typing practice.\nSecond para.\n\n第一段。\n第二段。",
       },
       { customLibraries: [emptyLibrary("web")] },
     );
-    for (const char of "My Day") {
-      state = reduceLibraryInputKey(state, charEvent(char), fakeContext()).state;
-    }
-    state = reduceLibraryInputKey(state, keyEvent("enter", "\r"), fakeContext()).state;
-    if (state.route.screen !== "library_input") throw new Error("expected input");
-    expect(state.route.phase).toBe("body");
-    expect(state.route.article_title).toBe("My Day");
-
-    state = {
-      ...state,
-      route: { ...state.route, text: "First para.\nSecond para.\n\n第一段。\n第二段。" },
-    };
     state = reduceLibraryInputKey(state, ctrlD, fakeContext()).state;
     if (state.route.screen !== "library_preview") throw new Error("expected preview");
     expect(state.route.payload).toMatchObject({
       kind: "article",
-      title: "My Day",
       paragraphs: [
-        { text: "First para.", translation_zh: "第一段。" },
+        { text: "First para about typing practice.", translation_zh: "第一段。" },
         { text: "Second para.", translation_zh: "第二段。" },
       ],
       warnings: [],
@@ -311,7 +288,7 @@ describe("library sentences and article input flow", () => {
     const saved = reduceLibraryPreviewKey(state, keyEvent("enter", "\r"));
     expect(saved.persist?.kind).toBe("save");
     const article = saved.state.customLibraries?.[0]?.articles[0];
-    expect(article?.title).toBe("My Day");
+    expect(article?.title).toBe("First para about typing practice.");
     expect(article?.paragraphs.length).toBe(2);
   });
 
@@ -321,8 +298,6 @@ describe("library sentences and article input flow", () => {
         screen: "library_input",
         slug: "web",
         kind: "article",
-        phase: "body",
-        article_title: "T",
         text: "P1.\nP2.\n\n译一。",
       },
       { customLibraries: [emptyLibrary("web")] },
@@ -339,8 +314,6 @@ describe("library sentences and article input flow", () => {
         screen: "library_input",
         slug: "web",
         kind: "sentences",
-        phase: "body",
-        article_title: "",
         text: "  \n ",
       },
       { customLibraries: [emptyLibrary("web")] },
@@ -425,7 +398,6 @@ describe("library actions screen", () => {
     expect(addWords.state.route).toMatchObject({
       screen: "library_input",
       kind: "words",
-      phase: "body",
     });
     const onDelete = stateAt(
       { screen: "library_actions", slug: "web", selected_index: 6 },
@@ -447,16 +419,17 @@ describe("library actions screen", () => {
     });
   });
 
-  test("article action starts at title phase", () => {
+  test("article action goes straight to body paste", () => {
     const onArticle = stateAt(
       { screen: "library_actions", slug: "web", selected_index: 2 },
       { customLibraries: [richLibrary()] },
     );
     const result = reduceLibraryActionsKey(onArticle, keyEvent("enter", "\r"));
-    expect(result.state.route).toMatchObject({
+    expect(result.state.route).toEqual({
       screen: "library_input",
+      slug: "web",
       kind: "article",
-      phase: "title",
+      text: "",
     });
   });
 });
@@ -588,17 +561,13 @@ describe("acceptance: all library screens render without throwing", () => {
       screen: "library_input",
       slug: "web",
       kind: "words",
-      phase: "body",
-      article_title: "",
       text: "abandon\nfoo: 释义",
     },
     {
       screen: "library_input",
       slug: "web",
       kind: "article",
-      phase: "title",
-      article_title: "My Day",
-      text: "",
+      text: "First para.\n\n第一段。",
     },
     {
       screen: "library_preview",
@@ -618,7 +587,7 @@ describe("acceptance: all library screens render without throwing", () => {
   ];
 
   for (const route of routes) {
-    test(`renders ${route.screen}${"kind" in route ? `:${route.kind}:${route.phase}` : ""}`, async () => {
+    test(`renders ${route.screen}${"kind" in route ? `:${route.kind}` : ""}`, async () => {
       const state = stateAt(route, {
         customLibraries: [
           {
@@ -667,3 +636,68 @@ function fakeRenderKit(): Parameters<typeof renderOpenTuiAppOnce>[1] & {
     }),
   } as never;
 }
+
+import { inputTextFromEvent } from "../src/ui/opentui/libraryReducers";
+
+describe("IME and paste text input", () => {
+  test("inputTextFromEvent accepts multi-character IME sequences", () => {
+    expect(inputTextFromEvent(keyEvent("考研英语", "考研英语"))).toBe("考研英语");
+    expect(inputTextFromEvent(keyEvent("a", "a"))).toBe("a");
+    expect(inputTextFromEvent(keyEvent("escape", "\x1b"))).toBeNull();
+    expect(inputTextFromEvent({ name: "d", sequence: "\x04", ctrl: true, meta: false })).toBeNull();
+  });
+
+  test("inputTextFromEvent accepts synthetic paste events with newlines kept", () => {
+    const paste = { name: "paste", sequence: "abandon\r\nvivid: 生动\r\n", ctrl: false, meta: false };
+    expect(inputTextFromEvent(paste)).toBe("abandon\nvivid: 生动\n");
+  });
+
+  test("library name input accepts IME chunk and pasted text without newlines", () => {
+    let state = stateAt({ screen: "library_create", name: "" });
+    state = reduceLibraryCreateKey(state, keyEvent("考研英语", "考研英语")).state;
+    expect(state.route).toEqual({ screen: "library_create", name: "考研英语" });
+    state = reduceLibraryCreateKey(state, {
+      name: "paste",
+      sequence: " 2026\n冲刺",
+      ctrl: false,
+      meta: false,
+    }).state;
+    expect(state.route).toEqual({ screen: "library_create", name: "考研英语 2026 冲刺" });
+  });
+
+  test("multi-line input accepts pasted block with newlines", () => {
+    let state = stateAt(
+      { screen: "library_input", slug: "web", kind: "words", text: "" },
+      { customLibraries: [emptyLibrary("web")] },
+    );
+    state = reduceLibraryInputKey(
+      state,
+      { name: "paste", sequence: "abandon\nmachine learning: 机器学习\n", ctrl: false, meta: false },
+      fakeContext(),
+    ).state;
+    if (state.route.screen !== "library_input") throw new Error("expected input");
+    expect(state.route.text).toBe("abandon\nmachine learning: 机器学习\n");
+    state = reduceLibraryInputKey(state, keyEvent("好", "好"), fakeContext()).state;
+    if (state.route.screen !== "library_input") throw new Error("expected input");
+    expect(state.route.text).toBe("abandon\nmachine learning: 机器学习\n好");
+  });
+
+  test("browse query accepts typing but d still deletes when query empty", () => {
+    const base = stateAt(
+      { screen: "library_browse", slug: "web", entry_type: "words", query: "", index: 0 },
+      {
+        customLibraries: [
+          {
+            ...emptyLibrary("web"),
+            words: [{ id: "w1", text: "abandon", kind: "word", source: "dict" }],
+          },
+        ],
+      },
+    );
+    const deleted = reduceLibraryBrowseKey(base, keyEvent("d", "d"));
+    expect(deleted.persist?.kind).toBe("save");
+    const typed = reduceLibraryBrowseKey(base, keyEvent("机器", "机器"));
+    if (typed.state.route.screen !== "library_browse") throw new Error("expected browse");
+    expect(typed.state.route.query).toBe("机器");
+  });
+});

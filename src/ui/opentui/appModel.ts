@@ -228,8 +228,6 @@ export type OpenTuiRoute =
       screen: "library_input";
       slug: string;
       kind: "words" | "sentences" | "article";
-      phase: "title" | "body";
-      article_title: string;
       text: string;
       editing_id?: string;
     }

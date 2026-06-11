@@ -89,50 +89,6 @@ export function renderLibraryInputScreen(
       : "English paragraphs (one per line), blank line, then translations · Ctrl+D submit",
   } as const;
 
-  if (route.kind === "article" && route.phase === "title") {
-    return kit.Box(
-      {
-        id: "keyloop-library-input",
-        flexDirection: "column",
-        gap: 1,
-        flexGrow: 1,
-        width: "100%",
-      },
-      kit.Box(
-        {
-          id: "keyloop-library-input-title-panel",
-          border: true,
-          borderStyle: "rounded",
-          borderColor: theme.info,
-          paddingX: 1,
-          height: 3,
-          width: "100%",
-          flexShrink: 0,
-          title: zh ? ` 文章标题 — ${libraryName} ` : ` Article title — ${libraryName} `,
-          overflow: "hidden",
-        },
-        kit.Text({
-          id: "keyloop-library-input-title-value",
-          content:
-            route.article_title === ""
-              ? zh
-                ? "输入文章标题…"
-                : "type the article title…"
-              : `${route.article_title}▏`,
-          fg: route.article_title === "" ? theme.muted : theme.foreground,
-          attributes: route.article_title === "" ? undefined : TEXT_BOLD,
-          height: 1,
-          wrapMode: "none",
-        }),
-      ),
-      helpBar(
-        zh ? "Enter 继续粘贴正文 · Esc 取消" : "Enter to paste body · Esc to cancel",
-        kit,
-        "keyloop-library-input-title-help",
-      ),
-    );
-  }
-
   const lines = route.text.split("\n");
   const visible = lines.slice(-INPUT_VISIBLE_LINES);
   const hiddenCount = lines.length - visible.length;

@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import ts from "typescript";
 import { Language, Parser, type Node as TreeSitterNode } from "web-tree-sitter";
 
 import { scoreTypingDifficulty } from "../training/typingDifficulty";
@@ -178,10 +179,15 @@ export async function collectTypeScriptCorpusV4FromFile(
   options: Omit<CorpusV4SourceOptions, "relativePath">,
 ): Promise<CorpusV4Record[]> {
   const source = await readFile(filePath, "utf8");
-  return collectTypeScriptCorpusV4FromSource(source, {
+  const sourceOptions = {
     ...options,
     relativePath: relative(repoRoot, filePath),
-  });
+  };
+  const records = await collectTypeScriptCorpusV4FromSource(source, sourceOptions);
+  if (records.length > 0 || !filePath.endsWith(".tsx")) {
+    return records;
+  }
+  return collectTypeScriptFileLevelFallback(source, filePath, sourceOptions);
 }
 
 async function typeScriptParser(): Promise<Parser> {
@@ -215,6 +221,73 @@ function typeScriptGrammarPath(): string {
     }
   }
   throw new Error("tree-sitter TypeScript grammar wasm not found");
+}
+
+function collectTypeScriptFileLevelFallback(
+  source: string,
+  filePath: string,
+  options: CorpusV4SourceOptions,
+): CorpusV4Record[] {
+  const scriptKind = filePath.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
+  const sourceFile = ts.createSourceFile(filePath, source, ts.ScriptTarget.Latest, true, scriptKind);
+  if (sourceFile.parseDiagnostics.length > 0) {
+    return [];
+  }
+  const normalized = normalizeSnippetText(source);
+  if (!isUsableText(normalized)) {
+    return [];
+  }
+  const size = sizeFor("file", normalized);
+  if (size === undefined) {
+    return [];
+  }
+  const quality = assessCorpusTextQuality({
+    text: normalized,
+    level: "file",
+    size,
+    line_count: normalized.split("\n").length,
+    char_count: normalized.length,
+  });
+  if (quality.status === "reject" || quality.metrics.maxLineLength > 140) {
+    return [];
+  }
+  const scored = scoreTypingDifficulty(normalized);
+  const lineCount = normalized.split("\n").length;
+  return [{
+    id: [
+      "v4",
+      options.technologyDomain.toLowerCase(),
+      options.repo.replace(/[^A-Za-z0-9]+/gu, "-").toLowerCase(),
+      options.relativePath.replace(/[^A-Za-z0-9]+/gu, "-").toLowerCase(),
+      1,
+      lineCount,
+    ].join("-"),
+    corpus_version: 4,
+    quality: "candidate",
+    source_kind: "github",
+    repo: options.repo,
+    repo_url: options.repoUrl,
+    source_url: `${options.repoUrl}/blob/${options.commitSha}/${options.relativePath}#L1-L${lineCount}`,
+    commit: options.commitSha,
+    commit_sha: options.commitSha,
+    file_path: options.relativePath,
+    start_line: 1,
+    end_line: lineCount,
+    technology_domain: options.technologyDomain,
+    language: options.language,
+    framework: options.framework,
+    domain: options.technologyDomain,
+    level: "file",
+    difficulty: scored.difficulty,
+    difficulty_score: scored.score,
+    difficulty_reasons: scored.reasons,
+    size,
+    line_count: lineCount,
+    char_count: normalized.length,
+    shape: ["file", "typescript-sourcefile-fallback"],
+    text: normalized,
+    license_spdx: options.licenseSpdx,
+  }];
 }
 
 function functionCandidates(root: TreeSitterNode): Candidate[] {

@@ -24,19 +24,44 @@ export function isBackspaceEvent(event: OpenTuiKeyEvent): boolean {
   );
 }
 
-export function printableChar(event: OpenTuiKeyEvent): string | null {
+/**
+ * 从按键/粘贴事件提取可输入文本。
+ * - 普通按键：sequence 为单个或多个（IME 整句上屏）可打印字符
+ * - 合成粘贴事件（name === "paste"）：保留换行（CRLF 归一为 \n），过滤其他控制字符
+ * 返回 null 表示该事件不是文本输入。
+ */
+export function inputTextFromEvent(event: OpenTuiKeyEvent): string | null {
   if (event.ctrl || event.meta) {
     return null;
   }
-  const chars = Array.from(event.sequence);
-  if (chars.length !== 1) {
+  const raw = event.name === "paste" ? event.sequence.replaceAll("\r\n", "\n").replaceAll("\r", "\n") : event.sequence;
+  if (raw === "") {
     return null;
   }
-  const codePoint = chars[0]!.codePointAt(0) ?? 0;
-  if (codePoint < 0x20 || codePoint === 0x7f) {
-    return null;
+  const keepNewlines = event.name === "paste";
+  let text = "";
+  for (const char of raw) {
+    const codePoint = char.codePointAt(0) ?? 0;
+    if (char === "\n") {
+      if (keepNewlines) {
+        text += char;
+      }
+      continue;
+    }
+    if (char === "\t") {
+      text += "  ";
+      continue;
+    }
+    if (codePoint < 0x20 || codePoint === 0x7f) {
+      return event.name === "paste" ? (text === "" ? null : text) : null;
+    }
+    text += char;
   }
-  return chars[0]!;
+  return text === "" ? null : text;
+}
+
+function singleLine(text: string): string {
+  return text.replaceAll("\n", " ").replaceAll(/\s+/gu, " ");
 }
 
 export function reduceLibraryCreateKey(
@@ -64,9 +89,9 @@ export function reduceLibraryCreateKey(
   if (isBackspaceEvent(event)) {
     return { state: withRoute(state, { ...route, name: route.name.slice(0, -1) }) };
   }
-  const char = printableChar(event);
-  if (char !== null) {
-    return { state: withRoute(state, { ...route, name: route.name + char }) };
+  const text = inputTextFromEvent(event);
+  if (text !== null) {
+    return { state: withRoute(state, { ...route, name: singleLine(route.name + singleLine(text)) }) };
   }
   return { state };
 }
@@ -84,23 +109,6 @@ export function reduceLibraryInputKey(
   if (route.screen !== "library_input") {
     return { state };
   }
-  if (route.kind === "article" && route.phase === "title") {
-    if (isEnterEvent(event)) {
-      return { state: withRoute(state, { ...route, phase: "body" }) };
-    }
-    if (isBackspaceEvent(event)) {
-      return {
-        state: withRoute(state, { ...route, article_title: route.article_title.slice(0, -1) }),
-      };
-    }
-    const titleChar = printableChar(event);
-    if (titleChar !== null) {
-      return {
-        state: withRoute(state, { ...route, article_title: route.article_title + titleChar }),
-      };
-    }
-    return { state };
-  }
   if (isSubmitEvent(event)) {
     return submitLibraryInput(state, route, context);
   }
@@ -110,11 +118,23 @@ export function reduceLibraryInputKey(
   if (isBackspaceEvent(event)) {
     return { state: withRoute(state, { ...route, text: route.text.slice(0, -1) }) };
   }
-  const char = printableChar(event);
-  if (char !== null) {
-    return { state: withRoute(state, { ...route, text: route.text + char }) };
+  const text = inputTextFromEvent(event);
+  if (text !== null) {
+    return { state: withRoute(state, { ...route, text: route.text + text }) };
   }
   return { state };
+}
+
+const AUTO_TITLE_MAX = 48;
+
+function autoArticleTitle(paragraphs: readonly { text: string }[]): string {
+  const first = (paragraphs[0]?.text ?? "").trim();
+  if (first.length <= AUTO_TITLE_MAX) {
+    return first;
+  }
+  const cut = first.slice(0, AUTO_TITLE_MAX);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${lastSpace > 20 ? cut.slice(0, lastSpace) : cut}…`;
 }
 
 function submitLibraryInput(
@@ -188,7 +208,7 @@ function submitLibraryInput(
       payload: {
         kind: "article",
         raw_text: route.text,
-        title: route.article_title.trim(),
+        title: autoArticleTitle(parsedArticle.paragraphs),
         paragraphs: parsedArticle.paragraphs,
         warnings: parsedArticle.warnings,
         ...(route.editing_id === undefined ? {} : { editing_id: route.editing_id }),
@@ -212,8 +232,6 @@ export function reduceLibraryPreviewKey(
         screen: "library_input",
         slug: route.slug,
         kind: payload.kind === "article" ? "article" : payload.kind,
-        phase: "body",
-        article_title: payload.kind === "article" ? payload.title : "",
         text: payload.raw_text,
         ...(payload.editing_id === undefined ? {} : { editing_id: payload.editing_id }),
       }),
@@ -397,24 +415,12 @@ export function reduceLibraryActionsKey(
   switch (item.id) {
     case "add_words":
     case "add_sentences":
-      return {
-        state: withRoute(state, {
-          screen: "library_input",
-          slug: route.slug,
-          kind: item.id === "add_words" ? "words" : "sentences",
-          phase: "body",
-          article_title: "",
-          text: "",
-        }),
-      };
     case "add_article":
       return {
         state: withRoute(state, {
           screen: "library_input",
           slug: route.slug,
-          kind: "article",
-          phase: "title",
-          article_title: "",
+          kind: item.id === "add_words" ? "words" : item.id === "add_sentences" ? "sentences" : "article",
           text: "",
         }),
       };
@@ -485,8 +491,6 @@ function editPrefillRoute(
       screen: "library_input",
       slug,
       kind: "words",
-      phase: "body",
-      article_title: "",
       text: word.meaning_zh === undefined ? word.text : `${word.text}: ${word.meaning_zh}`,
       editing_id: word.id,
     };
@@ -497,8 +501,6 @@ function editPrefillRoute(
       screen: "library_input",
       slug,
       kind: "sentences",
-      phase: "body",
-      article_title: "",
       text:
         sentence.translation_zh === undefined
           ? sentence.text
@@ -516,8 +518,6 @@ function editPrefillRoute(
     screen: "library_input",
     slug,
     kind: "article",
-    phase: "body",
-    article_title: article.title,
     text: chinese === "" ? english : `${english}\n\n${chinese}`,
     editing_id: article.id,
   };
@@ -559,16 +559,16 @@ export function reduceLibraryBrowseKey(
   if (isBackspaceEvent(event)) {
     return { state: withRoute(state, { ...route, query: route.query.slice(0, -1), index: 0 }) };
   }
-  const char = printableChar(event);
-  if (char !== null) {
-    if (char === "d" && route.query === "") {
+  const text = inputTextFromEvent(event);
+  if (text !== null) {
+    if (text === "d" && event.name !== "paste" && route.query === "") {
       const match = matches[index];
       if (match === undefined) {
         return { state };
       }
       return deleteBrowseEntry(state, route, match, index);
     }
-    return { state: withRoute(state, { ...route, query: route.query + char, index: 0 }) };
+    return { state: withRoute(state, { ...route, query: singleLine(route.query + text), index: 0 }) };
   }
   return { state };
 }
