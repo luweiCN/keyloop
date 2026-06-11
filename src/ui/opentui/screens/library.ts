@@ -61,6 +61,15 @@ export function renderLibraryCreateScreen(
 
 const INPUT_VISIBLE_LINES = 14;
 
+function inputWrapColumns(): number {
+  const terminalColumns = process.stdout.columns;
+  const frameColumns =
+    terminalColumns === undefined || terminalColumns <= 0
+      ? APP_FRAME_WIDTH
+      : Math.min(terminalColumns, APP_FRAME_WIDTH);
+  return Math.max(20, frameColumns - 8); // 扣除边框、padding 与滚动余量
+}
+
 export function renderLibraryInputScreen(
   state: OpenTuiAppState,
   kit: OpenTuiRendererKit,
@@ -89,9 +98,18 @@ export function renderLibraryInputScreen(
       : "English paragraphs (one per line), blank line, then translations · Ctrl+D submit",
   } as const;
 
-  const lines = route.text.split("\n");
-  const visible = lines.slice(-INPUT_VISIBLE_LINES);
-  const hiddenCount = lines.length - visible.length;
+  const wrapColumns = inputWrapColumns();
+  const logicalLines = route.text.split("\n");
+  const visualLines: string[] = [];
+  for (let index = 0; index < logicalLines.length; index += 1) {
+    const isLastLogical = index === logicalLines.length - 1;
+    // 真实换行处标 ⏎，与练习屏一致；末行显示光标
+    const decorated = `${logicalLines[index] ?? ""}${isLastLogical ? "▏" : " ⏎"}`;
+    const wrapped = wrapToDisplayWidth(decorated, wrapColumns);
+    visualLines.push(...(wrapped.length === 0 ? [""] : wrapped));
+  }
+  const visible = visualLines.slice(-INPUT_VISIBLE_LINES);
+  const hiddenCount = visualLines.length - visible.length;
   const children: unknown[] = [];
   if (hiddenCount > 0) {
     children.push(
@@ -105,11 +123,10 @@ export function renderLibraryInputScreen(
     );
   }
   for (let index = 0; index < visible.length; index += 1) {
-    const isLast = index === visible.length - 1;
     children.push(
       kit.Text({
         id: `keyloop-library-input-line-${index}`,
-        content: `${visible[index] ?? ""}${isLast ? "▏" : ""}`,
+        content: visible[index] ?? "",
         fg: theme.foreground,
         height: 1,
         wrapMode: "none",
@@ -226,16 +243,34 @@ export function renderLibraryPreviewScreen(
     }
   } else {
     summary = zh
-      ? `《${payload.title || "未命名文章"}》 · ${payload.paragraphs.length} 段`
-      : `"${payload.title || "Untitled"}" · ${payload.paragraphs.length} paragraphs`;
+      ? `${payload.paragraphs.length} 段`
+      : `${payload.paragraphs.length} paragraphs`;
     for (const warning of payload.warnings) {
       pushRow(`⚠ ${warning}`, theme.warning);
     }
-    for (const paragraph of payload.paragraphs.slice(0, 3)) {
-      pushRow(`· ${paragraph.text.slice(0, 60)}`, theme.foreground);
-      if (paragraph.translation_zh !== undefined) {
-        pushRow(`  ${paragraph.translation_zh.slice(0, 60)}`, theme.muted);
+    // 与录入格式一致：整篇英文在上，空行后整篇翻译在下
+    const columns = inputWrapColumns();
+    const blockBudget = Math.floor((PREVIEW_VISIBLE_ROWS - payload.warnings.length) / 2);
+    const english = payload.paragraphs.map((paragraph) => paragraph.text);
+    const chinese = payload.paragraphs
+      .map((paragraph) => paragraph.translation_zh)
+      .filter((line): line is string => line !== undefined);
+    for (const line of english.slice(0, blockBudget)) {
+      pushRow(truncateToDisplayWidth(line, columns), theme.foreground);
+    }
+    if (english.length > blockBudget) {
+      pushRow(zh ? `… 其余 ${english.length - blockBudget} 段省略` : `… ${english.length - blockBudget} more`, theme.muted);
+    }
+    if (chinese.length > 0) {
+      pushRow("", theme.muted);
+      for (const line of chinese.slice(0, blockBudget)) {
+        pushRow(truncateToDisplayWidth(line, columns), theme.muted);
       }
+      if (chinese.length > blockBudget) {
+        pushRow(zh ? `… 其余 ${chinese.length - blockBudget} 行省略` : `… ${chinese.length - blockBudget} more`, theme.muted);
+      }
+    } else {
+      pushRow(zh ? "（无翻译）" : "(no translation)", theme.warning);
     }
   }
 
@@ -271,6 +306,8 @@ export function renderLibraryPreviewScreen(
 }
 
 import { listRow } from "../components";
+import { APP_FRAME_WIDTH } from "./appFrame";
+import { truncateToDisplayWidth, wrapToDisplayWidth } from "./shared";
 import { libraryActionItems, libraryBrowseMatches } from "../libraryReducers";
 
 function libraryListRow(
