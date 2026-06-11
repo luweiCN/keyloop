@@ -703,6 +703,9 @@ function activateLibraryMenuItem(
   state: OpenTuiAppState,
   itemId: OpenTuiMenuItemId,
 ): OpenTuiAppState {
+  if (itemId === "library_manage") {
+    return withRoute(state, { screen: "library_manage", selected_index: 0 });
+  }
   if (!itemId.startsWith("library_kind_")) {
     return state;
   }

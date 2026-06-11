@@ -180,6 +180,13 @@ export function libraryMenuItems(state: OpenTuiAppState, slug: string): OpenTuiM
       label: zh ? "混合练习" : "Mixed",
       hint: zh ? "单词 · 词组 · 句子 · 文章" : "words · phrases · sentences · articles",
     });
+  } else {
+    // 空库：给出指引而不是一片空白
+    items.push({
+      id: "library_manage",
+      label: zh ? "该语料库还没有内容" : "This library is empty",
+      hint: zh ? "回车进入管理，先添加单词、句子或文章" : "press Enter to add words, sentences, or articles",
+    });
   }
   return items;
 }
