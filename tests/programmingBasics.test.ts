@@ -9,6 +9,7 @@ import {
 } from "../src/content/programmingBasics";
 import {
   buildBuiltinApiTarget,
+  buildNewProgrammingBasicsMixTarget,
   buildSymbolsNumbersTarget,
   resolveProgrammingBasicsLanguage,
 } from "../src/training/programmingBasicsTargets";
@@ -252,5 +253,28 @@ describe("builtin api target", () => {
     const lines = target.text.split("\n");
     expect(lines.length).toBeGreaterThanOrEqual(8);
     expect(target.code_blocks?.[0]?.language).toBe("python");
+  });
+});
+
+describe("programming basics mix target", () => {
+  test("combines cards, naming and words with single language", () => {
+    const contentRoot = makeFixtureRootWithManyCards();
+    const options = { env: { KEYLOOP_TS_CONTENT_ROOT: contentRoot }, exists: () => true };
+    const context = basicsContext([], ["typescript"]);
+    context.library = {
+      programming_words: [
+        "filter", "select", "update", "remove", "create", "config", "request", "response",
+      ],
+    } as ContentLibrary;
+    const target = buildNewProgrammingBasicsMixTarget(context, options);
+    expect(target.mode).toBe("code");
+    expect(target.source).toBe("keyloop:module:programming-basics-mix:typescript");
+    const lines = target.text.split("\n").filter((line) => line.trim().length > 0);
+    expect(lines.length).toBeGreaterThanOrEqual(6);
+    expect(lines.length).toBeLessThanOrEqual(10);
+    const namingLines = lines.filter((line) => line.includes("_LIMIT"));
+    expect(namingLines.length).toBe(2);
+    const cardLines = lines.filter((line) => line.includes(";"));
+    expect(cardLines.length).toBeGreaterThanOrEqual(4);
   });
 });

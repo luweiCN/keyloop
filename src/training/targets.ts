@@ -2030,7 +2030,7 @@ function repeatPool(
   return output.slice(0, targetLen);
 }
 
-function chunkWords(items: string[], chunkSize: number): string[] {
+export function chunkWords(items: string[], chunkSize: number): string[] {
   const lines: string[] = [];
   for (let index = 0; index < items.length; index += chunkSize) {
     lines.push(items.slice(index, index + chunkSize).join(" "));

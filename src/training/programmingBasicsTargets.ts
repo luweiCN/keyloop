@@ -6,7 +6,8 @@ import {
   type ProgrammingBasicsKind,
   type ProgrammingBasicsOptions,
 } from "../content/programmingBasics";
-import type { BuildTargetContext } from "./targets";
+import { recentFeedbackTerms } from "./feedback";
+import { chunkWords, type BuildTargetContext } from "./targets";
 
 const CARDS_PER_LESSON_MIN = 8;
 const CARDS_PER_LESSON_MAX = 10;
@@ -130,4 +131,63 @@ export function buildBuiltinApiTarget(
   options: ProgrammingBasicsOptions = {},
 ): PracticeTarget {
   return basicsTarget("builtin_api", "builtin-api", context, options);
+}
+
+export function namingLinesFromWords(
+  words: string[],
+  random: () => number,
+  count: number,
+): string[] {
+  const pool = shuffled(
+    words.filter((word) => /^[a-z]+$/.test(word)),
+    random,
+  );
+  const lines: string[] = [];
+  for (const word of pool.slice(0, Math.max(0, count))) {
+    const pascal = word.charAt(0).toUpperCase() + word.slice(1);
+    lines.push(`${word} get${pascal} ${pascal}Config ${word.toUpperCase()}_LIMIT`);
+  }
+  return lines;
+}
+
+export function buildNewProgrammingBasicsMixTarget(
+  context: BuildTargetContext,
+  options: ProgrammingBasicsOptions = {},
+): PracticeTarget {
+  const random = context.random ?? Math.random;
+  const available = listProgrammingBasicsLanguages(options);
+  const language = resolveProgrammingBasicsLanguage(context.codeConfig, available, random);
+  const used = recentBasicsLines(context.records);
+
+  const symbolCards = pickBalancedCards(
+    loadProgrammingBasicsCards("symbols_numbers", language, options),
+    used,
+    random,
+  ).slice(0, 3);
+  const apiCards = pickBalancedCards(
+    loadProgrammingBasicsCards("builtin_api", language, options),
+    used,
+    random,
+  ).slice(0, 3);
+
+  const lines: string[] = [];
+  const feedback = recentFeedbackTerms(context.records);
+  if (feedback.length > 0) {
+    lines.push(...chunkWords(feedback.slice(0, 8), 4));
+  }
+  lines.push(...symbolCards.map((card) => card.text));
+  lines.push(...apiCards.map((card) => card.text));
+  lines.push(...namingLinesFromWords(context.library.programming_words, random, 2));
+  const words = shuffled(context.library.programming_words, random).slice(0, 8);
+  if (words.length > 0) {
+    lines.push(...chunkWords(words, 4));
+  }
+
+  const cardCount = symbolCards.length + apiCards.length;
+  return {
+    mode: "code",
+    text: lines.join("\n"),
+    source: `keyloop:module:programming-basics-mix:${language}`,
+    code_blocks: [basicsCodeBlock(language, cardCount)],
+  };
 }
