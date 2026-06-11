@@ -1,0 +1,7 @@
+{
+  "schema": "keyloop.programming_basics",
+  "schema_version": 1,
+  "languages": [
+    "typescript"
+  ]
+}

@@ -24,6 +24,7 @@
     "content:build-word-decomposition-moby": "bun src/tools/buildEverydayWordDecompositionFromMoby.ts",
     "content:build-word-decomposition": "bun src/tools/buildEverydayWordDecompositionContent.ts",
     "content:build-dictionary-mini": "bun src/tools/buildDictionaryMini.ts",
+    "content:build-programming-basics": "bun src/tools/buildProgrammingBasicsContent.ts",
     "smoke": "bun run smoke:plan && bun run smoke:report && bun run smoke:sources && bun run smoke:binary:sources",
     "verify:migration": "bun run typecheck && bun test tests && bun run build && bun run build:binary && bun run smoke",
     "verify:all": "bun run verify:migration"

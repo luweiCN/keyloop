@@ -5,8 +5,14 @@
     "repo_url": "https://github.com/vitejs/vite",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript", "javascript"],
-    "frameworks": ["vite", "frontend"],
+    "languages": [
+      "typescript",
+      "javascript"
+    ],
+    "frameworks": [
+      "vite",
+      "frontend"
+    ],
     "notes": "Source family for TypeScript tooling and frontend build code."
   },
   {
@@ -15,8 +21,15 @@
     "repo_url": "https://github.com/vercel/next.js",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript", "javascript", "react"],
-    "frameworks": ["react", "nextjs"],
+    "languages": [
+      "typescript",
+      "javascript",
+      "react"
+    ],
+    "frameworks": [
+      "react",
+      "nextjs"
+    ],
     "notes": "Source family for React and Next.js application code blocks."
   },
   {
@@ -25,8 +38,13 @@
     "repo_url": "https://github.com/facebook/react",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["javascript", "typescript"],
-    "frameworks": ["react"],
+    "languages": [
+      "javascript",
+      "typescript"
+    ],
+    "frameworks": [
+      "react"
+    ],
     "notes": "Source family for React hooks, reducer, and fixture-style drills."
   },
   {
@@ -35,8 +53,13 @@
     "repo_url": "https://github.com/TanStack/query",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript"],
-    "frameworks": ["react", "query"],
+    "languages": [
+      "typescript"
+    ],
+    "frameworks": [
+      "react",
+      "query"
+    ],
     "notes": "Source family for frontend async-state and cache invalidation snippets."
   },
   {
@@ -45,8 +68,12 @@
     "repo_url": "https://github.com/vuejs/core",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript"],
-    "frameworks": ["vue"],
+    "languages": [
+      "typescript"
+    ],
+    "frameworks": [
+      "vue"
+    ],
     "notes": "Source family for Vue runtime and composition API examples."
   },
   {
@@ -55,8 +82,13 @@
     "repo_url": "https://github.com/vuejs/pinia",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript"],
-    "frameworks": ["vue", "pinia"],
+    "languages": [
+      "typescript"
+    ],
+    "frameworks": [
+      "vue",
+      "pinia"
+    ],
     "notes": "Source family for Vue store and state-management drills."
   },
   {
@@ -65,8 +97,13 @@
     "repo_url": "https://github.com/vuejs/router",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript"],
-    "frameworks": ["vue", "router"],
+    "languages": [
+      "typescript"
+    ],
+    "frameworks": [
+      "vue",
+      "router"
+    ],
     "notes": "Source family for Vue route guard and navigation snippets."
   },
   {
@@ -75,8 +112,13 @@
     "repo_url": "https://github.com/vueuse/vueuse",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript"],
-    "frameworks": ["vue", "composables"],
+    "languages": [
+      "typescript"
+    ],
+    "frameworks": [
+      "vue",
+      "composables"
+    ],
     "notes": "Source family for Vue composable and reactivity drills."
   },
   {
@@ -85,8 +127,14 @@
     "repo_url": "https://github.com/nuxt/nuxt",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript", "vue"],
-    "frameworks": ["vue", "nuxt"],
+    "languages": [
+      "typescript",
+      "vue"
+    ],
+    "frameworks": [
+      "vue",
+      "nuxt"
+    ],
     "notes": "Source family for Nuxt routing, data loading, and middleware snippets."
   },
   {
@@ -95,8 +143,12 @@
     "repo_url": "https://github.com/nestjs/nest",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript"],
-    "frameworks": ["nestjs"],
+    "languages": [
+      "typescript"
+    ],
+    "frameworks": [
+      "nestjs"
+    ],
     "notes": "Source family for controller, provider, module, guard, and test code."
   },
   {
@@ -105,8 +157,13 @@
     "repo_url": "https://github.com/nestjs/typeorm",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript"],
-    "frameworks": ["nestjs", "typeorm"],
+    "languages": [
+      "typescript"
+    ],
+    "frameworks": [
+      "nestjs",
+      "typeorm"
+    ],
     "notes": "Source family for NestJS persistence and repository drills."
   },
   {
@@ -115,8 +172,12 @@
     "repo_url": "https://github.com/OpenZeppelin/openzeppelin-contracts",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["solidity"],
-    "frameworks": ["evm"],
+    "languages": [
+      "solidity"
+    ],
+    "frameworks": [
+      "evm"
+    ],
     "notes": "Source family for Solidity function and modifier drills."
   },
   {
@@ -125,8 +186,14 @@
     "repo_url": "https://github.com/tauri-apps/tauri",
     "license_spdx": "Apache-2.0",
     "retrieved_at": "2026-05-30",
-    "languages": ["rust", "typescript"],
-    "frameworks": ["rust", "desktop"],
+    "languages": [
+      "rust",
+      "typescript"
+    ],
+    "frameworks": [
+      "rust",
+      "desktop"
+    ],
     "notes": "Source family for Rust application code and TypeScript integration code."
   },
   {
@@ -135,8 +202,14 @@
     "repo_url": "https://github.com/swc-project/swc",
     "license_spdx": "Apache-2.0",
     "retrieved_at": "2026-05-30",
-    "languages": ["rust", "typescript"],
-    "frameworks": ["rust", "web"],
+    "languages": [
+      "rust",
+      "typescript"
+    ],
+    "frameworks": [
+      "rust",
+      "web"
+    ],
     "notes": "Source family for Rust compiler transform and visitor snippets."
   },
   {
@@ -145,8 +218,14 @@
     "repo_url": "https://github.com/denoland/deno",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["rust", "typescript"],
-    "frameworks": ["rust", "runtime"],
+    "languages": [
+      "rust",
+      "typescript"
+    ],
+    "frameworks": [
+      "rust",
+      "runtime"
+    ],
     "notes": "Source family for module resolution and runtime-oriented Rust snippets."
   },
   {
@@ -155,8 +234,13 @@
     "repo_url": "https://github.com/tokio-rs/axum",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["rust"],
-    "frameworks": ["rust", "server"],
+    "languages": [
+      "rust"
+    ],
+    "frameworks": [
+      "rust",
+      "server"
+    ],
     "notes": "Source family for Rust web handler and extractor snippets."
   },
   {
@@ -165,8 +249,13 @@
     "repo_url": "https://github.com/BurntSushi/ripgrep",
     "license_spdx": "Unlicense",
     "retrieved_at": "2026-05-30",
-    "languages": ["rust"],
-    "frameworks": ["rust", "cli"],
+    "languages": [
+      "rust"
+    ],
+    "frameworks": [
+      "rust",
+      "cli"
+    ],
     "notes": "Source family for Rust CLI filtering and file-walking snippets."
   },
   {
@@ -175,8 +264,13 @@
     "repo_url": "https://github.com/rust-lang/rust-analyzer",
     "license_spdx": "Apache-2.0",
     "retrieved_at": "2026-05-30",
-    "languages": ["rust"],
-    "frameworks": ["rust", "language-server"],
+    "languages": [
+      "rust"
+    ],
+    "frameworks": [
+      "rust",
+      "language-server"
+    ],
     "notes": "Source family for Rust syntax and editor-service snippets."
   },
   {
@@ -185,8 +279,13 @@
     "repo_url": "https://github.com/ratatui/ratatui",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["rust"],
-    "frameworks": ["rust", "terminal"],
+    "languages": [
+      "rust"
+    ],
+    "frameworks": [
+      "rust",
+      "terminal"
+    ],
     "notes": "Source family for terminal UI layout and rendering snippets."
   },
   {
@@ -195,8 +294,14 @@
     "repo_url": "https://github.com/twbs/bootstrap",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["scss", "javascript"],
-    "frameworks": ["web", "scss"],
+    "languages": [
+      "scss",
+      "javascript"
+    ],
+    "frameworks": [
+      "web",
+      "scss"
+    ],
     "notes": "Source family for SCSS/Sass component style drills."
   },
   {
@@ -205,8 +310,12 @@
     "repo_url": "https://github.com/necolas/normalize.css",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["css"],
-    "frameworks": ["web"],
+    "languages": [
+      "css"
+    ],
+    "frameworks": [
+      "web"
+    ],
     "notes": "Source family for concise CSS normalization snippets."
   },
   {
@@ -215,8 +324,14 @@
     "repo_url": "https://github.com/mdn/dom-examples",
     "license_spdx": "CC0-1.0",
     "retrieved_at": "2026-05-30",
-    "languages": ["javascript", "html", "css"],
-    "frameworks": ["web"],
+    "languages": [
+      "javascript",
+      "html",
+      "css"
+    ],
+    "frameworks": [
+      "web"
+    ],
     "notes": "Source family for DOM, custom element, and browser API drills."
   },
   {
@@ -225,8 +340,14 @@
     "repo_url": "https://github.com/nodejs/undici",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["javascript", "typescript"],
-    "frameworks": ["node", "web"],
+    "languages": [
+      "javascript",
+      "typescript"
+    ],
+    "frameworks": [
+      "node",
+      "web"
+    ],
     "notes": "Source family for fetch and HTTP client snippets."
   },
   {
@@ -235,8 +356,14 @@
     "repo_url": "https://github.com/sveltejs/kit",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript", "svelte"],
-    "frameworks": ["svelte", "web"],
+    "languages": [
+      "typescript",
+      "svelte"
+    ],
+    "frameworks": [
+      "svelte",
+      "web"
+    ],
     "notes": "Source family for SvelteKit load and routing snippets."
   },
   {
@@ -245,8 +372,14 @@
     "repo_url": "https://github.com/tailwindlabs/tailwindcss",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript", "css"],
-    "frameworks": ["web", "css"],
+    "languages": [
+      "typescript",
+      "css"
+    ],
+    "frameworks": [
+      "web",
+      "css"
+    ],
     "notes": "Source family for utility CSS and documentation-style style blocks."
   },
   {
@@ -255,8 +388,15 @@
     "repo_url": "https://github.com/radix-ui/primitives",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript", "css"],
-    "frameworks": ["react", "web", "css"],
+    "languages": [
+      "typescript",
+      "css"
+    ],
+    "frameworks": [
+      "react",
+      "web",
+      "css"
+    ],
     "notes": "Source family for accessible component state and CSS animation snippets."
   },
   {
@@ -265,8 +405,14 @@
     "repo_url": "https://github.com/sass/sass",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["scss", "sass"],
-    "frameworks": ["web", "scss"],
+    "languages": [
+      "scss",
+      "sass"
+    ],
+    "frameworks": [
+      "web",
+      "scss"
+    ],
     "notes": "Source family for Sass mixin and language fixture snippets."
   },
   {
@@ -275,8 +421,14 @@
     "repo_url": "https://github.com/less/less.js",
     "license_spdx": "Apache-2.0",
     "retrieved_at": "2026-05-30",
-    "languages": ["less", "javascript"],
-    "frameworks": ["web", "less"],
+    "languages": [
+      "less",
+      "javascript"
+    ],
+    "frameworks": [
+      "web",
+      "less"
+    ],
     "notes": "Source family for Less variable, mixin, and fixture snippets."
   },
   {
@@ -285,8 +437,15 @@
     "repo_url": "https://github.com/ant-design/ant-design",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript", "less"],
-    "frameworks": ["react", "antd", "less"],
+    "languages": [
+      "typescript",
+      "less"
+    ],
+    "frameworks": [
+      "react",
+      "antd",
+      "less"
+    ],
     "notes": "Source family for Less component style drills; prefer the 4.24.9 tag for Less-heavy material."
   },
   {
@@ -295,8 +454,14 @@
     "repo_url": "https://github.com/shadcn-ui/ui",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript", "react"],
-    "frameworks": ["react", "ui"],
+    "languages": [
+      "typescript",
+      "react"
+    ],
+    "frameworks": [
+      "react",
+      "ui"
+    ],
     "notes": "Source family for React component and form-control snippets."
   },
   {
@@ -305,8 +470,14 @@
     "repo_url": "https://github.com/remix-run/remix",
     "license_spdx": "MIT",
     "retrieved_at": "2026-05-30",
-    "languages": ["typescript", "react"],
-    "frameworks": ["react", "remix"],
+    "languages": [
+      "typescript",
+      "react"
+    ],
+    "frameworks": [
+      "react",
+      "remix"
+    ],
     "notes": "Source family for React loader and action snippets."
   },
   {
@@ -315,8 +486,37 @@
     "repo_url": "https://github.com/foundry-rs/forge-std",
     "license_spdx": "Apache-2.0",
     "retrieved_at": "2026-05-30",
-    "languages": ["solidity"],
-    "frameworks": ["evm", "foundry"],
+    "languages": [
+      "solidity"
+    ],
+    "frameworks": [
+      "evm",
+      "foundry"
+    ],
     "notes": "Source family for Solidity test and Foundry-style snippets."
+  },
+  {
+    "source_id": "keyloop:programming-basics:seeds",
+    "repo": "luweiCN/keyloop",
+    "repo_url": "https://github.com/luweiCN/keyloop",
+    "license_spdx": "MIT",
+    "retrieved_at": "2026-06-11",
+    "languages": [
+      "typescript",
+      "javascript",
+      "python",
+      "go",
+      "java",
+      "rust",
+      "csharp",
+      "cpp",
+      "c",
+      "php",
+      "ruby",
+      "kotlin",
+      "swift"
+    ],
+    "frameworks": [],
+    "notes": "Hand-curated programming basics seed cards (symbols-in-context and builtin API drills), expanded by buildProgrammingBasicsContent.ts."
   }
 ]
