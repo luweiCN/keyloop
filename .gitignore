@@ -34,3 +34,6 @@ sessions.jsonl
 /--verbose
 __pycache__/
 .claude/
+
+# Corpus rebuild intermediates (candidates + per-item reviews).
+/content/corpus-rebuild/
