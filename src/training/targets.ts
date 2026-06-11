@@ -1002,7 +1002,7 @@ function annotationForItem(
   };
 }
 
-function conciseChineseMeaning(value: string, maxParts = 1): string {
+export function conciseChineseMeaning(value: string, maxParts = 1): string {
   const normalized = value
     .replace(/\s+/gu, " ")
     .replace(/[；;，,、]+/gu, "；")

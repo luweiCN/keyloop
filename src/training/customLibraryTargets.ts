@@ -1,4 +1,5 @@
 import type { PracticeTarget, PracticeTargetAnnotation } from "../domain/model";
+import { conciseChineseMeaning } from "./targets";
 import type { CustomLibrary, CustomWord } from "./customLibrary";
 
 interface BuildOptions {
@@ -20,7 +21,8 @@ interface AppendState {
   annotations: PracticeTargetAnnotation[];
 }
 
-function appendWordLine(state: AppendState, words: readonly CustomWord[]): void {
+/** 与日常练习一致：单词空格连排成一段，渲染层按 word 标注排布；释义只取第一义并去词性 */
+function appendWordRun(state: AppendState, words: readonly CustomWord[]): void {
   if (state.text !== "") {
     state.text += "\n";
   }
@@ -32,12 +34,15 @@ function appendWordLine(state: AppendState, words: readonly CustomWord[]): void 
     const start = state.text.length;
     state.text += word.text;
     if (word.meaning_zh !== undefined) {
-      state.annotations.push({
-        start,
-        end: state.text.length,
-        translation_zh: word.meaning_zh,
-        display: "word",
-      });
+      const meaning = conciseChineseMeaning(word.meaning_zh);
+      if (meaning !== "") {
+        state.annotations.push({
+          start,
+          end: state.text.length,
+          translation_zh: meaning,
+          display: "word",
+        });
+      }
     }
   }
 }
@@ -67,8 +72,6 @@ function finish(state: AppendState, source: string): PracticeTarget {
   };
 }
 
-const WORDS_PER_LINE = 4;
-
 export function buildLibraryWordsTarget(
   library: CustomLibrary,
   options: BuildOptions = {},
@@ -80,9 +83,7 @@ export function buildLibraryWordsTarget(
     random,
   ).slice(0, count);
   const state: AppendState = { text: "", annotations: [] };
-  for (let index = 0; index < chosen.length; index += WORDS_PER_LINE) {
-    appendWordLine(state, chosen.slice(index, index + WORDS_PER_LINE));
-  }
+  appendWordRun(state, chosen);
   return finish(state, `keyloop:library:${library.slug}:words`);
 }
 
@@ -98,7 +99,11 @@ export function buildLibraryPhrasesTarget(
   ).slice(0, count);
   const state: AppendState = { text: "", annotations: [] };
   for (const phrase of chosen) {
-    appendLine(state, phrase.text, phrase.meaning_zh);
+    appendLine(
+      state,
+      phrase.text,
+      phrase.meaning_zh === undefined ? undefined : conciseChineseMeaning(phrase.meaning_zh),
+    );
   }
   return {
     ...finish(state, `keyloop:library:${library.slug}:phrases`),
@@ -164,15 +169,19 @@ export function buildLibraryMixTarget(
     library.words.filter((word) => word.kind === "word"),
     random,
   ).slice(0, 8);
-  for (let index = 0; index < words.length; index += WORDS_PER_LINE) {
-    appendWordLine(state, words.slice(index, index + WORDS_PER_LINE));
+  if (words.length > 0) {
+    appendWordRun(state, words);
   }
   const phrases = shuffled(
     library.words.filter((word) => word.kind === "phrase"),
     random,
   ).slice(0, 3);
   for (const phrase of phrases) {
-    appendLine(state, phrase.text, phrase.meaning_zh);
+    appendLine(
+      state,
+      phrase.text,
+      phrase.meaning_zh === undefined ? undefined : conciseChineseMeaning(phrase.meaning_zh),
+    );
   }
   for (const sentence of shuffled(library.sentences, random).slice(0, 2)) {
     appendLine(state, sentence.text, sentence.translation_zh);

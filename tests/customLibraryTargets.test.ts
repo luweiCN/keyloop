@@ -38,19 +38,38 @@ const library: CustomLibrary = {
 const fixedRandom = () => 0;
 
 describe("custom library targets", () => {
-  test("words target chunks words and annotates meanings", () => {
+  test("words target lays out like everyday practice with concise meanings", () => {
     const target = buildLibraryWordsTarget(library, { random: fixedRandom });
     expect(target.mode).toBe("words");
     expect(target.text).toContain("abandon");
     expect(target.text).not.toContain("machine learning");
+    expect(target.text).not.toContain("\n"); // 同日常练习：单行空格连排，渲染层按词排列
     const abandonStart = target.text.indexOf("abandon");
     expect(target.annotations).toContainEqual({
       start: abandonStart,
       end: abandonStart + "abandon".length,
-      translation_zh: "v. 放弃",
+      translation_zh: "放弃", // 第一义、去词性
       display: "word",
     });
     expect(target.source).toBe("keyloop:library:kaoyan:words");
+  });
+
+  test("dictionary multi-sense meanings keep only the first sense", () => {
+    const rich: CustomLibrary = {
+      ...library,
+      words: [
+        {
+          id: "w9",
+          text: "abandon",
+          kind: "word",
+          meaning_zh: "vt. 放弃, 抛弃, 遗弃; n. 放任, 无拘束",
+          source: "dict",
+        },
+      ],
+    };
+    const target = buildLibraryWordsTarget(rich, { random: fixedRandom });
+    expect(target.annotations?.[0]?.translation_zh).toBe("放弃");
+    expect(target.annotations?.[0]?.translation_zh).not.toContain("vt.");
   });
 
   test("phrases target puts one phrase per line", () => {
