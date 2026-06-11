@@ -267,7 +267,7 @@ describe("storage file io", () => {
         field: "category",
         value: "syntax_mix",
         message:
-          "lesson.category must be one of: unknown, foundation_mix, home_row, top_row, bottom_row, finger_transitions, punctuation_edges, letter_combinations, basic_words, everyday_words, everyday_phrases, everyday_sentences, everyday_articles, everyday_word_decomposition, everyday_mix, numbers_symbols, operators_brackets_quotes, programming_terms, naming_styles, programming_basics_mix, code_snippet, code_function, code_file_fragment, code_mix, review, word_breakdown, personal_vocabulary",
+          "lesson.category must be one of: unknown, foundation_mix, home_row, top_row, bottom_row, finger_transitions, punctuation_edges, letter_combinations, basic_words, everyday_words, everyday_phrases, everyday_sentences, everyday_articles, everyday_word_decomposition, everyday_mix, numbers_symbols, symbols_numbers, programming_terms, naming_styles, builtin_api, programming_basics_mix, code_snippet, code_function, code_file_fragment, code_mix, review, word_breakdown, personal_vocabulary",
       },
       {
         field: "mix_profile",

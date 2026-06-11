@@ -45,9 +45,10 @@ export type TrainingCategory =
   | "everyday_word_decomposition"
   | "everyday_mix"
   | "numbers_symbols"
-  | "operators_brackets_quotes"
+  | "symbols_numbers"
   | "programming_terms"
   | "naming_styles"
+  | "builtin_api"
   | "programming_basics_mix"
   | "code_snippet"
   | "code_function"
@@ -353,9 +354,10 @@ const trainingCategories = [
   "everyday_word_decomposition",
   "everyday_mix",
   "numbers_symbols",
-  "operators_brackets_quotes",
+  "symbols_numbers",
   "programming_terms",
   "naming_styles",
+  "builtin_api",
   "programming_basics_mix",
   "code_snippet",
   "code_function",

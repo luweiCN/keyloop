@@ -17,6 +17,7 @@ import { defaultSessionRecord } from "../src/domain/model";
 import type { ContentLibrary } from "../src/content/library";
 import type { PracticePlan, SessionRecord, TrainingCategory } from "../src/domain/model";
 import type { BuildTargetContext } from "../src/training/targets";
+import { submenuItems } from "../src/ui/opentui/menuItems";
 
 function emptyPlan(): PracticePlan {
   return {
@@ -276,5 +277,21 @@ describe("programming basics mix target", () => {
     expect(namingLines.length).toBe(2);
     const cardLines = lines.filter((line) => line.includes(";"));
     expect(cardLines.length).toBeGreaterThanOrEqual(4);
+  });
+});
+
+describe("programming submenu", () => {
+  test("lists exactly the six redesigned groups", () => {
+    const items = submenuItems("programming", "zh");
+    expect(items.map((entry) => entry.id)).toEqual([
+      "symbols_numbers",
+      "programming_terms",
+      "naming_styles",
+      "technical_long_words",
+      "builtin_api",
+      "programming_basics_mix",
+    ]);
+    expect(items[0]?.label).toBe("符号与数字");
+    expect(items[4]?.label).toBe("内置 API");
   });
 });

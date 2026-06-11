@@ -66,10 +66,14 @@ import {
   buildFoundationMixPracticeTarget,
   buildLongWordBreakdownPracticeTarget,
   buildProgrammingBasicsPracticeTarget,
-  buildProgrammingBasicsMixTarget,
   type BuildTargetContext,
   type FoundationPracticeTargetKind,
 } from "../../training/targets";
+import {
+  buildBuiltinApiTarget,
+  buildNewProgrammingBasicsMixTarget,
+  buildSymbolsNumbersTarget,
+} from "../../training/programmingBasicsTargets";
 import type { LiveMetrics } from "../../training/liveSession";
 
 export const openTuiStatsViews = [
@@ -866,11 +870,19 @@ function activateSubmenuItem(
         undefined,
         stateOptions(state),
       );
-    case "operators_brackets_quotes":
+    case "symbols_numbers":
       return runningState(
         state.language,
         itemId,
-        buildProgrammingBasicsPracticeTarget(effectiveContext, "operators_brackets_quotes"),
+        buildSymbolsNumbersTarget(effectiveContext),
+        undefined,
+        stateOptions(state),
+      );
+    case "builtin_api":
+      return runningState(
+        state.language,
+        itemId,
+        buildBuiltinApiTarget(effectiveContext),
         undefined,
         stateOptions(state),
       );
@@ -894,7 +906,7 @@ function activateSubmenuItem(
       return runningState(
         state.language,
         itemId,
-        buildProgrammingBasicsMixTarget(effectiveContext),
+        buildNewProgrammingBasicsMixTarget(effectiveContext),
         undefined,
         stateOptions(state),
       );

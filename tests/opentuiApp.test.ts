@@ -342,8 +342,13 @@ describe("OpenTUI app model", () => {
       ["everyday", "everyday_mix", "keyloop:module:everyday-english"],
       [
         "programming",
-        "operators_brackets_quotes",
-        "keyloop:module:programming-basics:operators-brackets-quotes",
+        "symbols_numbers",
+        "keyloop:module:programming-basics:symbols-numbers",
+      ],
+      [
+        "programming",
+        "builtin_api",
+        "keyloop:module:programming-basics:builtin-api",
       ],
       [
         "programming",

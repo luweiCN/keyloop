@@ -41,10 +41,11 @@ export type OpenTuiSubmenuId =
   | "everyday_word_decomposition"
   | "long_word_breakdown"
   | "everyday_mix"
-  | "operators_brackets_quotes"
+  | "symbols_numbers"
   | "programming_terms"
   | "naming_styles"
   | "technical_long_words"
+  | "builtin_api"
   | "programming_basics_mix"
   | "code_blocks"
   | "code_functions"
@@ -218,15 +219,11 @@ export function submenuItems(menu: OpenTuiSubmenu, language: Language): OpenTuiM
       ];
     case "programming":
       return [
-        item(
-          "operators_brackets_quotes",
-          "符号与括号",
-          "Operators, brackets, and quotes",
-          language,
-        ),
+        item("symbols_numbers", "符号与数字", "Symbols and numbers", language),
         item("programming_terms", "编程常用词", "Programming terms", language),
         item("naming_styles", "命名形式", "Naming styles", language),
         item("technical_long_words", "技术长词", "Technical long words", language),
+        item("builtin_api", "内置 API", "Built-in APIs", language),
         item("programming_basics_mix", "编程基础综合", "Programming basics mix", language),
       ];
     case "code":
@@ -298,10 +295,11 @@ export function submenuForStandaloneItem(itemId: OpenTuiMenuItemId): OpenTuiSubm
     case "long_word_breakdown":
     case "everyday_mix":
       return "everyday";
-    case "operators_brackets_quotes":
+    case "symbols_numbers":
     case "programming_terms":
     case "naming_styles":
     case "technical_long_words":
+    case "builtin_api":
     case "programming_basics_mix":
       return "programming";
     case "code_blocks":
@@ -390,12 +388,14 @@ export function menuItemTag(item: { id: string }): string {
     case "long_word_breakdown":
       return "words";
     case "programming":
-    case "programming_basics_mix":
-    case "operators_brackets_quotes":
     case "programming_terms":
     case "naming_styles":
     case "technical_long_words":
       return "symbols";
+    case "symbols_numbers":
+    case "builtin_api":
+    case "programming_basics_mix":
+      return "code";
     case "code":
     case "code_blocks":
     case "code_functions":
@@ -505,8 +505,10 @@ export function menuItemDescription(item: { id: string }): string {
       return "拆开长词再合并输入，建立稳定拼写块。";
     case "everyday_mix":
       return "单词、短语、句子和长词拆解混合复盘。";
-    case "operators_brackets_quotes":
-      return "集中练括号、引号、比较、箭头和常用操作符。";
+    case "symbols_numbers":
+      return "按当前语言在真实代码语境里练符号与数字。";
+    case "builtin_api":
+      return "练当前语言生态的高频内置 API 调用。";
     case "programming_terms":
       return "练 selected、pending、enabled 等高频编程业务词。";
     case "naming_styles":
@@ -514,7 +516,7 @@ export function menuItemDescription(item: { id: string }): string {
     case "technical_long_words":
       return "练 internationalization、serialization 等技术长词拆解。";
     case "programming_basics_mix":
-      return "编程词、符号、命名和个人词库综合练习。";
+      return "符号数字、内置 API、命名与编程词混合复盘。";
     case "code_blocks":
       return "练完整代码块，保留上下文和缩进节奏。";
     case "code_functions":

@@ -1006,11 +1006,17 @@ function standaloneLessonMetadata(
         module: "everyday_english",
         category: "everyday_mix",
       };
-    case "operators_brackets_quotes":
+    case "symbols_numbers":
       return {
-        kind: "symbols",
+        kind: "code_block",
         module: "programming_basics",
-        category: "operators_brackets_quotes",
+        category: "symbols_numbers",
+      };
+    case "builtin_api":
+      return {
+        kind: "code_block",
+        module: "programming_basics",
+        category: "builtin_api",
       };
     case "programming_terms":
       return {
@@ -1033,7 +1039,7 @@ function standaloneLessonMetadata(
       };
     case "programming_basics_mix":
       return {
-        kind: "symbols",
+        kind: "code_block",
         module: "programming_basics",
         category: "programming_basics_mix",
       };
