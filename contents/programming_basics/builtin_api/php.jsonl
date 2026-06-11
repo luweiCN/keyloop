@@ -1,0 +1,80 @@
+{"text":"$ids = array_map(fn($item) => $item['id'], $items);","topic":"array","api":"array_map","note_zh":"数组映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$active = array_filter($users, fn($user) => $user['active']);","topic":"array","api":"array_filter","note_zh":"数组过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$config = array_merge($defaults, $overrides);","topic":"array","api":"array_merge","note_zh":"数组合并","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$fields = array_keys($schema);","topic":"array","api":"array_keys","note_zh":"取键列表","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$list = array_values($filtered);","topic":"array","api":"array_values","note_zh":"重排索引","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (in_array($origin, $allowed, true)) {","topic":"array","api":"in_array","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (array_key_exists('limit', $options)) {","topic":"array","api":"array_key_exists","note_zh":"键存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (count($errors) === 0) {","topic":"array","api":"count","note_zh":"计数判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"usort($rows, fn($a, $b) => $b['score'] <=> $a['score']);","topic":"array","api":"usort","note_zh":"自定义排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$total = array_reduce($prices, fn($acc, $p) => $acc + $p, 0);","topic":"array","api":"array_reduce","note_zh":"归约求和","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$unique = array_unique($tags);","topic":"array","api":"array_unique","note_zh":"去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$names = array_column($records, 'name');","topic":"array","api":"array_column","note_zh":"取列","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$slug = str_replace(' ', '-', $title);","topic":"string","api":"str_replace","note_zh":"替换字符","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (strpos($message, 'error') !== false) {","topic":"string","api":"strpos","note_zh":"子串查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$ext = substr($name, strrpos($name, '.'));","topic":"string","api":"substr","note_zh":"截取扩展名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$keyword = trim($query);","topic":"string","api":"trim","note_zh":"去除空白","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$segments = explode('/', $path);","topic":"string","api":"explode","note_zh":"路径切分","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$csv = implode(',', $fields);","topic":"string","api":"implode","note_zh":"拼接为串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$key = sprintf('%s:%d', $host, $port);","topic":"string","api":"sprintf","note_zh":"格式化拼键","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (str_starts_with($url, 'https://')) {","topic":"string","api":"str_starts_with","note_zh":"前缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (str_ends_with($name, '.json')) {","topic":"string","api":"str_ends_with","note_zh":"后缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (str_contains($ua, 'Mobile')) {","topic":"string","api":"str_contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$key = strtolower($label);","topic":"string","api":"strtolower","note_zh":"转小写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$id = str_pad((string)$index, 4, '0', STR_PAD_LEFT);","topic":"string","api":"str_pad","note_zh":"前导补零","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$body = json_encode(['name' => $name]);","topic":"json","api":"json_encode","note_zh":"序列化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$data = json_decode($raw, true);","topic":"json","api":"json_decode","note_zh":"反序列化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"file_put_contents($out, json_encode($report, JSON_PRETTY_PRINT));","topic":"json","api":"json_encode","note_zh":"格式化写出","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$config = json_decode(file_get_contents($path), true);","topic":"json","api":"json_decode","note_zh":"读文件解析","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (json_last_error() !== JSON_ERROR_NONE) {","topic":"json","api":"json_last_error","note_zh":"解析错误检查","source_id":"keyloop:programming-basics:seeds"}
+{"text":"echo json_encode($stats, JSON_UNESCAPED_UNICODE);","topic":"json","api":"json_encode","note_zh":"中文不转义","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$payload = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);","topic":"json","api":"json_decode","note_zh":"抛错模式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (!json_validate($raw)) {","topic":"json","api":"json_validate","note_zh":"合法性检查","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (preg_match('/^v\\d+\\.\\d+/', $tag)) {","topic":"preg","api":"preg_match","note_zh":"正则匹配","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (preg_match('/error: (.+)/', $line, $matches)) {","topic":"preg","api":"preg_match","note_zh":"捕获分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$clean = preg_replace('/\\s+/', ' ', $raw);","topic":"preg","api":"preg_replace","note_zh":"正则替换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$tokens = preg_split('/[,;]/', $line);","topic":"preg","api":"preg_split","note_zh":"多分隔切分","source_id":"keyloop:programming-basics:seeds"}
+{"text":"preg_match_all('/https?:\\/\\/\\S+/', $text, $links);","topic":"preg","api":"preg_match_all","note_zh":"全量提取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$escaped = preg_quote($keyword, '/');","topic":"preg","api":"preg_quote","note_zh":"转义元字符","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$html = preg_replace_callback('/@(\\w+)/', $linkify, $text);","topic":"preg","api":"preg_replace_callback","note_zh":"回调替换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$errors = preg_grep('/^ERROR/', $lines);","topic":"preg","api":"preg_grep","note_zh":"行过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$template = file_get_contents('index.html');","topic":"file","api":"file_get_contents","note_zh":"读取文本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"file_put_contents('report.json', $output);","topic":"file","api":"file_put_contents","note_zh":"写入文本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (file_exists($lockFile)) {","topic":"file","api":"file_exists","note_zh":"存在性检查","source_id":"keyloop:programming-basics:seeds"}
+{"text":"mkdir($cacheDir, 0755, true);","topic":"file","api":"mkdir","note_zh":"递归建目录","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$seeds = glob($seedDir . '/*.json');","topic":"file","api":"glob","note_zh":"通配列文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$language = basename($seedPath, '.json');","topic":"file","api":"basename","note_zh":"取文件名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$lines = file($logPath, FILE_IGNORE_NEW_LINES);","topic":"file","api":"file","note_zh":"按行读取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"unlink($lockFile);","topic":"file","api":"unlink","note_zh":"删除文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$page = intval($_GET['page'] ?? 1);","topic":"type_convert","api":"intval","note_zh":"解析整数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$price = floatval($cell);","topic":"type_convert","api":"floatval","note_zh":"解析浮点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (is_numeric($input)) {","topic":"type_convert","api":"is_numeric","note_zh":"数字判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (is_array($payload)) {","topic":"type_convert","api":"is_array","note_zh":"数组判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (is_string($value) && $value !== '') {","topic":"type_convert","api":"is_string","note_zh":"字符串判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (isset($config['debug'])) {","topic":"type_convert","api":"isset","note_zh":"已设置判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (empty($items)) return [];","topic":"type_convert","api":"empty","note_zh":"空值判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"settype($limit, 'integer');","topic":"type_convert","api":"settype","note_zh":"类型转换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$width = max($minWidth, $measured);","topic":"math","api":"max","note_zh":"下限约束","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$next = min($page + 1, $lastPage);","topic":"math","api":"min","note_zh":"上限约束","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$rounded = round($score, 2);","topic":"math","api":"round","note_zh":"四舍五入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$pages = (int)ceil($total / $pageSize);","topic":"math","api":"ceil","note_zh":"向上取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$index = (int)floor($ratio * $n);","topic":"math","api":"floor","note_zh":"向下取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$delta = abs($current - $previous);","topic":"math","api":"abs","note_zh":"绝对差值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$pick = random_int(0, count($pool) - 1);","topic":"math","api":"random_int","note_zh":"随机索引","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$display = number_format($amount, 2);","topic":"math","api":"number_format","note_zh":"千分位格式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$stamp = date('H:i:s');","topic":"datetime","api":"date","note_zh":"格式化时间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$now = time();","topic":"datetime","api":"time","note_zh":"当前时间戳","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$due = strtotime('+7 days');","topic":"datetime","api":"strtotime","note_zh":"解析相对时间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$label = $created->format('Y-m-d');","topic":"datetime","api":"DateTime::format","note_zh":"对象格式化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$deadline = new DateTime('2026-06-18');","topic":"datetime","api":"new DateTime","note_zh":"构造日期","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$interval = $start->diff($end);","topic":"datetime","api":"DateTime::diff","note_zh":"日期差","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$started = microtime(true);","topic":"datetime","api":"microtime","note_zh":"高精度计时","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$next = $today->modify('+1 day');","topic":"datetime","api":"DateTimeImmutable::modify","note_zh":"不可变加减","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$debug = getenv('DEBUG') === '1';","topic":"misc_env","api":"getenv","note_zh":"调试开关","source_id":"keyloop:programming-basics:seeds"}
+{"text":"error_log(\"failed to load {$path}\");","topic":"misc_env","api":"error_log","note_zh":"错误日志","source_id":"keyloop:programming-basics:seeds"}
+{"text":"var_dump($response);","topic":"misc_env","api":"var_dump","note_zh":"调试输出","source_id":"keyloop:programming-basics:seeds"}
+{"text":"echo htmlspecialchars($comment, ENT_QUOTES);","topic":"misc_env","api":"htmlspecialchars","note_zh":"HTML 转义","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$query = http_build_query(['page' => 1]);","topic":"misc_env","api":"http_build_query","note_zh":"构造查询串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$host = parse_url($url, PHP_URL_HOST);","topic":"misc_env","api":"parse_url","note_zh":"解析 URL","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$token = uniqid('job_', true);","topic":"misc_env","api":"uniqid","note_zh":"唯一标识","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if ($failed > 0) exit(1);","topic":"misc_env","api":"exit","note_zh":"失败退出","source_id":"keyloop:programming-basics:seeds"}

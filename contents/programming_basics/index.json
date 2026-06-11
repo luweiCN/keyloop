@@ -9,8 +9,11 @@
     "java",
     "javascript",
     "kotlin",
+    "php",
     "python",
+    "ruby",
     "rust",
+    "swift",
     "typescript"
   ]
 }
