@@ -27,7 +27,8 @@
     "content:build-programming-basics": "bun src/tools/buildProgrammingBasicsContent.ts",
     "smoke": "bun run smoke:plan && bun run smoke:report && bun run smoke:sources && bun run smoke:binary:sources",
     "verify:migration": "bun run typecheck && bun test tests && bun run build && bun run build:binary && bun run smoke",
-    "verify:all": "bun run verify:migration"
+    "verify:all": "bun run verify:migration",
+    "content:build-programming-words": "bun src/tools/buildProgrammingWordsContent.ts"
   },
   "devDependencies": {
     "@types/bun": "^1.3.5",

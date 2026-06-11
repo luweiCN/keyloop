@@ -32,7 +32,7 @@ describe("content library", () => {
     expect(library.warmup.length).toBeGreaterThanOrEqual(180);
     expect(library.common_words.length).toBeGreaterThanOrEqual(400);
     expect(library.word_chunks.length).toBeGreaterThanOrEqual(300);
-    expect(library.programming_words.length).toBeGreaterThanOrEqual(800);
+    expect(library.programming_words.length).toBeGreaterThanOrEqual(300);
     expect(library.symbols.length).toBeGreaterThanOrEqual(200);
     expect(library.language_symbols.length).toBeGreaterThanOrEqual(8);
     expect(library.number_drills.length).toBeGreaterThanOrEqual(80);

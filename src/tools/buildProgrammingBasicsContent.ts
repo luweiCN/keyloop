@@ -95,7 +95,7 @@ export function buildLanguageCorpus(
     symbolsNumbers.push({
       text: card.text,
       topic: card.topic,
-      focus: card.focus,
+      ...(card.focus !== undefined ? { focus: card.focus } : {}),
       note_zh: card.note_zh,
       source_id: seed.source_id,
     });

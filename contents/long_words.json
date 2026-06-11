@@ -1,89 +1,10 @@
 [
   {
-    "word": "internationalization",
-    "parts": ["international", "ization"],
-    "aliases": ["i18n"],
-    "domain": "programming",
-    "tier": 3,
-    "source_id": "keyloop:long-words:manual",
-    "note_zh": "国际化"
-  },
-  {
-    "word": "accessibility",
-    "parts": ["access", "ibility"],
-    "aliases": ["a11y"],
-    "domain": "programming",
-    "tier": 3,
-    "source_id": "keyloop:long-words:manual",
-    "note_zh": "可访问性"
-  },
-  {
-    "word": "authentication",
-    "parts": ["authentic", "ation"],
-    "domain": "programming",
-    "tier": 2,
-    "source_id": "keyloop:long-words:manual",
-    "note_zh": "认证"
-  },
-  {
-    "word": "authorization",
-    "parts": ["author", "ization"],
-    "domain": "programming",
-    "tier": 2,
-    "source_id": "keyloop:long-words:manual",
-    "note_zh": "授权"
-  },
-  {
-    "word": "configuration",
-    "parts": ["configur", "ation"],
-    "domain": "programming",
-    "tier": 2,
-    "source_id": "keyloop:long-words:manual",
-    "note_zh": "配置"
-  },
-  {
-    "word": "initialization",
-    "parts": ["initial", "ization"],
-    "domain": "programming",
-    "tier": 2,
-    "source_id": "keyloop:long-words:manual",
-    "note_zh": "初始化"
-  },
-  {
-    "word": "serialization",
-    "parts": ["serial", "ization"],
-    "domain": "programming",
-    "tier": 3,
-    "source_id": "keyloop:long-words:manual",
-    "note_zh": "序列化"
-  },
-  {
-    "word": "synchronization",
-    "parts": ["synchron", "ization"],
-    "domain": "programming",
-    "tier": 3,
-    "source_id": "keyloop:long-words:manual",
-    "note_zh": "同步"
-  },
-  {
-    "word": "compatibility",
-    "parts": ["compat", "ibility"],
-    "domain": "programming",
-    "tier": 2,
-    "source_id": "keyloop:long-words:manual",
-    "note_zh": "兼容性"
-  },
-  {
-    "word": "performance",
-    "parts": ["perform", "ance"],
-    "domain": "programming",
-    "tier": 1,
-    "source_id": "keyloop:long-words:manual",
-    "note_zh": "性能"
-  },
-  {
     "word": "communication",
-    "parts": ["communi", "cation"],
+    "parts": [
+      "communi",
+      "cation"
+    ],
     "domain": "workplace",
     "tier": 2,
     "source_id": "keyloop:long-words:manual",
@@ -91,7 +12,10 @@
   },
   {
     "word": "collaboration",
-    "parts": ["collabor", "ation"],
+    "parts": [
+      "collabor",
+      "ation"
+    ],
     "domain": "workplace",
     "tier": 2,
     "source_id": "keyloop:long-words:manual",
@@ -99,7 +23,10 @@
   },
   {
     "word": "responsibility",
-    "parts": ["respons", "ibility"],
+    "parts": [
+      "respons",
+      "ibility"
+    ],
     "domain": "workplace",
     "tier": 3,
     "source_id": "keyloop:long-words:manual",
@@ -107,7 +34,10 @@
   },
   {
     "word": "conversation",
-    "parts": ["convers", "ation"],
+    "parts": [
+      "convers",
+      "ation"
+    ],
     "domain": "everyday",
     "tier": 2,
     "source_id": "keyloop:long-words:manual",
@@ -115,10 +45,689 @@
   },
   {
     "word": "opportunity",
-    "parts": ["opportun", "ity"],
+    "parts": [
+      "opportun",
+      "ity"
+    ],
     "domain": "everyday",
     "tier": 3,
     "source_id": "keyloop:long-words:manual",
     "note_zh": "机会"
+  },
+  {
+    "word": "internationalization",
+    "parts": [
+      "international",
+      "ization"
+    ],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "国际化",
+    "aliases": [
+      "i18n"
+    ]
+  },
+  {
+    "word": "localization",
+    "parts": [
+      "local",
+      "ization"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "本地化",
+    "aliases": [
+      "l10n"
+    ]
+  },
+  {
+    "word": "accessibility",
+    "parts": [
+      "access",
+      "ibility"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "无障碍",
+    "aliases": [
+      "a11y"
+    ]
+  },
+  {
+    "word": "authentication",
+    "parts": [
+      "authentic",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "认证",
+    "aliases": [
+      "auth"
+    ]
+  },
+  {
+    "word": "authorization",
+    "parts": [
+      "authorize",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "授权"
+  },
+  {
+    "word": "configuration",
+    "parts": [
+      "configure",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "配置",
+    "aliases": [
+      "config"
+    ]
+  },
+  {
+    "word": "initialization",
+    "parts": [
+      "initialize",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "初始化",
+    "aliases": [
+      "init"
+    ]
+  },
+  {
+    "word": "serialization",
+    "parts": [
+      "serialize",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "序列化"
+  },
+  {
+    "word": "deserialization",
+    "parts": [
+      "deserialize",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "反序列化"
+  },
+  {
+    "word": "synchronization",
+    "parts": [
+      "synchronize",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "同步",
+    "aliases": [
+      "sync"
+    ]
+  },
+  {
+    "word": "implementation",
+    "parts": [
+      "implement",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "实现",
+    "aliases": [
+      "impl"
+    ]
+  },
+  {
+    "word": "compatibility",
+    "parts": [
+      "compatible",
+      "ity"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "兼容性"
+  },
+  {
+    "word": "representation",
+    "parts": [
+      "represent",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "表示",
+    "aliases": [
+      "repr"
+    ]
+  },
+  {
+    "word": "documentation",
+    "parts": [
+      "document",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "文档",
+    "aliases": [
+      "docs"
+    ]
+  },
+  {
+    "word": "optimization",
+    "parts": [
+      "optimize",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "优化"
+  },
+  {
+    "word": "performance",
+    "parts": [
+      "perform",
+      "ance"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "性能",
+    "aliases": [
+      "perf"
+    ]
+  },
+  {
+    "word": "dependencies",
+    "parts": [
+      "depend",
+      "encies"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "依赖项",
+    "aliases": [
+      "deps"
+    ]
+  },
+  {
+    "word": "environment",
+    "parts": [
+      "environ",
+      "ment"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "环境",
+    "aliases": [
+      "env"
+    ]
+  },
+  {
+    "word": "asynchronous",
+    "parts": [
+      "a",
+      "synchronous"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "异步的",
+    "aliases": [
+      "async"
+    ]
+  },
+  {
+    "word": "infrastructure",
+    "parts": [
+      "infra",
+      "structure"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "基础设施",
+    "aliases": [
+      "infra"
+    ]
+  },
+  {
+    "word": "architecture",
+    "parts": [
+      "architect",
+      "ure"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "架构"
+  },
+  {
+    "word": "orchestration",
+    "parts": [
+      "orchestrate",
+      "ion"
+    ],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "编排"
+  },
+  {
+    "word": "containerization",
+    "parts": [
+      "container",
+      "ization"
+    ],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "容器化"
+  },
+  {
+    "word": "virtualization",
+    "parts": [
+      "virtual",
+      "ization"
+    ],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "虚拟化"
+  },
+  {
+    "word": "encapsulation",
+    "parts": [
+      "encapsulate",
+      "ion"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "封装"
+  },
+  {
+    "word": "polymorphism",
+    "parts": [
+      "poly",
+      "morphism"
+    ],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "多态"
+  },
+  {
+    "word": "inheritance",
+    "parts": [
+      "inherit",
+      "ance"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "继承"
+  },
+  {
+    "word": "abstraction",
+    "parts": [
+      "abstract",
+      "ion"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "抽象"
+  },
+  {
+    "word": "refactoring",
+    "parts": [
+      "refactor",
+      "ing"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "重构"
+  },
+  {
+    "word": "instantiation",
+    "parts": [
+      "instantiate",
+      "ion"
+    ],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "实例化"
+  },
+  {
+    "word": "interpolation",
+    "parts": [
+      "interpolate",
+      "ion"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "插值"
+  },
+  {
+    "word": "concatenation",
+    "parts": [
+      "concatenate",
+      "ion"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "拼接",
+    "aliases": [
+      "concat"
+    ]
+  },
+  {
+    "word": "normalization",
+    "parts": [
+      "normalize",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "归一化"
+  },
+  {
+    "word": "transformation",
+    "parts": [
+      "transform",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "变换"
+  },
+  {
+    "word": "specification",
+    "parts": [
+      "specify",
+      "cation"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "规格说明",
+    "aliases": [
+      "spec"
+    ]
+  },
+  {
+    "word": "compilation",
+    "parts": [
+      "compile",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "编译"
+  },
+  {
+    "word": "transpilation",
+    "parts": [
+      "transpile",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "转译"
+  },
+  {
+    "word": "registration",
+    "parts": [
+      "register",
+      "ation"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "注册"
+  },
+  {
+    "word": "notification",
+    "parts": [
+      "notify",
+      "cation"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "通知"
+  },
+  {
+    "word": "verification",
+    "parts": [
+      "verify",
+      "cation"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "校验"
+  },
+  {
+    "word": "validation",
+    "parts": [
+      "validate",
+      "ion"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "验证"
+  },
+  {
+    "word": "vulnerability",
+    "parts": [
+      "vulnerable",
+      "ity"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "漏洞",
+    "aliases": [
+      "vuln"
+    ]
+  },
+  {
+    "word": "encryption",
+    "parts": [
+      "encrypt",
+      "ion"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "加密"
+  },
+  {
+    "word": "decryption",
+    "parts": [
+      "decrypt",
+      "ion"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "解密"
+  },
+  {
+    "word": "idempotency",
+    "parts": [
+      "idempotent",
+      "cy"
+    ],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "幂等性"
+  },
+  {
+    "word": "concurrency",
+    "parts": [
+      "concurrent",
+      "cy"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "并发"
+  },
+  {
+    "word": "parallelism",
+    "parts": [
+      "parallel",
+      "ism"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "并行"
+  },
+  {
+    "word": "availability",
+    "parts": [
+      "available",
+      "ity"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "可用性"
+  },
+  {
+    "word": "scalability",
+    "parts": [
+      "scalable",
+      "ity"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "可扩展性"
+  },
+  {
+    "word": "reliability",
+    "parts": [
+      "reliable",
+      "ity"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "可靠性"
+  },
+  {
+    "word": "observability",
+    "parts": [
+      "observable",
+      "ity"
+    ],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "可观测性",
+    "aliases": [
+      "o11y"
+    ]
+  },
+  {
+    "word": "maintainability",
+    "parts": [
+      "maintainable",
+      "ity"
+    ],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "可维护性"
+  },
+  {
+    "word": "interoperability",
+    "parts": [
+      "interoperable",
+      "ity"
+    ],
+    "domain": "programming",
+    "tier": 3,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "互操作性"
+  },
+  {
+    "word": "deprecation",
+    "parts": [
+      "deprecate",
+      "ion"
+    ],
+    "domain": "programming",
+    "tier": 2,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "弃用"
+  },
+  {
+    "word": "middleware",
+    "parts": [
+      "middle",
+      "ware"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "中间件"
+  },
+  {
+    "word": "repository",
+    "parts": [
+      "reposit",
+      "ory"
+    ],
+    "domain": "programming",
+    "tier": 1,
+    "source_id": "keyloop:long-words:curated-v2",
+    "note_zh": "仓库",
+    "aliases": [
+      "repo"
+    ]
   }
 ]
