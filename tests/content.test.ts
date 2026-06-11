@@ -405,8 +405,8 @@ describe("content library", () => {
 
     const resolvedRoot = await resolveContentRoot({
       moduleUrl: "file:///Users/luwei/code/ai/keyloop/src/content/library.js",
-      execPath: "/Users/luwei/code/ai/keyloop/dist/keyloop-ts",
-      argv1: "/Users/luwei/code/ai/keyloop/dist/keyloop-ts",
+      execPath: "/Users/luwei/code/ai/keyloop/dist/keyloop",
+      argv1: "/Users/luwei/code/ai/keyloop/dist/keyloop",
       env: {},
       exists: async (path) => {
         checkedPaths.push(path);

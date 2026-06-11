@@ -18,7 +18,7 @@ describe("package verification scripts", () => {
       "bun build src/main.ts --target bun --packages external --outfile dist/keyloop.js",
     );
     expect(packageJson.scripts?.["build:binary"]).toBe(
-      "bun build src/main.ts --compile --outfile dist/keyloop-ts",
+      "bun build src/main.ts --compile --outfile dist/keyloop",
     );
     expect(packageJson.scripts?.["smoke:plan"]).toContain(
       "bun src/main.ts plan",
@@ -30,7 +30,7 @@ describe("package verification scripts", () => {
       "bun src/main.ts sources",
     );
     expect(packageJson.scripts?.["smoke:binary:sources"]).toContain(
-      "dist/keyloop-ts\" sources",
+      "dist/keyloop\" sources",
     );
     expect(packageJson.scripts?.smoke).toBe(
       "bun run smoke:plan && bun run smoke:report && bun run smoke:sources && bun run smoke:binary:sources",
