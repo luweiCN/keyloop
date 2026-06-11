@@ -977,3 +977,88 @@ describe("return-to-menu state after practice", () => {
     expect(returned.dictionaryTier).toBe("mini");
   });
 });
+
+describe("escape navigation hierarchy", () => {
+  const esc = keyEvent("escape", "\x1b");
+  const withLib = { customLibraries: [emptyLibrary("web")] };
+
+  test("level-2 screens return to the custom submenu", () => {
+    for (const route of [
+      { screen: "library_menu", slug: "web", selected_index: 0 },
+      { screen: "library_manage", selected_index: 0 },
+      { screen: "library_create", name: "abc" },
+    ] as const) {
+      const result = reduceOpenTuiAppKey(stateAt(route as never, withLib), esc, fakeContext());
+      expect(result.state.route).toEqual({ screen: "submenu", menu: "custom", selected_index: 0 });
+    }
+  });
+
+  test("level-3 screens return to their parent", () => {
+    const actions = reduceOpenTuiAppKey(
+      stateAt({ screen: "library_actions", slug: "web", selected_index: 2 }, withLib),
+      esc,
+      fakeContext(),
+    );
+    expect(actions.state.route).toEqual({ screen: "library_manage", selected_index: 0 });
+
+    const browse = reduceOpenTuiAppKey(
+      stateAt({ screen: "library_browse", slug: "web", query: "q", index: 0 }, withLib),
+      esc,
+      fakeContext(),
+    );
+    expect(browse.state.route).toEqual({
+      screen: "library_actions",
+      slug: "web",
+      selected_index: 0,
+    });
+
+    const confirm = reduceOpenTuiAppKey(
+      stateAt({ screen: "library_delete_confirm", slug: "web" }, withLib),
+      esc,
+      fakeContext(),
+    );
+    expect(confirm.state.route).toEqual({
+      screen: "library_actions",
+      slug: "web",
+      selected_index: 0,
+    });
+  });
+
+  test("level-4 screens return to their parent", () => {
+    const input = reduceOpenTuiAppKey(
+      stateAt(
+        { screen: "library_input", slug: "web", kind: "words", text: "x" },
+        withLib,
+      ),
+      esc,
+      fakeContext(),
+    );
+    expect(input.state.route).toEqual({
+      screen: "library_actions",
+      slug: "web",
+      selected_index: 0,
+    });
+
+    const detail = reduceOpenTuiAppKey(
+      stateAt(
+        {
+          screen: "library_detail",
+          slug: "web",
+          entry_id: "w1",
+          return_query: "q",
+          return_index: 1,
+          scroll: 0,
+        },
+        withLib,
+      ),
+      esc,
+      fakeContext(),
+    );
+    expect(detail.state.route).toEqual({
+      screen: "library_browse",
+      slug: "web",
+      query: "q",
+      index: 1,
+    });
+  });
+});

@@ -139,7 +139,12 @@ export function reduceOpenTuiAppKey(
     if (state.route.screen === "main_menu") {
       return { state, action: "quit" };
     }
-    if (state.route.screen === "library_menu") {
+    if (
+      state.route.screen === "library_menu" ||
+      state.route.screen === "library_manage" ||
+      state.route.screen === "library_create"
+    ) {
+      // 二级屏（练习分项 / 管理列表 / 新建）返回自建语料库子菜单
       return {
         state: withRoute(state, { screen: "submenu", menu: "custom", selected_index: 0 }),
         action: "continue",
@@ -183,13 +188,23 @@ export function reduceOpenTuiAppKey(
         action: "continue",
       };
     }
-    if (
-      state.route.screen === "library_actions" ||
-      state.route.screen === "library_delete_confirm" ||
-      state.route.screen === "library_browse"
-    ) {
+    if (state.route.screen === "library_actions") {
       return {
         state: withRoute(state, { screen: "library_manage", selected_index: 0 }),
+        action: "continue",
+      };
+    }
+    if (
+      state.route.screen === "library_browse" ||
+      state.route.screen === "library_delete_confirm"
+    ) {
+      // 三级屏（浏览 / 删库确认）返回所属库的操作菜单
+      return {
+        state: withRoute(state, {
+          screen: "library_actions",
+          slug: state.route.slug,
+          selected_index: 0,
+        }),
         action: "continue",
       };
     }
