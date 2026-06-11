@@ -533,6 +533,9 @@ export function reduceLibraryBrowseKey(
   }
   const matches = libraryBrowseMatches(state);
   const index = Math.min(Math.max(route.index, 0), Math.max(matches.length - 1, 0));
+  if (route.action_menu !== undefined) {
+    return reduceBrowseActionMenuKey(state, route, event, matches, index);
+  }
   if (isArrowDownEvent(event)) {
     return {
       state: withRoute(state, {
@@ -550,11 +553,10 @@ export function reduceLibraryBrowseKey(
     };
   }
   if (isEnterEvent(event)) {
-    const match = matches[index];
-    if (match === undefined) {
+    if (matches[index] === undefined) {
       return { state };
     }
-    return { state: withRoute(state, editPrefillRoute(route.slug, match)) };
+    return { state: withRoute(state, { ...route, action_menu: 0 }) };
   }
   if (event.ctrl && !event.meta && (event.name.toLowerCase() === "x" || event.sequence === "\x18")) {
     const match = matches[index];
@@ -581,6 +583,62 @@ export function reduceLibraryBrowseKey(
     return { state: withRoute(state, { ...route, query: singleLine(route.query + text), index: 0 }) };
   }
   return { state };
+}
+
+const BROWSE_ACTION_COUNT = 3; // 编辑 / 删除 / 取消
+
+function reduceBrowseActionMenuKey(
+  state: OpenTuiAppState,
+  route: Extract<OpenTuiAppState["route"], { screen: "library_browse" }>,
+  event: OpenTuiKeyEvent,
+  matches: LibraryBrowseEntry[],
+  index: number,
+): LibraryReduceResult {
+  const menuIndex = Math.min(Math.max(route.action_menu ?? 0, 0), BROWSE_ACTION_COUNT - 1);
+  if (isArrowDownEvent(event)) {
+    return {
+      state: withRoute(state, { ...route, action_menu: (menuIndex + 1) % BROWSE_ACTION_COUNT }),
+    };
+  }
+  if (isArrowUpEvent(event)) {
+    return {
+      state: withRoute(state, {
+        ...route,
+        action_menu: (menuIndex - 1 + BROWSE_ACTION_COUNT) % BROWSE_ACTION_COUNT,
+      }),
+    };
+  }
+  if (isBackspaceEvent(event)) {
+    return { state: withRoute(state, closedActionMenuRoute(route)) };
+  }
+  if (!isEnterEvent(event)) {
+    return { state }; // 菜单打开时忽略文本输入
+  }
+  const match = matches[index];
+  if (match === undefined) {
+    return { state: withRoute(state, closedActionMenuRoute(route)) };
+  }
+  if (menuIndex === 0) {
+    return { state: withRoute(state, editPrefillRoute(route.slug, match)) };
+  }
+  if (menuIndex === 1) {
+    const deleted = deleteBrowseEntry(state, route, match, index);
+    if (deleted.state.route.screen === "library_browse") {
+      return {
+        ...deleted,
+        state: withRoute(deleted.state, closedActionMenuRoute(deleted.state.route)),
+      };
+    }
+    return deleted;
+  }
+  return { state: withRoute(state, closedActionMenuRoute(route)) };
+}
+
+function closedActionMenuRoute(
+  route: Extract<OpenTuiAppState["route"], { screen: "library_browse" }>,
+): Extract<OpenTuiAppState["route"], { screen: "library_browse" }> {
+  const { action_menu: _closed, ...rest } = route;
+  return rest;
 }
 
 function deleteBrowseEntry(

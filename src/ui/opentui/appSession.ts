@@ -166,6 +166,10 @@ export function reduceOpenTuiAppKey(
         action: "continue",
       };
     }
+    if (state.route.screen === "library_browse" && state.route.action_menu !== undefined) {
+      const { action_menu: _closed, ...rest } = state.route;
+      return { state: withRoute(state, rest), action: "continue" };
+    }
     if (
       state.route.screen === "library_actions" ||
       state.route.screen === "library_delete_confirm" ||

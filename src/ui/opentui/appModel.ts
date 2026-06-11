@@ -238,6 +238,8 @@ export type OpenTuiRoute =
       entry_type: "words" | "sentences" | "articles";
       query: string;
       index: number;
+      /** 选中条目上的操作菜单（编辑/删除/取消）；undefined 表示菜单未打开 */
+      action_menu?: number;
     }
   | { screen: "library_delete_confirm"; slug: string };
 

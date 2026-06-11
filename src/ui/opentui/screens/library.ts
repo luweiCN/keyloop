@@ -517,6 +517,11 @@ export function renderLibraryBrowseScreen(
       }),
     );
   }
+  const selectedMatch = matches[selected];
+  const actionMenu =
+    route.action_menu === undefined || selectedMatch === undefined
+      ? []
+      : [renderBrowseActionMenu(route.action_menu, selectedMatch, zh, kit)];
   return kit.Box(
     {
       id: "keyloop-library-browse",
@@ -525,6 +530,7 @@ export function renderLibraryBrowseScreen(
       flexGrow: 1,
       width: "100%",
     },
+    ...actionMenu,
     kit.Box(
       {
         id: "keyloop-library-browse-search-panel",
@@ -563,11 +569,54 @@ export function renderLibraryBrowseScreen(
       ...rows,
     ),
     helpBar(
-      zh
-        ? "输入搜索 · ↑↓ 选择 · Enter 编辑 · Ctrl+X 删除 · Ctrl+N 新增 · Esc 返回"
-        : "type to search · ↑↓ select · Enter edit · Ctrl+X delete · Ctrl+N add · Esc back",
+      route.action_menu === undefined
+        ? zh
+          ? "输入搜索 · ↑↓ 选择 · Enter 操作菜单 · Ctrl+X 快捷删除 · Ctrl+N 新增 · Esc 返回"
+          : "type to search · ↑↓ select · Enter actions · Ctrl+X delete · Ctrl+N add · Esc back"
+        : zh
+          ? "↑↓ 选择操作 · Enter 确认 · Esc/退格 关闭"
+          : "↑↓ choose · Enter confirm · Esc/Backspace close",
       kit,
       "keyloop-library-browse-help",
+    ),
+  );
+}
+
+function renderBrowseActionMenu(
+  menuIndex: number,
+  match: import("../libraryReducers").LibraryBrowseEntry,
+  zh: boolean,
+  kit: OpenTuiRendererKit,
+): unknown {
+  const label =
+    match.entry_type === "articles" ? match.entry.title : match.entry.text;
+  const items = [
+    zh ? "编辑" : "Edit",
+    zh ? "删除" : "Delete",
+    zh ? "取消" : "Cancel",
+  ];
+  return kit.Box(
+    {
+      id: "keyloop-library-browse-action-menu",
+      border: true,
+      borderStyle: "rounded",
+      borderColor: theme.accent,
+      paddingX: 1,
+      width: "100%",
+      flexShrink: 0,
+      title: ` ${truncateToDisplayWidth(label, 40)} `,
+      overflow: "hidden",
+      flexDirection: "column",
+    },
+    ...items.map((item, index) =>
+      kit.Text({
+        id: `keyloop-library-browse-action-${index}`,
+        content: `${index === menuIndex ? "▌ " : "  "}${item}`,
+        fg: index === menuIndex ? theme.accent : theme.foreground,
+        ...(index === menuIndex ? { attributes: TEXT_BOLD } : {}),
+        height: 1,
+        wrapMode: "none",
+      }),
     ),
   );
 }
