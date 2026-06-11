@@ -713,8 +713,6 @@ export function renderLibraryDeleteConfirmScreen(
 
 export const LIBRARY_DETAIL_SCROLLBOX_ID = "keyloop-library-detail-scroll";
 
-const DETAIL_EDIT_VISIBLE_LINES = 16;
-
 export function renderLibraryDetailScreen(
   state: OpenTuiAppState,
   kit: OpenTuiRendererKit,
@@ -751,6 +749,7 @@ export function renderLibraryDetailScreen(
             ? "文章"
             : "Article";
 
+  const bodyHeight = Math.max(6, popupHeight - 2); // 扣除上下边框
   let body: unknown;
   if (match === undefined) {
     body = kit.Text({
@@ -763,7 +762,7 @@ export function renderLibraryDetailScreen(
   } else if (editing === undefined) {
     body = renderDetailViewBody(match, contentWidth, zh, kit);
   } else {
-    body = renderDetailEditBody(editing, contentWidth, kit);
+    body = renderDetailEditBody(editing, contentWidth, bodyHeight, zh, kit);
   }
 
   return kit.Box(
@@ -865,6 +864,8 @@ function renderDetailViewBody(
 function renderDetailEditBody(
   editing: { text: string; cursor: number },
   contentWidth: number,
+  bodyHeight: number,
+  zh: boolean,
   kit: OpenTuiRendererKit,
 ): unknown {
   // 光标处插入 ▏ 后按逻辑行渲染；视窗自动滚动保证光标行可见
@@ -872,7 +873,7 @@ function renderDetailEditBody(
     editing.text.slice(0, editing.cursor) + "▏" + editing.text.slice(editing.cursor);
   const logicalLines = withCursor.split("\n");
   const cursorLineIndex = withCursor.slice(0, editing.cursor + 1).split("\n").length - 1;
-  const visualLines: { content: string; hasCursor: boolean }[] = [];
+  const visualLines: string[] = [];
   let cursorVisualLine = 0;
   for (let index = 0; index < logicalLines.length; index += 1) {
     const decorated = `${logicalLines[index] ?? ""}${index < logicalLines.length - 1 ? " ⏎" : ""}`;
@@ -881,17 +882,52 @@ function renderDetailEditBody(
       if (index === cursorLineIndex && line.includes("▏")) {
         cursorVisualLine = visualLines.length;
       }
-      visualLines.push({ content: line, hasCursor: line.includes("▏") });
+      visualLines.push(line);
     }
   }
+  const visibleCapacity = Math.max(4, bodyHeight - 2); // 预留上下溢出提示行
   const windowStart = Math.max(
     0,
     Math.min(
-      cursorVisualLine - Math.floor(DETAIL_EDIT_VISIBLE_LINES / 2),
-      visualLines.length - DETAIL_EDIT_VISIBLE_LINES,
+      cursorVisualLine - Math.floor(visibleCapacity / 2),
+      visualLines.length - visibleCapacity,
     ),
   );
-  const visible = visualLines.slice(windowStart, windowStart + DETAIL_EDIT_VISIBLE_LINES);
+  const visible = visualLines.slice(windowStart, windowStart + visibleCapacity);
+  const hiddenAbove = windowStart;
+  const hiddenBelow = visualLines.length - windowStart - visible.length;
+  const children: unknown[] = [];
+  children.push(
+    kit.Text({
+      id: "keyloop-library-detail-edit-above",
+      content:
+        hiddenAbove > 0 ? (zh ? `↑ 上方还有 ${hiddenAbove} 行` : `↑ ${hiddenAbove} more above`) : "",
+      fg: theme.muted,
+      height: 1,
+      wrapMode: "none",
+    }),
+  );
+  for (let index = 0; index < visible.length; index += 1) {
+    children.push(
+      kit.Text({
+        id: `keyloop-library-detail-edit-line-${index}`,
+        content: visible[index] ?? "",
+        fg: theme.foreground,
+        height: 1,
+        wrapMode: "none",
+      }),
+    );
+  }
+  children.push(
+    kit.Text({
+      id: "keyloop-library-detail-edit-below",
+      content:
+        hiddenBelow > 0 ? (zh ? `↓ 下方还有 ${hiddenBelow} 行` : `↓ ${hiddenBelow} more below`) : "",
+      fg: theme.muted,
+      height: 1,
+      wrapMode: "none",
+    }),
+  );
   return kit.Box(
     {
       id: "keyloop-library-detail-edit",
@@ -900,14 +936,6 @@ function renderDetailEditBody(
       flexDirection: "column",
       overflow: "hidden",
     },
-    ...visible.map((line, index) =>
-      kit.Text({
-        id: `keyloop-library-detail-edit-line-${index}`,
-        content: line.content,
-        fg: theme.foreground,
-        height: 1,
-        wrapMode: "none",
-      }),
-    ),
+    ...children,
   );
 }

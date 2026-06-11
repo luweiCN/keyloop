@@ -720,10 +720,11 @@ export function reduceLibraryDetailKey(
     // 查看态：E/M 编辑，D 删除，Enter/Esc 关闭（Esc 由顶层处理）
     const key = event.ctrl || event.meta ? "" : event.name.toLowerCase();
     if (DETAIL_EDIT_KEYS.has(key)) {
+      const text = entryEditText(match);
       return {
         state: withRoute(state, {
           ...route,
-          editing: { text: entryEditText(match), cursor: 0 },
+          editing: { text, cursor: text.length },
         }),
       };
     }
