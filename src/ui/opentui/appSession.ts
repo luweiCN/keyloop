@@ -67,6 +67,7 @@ import {
   wordFormSettingsFromContext,
 } from "./settingsReducers";
 import { reduceStatsKey, statsState } from "./statsReducer";
+import { setUiEventSink } from "./uiEventBus";
 import {
   reduceLibraryDetailKey,
   reduceLibraryActionsKey,
@@ -311,6 +312,17 @@ export async function runOpenTuiAppSession(
   if (options.initialRenderer !== undefined) {
     await renderer.renderState?.(state);
   }
+  setUiEventSink((event) => {
+    const settle = activeSettlers.get(renderer);
+    if (settle !== undefined) {
+      settle(event);
+      return;
+    }
+    const queue = pendingAppEvents.get(renderer) ?? [];
+    queue.push(event);
+    pendingAppEvents.set(renderer, queue);
+  });
+  try {
   for (;;) {
     const event = await waitForAppKey(renderer);
 
@@ -339,6 +351,9 @@ export async function runOpenTuiAppSession(
     if (state !== previousState) {
       await renderer.renderState?.(state);
     }
+  }
+  } finally {
+    setUiEventSink(null);
   }
 }
 
@@ -537,6 +552,7 @@ function isLibraryTextInputScreen(state: OpenTuiAppState): boolean {
  * resolve 第一个后剩余事件先进缓冲，退订延迟到批次结束，下次调用先吃缓冲。
  */
 const pendingAppEvents = new WeakMap<OpenTuiRenderer, OpenTuiKeyEvent[]>();
+const activeSettlers = new WeakMap<OpenTuiRenderer, (event: OpenTuiKeyEvent) => void>();
 
 function waitForAppKey(renderer: OpenTuiRenderer): Promise<OpenTuiKeyEvent | undefined> {
   if (renderer.keyInput === undefined) {
@@ -558,12 +574,14 @@ function waitForAppKey(renderer: OpenTuiRenderer): Promise<OpenTuiKeyEvent | und
         return;
       }
       settled = true;
+      activeSettlers.delete(renderer);
       queueMicrotask(() => {
         keyInput.off("keypress", handleKeypress);
         pasteInput.off?.("paste", handlePaste);
       });
       resolve(event);
     };
+    activeSettlers.set(renderer, settle);
     const handleKeypress = (event: OpenTuiKeyEvent): void => {
       settle(event);
     };

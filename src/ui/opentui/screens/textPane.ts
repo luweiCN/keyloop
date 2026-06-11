@@ -2,6 +2,7 @@ import type { OpenTuiRendererKit } from "../kit";
 import { theme, type OpenTuiColorInput } from "../theme";
 import { vScrollbar } from "../components";
 import { cursorVisualPosition, visualizeText, type VisualLine } from "../visualText";
+import { injectUiEvent, WHEEL_DOWN_EVENT, WHEEL_UP_EVENT } from "../uiEventBus";
 
 /**
  * 统一文本面板：详情查看、详情编辑、内容录入共用。
@@ -35,7 +36,7 @@ interface PaneLine {
 }
 
 export function textPaneContentWidth(totalWidth: number): number {
-  return Math.max(10, totalWidth - 2);
+  return Math.max(10, totalWidth - 3); // 滚动条 1 列 + 行区左右留白
 }
 
 export function renderTextPane(options: TextPaneOptions, kit: OpenTuiRendererKit): unknown {
@@ -81,6 +82,20 @@ export function renderTextPane(options: TextPaneOptions, kit: OpenTuiRendererKit
     visible.push({ content: "", fg: theme.muted });
   }
 
+  // 查看态支持鼠标滚轮：滚动事件回注键事件循环，与 ↑↓ 同一条 reducer 路径
+  const wheelProps =
+    options.mode.kind === "view"
+      ? {
+          onMouseScroll: (event: { scroll?: { direction: string; delta: number } }) => {
+            const direction = event.scroll?.direction;
+            if (direction === "up") {
+              injectUiEvent(WHEEL_UP_EVENT);
+            } else if (direction === "down") {
+              injectUiEvent(WHEEL_DOWN_EVENT);
+            }
+          },
+        }
+      : {};
   return kit.Box(
     {
       id: options.id,
@@ -89,7 +104,7 @@ export function renderTextPane(options: TextPaneOptions, kit: OpenTuiRendererKit
       width: "100%",
       height: "100%",
       overflow: "hidden",
-      gap: 1,
+      ...wheelProps,
     },
     kit.Box(
       {
@@ -98,6 +113,7 @@ export function renderTextPane(options: TextPaneOptions, kit: OpenTuiRendererKit
         flexGrow: 1,
         height: "100%",
         overflow: "hidden",
+        paddingX: 1,
       },
       ...visible.map((line, index) =>
         kit.Text({

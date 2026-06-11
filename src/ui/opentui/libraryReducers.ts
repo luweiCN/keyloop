@@ -733,11 +733,11 @@ export function reduceLibraryDetailKey(
         scroll: Math.max(0, Math.min(target, maxScroll)),
       }),
     });
-    if (isArrowUpEvent(event)) {
-      return scrollTo(route.scroll - 1);
+    if (isArrowUpEvent(event) || event.name === "wheel_up") {
+      return scrollTo(route.scroll - (event.name === "wheel_up" ? 3 : 1));
     }
-    if (isArrowDownEvent(event)) {
-      return scrollTo(route.scroll + 1);
+    if (isArrowDownEvent(event) || event.name === "wheel_down") {
+      return scrollTo(route.scroll + (event.name === "wheel_down" ? 3 : 1));
     }
     if (event.name.toLowerCase() === "pageup") {
       return scrollTo(route.scroll - size.bodyHeight);

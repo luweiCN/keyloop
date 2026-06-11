@@ -65,7 +65,7 @@ export function libraryInputPaneWidth(): number {
     terminalColumns === undefined || terminalColumns <= 0
       ? APP_FRAME_WIDTH
       : Math.min(terminalColumns, APP_FRAME_WIDTH);
-  return Math.max(20, frameColumns - 6); // 扣除边框与 padding
+  return Math.max(20, frameColumns - 4); // 扣除边框
 }
 
 function libraryInputPaneHeight(): number {
@@ -137,7 +137,6 @@ export function renderLibraryInputScreen(
         border: true,
         borderStyle: "rounded",
         borderColor: theme.info,
-        paddingX: 1,
         flexGrow: 1,
         width: "100%",
         title: ` ${titles[route.kind]} — ${libraryName} `,
@@ -686,7 +685,7 @@ export function detailPopupSize(): DetailPopupSize {
   const terminalRows = process.stdout.rows ?? 32;
   const width = Math.max(44, Math.min(Math.floor(terminalColumns * 0.7), APP_FRAME_WIDTH - 4));
   const height = Math.max(14, Math.floor(terminalRows * 0.8));
-  return { width, height, bodyHeight: Math.max(6, height - 2), paneWidth: width - 4 };
+  return { width, height, bodyHeight: Math.max(6, height - 2), paneWidth: width - 2 };
 }
 
 export function detailViewBlocks(match: LibraryBrowseEntry, zh: boolean): TextPaneBlock[] {
@@ -803,7 +802,6 @@ export function renderLibraryDetailScreen(
         border: true,
         borderStyle: "rounded",
         borderColor: editing === undefined ? theme.info : theme.accent,
-        paddingX: 1,
         width: size.width,
         height: size.height,
         flexShrink: 0,

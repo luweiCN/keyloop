@@ -844,3 +844,43 @@ describe("browse entry detail popup", () => {
     expect(closed.state.route).toMatchObject({ screen: "library_browse", query: "aban" });
   });
 });
+
+describe("detail view wheel scrolling", () => {
+  test("wheel events scroll the view by 3 lines, clamped at 0", () => {
+    const longArticle: CustomLibrary = {
+      ...emptyLibrary("web"),
+      articles: [
+        {
+          id: "a1",
+          title: "Long",
+          paragraphs: Array.from({ length: 40 }, (_, i) => ({ text: `Paragraph number ${i}.` })),
+        },
+      ],
+    };
+    const state = stateAt(
+      {
+        screen: "library_detail",
+        slug: "web",
+        entry_id: "a1",
+        return_query: "",
+        return_index: 0,
+        scroll: 0,
+      },
+      { customLibraries: [longArticle] },
+    );
+    const down = reduceLibraryDetailKey(
+      state,
+      { name: "wheel_down", sequence: "", ctrl: false, meta: false },
+      fakeContext(),
+    );
+    if (down.state.route.screen !== "library_detail") throw new Error("expected detail");
+    expect(down.state.route.scroll).toBe(3);
+    const up = reduceLibraryDetailKey(
+      state,
+      { name: "wheel_up", sequence: "", ctrl: false, meta: false },
+      fakeContext(),
+    );
+    if (up.state.route.screen !== "library_detail") throw new Error("expected detail");
+    expect(up.state.route.scroll).toBe(0);
+  });
+});
