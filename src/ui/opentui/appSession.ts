@@ -318,10 +318,12 @@ export async function runOpenTuiAppSession(
       dictionaryTier: context.dictionary?.tier ?? "none",
       todayElapsedMs: todayElapsedMsFromContext(context),
     });
-  let state =
-    baseState.today_elapsed_ms === undefined
-      ? { ...baseState, today_elapsed_ms: todayElapsedMsFromContext(context) }
-      : baseState;
+  // 今日时长每次进入会话都按最新记录重算（context 已含刚完成的练习），
+  // 否则练习后返回菜单会一直显示练习前的旧值
+  let state: OpenTuiAppState = {
+    ...baseState,
+    today_elapsed_ms: todayElapsedMsFromContext(context),
+  };
 
   const renderer = options.initialRenderer ?? await renderOpenTuiAppOnce(state, options.kit);
   if (options.initialRenderer !== undefined) {

@@ -1038,3 +1038,21 @@ function delay(ms: number): Promise<void> {
     expect(result?.action).toBe("quit");
     expect(result?.state.customLibraries?.[0]?.name).toBe("考研英语");
   });
+
+  test("today elapsed is recomputed from context on every session entry", async () => {
+    const kit = fakeKit();
+    const runPromise = runOpenTuiAppSession(
+      { ...appContext(), todayElapsedMs: 5 * 60 * 1000 },
+      {
+        kit,
+        initialState: {
+          ...createOpenTuiInitialState("zh"),
+          today_elapsed_ms: 60 * 1000, // 练习前的旧值
+        },
+      },
+    );
+    await kit.waitForKeyListener(1);
+    kit.emitKey({ name: "q", sequence: "q" });
+    const result = await Promise.race([runPromise, delay(80).then(() => null)]);
+    expect(result?.state.today_elapsed_ms).toBe(5 * 60 * 1000);
+  });
