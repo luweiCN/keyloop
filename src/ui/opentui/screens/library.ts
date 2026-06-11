@@ -162,6 +162,10 @@ export function renderLibraryInputScreen(
         flexGrow: 1,
         width: "100%",
         title: ` ${titles[route.kind]} — ${libraryName} `,
+        bottomTitle: zh
+          ? ` ${logicalLines.length} 行 · ${Array.from(route.text).length} 字 `
+          : ` ${logicalLines.length} lines · ${Array.from(route.text).length} chars `,
+        bottomTitleAlignment: "right",
         overflow: "hidden",
         flexDirection: "column",
       },
@@ -308,7 +312,11 @@ export function renderLibraryPreviewScreen(
 import { listRow } from "../components";
 import { APP_FRAME_WIDTH } from "./appFrame";
 import { truncateToDisplayWidth, wrapWordsToDisplayWidth } from "./shared";
-import { libraryActionItems, libraryBrowseMatches } from "../libraryReducers";
+import {
+  libraryActionItems,
+  libraryBrowseMatches,
+  type LibraryBrowseEntry,
+} from "../libraryReducers";
 
 function libraryListRow(
   id: string,
@@ -459,7 +467,7 @@ export function renderLibraryActionsScreen(
   );
 }
 
-const BROWSE_VISIBLE_ROWS = 12;
+const BROWSE_VISIBLE_ENTRIES = 6;
 
 export function renderLibraryBrowseScreen(
   state: OpenTuiAppState,
@@ -472,39 +480,26 @@ export function renderLibraryBrowseScreen(
   const route = state.route;
   const matches = libraryBrowseMatches(state);
   const selected = Math.min(Math.max(route.index, 0), Math.max(matches.length - 1, 0));
-  const typeLabels = {
-    words: zh ? "单词与词组" : "words",
-    sentences: zh ? "句子" : "sentences",
-    articles: zh ? "文章" : "articles",
-  } as const;
+  const columns = inputWrapColumns();
   const rows: unknown[] = [];
   const windowStart = Math.max(
     0,
-    Math.min(selected - Math.floor(BROWSE_VISIBLE_ROWS / 2), matches.length - BROWSE_VISIBLE_ROWS),
+    Math.min(
+      selected - Math.floor(BROWSE_VISIBLE_ENTRIES / 2),
+      matches.length - BROWSE_VISIBLE_ENTRIES,
+    ),
   );
   for (
     let index = windowStart;
-    index < Math.min(matches.length, windowStart + BROWSE_VISIBLE_ROWS);
+    index < Math.min(matches.length, windowStart + BROWSE_VISIBLE_ENTRIES);
     index += 1
   ) {
     const match = matches[index]!;
-    const label =
-      match.entry_type === "words"
-        ? match.entry.text
-        : match.entry_type === "sentences"
-          ? match.entry.text
-          : match.entry.title;
-    const hint =
-      match.entry_type === "words"
-        ? match.entry.meaning_zh ?? (zh ? "（无释义）" : "(no meaning)")
-        : match.entry_type === "sentences"
-          ? match.entry.translation_zh ?? ""
-          : zh
-            ? `${match.entry.paragraphs.length} 段`
-            : `${match.entry.paragraphs.length} paragraphs`;
-    rows.push(
-      libraryListRow(`keyloop-library-browse-row-${index}`, label, hint, index === selected, kit),
-    );
+    const isSelected = index === selected;
+    rows.push(renderBrowseEntryRows(match, index, isSelected, columns, zh, kit));
+    if (isSelected && route.action_menu !== undefined) {
+      rows.push(renderBrowseActionMenu(route.action_menu, zh, kit));
+    }
   }
   if (matches.length === 0) {
     rows.push(
@@ -517,11 +512,6 @@ export function renderLibraryBrowseScreen(
       }),
     );
   }
-  const selectedMatch = matches[selected];
-  const actionMenu =
-    route.action_menu === undefined || selectedMatch === undefined
-      ? []
-      : [renderBrowseActionMenu(route.action_menu, selectedMatch, zh, kit)];
   return kit.Box(
     {
       id: "keyloop-library-browse",
@@ -530,7 +520,6 @@ export function renderLibraryBrowseScreen(
       flexGrow: 1,
       width: "100%",
     },
-    ...actionMenu,
     kit.Box(
       {
         id: "keyloop-library-browse-search-panel",
@@ -541,14 +530,19 @@ export function renderLibraryBrowseScreen(
         height: 3,
         width: "100%",
         flexShrink: 0,
-        title: zh ? ` 浏览${typeLabels[route.entry_type]} ` : ` Browse ${typeLabels[route.entry_type]} `,
+        title: zh ? " 浏览内容 " : " Browse entries ",
         bottomTitle: ` ${matches.length} `,
         bottomTitleAlignment: "right",
         overflow: "hidden",
       },
       kit.Text({
         id: "keyloop-library-browse-query",
-        content: route.query === "" ? (zh ? "⌕ 输入关键词模糊搜索" : "⌕ type to fuzzy search") : `⌕ ${route.query}▏`,
+        content:
+          route.query === ""
+            ? zh
+              ? "⌕ 输入关键词模糊搜索（词 · 句 · 文）"
+              : "⌕ type to fuzzy search all entries"
+            : `⌕ ${route.query}▏`,
         fg: route.query === "" ? theme.muted : theme.foreground,
         height: 1,
         wrapMode: "none",
@@ -565,14 +559,15 @@ export function renderLibraryBrowseScreen(
         width: "100%",
         overflow: "hidden",
         flexDirection: "column",
+        gap: 1,
       },
       ...rows,
     ),
     helpBar(
       route.action_menu === undefined
         ? zh
-          ? "输入搜索 · ↑↓ 选择 · Enter 操作菜单 · Ctrl+X 快捷删除 · Ctrl+N 新增 · Esc 返回"
-          : "type to search · ↑↓ select · Enter actions · Ctrl+X delete · Ctrl+N add · Esc back"
+          ? "输入搜索 · ↑↓ 选择 · Enter 操作菜单 · Ctrl+X 快捷删除 · Esc 返回"
+          : "type to search · ↑↓ select · Enter actions · Ctrl+X delete · Esc back"
         : zh
           ? "↑↓ 选择操作 · Enter 确认 · Esc/退格 关闭"
           : "↑↓ choose · Enter confirm · Esc/Backspace close",
@@ -582,19 +577,77 @@ export function renderLibraryBrowseScreen(
   );
 }
 
-function renderBrowseActionMenu(
-  menuIndex: number,
-  match: import("../libraryReducers").LibraryBrowseEntry,
+/** 条目两行：第一行原文（含类型标记），第二行翻译，占满宽度后截断 */
+function renderBrowseEntryRows(
+  match: LibraryBrowseEntry,
+  index: number,
+  selected: boolean,
+  columns: number,
   zh: boolean,
   kit: OpenTuiRendererKit,
 ): unknown {
-  const label =
-    match.entry_type === "articles" ? match.entry.title : match.entry.text;
-  const items = [
-    zh ? "编辑" : "Edit",
-    zh ? "删除" : "Delete",
-    zh ? "取消" : "Cancel",
-  ];
+  const marker = selected ? "▌ " : "  ";
+  const tag =
+    match.entry_type === "words"
+      ? match.entry.kind === "phrase"
+        ? zh
+          ? "[组]"
+          : "[P]"
+        : zh
+          ? "[词]"
+          : "[W]"
+      : match.entry_type === "sentences"
+        ? zh
+          ? "[句]"
+          : "[S]"
+        : zh
+          ? "[文]"
+          : "[A]";
+  const original =
+    match.entry_type === "articles" ? (match.entry.paragraphs[0]?.text ?? "") : match.entry.text;
+  const translation =
+    match.entry_type === "words"
+      ? (match.entry.meaning_zh ?? (zh ? "（无释义）" : "(no meaning)"))
+      : match.entry_type === "sentences"
+        ? (match.entry.translation_zh ?? (zh ? "（无翻译）" : "(no translation)"))
+        : (match.entry.paragraphs[0]?.translation_zh ?? (zh ? "（无翻译）" : "(no translation)"));
+  const bodyWidth = Math.max(10, columns - 6);
+  return kit.Box(
+    {
+      id: `keyloop-library-browse-entry-${index}`,
+      flexDirection: "column",
+      width: "100%",
+      flexShrink: 0,
+    },
+    kit.Text({
+      id: `keyloop-library-browse-entry-${index}-text`,
+      content: `${marker}${tag} ${ellipsize(original, bodyWidth)}`,
+      fg: selected ? theme.accent : theme.foreground,
+      ...(selected ? { attributes: TEXT_BOLD } : {}),
+      height: 1,
+      wrapMode: "none",
+    }),
+    kit.Text({
+      id: `keyloop-library-browse-entry-${index}-translation`,
+      content: `${selected ? "▌ " : "  "}     ${ellipsize(translation, bodyWidth)}`,
+      fg: theme.muted,
+      height: 1,
+      wrapMode: "none",
+    }),
+  );
+}
+
+function ellipsize(text: string, maxWidth: number): string {
+  const truncated = truncateToDisplayWidth(text, maxWidth);
+  return truncated.length < text.length ? `${truncated}…` : truncated;
+}
+
+function renderBrowseActionMenu(
+  menuIndex: number,
+  zh: boolean,
+  kit: OpenTuiRendererKit,
+): unknown {
+  const items = [zh ? "编辑" : "Edit", zh ? "删除" : "Delete", zh ? "取消" : "Cancel"];
   return kit.Box(
     {
       id: "keyloop-library-browse-action-menu",
@@ -602,9 +655,8 @@ function renderBrowseActionMenu(
       borderStyle: "rounded",
       borderColor: theme.accent,
       paddingX: 1,
-      width: "100%",
+      width: 24,
       flexShrink: 0,
-      title: ` ${truncateToDisplayWidth(label, 40)} `,
       overflow: "hidden",
       flexDirection: "column",
     },

@@ -511,9 +511,19 @@ function isLibraryTextInputScreen(state: OpenTuiAppState): boolean {
   );
 }
 
+/**
+ * 同一 stdin 块（IME 整句上屏、连击）会在一个同步批次里派发多个 keypress。
+ * resolve 第一个后剩余事件先进缓冲，退订延迟到批次结束，下次调用先吃缓冲。
+ */
+const pendingAppEvents = new WeakMap<OpenTuiRenderer, OpenTuiKeyEvent[]>();
+
 function waitForAppKey(renderer: OpenTuiRenderer): Promise<OpenTuiKeyEvent | undefined> {
   if (renderer.keyInput === undefined) {
     return Promise.resolve(undefined);
+  }
+  const buffered = pendingAppEvents.get(renderer);
+  if (buffered !== undefined && buffered.length > 0) {
+    return Promise.resolve(buffered.shift());
   }
   const keyInput = renderer.keyInput;
   const pasteInput = keyInput as unknown as PasteCapableKeyInput;
@@ -521,11 +531,16 @@ function waitForAppKey(renderer: OpenTuiRenderer): Promise<OpenTuiKeyEvent | und
     let settled = false;
     const settle = (event: OpenTuiKeyEvent): void => {
       if (settled) {
+        const queue = pendingAppEvents.get(renderer) ?? [];
+        queue.push(event);
+        pendingAppEvents.set(renderer, queue);
         return;
       }
       settled = true;
-      keyInput.off("keypress", handleKeypress);
-      pasteInput.off?.("paste", handlePaste);
+      queueMicrotask(() => {
+        keyInput.off("keypress", handleKeypress);
+        pasteInput.off?.("paste", handlePaste);
+      });
       resolve(event);
     };
     const handleKeypress = (event: OpenTuiKeyEvent): void => {

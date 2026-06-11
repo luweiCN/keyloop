@@ -314,9 +314,7 @@ export interface LibraryActionItem {
     | "add_words"
     | "add_sentences"
     | "add_article"
-    | "browse_words"
-    | "browse_sentences"
-    | "browse_articles"
+    | "browse_all"
     | "delete_library";
   label: string;
   hint: string;
@@ -332,9 +330,13 @@ export function libraryActionItems(state: OpenTuiAppState, slug: string): Librar
     { id: "add_words", label: zh ? "添加单词 / 词组" : "Add words", hint: zh ? "每行一条，可带释义" : "one per line" },
     { id: "add_sentences", label: zh ? "添加句子" : "Add sentences", hint: zh ? "单次粘贴，英文+翻译交替" : "single paste" },
     { id: "add_article", label: zh ? "添加文章" : "Add article", hint: zh ? "标题 + 整篇粘贴" : "title + paste" },
-    { id: "browse_words", label: zh ? "浏览单词与词组" : "Browse words", hint: zh ? `${wordCount} 条 · 搜索 · 编辑 · 删除` : `${wordCount} entries` },
-    { id: "browse_sentences", label: zh ? "浏览句子" : "Browse sentences", hint: zh ? `${sentenceCount} 句` : `${sentenceCount} sentences` },
-    { id: "browse_articles", label: zh ? "浏览文章" : "Browse articles", hint: zh ? `${articleCount} 篇` : `${articleCount} articles` },
+    {
+      id: "browse_all",
+      label: zh ? "浏览内容" : "Browse entries",
+      hint: zh
+        ? `${wordCount} 词 · ${sentenceCount} 句 · ${articleCount} 篇 · 搜索 · 编辑 · 删除`
+        : `${wordCount}w · ${sentenceCount}s · ${articleCount}a`,
+    },
     { id: "delete_library", label: zh ? "删除语料库" : "Delete library", hint: zh ? "整库删除，需确认" : "confirm required" },
   ];
 }
@@ -424,19 +426,11 @@ export function reduceLibraryActionsKey(
           text: "",
         }),
       };
-    case "browse_words":
-    case "browse_sentences":
-    case "browse_articles":
+    case "browse_all":
       return {
         state: withRoute(state, {
           screen: "library_browse",
           slug: route.slug,
-          entry_type:
-            item.id === "browse_words"
-              ? "words"
-              : item.id === "browse_sentences"
-                ? "sentences"
-                : "articles",
           query: "",
           index: 0,
         }),
@@ -463,22 +457,24 @@ export function libraryBrowseMatches(state: OpenTuiAppState): LibraryBrowseEntry
     return [];
   }
   const query = route.query;
-  if (route.entry_type === "words") {
-    return library.words
-      .filter((word) => query === "" || fuzzyIncludes(`${word.text} ${word.meaning_zh ?? ""}`, query))
-      .map((word) => ({ entry_type: "words" as const, id: word.id, entry: word }));
+  const matches: LibraryBrowseEntry[] = [];
+  for (const word of library.words) {
+    if (query === "" || fuzzyIncludes(`${word.text} ${word.meaning_zh ?? ""}`, query)) {
+      matches.push({ entry_type: "words", id: word.id, entry: word });
+    }
   }
-  if (route.entry_type === "sentences") {
-    return library.sentences
-      .filter(
-        (sentence) =>
-          query === "" || fuzzyIncludes(`${sentence.text} ${sentence.translation_zh ?? ""}`, query),
-      )
-      .map((sentence) => ({ entry_type: "sentences" as const, id: sentence.id, entry: sentence }));
+  for (const sentence of library.sentences) {
+    if (query === "" || fuzzyIncludes(`${sentence.text} ${sentence.translation_zh ?? ""}`, query)) {
+      matches.push({ entry_type: "sentences", id: sentence.id, entry: sentence });
+    }
   }
-  return library.articles
-    .filter((article) => query === "" || fuzzyIncludes(article.title, query))
-    .map((article) => ({ entry_type: "articles" as const, id: article.id, entry: article }));
+  for (const article of library.articles) {
+    const haystack = `${article.title} ${article.paragraphs[0]?.text ?? ""}`;
+    if (query === "" || fuzzyIncludes(haystack, query)) {
+      matches.push({ entry_type: "articles", id: article.id, entry: article });
+    }
+  }
+  return matches;
 }
 
 function editPrefillRoute(
@@ -564,16 +560,6 @@ export function reduceLibraryBrowseKey(
       return { state };
     }
     return deleteBrowseEntry(state, route, match, index);
-  }
-  if (event.ctrl && !event.meta && (event.name.toLowerCase() === "n" || event.sequence === "\x0e")) {
-    return {
-      state: withRoute(state, {
-        screen: "library_input",
-        slug: route.slug,
-        kind: route.entry_type === "articles" ? "article" : route.entry_type,
-        text: "",
-      }),
-    };
   }
   if (isBackspaceEvent(event)) {
     return { state: withRoute(state, { ...route, query: route.query.slice(0, -1), index: 0 }) };

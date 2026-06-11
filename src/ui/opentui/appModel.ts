@@ -235,7 +235,6 @@ export type OpenTuiRoute =
   | {
       screen: "library_browse";
       slug: string;
-      entry_type: "words" | "sentences" | "articles";
       query: string;
       index: number;
       /** 选中条目上的操作菜单（编辑/删除/取消）；undefined 表示菜单未打开 */
@@ -608,7 +607,7 @@ function codeFilterOptionsMatchingQuery(
 export function fuzzyIncludes(value: string, query: string): boolean {
   let searchIndex = 0;
   const normalizedValue = value.toLowerCase();
-  for (const character of query) {
+  for (const character of query.toLowerCase()) {
     searchIndex = normalizedValue.indexOf(character, searchIndex);
     if (searchIndex === -1) {
       return false;

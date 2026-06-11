@@ -1012,3 +1012,29 @@ function testLibrary(): ContentLibrary {
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+  test("burst keypresses from one stdin chunk are all consumed (IME commit)", async () => {
+    const kit = fakeKit();
+    const runPromise = runOpenTuiAppSession(appContext(), {
+      kit,
+      initialState: {
+        ...createOpenTuiInitialState("zh"),
+        route: { screen: "library_create", name: "" },
+      },
+    });
+
+    await kit.waitForKeyListener(1);
+    // 模拟 IME 整句上屏：同一同步批次连发 4 个字符事件
+    kit.emitKey({ name: "考", sequence: "考" });
+    kit.emitKey({ name: "研", sequence: "研" });
+    kit.emitKey({ name: "英", sequence: "英" });
+    kit.emitKey({ name: "语", sequence: "语" });
+    await kit.waitForKeyListener(2);
+    kit.emitKey({ name: "enter", sequence: "\r" });
+    await kit.waitForKeyListener(3);
+    kit.emitKey({ name: "q", sequence: "q" });
+
+    const result = await Promise.race([runPromise, delay(80).then(() => null)]);
+    expect(result?.action).toBe("quit");
+    expect(result?.state.customLibraries?.[0]?.name).toBe("考研英语");
+  });

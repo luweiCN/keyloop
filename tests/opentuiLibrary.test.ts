@@ -382,9 +382,7 @@ describe("library actions screen", () => {
       "add_words",
       "add_sentences",
       "add_article",
-      "browse_words",
-      "browse_sentences",
-      "browse_articles",
+      "browse_all",
       "delete_library",
     ]);
   });
@@ -400,7 +398,7 @@ describe("library actions screen", () => {
       kind: "words",
     });
     const onDelete = stateAt(
-      { screen: "library_actions", slug: "web", selected_index: 6 },
+      { screen: "library_actions", slug: "web", selected_index: 4 },
       { customLibraries: [richLibrary()] },
     );
     const confirm = reduceLibraryActionsKey(onDelete, keyEvent("enter", "\r"));
@@ -413,7 +411,6 @@ describe("library actions screen", () => {
     expect(browse.state.route).toEqual({
       screen: "library_browse",
       slug: "web",
-      entry_type: "words",
       query: "",
       index: 0,
     });
@@ -437,16 +434,18 @@ describe("library actions screen", () => {
 describe("library browse screen", () => {
   function browseState(query = "", index = 0): OpenTuiAppState {
     return stateAt(
-      { screen: "library_browse", slug: "web", entry_type: "words", query, index },
+      { screen: "library_browse", slug: "web", query, index },
       { customLibraries: [richLibrary()] },
     );
   }
 
-  test("fuzzy query filters entries by text and meaning", () => {
+  test("fuzzy query filters across words, sentences, and articles", () => {
     const all = libraryBrowseMatches(browseState());
-    expect(all.map((entry) => entry.id)).toEqual(["w1", "w2", "w3"]);
+    expect(all.map((entry) => entry.id)).toEqual(["w1", "w2", "w3", "s1", "a1"]);
     const filtered = libraryBrowseMatches(browseState("mln"));
     expect(filtered.map((entry) => entry.id)).toEqual(["w2"]);
+    const article = libraryBrowseMatches(browseState("My Day"));
+    expect(article.map((entry) => entry.id)).toEqual(["a1"]);
   });
 
   test("typing updates query; enter then edit opens editor prefilled with entry format", () => {
@@ -577,7 +576,7 @@ describe("acceptance: all library screens render without throwing", () => {
         error_lines: ["第 3 行：苹果"],
       },
     },
-    { screen: "library_browse", slug: "web", entry_type: "words", query: "ab", index: 0 },
+    { screen: "library_browse", slug: "web", query: "ab", index: 0 },
     { screen: "library_delete_confirm", slug: "web" },
   ];
 
@@ -680,7 +679,7 @@ describe("IME and paste text input", () => {
 
   test("browse query accepts IME chunks", () => {
     const base = stateAt(
-      { screen: "library_browse", slug: "web", entry_type: "words", query: "", index: 0 },
+      { screen: "library_browse", slug: "web", query: "", index: 0 },
       {
         customLibraries: [
           {
@@ -720,7 +719,7 @@ describe("library input screens swallow the global quit key", () => {
 
     const browse = reduceOpenTuiAppKey(
       stateAt(
-        { screen: "library_browse", slug: "web", entry_type: "words", query: "", index: 0 },
+        { screen: "library_browse", slug: "web", query: "", index: 0 },
         { customLibraries: [emptyLibrary("web")] },
       ),
       keyEvent("q", "q"),
@@ -735,7 +734,7 @@ describe("library input screens swallow the global quit key", () => {
 describe("browse entry operations with active query", () => {
   function browseStateWithWords(query: string): OpenTuiAppState {
     return stateAt(
-      { screen: "library_browse", slug: "web", entry_type: "words", query, index: 0 },
+      { screen: "library_browse", slug: "web", query, index: 0 },
       {
         customLibraries: [
           {
@@ -761,20 +760,6 @@ describe("browse entry operations with active query", () => {
     expect(result.state.customLibraries?.[0]?.words.map((word) => word.id)).toEqual(["w2"]);
   });
 
-  test("ctrl+n jumps to the matching add screen", () => {
-    const result = reduceLibraryBrowseKey(browseStateWithWords("aban"), {
-      name: "n",
-      sequence: "\x0e",
-      ctrl: true,
-      meta: false,
-    });
-    expect(result.state.route).toEqual({
-      screen: "library_input",
-      slug: "web",
-      kind: "words",
-      text: "",
-    });
-  });
 
   test("plain d is just a search character now", () => {
     const result = reduceLibraryBrowseKey(browseStateWithWords(""), keyEvent("d", "d"));
@@ -803,7 +788,7 @@ describe("word-boundary wrapping", () => {
 describe("browse entry action menu", () => {
   function browseBase(query = "aban"): OpenTuiAppState {
     return stateAt(
-      { screen: "library_browse", slug: "web", entry_type: "words", query, index: 0 },
+      { screen: "library_browse", slug: "web", query, index: 0 },
       {
         customLibraries: [
           {
