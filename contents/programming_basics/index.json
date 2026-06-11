@@ -2,12 +2,15 @@
   "schema": "keyloop.programming_basics",
   "schema_version": 1,
   "languages": [
+    "c",
+    "cpp",
     "csharp",
     "go",
     "java",
     "javascript",
     "kotlin",
     "python",
+    "rust",
     "typescript"
   ]
 }
