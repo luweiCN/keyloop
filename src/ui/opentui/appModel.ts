@@ -246,6 +246,8 @@ export type OpenTuiRoute =
       /** 返回 picker 时恢复的搜索词与选中位置 */
       return_query: string;
       return_index: number;
+      /** 查看态滚动偏移（视觉行） */
+      scroll: number;
       /** 编辑态：弹窗内可编辑缓冲；undefined 为查看态 */
       editing?: { text: string; cursor: number };
     }

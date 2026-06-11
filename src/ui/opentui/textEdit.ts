@@ -139,3 +139,27 @@ export function moveCursorLineEnd(state: TextEditState): TextEditState {
 export function cursorLine(state: TextEditState): number {
   return cursorPosition(state).line;
 }
+
+import { cursorVisualPosition, offsetAtDisplayColumn, visualizeText } from "./visualText";
+
+/** 在视觉行（软换行后的行）间上移，按显示列对齐 */
+export function moveCursorUpVisual(state: TextEditState, maxWidth: number): TextEditState {
+  const position = cursorVisualPosition(state.text, maxWidth, state.cursor);
+  if (position.line === 0) {
+    return { text: state.text, cursor: clampCursor(state) };
+  }
+  const lines = visualizeText(state.text, maxWidth);
+  const target = lines[position.line - 1]!;
+  return { text: state.text, cursor: offsetAtDisplayColumn(target, position.displayColumn) };
+}
+
+/** 在视觉行间下移，按显示列对齐 */
+export function moveCursorDownVisual(state: TextEditState, maxWidth: number): TextEditState {
+  const lines = visualizeText(state.text, maxWidth);
+  const position = cursorVisualPosition(state.text, maxWidth, state.cursor);
+  if (position.line >= lines.length - 1) {
+    return { text: state.text, cursor: clampCursor(state) };
+  }
+  const target = lines[position.line + 1]!;
+  return { text: state.text, cursor: offsetAtDisplayColumn(target, position.displayColumn) };
+}

@@ -15,14 +15,16 @@ import { isArrowDownEvent, isArrowUpEvent, isEnterEvent } from "./runnerEvents";
 import {
   deleteBeforeCursor,
   insertAtCursor,
-  moveCursorDown,
+  moveCursorDownVisual,
   moveCursorLeft,
   moveCursorLineEnd,
   moveCursorLineStart,
   moveCursorRight,
-  moveCursorUp,
+  moveCursorUpVisual,
   type TextEditState,
 } from "./textEdit";
+import { detailPopupSize, detailViewBlocks, libraryInputPaneWidth } from "./screens/library";
+import { textPaneContentWidth, textPaneMaxScroll } from "./screens/textPane";
 
 export function isArrowLeftEvent(event: OpenTuiKeyEvent): boolean {
   return event.name === "left" || event.name === "arrowleft" || event.sequence === "\x1b[D";
@@ -144,10 +146,10 @@ export function reduceLibraryInputKey(
     state: withRoute(state, { ...route, text: next.text, cursor: next.cursor }),
   });
   if (isArrowUpEvent(event)) {
-    return apply(moveCursorUp(editing));
+    return apply(moveCursorUpVisual(editing, libraryInputPaneWidth()));
   }
   if (isArrowDownEvent(event)) {
-    return apply(moveCursorDown(editing));
+    return apply(moveCursorDownVisual(editing, libraryInputPaneWidth()));
   }
   if (isArrowLeftEvent(event)) {
     return apply(moveCursorLeft(editing));
@@ -609,6 +611,7 @@ export function reduceLibraryBrowseKey(
         entry_id: match.id,
         return_query: route.query,
         return_index: index,
+        scroll: 0,
       }),
     };
   }
@@ -717,7 +720,31 @@ export function reduceLibraryDetailKey(
   }
 
   if (route.editing === undefined) {
-    // 查看态：E/M 编辑，D 删除，Enter/Esc 关闭（Esc 由顶层处理）
+    // 查看态：↑↓/PgUp/PgDn 滚动，E/M 编辑，D 删除，Enter/Esc 关闭（Esc 由顶层处理）
+    const size = detailPopupSize();
+    const maxScroll = textPaneMaxScroll(
+      detailViewBlocks(match, state.language === "zh"),
+      size.paneWidth,
+      size.bodyHeight,
+    );
+    const scrollTo = (target: number): LibraryReduceResult => ({
+      state: withRoute(state, {
+        ...route,
+        scroll: Math.max(0, Math.min(target, maxScroll)),
+      }),
+    });
+    if (isArrowUpEvent(event)) {
+      return scrollTo(route.scroll - 1);
+    }
+    if (isArrowDownEvent(event)) {
+      return scrollTo(route.scroll + 1);
+    }
+    if (event.name.toLowerCase() === "pageup") {
+      return scrollTo(route.scroll - size.bodyHeight);
+    }
+    if (event.name.toLowerCase() === "pagedown") {
+      return scrollTo(route.scroll + size.bodyHeight);
+    }
     const key = event.ctrl || event.meta ? "" : event.name.toLowerCase();
     if (DETAIL_EDIT_KEYS.has(key)) {
       const text = entryEditText(match);
@@ -756,10 +783,10 @@ export function reduceLibraryDetailKey(
     return saveDetailEdit(state, route, match, editing.text, context);
   }
   if (isArrowUpEvent(event)) {
-    return apply(moveCursorUp(editing));
+    return apply(moveCursorUpVisual(editing, textPaneContentWidth(detailPopupSize().paneWidth)));
   }
   if (isArrowDownEvent(event)) {
-    return apply(moveCursorDown(editing));
+    return apply(moveCursorDownVisual(editing, textPaneContentWidth(detailPopupSize().paneWidth)));
   }
   if (isArrowLeftEvent(event)) {
     return apply(moveCursorLeft(editing));

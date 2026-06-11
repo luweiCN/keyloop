@@ -780,6 +780,7 @@ describe("browse entry detail popup", () => {
       entry_id: "w1",
       return_query: "aban",
       return_index: 0,
+      scroll: 0,
     });
   });
 
