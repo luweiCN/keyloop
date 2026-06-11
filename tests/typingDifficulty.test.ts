@@ -26,11 +26,11 @@ describe("typing difficulty scoring", () => {
 
     expect(result.difficulty).toBe("medium");
     expect(result.score).toBeGreaterThanOrEqual(6);
-    expect(result.score).toBeLessThanOrEqual(10);
+    expect(result.score).toBeLessThanOrEqual(8);
     expect(result.reasons).toContain("mixed identifier casing");
   });
 
-  test("classifies symbol-dense generic code as medium", () => {
+  test("classifies symbol-dense generic code as hard", () => {
     const result = scoreTypingDifficulty(
       [
         "type UserMap<T extends Record<string, unknown>> = {",
@@ -39,9 +39,8 @@ describe("typing difficulty scoring", () => {
       ].join("\n"),
     );
 
-    expect(result.difficulty).toBe("medium");
-    expect(result.score).toBeGreaterThanOrEqual(6);
-    expect(result.score).toBeLessThanOrEqual(10);
+    expect(result.difficulty).toBe("hard");
+    expect(result.score).toBeGreaterThanOrEqual(9);
     expect(result.reasons).toContain("high symbol density");
     expect(result.reasons).toContain("tricky operator sequences");
   });

@@ -33,3 +33,6 @@ sessions.jsonl
 # Stray artifacts
 /--verbose
 __pycache__/
+
+# Corpus rebuild intermediates (candidates + per-item reviews).
+/content/corpus-rebuild/

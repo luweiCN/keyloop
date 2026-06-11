@@ -137,7 +137,7 @@ function typingDifficultyFromScore(score: number): TypingDifficulty {
   if (score <= 5) {
     return "easy";
   }
-  if (score <= 10) {
+  if (score <= 8) {
     return "medium";
   }
   return "hard";
