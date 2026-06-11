@@ -954,3 +954,26 @@ describe("delete confirmation", () => {
     expect(cancelled.state.route.query).toBe("");
   });
 });
+
+import { returnStateFromRunningState } from "../src/cli";
+
+describe("return-to-menu state after practice", () => {
+  test("keeps custom libraries and dictionary tier (regression)", () => {
+    const running: OpenTuiAppState = {
+      ...stateAt(
+        {
+          screen: "running",
+          target: { mode: "words", text: "abandon", source: "keyloop:library:web3:words" },
+          source_item: "library_kind_web3:words",
+          return_route: { screen: "library_menu", slug: "web3", selected_index: 0 },
+        } as never,
+        { customLibraries: [emptyLibrary("web3")] },
+      ),
+      dictionaryTier: "mini",
+    };
+    const returned = returnStateFromRunningState(running);
+    expect(returned.route).toEqual({ screen: "library_menu", slug: "web3", selected_index: 0 });
+    expect(returned.customLibraries?.map((library) => library.slug)).toEqual(["web3"]);
+    expect(returned.dictionaryTier).toBe("mini");
+  });
+});

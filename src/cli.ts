@@ -833,22 +833,15 @@ function todayElapsedMsFromRecords(records: SessionRecord[], now: Date): number 
     .reduce((sum, record) => sum + record.duration_ms, 0);
 }
 
-function returnStateFromRunningState(state: OpenTuiAppState): OpenTuiAppState {
+export function returnStateFromRunningState(state: OpenTuiAppState): OpenTuiAppState {
   const route: OpenTuiReturnRoute =
     state.route.screen === "running" && state.route.return_route !== undefined
       ? state.route.return_route
       : { screen: "main_menu", selected_index: 0 };
-  return {
-    language: state.language,
-    route,
-    ...(state.codeFilters === undefined ? {} : { codeFilters: state.codeFilters }),
-    ...(state.codeSettings === undefined ? {} : { codeSettings: state.codeSettings }),
-    ...(state.codeStyleSettings === undefined ? {} : { codeStyleSettings: state.codeStyleSettings }),
-    ...(state.everydaySettings === undefined ? {} : { everydaySettings: state.everydaySettings }),
-    ...(state.wordFormSettings === undefined ? {} : { wordFormSettings: state.wordFormSettings }),
-    ...(state.speed_unit === undefined ? {} : { speed_unit: state.speed_unit }),
-    ...(state.today_elapsed_ms === undefined ? {} : { today_elapsed_ms: state.today_elapsed_ms }),
-  };
+  // 展开整个 state 只替换 route：session 字段（customLibraries、dictionaryTier、
+  // 设置等）全部自动延续，避免逐字段拷贝漏掉新增字段（曾导致自建语料库
+  // 在练习返回后从菜单消失）。
+  return { ...state, route };
 }
 
 async function loadDailyPracticePlan(
