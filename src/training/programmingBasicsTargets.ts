@@ -99,7 +99,7 @@ function basicsCodeBlock(language: string, lineCount: number) {
   };
 }
 
-// 符号与数字三形态组装：value 卡按空格聚合成行，statement 卡一行一张，
+// 代码基础三形态组装：value 卡按空格聚合成行，statement 卡一行一张，
 // block 卡保留多行且块间以空行分隔（与代码实战一致的输入体验）。
 const VALUES_PER_LINE = 4;
 

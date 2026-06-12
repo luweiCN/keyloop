@@ -17,7 +17,7 @@ import { defaultSessionRecord } from "../src/domain/model";
 import type { ContentLibrary } from "../src/content/library";
 import type { PracticePlan, SessionRecord, TrainingCategory } from "../src/domain/model";
 import type { BuildTargetContext } from "../src/training/targets";
-import { submenuItems } from "../src/ui/opentui/menuItems";
+import { menuItemDescription, submenuItems } from "../src/ui/opentui/menuItems";
 
 function emptyPlan(): PracticePlan {
   return {
@@ -291,7 +291,10 @@ describe("programming submenu", () => {
       "builtin_api",
       "programming_basics_mix",
     ]);
-    expect(items[0]?.label).toBe("符号与数字");
+    expect(items[0]?.label).toBe("代码基础");
     expect(items[4]?.label).toBe("内置 API");
+    expect(menuItemDescription({ id: "symbols_numbers" })).toBe(
+      "练字面值、单行语句和小代码块里的符号、数字、标点与配对结构；API 调用在内置 API 中练。",
+    );
   });
 });

@@ -114,7 +114,7 @@ The menu has 6 fixed entries:
 - Full practice: run the adaptive sequence across foundation practice, everyday practice, programming basics, and code practice.
 - Foundation practice: open a second-level menu for Home row, Top row, Bottom row, horizontal, vertical, finger movement, and a bottom mixed foundation entry.
 - Everyday practice: open common 100 words, common 500 words, common 1000 words, everyday sentences, or everyday mix. Word entries can switch each group between 10 / 20 / 50 / 100 words. The sentence entry switches short / medium / long / mixed inside the same entry.
-- Programming basics: open numbers and symbols, operators/brackets/quotes, naming and camel case, technical terms, or programming basics mix.
+- Programming basics: open code input basics, programming terms, naming styles, technical long words, built-in APIs, or programming basics mix.
 - Code practice: open code blocks, functions, file fragments, or random mix while keeping language/framework/project multi-select filters. Used or pinned filters stay near the top and are saved as the global code scope.
 - Stats: review total time, best WPM, weighted accuracy, key heatmap, problem words, daily details, and what the next full practice will prioritize.
 

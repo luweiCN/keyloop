@@ -226,7 +226,7 @@ export function submenuItems(menu: OpenTuiSubmenu, language: Language): OpenTuiM
       ];
     case "programming":
       return [
-        item("symbols_numbers", "符号与数字", "Symbols and numbers", language),
+        item("symbols_numbers", "代码基础", "Code input basics", language),
         item("programming_terms", "编程常用词", "Programming terms", language),
         item("naming_styles", "命名形式", "Naming styles", language),
         item("technical_long_words", "技术长词", "Technical long words", language),
@@ -452,7 +452,7 @@ export function menuItemDescription(item: { id: string }): string {
     case "everyday":
       return "常用词、句子、长词拆解，适合补英文自动化。";
     case "programming":
-      return "操作符、括号、命名、技术长词和个人词库。";
+      return "代码基础、内置 API、命名形式、编程词和技术长词。";
     case "code":
       return "按语言 / 框架范围练完整代码块、函数和文件片段。";
     case "settings":
@@ -513,7 +513,7 @@ export function menuItemDescription(item: { id: string }): string {
     case "everyday_mix":
       return "单词、短语、句子和长词拆解混合复盘。";
     case "symbols_numbers":
-      return "按当前语言在真实代码语境里练符号与数字。";
+      return "练字面值、单行语句和小代码块里的符号、数字、标点与配对结构；API 调用在内置 API 中练。";
     case "builtin_api":
       return "练当前语言生态的高频内置 API 调用。";
     case "programming_terms":
@@ -523,7 +523,7 @@ export function menuItemDescription(item: { id: string }): string {
     case "technical_long_words":
       return "练 internationalization、serialization 等技术长词拆解。";
     case "programming_basics_mix":
-      return "符号数字、内置 API、命名与编程词混合复盘。";
+      return "代码基础、内置 API、命名与编程词混合复盘。";
     case "code_blocks":
       return "练完整代码块，保留上下文和缩进节奏。";
     case "code_functions":
