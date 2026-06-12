@@ -119,30 +119,35 @@ describe("target generation core", () => {
         end: "state".length,
         translation_zh: "状态（组件/应用状态）",
         display: "word",
+        audio_text: "state",
       },
       {
         start: "state ".length,
         end: "state token".length,
         translation_zh: "令牌（认证凭证）",
         display: "word",
+        audio_text: "token",
       },
       {
         start: "state token ".length,
         end: "state token payload".length,
         translation_zh: "载荷（请求/事件数据）",
         display: "word",
+        audio_text: "payload",
       },
       {
         start: "state token payload ".length,
         end: "state token payload context".length,
         translation_zh: "上下文（运行/调用上下文）",
         display: "word",
+        audio_text: "context",
       },
       {
         start: "state token payload context ".length,
         end: "state token payload context request".length,
         translation_zh: "请求（HTTP/接口入参）",
         display: "word",
+        audio_text: "request",
       },
     ]);
   });
@@ -174,12 +179,14 @@ describe("target generation core", () => {
         end: "state state state".length,
         translation_zh: "状态（组件/应用状态）",
         display: "word_loose",
+        audio_text: "state",
       },
       {
         start: "state state state ".length,
         end: "state state state request request request".length,
         translation_zh: "请求（HTTP/接口入参）",
         display: "word_loose",
+        audio_text: "request",
       },
     ]);
   });
@@ -318,12 +325,14 @@ describe("target generation core", () => {
         end: "practice practice practice".length,
         translation_zh: "练习",
         display: "word_loose",
+        audio_text: "practice",
       },
       {
         start: "practice practice practice ".length,
         end: "practice practice practice today today today".length,
         translation_zh: "今天",
         display: "word_loose",
+        audio_text: "today",
       },
     ]);
   });
@@ -910,6 +919,7 @@ describe("target generation core", () => {
         end: "specification".length,
         translation_zh: "规格说明（技术规范）",
         display: "word",
+        audio_text: "specification",
       },
     ]);
   });
@@ -959,12 +969,14 @@ describe("target generation core", () => {
         end: "deallocation deallocation deallocation".length,
         translation_zh: "释放（归还内存资源）",
         display: "word_loose",
+        audio_text: "deallocation",
       },
       {
         start: "deallocation deallocation deallocation ".length,
         end: target.text.length,
         translation_zh: "认证",
         display: "word_loose",
+        audio_text: "authentication",
       },
     ]);
   });
@@ -1004,6 +1016,7 @@ describe("target generation core", () => {
         end: repeated.length,
         translation_zh: "释放",
         display: "word_loose",
+        audio_text: "deallocation",
       },
     ]);
   });

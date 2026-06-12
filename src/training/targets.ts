@@ -413,6 +413,7 @@ function programmingWordAnnotationItem(
   const note = entry.note_zh.trim();
   return {
     text: repeatedWordText(entry.word, wordRepeats),
+    audio_text: entry.word,
     ...(note.length === 0
       ? {}
       : { translation_zh: note, display: wordAnnotationDisplay(wordRepeats) }),
@@ -916,6 +917,7 @@ interface AnnotationTextItem {
   translation_zh: string;
   source_title?: string;
   display?: PracticeTargetAnnotation["display"];
+  audio_text?: string;
 }
 
 interface OptionalAnnotationTextItem {
@@ -923,6 +925,7 @@ interface OptionalAnnotationTextItem {
   translation_zh?: string;
   source_title?: string;
   display?: PracticeTargetAnnotation["display"];
+  audio_text?: string;
 }
 
 interface AnnotatedTargetText {
@@ -1025,6 +1028,7 @@ function annotationForItem(
     translation_zh: item.translation_zh,
     ...(item.source_title === undefined ? {} : { source_title: item.source_title }),
     ...(item.display === undefined ? {} : { display: item.display }),
+    ...(item.audio_text === undefined ? {} : { audio_text: item.audio_text }),
   };
 }
 
@@ -1040,6 +1044,7 @@ function annotationForOptionalItem(
     translation_zh,
     ...(item.source_title === undefined ? {} : { source_title: item.source_title }),
     ...(item.display === undefined ? {} : { display: item.display }),
+    ...(item.audio_text === undefined ? {} : { audio_text: item.audio_text }),
   };
 }
 
@@ -1132,6 +1137,7 @@ function everydayTranslatedMixTarget(
       text: entry.word,
       translation_zh: conciseChineseMeaning(entry.translation_zh),
       display: "word",
+      audio_text: entry.word,
     })),
   );
   const sentencesBlock = annotatedLineText(
@@ -1287,6 +1293,7 @@ function everydayTranslatedWordsTarget(context: BuildTargetContext): PracticeTar
       text: repeatedWordText(entry.word, wordRepeats),
       translation_zh: conciseChineseMeaning(entry.translation_zh),
       display: wordAnnotationDisplay(wordRepeats),
+      audio_text: entry.word,
     })),
   );
   return {
@@ -1896,6 +1903,7 @@ function breakdownCandidateTextItems(
   return [
     {
       text: repeatedWordText(candidate.word, wordRepeats),
+      audio_text: candidate.word,
       ...(candidate.note_zh === undefined
         ? {}
         : { translation_zh: candidate.note_zh, display: wordAnnotationDisplay(wordRepeats) }),

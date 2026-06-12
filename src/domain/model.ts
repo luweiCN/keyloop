@@ -116,6 +116,7 @@ export interface PracticeTargetAnnotation {
   translation_zh: string;
   source_title?: string;
   display?: PracticeTargetAnnotationDisplay;
+  audio_text?: string;
 }
 
 export type PracticeTargetAnnotationDisplay = "word" | "word_loose" | "line" | "article";
@@ -429,6 +430,7 @@ export function parsePracticeTarget(value: unknown): PracticeTarget {
 function parsePracticeTargetAnnotation(value: unknown): PracticeTargetAnnotation {
   const object = asObject(value);
   const sourceTitle = optionalString(object.source_title);
+  const audioText = optionalString(object.audio_text);
   const display = optionalLiteral(
     object.display,
     ["word", "word_loose", "line", "article"] as const,
@@ -439,6 +441,7 @@ function parsePracticeTargetAnnotation(value: unknown): PracticeTargetAnnotation
     translation_zh: stringValue(object.translation_zh),
     ...(sourceTitle === undefined ? {} : { source_title: sourceTitle }),
     ...(display === undefined ? {} : { display }),
+    ...(audioText === undefined ? {} : { audio_text: audioText }),
   };
 }
 

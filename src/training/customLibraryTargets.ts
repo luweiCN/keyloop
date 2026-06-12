@@ -5,6 +5,7 @@ import type { CustomLibrary, CustomWord } from "./customLibrary";
 interface BuildOptions {
   random?: () => number;
   count?: number;
+  wordRepeats?: number;
 }
 
 function shuffled<T>(items: readonly T[], random: () => number): T[] {
@@ -22,7 +23,12 @@ interface AppendState {
 }
 
 /** 与日常练习一致：单词空格连排成一段，渲染层按 word 标注排布；释义只取第一义并去词性 */
-function appendWordRun(state: AppendState, words: readonly CustomWord[]): void {
+function appendWordRun(
+  state: AppendState,
+  words: readonly CustomWord[],
+  wordRepeats = 1,
+): void {
+  const repeats = normalizedWordRepeats(wordRepeats);
   if (state.text !== "") {
     state.text += "\n";
   }
@@ -32,7 +38,7 @@ function appendWordRun(state: AppendState, words: readonly CustomWord[]): void {
     }
     const word = words[index]!;
     const start = state.text.length;
-    state.text += word.text;
+    state.text += repeatedWordText(word.text, repeats);
     if (word.meaning_zh !== undefined) {
       const meaning = conciseChineseMeaning(word.meaning_zh);
       if (meaning !== "") {
@@ -40,7 +46,8 @@ function appendWordRun(state: AppendState, words: readonly CustomWord[]): void {
           start,
           end: state.text.length,
           translation_zh: meaning,
-          display: "word",
+          display: repeats > 1 ? "word_loose" : "word",
+          audio_text: word.text,
         });
       }
     }
@@ -83,7 +90,7 @@ export function buildLibraryWordsTarget(
     random,
   ).slice(0, count);
   const state: AppendState = { text: "", annotations: [] };
-  appendWordRun(state, chosen);
+  appendWordRun(state, chosen, options.wordRepeats);
   return finish(state, `keyloop:library:${library.slug}:words`);
 }
 
@@ -192,4 +199,15 @@ export function buildLibraryMixTarget(
     appendLine(state, paragraph.text, paragraph.translation_zh);
   }
   return finish(state, `keyloop:library:${library.slug}:mix`);
+}
+
+function repeatedWordText(word: string, repeats: number): string {
+  return Array.from({ length: repeats }, () => word).join(" ");
+}
+
+function normalizedWordRepeats(value: number): number {
+  if (!Number.isFinite(value)) {
+    return 1;
+  }
+  return Math.min(10, Math.max(1, Math.floor(value)));
 }

@@ -50,8 +50,23 @@ describe("custom library targets", () => {
       end: abandonStart + "abandon".length,
       translation_zh: "放弃", // 第一义、去词性
       display: "word",
+      audio_text: "abandon",
     });
     expect(target.source).toBe("keyloop:library:kaoyan:words");
+  });
+
+  test("words target repeats custom words without repeating meanings", () => {
+    const target = buildLibraryWordsTarget(library, { random: fixedRandom, wordRepeats: 3 });
+    const repeated = "abandon abandon abandon";
+    const repeatedStart = target.text.indexOf(repeated);
+    expect(target.text).toContain(repeated);
+    expect(target.annotations).toContainEqual({
+      start: repeatedStart,
+      end: repeatedStart + repeated.length,
+      translation_zh: "放弃",
+      display: "word_loose",
+      audio_text: "abandon",
+    });
   });
 
   test("dictionary multi-sense meanings keep only the first sense", () => {
