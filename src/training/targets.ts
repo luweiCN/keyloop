@@ -36,6 +36,7 @@ import {
   type LongWordEntry,
 } from "./vocabulary";
 import type { SkillProfile, TrainingForm } from "./diagnosis";
+import { charBudget } from "./prescription";
 import type { CustomLibrary } from "./customLibrary";
 
 export interface BuildTargetContext {
@@ -2693,4 +2694,94 @@ function symbolsStageTarget(
     text: lines.join("\n"),
     source: "keyloop:stage:symbols:foundation",
   };
+}
+
+/** 合并多个 PracticeTarget，平移注解偏移 */
+function combinePracticeTargets(
+  targets: PracticeTarget[],
+  mode: PracticeTarget["mode"],
+  source: string,
+  separator = "\n",
+): PracticeTarget {
+  let text = "";
+  const annotations: PracticeTargetAnnotation[] = [];
+  for (const target of targets) {
+    if (target.text.length === 0) {
+      continue;
+    }
+    if (text.length > 0) {
+      text += separator;
+    }
+    const offset = text.length;
+    text += target.text;
+    for (const annotation of target.annotations ?? []) {
+      annotations.push({
+        ...annotation,
+        start: annotation.start + offset,
+        end: annotation.end + offset,
+      });
+    }
+  }
+  return {
+    mode,
+    text,
+    source,
+    ...(annotations.length === 0 ? {} : { annotations }),
+  };
+}
+
+/** 二级菜单「日常综合」：单词 + 句子两段，预算按形态 EWMA，focus 分桶回流 */
+export function buildEverydayMixStageTarget(
+  context: BuildTargetContext,
+  profile: SkillProfile,
+  customLibraries?: CustomLibrary[],
+): PracticeTarget {
+  const enabledModules: TrainingModule[] = ["everyday_english"];
+  const words = wordsStageTarget(context, {
+    stage: { form: "words", char_budget: stageMixBudget(profile, "words") },
+    profile,
+    enabledModules,
+    ...(customLibraries === undefined ? {} : { customLibraries }),
+  });
+  const sentences = sentencesStageTarget(context, {
+    stage: { form: "sentences", char_budget: stageMixBudget(profile, "sentences") },
+    profile,
+    enabledModules,
+    ...(customLibraries === undefined ? {} : { customLibraries }),
+  });
+  return combinePracticeTargets(
+    [words, sentences],
+    "words",
+    "keyloop:module:everyday-english:mix:adaptive",
+  );
+}
+
+/** 二级菜单「编程基础综合」：编程词 + 符号数字两段 */
+export function buildProgrammingBasicsMixStageTarget(
+  context: BuildTargetContext,
+  profile: SkillProfile,
+): PracticeTarget {
+  const enabledModules: TrainingModule[] = ["programming_basics"];
+  const words = wordsStageTarget(context, {
+    stage: { form: "words", char_budget: stageMixBudget(profile, "words") },
+    profile,
+    enabledModules,
+  });
+  const symbols = symbolsStageTarget(context, {
+    stage: { form: "symbols", char_budget: stageMixBudget(profile, "symbols") },
+    profile,
+    enabledModules,
+  });
+  return combinePracticeTargets(
+    [words, symbols],
+    "mixed",
+    "keyloop:module:programming-basics:mix:adaptive",
+  );
+}
+
+/** 二级 mix 的形态预算：固定 4 分钟 × 该形态 EWMA WPM（冷启动折扣由 charBudget 内置） */
+const STAGE_MIX_MINUTES = 4;
+
+function stageMixBudget(profile: SkillProfile, form: TrainingForm): number {
+  return charBudget(form, STAGE_MIX_MINUTES, profile.form_speeds);
 }

@@ -3,7 +3,12 @@ import { describe, expect, test } from "bun:test";
 import type { ContentLibrary } from "../src/content/library";
 import type { CustomLibrary } from "../src/training/customLibrary";
 import type { SkillProfile } from "../src/training/diagnosis";
-import { buildStageTarget, type BuildTargetContext } from "../src/training/targets";
+import {
+  buildEverydayMixStageTarget,
+  buildProgrammingBasicsMixStageTarget,
+  buildStageTarget,
+  type BuildTargetContext,
+} from "../src/training/targets";
 
 function stageLibrary(): ContentLibrary {
   return {
@@ -267,5 +272,34 @@ describe("buildStageTarget code and keys", () => {
       profile: emptyProfile(),
     });
     expect(target.text).toContain("It was a sunny day.");
+  });
+});
+
+describe("module mix stage targets (secondary menus)", () => {
+  test("everyday mix combines words and sentences, excludes programming words", () => {
+    const target = buildEverydayMixStageTarget(
+      stageContext(),
+      emptyProfile({ words: ["algorithm"] }),
+      [customLibraryFixture()],
+    );
+    // focus 回流 + 自建词库混入
+    expect(target.text).toContain("algorithm");
+    expect(target.text).toContain("bespoke");
+    // 句子段存在（库中句子之一出现）
+    expect(target.text).toMatch(/\./u);
+    expect(target.text.split("\n").length).toBeGreaterThan(1);
+    // 编程词不进日常综合
+    expect(target.text).not.toContain("closure");
+    expect(target.source).toBe("keyloop:module:everyday-english:mix:adaptive");
+  });
+
+  test("programming mix combines programming words and symbols, excludes everyday words", () => {
+    const target = buildProgrammingBasicsMixStageTarget(
+      stageContext(),
+      emptyProfile(),
+    );
+    expect(target.text).toContain("closure");
+    expect(target.text).not.toContain("weather");
+    expect(target.source).toBe("keyloop:module:programming-basics:mix:adaptive");
   });
 });

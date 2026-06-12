@@ -60,7 +60,9 @@ import {
   buildCodeMixPracticeTarget,
   buildCodeSpecialistPracticeTarget,
   buildDailyPracticePlan,
+  buildEverydayMixStageTarget,
   buildEverydayPracticeTarget,
+  buildProgrammingBasicsMixStageTarget,
   everydayMeaningLines,
   buildFoundationPracticeTarget,
   buildFoundationMixPracticeTarget,
@@ -75,6 +77,7 @@ import {
   buildSymbolsNumbersTarget,
 } from "../../training/programmingBasicsTargets";
 import type { LiveMetrics } from "../../training/liveSession";
+import { buildSkillProfile } from "../../training/diagnosis";
 
 export const openTuiStatsViews = [
   "overview",
@@ -889,7 +892,11 @@ function activateSubmenuItem(
       return runningState(
         state.language,
         itemId,
-        buildEverydayPracticeTarget(effectiveContext, "mix"),
+        buildEverydayMixStageTarget(
+          effectiveContext,
+          buildSkillProfile(effectiveContext.records, effectiveContext.plan, effectiveContext.now),
+          state.customLibraries,
+        ),
         undefined,
         stateOptions(state),
       );
@@ -929,7 +936,10 @@ function activateSubmenuItem(
       return runningState(
         state.language,
         itemId,
-        buildProgrammingBasicsMixTarget(effectiveContext),
+        buildProgrammingBasicsMixStageTarget(
+          effectiveContext,
+          buildSkillProfile(effectiveContext.records, effectiveContext.plan, effectiveContext.now),
+        ),
         undefined,
         stateOptions(state),
       );

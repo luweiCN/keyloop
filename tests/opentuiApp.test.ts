@@ -364,7 +364,7 @@ describe("OpenTUI app model", () => {
       [
         "programming",
         "programming_basics_mix",
-        "keyloop:module:programming-basics-mix",
+        "keyloop:module:programming-basics:mix:adaptive",
       ],
       ["code", "code_mix", "keyloop:code-corpus"],
     ];
