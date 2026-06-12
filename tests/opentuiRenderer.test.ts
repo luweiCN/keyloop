@@ -5,6 +5,7 @@ import {
   wrapGhostWordBlockLoose,
 } from "../src/ui/opentui/screens/ghostText";
 import {
+  startStagePlanFirstLesson,
   activateOpenTuiMenuItem,
   createOpenTuiCompletionState,
   createOpenTuiExitConfirmationState,
@@ -350,10 +351,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders running route target text", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -847,10 +846,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders running route with live metric strip above ghost text", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1062,10 +1059,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders current target keys in the diagnostics panel before typing starts", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("zh"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("zh"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1115,10 +1110,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders live diagnostics for only the keys present in the current target", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1193,10 +1186,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("keeps long diagnostic key rows aligned without clipping", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1233,10 +1224,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders line numbers only for code targets", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1255,10 +1244,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("soft wraps long code rows instead of clipping hidden target text", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1283,10 +1270,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("soft wraps long code rows at word boundaries when possible", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1309,10 +1294,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("does not apply syntax fallback colors to non-code targets", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1344,10 +1327,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders explicit default foreground for plain code instead of ANSI white", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1376,10 +1357,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders cursor position and newline markers without an error hint row", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1418,10 +1397,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders code practice with Shiki-backed syntax colors", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1676,10 +1653,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("keeps ghost text stable when repeated wrong enters are typed", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");

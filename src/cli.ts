@@ -911,7 +911,8 @@ async function startContextFromAppState(
       ? await loadDailyPracticePlan(
           dataDir,
           effectiveAppContext.records,
-          buildDailyPracticePlan(effectiveAppContext),
+          // 诊断屏确认过的计划优先（所见即所练），否则现场生成
+          state.route.daily_plan ?? buildDailyPracticePlan(effectiveAppContext),
           options,
         )
       : standaloneDailyPlanFromRoute(state.route);

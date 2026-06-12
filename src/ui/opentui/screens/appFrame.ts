@@ -140,6 +140,12 @@ export function routeHints(state: OpenTuiAppState): KeyHint[] {
     case "practice_options":
     case "complete":
       return modalHints(state.route, zh);
+    case "stage_plan":
+      return [
+        { key: "Enter", label: zh ? "开始" : "start" },
+        { key: "←/→", label: zh ? "调整时长" : "adjust" },
+        { key: "Esc", label: zh ? "返回" : "back" },
+      ];
     case "summary":
     case "ansi_palette":
       return [
@@ -171,6 +177,7 @@ export function routeCrumb(state: OpenTuiAppState): string {
       return `${openTuiRouteTitle(state)} › ${state.route.record.module}`;
     case "settings":
     case "stats":
+    case "stage_plan":
     case "exit_confirmation":
     case "code_settings_confirmation":
     case "practice_options":

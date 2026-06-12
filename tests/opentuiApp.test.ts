@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import {
   activateOpenTuiMenuItem,
+  startStagePlanFirstLesson,
   createOpenTuiCompletionState,
   createOpenTuiCodeFilterState,
   createOpenTuiInitialState,
@@ -137,19 +138,28 @@ describe("OpenTUI app model", () => {
     ]);
   });
 
-  test("comprehensive starts the first daily lesson target", () => {
+  test("comprehensive opens the stage plan screen, enter starts stage one", () => {
     const state = activateOpenTuiMenuItem(
       createOpenTuiInitialState("en"),
       "comprehensive",
       appContext(),
     );
 
-    expect(state.route.screen).toBe("running");
-    if (state.route.screen !== "running") {
+    expect(state.route.screen).toBe("stage_plan");
+    if (state.route.screen !== "stage_plan") {
+      throw new Error("expected stage_plan route");
+    }
+    expect(state.route.plan.lessons[0]?.id).toBe("stage:keys:1");
+    expect(state.route.diagnosis_lines.length).toBeGreaterThan(0);
+
+    const started = startStagePlanFirstLesson(state);
+    expect(started.route.screen).toBe("running");
+    if (started.route.screen !== "running") {
       throw new Error("expected running route");
     }
-    expect(state.route.lesson?.module).toBe("foundation_input");
-    expect(state.route.target.source).toContain("keyloop:module:foundation-mix");
+    expect(started.route.lesson?.module).toBe("foundation_input");
+    expect(started.route.target.source).toContain("keyloop:module:foundation-mix");
+    expect(started.route.daily_plan?.lessons.length).toBeGreaterThanOrEqual(3);
   });
 
   test("programming technical long words starts a word breakdown target", () => {

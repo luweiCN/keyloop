@@ -592,7 +592,15 @@ export function buildLongWordBreakdownPracticeTarget(
 }
 
 
-export function buildDailyPracticePlan(context: BuildTargetContext): DailyPracticePlan {
+export interface BuildDailyPracticePlanOptions {
+  /** 覆盖推荐时长（诊断屏手动调整） */
+  targetMinutesOverride?: number;
+}
+
+export function buildDailyPracticePlan(
+  context: BuildTargetContext,
+  options: BuildDailyPracticePlanOptions = {},
+): DailyPracticePlan {
   const now = context.now ?? new Date();
   const profile = buildSkillProfile(context.records, context.plan, now);
   const prescription = buildDailyPrescription({
@@ -606,6 +614,9 @@ export function buildDailyPracticePlan(context: BuildTargetContext): DailyPracti
     records: context.records,
     now,
     ...(context.random === undefined ? {} : { random: context.random }),
+    ...(options.targetMinutesOverride === undefined
+      ? {}
+      : { targetMinutesOverride: options.targetMinutesOverride }),
   });
   const lessons = prescription.stages.map((stage, index) =>
     stageLessonFromPlan(context, profile, stage, index),

@@ -59,7 +59,12 @@ export interface PrescriptionInput {
   records: SessionRecord[];
   now: Date;
   random?: () => number;
+  /** 覆盖推荐时长（诊断屏手动调整），clamp [10, 60] */
+  targetMinutesOverride?: number;
 }
+
+/** 手动调整时长的上限（高于自动推荐上限，允许用户主动加练） */
+const MAX_OVERRIDE_MINUTES = 60;
 
 /** 冷启动各形态保守默认 WPM */
 export const FORM_FALLBACK_WPM: Record<TrainingForm, number> = {
@@ -101,7 +106,10 @@ const DIMENSION_FORM: Record<SkillDimensionId, TrainingForm> = {
 
 export function buildDailyPrescription(input: PrescriptionInput): DailyPrescription {
   const random = input.random ?? Math.random;
-  const targetMinutes = recommendedDailyMinutes(input.profile);
+  const targetMinutes =
+    input.targetMinutesOverride === undefined
+      ? recommendedDailyMinutes(input.profile)
+      : clamp(Math.round(input.targetMinutesOverride), MIN_DAILY_MINUTES, MAX_OVERRIDE_MINUTES);
   const weakForms = collectWeakForms(input.profile);
   const stableForms = collectStableForms(input.profile);
   const everydayEnabled = input.enabledModules.includes("everyday_english");
