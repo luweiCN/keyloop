@@ -53,7 +53,7 @@ describe("package verification scripts", () => {
       new URL("../package.json", import.meta.url),
     ).json()) as PackageJson;
 
-    expect(packageJson.version).toBe("0.1.5");
+    expect(packageJson.version).toBe("0.1.6");
   });
 
   test("release workflow packages runtime content and Homebrew installs it", async () => {
@@ -63,9 +63,9 @@ describe("package verification scripts", () => {
 
     expect(releaseWorkflow).toContain("bun_target: bun-linux-x64");
     expect(releaseWorkflow).toContain("archive_target: x86_64-unknown-linux-gnu");
-    expect(releaseWorkflow).toContain("os: macos-15-intel");
+    expect(releaseWorkflow).toContain("os: macos-26-intel");
     expect(releaseWorkflow).toContain("archive_target: x86_64-apple-darwin");
-    expect(releaseWorkflow).toContain("os: macos-latest");
+    expect(releaseWorkflow).toContain("os: macos-26");
     expect(releaseWorkflow).toContain("archive_target: aarch64-apple-darwin");
     expect(releaseWorkflow).toContain('if [ -n "$BUN_TARGET" ]; then');
     expect(releaseWorkflow).toContain('--target "$BUN_TARGET"');

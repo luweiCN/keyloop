@@ -60,10 +60,10 @@ jobs:
           - os: ubuntu-latest
             bun_target: bun-linux-x64
             archive_target: x86_64-unknown-linux-gnu
-          - os: macos-15-intel
+          - os: macos-26-intel
             bun_target: ""
             archive_target: x86_64-apple-darwin
-          - os: macos-latest
+          - os: macos-26
             bun_target: ""
             archive_target: aarch64-apple-darwin
     steps:
