@@ -342,6 +342,7 @@ async function runApp(
       wordBreakdownSettings: preferences.word_breakdown,
       wordAudioSettings: preferences.word_audio,
       customLibrarySettings: preferences.custom_library,
+      enabledModules: preferences.enabled_modules,
       speedUnit: preferences.speed_unit,
       todayElapsedMs: todayElapsedMsFromRecords(records, options.now ?? new Date()),
       dataDir,
@@ -723,6 +724,7 @@ async function runStart(
       localCodeScanError = errorMessage(error);
     }
   }
+  const customLibraries = await loadCustomLibrariesFromDir(customLibrariesDirPath(dataDir));
   const targetContext: Parameters<typeof buildDailyPracticePlan>[0] = {
     records,
     plan,
@@ -732,6 +734,8 @@ async function runStart(
     everydaySettings: preferences.everyday_english,
     programmingTermsSettings: preferences.programming_terms,
     wordBreakdownSettings: preferences.word_breakdown,
+    enabledModules: preferences.enabled_modules,
+    customLibraries,
     localCodeSnippets,
     ...(command.repo === undefined ? {} : { localCodeSource: command.repo }),
     ...(localCodeScanError === undefined ? {} : { localCodeScanError }),
@@ -750,6 +754,7 @@ async function runStart(
       targetContext,
       wordAudioSettings: preferences.word_audio,
       customLibrarySettings: preferences.custom_library,
+      customLibraries,
       ...(options.now === undefined ? {} : { now: options.now }),
     },
     dataDir,
