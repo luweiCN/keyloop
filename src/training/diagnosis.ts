@@ -62,3 +62,52 @@ export function charSkillDimensions(char: string): SkillDimensionId[] {
   }
   return [];
 }
+
+/** EWMA 半衰期：4 个样本 */
+const EWMA_HALF_LIFE = 4;
+/** 每维度/形态取最近多少次会话 */
+export const DIAGNOSIS_WINDOW_SESSIONS = 10;
+
+/** values 按时间正序（旧→新），返回指数加权平均；空数组返回 null */
+export function ewmaAverage(values: number[]): number | null {
+  if (values.length === 0) {
+    return null;
+  }
+  let weightedSum = 0;
+  let weightTotal = 0;
+  for (let index = 0; index < values.length; index += 1) {
+    const age = values.length - 1 - index; // 最新样本 age=0
+    const weight = Math.pow(0.5, age / EWMA_HALF_LIFE);
+    weightedSum += values[index]! * weight;
+    weightTotal += weight;
+  }
+  return weightedSum / weightTotal;
+}
+
+export type TrendDirection = "higher_is_better" | "lower_is_better";
+
+/** 窗口前半 vs 后半均值对比，变化超过 ±8% 判趋势；样本 <4 为 insufficient */
+export function seriesTrend(values: number[], direction: TrendDirection): SkillTrend {
+  if (values.length < 4) {
+    return "insufficient";
+  }
+  const half = Math.floor(values.length / 2);
+  const first = average(values.slice(0, half));
+  const second = average(values.slice(values.length - half));
+  if (first === 0) {
+    return "stable";
+  }
+  const change = (second - first) / first;
+  if (Math.abs(change) <= 0.08) {
+    return "stable";
+  }
+  const better = direction === "higher_is_better" ? change > 0 : change < 0;
+  return better ? "improving" : "declining";
+}
+
+function average(values: number[]): number {
+  if (values.length === 0) {
+    return 0;
+  }
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
