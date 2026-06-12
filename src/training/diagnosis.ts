@@ -111,3 +111,147 @@ function average(values: number[]): number {
   }
   return values.reduce((sum, value) => sum + value, 0) / values.length;
 }
+
+const CHAR_DIMENSIONS: SkillDimensionId[] = [
+  "home_row",
+  "top_row",
+  "bottom_row",
+  "left_hand",
+  "right_hand",
+  "digits",
+  "symbols",
+  "capitalization",
+];
+
+/** 单维度在单次会话内的样本 */
+interface DimensionSessionSample {
+  events: number;
+  errors: number;
+  /** 平均键间隔 ms（仅统计 ≤2000ms 的相邻 insert 间隔） */
+  avgIntervalMs: number | null;
+}
+
+/** 键间隔超过该值视为停顿，不计入速度 */
+const MAX_INTERVAL_MS = 2000;
+/** 维度事件数低于此值的会话不计入该维度样本 */
+const MIN_DIMENSION_EVENTS = 3;
+/** 总事件量低于此值视为 unrated */
+const MIN_RATED_EVENTS = 20;
+
+function dimensionSamplesForRecord(
+  record: SessionRecord,
+): Map<SkillDimensionId, DimensionSessionSample> {
+  const stats = new Map<
+    SkillDimensionId,
+    { events: number; errors: number; intervalSum: number; intervalCount: number }
+  >();
+  let previousAtMs: number | null = null;
+  for (const event of record.key_events) {
+    if (event.action !== "insert") {
+      previousAtMs = null;
+      continue;
+    }
+    const char = event.expected ?? event.input;
+    const interval = previousAtMs === null ? null : event.at_ms - previousAtMs;
+    previousAtMs = event.at_ms;
+    if (char === null) {
+      continue;
+    }
+    for (const dimension of charSkillDimensions(char)) {
+      const entry = stats.get(dimension) ?? {
+        events: 0,
+        errors: 0,
+        intervalSum: 0,
+        intervalCount: 0,
+      };
+      entry.events += 1;
+      if (!event.correct) {
+        entry.errors += 1;
+      }
+      if (interval !== null && interval > 0 && interval <= MAX_INTERVAL_MS) {
+        entry.intervalSum += interval;
+        entry.intervalCount += 1;
+      }
+      stats.set(dimension, entry);
+    }
+  }
+  const samples = new Map<SkillDimensionId, DimensionSessionSample>();
+  for (const [dimension, entry] of stats) {
+    if (entry.events < MIN_DIMENSION_EVENTS) {
+      continue;
+    }
+    samples.set(dimension, {
+      events: entry.events,
+      errors: entry.errors,
+      avgIntervalMs:
+        entry.intervalCount === 0 ? null : entry.intervalSum / entry.intervalCount,
+    });
+  }
+  return samples;
+}
+
+export function diagnoseCharSkills(records: SessionRecord[]): SkillDiagnosis[] {
+  // 按时间正序处理（旧→新），EWMA 假定数组尾部最新
+  const ordered = [...records].sort(
+    (left, right) => Date.parse(left.started_at) - Date.parse(right.started_at),
+  );
+  const perDimension = new Map<SkillDimensionId, DimensionSessionSample[]>();
+  for (const record of ordered) {
+    for (const [dimension, sample] of dimensionSamplesForRecord(record)) {
+      const list = perDimension.get(dimension) ?? [];
+      list.push(sample);
+      perDimension.set(dimension, list);
+    }
+  }
+
+  return CHAR_DIMENSIONS.map((dimension) => {
+    const all = perDimension.get(dimension) ?? [];
+    const window = all.slice(-DIAGNOSIS_WINDOW_SESSIONS);
+    const events = window.reduce((sum, sample) => sum + sample.events, 0);
+    if (window.length === 0 || events < MIN_RATED_EVENTS) {
+      return {
+        id: dimension,
+        samples: window.length,
+        events,
+        ewma_error_rate: null,
+        ewma_speed: null,
+        trend: "insufficient" as const,
+        status: "unrated" as const,
+      };
+    }
+    const errorRates = window.map((sample) => (sample.errors / sample.events) * 100);
+    const intervals = window
+      .map((sample) => sample.avgIntervalMs)
+      .filter((value): value is number => value !== null);
+    const ewmaErrorRate = ewmaAverage(errorRates);
+    const ewmaInterval = ewmaAverage(intervals);
+    const trend = seriesTrend(intervals, "lower_is_better");
+    return {
+      id: dimension,
+      samples: window.length,
+      events,
+      ewma_error_rate: ewmaErrorRate,
+      ewma_speed: ewmaInterval,
+      trend,
+      status: dimensionStatus(window.length, ewmaErrorRate, trend),
+    };
+  });
+}
+
+function dimensionStatus(
+  samples: number,
+  ewmaErrorRate: number | null,
+  trend: SkillTrend,
+): SkillStatus {
+  if (ewmaErrorRate === null) {
+    return "unrated";
+  }
+  if (ewmaErrorRate >= 8 || trend === "declining") {
+    return "weak";
+  }
+  // 到这里 trend 必非 declining，无需再判
+  if (samples >= 3 && ewmaErrorRate <= 2.5) {
+    return "stable";
+  }
+  return "normal";
+}
