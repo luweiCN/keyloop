@@ -35,8 +35,8 @@ import { PLAN_HISTORY_DAYS } from "./plan";
 import {
   type LongWordEntry,
 } from "./vocabulary";
-import type { SkillProfile, TrainingForm } from "./diagnosis";
-import { charBudget } from "./prescription";
+import { buildSkillProfile, type SkillProfile, type TrainingForm } from "./diagnosis";
+import { buildDailyPrescription, charBudget, type StagePlan } from "./prescription";
 import type { CustomLibrary } from "./customLibrary";
 
 export interface BuildTargetContext {
@@ -53,6 +53,10 @@ export interface BuildTargetContext {
   wordBreakdownSettings?: UserPreferences["word_breakdown"];
   random?: () => number;
   now?: Date;
+  /** 综合训练启用的一级模块（来自 preferences.enabled_modules），缺省全启用 */
+  enabledModules?: TrainingModule[];
+  /** 自建语料库（参与单词/句子形态的语料池） */
+  customLibraries?: CustomLibrary[];
 }
 
 export interface BuildLongWordBreakdownPracticeOptions {
@@ -537,6 +541,24 @@ export function refreshModuleMixTarget(
   lesson: PracticeLesson,
   context: BuildTargetContext,
 ): PracticeTarget {
+  const stageForm = stageFormFromLessonId(lesson.id);
+  if (stageForm !== undefined) {
+    // 阶段课程：用包含最新记录的 context 重建画像与预算（会话内实时修正）
+    const profile = buildSkillProfile(context.records, context.plan, context.now);
+    return buildStageTarget(context, {
+      stage: {
+        form: stageForm,
+        char_budget: charBudget(stageForm, lesson.estimated_minutes, profile.form_speeds),
+      },
+      profile,
+      ...(context.enabledModules === undefined
+        ? {}
+        : { enabledModules: context.enabledModules }),
+      ...(context.customLibraries === undefined
+        ? {}
+        : { customLibraries: context.customLibraries }),
+    });
+  }
   switch (lesson.module) {
     case "foundation_input":
       return foundationMixTarget(context);
@@ -572,26 +594,112 @@ export function buildLongWordBreakdownPracticeTarget(
 
 export function buildDailyPracticePlan(context: BuildTargetContext): DailyPracticePlan {
   const now = context.now ?? new Date();
-  const readiness = moduleReadinessFromRecords(context.records, now);
-  const occurrenceCounts = new Map<LessonKind, number>();
-  const lessons = comprehensiveModuleSequence(readiness, context.plan).map((item) =>
-    buildModuleMixLesson(
-      nextLessonId(item.kind, occurrenceCounts),
-      item.kind,
-      item.module,
-      item.category,
-      buildModuleMixTarget(context, item.module),
-      readiness,
-    ),
+  const profile = buildSkillProfile(context.records, context.plan, now);
+  const prescription = buildDailyPrescription({
+    profile,
+    enabledModules: context.enabledModules ?? [
+      "foundation_input",
+      "everyday_english",
+      "programming_basics",
+      "code_practice",
+    ],
+    records: context.records,
+    now,
+    ...(context.random === undefined ? {} : { random: context.random }),
+  });
+  const lessons = prescription.stages.map((stage, index) =>
+    stageLessonFromPlan(context, profile, stage, index),
   );
 
   return {
     run_id: "",
     run_number: 0,
-    target_minutes: 20,
+    target_minutes: prescription.target_minutes,
     completed_ms: completedMsForDate(context.records, now),
     lessons,
   };
+}
+
+function stageLessonFromPlan(
+  context: BuildTargetContext,
+  profile: SkillProfile,
+  stage: StagePlan,
+  index: number,
+): PracticeLesson {
+  return {
+    id: `stage:${stage.form}:${index + 1}`,
+    kind: stageLessonKind(stage.form),
+    module: stageLessonModule(stage.form),
+    category: stageLessonCategory(stage.form),
+    mix_profile: "comprehensive",
+    estimated_minutes: stage.minutes,
+    target: buildStageTarget(context, {
+      stage,
+      profile,
+      ...(context.enabledModules === undefined
+        ? {}
+        : { enabledModules: context.enabledModules }),
+      ...(context.customLibraries === undefined
+        ? {}
+        : { customLibraries: context.customLibraries }),
+    }),
+    reason_zh: stage.reason_zh,
+    reason_en: stage.reason_en,
+  };
+}
+
+function stageLessonKind(form: TrainingForm): LessonKind {
+  switch (form) {
+    case "keys":
+      return "foundation";
+    case "words":
+      return "common_words";
+    case "symbols":
+      return "symbols";
+    case "sentences":
+    case "articles":
+      return "words";
+    case "code":
+      return "code_block";
+  }
+}
+
+function stageLessonModule(form: TrainingForm): TrainingModule {
+  switch (form) {
+    case "keys":
+      return "foundation_input";
+    case "words":
+    case "sentences":
+    case "articles":
+      return "everyday_english";
+    case "symbols":
+      return "programming_basics";
+    case "code":
+      return "code_practice";
+  }
+}
+
+/** 阶段会话记录的 category 决定它回流到哪个技能形态（formForCategory 闭环） */
+function stageLessonCategory(form: TrainingForm): TrainingCategory {
+  switch (form) {
+    case "keys":
+      return "foundation_mix";
+    case "words":
+      return "everyday_words";
+    case "symbols":
+      return "symbols_numbers";
+    case "sentences":
+      return "everyday_sentences";
+    case "articles":
+      return "everyday_articles";
+    case "code":
+      return "code_mix";
+  }
+}
+
+export function stageFormFromLessonId(lessonId: string): TrainingForm | undefined {
+  const match = lessonId.match(/^stage:(keys|words|symbols|sentences|articles|code):/u);
+  return match?.[1] as TrainingForm | undefined;
 }
 
 function buildModuleMixLesson(

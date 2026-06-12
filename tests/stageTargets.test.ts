@@ -4,9 +4,11 @@ import type { ContentLibrary } from "../src/content/library";
 import type { CustomLibrary } from "../src/training/customLibrary";
 import type { SkillProfile } from "../src/training/diagnosis";
 import {
+  buildDailyPracticePlan,
   buildEverydayMixStageTarget,
   buildProgrammingBasicsMixStageTarget,
   buildStageTarget,
+  refreshModuleMixTarget,
   type BuildTargetContext,
 } from "../src/training/targets";
 
@@ -301,5 +303,45 @@ describe("module mix stage targets (secondary menus)", () => {
     expect(target.text).toContain("closure");
     expect(target.text).not.toContain("weather");
     expect(target.source).toBe("keyloop:module:programming-basics:mix:adaptive");
+  });
+});
+
+describe("buildDailyPracticePlan (stage-based)", () => {
+  test("plan lessons follow prescription stages with stage ids", () => {
+    const plan = buildDailyPracticePlan({
+      ...stageContext(),
+      now: new Date("2026-06-13T08:00:00Z"),
+    });
+    expect(plan.lessons.length).toBeGreaterThanOrEqual(3);
+    expect(plan.lessons[0]?.id).toBe("stage:keys:1");
+    expect(plan.lessons[0]?.category).toBe("foundation_mix");
+    const forms = plan.lessons.map((lesson) => lesson.id.split(":")[1]);
+    expect(forms).toContain("words");
+    // 无历史 → 15 分钟默认
+    expect(plan.target_minutes).toBe(15);
+    // 每课带理由
+    for (const lesson of plan.lessons) {
+      expect(lesson.reason_zh.length).toBeGreaterThan(0);
+      expect(lesson.mix_profile).toBe("comprehensive");
+    }
+  });
+
+  test("disabled modules remove their stages from the plan", () => {
+    const plan = buildDailyPracticePlan({
+      ...stageContext(),
+      now: new Date("2026-06-13T08:00:00Z"),
+      enabledModules: ["foundation_input", "everyday_english"],
+    });
+    const forms = plan.lessons.map((lesson) => lesson.id.split(":")[1]);
+    expect(forms).not.toContain("code");
+  });
+
+  test("refreshModuleMixTarget regenerates stage lessons by form", () => {
+    const context = { ...stageContext(), now: new Date("2026-06-13T08:00:00Z") };
+    const plan = buildDailyPracticePlan(context);
+    const wordsLesson = plan.lessons.find((lesson) => lesson.id.startsWith("stage:words"));
+    expect(wordsLesson).toBeDefined();
+    const refreshed = refreshModuleMixTarget(wordsLesson!, context);
+    expect(refreshed.source).toContain("keyloop:stage:words");
   });
 });
