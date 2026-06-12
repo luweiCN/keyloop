@@ -10,6 +10,7 @@ import { buildPlan } from "../../training/plan";
 import { refreshModuleMixTarget, type BuildTargetContext } from "../../training/targets";
 import {
   activateOpenTuiMenuItem,
+  everydayLiveOptionSources,
   liveOptionsAvailableForSource,
   submenuForStandaloneItem,
   wordBreakdownLiveOptionSources,
@@ -126,11 +127,12 @@ export function refreshedStandaloneSelection(
     return selection;
   }
   const submenu = submenuForStandaloneItem(sourceItem);
-  if (submenu === undefined) {
+  const sourceState = stateForStandaloneRefresh(context, sourceItem, submenu);
+  if (sourceState === undefined) {
     return selection;
   }
   const state = activateOpenTuiMenuItem(
-    { language: context.language, route: { screen: "submenu", menu: submenu } },
+    sourceState,
     sourceItem,
     targetContext,
   );
@@ -144,6 +146,35 @@ export function refreshedStandaloneSelection(
       target: state.route.target,
     },
   };
+}
+
+function stateForStandaloneRefresh(
+  context: StartRunnerContext,
+  sourceItem: string,
+  submenu: OpenTuiSubmenu | undefined,
+): OpenTuiAppState | undefined {
+  const customLibrarySlug = customLibrarySlugFromWordsSource(sourceItem);
+  if (customLibrarySlug !== undefined) {
+    return {
+      language: context.language,
+      route: { screen: "library_menu", slug: customLibrarySlug },
+      ...(context.customLibraries === undefined ? {} : { customLibraries: context.customLibraries }),
+      ...(context.customLibrarySettings === undefined
+        ? {}
+        : { customLibrarySettings: context.customLibrarySettings }),
+    };
+  }
+  return submenu === undefined
+    ? undefined
+    : { language: context.language, route: { screen: "submenu", menu: submenu } };
+}
+
+function customLibrarySlugFromWordsSource(sourceItem: string): string | undefined {
+  if (!isCustomLibraryWordsSource(sourceItem)) {
+    return undefined;
+  }
+  const spec = sourceItem.slice("library_kind_".length);
+  return spec.slice(0, -":words".length);
 }
 
 
@@ -233,6 +264,8 @@ export function startRunnerContextWithRuntimeSettings(
   everydaySettings: EverydayEnglishSettings | undefined,
   wordBreakdownSettings?: UserPreferences["word_breakdown"] | undefined,
   programmingTermsSettings?: UserPreferences["programming_terms"] | undefined,
+  wordAudioSettings?: UserPreferences["word_audio"] | undefined,
+  customLibrarySettings?: UserPreferences["custom_library"] | undefined,
 ): StartRunnerContext {
   const withCode = startRunnerContextWithCodeConfig(context, codeConfig);
   const withEveryday = everydaySettings === undefined
@@ -241,12 +274,17 @@ export function startRunnerContextWithRuntimeSettings(
   const withWordBreakdown = wordBreakdownSettings === undefined
     ? withEveryday
     : startRunnerContextWithWordBreakdownSettings(withEveryday, wordBreakdownSettings);
-  return programmingTermsSettings === undefined
+  const withProgrammingTerms = programmingTermsSettings === undefined
     ? withWordBreakdown
     : startRunnerContextWithProgrammingTermsSettings(
         withWordBreakdown,
         programmingTermsSettings,
       );
+  return {
+    ...withProgrammingTerms,
+    ...(wordAudioSettings === undefined ? {} : { wordAudioSettings }),
+    ...(customLibrarySettings === undefined ? {} : { customLibrarySettings }),
+  };
 }
 
 export function cloneCodeConfig(config: CodePracticeConfig): CodePracticeConfig {
@@ -304,9 +342,7 @@ export function isLiveEverydayOptionsEnabled(context: StartRunnerContext): boole
     context.dailyPlan.run_id.length === 0 &&
     context.targetContext !== undefined &&
     context.sourceItem !== undefined &&
-    submenuForStandaloneItem(context.sourceItem) !== "code" &&
-    !wordBreakdownLiveOptionSources.has(context.sourceItem) &&
-    liveOptionsAvailableForSource(context.sourceItem)
+    everydayLiveOptionSources.has(context.sourceItem)
   );
 }
 
@@ -319,10 +355,23 @@ export function isLiveWordBreakdownOptionsEnabled(context: StartRunnerContext): 
   );
 }
 
+export function isLiveCustomLibraryWordOptionsEnabled(context: StartRunnerContext): boolean {
+  return (
+    context.dailyPlan.run_id.length === 0 &&
+    context.sourceItem !== undefined &&
+    isCustomLibraryWordsSource(context.sourceItem)
+  );
+}
+
 export function isLivePracticeOptionsEnabled(context: StartRunnerContext): boolean {
   return (
     isLiveCodeSettingsEnabled(context) ||
     isLiveEverydayOptionsEnabled(context) ||
-    isLiveWordBreakdownOptionsEnabled(context)
+    isLiveWordBreakdownOptionsEnabled(context) ||
+    isLiveCustomLibraryWordOptionsEnabled(context)
   );
+}
+
+export function isCustomLibraryWordsSource(sourceItem: string): boolean {
+  return sourceItem.startsWith("library_kind_") && sourceItem.endsWith(":words");
 }

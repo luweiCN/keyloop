@@ -7,6 +7,7 @@ import type { StartRunnerContext } from "../../cli";
 import type { OpenTuiMenuItemId, OpenTuiPracticeOptionsState } from "./appModel";
 import {
   cloneCodeConfig,
+  isLiveCustomLibraryWordOptionsEnabled,
   isLiveCodeSettingsEnabled,
   isLiveEverydayOptionsEnabled,
   isLiveWordBreakdownOptionsEnabled,
@@ -61,12 +62,16 @@ export type LiveEverydayControl =
 
 export type LiveWordBreakdownControl = "word_repeats";
 export type LiveProgrammingTermsControl = "word_repeats";
+export type LiveCustomLibraryControl = "word_repeats";
+export type LiveWordAudioControl = "enabled";
 
 export type PracticeOptionControl =
   | { domain: "code"; control: LiveCodeControl }
   | { domain: "everyday"; control: LiveEverydayControl }
   | { domain: "word_breakdown"; control: LiveWordBreakdownControl }
-  | { domain: "programming_terms"; control: LiveProgrammingTermsControl };
+  | { domain: "programming_terms"; control: LiveProgrammingTermsControl }
+  | { domain: "custom_library"; control: LiveCustomLibraryControl }
+  | { domain: "word_audio"; control: LiveWordAudioControl };
 
 export type PostCompletionAction =
   | "continue"
@@ -143,14 +148,29 @@ export function practiceOptionsStateForContext(
 ): OpenTuiPracticeOptionsState {
   const items = isLiveCodeSettingsEnabled(context)
     ? codePracticeOptionItems(context.codeConfig, language)
+    : isLiveCustomLibraryWordOptionsEnabled(context)
+      ? customLibraryPracticeOptionItems(
+          customLibrarySettingsForContext(context),
+          wordAudioSettingsForContext(context),
+          language,
+        )
     : isLiveWordBreakdownOptionsEnabled(context)
       ? context.sourceItem === "programming_terms"
-        ? programmingTermsPracticeOptionItems(programmingTermsSettingsForContext(context), language)
-        : wordBreakdownPracticeOptionItems(wordBreakdownSettingsForContext(context), language)
+        ? programmingTermsPracticeOptionItems(
+            programmingTermsSettingsForContext(context),
+            language,
+            wordAudioSettingsForContext(context),
+          )
+        : wordBreakdownPracticeOptionItems(
+            wordBreakdownSettingsForContext(context),
+            language,
+            wordAudioSettingsForContext(context),
+          )
       : everydayPracticeOptionItems(
           context.sourceItem,
           everydaySettingsForContext(context),
           language,
+          wordAudioSettingsForContext(context),
         );
   return {
     selected_index: Math.min(Math.max(selectedIndex, 0), items.length - 1),
@@ -180,6 +200,7 @@ export function everydayPracticeOptionItems(
   sourceItem: OpenTuiMenuItemId | undefined,
   settings: EverydayEnglishSettings,
   language: StartRunnerContext["language"],
+  wordAudio: UserPreferences["word_audio"] = { enabled: false },
 ): OpenTuiPracticeOptionsState["items"] {
   switch (sourceItem) {
     case "everyday_words":
@@ -199,6 +220,7 @@ export function everydayPracticeOptionItems(
           label: language === "zh" ? "单词重复" : "Word repeats",
           value: String(settings.word_repeats),
         },
+        wordAudioPracticeOptionItem(wordAudio, language),
       ];
     case "everyday_sentences":
       return [
@@ -262,6 +284,7 @@ export function everydayPracticeOptionItems(
 export function wordBreakdownPracticeOptionItems(
   settings: UserPreferences["word_breakdown"],
   language: StartRunnerContext["language"],
+  wordAudio: UserPreferences["word_audio"] = { enabled: false },
 ): OpenTuiPracticeOptionsState["items"] {
   return [
     {
@@ -269,12 +292,14 @@ export function wordBreakdownPracticeOptionItems(
       label: language === "zh" ? "完整词重复" : "Whole repeats",
       value: String(settings.word_repeats),
     },
+    wordAudioPracticeOptionItem(wordAudio, language),
   ];
 }
 
 export function programmingTermsPracticeOptionItems(
   settings: UserPreferences["programming_terms"],
   language: StartRunnerContext["language"],
+  wordAudio: UserPreferences["word_audio"] = { enabled: false },
 ): OpenTuiPracticeOptionsState["items"] {
   return [
     {
@@ -282,7 +307,34 @@ export function programmingTermsPracticeOptionItems(
       label: language === "zh" ? "单词重复" : "Word repeats",
       value: String(settings.word_repeats),
     },
+    wordAudioPracticeOptionItem(wordAudio, language),
   ];
+}
+
+export function customLibraryPracticeOptionItems(
+  settings: UserPreferences["custom_library"],
+  wordAudio: UserPreferences["word_audio"],
+  language: StartRunnerContext["language"],
+): OpenTuiPracticeOptionsState["items"] {
+  return [
+    {
+      id: "custom_library_word_repeats",
+      label: language === "zh" ? "单词重复" : "Word repeats",
+      value: String(settings.word_repeats),
+    },
+    wordAudioPracticeOptionItem(wordAudio, language),
+  ];
+}
+
+function wordAudioPracticeOptionItem(
+  settings: UserPreferences["word_audio"],
+  language: StartRunnerContext["language"],
+): OpenTuiPracticeOptionsState["items"][number] {
+  return {
+    id: "word_audio_enabled",
+    label: language === "zh" ? "发音" : "Pronunciation",
+    value: onOffLabel(settings.enabled, language),
+  };
 }
 
 export function nextPracticeOptionsIndex(
@@ -304,9 +356,17 @@ export function practiceOptionControlForIndex(
   if (isLiveCodeSettingsEnabled(context)) {
     return { domain: "code", control: index <= 0 ? "difficulty" : "length" };
   }
+  if (isLiveCustomLibraryWordOptionsEnabled(context)) {
+    return index <= 0
+      ? { domain: "custom_library", control: "word_repeats" }
+      : { domain: "word_audio", control: "enabled" };
+  }
   const sourceItem = context.sourceItem;
   if (!isLiveEverydayOptionsEnabled(context)) {
     if (isLiveWordBreakdownOptionsEnabled(context)) {
+      if (index > 0) {
+        return { domain: "word_audio", control: "enabled" };
+      }
       if (context.sourceItem === "programming_terms") {
         return { domain: "programming_terms", control: "word_repeats" };
       }
@@ -316,6 +376,9 @@ export function practiceOptionControlForIndex(
   }
   switch (sourceItem) {
     case "everyday_words":
+      if (index > 2) {
+        return { domain: "word_audio", control: "enabled" };
+      }
       return {
         domain: "everyday",
         control: index <= 0 ? "word_range" : index === 1 ? "word_count" : "word_repeats",
@@ -347,6 +410,18 @@ export function practiceOptionControlForIndex(
     default:
       return undefined;
   }
+}
+
+export function wordAudioSettingsForContext(
+  context: StartRunnerContext,
+): UserPreferences["word_audio"] {
+  return context.wordAudioSettings ?? { enabled: false };
+}
+
+export function customLibrarySettingsForContext(
+  context: StartRunnerContext,
+): UserPreferences["custom_library"] {
+  return context.customLibrarySettings ?? { word_repeats: 1 };
 }
 
 export function wordBreakdownSettingsForContext(
@@ -422,6 +497,31 @@ export function nextProgrammingTermsSettingsForControl(
         ),
       };
   }
+}
+
+export function nextCustomLibrarySettingsForControl(
+  settings: UserPreferences["custom_library"],
+  control: LiveCustomLibraryControl,
+  direction: -1 | 1,
+): UserPreferences["custom_library"] {
+  switch (control) {
+    case "word_repeats":
+      return {
+        ...settings,
+        word_repeats: cycleNumberOption(
+          wordBreakdownRepeatControls,
+          settings.word_repeats,
+          direction,
+        ),
+      };
+  }
+}
+
+export function nextWordAudioSettingsForControl(
+  settings: UserPreferences["word_audio"],
+  _control: LiveWordAudioControl,
+): UserPreferences["word_audio"] {
+  return { ...settings, enabled: !settings.enabled };
 }
 
 export function nextEverydaySettingsForControl(
@@ -529,6 +629,10 @@ export function cycleCodeOption<const T extends readonly string[]>(
   const index = values.indexOf(current);
   const currentIndex = index === -1 ? 0 : index;
   return values[(currentIndex + direction + values.length) % values.length] ?? fallback;
+}
+
+function onOffLabel(enabled: boolean, language: StartRunnerContext["language"]): string {
+  return language === "zh" ? (enabled ? "开" : "关") : enabled ? "on" : "off";
 }
 
 export function cycleStringOption<const T extends readonly string[]>(

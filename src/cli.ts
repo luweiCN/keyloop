@@ -59,6 +59,7 @@ import {
   extractSnippets,
   type CodeSnippet,
 } from "./content/snippets";
+import type { CustomLibrary } from "./training/customLibrary";
 import {
   runOpenTuiAppSession,
   type OpenTuiAppSessionContext,
@@ -117,6 +118,9 @@ export interface StartRunnerContext {
   dataDir: string;
   codeConfig: CodePracticeConfig;
   targetContext?: BuildTargetContext;
+  wordAudioSettings?: UserPreferences["word_audio"];
+  customLibrarySettings?: UserPreferences["custom_library"];
+  customLibraries?: CustomLibrary[];
   sourceItem?: OpenTuiRunningRoute["source_item"];
   initialRenderer?: OpenTuiRenderer;
   returnState?: OpenTuiAppState;
@@ -324,6 +328,8 @@ async function runApp(
       everydaySettings: preferences.everyday_english,
       programmingTermsSettings: preferences.programming_terms,
       wordBreakdownSettings: preferences.word_breakdown,
+      wordAudioSettings: preferences.word_audio,
+      customLibrarySettings: preferences.custom_library,
       speedUnit: preferences.speed_unit,
       todayElapsedMs: todayElapsedMsFromRecords(records, options.now ?? new Date()),
       dataDir,
@@ -450,6 +456,8 @@ function preferencesFromAppState(
     everyday_english: { ...preferences.everyday_english },
     word_breakdown: { ...preferences.word_breakdown },
     programming_terms: { ...preferences.programming_terms },
+    word_audio: { ...preferences.word_audio },
+    custom_library: { ...preferences.custom_library },
   };
 
   if (state.language !== initialLanguage) {
@@ -519,6 +527,22 @@ function preferencesFromAppState(
       next.programming_terms = { ...state.wordFormSettings.programming_terms };
       changed = true;
     }
+  }
+
+  if (
+    state.wordAudioSettings !== undefined &&
+    !wordAudioSettingsEqual(state.wordAudioSettings, preferences.word_audio)
+  ) {
+    next.word_audio = { ...state.wordAudioSettings };
+    changed = true;
+  }
+
+  if (
+    state.customLibrarySettings !== undefined &&
+    !customLibrarySettingsEqual(state.customLibrarySettings, preferences.custom_library)
+  ) {
+    next.custom_library = { ...state.customLibrarySettings };
+    changed = true;
   }
 
   return changed ? next : undefined;
@@ -593,6 +617,20 @@ function wordBreakdownSettingsEqual(
 function programmingTermsSettingsEqual(
   left: UserPreferences["programming_terms"],
   right: UserPreferences["programming_terms"],
+): boolean {
+  return left.word_repeats === right.word_repeats;
+}
+
+function wordAudioSettingsEqual(
+  left: UserPreferences["word_audio"],
+  right: UserPreferences["word_audio"],
+): boolean {
+  return left.enabled === right.enabled;
+}
+
+function customLibrarySettingsEqual(
+  left: UserPreferences["custom_library"],
+  right: UserPreferences["custom_library"],
 ): boolean {
   return left.word_repeats === right.word_repeats;
 }
@@ -696,6 +734,8 @@ async function runStart(
       codeConfig,
       speedUnit: preferences.speed_unit,
       targetContext,
+      wordAudioSettings: preferences.word_audio,
+      customLibrarySettings: preferences.custom_library,
       ...(options.now === undefined ? {} : { now: options.now }),
     },
     dataDir,
@@ -735,6 +775,13 @@ async function runStartRunner(
     ...(context.targetContext === undefined
       ? {}
       : { targetContext: context.targetContext }),
+    ...(context.wordAudioSettings === undefined
+      ? {}
+      : { wordAudioSettings: context.wordAudioSettings }),
+    ...(context.customLibrarySettings === undefined
+      ? {}
+      : { customLibrarySettings: context.customLibrarySettings }),
+    ...(context.customLibraries === undefined ? {} : { customLibraries: context.customLibraries }),
     ...(context.sourceItem === undefined ? {} : { sourceItem: context.sourceItem }),
     ...(context.initialRenderer === undefined
       ? {}
@@ -820,6 +867,12 @@ async function startContextFromAppState(
     effectiveAppContext.wordBreakdownSettings = state.wordFormSettings.word_breakdown;
     effectiveAppContext.programmingTermsSettings = state.wordFormSettings.programming_terms;
   }
+  if (state.wordAudioSettings !== undefined) {
+    effectiveAppContext.wordAudioSettings = state.wordAudioSettings;
+  }
+  if (state.customLibrarySettings !== undefined) {
+    effectiveAppContext.customLibrarySettings = state.customLibrarySettings;
+  }
   const dailyPlan =
     state.route.source_item === "comprehensive"
       ? await loadDailyPracticePlan(
@@ -837,6 +890,15 @@ async function startContextFromAppState(
     dataDir,
     codeConfig,
     targetContext: effectiveAppContext,
+    ...(effectiveAppContext.wordAudioSettings === undefined
+      ? {}
+      : { wordAudioSettings: effectiveAppContext.wordAudioSettings }),
+    ...(effectiveAppContext.customLibrarySettings === undefined
+      ? {}
+      : { customLibrarySettings: effectiveAppContext.customLibrarySettings }),
+    ...(effectiveAppContext.customLibraries === undefined
+      ? {}
+      : { customLibraries: effectiveAppContext.customLibraries }),
     sourceItem: state.route.source_item,
     returnState: returnStateFromRunningState(state),
     speedUnit: state.speed_unit ?? appContext.speedUnit ?? "wpm",

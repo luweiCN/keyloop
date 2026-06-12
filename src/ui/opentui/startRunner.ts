@@ -72,14 +72,18 @@ import {
   everydayPracticeOptionItems,
   everydaySettingsForContext,
   nextCodeConfigForControl,
+  nextCustomLibrarySettingsForControl,
   nextEverydaySettingsForControl,
   nextProgrammingTermsSettingsForControl,
+  nextWordAudioSettingsForControl,
   nextWordBreakdownSettingsForControl,
   nextPracticeOptionsIndex,
   postCompletionActionForCodeControl,
   practiceOptionControlForIndex,
   practiceOptionsStateForContext,
   programmingTermsSettingsForContext,
+  customLibrarySettingsForContext,
+  wordAudioSettingsForContext,
   wordBreakdownSettingsForContext,
   type LiveCodeControl,
   type LiveEverydayControl,
@@ -154,6 +158,12 @@ export async function openTuiStartRunner(
     context.targetContext?.programmingTermsSettings === undefined
       ? undefined
       : programmingTermsSettingsForContext(context);
+  let runtimeWordAudioSettings =
+    context.wordAudioSettings === undefined ? undefined : wordAudioSettingsForContext(context);
+  let runtimeCustomLibrarySettings =
+    context.customLibrarySettings === undefined
+      ? undefined
+      : customLibrarySettingsForContext(context);
   let openPracticeOptionsOnNextRun = false;
 
   for (;;) {
@@ -163,6 +173,8 @@ export async function openTuiStartRunner(
       runtimeEverydaySettings,
       runtimeWordBreakdownSettings,
       runtimeProgrammingTermsSettings,
+      runtimeWordAudioSettings,
+      runtimeCustomLibrarySettings,
     );
     const shouldOpenPracticeOptions = openPracticeOptionsOnNextRun;
     const forced = forcedSelection;
@@ -207,6 +219,12 @@ export async function openTuiStartRunner(
       },
       (nextSettings) => {
         runtimeProgrammingTermsSettings = { ...nextSettings };
+      },
+      (nextSettings) => {
+        runtimeWordAudioSettings = { ...nextSettings };
+      },
+      (nextSettings) => {
+        runtimeCustomLibrarySettings = { ...nextSettings };
       },
       shouldOpenPracticeOptions,
     );
@@ -377,6 +395,10 @@ export async function runLessonUntilComplete(
   ) => void,
   onProgrammingTermsSettingsChange: (
     settings: UserPreferences["programming_terms"],
+  ) => void,
+  onWordAudioSettingsChange: (settings: UserPreferences["word_audio"]) => void,
+  onCustomLibrarySettingsChange: (
+    settings: UserPreferences["custom_library"],
   ) => void,
   openPracticeOptionsInitially = false,
 ): Promise<LessonRunResult> {
@@ -657,6 +679,52 @@ export async function runLessonUntilComplete(
         ),
       );
     };
+    const refreshCustomLibraryTarget = async (
+      nextSettings: UserPreferences["custom_library"],
+      currentMs: number,
+      refreshOptions: { keepPracticeOptionsOpen?: boolean } = {},
+    ): Promise<void> => {
+      currentContext = {
+        ...currentContext,
+        customLibrarySettings: nextSettings,
+      };
+      onCustomLibrarySettingsChange(nextSettings);
+      selection = refreshedStandaloneSelection(currentContext, selection, []);
+      session = createLiveSession(selection.lesson.target);
+      startedAtMs = undefined;
+      pausedTotalMs = 0;
+      pausedAtMs = undefined;
+      resumeOnNextInput = false;
+      clearTimer();
+      await saveCheckpointForSelection(currentContext, selection);
+      if (refreshOptions.keepPracticeOptionsOpen === true) {
+        pausedAtMs = currentMs;
+        practiceOptionsOpen = true;
+        await renderPracticeOptions(currentMs);
+        return;
+      }
+      await transitionRenderer(
+        runningStateForLesson(
+          currentContext,
+          selection.lesson,
+          liveStateFromSession(session, 0),
+          todayElapsedBeforeLesson,
+        ),
+      );
+    };
+    const updateWordAudioSettings = async (
+      nextSettings: UserPreferences["word_audio"],
+      currentMs: number,
+    ): Promise<void> => {
+      currentContext = {
+        ...currentContext,
+        wordAudioSettings: nextSettings,
+      };
+      onWordAudioSettingsChange(nextSettings);
+      if (practiceOptionsOpen) {
+        await renderPracticeOptions(currentMs);
+      }
+    };
     const refreshStandaloneTarget = async (currentMs: number): Promise<void> => {
       selection = refreshedStandaloneSelection(currentContext, selection, []);
       session = createLiveSession(selection.lesson.target);
@@ -751,6 +819,8 @@ export async function runLessonUntilComplete(
               word_breakdown: wordBreakdownSettingsForContext(currentContext),
               programming_terms: programmingTermsSettingsForContext(currentContext),
             },
+            wordAudioSettings: wordAudioSettingsForContext(currentContext),
+            customLibrarySettings: customLibrarySettingsForContext(currentContext),
             speedUnit: currentContext.speedUnit ?? "wpm",
             todayElapsedMs: todayElapsedBeforeLesson,
           },
@@ -802,6 +872,25 @@ export async function runLessonUntilComplete(
         await refreshProgrammingTermsTarget(nextSettings, currentMs, {
           keepPracticeOptionsOpen: true,
         });
+        return;
+      }
+      if (option.domain === "custom_library") {
+        const nextSettings = nextCustomLibrarySettingsForControl(
+          customLibrarySettingsForContext(currentContext),
+          option.control,
+          direction,
+        );
+        await refreshCustomLibraryTarget(nextSettings, currentMs, {
+          keepPracticeOptionsOpen: true,
+        });
+        return;
+      }
+      if (option.domain === "word_audio") {
+        const nextSettings = nextWordAudioSettingsForControl(
+          wordAudioSettingsForContext(currentContext),
+          option.control,
+        );
+        await updateWordAudioSettings(nextSettings, currentMs);
         return;
       }
       const nextSettings = nextEverydaySettingsForControl(

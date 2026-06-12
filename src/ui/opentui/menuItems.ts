@@ -341,6 +341,7 @@ export function liveOptionsAvailableForSource(sourceItem: string): boolean {
   return (
     everydayLiveOptionSources.has(sourceItem) ||
     wordBreakdownLiveOptionSources.has(sourceItem) ||
+    (sourceItem.startsWith("library_kind_") && sourceItem.endsWith(":words")) ||
     submenuForStandaloneItem(sourceItem as OpenTuiMenuItemId) === "code"
   );
 }

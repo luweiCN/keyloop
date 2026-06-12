@@ -394,6 +394,32 @@ describe("TS CLI command dispatch", () => {
     }
   });
 
+  test("bare keyloop persists word pronunciation setting changed in app settings", async () => {
+    const dir = await tempDir();
+    try {
+      await savePreferencesToPath(defaultPreferences("en"), preferencesPath(dir));
+
+      await runCli([], {
+        env: { KEYLOOP_HOME: dir },
+        appRunner: async (context) => {
+          const settings = reduceOpenTuiAppKey(
+            createOpenTuiInitialState(context.language),
+            key("7", "7"),
+            context,
+          );
+          const wordAudioRow = pressSettingsDown(settings.state, context, 8);
+          const enabled = reduceOpenTuiAppKey(wordAudioRow, key("right", ""), context);
+          return { state: enabled.state, action: "quit" };
+        },
+      });
+
+      const preferences = await loadPreferencesFromPath(preferencesPath(dir));
+      expect(preferences.word_audio.enabled).toBe(true);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
   test("bare keyloop persists code filter settings and starts with returned state config", async () => {
     const dir = await tempDir();
     let selectedPreference: CodeFilterPreference | undefined;

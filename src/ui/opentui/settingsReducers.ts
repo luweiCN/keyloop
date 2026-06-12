@@ -15,7 +15,9 @@ import {
   createOpenTuiCodeFilterState,
   createOpenTuiSettingsState,
   defaultCodeSettings,
+  defaultCustomLibrarySettings,
   defaultEverydaySettings,
+  defaultWordAudioSettings,
   defaultWordFormSettings,
   openTuiCodeFilterPickerItems,
   openTuiFlatSettingsItems,
@@ -87,6 +89,8 @@ export function settingsViewState(
         codeStyleSettings: appState.codeStyleSettings,
         everydaySettings: appState.everydaySettings,
         wordFormSettings: appState.wordFormSettings,
+        wordAudioSettings: appState.wordAudioSettings,
+        customLibrarySettings: appState.customLibrarySettings,
         speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
       });
     case "code_filters":
@@ -96,6 +100,8 @@ export function settingsViewState(
         codeStyleSettings: appState.codeStyleSettings,
         everydaySettings: appState.everydaySettings,
         wordFormSettings: appState.wordFormSettings,
+        wordAudioSettings: appState.wordAudioSettings,
+        customLibrarySettings: appState.customLibrarySettings,
         speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
       });
     case "everyday":
@@ -123,6 +129,8 @@ export function settingsViewState(
         codeStyleSettings: appState.codeStyleSettings,
         everydaySettings: appState.everydaySettings,
         wordFormSettings: appState.wordFormSettings,
+        wordAudioSettings: appState.wordAudioSettings,
+        customLibrarySettings: appState.customLibrarySettings,
         speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
       });
     case "code_style":
@@ -132,6 +140,8 @@ export function settingsViewState(
         codeStyleSettings: appState.codeStyleSettings ?? codeStyleSettingsFromContext(context),
         everydaySettings: appState.everydaySettings,
         wordFormSettings: appState.wordFormSettings,
+        wordAudioSettings: appState.wordAudioSettings,
+        customLibrarySettings: appState.customLibrarySettings,
         speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
       });
   }
@@ -148,6 +158,8 @@ export function settingsRootState(
     codeStyleSettings: state.codeStyleSettings ?? codeStyleSettingsFromContext(context),
     everydaySettings: state.everydaySettings ?? everydaySettingsFromContext(context),
     wordFormSettings: state.wordFormSettings ?? wordFormSettingsFromContext(context),
+    wordAudioSettings: state.wordAudioSettings ?? wordAudioSettingsFromContext(context),
+    customLibrarySettings: state.customLibrarySettings ?? customLibrarySettingsFromContext(context),
     speedUnit: state.speed_unit ?? speedUnitFromContext(context),
     todayElapsedMs: state.today_elapsed_ms,
   });
@@ -323,6 +335,7 @@ export function reduceFlatSettingsItem(
 ): OpenTuiAppKeyResult {
   const codeSettings = state.codeSettings ?? codeSettingsFromContext(context);
   const codeStyleSettings = state.codeStyleSettings ?? codeStyleSettingsFromContext(context);
+  const wordAudioSettings = state.wordAudioSettings ?? wordAudioSettingsFromContext(context);
   switch (item.kind) {
     case "language": {
       const language = cycleStringOption(["zh", "en"] as const, state.language, direction);
@@ -366,6 +379,10 @@ export function reduceFlatSettingsItem(
       return flatSettingsResult(state.language, state, selectedIndex, {
         codeStyleSettings: cycleCodeStyleSetting(codeStyleSettings, 2, direction),
       });
+    case "word_audio":
+      return flatSettingsResult(state.language, state, selectedIndex, {
+        wordAudioSettings: { enabled: !wordAudioSettings.enabled },
+      });
     case "code_filters":
     case "dictionary_status":
       return { state, action: "continue" };
@@ -400,6 +417,9 @@ export function flatSettingsOptions(
   const codeStyleSettings = overrides.codeStyleSettings ?? state.codeStyleSettings;
   const everydaySettings = overrides.everydaySettings ?? state.everydaySettings;
   const wordFormSettings = overrides.wordFormSettings ?? state.wordFormSettings;
+  const wordAudioSettings = overrides.wordAudioSettings ?? state.wordAudioSettings;
+  const customLibrarySettings =
+    overrides.customLibrarySettings ?? state.customLibrarySettings;
   const speedUnit = overrides.speedUnit ?? state.speed_unit;
   const todayElapsedMs = overrides.todayElapsedMs ?? state.today_elapsed_ms;
   if (codeFilters !== undefined) {
@@ -416,6 +436,12 @@ export function flatSettingsOptions(
   }
   if (wordFormSettings !== undefined) {
     options.wordFormSettings = wordFormSettings;
+  }
+  if (wordAudioSettings !== undefined) {
+    options.wordAudioSettings = wordAudioSettings;
+  }
+  if (customLibrarySettings !== undefined) {
+    options.customLibrarySettings = customLibrarySettings;
   }
   if (speedUnit !== undefined) {
     options.speedUnit = speedUnit;
@@ -1045,6 +1071,18 @@ export function wordFormSettingsFromContext(
       word_repeats: context.programmingTermsSettings?.word_repeats ?? 1,
     },
   };
+}
+
+export function wordAudioSettingsFromContext(
+  context: OpenTuiAppSessionContext,
+): UserPreferences["word_audio"] {
+  return context.wordAudioSettings ?? defaultWordAudioSettings();
+}
+
+export function customLibrarySettingsFromContext(
+  context: OpenTuiAppSessionContext,
+): UserPreferences["custom_library"] {
+  return context.customLibrarySettings ?? defaultCustomLibrarySettings();
 }
 
 export function codeFilterStateFromContext(

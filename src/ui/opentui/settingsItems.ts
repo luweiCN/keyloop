@@ -5,6 +5,7 @@ import {
   codeDifficultyOptions,
   codeLengthOptions,
   defaultCodeSettings,
+  defaultWordAudioSettings,
   defaultEverydaySettings,
   defaultWordFormSettings,
   openTuiCodeFilterPickerItems,
@@ -41,6 +42,7 @@ export type OpenTuiFlatSettingsItemKind =
   | "code_semicolons"
   | "code_quotes"
   | "code_filters"
+  | "word_audio"
   | "dictionary_status";
 
 export interface OpenTuiFlatSettingsItem {
@@ -109,6 +111,11 @@ export function openTuiFlatSettingsItems(state: OpenTuiAppState): OpenTuiFlatSet
       kind: "code_quotes",
       label: language === "zh" ? "代码引号" : "Code quotes",
       value: codeQuoteLabel(codeStyleSettings.quotes, language),
+    },
+    {
+      kind: "word_audio",
+      label: language === "zh" ? "单词发音" : "Word pronunciation",
+      value: onOffLabel((state.wordAudioSettings ?? defaultWordAudioSettings()).enabled, language),
     },
     {
       kind: "dictionary_status",

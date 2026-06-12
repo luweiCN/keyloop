@@ -124,6 +124,9 @@ export interface OpenTuiWordFormSettings {
   programming_terms: UserPreferences["programming_terms"];
 }
 
+export type OpenTuiWordAudioSettings = UserPreferences["word_audio"];
+export type OpenTuiCustomLibrarySettings = UserPreferences["custom_library"];
+
 export interface OpenTuiCodeSettings {
   difficulty: UserPreferences["code_practice"]["difficulty"];
   length: UserPreferences["code_practice"]["length"];
@@ -154,6 +157,8 @@ export interface OpenTuiStateOptions {
   codeStyleSettings?: CodeStyleSettings | undefined;
   everydaySettings?: Partial<EverydayEnglishSettings> | undefined;
   wordFormSettings?: OpenTuiWordFormSettings | undefined;
+  wordAudioSettings?: OpenTuiWordAudioSettings | undefined;
+  customLibrarySettings?: OpenTuiCustomLibrarySettings | undefined;
   practiceOptions?: OpenTuiPracticeOptionsState | undefined;
   speedUnit?: SpeedUnit | undefined;
   todayElapsedMs?: number | undefined;
@@ -305,6 +310,8 @@ export interface OpenTuiSessionState {
   codeStyleSettings?: CodeStyleSettings | undefined;
   everydaySettings?: EverydayEnglishSettings | undefined;
   wordFormSettings?: OpenTuiWordFormSettings | undefined;
+  wordAudioSettings?: OpenTuiWordAudioSettings | undefined;
+  customLibrarySettings?: OpenTuiCustomLibrarySettings | undefined;
   customLibraries?: CustomLibrary[] | undefined;
   dictionaryTier?: DictionaryTier | undefined;
   today_elapsed_ms?: number | undefined;
@@ -727,7 +734,9 @@ function activateLibraryMenuItem(
   }
   const target =
     kind === "words"
-      ? buildLibraryWordsTarget(library)
+      ? buildLibraryWordsTarget(library, {
+          wordRepeats: (state.customLibrarySettings ?? defaultCustomLibrarySettings()).word_repeats,
+        })
       : kind === "phrases"
         ? buildLibraryPhrasesTarget(library)
         : kind === "sentences"
@@ -1063,6 +1072,12 @@ function appState(
   if (options.wordFormSettings !== undefined) {
     state.wordFormSettings = cloneWordFormSettings(options.wordFormSettings);
   }
+  if (options.wordAudioSettings !== undefined) {
+    state.wordAudioSettings = cloneWordAudioSettings(options.wordAudioSettings);
+  }
+  if (options.customLibrarySettings !== undefined) {
+    state.customLibrarySettings = cloneCustomLibrarySettings(options.customLibrarySettings);
+  }
   if (options.customLibraries !== undefined) {
     state.customLibraries = options.customLibraries;
   }
@@ -1084,11 +1099,15 @@ function buildTargetContextForState(
   const codeStyle = state.codeStyleSettings;
   const everydaySettings = state.everydaySettings;
   const wordFormSettings = state.wordFormSettings;
+  const wordAudioSettings = state.wordAudioSettings;
+  const customLibrarySettings = state.customLibrarySettings;
   if (
     codeConfig === undefined &&
     codeStyle === undefined &&
     everydaySettings === undefined &&
-    wordFormSettings === undefined
+    wordFormSettings === undefined &&
+    wordAudioSettings === undefined &&
+    customLibrarySettings === undefined
   ) {
     return context;
   }
@@ -1125,6 +1144,12 @@ export function stateOptions(state: OpenTuiAppState): OpenTuiStateOptions {
   }
   if (state.wordFormSettings !== undefined) {
     options.wordFormSettings = state.wordFormSettings;
+  }
+  if (state.wordAudioSettings !== undefined) {
+    options.wordAudioSettings = state.wordAudioSettings;
+  }
+  if (state.customLibrarySettings !== undefined) {
+    options.customLibrarySettings = state.customLibrarySettings;
   }
   if (state.customLibraries !== undefined) {
     options.customLibraries = state.customLibraries;
@@ -1194,6 +1219,14 @@ export function defaultWordFormSettings(): OpenTuiWordFormSettings {
   };
 }
 
+export function defaultWordAudioSettings(): OpenTuiWordAudioSettings {
+  return { enabled: false };
+}
+
+export function defaultCustomLibrarySettings(): OpenTuiCustomLibrarySettings {
+  return { word_repeats: 1 };
+}
+
 function cloneWordFormSettings(
   settings: OpenTuiWordFormSettings,
 ): OpenTuiWordFormSettings {
@@ -1201,6 +1234,16 @@ function cloneWordFormSettings(
     word_breakdown: { ...settings.word_breakdown },
     programming_terms: { ...settings.programming_terms },
   };
+}
+
+function cloneWordAudioSettings(settings: OpenTuiWordAudioSettings): OpenTuiWordAudioSettings {
+  return { ...settings };
+}
+
+function cloneCustomLibrarySettings(
+  settings: OpenTuiCustomLibrarySettings,
+): OpenTuiCustomLibrarySettings {
+  return { ...settings };
 }
 
 function cloneCodeFilterState(filters: OpenTuiCodeFilterState): OpenTuiCodeFilterState {
@@ -1301,6 +1344,7 @@ export {
   submenuTitle,
   targetRefreshAvailableForSource,
   wordBreakdownLiveOptionSources,
+  everydayLiveOptionSources,
   type OpenTuiMainMenuId,
   type OpenTuiMenuItem,
   type OpenTuiMenuItemId,

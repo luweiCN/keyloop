@@ -404,6 +404,7 @@ describe("OpenTUI app model", () => {
       "  Code indent  2 spaces",
       "  Code semicolons  Always",
       "  Code quotes  Double",
+      "  Word pronunciation  off",
       "  Dictionary  Not loaded",
     ]);
   });

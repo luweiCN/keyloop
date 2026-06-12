@@ -9,6 +9,7 @@ import {
   runOpenTuiAppSession,
   type BuildTargetContext,
   type ContentLibrary,
+  type CustomLibrary,
   type DailyPracticePlan,
   type OpenTuiRendererKit,
   type PracticeLesson,
@@ -1511,6 +1512,83 @@ describe("OpenTUI start runner", () => {
     expect(content).toContain("‹ 2 ›");
     expect(content).toContain("state state");
     expect(content).toContain("request request");
+    expect(findNodeById(kit.addedNodes, "keyloop-practice-options-popup")).toBeDefined();
+
+    kit.emitKey({ name: "c", sequence: "c", ctrl: true });
+    const result = await runPromise;
+
+    expect(result.completedRecords).toEqual([]);
+  });
+
+  test("standalone custom library word options popup changes repeat count", async () => {
+    const kit = fakeKit({ keyInput: true });
+    let nowMs = 10_000;
+    const runner = createOpenTuiStartRunner({
+      kit,
+      nowMs: () => nowMs,
+    });
+    const plan: DailyPracticePlan = {
+      run_id: "",
+      run_number: 0,
+      target_minutes: 4,
+      completed_ms: 0,
+      lessons: [
+        {
+          id: "standalone:library_kind_kaoyan:words",
+          kind: "words",
+          module: "custom_corpus",
+          category: "custom_library",
+          mix_profile: "standalone",
+          estimated_minutes: 4,
+          target: { mode: "words", text: "abandon", source: "test:first" },
+          reason_zh: "",
+          reason_en: "",
+        },
+      ],
+    };
+    const library: CustomLibrary = {
+      version: 1,
+      slug: "kaoyan",
+      name: "考研英语",
+      created_at: "2026-06-12T00:00:00.000Z",
+      words: [
+        { id: "w1", text: "abandon", kind: "word", meaning_zh: "v. 放弃", source: "dict" },
+      ],
+      sentences: [],
+      articles: [],
+    };
+    const context: StartRunnerContext = {
+      ...contextWithPlan(plan),
+      sourceItem: "library_kind_kaoyan:words",
+      targetContext: {
+        records: [],
+        plan: refreshPlan(),
+        library: refreshLibrary(),
+      },
+      customLibraries: [library],
+      customLibrarySettings: {
+        word_repeats: 1,
+      },
+    };
+
+    const runPromise = runner(context);
+    await kit.waitForKeyListener(1);
+
+    kit.emitKey({ name: "o", sequence: "\x0f", ctrl: true });
+    await kit.waitForRenderRequest(1);
+    let content = flattenContent(kit.addedNodes);
+    expect(findNodeById(kit.addedNodes, "keyloop-practice-options-popup")).toBeDefined();
+    expect(content).toContain("Word repeats");
+    expect(content).toContain("1");
+    expect(content).toContain("Pronunciation");
+
+    kit.emitKey({ name: "right", sequence: "\x1b[C" });
+    await kit.waitForRenderRequest(2);
+
+    content = flattenContent(kit.addedNodes).replace(/\n/gu, "");
+    expect(content).toContain("Word repeats");
+    expect(content).toContain("‹ 2 ›");
+    expect(content).toContain("abandon abandon");
     expect(findNodeById(kit.addedNodes, "keyloop-practice-options-popup")).toBeDefined();
 
     kit.emitKey({ name: "c", sequence: "c", ctrl: true });

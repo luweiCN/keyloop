@@ -64,6 +64,8 @@ import {
   codeStyleSettingsFromContext,
   everydaySettingsFromContext,
   speedUnitFromContext,
+  customLibrarySettingsFromContext,
+  wordAudioSettingsFromContext,
   wordFormSettingsFromContext,
 } from "./settingsReducers";
 import { reduceStatsKey, statsState } from "./statsReducer";
@@ -88,6 +90,8 @@ export interface OpenTuiAppSessionContext extends BuildTargetContext {
   pinnedCodeFilters?: CodeFilterPreference[];
   codeSettings?: OpenTuiCodeSettings;
   codeStyleSettings?: CodeStyleSettings;
+  wordAudioSettings?: UserPreferences["word_audio"];
+  customLibrarySettings?: UserPreferences["custom_library"];
   speedUnit?: SpeedUnit;
   todayElapsedMs?: number;
   customLibraries?: CustomLibrary[];
@@ -313,6 +317,8 @@ export async function runOpenTuiAppSession(
       codeStyleSettings: codeStyleSettingsFromContext(context),
       everydaySettings: everydaySettingsFromContext(context),
       wordFormSettings: wordFormSettingsFromContext(context),
+      wordAudioSettings: wordAudioSettingsFromContext(context),
+      customLibrarySettings: customLibrarySettingsFromContext(context),
       speedUnit: speedUnitFromContext(context),
       customLibraries: context.customLibraries ?? [],
       dictionaryTier: context.dictionary?.tier ?? "none",

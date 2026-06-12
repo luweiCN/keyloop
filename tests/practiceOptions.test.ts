@@ -7,7 +7,7 @@ import {
   practiceOptionsStateForContext,
   wordBreakdownRepeatControls,
 } from "../src/ui/opentui/practiceOptions";
-import type { EverydayEnglishSettings } from "../src/index";
+import { defaultCodePracticeConfig, type EverydayEnglishSettings } from "../src/index";
 import type { StartRunnerContext } from "../src/cli";
 
 describe("practice option controls", () => {
@@ -22,6 +22,7 @@ describe("practice option controls", () => {
       { id: "everyday_word_range", label: "词库范围", value: "常用 1000" },
       { id: "everyday_word_count", label: "每组单词", value: "20" },
       { id: "everyday_word_repeats", label: "单词重复", value: "1" },
+      { id: "word_audio_enabled", label: "发音", value: "关" },
     ]);
     expect(nextEverydaySettingsForControl(settings, "word_repeats", 1).word_repeats).toBe(2);
     expect(
@@ -47,10 +48,71 @@ describe("practice option controls", () => {
 
     expect(practiceOptionsStateForContext(context, 0, "en").items).toEqual([
       { id: "programming_terms_word_repeats", label: "Word repeats", value: "4" },
+      { id: "word_audio_enabled", label: "Pronunciation", value: "off" },
     ]);
     expect(practiceOptionControlForIndex(context, 0)).toEqual({
       domain: "programming_terms",
       control: "word_repeats",
+    });
+    expect(practiceOptionControlForIndex(context, 1)).toEqual({
+      domain: "word_audio",
+      control: "enabled",
+    });
+  });
+
+  test("technical long words and custom library words expose pronunciation options", () => {
+    const technicalContext = {
+      dailyPlan: { run_id: "" },
+      sourceItem: "technical_long_words",
+      language: "zh",
+      targetContext: {
+        wordBreakdownSettings: {
+          enabled_in_comprehensive: true,
+          max_items_per_group: 6,
+          word_repeats: 2,
+        },
+      },
+    } as StartRunnerContext;
+    expect(practiceOptionsStateForContext(technicalContext, 1, "zh").items).toEqual([
+      { id: "word_breakdown_word_repeats", label: "完整词重复", value: "2" },
+      { id: "word_audio_enabled", label: "发音", value: "关" },
+    ]);
+    expect(practiceOptionControlForIndex(technicalContext, 1)).toEqual({
+      domain: "word_audio",
+      control: "enabled",
+    });
+
+    const libraryContext: StartRunnerContext = {
+      dailyPlan: {
+        run_id: "",
+        run_number: 0,
+        target_minutes: 0,
+        completed_ms: 0,
+        lessons: [],
+      },
+      records: [],
+      sourceItem: "library_kind_kaoyan:words",
+      language: "en",
+      dataDir: "/tmp/keyloop",
+      codeConfig: defaultCodePracticeConfig(),
+      customLibrarySettings: {
+        word_repeats: 3,
+      },
+      wordAudioSettings: {
+        enabled: true,
+      },
+    };
+    expect(practiceOptionsStateForContext(libraryContext, 1, "en").items).toEqual([
+      { id: "custom_library_word_repeats", label: "Word repeats", value: "3" },
+      { id: "word_audio_enabled", label: "Pronunciation", value: "on" },
+    ]);
+    expect(practiceOptionControlForIndex(libraryContext, 0)).toEqual({
+      domain: "custom_library",
+      control: "word_repeats",
+    });
+    expect(practiceOptionControlForIndex(libraryContext, 1)).toEqual({
+      domain: "word_audio",
+      control: "enabled",
     });
   });
 });
