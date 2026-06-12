@@ -53,7 +53,7 @@ describe("package verification scripts", () => {
       new URL("../package.json", import.meta.url),
     ).json()) as PackageJson;
 
-    expect(packageJson.version).toBe("0.1.6");
+    expect(packageJson.version).toBe("0.1.7");
   });
 
   test("release workflow packages runtime content and Homebrew installs it", async () => {
@@ -61,21 +61,26 @@ describe("package verification scripts", () => {
       new URL("../.github/workflows/release.yml", import.meta.url),
     ).text();
 
-    expect(releaseWorkflow).toContain("bun_target: bun-linux-x64");
     expect(releaseWorkflow).toContain("archive_target: x86_64-unknown-linux-gnu");
     expect(releaseWorkflow).toContain("os: macos-26-intel");
     expect(releaseWorkflow).toContain("archive_target: x86_64-apple-darwin");
     expect(releaseWorkflow).toContain("os: macos-26");
     expect(releaseWorkflow).toContain("archive_target: aarch64-apple-darwin");
-    expect(releaseWorkflow).toContain('if [ -n "$BUN_TARGET" ]; then');
-    expect(releaseWorkflow).toContain('--target "$BUN_TARGET"');
-    expect(releaseWorkflow).toContain("bun build src/main.ts --compile --outfile dist/keyloop");
+    expect(releaseWorkflow).toContain(
+      "bun build src/main.ts --target bun --packages external --outfile dist/keyloop.js",
+    );
     expect(releaseWorkflow).toContain("TARGET: ${{ matrix.archive_target }}");
-    expect(releaseWorkflow).toContain("Smoke release binary");
-    expect(releaseWorkflow).toContain("./dist/keyloop --help >/dev/null");
-    expect(releaseWorkflow).toContain('./dist/keyloop sources >/dev/null');
-    expect(releaseWorkflow).toContain('bin.install "keyloop"');
+    expect(releaseWorkflow).toContain("Smoke release app");
+    expect(releaseWorkflow).toContain('"$tmp/keyloop/bin/keyloop" --help >/dev/null');
+    expect(releaseWorkflow).toContain('"$tmp/keyloop/bin/keyloop" sources >/dev/null');
+    expect(releaseWorkflow).toContain('depends_on "bun"');
+    expect(releaseWorkflow).toContain('libexec.install "libexec/keyloop.js"');
+    expect(releaseWorkflow).toContain('libexec.install "libexec/node_modules"');
+    expect(releaseWorkflow).toContain('Formula["bun"].opt_bin');
     expect(releaseWorkflow).toContain('cp -R contents "dist/keyloop-${VERSION}-${TARGET}/"');
+    expect(releaseWorkflow).toContain(
+      'cp -R node_modules "dist/keyloop-${VERSION}-${TARGET}/libexec/node_modules"',
+    );
     expect(releaseWorkflow).toContain('prefix.install "contents"');
   });
 

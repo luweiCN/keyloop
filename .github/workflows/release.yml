@@ -58,13 +58,10 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            bun_target: bun-linux-x64
             archive_target: x86_64-unknown-linux-gnu
           - os: macos-26-intel
-            bun_target: ""
             archive_target: x86_64-apple-darwin
           - os: macos-26
-            bun_target: ""
             archive_target: aarch64-apple-darwin
     steps:
       - name: Checkout
@@ -79,21 +76,24 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Build release artifacts
-        env:
-          BUN_TARGET: ${{ matrix.bun_target }}
-        run: |
-          if [ -n "$BUN_TARGET" ]; then
-            bun build src/main.ts --compile --target "$BUN_TARGET" --outfile dist/keyloop
-          else
-            bun build src/main.ts --compile --outfile dist/keyloop
-          fi
+        run: bun build src/main.ts --target bun --packages external --outfile dist/keyloop.js
 
-      - name: Smoke release binary
+      - name: Smoke release app
         timeout-minutes: 1
         run: |
-          ./dist/keyloop --help >/dev/null
           tmp="$(mktemp -d)"
-          KEYLOOP_HOME="$tmp" ./dist/keyloop sources >/dev/null
+          trap 'rm -rf "$tmp"' EXIT
+          mkdir -p "$tmp/keyloop/bin" "$tmp/keyloop/libexec"
+          cp dist/keyloop.js "$tmp/keyloop/libexec/keyloop.js"
+          cp -R node_modules "$tmp/keyloop/libexec/node_modules"
+          cp -R contents "$tmp/keyloop/contents"
+          cat > "$tmp/keyloop/bin/keyloop" <<EOF
+          #!/bin/sh
+          exec bun "$tmp/keyloop/libexec/keyloop.js" "\$@"
+          EOF
+          chmod +x "$tmp/keyloop/bin/keyloop"
+          KEYLOOP_HOME="$tmp/home" "$tmp/keyloop/bin/keyloop" --help >/dev/null
+          KEYLOOP_HOME="$tmp/home" "$tmp/keyloop/bin/keyloop" sources >/dev/null
           rm -rf "$tmp"
 
       - name: Package archive
@@ -102,8 +102,9 @@ jobs:
           TARGET: ${{ matrix.archive_target }}
         run: |
           archive="keyloop-${VERSION}-${TARGET}.tar.gz"
-          mkdir -p "dist/keyloop-${VERSION}-${TARGET}"
-          cp dist/keyloop "dist/keyloop-${VERSION}-${TARGET}/"
+          mkdir -p "dist/keyloop-${VERSION}-${TARGET}/libexec"
+          cp dist/keyloop.js "dist/keyloop-${VERSION}-${TARGET}/libexec/keyloop.js"
+          cp -R node_modules "dist/keyloop-${VERSION}-${TARGET}/libexec/node_modules"
           cp README.md LICENSE "dist/keyloop-${VERSION}-${TARGET}/"
           cp -R contents "dist/keyloop-${VERSION}-${TARGET}/"
           tar -C dist -czf "$archive" "keyloop-${VERSION}-${TARGET}"
@@ -173,6 +174,7 @@ jobs:
             homepage "https://github.com/luweiCN/keyloop"
             version "${VERSION}"
             license "MIT"
+            depends_on "bun"
 
             on_macos do
               if Hardware::CPU.arm?
@@ -190,8 +192,14 @@ jobs:
             end
 
             def install
-              bin.install "keyloop"
+              libexec.install "libexec/keyloop.js"
+              libexec.install "libexec/node_modules"
               prefix.install "contents"
+              (bin/"keyloop").write <<~EOS
+                #!/bin/sh
+                exec "#{Formula["bun"].opt_bin}/bun" "#{libexec}/keyloop.js" "\$@"
+              EOS
+              chmod 0755, bin/"keyloop"
             end
 
             test do
