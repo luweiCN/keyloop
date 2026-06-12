@@ -1,11 +1,19 @@
+import { join } from "node:path";
+
 import type {
   CodePracticeConfig,
   CompletionState,
   EverydayEnglishSettings,
+  PracticeTargetAnnotation,
   PracticeLesson,
   SessionRecord,
   UserPreferences,
 } from "../../domain/model";
+import {
+  playWordAudio,
+  resolveWordAudio,
+  type WordAudioSourceItem,
+} from "../../audio/wordAudio";
 import type { StartRunner, StartRunnerContext, StartRunnerResult } from "../../cli";
 import {
   applyLiveKey,
@@ -120,7 +128,31 @@ export interface OpenTuiStartRunnerOptions {
   kit?: OpenTuiRendererKit;
   nowMs?: () => number;
   timerIntervalMs?: number;
+  wordAudio?: WordAudioPlayback;
 }
+
+export interface WordAudioPlaybackRequest {
+  text: string;
+  sourceItem: WordAudioSourceItem;
+  dataDir: string;
+}
+
+export interface WordAudioPlayback {
+  play: (request: WordAudioPlaybackRequest) => Promise<void> | void;
+}
+
+const defaultWordAudioPlayback: WordAudioPlayback = {
+  play: async (request) => {
+    const path = await resolveWordAudio({
+      text: request.text,
+      sourceItem: request.sourceItem,
+      cacheDir: join(request.dataDir, "audio-cache"),
+    });
+    if (path !== null) {
+      await playWordAudio(path);
+    }
+  },
+};
 
 export interface LessonRunResult {
   record: SessionRecord | null;
@@ -432,6 +464,11 @@ export async function runLessonUntilComplete(
     let resumeOnNextInput = false;
     let lastInputAtMs: number | undefined;
     let timer: ReturnType<typeof setInterval> | undefined;
+    let spokenAudioAnnotations = new Set<string>();
+    const wordAudioPlayback = options.wordAudio ?? defaultWordAudioPlayback;
+    const resetSpokenAudioAnnotations = (): void => {
+      spokenAudioAnnotations = new Set();
+    };
     const activeElapsedMs = (currentMs: number): number => {
       if (startedAtMs === undefined) {
         return 0;
@@ -562,6 +599,7 @@ export async function runLessonUntilComplete(
       onCodeConfigChange(nextConfig);
       selection = refreshedStandaloneSelection(currentContext, selection, []);
       session = createLiveSession(selection.lesson.target);
+      resetSpokenAudioAnnotations();
       startedAtMs = undefined;
       pausedTotalMs = 0;
       pausedAtMs = undefined;
@@ -592,6 +630,7 @@ export async function runLessonUntilComplete(
       onEverydaySettingsChange(nextSettings);
       selection = refreshedStandaloneSelection(currentContext, selection, []);
       session = createLiveSession(selection.lesson.target);
+      resetSpokenAudioAnnotations();
       startedAtMs = undefined;
       pausedTotalMs = 0;
       pausedAtMs = undefined;
@@ -625,6 +664,7 @@ export async function runLessonUntilComplete(
       onWordBreakdownSettingsChange(nextSettings);
       selection = refreshedStandaloneSelection(currentContext, selection, []);
       session = createLiveSession(selection.lesson.target);
+      resetSpokenAudioAnnotations();
       startedAtMs = undefined;
       pausedTotalMs = 0;
       pausedAtMs = undefined;
@@ -658,6 +698,7 @@ export async function runLessonUntilComplete(
       onProgrammingTermsSettingsChange(nextSettings);
       selection = refreshedStandaloneSelection(currentContext, selection, []);
       session = createLiveSession(selection.lesson.target);
+      resetSpokenAudioAnnotations();
       startedAtMs = undefined;
       pausedTotalMs = 0;
       pausedAtMs = undefined;
@@ -691,6 +732,7 @@ export async function runLessonUntilComplete(
       onCustomLibrarySettingsChange(nextSettings);
       selection = refreshedStandaloneSelection(currentContext, selection, []);
       session = createLiveSession(selection.lesson.target);
+      resetSpokenAudioAnnotations();
       startedAtMs = undefined;
       pausedTotalMs = 0;
       pausedAtMs = undefined;
@@ -728,6 +770,7 @@ export async function runLessonUntilComplete(
     const refreshStandaloneTarget = async (currentMs: number): Promise<void> => {
       selection = refreshedStandaloneSelection(currentContext, selection, []);
       session = createLiveSession(selection.lesson.target);
+      resetSpokenAudioAnnotations();
       startedAtMs = undefined;
       pausedTotalMs = 0;
       pausedAtMs = undefined;
@@ -745,6 +788,7 @@ export async function runLessonUntilComplete(
     };
     const restartCurrentGroup = async (currentMs: number): Promise<void> => {
       session = createLiveSession(selection.lesson.target);
+      resetSpokenAudioAnnotations();
       startedAtMs = undefined;
       pausedTotalMs = 0;
       pausedAtMs = undefined;
@@ -1083,7 +1127,9 @@ export async function runLessonUntilComplete(
       }
       lastInputAtMs = currentMs;
       const elapsedMs = activeElapsedMs(currentMs);
+      const beforeInputLength = session.input.length;
       applyLiveKey(session, key, elapsedMs);
+      triggerWordAudioForInput(key, beforeInputLength);
 
       if (!isSessionComplete(session.input, selection.lesson.target.text)) {
         await renderRunning(elapsedMs);
@@ -1098,6 +1144,38 @@ export async function runLessonUntilComplete(
           manual_pause_ms: pausedTotalMs,
         }),
       );
+    };
+
+    const triggerWordAudioForInput = (key: LiveKey, beforeInputLength: number): void => {
+      if (key.kind === "backspace" || session.input.length === beforeInputLength) {
+        return;
+      }
+      if (!wordAudioSettingsForContext(currentContext).enabled) {
+        return;
+      }
+      const sourceItem = wordAudioSourceItemForContext(currentContext);
+      if (sourceItem === undefined) {
+        return;
+      }
+      const annotation = activeWordAudioAnnotation(
+        selection.lesson.target.annotations,
+        session.input.length,
+      );
+      if (annotation?.audio_text === undefined) {
+        return;
+      }
+      const keyForAnnotation = `${annotation.start}:${annotation.end}:${annotation.audio_text}`;
+      if (spokenAudioAnnotations.has(keyForAnnotation)) {
+        return;
+      }
+      spokenAudioAnnotations.add(keyForAnnotation);
+      void Promise.resolve(
+        wordAudioPlayback.play({
+          text: annotation.audio_text,
+          sourceItem,
+          dataDir: currentContext.dataDir,
+        }),
+      ).catch(() => undefined);
     };
 
     renderer.keyInput?.on("keypress", handleKeypress);
@@ -1361,6 +1439,40 @@ export function liveKeyCanMutateSession(session: LiveSessionState, key: LiveKey)
     case "tab":
       return true;
   }
+}
+
+function wordAudioSourceItemForContext(
+  context: StartRunnerContext,
+): WordAudioSourceItem | undefined {
+  const sourceItem = context.sourceItem;
+  if (sourceItem === "everyday_words") {
+    return "everyday_words";
+  }
+  if (sourceItem === "programming_terms") {
+    return "programming_terms";
+  }
+  if (sourceItem === "technical_long_words" || sourceItem === "long_word_breakdown") {
+    return "technical_long_words";
+  }
+  if (sourceItem?.startsWith("library_kind_") === true && sourceItem.endsWith(":words")) {
+    return "library_words";
+  }
+  return undefined;
+}
+
+function activeWordAudioAnnotation(
+  annotations: PracticeTargetAnnotation[] | undefined,
+  position: number,
+): PracticeTargetAnnotation | undefined {
+  return annotations?.find((annotation) => {
+    if (annotation.audio_text === undefined) {
+      return false;
+    }
+    if (annotation.display !== "word" && annotation.display !== "word_loose") {
+      return false;
+    }
+    return position >= annotation.start && position <= annotation.end;
+  });
 }
 
 

@@ -1597,6 +1597,136 @@ describe("OpenTUI start runner", () => {
     expect(result.completedRecords).toEqual([]);
   });
 
+  test("word pronunciation plays each active word annotation once while typing", async () => {
+    const kit = fakeKit({ keyInput: true });
+    let nowMs = 10_000;
+    const played: string[] = [];
+    const runner = createOpenTuiStartRunner({
+      kit,
+      nowMs: () => nowMs,
+      wordAudio: {
+        play: async (request) => {
+          played.push(request.text);
+        },
+      },
+    });
+    const plan: DailyPracticePlan = {
+      run_id: "",
+      run_number: 0,
+      target_minutes: 4,
+      completed_ms: 0,
+      lessons: [
+        {
+          id: "standalone:everyday_words",
+          kind: "words",
+          module: "everyday_english",
+          category: "everyday_words",
+          mix_profile: "standalone",
+          estimated_minutes: 4,
+          target: {
+            mode: "words",
+            text: "hello hello world",
+            source: "test:audio",
+            annotations: [
+              {
+                start: 0,
+                end: "hello hello".length,
+                translation_zh: "你好",
+                display: "word_loose",
+                audio_text: "hello",
+              },
+              {
+                start: "hello hello ".length,
+                end: "hello hello world".length,
+                translation_zh: "世界",
+                display: "word",
+                audio_text: "world",
+              },
+            ],
+          },
+          reason_zh: "",
+          reason_en: "",
+        },
+      ],
+    };
+    const context: StartRunnerContext = {
+      ...contextWithPlan(plan),
+      sourceItem: "everyday_words",
+      wordAudioSettings: {
+        enabled: true,
+      },
+    };
+
+    const runPromise = runner(context);
+    await kit.waitForKeyListener(1);
+
+    kit.emitKey({ name: "h", sequence: "h" });
+    await kit.waitForRenderRequest(1);
+    expect(played).toEqual(["hello"]);
+
+    let renderCount = 1;
+    for (const char of "ello hello ") {
+      renderCount += 1;
+      kit.emitKey({ name: char, sequence: char });
+      await kit.waitForRenderRequest(renderCount);
+    }
+    expect(played).toEqual(["hello", "world"]);
+
+    kit.emitKey({ name: "c", sequence: "c", ctrl: true });
+    const result = await runPromise;
+
+    expect(result.completedRecords).toEqual([]);
+  });
+
+  test("word pronunciation stays silent when disabled", async () => {
+    const kit = fakeKit({ keyInput: true });
+    const played: string[] = [];
+    const runner = createOpenTuiStartRunner({
+      kit,
+      wordAudio: {
+        play: async (request) => {
+          played.push(request.text);
+        },
+      },
+    });
+    const plan = testSingleLessonPlan("hello");
+    plan.lessons[0] = {
+      ...plan.lessons[0]!,
+      target: {
+        mode: "words",
+        text: "hello",
+        source: "test:audio-disabled",
+        annotations: [
+          {
+            start: 0,
+            end: "hello".length,
+            translation_zh: "你好",
+            display: "word",
+            audio_text: "hello",
+          },
+        ],
+      },
+    };
+    const context: StartRunnerContext = {
+      ...contextWithPlan(plan),
+      sourceItem: "everyday_words",
+      wordAudioSettings: {
+        enabled: false,
+      },
+    };
+
+    const runPromise = runner(context);
+    await kit.waitForKeyListener(1);
+
+    kit.emitKey({ name: "h", sequence: "h" });
+    await kit.waitForRenderRequest(1);
+    kit.emitKey({ name: "c", sequence: "c", ctrl: true });
+    const result = await runPromise;
+
+    expect(played).toEqual([]);
+    expect(result.completedRecords).toEqual([]);
+  });
+
   test("standalone code options popup can open from completion after the result popup is dismissed", async () => {
     const kit = fakeKit({ keyInput: true });
     let nowMs = 9_300;
