@@ -53,7 +53,7 @@ describe("package verification scripts", () => {
       new URL("../package.json", import.meta.url),
     ).json()) as PackageJson;
 
-    expect(packageJson.version).toBe("0.1.7");
+    expect(packageJson.version).toBe("0.1.8");
   });
 
   test("release workflow packages runtime content and Homebrew installs it", async () => {
@@ -74,6 +74,7 @@ describe("package verification scripts", () => {
     expect(releaseWorkflow).toContain('"$tmp/keyloop/bin/keyloop" --help >/dev/null');
     expect(releaseWorkflow).toContain('"$tmp/keyloop/bin/keyloop" sources >/dev/null');
     expect(releaseWorkflow).toContain('depends_on "bun"');
+    expect(releaseWorkflow).toContain("preserve_rpath");
     expect(releaseWorkflow).toContain('libexec.install "libexec/keyloop.js"');
     expect(releaseWorkflow).toContain('libexec.install "libexec/node_modules"');
     expect(releaseWorkflow).toContain('Formula["bun"].opt_bin');
