@@ -1,4 +1,4 @@
-import type { ContentLibrary } from "../content/library";
+import type { ContentLibrary, ProgrammingWordEntry } from "../content/library";
 import { pickCodeCorpusSnippetsExcludingByDifficulty } from "../content/codeCorpus";
 import { formatCodeSnippetsForPractice } from "../content/codeFormatter";
 import {
@@ -364,6 +364,32 @@ export function buildLessonWords(
   library: Pick<ContentLibrary, "programming_words">,
   random: () => number = Math.random,
 ): string {
+  return chunkWords(
+    selectedProgrammingWordEntries(library, random).map((entry) => entry.word),
+    4,
+  ).join("\n");
+}
+
+function programmingTermsTarget(
+  library: Pick<ContentLibrary, "programming_words">,
+  random: () => number,
+): PracticeTarget {
+  const blocks = chunkItems(selectedProgrammingWordEntries(library, random), 4).map((entries) =>
+    annotatedOptionalTokenText(entries.map(programmingWordAnnotationItem)),
+  );
+  const annotated = combineAnnotatedBlocks(blocks);
+  return {
+    mode: "words",
+    text: annotated.text,
+    source: "keyloop:module:programming-basics:technical-terms",
+    ...(annotated.annotations.length === 0 ? {} : { annotations: annotated.annotations }),
+  };
+}
+
+function selectedProgrammingWordEntries(
+  library: Pick<ContentLibrary, "programming_words">,
+  random: () => number,
+): ProgrammingWordEntry[] {
   const chosen: string[] = [];
   fillFrom(
     chosen,
@@ -371,7 +397,21 @@ export function buildLessonWords(
     16,
     random,
   );
-  return chunkWords(chosen.slice(0, 16), 4).join("\n");
+  const entriesByWord = new Map(
+    library.programming_words.map((entry) => [entry.word, entry] as const),
+  );
+  return chosen.slice(0, 16).flatMap((word) => {
+    const entry = entriesByWord.get(word);
+    return entry === undefined ? [] : [entry];
+  });
+}
+
+function programmingWordAnnotationItem(entry: ProgrammingWordEntry): OptionalAnnotationTextItem {
+  const note = entry.note_zh.trim();
+  return {
+    text: entry.word,
+    ...(note.length === 0 ? {} : { translation_zh: note, display: "word" as const }),
+  };
 }
 
 export function buildFoundationMixPracticeTarget(
@@ -424,11 +464,7 @@ export function buildProgrammingBasicsPracticeTarget(
 ): PracticeTarget {
   switch (kind) {
     case "programming_terms":
-      return {
-        mode: "words",
-        text: buildLessonWords(context.library, context.random ?? Math.random),
-        source: "keyloop:module:programming-basics:technical-terms",
-      };
+      return programmingTermsTarget(context.library, context.random ?? Math.random);
     case "naming_styles":
       return {
         mode: "case",
@@ -1991,11 +2027,16 @@ function repeatPool(
 }
 
 export function chunkWords(items: string[], chunkSize: number): string[] {
-  const lines: string[] = [];
-  for (let index = 0; index < items.length; index += chunkSize) {
-    lines.push(items.slice(index, index + chunkSize).join(" "));
+  return chunkItems(items, chunkSize).map((chunk) => chunk.join(" "));
+}
+
+function chunkItems<T>(items: T[], chunkSize: number): T[][] {
+  const chunks: T[][] = [];
+  const safeChunkSize = Math.max(1, Math.floor(chunkSize));
+  for (let index = 0; index < items.length; index += safeChunkSize) {
+    chunks.push(items.slice(index, index + safeChunkSize));
   }
-  return lines;
+  return chunks;
 }
 
 function shuffleInPlace<T>(items: T[], random: () => number): void {

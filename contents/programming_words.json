@@ -37,7 +37,7 @@
   },
   {
     "word": "account",
-    "note_zh": "账户"
+    "note_zh": "账号；账户（用户/云资源主体）"
   },
   {
     "word": "accumulator",
@@ -177,7 +177,7 @@
   },
   {
     "word": "area",
-    "note_zh": "区域；面积"
+    "note_zh": "区域；可视/交互区域"
   },
   {
     "word": "args",
@@ -297,7 +297,7 @@
   },
   {
     "word": "badge",
-    "note_zh": "徽标（角标）"
+    "note_zh": "徽章；角标标记"
   },
   {
     "word": "balance",
@@ -309,7 +309,7 @@
   },
   {
     "word": "banner",
-    "note_zh": "横幅"
+    "note_zh": "横幅提示；顶部横条通知"
   },
   {
     "word": "base64",
@@ -357,7 +357,7 @@
   },
   {
     "word": "blank",
-    "note_zh": "空白的"
+    "note_zh": "空白的；空字符串/空白页"
   },
   {
     "word": "blob",
@@ -529,7 +529,7 @@
   },
   {
     "word": "cast",
-    "note_zh": "类型强转"
+    "note_zh": "类型转换；强制类型转换"
   },
   {
     "word": "category",
@@ -613,7 +613,7 @@
   },
   {
     "word": "churn",
-    "note_zh": "流失"
+    "note_zh": "代码变动率；用户流失率（需按场景）"
   },
   {
     "word": "cipher",
@@ -705,7 +705,7 @@
   },
   {
     "word": "common",
-    "note_zh": "通用的；公共的"
+    "note_zh": "通用的；共享的（公共模块/公共代码）"
   },
   {
     "word": "comparator",
@@ -745,7 +745,7 @@
   },
   {
     "word": "compliance",
-    "note_zh": "合规"
+    "note_zh": "合规性（满足安全/审计/监管要求）"
   },
   {
     "word": "component",
@@ -885,7 +885,7 @@
   },
   {
     "word": "conversion",
-    "note_zh": "转化（转化率）；转换"
+    "note_zh": "转换（类型/格式/数据）；转化率（仅增长分析场景）"
   },
   {
     "word": "convert",
@@ -1209,7 +1209,7 @@
   },
   {
     "word": "development",
-    "note_zh": "开发环境"
+    "note_zh": "开发；开发环境/开发模式"
   },
   {
     "word": "device",
@@ -1317,7 +1317,7 @@
   },
   {
     "word": "document",
-    "note_zh": "文档（DOM/文档数据库记录）"
+    "note_zh": "文档；Document 对象；文档型数据库记录"
   },
   {
     "word": "documentation",
@@ -1473,7 +1473,7 @@
   },
   {
     "word": "engagement",
-    "note_zh": "用户参与度"
+    "note_zh": "用户参与度（产品分析指标）"
   },
   {
     "word": "engine",
@@ -1525,7 +1525,7 @@
   },
   {
     "word": "evaluation",
-    "note_zh": "评估"
+    "note_zh": "求值；评估"
   },
   {
     "word": "event",
@@ -1577,7 +1577,7 @@
   },
   {
     "word": "experiment",
-    "note_zh": "实验（AB 实验）"
+    "note_zh": "实验；A/B 实验配置"
   },
   {
     "word": "experimental",
@@ -1593,7 +1593,7 @@
   },
   {
     "word": "expiry",
-    "note_zh": "有效期"
+    "note_zh": "到期时间；有效期"
   },
   {
     "word": "explicit",
@@ -1665,7 +1665,7 @@
   },
   {
     "word": "fatal",
-    "note_zh": "致命错误级别"
+    "note_zh": "致命的；致命错误级别"
   },
   {
     "word": "feature",
@@ -1693,7 +1693,7 @@
   },
   {
     "word": "final",
-    "note_zh": "最终的"
+    "note_zh": "最终的；final 关键字（不可继承/不可重写/不可变引用）"
   },
   {
     "word": "find",
@@ -1801,7 +1801,7 @@
   },
   {
     "word": "fresh",
-    "note_zh": "新鲜的（缓存有效）"
+    "note_zh": "未过期的；最新的（缓存仍有效）"
   },
   {
     "word": "frontend",
@@ -1829,7 +1829,7 @@
   },
   {
     "word": "funnel",
-    "note_zh": "漏斗（转化漏斗）"
+    "note_zh": "转化漏斗（产品分析）"
   },
   {
     "word": "future",
@@ -1961,7 +1961,7 @@
   },
   {
     "word": "handle",
-    "note_zh": "处理"
+    "note_zh": "句柄；处理"
   },
   {
     "word": "handler",
@@ -2093,7 +2093,7 @@
   },
   {
     "word": "image",
-    "note_zh": "图片"
+    "note_zh": "图像；也可指镜像（如容器镜像）"
   },
   {
     "word": "immutability",
@@ -2153,7 +2153,7 @@
   },
   {
     "word": "inference",
-    "note_zh": "推理（模型预测）"
+    "note_zh": "推断；在 AI 语境中也指模型推理"
   },
   {
     "word": "infinity",
@@ -2193,7 +2193,7 @@
   },
   {
     "word": "injection",
-    "note_zh": "注入攻击（SQL 注入等）"
+    "note_zh": "注入；在安全语境下常指注入攻击"
   },
   {
     "word": "inner",
@@ -2257,7 +2257,7 @@
   },
   {
     "word": "invoice",
-    "note_zh": "发票；账单"
+    "note_zh": "发票；账单（业务字段/业务对象）"
   },
   {
     "word": "invoke",
@@ -2325,7 +2325,7 @@
   },
   {
     "word": "kind",
-    "note_zh": "种类"
+    "note_zh": "类别；种类标记"
   },
   {
     "word": "kotlin",
@@ -2377,11 +2377,11 @@
   },
   {
     "word": "learning",
-    "note_zh": "学习（机器学习）"
+    "note_zh": "学习；多指机器学习中的训练/学习过程"
   },
   {
     "word": "ledger",
-    "note_zh": "账本"
+    "note_zh": "账本（区块链/财务业务中的记录账本）"
   },
   {
     "word": "legacy",
@@ -2593,7 +2593,7 @@
   },
   {
     "word": "media",
-    "note_zh": "媒体"
+    "note_zh": "媒体资源（图片/音频/视频）"
   },
   {
     "word": "median",
@@ -2665,7 +2665,7 @@
   },
   {
     "word": "milestone",
-    "note_zh": "里程碑"
+    "note_zh": "里程碑（项目/Issue 计划节点）"
   },
   {
     "word": "millisecond",
@@ -2781,7 +2781,7 @@
   },
   {
     "word": "native",
-    "note_zh": "原生的（原生应用）"
+    "note_zh": "原生的；宿主平台原生实现的"
   },
   {
     "word": "navbar",
@@ -2817,7 +2817,7 @@
   },
   {
     "word": "nickname",
-    "note_zh": "昵称"
+    "note_zh": "昵称（用户资料字段）"
   },
   {
     "word": "node",
@@ -2941,7 +2941,7 @@
   },
   {
     "word": "order",
-    "note_zh": "订单；顺序"
+    "note_zh": "顺序；也可指订单（业务字段）"
   },
   {
     "word": "origin",
@@ -2989,7 +2989,7 @@
   },
   {
     "word": "owner",
-    "note_zh": "所有者"
+    "note_zh": "所有者；负责人（资源归属）"
   },
   {
     "word": "ownership",
@@ -3105,7 +3105,7 @@
   },
   {
     "word": "payment",
-    "note_zh": "支付"
+    "note_zh": "支付（业务对象/支付流程）"
   },
   {
     "word": "peer",
@@ -3137,7 +3137,7 @@
   },
   {
     "word": "piece",
-    "note_zh": "片段；一部分"
+    "note_zh": "片段；代码/数据的一部分"
   },
   {
     "word": "ping",
@@ -3273,7 +3273,7 @@
   },
   {
     "word": "pricing",
-    "note_zh": "定价"
+    "note_zh": "定价（计费/套餐价格配置）"
   },
   {
     "word": "primary",
@@ -3309,7 +3309,7 @@
   },
   {
     "word": "profile",
-    "note_zh": "个人资料；配置档"
+    "note_zh": "个人资料；运行配置；性能剖析结果"
   },
   {
     "word": "profiling",
@@ -3333,7 +3333,7 @@
   },
   {
     "word": "prompt",
-    "note_zh": "提示输入；AI 提示词"
+    "note_zh": "提示文本；命令行提示符；AI 提示词"
   },
   {
     "word": "properties",
@@ -3413,7 +3413,7 @@
   },
   {
     "word": "query",
-    "note_zh": "查询；查询字符串"
+    "note_zh": "查询；查询语句；查询参数"
   },
   {
     "word": "queue",
@@ -3445,7 +3445,7 @@
   },
   {
     "word": "ranking",
-    "note_zh": "排序（搜索结果排名）"
+    "note_zh": "排名；结果排序优先级"
   },
   {
     "word": "ratelimit",
@@ -3489,7 +3489,7 @@
   },
   {
     "word": "reason",
-    "note_zh": "原因"
+    "note_zh": "原因；失败原因；原因字段"
   },
   {
     "word": "rebase",
@@ -3545,7 +3545,7 @@
   },
   {
     "word": "reducer",
-    "note_zh": "归约函数（Redux 状态更新）"
+    "note_zh": "归约器；状态归并函数（如 Redux reducer）"
   },
   {
     "word": "ref",
@@ -3577,7 +3577,7 @@
   },
   {
     "word": "refund",
-    "note_zh": "退款"
+    "note_zh": "退款（支付业务）"
   },
   {
     "word": "regex",
@@ -3661,7 +3661,7 @@
   },
   {
     "word": "report",
-    "note_zh": "报告"
+    "note_zh": "报告；上报（如错误上报、埋点上报）"
   },
   {
     "word": "repository",
@@ -3737,7 +3737,7 @@
   },
   {
     "word": "retention",
-    "note_zh": "留存"
+    "note_zh": "留存；保留期（如用户留存、数据保留策略）"
   },
   {
     "word": "retry",
@@ -3893,7 +3893,7 @@
   },
   {
     "word": "scheme",
-    "note_zh": "方案；URL 协议头"
+    "note_zh": "协议方案（如 URL scheme）；命名/配色方案"
   },
   {
     "word": "scope",
@@ -3925,7 +3925,7 @@
   },
   {
     "word": "secret",
-    "note_zh": "密钥（敏感配置）"
+    "note_zh": "机密；密钥；敏感配置项"
   },
   {
     "word": "section",
@@ -3981,7 +3981,7 @@
   },
   {
     "word": "series",
-    "note_zh": "系列；时间序列"
+    "note_zh": "序列；时间序列"
   },
   {
     "word": "server",
@@ -3993,7 +3993,7 @@
   },
   {
     "word": "service",
-    "note_zh": "服务"
+    "note_zh": "服务；后端服务；业务服务"
   },
   {
     "word": "session",
@@ -4013,7 +4013,7 @@
   },
   {
     "word": "settle",
-    "note_zh": "落定（Promise 完成）"
+    "note_zh": "完成（Promise 无论成功或失败）"
   },
   {
     "word": "setup",
@@ -4153,7 +4153,7 @@
   },
   {
     "word": "space",
-    "note_zh": "空格；空间"
+    "note_zh": "空格；空白字符；存储空间"
   },
   {
     "word": "spacing",
@@ -4233,7 +4233,7 @@
   },
   {
     "word": "stake",
-    "note_zh": "质押"
+    "note_zh": "质押（区块链/金融业务）"
   },
   {
     "word": "stale",
@@ -4337,7 +4337,7 @@
   },
   {
     "word": "subscription",
-    "note_zh": "订阅（订阅制付费）"
+    "note_zh": "订阅；订阅关系；订阅制付费"
   },
   {
     "word": "success",
@@ -4361,7 +4361,7 @@
   },
   {
     "word": "support",
-    "note_zh": "支持"
+    "note_zh": "支持；兼容；提供能力"
   },
   {
     "word": "supported",
@@ -4409,7 +4409,7 @@
   },
   {
     "word": "tab",
-    "note_zh": "标签页"
+    "note_zh": "标签页；制表符"
   },
   {
     "word": "table",
@@ -4509,7 +4509,7 @@
   },
   {
     "word": "time",
-    "note_zh": "时间"
+    "note_zh": "时间；耗时；时间字段"
   },
   {
     "word": "timeline",
@@ -4561,7 +4561,7 @@
   },
   {
     "word": "topic",
-    "note_zh": "主题（消息队列订阅单元）"
+    "note_zh": "主题（消息队列中的发布/订阅通道）"
   },
   {
     "word": "total",
@@ -4693,7 +4693,7 @@
   },
   {
     "word": "unit",
-    "note_zh": "单位；单元"
+    "note_zh": "单元；单位；最小测试/模块粒度"
   },
   {
     "word": "unittest",
@@ -4737,7 +4737,7 @@
   },
   {
     "word": "uptime",
-    "note_zh": "在线时长；可用率"
+    "note_zh": "在线时长；持续运行时间"
   },
   {
     "word": "uri",
@@ -4761,7 +4761,7 @@
   },
   {
     "word": "utf8",
-    "note_zh": "通用字符编码"
+    "note_zh": "UTF-8 字符编码"
   },
   {
     "word": "util",
@@ -4809,7 +4809,7 @@
   },
   {
     "word": "vendor",
-    "note_zh": "第三方代码目录"
+    "note_zh": "供应商；第三方依赖目录（如 vendor/）"
   },
   {
     "word": "verbose",
@@ -4921,11 +4921,11 @@
   },
   {
     "word": "week",
-    "note_zh": "周"
+    "note_zh": "周（日期时间字段）"
   },
   {
     "word": "weekday",
-    "note_zh": "工作日；星期几"
+    "note_zh": "星期几；工作日（日期时间语境）"
   },
   {
     "word": "weight",
@@ -4993,7 +4993,7 @@
   },
   {
     "word": "year",
-    "note_zh": "年份"
+    "note_zh": "年；年份字段"
   },
   {
     "word": "yield",
@@ -5001,11 +5001,11 @@
   },
   {
     "word": "zero",
-    "note_zh": "零"
+    "note_zh": "零；0 值；零值"
   },
   {
     "word": "zone",
-    "note_zh": "区域；时区（timezone）"
+    "note_zh": "时区；区域；执行上下文隔离区（如 Zone）"
   },
   {
     "word": "zoom",

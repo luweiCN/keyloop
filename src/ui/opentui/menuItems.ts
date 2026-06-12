@@ -523,7 +523,7 @@ export function menuItemDescription(item: { id: string }): string {
     case "builtin_api":
       return "练当前语言生态的高频内置 API 调用。";
     case "programming_terms":
-      return "练 selected、pending、enabled 等高频编程业务词。";
+      return "练 selected、pending、enabled 等高频编程词，显示人工维护的编程语境释义。";
     case "naming_styles":
       return "练 camelCase、snake_case、PascalCase 等命名形态。";
     case "technical_long_words":

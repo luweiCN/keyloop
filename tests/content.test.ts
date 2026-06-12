@@ -122,6 +122,16 @@ describe("content library", () => {
     }
   });
 
+  test("programming words keep programming-context meanings for ambiguous terms", async () => {
+    const library = await loadContentLibrary();
+    const notes = new Map(library.programming_words.map((entry) => [entry.word, entry.note_zh]));
+
+    expect(notes.get("image")).toBe("图像；也可指镜像（如容器镜像）");
+    expect(notes.get("order")).toBe("顺序；也可指订单（业务字段）");
+    expect(notes.get("query")).toBe("查询；查询语句；查询参数");
+    expect(notes.get("tab")).toBe("标签页；制表符");
+  });
+
   test("code snippets use the generated code content index", async () => {
     const library = await loadContentLibrary();
     const shardPaths = library.code_corpus?.index.shards.map((shard) => shard.path) ?? [];

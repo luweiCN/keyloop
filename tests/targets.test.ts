@@ -92,6 +92,54 @@ describe("target generation core", () => {
     }
   });
 
+  test("programming word targets include programming-context translations", () => {
+    const library = testLibrary();
+    library.programming_words = [
+      { word: "request", note_zh: "请求（HTTP/接口入参）" },
+      { word: "state", note_zh: "状态（组件/应用状态）" },
+      { word: "token", note_zh: "令牌（认证凭证）" },
+      { word: "payload", note_zh: "载荷（请求/事件数据）" },
+    ];
+
+    const target = buildProgrammingBasicsPracticeTarget(
+      {
+        records: [],
+        plan: unfocusedPlan(),
+        library,
+        random: () => 0,
+      },
+      "programming_terms",
+    );
+
+    expect(target.text).toBe("state token payload request");
+    expect(target.annotations).toEqual([
+      {
+        start: 0,
+        end: "state".length,
+        translation_zh: "状态（组件/应用状态）",
+        display: "word",
+      },
+      {
+        start: "state ".length,
+        end: "state token".length,
+        translation_zh: "令牌（认证凭证）",
+        display: "word",
+      },
+      {
+        start: "state token ".length,
+        end: "state token payload".length,
+        translation_zh: "载荷（请求/事件数据）",
+        display: "word",
+      },
+      {
+        start: "state token payload ".length,
+        end: "state token payload request".length,
+        translation_zh: "请求（HTTP/接口入参）",
+        display: "word",
+      },
+    ]);
+  });
+
   test("everyday mix includes phrases and matching sentence length when enabled", () => {
     const target = buildEverydayPracticeTarget(
       {

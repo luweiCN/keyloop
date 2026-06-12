@@ -296,5 +296,8 @@ describe("programming submenu", () => {
     expect(menuItemDescription({ id: "symbols_numbers" })).toBe(
       "练字面值、单行语句和小代码块里的符号、数字、标点与配对结构；API 调用在内置 API 中练。",
     );
+    expect(menuItemDescription({ id: "programming_terms" })).toBe(
+      "练 selected、pending、enabled 等高频编程词，显示人工维护的编程语境释义。",
+    );
   });
 });
