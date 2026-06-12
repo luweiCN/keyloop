@@ -1828,10 +1828,6 @@ function breakdownCandidateFromLongWord(entry: LongWordEntry): BreakdownCandidat
 
 function breakdownCandidateLines(candidate: BreakdownCandidate, wordRepeats = 2): string[] {
   const lines = [repeatedWordText(candidate.word, wordRepeats)];
-  const alias = firstTrimmedAlias(candidate.aliases);
-  if (alias !== undefined) {
-    lines.push(`${alias} ${repeatedWordText(candidate.word, wordRepeats)}`);
-  }
   if (candidate.identifierForms) {
     const pascal = pascalCase(candidate.parts);
     lines.push(
@@ -1852,7 +1848,7 @@ function breakdownCandidateTextItems(
 ): OptionalAnnotationTextItem[] {
   const display: PracticeTargetAnnotation["display"] =
     wordRepeats > 1 ? "word_loose" : "word";
-  const items: OptionalAnnotationTextItem[] = [
+  return [
     {
       text: repeatedWordText(candidate.word, wordRepeats),
       ...(candidate.note_zh === undefined
@@ -1860,16 +1856,6 @@ function breakdownCandidateTextItems(
         : { translation_zh: candidate.note_zh, display }),
     },
   ];
-  const alias = firstTrimmedAlias(candidate.aliases);
-  if (alias !== undefined) {
-    items.push({
-      text: `${alias} ${repeatedWordText(candidate.word, wordRepeats)}`,
-      ...(candidate.note_zh === undefined
-        ? {}
-        : { translation_zh: candidate.note_zh, display }),
-    });
-  }
-  return items;
 }
 
 function repeatedWordText(word: string, repeats: number): string {
@@ -1885,10 +1871,6 @@ function normalizedWordRepeats(value: number): number {
     return 2;
   }
   return Math.min(10, Math.max(1, Math.floor(value)));
-}
-
-function firstTrimmedAlias(aliases: string[] | undefined): string | undefined {
-  return aliases?.map((value) => value.trim()).find((value) => value.length > 0);
 }
 
 function matchesBreakdownDomain(

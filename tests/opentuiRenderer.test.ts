@@ -1,6 +1,9 @@
 import { describe, expect, test } from "bun:test";
 
-import { ghostRows } from "../src/ui/opentui/screens/ghostText";
+import {
+  ghostRows,
+  wrapGhostWordBlockLoose,
+} from "../src/ui/opentui/screens/ghostText";
 import {
   activateOpenTuiMenuItem,
   createOpenTuiCompletionState,
@@ -541,6 +544,48 @@ describe("OpenTUI renderer adapter", () => {
 
     const cursorNodes = findNodesByIdPrefix(kit.addedNodes, "keyloop-ghost-cursor-");
     expect(cursorNodes.map((node) => node.props.content)).toEqual([" "]);
+  });
+
+  test("wraps repeated long-word items at word boundaries", () => {
+    const text = [
+      "infrastructure",
+      "infrastructure",
+      "infrastructure",
+      "infrastructure",
+    ].join(" ");
+    const [row] = ghostRows(text, "", undefined, false);
+
+    const blockRows = wrapGhostWordBlockLoose(
+      row ?? [],
+      [{ srcStartCol: 0, srcEndCol: text.length, translation: "基础设施", loose: true }],
+      32,
+    );
+
+    expect(blockRows.map((blockRow) => flattenGhostSegments(blockRow.segments))).toEqual([
+      "infrastructure infrastructure",
+      "infrastructure infrastructure",
+    ]);
+    expect(blockRows.map((blockRow) => blockRow.meaning)).toEqual(["基础设施", ""]);
+  });
+
+  test("keeps the cursor visible on a wrapped repeated long-word separator", () => {
+    const text = [
+      "infrastructure",
+      "infrastructure",
+      "infrastructure",
+      "infrastructure",
+    ].join(" ");
+    const [row] = ghostRows(text, "infrastructure infrastructure", undefined, false);
+
+    const blockRows = wrapGhostWordBlockLoose(
+      row ?? [],
+      [{ srcStartCol: 0, srcEndCol: text.length, translation: "基础设施", loose: true }],
+      32,
+    );
+
+    expect(flattenGhostSegments(blockRows[0]?.segments ?? [])).toBe(
+      "infrastructure infrastructure ",
+    );
   });
 
   test("wraps long decomposition rows and shows the full translation below", async () => {
@@ -2272,6 +2317,10 @@ function flattenContent(nodes: FakeNode[]): string {
     visit(node);
   }
   return values.join("\n");
+}
+
+function flattenGhostSegments(segments: Array<{ text: string }>): string {
+  return segments.map((segment) => segment.text).join("");
 }
 
 function collectHintTexts(nodes: FakeNode[]): string[] {

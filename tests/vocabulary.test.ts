@@ -3,7 +3,7 @@ import { describe, expect, test } from "bun:test";
 import { buildLongWordBreakdownTarget, type LongWordEntry } from "../src/index";
 
 describe("long-word breakdown", () => {
-  test("breakdown target uses whole-word and alias pattern", () => {
+  test("breakdown target uses whole-word repetitions without aliases", () => {
     const word: LongWordEntry = {
       word: "internationalization",
       parts: ["international", "ization"],
@@ -17,12 +17,7 @@ describe("long-word breakdown", () => {
     const target = buildLongWordBreakdownTarget(word);
 
     expect(target.mode).toBe("words");
-    expect(target.text).toBe(
-      [
-        "internationalization internationalization",
-        "i18n internationalization",
-      ].join("\n"),
-    );
+    expect(target.text).toBe("internationalization internationalization");
     expect(target.source).toBe("keyloop:module:word-breakdown:internationalization");
   });
 

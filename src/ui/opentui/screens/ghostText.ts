@@ -247,6 +247,17 @@ export function wrapGhostWordBlockLoose(
   let currentWidth = 0;
 
   for (const item of items) {
+    if (ghostLooseWordItemWidth(item) > safeMaxColumns) {
+      if (current.length > 0) {
+        blockRows.push(ghostLooseWordBlockRow(current, safeMaxColumns));
+        current = [];
+        currentWidth = 0;
+      }
+      for (const chunk of splitLooseWordItem(item, safeMaxColumns)) {
+        blockRows.push(ghostLooseWordBlockRow([chunk], safeMaxColumns));
+      }
+      continue;
+    }
     const itemWidth = ghostLooseWordItemWidth(item);
     const nextWidth = current.length === 0 ? itemWidth : currentWidth + itemWidth;
     if (current.length > 0 && nextWidth > safeMaxColumns) {
@@ -285,14 +296,114 @@ function ghostLooseWordItem(
   const itemCells = cells.slice(column.srcStartCol, column.srcEndCol);
   const separatorCells =
     nextColumn === undefined ? [] : cells.slice(column.srcEndCol, nextColumn.srcStartCol);
-  const textWidth = displayWidth(itemCells.map((cell) => cell.text).join(""));
-  const translationWidth = displayWidth(column.translation);
+  return ghostLooseWordItemFromCells(itemCells, separatorCells, column.translation);
+}
+
+function ghostLooseWordItemFromCells(
+  itemCells: GhostCell[],
+  separatorCells: GhostCell[],
+  translation: string,
+): GhostLooseWordItem {
+  const textWidth = ghostCellTextWidth(itemCells);
+  const translationWidth = displayWidth(translation);
   return {
     cells: itemCells,
     separatorCells,
-    translation: column.translation,
+    translation,
     width: Math.max(1, textWidth, translationWidth),
   };
+}
+
+function splitLooseWordItem(
+  item: GhostLooseWordItem,
+  maxColumns: number,
+): GhostLooseWordItem[] {
+  const safeMaxColumns = Math.max(1, Math.trunc(maxColumns));
+  const chunks: GhostLooseWordItem[] = [];
+  let start = 0;
+  let translation = item.translation;
+
+  while (start < item.cells.length) {
+    const hardEnd = Math.min(start + safeMaxColumns, item.cells.length);
+    const split = looseWordItemSplitPoint(item.cells, start, hardEnd);
+    const chunkCells = item.cells.slice(start, split.end);
+    const separatorCells = split.nextStart >= item.cells.length
+      ? item.separatorCells
+      : item.cells.slice(split.end, split.nextStart);
+    chunks.push(ghostLooseWordItemFromCells(chunkCells, separatorCells, translation));
+    translation = "";
+    start = split.nextStart;
+  }
+
+  return chunks;
+}
+
+function looseWordItemSplitPoint(
+  cells: readonly GhostCell[],
+  start: number,
+  hardEnd: number,
+): { end: number; nextStart: number } {
+  if (hardEnd >= cells.length) {
+    return { end: cells.length, nextStart: cells.length };
+  }
+
+  const whitespaceBefore = lastGhostWhitespaceIndex(cells, start, hardEnd);
+  if (whitespaceBefore !== undefined) {
+    return {
+      end: whitespaceBefore,
+      nextStart: skipGhostWhitespace(cells, whitespaceBefore),
+    };
+  }
+
+  const whitespaceAfter = firstGhostWhitespaceIndex(cells, hardEnd);
+  if (whitespaceAfter !== undefined) {
+    return {
+      end: whitespaceAfter,
+      nextStart: skipGhostWhitespace(cells, whitespaceAfter),
+    };
+  }
+
+  return { end: cells.length, nextStart: cells.length };
+}
+
+function lastGhostWhitespaceIndex(
+  cells: readonly GhostCell[],
+  start: number,
+  hardEnd: number,
+): number | undefined {
+  for (let index = hardEnd - 1; index > start; index -= 1) {
+    if (isGhostWhitespace(cells[index]?.text)) {
+      return index;
+    }
+  }
+  return undefined;
+}
+
+function firstGhostWhitespaceIndex(
+  cells: readonly GhostCell[],
+  start: number,
+): number | undefined {
+  for (let index = start; index < cells.length; index += 1) {
+    if (isGhostWhitespace(cells[index]?.text)) {
+      return index;
+    }
+  }
+  return undefined;
+}
+
+function skipGhostWhitespace(
+  cells: readonly GhostCell[],
+  start: number,
+): number {
+  let index = start;
+  while (isGhostWhitespace(cells[index]?.text)) {
+    index += 1;
+  }
+  return index;
+}
+
+function ghostCellTextWidth(cells: readonly GhostCell[]): number {
+  return displayWidth(cells.map((cell) => cell.text).join(""));
 }
 
 function ghostLooseWordBlockRow(
@@ -309,7 +420,7 @@ function ghostLooseWordBlockRow(
       continue;
     }
     out.push(...item.cells);
-    const itemTextWidth = displayWidth(item.cells.map((cell) => cell.text).join(""));
+    const itemTextWidth = ghostCellTextWidth(item.cells);
     const itemWidth = Math.max(1, item.width);
     const padding = Math.max(itemWidth - itemTextWidth, 0);
     for (let pad = 0; pad < padding; pad += 1) {

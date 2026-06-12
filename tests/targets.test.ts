@@ -744,7 +744,7 @@ describe("target generation core", () => {
     expect(target.text).not.toContain("de allocation");
   });
 
-  test("standalone long-word breakdown lays out word items with one translation each", () => {
+  test("standalone long-word breakdown ignores aliases", () => {
     const library = testLibrary();
     library.long_words = [
       {
@@ -772,20 +772,11 @@ describe("target generation core", () => {
       { profile: "standalone", domain: "programming", maxItems: 1 },
     );
 
-    const firstItem = "specification";
-    const aliasItem = "spec specification";
-    const aliasStart = target.text.indexOf(aliasItem);
-    expect(target.text).toBe("specification spec specification");
+    expect(target.text).toBe("specification");
     expect(target.annotations).toEqual([
       {
         start: 0,
-        end: firstItem.length,
-        translation_zh: "规格说明（技术规范）",
-        display: "word",
-      },
-      {
-        start: aliasStart,
-        end: aliasStart + aliasItem.length,
+        end: "specification".length,
         translation_zh: "规格说明（技术规范）",
         display: "word",
       },

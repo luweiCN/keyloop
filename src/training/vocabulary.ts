@@ -21,10 +21,6 @@ export function buildLongWordBreakdownTarget(
 ): PracticeTarget {
   const wordRepetitions = options.wordRepetitions ?? 2;
   const lines = [repeat(entry.word, wordRepetitions).join(" ")];
-  const alias = entry.aliases?.find((value) => value.trim().length > 0)?.trim();
-  if (alias !== undefined) {
-    lines.push(`${alias} ${entry.word}`);
-  }
 
   return {
     mode: "words",
