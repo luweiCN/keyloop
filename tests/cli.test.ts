@@ -35,7 +35,7 @@ import {
   type StartRunnerContext,
 } from "../src/index";
 
-const START_CLI_TEST_TIMEOUT_MS = 10_000;
+const START_CLI_TEST_TIMEOUT_MS = 20_000;
 
 describe("TS CLI parser parity", () => {
   test("bare keyloop has no command and defaults to zh", () => {

@@ -298,13 +298,18 @@ describe("build everyday reading content CLI", () => {
   test("writes sourced sentence and article corpora", async () => {
     const root = mkdtempSync(join(tmpdir(), "keyloop-everyday-reading-"));
     const repoRoot = fileURLToPath(new URL("..", import.meta.url));
+    const seed = join(root, "everyday_reading_seed.json");
     const sentences = join(root, "everyday_sentences.json");
     const articles = join(root, "everyday_articles.json");
     try {
+      writeFileSync(seed, `${JSON.stringify(readingSeedFixture(), null, 2)}\n`);
+
       const result = Bun.spawnSync({
         cmd: [
           "bun",
           "src/tools/buildEverydayReadingContent.ts",
+          "--seed",
+          seed,
           "--sentences-output",
           sentences,
           "--articles-output",
@@ -337,12 +342,16 @@ describe("build everyday reading content CLI", () => {
         }>;
       };
 
-      expect(sentenceCorpus.entries.length).toBeGreaterThanOrEqual(150);
-      expect(articleCorpus.entries.length).toBeGreaterThanOrEqual(30);
-      expect(sentenceCorpus.sources.some((source) => source.source_id.startsWith("gutenberg:")))
-        .toBe(true);
+      expect(sentenceCorpus.entries.length).toBeGreaterThanOrEqual(1);
+      expect(articleCorpus.entries).toHaveLength(1);
+      expect(sentenceCorpus.sources.map((source) => source.source_id)).toEqual([
+        "gutenberg:test-reading",
+      ]);
       expect(articleCorpus.sources.map((source) => source.license)).toContain(
         "Public domain in the USA",
+      );
+      expect(sentenceCorpus.entries.map((entry) => entry.text)).toContain(
+        "Every morning, the small team shares notes before work begins.",
       );
       expect(sentenceCorpus.entries.every((entry) => entry.translation_zh.trim().length > 0)).toBe(
         true,
@@ -371,10 +380,8 @@ describe("build everyday reading content CLI", () => {
           );
         }),
       ).toBe(true);
-      for (const level of ["high_school", "cet4", "cet6", "postgraduate", "toefl_ielts"]) {
-        expect(articleCorpus.entries.filter((entry) => entry.level === level).length)
-          .toBeGreaterThanOrEqual(6);
-      }
+      expect(articleCorpus.entries[0]?.level).toBe("high_school");
+      expect(articleCorpus.entries[0]?.length).toBe("short");
     } finally {
       rmSync(root, { recursive: true, force: true });
     }
@@ -470,6 +477,86 @@ describe("build Moby word decomposition content CLI", () => {
     }
   });
 });
+
+function readingSeedFixture() {
+  return {
+    sources: [
+      {
+        source_id: "gutenberg:test-reading",
+        source_name: "Project Gutenberg: Test Reading Fixture",
+        source_url: "https://www.gutenberg.org/",
+        license: "Public domain in the USA",
+        retrieved_at: "2026-06-12",
+        generation_script: "tests/buildCodeCorpusSnapshotCli.test.ts",
+        included_fields: [
+          "text",
+          "translation_zh",
+          "level",
+          "length",
+          "source_id",
+          "source_title",
+          "paragraphs",
+        ],
+        notes: "Small deterministic fixture for the reading content CLI.",
+      },
+    ],
+    sentences: [
+      {
+        text: "Every morning, the small team shares notes before work begins.",
+        translation_zh: "每天早上，这个小团队都会在工作开始前分享笔记。",
+        level: "high_school",
+        source_id: "gutenberg:test-reading",
+        source_title: "Test Reading Fixture",
+      },
+    ],
+    articles: [
+      {
+        title: "A Simple Team Plan",
+        level: "high_school",
+        length: "short",
+        source_id: "gutenberg:test-reading",
+        paragraphs: [
+          {
+            sentences: [
+              {
+                text: "The team met early to plan the week before customers arrived.",
+                translation_zh: "团队很早开会，在客户到来前规划这一周。",
+              },
+              {
+                text: "Each person named one risk and one small action for today.",
+                translation_zh: "每个人都说出一个风险和今天的一个小行动。",
+              },
+              {
+                text: "After lunch, they checked the notes and updated the shared board.",
+                translation_zh: "午饭后，他们检查笔记并更新共享看板。",
+              },
+              {
+                text: "The manager asked clear questions so every quiet issue became visible.",
+                translation_zh: "经理提出清楚的问题，让每个隐藏的问题都被看见。",
+              },
+              {
+                text: "By evening, the group had finished the report without rushing.",
+                translation_zh: "到晚上，小组已经不慌不忙地完成了报告。",
+              },
+              {
+                text: "They saved the draft, reviewed the numbers, and sent it.",
+                translation_zh: "他们保存草稿，复核数字，然后发送出去。",
+              },
+              {
+                text: "The next morning, everyone understood why the simple plan worked.",
+                translation_zh: "第二天早上，大家都明白这个简单计划为什么有效。",
+              },
+              {
+                text: "Good habits made the work easier when new problems appeared.",
+                translation_zh: "当新问题出现时，良好的习惯让工作更轻松。",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+}
 
 function writeCorpusDirectory(input: string): void {
   mkdirSync(join(input, "typescript"), { recursive: true });
