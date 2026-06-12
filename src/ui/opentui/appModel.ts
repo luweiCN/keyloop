@@ -1181,6 +1181,7 @@ export function defaultWordFormSettings(): OpenTuiWordFormSettings {
     word_breakdown: {
       enabled_in_comprehensive: true,
       max_items_per_group: 6,
+      word_repeats: 2,
     },
   };
 }
@@ -1290,6 +1291,7 @@ export {
   submenuItems,
   submenuTitle,
   targetRefreshAvailableForSource,
+  wordBreakdownLiveOptionSources,
   type OpenTuiMainMenuId,
   type OpenTuiMenuItem,
   type OpenTuiMenuItemId,

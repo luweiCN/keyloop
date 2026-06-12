@@ -51,6 +51,7 @@ export interface GhostWordColumn {
   srcStartCol: number;
   srcEndCol: number;
   translation: string;
+  loose?: boolean;
 }
 
 export interface GhostWordBlockRow {
@@ -96,7 +97,10 @@ export async function renderGhostText(
     const row = sourceRows[sourceLineIndex] ?? [];
     const columns = wordColumns.get(sourceLineIndex);
     if (columns !== undefined && columns.length > 0) {
-      for (const blockRow of wrapGhostWordBlock(row, columns, wrapColumns)) {
+      const blockRows = columns.some((column) => column.loose === true)
+        ? wrapGhostWordBlockLoose(row, columns, wrapColumns)
+        : wrapGhostWordBlock(row, columns, wrapColumns);
+      for (const blockRow of blockRows) {
         children.push(
           renderGhostVisualLine(
             { sourceLineIndex, continuation: false, segments: blockRow.segments },
@@ -228,6 +232,98 @@ export function wrapGhostWordBlock(
   return blockRows;
 }
 
+export function wrapGhostWordBlockLoose(
+  row: GhostSegment[],
+  columns: readonly GhostWordColumn[],
+  maxColumns: number,
+): GhostWordBlockRow[] {
+  const cells = ghostCells(row);
+  const items = columns.map((column) => ghostLooseWordItem(cells, column));
+  const safeMaxColumns = Math.max(1, Math.trunc(maxColumns));
+  const blockRows: GhostWordBlockRow[] = [];
+  let current: GhostLooseWordItem[] = [];
+  let currentWidth = 0;
+
+  for (const item of items) {
+    const nextWidth = current.length === 0
+      ? item.width
+      : currentWidth + 1 + item.width;
+    if (current.length > 0 && nextWidth > safeMaxColumns) {
+      blockRows.push(ghostLooseWordBlockRow(current, safeMaxColumns));
+      current = [item];
+      currentWidth = item.width;
+      continue;
+    }
+    current.push(item);
+    currentWidth = nextWidth;
+  }
+
+  if (current.length > 0) {
+    blockRows.push(ghostLooseWordBlockRow(current, safeMaxColumns));
+  }
+
+  return blockRows;
+}
+
+interface GhostLooseWordItem {
+  cells: GhostCell[];
+  translation: string;
+  width: number;
+}
+
+function ghostLooseWordItem(
+  cells: readonly GhostCell[],
+  column: GhostWordColumn,
+): GhostLooseWordItem {
+  const itemCells = cells.slice(column.srcStartCol, column.srcEndCol);
+  const textWidth = displayWidth(itemCells.map((cell) => cell.text).join(""));
+  const translationWidth = displayWidth(column.translation);
+  return {
+    cells: itemCells,
+    translation: column.translation,
+    width: Math.max(1, textWidth, translationWidth),
+  };
+}
+
+function ghostLooseWordBlockRow(
+  items: readonly GhostLooseWordItem[],
+  maxColumns: number,
+): GhostWordBlockRow {
+  const out: GhostCell[] = [];
+  let meaning = "";
+  let colStart = 0;
+
+  for (let index = 0; index < items.length; index += 1) {
+    const item = items[index];
+    if (item === undefined) {
+      continue;
+    }
+    if (index > 0) {
+      out.push({ text: " ", state: "pending", syntax: "plain" });
+      colStart += 1;
+    }
+    out.push(...item.cells);
+    const itemTextWidth = displayWidth(item.cells.map((cell) => cell.text).join(""));
+    const itemWidth = Math.max(1, item.width);
+    const padding = Math.max(itemWidth - itemTextWidth, 0);
+    for (let pad = 0; pad < padding; pad += 1) {
+      out.push({ text: " ", state: "pending", syntax: "plain" });
+    }
+
+    const limit = Math.max(Math.min(itemWidth, maxColumns - colStart), 0);
+    const translation = truncateToDisplayWidth(item.translation, limit);
+    if (translation.length > 0) {
+      meaning += " ".repeat(Math.max(colStart - displayWidth(meaning), 0)) + translation;
+    }
+    colStart += itemWidth;
+  }
+
+  return {
+    segments: ghostSegmentsFromCells(out),
+    meaning,
+  };
+}
+
 export function ghostWordGroupSegments(
   cells: readonly GhostCell[],
   group: readonly GhostWordColumn[],
@@ -345,7 +441,8 @@ export function ghostWordColumnRows(
   }
   const lineRanges = targetLineRanges(targetText);
   for (const annotation of annotations) {
-    if ((annotation.display ?? "line") !== "word") {
+    const display = annotation.display ?? "line";
+    if (display !== "word" && display !== "word_loose") {
       continue;
     }
     const translation = annotation.translation_zh.trim();
@@ -363,6 +460,7 @@ export function ghostWordColumnRows(
       srcStartCol: annotation.start - lineStart,
       srcEndCol: annotation.end - lineStart,
       translation,
+      ...(display === "word_loose" ? { loose: true } : {}),
     });
     rows.set(sourceLineIndex, existing);
   }

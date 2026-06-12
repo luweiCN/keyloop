@@ -1038,6 +1038,7 @@ export function wordFormSettingsFromContext(
       enabled_in_comprehensive:
         context.wordBreakdownSettings?.enabled_in_comprehensive ?? true,
       max_items_per_group: context.wordBreakdownSettings?.max_items_per_group ?? 6,
+      word_repeats: context.wordBreakdownSettings?.word_repeats ?? 2,
     },
   };
 }

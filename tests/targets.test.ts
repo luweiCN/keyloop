@@ -744,7 +744,7 @@ describe("target generation core", () => {
     expect(target.text).not.toContain("de allocation");
   });
 
-  test("standalone long-word breakdown annotates the word group end", () => {
+  test("standalone long-word breakdown lays out word items with one translation each", () => {
     const library = testLibrary();
     library.long_words = [
       {
@@ -763,19 +763,86 @@ describe("target generation core", () => {
         records: [],
         plan: testPlan(),
         library,
+        wordBreakdownSettings: {
+          enabled_in_comprehensive: true,
+          max_items_per_group: 6,
+          word_repeats: 1,
+        },
       },
       { profile: "standalone", domain: "programming", maxItems: 1 },
     );
 
-    const lastLine = "spec specification";
-    const start = target.text.indexOf(lastLine);
-    expect(target.text).toBe("specification specification\nspec specification");
+    const firstItem = "specification";
+    const aliasItem = "spec specification";
+    const aliasStart = target.text.indexOf(aliasItem);
+    expect(target.text).toBe("specification spec specification");
     expect(target.annotations).toEqual([
       {
-        start,
-        end: start + lastLine.length,
+        start: 0,
+        end: firstItem.length,
         translation_zh: "规格说明（技术规范）",
-        display: "line",
+        display: "word",
+      },
+      {
+        start: aliasStart,
+        end: aliasStart + aliasItem.length,
+        translation_zh: "规格说明（技术规范）",
+        display: "word",
+      },
+    ]);
+  });
+
+  test("standalone long-word breakdown repeats only the word item text", () => {
+    const library = testLibrary();
+    library.long_words = [
+      {
+        word: "deallocation",
+        parts: ["de", "allocation"],
+        domain: "programming",
+        tier: 3,
+        source_id: "test",
+        note_zh: "释放（归还内存资源）",
+      },
+      {
+        word: "authentication",
+        parts: ["authentic", "ation"],
+        domain: "programming",
+        tier: 3,
+        source_id: "test",
+        note_zh: "认证",
+      },
+    ];
+
+    const target = buildLongWordBreakdownPracticeTarget(
+      {
+        records: [],
+        plan: testPlan(),
+        library,
+        wordBreakdownSettings: {
+          enabled_in_comprehensive: true,
+          max_items_per_group: 6,
+          word_repeats: 3,
+        },
+        random: () => 0.99,
+      },
+      { profile: "standalone", domain: "programming", maxItems: 2 },
+    );
+
+    expect(target.text).toBe(
+      "deallocation deallocation deallocation authentication authentication authentication",
+    );
+    expect(target.annotations).toEqual([
+      {
+        start: 0,
+        end: "deallocation deallocation deallocation".length,
+        translation_zh: "释放（归还内存资源）",
+        display: "word_loose",
+      },
+      {
+        start: "deallocation deallocation deallocation ".length,
+        end: target.text.length,
+        translation_zh: "认证",
+        display: "word_loose",
       },
     ]);
   });

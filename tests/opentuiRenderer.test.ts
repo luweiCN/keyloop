@@ -464,6 +464,54 @@ describe("OpenTUI renderer adapter", () => {
     ]).replace(/\n/gu, "")).toBe("狡猾的狐狸先生");
   });
 
+  test("packs repeated long-word items without a uniform grid", async () => {
+    const running: OpenTuiAppState = {
+      language: "zh",
+      route: {
+        screen: "running",
+        source_item: "technical_long_words",
+        target: {
+          mode: "words",
+          text:
+            "alpha alpha beta beta gamma gamma delta delta",
+          source: "keyloop:module:word-breakdown:alpha",
+          annotations: [
+            { start: 0, end: 11, translation_zh: "甲", display: "word_loose" },
+            { start: 12, end: 21, translation_zh: "乙", display: "word_loose" },
+            { start: 22, end: 33, translation_zh: "很长的伽马释义", display: "word_loose" },
+            { start: 34, end: 45, translation_zh: "丁", display: "word_loose" },
+          ],
+        },
+      },
+    };
+    const kit = fakeKit();
+
+    await withStdoutColumns(40, async () => {
+      await renderOpenTuiAppOnce(running, kit);
+    });
+
+    expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+      (child) => child.props.id,
+    )).toEqual([
+      "keyloop-ghost-line-0",
+      "keyloop-ghost-meaning-line-0",
+      "keyloop-ghost-line-1",
+      "keyloop-ghost-meaning-line-1",
+    ]);
+    expect(flattenContent([
+      findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode,
+    ]).replace(/\n/gu, "")).toBe("alpha alpha beta beta");
+    expect(flattenContent([
+      findNodeById(kit.addedNodes, "keyloop-ghost-meaning-line-0") as FakeNode,
+    ]).replace(/\n/gu, "")).toBe("甲          乙");
+    expect(flattenContent([
+      findNodeById(kit.addedNodes, "keyloop-ghost-line-1") as FakeNode,
+    ]).replace(/\n/gu, "")).toBe("gamma gamma    delta delta");
+    expect(flattenContent([
+      findNodeById(kit.addedNodes, "keyloop-ghost-meaning-line-1") as FakeNode,
+    ]).replace(/\n/gu, "")).toBe("很长的伽马释义 丁");
+  });
+
   test("wraps long decomposition rows and shows the full translation below", async () => {
     const text =
       "information in in for for ma ma tion tion information information information";

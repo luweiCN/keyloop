@@ -573,7 +573,8 @@ function wordBreakdownSettingsEqual(
 ): boolean {
   return (
     left.enabled_in_comprehensive === right.enabled_in_comprehensive &&
-    left.max_items_per_group === right.max_items_per_group
+    left.max_items_per_group === right.max_items_per_group &&
+    left.word_repeats === right.word_repeats
   );
 }
 

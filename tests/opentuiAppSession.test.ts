@@ -468,6 +468,7 @@ describe("OpenTUI app session", () => {
       wordBreakdownSettings: {
         enabled_in_comprehensive: true,
         max_items_per_group: 6,
+        word_repeats: 2,
       },
       personalVocabularySettings: {
         enabled_in_comprehensive: true,

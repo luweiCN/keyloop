@@ -326,6 +326,11 @@ export const everydayLiveOptionSources = new Set([
   "everyday_word_decomposition",
 ]);
 
+export const wordBreakdownLiveOptionSources = new Set([
+  "technical_long_words",
+  "long_word_breakdown",
+]);
+
 /**
  * Whether a running screen for this source item supports the Ctrl+O live
  * options popup. Single source for both the key handling (startRunner) and
@@ -334,6 +339,7 @@ export const everydayLiveOptionSources = new Set([
 export function liveOptionsAvailableForSource(sourceItem: string): boolean {
   return (
     everydayLiveOptionSources.has(sourceItem) ||
+    wordBreakdownLiveOptionSources.has(sourceItem) ||
     submenuForStandaloneItem(sourceItem as OpenTuiMenuItemId) === "code"
   );
 }

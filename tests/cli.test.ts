@@ -1113,6 +1113,7 @@ function defaultPreferences(language: Language) {
     word_breakdown: {
       enabled_in_comprehensive: true,
       max_items_per_group: 6,
+      word_repeats: 2,
     },
     personal_vocabulary: {
       enabled_in_comprehensive: true,

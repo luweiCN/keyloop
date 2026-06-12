@@ -511,36 +511,15 @@ export function buildLongWordBreakdownPracticeTarget(
 ): PracticeTarget {
   const candidates = standaloneLongWordCandidates(context, options);
   const firstWord = candidates[0]?.word ?? "none";
-  let text = "";
-  const annotations: PracticeTargetAnnotation[] = [];
-  for (const candidate of candidates) {
-    if (text.length > 0) {
-      text += "\n";
-    }
-    const start = text.length;
-    const lines = breakdownCandidateLines(candidate);
-    text += lines.join("\n");
-    const annotationLineIndex = Math.max(0, lines.length - 1);
-    const annotationStart =
-      start +
-      lines
-        .slice(0, annotationLineIndex)
-        .reduce((sum, line) => sum + line.length + 1, 0);
-    const annotationLine = lines[annotationLineIndex] ?? "";
-    if (candidate.note_zh !== undefined) {
-      annotations.push({
-        start: annotationStart,
-        end: annotationStart + annotationLine.length,
-        translation_zh: candidate.note_zh,
-        display: "line",
-      });
-    }
-  }
+  const wordRepeats = wordBreakdownWordRepeats(context);
+  const annotated = annotatedOptionalTokenText(
+    candidates.flatMap((candidate) => breakdownCandidateTextItems(candidate, wordRepeats)),
+  );
   return {
     mode: "words",
-    text,
+    text: annotated.text,
     source: `keyloop:module:word-breakdown:${firstWord}`,
-    ...(annotations.length === 0 ? {} : { annotations }),
+    ...(annotated.annotations.length === 0 ? {} : { annotations: annotated.annotations }),
   };
 }
 
@@ -897,6 +876,13 @@ interface AnnotationTextItem {
   display?: PracticeTargetAnnotation["display"];
 }
 
+interface OptionalAnnotationTextItem {
+  text: string;
+  translation_zh?: string;
+  source_title?: string;
+  display?: PracticeTargetAnnotation["display"];
+}
+
 interface AnnotatedTargetText {
   text: string;
   annotations: PracticeTargetAnnotation[];
@@ -940,6 +926,26 @@ function annotatedLineText(
   return { text, annotations };
 }
 
+function annotatedOptionalTokenText(items: OptionalAnnotationTextItem[]): AnnotatedTargetText {
+  let text = "";
+  const annotations: NonNullable<PracticeTarget["annotations"]> = [];
+  for (let index = 0; index < items.length; index += 1) {
+    const item = items[index];
+    if (item === undefined) {
+      continue;
+    }
+    if (index > 0) {
+      text += " ";
+    }
+    const start = text.length;
+    text += item.text;
+    if (item.translation_zh !== undefined) {
+      annotations.push(annotationForOptionalItem(start, text.length, item, item.translation_zh));
+    }
+  }
+  return { text, annotations };
+}
+
 function combineAnnotatedBlocks(
   blocks: AnnotatedTargetText[],
   separator = "\n",
@@ -975,6 +981,21 @@ function annotationForItem(
     start,
     end,
     translation_zh: item.translation_zh,
+    ...(item.source_title === undefined ? {} : { source_title: item.source_title }),
+    ...(item.display === undefined ? {} : { display: item.display }),
+  };
+}
+
+function annotationForOptionalItem(
+  start: number,
+  end: number,
+  item: OptionalAnnotationTextItem,
+  translation_zh: string,
+): NonNullable<PracticeTarget["annotations"]>[number] {
+  return {
+    start,
+    end,
+    translation_zh,
     ...(item.source_title === undefined ? {} : { source_title: item.source_title }),
     ...(item.display === undefined ? {} : { display: item.display }),
   };
@@ -1659,7 +1680,10 @@ function longWordBreakdownLines(
     usedWords.add(key);
     focusCandidates.push(candidate);
   }
-  const focusLines = focusCandidates.flatMap(breakdownCandidateLines);
+  const wordRepeats = wordBreakdownWordRepeats(context);
+  const focusLines = focusCandidates.flatMap((candidate) =>
+    breakdownCandidateLines(candidate, wordRepeats),
+  );
   const dueWords = new Set([
     ...context.plan.focus_words.map((word) => word.toLowerCase()),
     ...feedbackTerms.map((word) => word.toLowerCase()),
@@ -1673,7 +1697,9 @@ function longWordBreakdownLines(
     .filter((entry) => dueWords.has(entry.word.toLowerCase()))
     .filter((entry) => !usedWords.has(entry.word.toLowerCase()))
     .slice(0, remainingBuiltInCount)
-    .flatMap((entry) => breakdownCandidateLines(breakdownCandidateFromLongWord(entry)));
+    .flatMap((entry) =>
+      breakdownCandidateLines(breakdownCandidateFromLongWord(entry), wordRepeats),
+    );
   return [...personalLines, ...focusLines, ...builtInLines];
 }
 
@@ -1695,13 +1721,16 @@ function everydayLongWordBreakdownLines(
     ...context.plan.focus_words.map((word) => word.toLowerCase()),
     ...recentFeedbackTerms(context.records).map((word) => word.toLowerCase()),
   ]);
+  const wordRepeats = wordBreakdownWordRepeats(context);
   const remainingBuiltInCount = Math.max(0, maxEntries - personalEntries.length);
   const builtInLines = context.library.long_words
     .filter(isEverydayLongWordEntry)
     .filter((entry) => dueWords.has(entry.word.toLowerCase()))
     .filter((entry) => !usedWords.has(entry.word.toLowerCase()))
     .slice(0, remainingBuiltInCount)
-    .flatMap((entry) => breakdownCandidateLines(breakdownCandidateFromLongWord(entry)));
+    .flatMap((entry) =>
+      breakdownCandidateLines(breakdownCandidateFromLongWord(entry), wordRepeats),
+    );
   return [...personalLines, ...builtInLines];
 }
 
@@ -1716,6 +1745,7 @@ function wordBreakdownMaxItems(
     context.wordBreakdownSettings ?? {
       enabled_in_comprehensive: true,
       max_items_per_group: 6,
+      word_repeats: 2,
     };
   return settings.enabled_in_comprehensive
     ? Math.min(
@@ -1796,11 +1826,11 @@ function breakdownCandidateFromLongWord(entry: LongWordEntry): BreakdownCandidat
   };
 }
 
-function breakdownCandidateLines(candidate: BreakdownCandidate): string[] {
-  const lines = [`${candidate.word} ${candidate.word}`];
+function breakdownCandidateLines(candidate: BreakdownCandidate, wordRepeats = 2): string[] {
+  const lines = [repeatedWordText(candidate.word, wordRepeats)];
   const alias = firstTrimmedAlias(candidate.aliases);
   if (alias !== undefined) {
-    lines.push(`${alias} ${candidate.word}`);
+    lines.push(`${alias} ${repeatedWordText(candidate.word, wordRepeats)}`);
   }
   if (candidate.identifierForms) {
     const pascal = pascalCase(candidate.parts);
@@ -1814,6 +1844,47 @@ function breakdownCandidateLines(candidate: BreakdownCandidate): string[] {
     );
   }
   return lines;
+}
+
+function breakdownCandidateTextItems(
+  candidate: BreakdownCandidate,
+  wordRepeats: number,
+): OptionalAnnotationTextItem[] {
+  const display: PracticeTargetAnnotation["display"] =
+    wordRepeats > 1 ? "word_loose" : "word";
+  const items: OptionalAnnotationTextItem[] = [
+    {
+      text: repeatedWordText(candidate.word, wordRepeats),
+      ...(candidate.note_zh === undefined
+        ? {}
+        : { translation_zh: candidate.note_zh, display }),
+    },
+  ];
+  const alias = firstTrimmedAlias(candidate.aliases);
+  if (alias !== undefined) {
+    items.push({
+      text: `${alias} ${repeatedWordText(candidate.word, wordRepeats)}`,
+      ...(candidate.note_zh === undefined
+        ? {}
+        : { translation_zh: candidate.note_zh, display }),
+    });
+  }
+  return items;
+}
+
+function repeatedWordText(word: string, repeats: number): string {
+  return Array.from({ length: normalizedWordRepeats(repeats) }, () => word).join(" ");
+}
+
+function wordBreakdownWordRepeats(context: BuildTargetContext): number {
+  return normalizedWordRepeats(context.wordBreakdownSettings?.word_repeats ?? 2);
+}
+
+function normalizedWordRepeats(value: number): number {
+  if (!Number.isFinite(value)) {
+    return 2;
+  }
+  return Math.min(5, Math.max(1, Math.floor(value)));
 }
 
 function firstTrimmedAlias(aliases: string[] | undefined): string | undefined {

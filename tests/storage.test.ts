@@ -49,6 +49,7 @@ describe("storage model defaults", () => {
     expect(preferences.everyday_english.decomposition_word_repeats).toBe(3);
     expect(preferences.word_breakdown.enabled_in_comprehensive).toBe(true);
     expect(preferences.word_breakdown.max_items_per_group).toBe(6);
+    expect(preferences.word_breakdown.word_repeats).toBe(2);
     expect(preferences.personal_vocabulary.enabled_in_comprehensive).toBe(true);
     expect(preferences.personal_vocabulary.daily_review_limit).toBe(8);
   });

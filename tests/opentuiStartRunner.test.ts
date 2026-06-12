@@ -1291,6 +1291,87 @@ describe("OpenTUI start runner", () => {
     });
   }
 
+  test("standalone technical long-word options popup changes repeat count", async () => {
+    const kit = fakeKit({ keyInput: true });
+    let nowMs = 10_000;
+    const runner = createOpenTuiStartRunner({
+      kit,
+      nowMs: () => nowMs,
+    });
+    const plan: DailyPracticePlan = {
+      run_id: "",
+      run_number: 0,
+      target_minutes: 4,
+      completed_ms: 0,
+      lessons: [
+        {
+          id: "standalone:technical_long_words",
+          kind: "words",
+          module: "programming_basics",
+          category: "word_breakdown",
+          mix_profile: "standalone",
+          estimated_minutes: 4,
+          target: {
+            mode: "words",
+            text: "deallocation deallocation",
+            source: "test:first",
+          },
+          reason_zh: "",
+          reason_en: "",
+        },
+      ],
+    };
+    const library = refreshLibrary();
+    library.long_words = [
+      {
+        word: "deallocation",
+        parts: ["de", "allocation"],
+        domain: "programming",
+        tier: 3,
+        source_id: "test",
+        note_zh: "释放",
+      },
+    ];
+    const context: StartRunnerContext = {
+      ...contextWithPlan(plan),
+      sourceItem: "technical_long_words",
+      targetContext: {
+        records: [],
+        plan: refreshPlan(),
+        library,
+        wordBreakdownSettings: {
+          enabled_in_comprehensive: true,
+          max_items_per_group: 6,
+          word_repeats: 2,
+        },
+      },
+    };
+
+    const runPromise = runner(context);
+    await kit.waitForKeyListener(1);
+
+    kit.emitKey({ name: "o", sequence: "\x0f", ctrl: true });
+    await kit.waitForRenderRequest(1);
+    let content = flattenContent(kit.addedNodes);
+    expect(findNodeById(kit.addedNodes, "keyloop-practice-options-popup")).toBeDefined();
+    expect(content).toContain("Whole repeats");
+    expect(content).toContain("2");
+
+    kit.emitKey({ name: "right", sequence: "\x1b[C" });
+    await kit.waitForRenderRequest(2);
+
+    content = flattenContent(kit.addedNodes).replace(/\n/gu, "");
+    expect(content).toContain("Whole repeats");
+    expect(content).toContain("‹ 3 ›");
+    expect(content).toContain("deallocation deallocation deallocation");
+    expect(findNodeById(kit.addedNodes, "keyloop-practice-options-popup")).toBeDefined();
+
+    kit.emitKey({ name: "c", sequence: "c", ctrl: true });
+    const result = await runPromise;
+
+    expect(result.completedRecords).toEqual([]);
+  });
+
   test("standalone code options popup can open from completion after the result popup is dismissed", async () => {
     const kit = fakeKit({ keyInput: true });
     let nowMs = 9_300;

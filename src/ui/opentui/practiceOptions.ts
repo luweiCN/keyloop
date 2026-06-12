@@ -1,6 +1,7 @@
 import type {
   CodePracticeConfig,
   EverydayEnglishSettings,
+  UserPreferences,
 } from "../../domain/model";
 import type { StartRunnerContext } from "../../cli";
 import type { OpenTuiMenuItemId, OpenTuiPracticeOptionsState } from "./appModel";
@@ -8,6 +9,7 @@ import {
   cloneCodeConfig,
   isLiveCodeSettingsEnabled,
   isLiveEverydayOptionsEnabled,
+  isLiveWordBreakdownOptionsEnabled,
 } from "./runnerSelection";
 import {
   codeDifficultyLabel,
@@ -39,6 +41,8 @@ export const everydaySentenceCountControls = [3, 5, 8, 10] as const;
 
 export const everydayRepeatControls = [1, 3, 5] as const;
 
+export const wordBreakdownRepeatControls = [1, 2, 3, 5] as const;
+
 export type LiveCodeControl = "difficulty" | "length" | "refresh";
 
 export type LiveEverydayControl =
@@ -54,9 +58,12 @@ export type LiveEverydayControl =
   | "decomposition_part_repeats"
   | "decomposition_word_repeats";
 
+export type LiveWordBreakdownControl = "word_repeats";
+
 export type PracticeOptionControl =
   | { domain: "code"; control: LiveCodeControl }
-  | { domain: "everyday"; control: LiveEverydayControl };
+  | { domain: "everyday"; control: LiveEverydayControl }
+  | { domain: "word_breakdown"; control: LiveWordBreakdownControl };
 
 export type PostCompletionAction =
   | "continue"
@@ -131,9 +138,10 @@ export function practiceOptionsStateForContext(
   selectedIndex: number,
   language: StartRunnerContext["language"],
 ): OpenTuiPracticeOptionsState {
-  const items =
-    isLiveCodeSettingsEnabled(context)
-      ? codePracticeOptionItems(context.codeConfig, language)
+  const items = isLiveCodeSettingsEnabled(context)
+    ? codePracticeOptionItems(context.codeConfig, language)
+    : isLiveWordBreakdownOptionsEnabled(context)
+      ? wordBreakdownPracticeOptionItems(wordBreakdownSettingsForContext(context), language)
       : everydayPracticeOptionItems(
           context.sourceItem,
           everydaySettingsForContext(context),
@@ -241,6 +249,19 @@ export function everydayPracticeOptionItems(
   }
 }
 
+export function wordBreakdownPracticeOptionItems(
+  settings: UserPreferences["word_breakdown"],
+  language: StartRunnerContext["language"],
+): OpenTuiPracticeOptionsState["items"] {
+  return [
+    {
+      id: "word_breakdown_word_repeats",
+      label: language === "zh" ? "完整词重复" : "Whole repeats",
+      value: String(settings.word_repeats),
+    },
+  ];
+}
+
 export function nextPracticeOptionsIndex(
   context: StartRunnerContext,
   index: number,
@@ -262,6 +283,9 @@ export function practiceOptionControlForIndex(
   }
   const sourceItem = context.sourceItem;
   if (!isLiveEverydayOptionsEnabled(context)) {
+    if (isLiveWordBreakdownOptionsEnabled(context)) {
+      return { domain: "word_breakdown", control: "word_repeats" };
+    }
     return undefined;
   }
   switch (sourceItem) {
@@ -299,6 +323,17 @@ export function practiceOptionControlForIndex(
   }
 }
 
+export function wordBreakdownSettingsForContext(
+  context: StartRunnerContext,
+): UserPreferences["word_breakdown"] {
+  return {
+    enabled_in_comprehensive: true,
+    max_items_per_group: 6,
+    word_repeats: 2,
+    ...context.targetContext?.wordBreakdownSettings,
+  };
+}
+
 export function everydaySettingsForContext(context: StartRunnerContext): EverydayEnglishSettings {
   return {
     word_range: "1000",
@@ -315,6 +350,24 @@ export function everydaySettingsForContext(context: StartRunnerContext): Everyda
     include_phrases: true,
     ...context.targetContext?.everydaySettings,
   };
+}
+
+export function nextWordBreakdownSettingsForControl(
+  settings: UserPreferences["word_breakdown"],
+  control: LiveWordBreakdownControl,
+  direction: -1 | 1,
+): UserPreferences["word_breakdown"] {
+  switch (control) {
+    case "word_repeats":
+      return {
+        ...settings,
+        word_repeats: cycleNumberOption(
+          wordBreakdownRepeatControls,
+          settings.word_repeats,
+          direction,
+        ),
+      };
+  }
 }
 
 export function nextEverydaySettingsForControl(

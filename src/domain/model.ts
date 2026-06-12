@@ -118,7 +118,7 @@ export interface PracticeTargetAnnotation {
   display?: PracticeTargetAnnotationDisplay;
 }
 
-export type PracticeTargetAnnotationDisplay = "word" | "line" | "article";
+export type PracticeTargetAnnotationDisplay = "word" | "word_loose" | "line" | "article";
 
 export interface PracticeTargetCodeBlock {
   start_line: number;
@@ -213,6 +213,7 @@ export interface UserPreferences {
   word_breakdown: {
     enabled_in_comprehensive: boolean;
     max_items_per_group: number;
+    word_repeats: EverydayRepeatCount;
   };
   personal_vocabulary: {
     enabled_in_comprehensive: boolean;
@@ -400,6 +401,7 @@ const everydaySentenceLengths = ["short", "medium", "long", "mixed"] as const;
 const everydayGroupWordCounts = [10, 20, 30, 50] as const;
 const everydaySentenceCounts = [3, 5, 8, 10] as const;
 const everydayRepeatCounts = [1, 3, 5] as const;
+const wordBreakdownRepeatCounts = [1, 2, 3, 5] as const;
 
 export function parsePracticeTarget(value: unknown): PracticeTarget {
   const object = asObject(value);
@@ -417,7 +419,10 @@ export function parsePracticeTarget(value: unknown): PracticeTarget {
 function parsePracticeTargetAnnotation(value: unknown): PracticeTargetAnnotation {
   const object = asObject(value);
   const sourceTitle = optionalString(object.source_title);
-  const display = optionalLiteral(object.display, ["word", "line", "article"] as const);
+  const display = optionalLiteral(
+    object.display,
+    ["word", "word_loose", "line", "article"] as const,
+  );
   return {
     start: numberValue(object.start),
     end: numberValue(object.end),
@@ -531,6 +536,11 @@ export function parseUserPreferences(value: unknown): UserPreferences {
         true,
       ),
       max_items_per_group: numberValue(wordBreakdown.max_items_per_group, 6),
+      word_repeats: nearestNumberOption(
+        numberValue(wordBreakdown.word_repeats, 2),
+        wordBreakdownRepeatCounts,
+        2,
+      ),
     },
     personal_vocabulary: {
       enabled_in_comprehensive: booleanValue(
@@ -716,6 +726,7 @@ export function defaultUserPreferences(
     word_breakdown: {
       enabled_in_comprehensive: true,
       max_items_per_group: 6,
+      word_repeats: 2,
     },
     personal_vocabulary: {
       enabled_in_comprehensive: true,
