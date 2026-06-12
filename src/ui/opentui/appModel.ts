@@ -13,6 +13,7 @@ import {
   type CodeFilterPreference,
   type CodePracticeConfig,
   type DailyPracticePlan,
+  type TrainingModule,
   type CodePracticeOption,
   type CodeStyleSettings,
   type EverydayEnglishSettings,
@@ -170,6 +171,7 @@ export interface OpenTuiStateOptions {
   customLibraries?: CustomLibrary[] | undefined;
   dictionaryTier?: DictionaryTier | undefined;
   youdaoTtsCredentialStatus?: OpenTuiYoudaoTtsCredentialStatus | undefined;
+  enabledModules?: TrainingModule[] | undefined;
 }
 
 export type OpenTuiReturnRoute =
@@ -336,6 +338,7 @@ export interface OpenTuiSessionState {
   dictionaryTier?: DictionaryTier | undefined;
   youdaoTtsCredentialStatus?: OpenTuiYoudaoTtsCredentialStatus | undefined;
   today_elapsed_ms?: number | undefined;
+  enabledModules?: TrainingModule[] | undefined;
 }
 
 export interface OpenTuiAppState extends OpenTuiSessionState {
@@ -1087,6 +1090,9 @@ function appState(
   if (options.codeFilters !== undefined) {
     state.codeFilters = cloneCodeFilterState(options.codeFilters);
   }
+  if (options.enabledModules !== undefined) {
+    state.enabledModules = [...options.enabledModules];
+  }
   if (options.codeSettings !== undefined) {
     state.codeSettings = cloneCodeSettings(options.codeSettings);
   }
@@ -1131,13 +1137,17 @@ function buildTargetContextForState(
   const wordFormSettings = state.wordFormSettings;
   const wordAudioSettings = state.wordAudioSettings;
   const customLibrarySettings = state.customLibrarySettings;
+  const enabledModules = state.enabledModules;
+  const customLibraries = state.customLibraries;
   if (
     codeConfig === undefined &&
     codeStyle === undefined &&
     everydaySettings === undefined &&
     wordFormSettings === undefined &&
     wordAudioSettings === undefined &&
-    customLibrarySettings === undefined
+    customLibrarySettings === undefined &&
+    enabledModules === undefined &&
+    customLibraries === undefined
   ) {
     return context;
   }
@@ -1146,6 +1156,8 @@ function buildTargetContextForState(
     ...(codeConfig === undefined ? {} : { codeConfig }),
     ...(codeStyle === undefined ? {} : { codeStyle }),
     ...(everydaySettings === undefined ? {} : { everydaySettings }),
+    ...(enabledModules === undefined ? {} : { enabledModules }),
+    ...(customLibraries === undefined ? {} : { customLibraries }),
     ...(wordFormSettings === undefined
       ? {}
       : {
@@ -1183,6 +1195,9 @@ export function stateOptions(state: OpenTuiAppState): OpenTuiStateOptions {
   }
   if (state.customLibraries !== undefined) {
     options.customLibraries = state.customLibraries;
+  }
+  if (state.enabledModules !== undefined) {
+    options.enabledModules = state.enabledModules;
   }
   if (state.dictionaryTier !== undefined) {
     options.dictionaryTier = state.dictionaryTier;

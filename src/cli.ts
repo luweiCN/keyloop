@@ -516,6 +516,17 @@ function preferencesFromAppState(
   }
 
   if (
+    state.enabledModules !== undefined &&
+    (state.enabledModules.length !== preferences.enabled_modules.length ||
+      state.enabledModules.some(
+        (module) => !preferences.enabled_modules.includes(module),
+      ))
+  ) {
+    next.enabled_modules = [...state.enabledModules];
+    changed = true;
+  }
+
+  if (
     state.everydaySettings !== undefined &&
     !everydaySettingsEqual(state.everydaySettings, preferences.everyday_english)
   ) {

@@ -371,6 +371,9 @@ export async function runOpenTuiAppSession(
       customLibrarySettings: customLibrarySettingsFromContext(context),
       speedUnit: speedUnitFromContext(context),
       customLibraries: context.customLibraries ?? [],
+      ...(context.enabledModules === undefined
+        ? {}
+        : { enabledModules: context.enabledModules }),
       dictionaryTier: context.dictionary?.tier ?? "none",
       youdaoTtsCredentialStatus: context.youdaoTtsCredentialStatus ?? "none",
       todayElapsedMs: todayElapsedMsFromContext(context),
