@@ -6,21 +6,22 @@ import { describe, expect, test } from "bun:test";
 
 import {
   audioCachePath,
+  playWordAudio,
   resolveWordAudio,
   wordAudioProviderChain,
   type WordAudioFetcher,
 } from "../src/audio/wordAudio";
 
 describe("word audio providers", () => {
-  test("routes everyday and custom words through free providers before paid tts", () => {
+  test("routes word sources through a stable youdao-first provider chain", () => {
     expect(wordAudioProviderChain("everyday_words")).toEqual([
-      "dictionaryapi",
       "youdao_dictvoice",
+      "dictionaryapi",
       "youdao_tts",
     ]);
     expect(wordAudioProviderChain("library_words")).toEqual([
-      "dictionaryapi",
       "youdao_dictvoice",
+      "dictionaryapi",
       "youdao_tts",
     ]);
     expect(wordAudioProviderChain("programming_terms")).toEqual([
@@ -73,6 +74,7 @@ describe("word audio providers", () => {
       expect(second).toBe(first);
       expect(existsSync(first ?? "")).toBe(true);
       expect(calls).toEqual([
+        "https://dict.youdao.com/dictvoice?audio=hello&type=2",
         "https://api.dictionaryapi.dev/api/v2/entries/en/hello",
         "https://audio.example/hello.mp3",
       ]);
@@ -150,6 +152,16 @@ describe("word audio providers", () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
+  });
+
+  test("passes normalized volume to the audio player", async () => {
+    const played: Array<{ path: string; volume: number }> = [];
+
+    await playWordAudio("cached.mp3", (path, volume) => {
+      played.push({ path, volume });
+    }, 0.42);
+
+    expect(played).toEqual([{ path: "cached.mp3", volume: 0.42 }]);
   });
 });
 

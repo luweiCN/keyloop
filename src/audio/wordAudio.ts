@@ -16,7 +16,7 @@ export type WordAudioFetcher = (
   init?: RequestInit,
 ) => Promise<Response>;
 
-export type AudioPlayer = (path: string) => Promise<void> | void;
+export type AudioPlayer = (path: string, volume: number) => Promise<void> | void;
 
 export interface ResolveWordAudioOptions {
   text: string;
@@ -39,7 +39,7 @@ export function wordAudioProviderChain(sourceItem: WordAudioSourceItem): WordAud
   switch (sourceItem) {
     case "everyday_words":
     case "library_words":
-      return ["dictionaryapi", "youdao_dictvoice", "youdao_tts"];
+      return ["youdao_dictvoice", "dictionaryapi", "youdao_tts"];
     case "programming_terms":
     case "technical_long_words":
       return ["youdao_dictvoice", "youdao_tts"];
@@ -67,12 +67,17 @@ export async function resolveWordAudio(
     return null;
   }
   const fetcher = options.fetcher ?? fetch;
-  for (const provider of wordAudioProviderChain(options.sourceItem)) {
+  const providers = wordAudioProviderChain(options.sourceItem);
+  for (const provider of providers) {
     const voice = cacheVoiceForProvider(provider, options.voiceName);
     const path = audioCachePath(options.cacheDir, provider, text, voice);
     if (existsSync(path)) {
       return path;
     }
+  }
+  for (const provider of providers) {
+    const voice = cacheVoiceForProvider(provider, options.voiceName);
+    const path = audioCachePath(options.cacheDir, provider, text, voice);
     const audio = await fetchProviderAudio(provider, text, fetcher, options);
     if (audio === null) {
       continue;
@@ -87,8 +92,9 @@ export async function resolveWordAudio(
 export async function playWordAudio(
   path: string,
   player: AudioPlayer = defaultAudioPlayer,
+  volume = 1,
 ): Promise<void> {
-  await player(path);
+  await player(path, clampAudioVolume(volume));
 }
 
 async function fetchProviderAudio(
@@ -227,11 +233,18 @@ function isObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-async function defaultAudioPlayer(path: string): Promise<void> {
+function clampAudioVolume(volume: number): number {
+  if (!Number.isFinite(volume)) {
+    return 1;
+  }
+  return Math.min(Math.max(volume, 0), 1);
+}
+
+async function defaultAudioPlayer(path: string, volume: number): Promise<void> {
   if (process.platform !== "darwin") {
     return;
   }
-  const proc = Bun.spawn(["afplay", path], {
+  const proc = Bun.spawn(["afplay", "-v", String(volume), path], {
     stdout: "ignore",
     stderr: "ignore",
   });
