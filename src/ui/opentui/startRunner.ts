@@ -73,11 +73,13 @@ import {
   everydaySettingsForContext,
   nextCodeConfigForControl,
   nextEverydaySettingsForControl,
+  nextProgrammingTermsSettingsForControl,
   nextWordBreakdownSettingsForControl,
   nextPracticeOptionsIndex,
   postCompletionActionForCodeControl,
   practiceOptionControlForIndex,
   practiceOptionsStateForContext,
+  programmingTermsSettingsForContext,
   wordBreakdownSettingsForContext,
   type LiveCodeControl,
   type LiveEverydayControl,
@@ -101,6 +103,7 @@ import {
   saveRecordIfAvailable,
   startRunnerContextWithCodeConfig,
   startRunnerContextWithEverydaySettings,
+  startRunnerContextWithProgrammingTermsSettings,
   startRunnerContextWithRuntimeSettings,
   startRunnerContextWithWordBreakdownSettings,
   todayElapsedMsForRun,
@@ -147,6 +150,10 @@ export async function openTuiStartRunner(
     context.targetContext?.wordBreakdownSettings === undefined
       ? undefined
       : wordBreakdownSettingsForContext(context);
+  let runtimeProgrammingTermsSettings =
+    context.targetContext?.programmingTermsSettings === undefined
+      ? undefined
+      : programmingTermsSettingsForContext(context);
   let openPracticeOptionsOnNextRun = false;
 
   for (;;) {
@@ -155,6 +162,7 @@ export async function openTuiStartRunner(
       runtimeCodeConfig,
       runtimeEverydaySettings,
       runtimeWordBreakdownSettings,
+      runtimeProgrammingTermsSettings,
     );
     const shouldOpenPracticeOptions = openPracticeOptionsOnNextRun;
     const forced = forcedSelection;
@@ -196,6 +204,9 @@ export async function openTuiStartRunner(
       },
       (nextSettings) => {
         runtimeWordBreakdownSettings = { ...nextSettings };
+      },
+      (nextSettings) => {
+        runtimeProgrammingTermsSettings = { ...nextSettings };
       },
       shouldOpenPracticeOptions,
     );
@@ -363,6 +374,9 @@ export async function runLessonUntilComplete(
   onEverydaySettingsChange: (settings: EverydayEnglishSettings) => void,
   onWordBreakdownSettingsChange: (
     settings: UserPreferences["word_breakdown"],
+  ) => void,
+  onProgrammingTermsSettingsChange: (
+    settings: UserPreferences["programming_terms"],
   ) => void,
   openPracticeOptionsInitially = false,
 ): Promise<LessonRunResult> {
@@ -610,6 +624,39 @@ export async function runLessonUntilComplete(
         ),
       );
     };
+    const refreshProgrammingTermsTarget = async (
+      nextSettings: UserPreferences["programming_terms"],
+      currentMs: number,
+      refreshOptions: { keepPracticeOptionsOpen?: boolean } = {},
+    ): Promise<void> => {
+      currentContext = startRunnerContextWithProgrammingTermsSettings(
+        currentContext,
+        nextSettings,
+      );
+      onProgrammingTermsSettingsChange(nextSettings);
+      selection = refreshedStandaloneSelection(currentContext, selection, []);
+      session = createLiveSession(selection.lesson.target);
+      startedAtMs = undefined;
+      pausedTotalMs = 0;
+      pausedAtMs = undefined;
+      resumeOnNextInput = false;
+      clearTimer();
+      await saveCheckpointForSelection(currentContext, selection);
+      if (refreshOptions.keepPracticeOptionsOpen === true) {
+        pausedAtMs = currentMs;
+        practiceOptionsOpen = true;
+        await renderPracticeOptions(currentMs);
+        return;
+      }
+      await transitionRenderer(
+        runningStateForLesson(
+          currentContext,
+          selection.lesson,
+          liveStateFromSession(session, 0),
+          todayElapsedBeforeLesson,
+        ),
+      );
+    };
     const refreshStandaloneTarget = async (currentMs: number): Promise<void> => {
       selection = refreshedStandaloneSelection(currentContext, selection, []);
       session = createLiveSession(selection.lesson.target);
@@ -702,6 +749,7 @@ export async function runLessonUntilComplete(
             everydaySettings: currentContext.targetContext?.everydaySettings,
             wordFormSettings: {
               word_breakdown: wordBreakdownSettingsForContext(currentContext),
+              programming_terms: programmingTermsSettingsForContext(currentContext),
             },
             speedUnit: currentContext.speedUnit ?? "wpm",
             todayElapsedMs: todayElapsedBeforeLesson,
@@ -741,6 +789,17 @@ export async function runLessonUntilComplete(
           direction,
         );
         await refreshWordBreakdownTarget(nextSettings, currentMs, {
+          keepPracticeOptionsOpen: true,
+        });
+        return;
+      }
+      if (option.domain === "programming_terms") {
+        const nextSettings = nextProgrammingTermsSettingsForControl(
+          programmingTermsSettingsForContext(currentContext),
+          option.control,
+          direction,
+        );
+        await refreshProgrammingTermsTarget(nextSettings, currentMs, {
           keepPracticeOptionsOpen: true,
         });
         return;

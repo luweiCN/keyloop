@@ -45,6 +45,7 @@ export interface BuildTargetContext {
   localCodeSource?: string;
   localCodeScanError?: string;
   everydaySettings?: Partial<EverydayEnglishSettings>;
+  programmingTermsSettings?: UserPreferences["programming_terms"];
   wordBreakdownSettings?: UserPreferences["word_breakdown"];
   random?: () => number;
   now?: Date;
@@ -370,12 +371,12 @@ export function buildLessonWords(
   ).join("\n");
 }
 
-function programmingTermsTarget(
-  library: Pick<ContentLibrary, "programming_words">,
-  random: () => number,
-): PracticeTarget {
+function programmingTermsTarget(context: BuildTargetContext, random: () => number): PracticeTarget {
+  const wordRepeats = programmingTermsWordRepeats(context);
   const annotated = annotatedOptionalTokenText(
-    selectedProgrammingWordEntries(library, random).map(programmingWordAnnotationItem),
+    selectedProgrammingWordEntries(context.library, random).map((entry) =>
+      programmingWordAnnotationItem(entry, wordRepeats),
+    ),
   );
   return {
     mode: "words",
@@ -405,11 +406,16 @@ function selectedProgrammingWordEntries(
   });
 }
 
-function programmingWordAnnotationItem(entry: ProgrammingWordEntry): OptionalAnnotationTextItem {
+function programmingWordAnnotationItem(
+  entry: ProgrammingWordEntry,
+  wordRepeats: number,
+): OptionalAnnotationTextItem {
   const note = entry.note_zh.trim();
   return {
-    text: entry.word,
-    ...(note.length === 0 ? {} : { translation_zh: note, display: "word" as const }),
+    text: repeatedWordText(entry.word, wordRepeats),
+    ...(note.length === 0
+      ? {}
+      : { translation_zh: note, display: wordAnnotationDisplay(wordRepeats) }),
   };
 }
 
@@ -463,7 +469,7 @@ export function buildProgrammingBasicsPracticeTarget(
 ): PracticeTarget {
   switch (kind) {
     case "programming_terms":
-      return programmingTermsTarget(context.library, context.random ?? Math.random);
+      return programmingTermsTarget(context, context.random ?? Math.random);
     case "naming_styles":
       return {
         mode: "case",
@@ -836,6 +842,7 @@ function everydaySettings(context: BuildTargetContext): EverydayEnglishSettings 
   return {
     word_range: "1000",
     word_count: 20,
+    word_repeats: 1,
     sentence_level: "cet4",
     sentence_length: "mixed",
     sentence_count: 5,
@@ -1248,13 +1255,17 @@ function everydayWordsTarget(
   const words = everydayWordItems(context, scope.tierLimit);
   fillFrom(words, context.library.common_words, settings.word_count);
   shuffleInPlace(words, random);
+  const wordRepeats = everydayWordRepeats(settings);
+  const repeatedWords = words
+    .slice(0, settings.word_count)
+    .map((word) => repeatedWordText(word, wordRepeats));
   const sourcePrefix =
     scope.sourceSlug === undefined
       ? "keyloop:module:everyday-english"
       : `keyloop:module:everyday-english:${scope.sourceSlug}`;
   return {
     mode: "words",
-    text: chunkWords(words.slice(0, settings.word_count), 8).join("\n"),
+    text: repeatedWords.join(" "),
     source: `${sourcePrefix}:words-${settings.word_count}`,
   };
 }
@@ -1270,11 +1281,12 @@ function everydayTranslatedWordsTarget(context: BuildTargetContext): PracticeTar
   const selected = [...available];
   shuffleInPlace(selected, random);
   const picked = selected.slice(0, settings.word_count);
+  const wordRepeats = everydayWordRepeats(settings);
   const annotated = annotatedTokenText(
     picked.map((entry) => ({
-      text: entry.word,
+      text: repeatedWordText(entry.word, wordRepeats),
       translation_zh: conciseChineseMeaning(entry.translation_zh),
-      display: "word",
+      display: wordAnnotationDisplay(wordRepeats),
     })),
   );
   return {
@@ -1881,14 +1893,12 @@ function breakdownCandidateTextItems(
   candidate: BreakdownCandidate,
   wordRepeats: number,
 ): OptionalAnnotationTextItem[] {
-  const display: PracticeTargetAnnotation["display"] =
-    wordRepeats > 1 ? "word_loose" : "word";
   return [
     {
       text: repeatedWordText(candidate.word, wordRepeats),
       ...(candidate.note_zh === undefined
         ? {}
-        : { translation_zh: candidate.note_zh, display }),
+        : { translation_zh: candidate.note_zh, display: wordAnnotationDisplay(wordRepeats) }),
     },
   ];
 }
@@ -1901,9 +1911,21 @@ function wordBreakdownWordRepeats(context: BuildTargetContext): number {
   return normalizedWordRepeats(context.wordBreakdownSettings?.word_repeats ?? 2);
 }
 
-function normalizedWordRepeats(value: number): number {
+function programmingTermsWordRepeats(context: BuildTargetContext): number {
+  return normalizedWordRepeats(context.programmingTermsSettings?.word_repeats ?? 1, 1);
+}
+
+function everydayWordRepeats(settings: EverydayEnglishSettings): number {
+  return normalizedWordRepeats(settings.word_repeats, 1);
+}
+
+function wordAnnotationDisplay(wordRepeats: number): PracticeTargetAnnotation["display"] {
+  return wordRepeats > 1 ? "word_loose" : "word";
+}
+
+function normalizedWordRepeats(value: number, fallback = 2): number {
   if (!Number.isFinite(value)) {
-    return 2;
+    return fallback;
   }
   return Math.min(10, Math.max(1, Math.floor(value)));
 }

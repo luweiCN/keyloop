@@ -327,6 +327,7 @@ export const everydayLiveOptionSources = new Set([
 ]);
 
 export const wordBreakdownLiveOptionSources = new Set([
+  "programming_terms",
   "technical_long_words",
   "long_word_breakdown",
 ]);

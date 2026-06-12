@@ -1115,6 +1115,9 @@ function defaultPreferences(language: Language) {
       max_items_per_group: 6,
       word_repeats: 2,
     },
+    programming_terms: {
+      word_repeats: 1,
+    },
     personal_vocabulary: {
       enabled_in_comprehensive: true,
       daily_review_limit: 8,
@@ -1126,6 +1129,7 @@ function defaultEverydayEnglishSettings() {
   return {
     word_range: "1000" as const,
     word_count: 20,
+    word_repeats: 1,
     sentence_level: "cet4" as const,
     sentence_length: "mixed" as const,
     sentence_count: 5,

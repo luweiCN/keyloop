@@ -46,12 +46,24 @@ describe("storage model defaults", () => {
     expect(preferences.code_practice.length).toBe("adaptive");
     expect(preferences.everyday_english.word_count).toBe(20);
     expect(preferences.everyday_english.word_range).toBe("1000");
+    expect(preferences.everyday_english.word_repeats).toBe(1);
     expect(preferences.everyday_english.decomposition_word_repeats).toBe(3);
     expect(preferences.word_breakdown.enabled_in_comprehensive).toBe(true);
     expect(preferences.word_breakdown.max_items_per_group).toBe(6);
     expect(preferences.word_breakdown.word_repeats).toBe(2);
+    expect(preferences.programming_terms.word_repeats).toBe(1);
     expect(preferences.personal_vocabulary.enabled_in_comprehensive).toBe(true);
     expect(preferences.personal_vocabulary.daily_review_limit).toBe(8);
+  });
+
+  test("preferences allow ten everyday word repeats", () => {
+    const preferences = parseUserPreferences({
+      everyday_english: {
+        word_repeats: 10,
+      },
+    });
+
+    expect(preferences.everyday_english.word_repeats).toBe(10);
   });
 
   test("preferences allow ten long-word repeats", () => {
@@ -62,6 +74,16 @@ describe("storage model defaults", () => {
     });
 
     expect(preferences.word_breakdown.word_repeats).toBe(10);
+  });
+
+  test("preferences allow ten programming term repeats", () => {
+    const preferences = parseUserPreferences({
+      programming_terms: {
+        word_repeats: 10,
+      },
+    });
+
+    expect(preferences.programming_terms.word_repeats).toBe(10);
   });
 
   test("preferences preserve intermediate long-word repeat counts", () => {

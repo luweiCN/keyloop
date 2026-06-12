@@ -121,6 +121,7 @@ export interface OpenTuiCodeFilterState {
 
 export interface OpenTuiWordFormSettings {
   word_breakdown: UserPreferences["word_breakdown"];
+  programming_terms: UserPreferences["programming_terms"];
 }
 
 export interface OpenTuiCodeSettings {
@@ -1098,7 +1099,10 @@ function buildTargetContextForState(
     ...(everydaySettings === undefined ? {} : { everydaySettings }),
     ...(wordFormSettings === undefined
       ? {}
-      : { wordBreakdownSettings: wordFormSettings.word_breakdown }),
+      : {
+          wordBreakdownSettings: wordFormSettings.word_breakdown,
+          programmingTermsSettings: wordFormSettings.programming_terms,
+        }),
   };
 }
 
@@ -1138,6 +1142,7 @@ export function defaultEverydaySettings(): EverydayEnglishSettings {
   return {
     word_range: "1000",
     word_count: 20,
+    word_repeats: 1,
     sentence_level: "cet4",
     sentence_length: "mixed",
     sentence_count: 5,
@@ -1183,6 +1188,9 @@ export function defaultWordFormSettings(): OpenTuiWordFormSettings {
       max_items_per_group: 6,
       word_repeats: 2,
     },
+    programming_terms: {
+      word_repeats: 1,
+    },
   };
 }
 
@@ -1191,6 +1199,7 @@ function cloneWordFormSettings(
 ): OpenTuiWordFormSettings {
   return {
     word_breakdown: { ...settings.word_breakdown },
+    programming_terms: { ...settings.programming_terms },
   };
 }
 

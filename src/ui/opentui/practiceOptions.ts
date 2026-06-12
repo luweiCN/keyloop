@@ -48,6 +48,7 @@ export type LiveCodeControl = "difficulty" | "length" | "refresh";
 export type LiveEverydayControl =
   | "word_range"
   | "word_count"
+  | "word_repeats"
   | "sentence_level"
   | "sentence_length"
   | "sentence_count"
@@ -59,11 +60,13 @@ export type LiveEverydayControl =
   | "decomposition_word_repeats";
 
 export type LiveWordBreakdownControl = "word_repeats";
+export type LiveProgrammingTermsControl = "word_repeats";
 
 export type PracticeOptionControl =
   | { domain: "code"; control: LiveCodeControl }
   | { domain: "everyday"; control: LiveEverydayControl }
-  | { domain: "word_breakdown"; control: LiveWordBreakdownControl };
+  | { domain: "word_breakdown"; control: LiveWordBreakdownControl }
+  | { domain: "programming_terms"; control: LiveProgrammingTermsControl };
 
 export type PostCompletionAction =
   | "continue"
@@ -141,7 +144,9 @@ export function practiceOptionsStateForContext(
   const items = isLiveCodeSettingsEnabled(context)
     ? codePracticeOptionItems(context.codeConfig, language)
     : isLiveWordBreakdownOptionsEnabled(context)
-      ? wordBreakdownPracticeOptionItems(wordBreakdownSettingsForContext(context), language)
+      ? context.sourceItem === "programming_terms"
+        ? programmingTermsPracticeOptionItems(programmingTermsSettingsForContext(context), language)
+        : wordBreakdownPracticeOptionItems(wordBreakdownSettingsForContext(context), language)
       : everydayPracticeOptionItems(
           context.sourceItem,
           everydaySettingsForContext(context),
@@ -188,6 +193,11 @@ export function everydayPracticeOptionItems(
           id: "everyday_word_count",
           label: language === "zh" ? "每组单词" : "Words per group",
           value: String(settings.word_count),
+        },
+        {
+          id: "everyday_word_repeats",
+          label: language === "zh" ? "单词重复" : "Word repeats",
+          value: String(settings.word_repeats),
         },
       ];
     case "everyday_sentences":
@@ -262,6 +272,19 @@ export function wordBreakdownPracticeOptionItems(
   ];
 }
 
+export function programmingTermsPracticeOptionItems(
+  settings: UserPreferences["programming_terms"],
+  language: StartRunnerContext["language"],
+): OpenTuiPracticeOptionsState["items"] {
+  return [
+    {
+      id: "programming_terms_word_repeats",
+      label: language === "zh" ? "单词重复" : "Word repeats",
+      value: String(settings.word_repeats),
+    },
+  ];
+}
+
 export function nextPracticeOptionsIndex(
   context: StartRunnerContext,
   index: number,
@@ -284,6 +307,9 @@ export function practiceOptionControlForIndex(
   const sourceItem = context.sourceItem;
   if (!isLiveEverydayOptionsEnabled(context)) {
     if (isLiveWordBreakdownOptionsEnabled(context)) {
+      if (context.sourceItem === "programming_terms") {
+        return { domain: "programming_terms", control: "word_repeats" };
+      }
       return { domain: "word_breakdown", control: "word_repeats" };
     }
     return undefined;
@@ -292,7 +318,7 @@ export function practiceOptionControlForIndex(
     case "everyday_words":
       return {
         domain: "everyday",
-        control: index <= 0 ? "word_range" : "word_count",
+        control: index <= 0 ? "word_range" : index === 1 ? "word_count" : "word_repeats",
       };
     case "everyday_sentences":
       return {
@@ -334,10 +360,20 @@ export function wordBreakdownSettingsForContext(
   };
 }
 
+export function programmingTermsSettingsForContext(
+  context: StartRunnerContext,
+): UserPreferences["programming_terms"] {
+  return {
+    word_repeats: 1,
+    ...context.targetContext?.programmingTermsSettings,
+  };
+}
+
 export function everydaySettingsForContext(context: StartRunnerContext): EverydayEnglishSettings {
   return {
     word_range: "1000",
     word_count: 20,
+    word_repeats: 1,
     sentence_level: "cet4",
     sentence_length: "mixed",
     sentence_count: 5,
@@ -370,6 +406,24 @@ export function nextWordBreakdownSettingsForControl(
   }
 }
 
+export function nextProgrammingTermsSettingsForControl(
+  settings: UserPreferences["programming_terms"],
+  control: LiveProgrammingTermsControl,
+  direction: -1 | 1,
+): UserPreferences["programming_terms"] {
+  switch (control) {
+    case "word_repeats":
+      return {
+        ...settings,
+        word_repeats: cycleNumberOption(
+          wordBreakdownRepeatControls,
+          settings.word_repeats,
+          direction,
+        ),
+      };
+  }
+}
+
 export function nextEverydaySettingsForControl(
   settings: EverydayEnglishSettings,
   control: LiveEverydayControl,
@@ -385,6 +439,15 @@ export function nextEverydaySettingsForControl(
       return {
         ...settings,
         word_count: cycleNumberOption(everydayWordCountControls, settings.word_count, direction),
+      };
+    case "word_repeats":
+      return {
+        ...settings,
+        word_repeats: cycleNumberOption(
+          wordBreakdownRepeatControls,
+          settings.word_repeats,
+          direction,
+        ),
       };
     case "sentence_level":
       return {

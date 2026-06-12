@@ -132,6 +132,7 @@ describe("domain model compatibility", () => {
     expect(defaults.everyday_english).toEqual({
       word_range: "1000",
       word_count: 20,
+      word_repeats: 1,
       sentence_level: "cet4",
       sentence_length: "mixed",
       sentence_count: 5,
@@ -144,6 +145,7 @@ describe("domain model compatibility", () => {
       include_phrases: true,
     });
     expect(legacy.everyday_english.word_count).toBe(20);
+    expect(legacy.everyday_english.word_repeats).toBe(1);
     expect(legacy.everyday_english.sentence_length).toBe("short");
     expect(legacy.everyday_english.include_phrases).toBe(false);
   });

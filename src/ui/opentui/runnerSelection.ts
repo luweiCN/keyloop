@@ -211,19 +211,42 @@ export function startRunnerContextWithWordBreakdownSettings(
   };
 }
 
+export function startRunnerContextWithProgrammingTermsSettings(
+  context: StartRunnerContext,
+  programmingTermsSettings: UserPreferences["programming_terms"],
+): StartRunnerContext {
+  if (context.targetContext === undefined) {
+    return context;
+  }
+  return {
+    ...context,
+    targetContext: {
+      ...context.targetContext,
+      programmingTermsSettings,
+    },
+  };
+}
+
 export function startRunnerContextWithRuntimeSettings(
   context: StartRunnerContext,
   codeConfig: CodePracticeConfig,
   everydaySettings: EverydayEnglishSettings | undefined,
   wordBreakdownSettings?: UserPreferences["word_breakdown"] | undefined,
+  programmingTermsSettings?: UserPreferences["programming_terms"] | undefined,
 ): StartRunnerContext {
   const withCode = startRunnerContextWithCodeConfig(context, codeConfig);
   const withEveryday = everydaySettings === undefined
     ? withCode
     : startRunnerContextWithEverydaySettings(withCode, everydaySettings);
-  return wordBreakdownSettings === undefined
+  const withWordBreakdown = wordBreakdownSettings === undefined
     ? withEveryday
     : startRunnerContextWithWordBreakdownSettings(withEveryday, wordBreakdownSettings);
+  return programmingTermsSettings === undefined
+    ? withWordBreakdown
+    : startRunnerContextWithProgrammingTermsSettings(
+        withWordBreakdown,
+        programmingTermsSettings,
+      );
 }
 
 export function cloneCodeConfig(config: CodePracticeConfig): CodePracticeConfig {

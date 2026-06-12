@@ -1157,6 +1157,7 @@ describe("OpenTUI start runner", () => {
         everydaySettings: {
           word_range: "200",
           word_count: 3,
+          word_repeats: 1,
           sentence_level: "cet4",
           sentence_length: "mixed",
           sentence_count: 5,
@@ -1188,6 +1189,81 @@ describe("OpenTUI start runner", () => {
     // The first word may be split into cursor + remainder segments, so join
     // the flattened segments before matching.
     expect(content.replace(/\n/gu, "")).toContain("information");
+    expect(findNodeById(kit.addedNodes, "keyloop-practice-options-popup")).toBeDefined();
+
+    kit.emitKey({ name: "c", sequence: "c", ctrl: true });
+    const result = await runPromise;
+
+    expect(result.completedRecords).toEqual([]);
+  });
+
+  test("standalone everyday word options popup changes repeat count", async () => {
+    const kit = fakeKit({ keyInput: true });
+    let nowMs = 10_000;
+    const runner = createOpenTuiStartRunner({
+      kit,
+      nowMs: () => nowMs,
+    });
+    const plan: DailyPracticePlan = {
+      run_id: "",
+      run_number: 0,
+      target_minutes: 4,
+      completed_ms: 0,
+      lessons: [
+        {
+          id: "standalone:everyday_words",
+          kind: "words",
+          module: "everyday_english",
+          category: "everyday_words",
+          mix_profile: "standalone",
+          estimated_minutes: 4,
+          target: { mode: "words", text: "today", source: "test:first" },
+          reason_zh: "",
+          reason_en: "",
+        },
+      ],
+    };
+    const context: StartRunnerContext = {
+      ...contextWithPlan(plan),
+      sourceItem: "everyday_words",
+      targetContext: {
+        records: [],
+        plan: refreshPlan(),
+        library: everydayWordLibrary(),
+        everydaySettings: {
+          word_range: "200",
+          word_count: 3,
+          word_repeats: 1,
+          sentence_level: "cet4",
+          sentence_length: "mixed",
+          sentence_count: 5,
+          article_level: "cet4",
+          article_length: "short",
+          decomposition_level: "cet4",
+          decomposition_word_count: 10,
+          decomposition_part_repeats: 3,
+          decomposition_word_repeats: 3,
+          include_phrases: true,
+        },
+      },
+    };
+
+    const runPromise = runner(context);
+    await kit.waitForKeyListener(1);
+
+    kit.emitKey({ name: "o", sequence: "\x0f", ctrl: true });
+    await kit.waitForRenderRequest(1);
+    kit.emitKey({ name: "down", sequence: "\x1b[B" });
+    await kit.waitForRenderRequest(2);
+    kit.emitKey({ name: "down", sequence: "\x1b[B" });
+    await kit.waitForRenderRequest(3);
+    kit.emitKey({ name: "right", sequence: "\x1b[C" });
+    await kit.waitForRenderRequest(4);
+
+    const content = flattenContent(kit.addedNodes).replace(/\n/gu, "");
+    expect(content).toContain("Word repeats");
+    expect(content).toContain("‹ 2 ›");
+    expect(content).toContain("today today");
     expect(findNodeById(kit.addedNodes, "keyloop-practice-options-popup")).toBeDefined();
 
     kit.emitKey({ name: "c", sequence: "c", ctrl: true });
@@ -1364,6 +1440,77 @@ describe("OpenTUI start runner", () => {
     expect(content).toContain("Whole repeats");
     expect(content).toContain("‹ 3 ›");
     expect(content).toContain("deallocation deallocation deallocation");
+    expect(findNodeById(kit.addedNodes, "keyloop-practice-options-popup")).toBeDefined();
+
+    kit.emitKey({ name: "c", sequence: "c", ctrl: true });
+    const result = await runPromise;
+
+    expect(result.completedRecords).toEqual([]);
+  });
+
+  test("standalone programming term options popup changes repeat count", async () => {
+    const kit = fakeKit({ keyInput: true });
+    let nowMs = 10_000;
+    const runner = createOpenTuiStartRunner({
+      kit,
+      nowMs: () => nowMs,
+    });
+    const plan: DailyPracticePlan = {
+      run_id: "",
+      run_number: 0,
+      target_minutes: 4,
+      completed_ms: 0,
+      lessons: [
+        {
+          id: "standalone:programming_terms",
+          kind: "common_words",
+          module: "programming_basics",
+          category: "programming_terms",
+          mix_profile: "standalone",
+          estimated_minutes: 4,
+          target: { mode: "words", text: "request", source: "test:first" },
+          reason_zh: "",
+          reason_en: "",
+        },
+      ],
+    };
+    const library = refreshLibrary();
+    library.programming_words = [
+      { word: "request", note_zh: "请求（HTTP/接口入参）" },
+      { word: "state", note_zh: "状态（组件/应用状态）" },
+    ];
+    const context: StartRunnerContext = {
+      ...contextWithPlan(plan),
+      sourceItem: "programming_terms",
+      targetContext: {
+        records: [],
+        plan: refreshPlan(),
+        library,
+        random: () => 0,
+        programmingTermsSettings: {
+          word_repeats: 1,
+        },
+      },
+    };
+
+    const runPromise = runner(context);
+    await kit.waitForKeyListener(1);
+
+    kit.emitKey({ name: "o", sequence: "\x0f", ctrl: true });
+    await kit.waitForRenderRequest(1);
+    let content = flattenContent(kit.addedNodes);
+    expect(findNodeById(kit.addedNodes, "keyloop-practice-options-popup")).toBeDefined();
+    expect(content).toContain("Word repeats");
+    expect(content).toContain("1");
+
+    kit.emitKey({ name: "right", sequence: "\x1b[C" });
+    await kit.waitForRenderRequest(2);
+
+    content = flattenContent(kit.addedNodes).replace(/\n/gu, "");
+    expect(content).toContain("Word repeats");
+    expect(content).toContain("‹ 2 ›");
+    expect(content).toContain("state state");
+    expect(content).toContain("request request");
     expect(findNodeById(kit.addedNodes, "keyloop-practice-options-popup")).toBeDefined();
 
     kit.emitKey({ name: "c", sequence: "c", ctrl: true });

@@ -147,6 +147,43 @@ describe("target generation core", () => {
     ]);
   });
 
+  test("programming word repeat setting repeats terms without repeating translations", () => {
+    const library = testLibrary();
+    library.programming_words = [
+      { word: "request", note_zh: "请求（HTTP/接口入参）" },
+      { word: "state", note_zh: "状态（组件/应用状态）" },
+    ];
+
+    const target = buildProgrammingBasicsPracticeTarget(
+      {
+        records: [],
+        plan: unfocusedPlan(),
+        library,
+        random: () => 0,
+        programmingTermsSettings: {
+          word_repeats: 3,
+        },
+      },
+      "programming_terms",
+    );
+
+    expect(target.text).toBe("state state state request request request");
+    expect(target.annotations).toEqual([
+      {
+        start: 0,
+        end: "state state state".length,
+        translation_zh: "状态（组件/应用状态）",
+        display: "word_loose",
+      },
+      {
+        start: "state state state ".length,
+        end: "state state state request request request".length,
+        translation_zh: "请求（HTTP/接口入参）",
+        display: "word_loose",
+      },
+    ]);
+  });
+
   test("everyday mix includes phrases and matching sentence length when enabled", () => {
     const target = buildEverydayPracticeTarget(
       {
@@ -250,6 +287,45 @@ describe("target generation core", () => {
     expect(target.text).not.toContain("\n");
     expect(target.text.split(" ")).toHaveLength(12);
     expect(target.annotations).toHaveLength(12);
+  });
+
+  test("everyday word repeat setting repeats words without repeating translations", () => {
+    const library = testLibrary();
+    library.everyday_words.entries = [
+      dailyWord("today", 1, "200", "high_school", "今天"),
+      dailyWord("practice", 2, "200", "high_school", "练习"),
+    ];
+
+    const target = buildEverydayPracticeTarget(
+      {
+        records: [],
+        plan: unfocusedPlan(),
+        library,
+        everydaySettings: dailySettings({
+          word_range: "200",
+          word_count: 2,
+          word_repeats: 3,
+        }),
+        random: () => 0,
+      },
+      "words",
+    );
+
+    expect(target.text).toBe("practice practice practice today today today");
+    expect(target.annotations).toEqual([
+      {
+        start: 0,
+        end: "practice practice practice".length,
+        translation_zh: "练习",
+        display: "word_loose",
+      },
+      {
+        start: "practice practice practice ".length,
+        end: "practice practice practice today today today".length,
+        translation_zh: "今天",
+        display: "word_loose",
+      },
+    ]);
   });
 
   test("everyday mix shuffles word pool with injected random", () => {
@@ -2055,6 +2131,7 @@ function dailySettings(
     decomposition_word_count: 10,
     decomposition_part_repeats: 3,
     decomposition_word_repeats: 3,
+    word_repeats: 1,
     include_phrases: true,
     ...overrides,
   };

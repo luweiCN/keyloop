@@ -322,6 +322,7 @@ async function runApp(
       codeStyleSettings: preferences.code_style,
       codeStyle: preferences.code_style,
       everydaySettings: preferences.everyday_english,
+      programmingTermsSettings: preferences.programming_terms,
       wordBreakdownSettings: preferences.word_breakdown,
       speedUnit: preferences.speed_unit,
       todayElapsedMs: todayElapsedMsFromRecords(records, options.now ?? new Date()),
@@ -448,6 +449,7 @@ function preferencesFromAppState(
     code_style: { ...preferences.code_style },
     everyday_english: { ...preferences.everyday_english },
     word_breakdown: { ...preferences.word_breakdown },
+    programming_terms: { ...preferences.programming_terms },
   };
 
   if (state.language !== initialLanguage) {
@@ -508,6 +510,15 @@ function preferencesFromAppState(
       next.word_breakdown = { ...state.wordFormSettings.word_breakdown };
       changed = true;
     }
+    if (
+      !programmingTermsSettingsEqual(
+        state.wordFormSettings.programming_terms,
+        preferences.programming_terms,
+      )
+    ) {
+      next.programming_terms = { ...state.wordFormSettings.programming_terms };
+      changed = true;
+    }
   }
 
   return changed ? next : undefined;
@@ -540,6 +551,7 @@ function everydaySettingsEqual(
   return (
     left.word_range === right.word_range &&
     left.word_count === right.word_count &&
+    left.word_repeats === right.word_repeats &&
     left.sentence_level === right.sentence_level &&
     left.sentence_length === right.sentence_length &&
     left.sentence_count === right.sentence_count &&
@@ -578,6 +590,12 @@ function wordBreakdownSettingsEqual(
   );
 }
 
+function programmingTermsSettingsEqual(
+  left: UserPreferences["programming_terms"],
+  right: UserPreferences["programming_terms"],
+): boolean {
+  return left.word_repeats === right.word_repeats;
+}
 
 function parseStartCommand(args: string[]): ParsedStartCommand {
   let mode: Mode = "chars";
@@ -660,6 +678,7 @@ async function runStart(
     codeConfig,
     codeStyle: preferences.code_style,
     everydaySettings: preferences.everyday_english,
+    programmingTermsSettings: preferences.programming_terms,
     wordBreakdownSettings: preferences.word_breakdown,
     localCodeSnippets,
     ...(command.repo === undefined ? {} : { localCodeSource: command.repo }),
@@ -799,6 +818,7 @@ async function startContextFromAppState(
   }
   if (state.wordFormSettings !== undefined) {
     effectiveAppContext.wordBreakdownSettings = state.wordFormSettings.word_breakdown;
+    effectiveAppContext.programmingTermsSettings = state.wordFormSettings.programming_terms;
   }
   const dailyPlan =
     state.route.source_item === "comprehensive"

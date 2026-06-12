@@ -1006,6 +1006,7 @@ function dailySettings(
   return {
     word_range: "1000",
     word_count: 20,
+    word_repeats: 1,
     sentence_level: "cet4",
     sentence_length: "mixed",
     sentence_count: 5,

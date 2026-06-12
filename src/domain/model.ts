@@ -187,6 +187,7 @@ export interface CodeStyleSettings {
 export interface EverydayEnglishSettings {
   word_range: EverydayWordRange;
   word_count: EverydayGroupWordCount;
+  word_repeats: EverydayRepeatCount;
   sentence_level: EverydayLevel;
   sentence_length: EverydaySentenceLength;
   sentence_count: EverydaySentenceCount;
@@ -213,6 +214,9 @@ export interface UserPreferences {
   word_breakdown: {
     enabled_in_comprehensive: boolean;
     max_items_per_group: number;
+    word_repeats: EverydayRepeatCount;
+  };
+  programming_terms: {
     word_repeats: EverydayRepeatCount;
   };
   personal_vocabulary: {
@@ -494,6 +498,7 @@ export function parseUserPreferences(value: unknown): UserPreferences {
   const codePractice = asObject(object.code_practice);
   const codeStyle = asObject(object.code_style);
   const wordBreakdown = asObject(object.word_breakdown);
+  const programmingTerms = asObject(object.programming_terms);
   const personalVocabulary = asObject(object.personal_vocabulary);
   return {
     interface_language: literalIfPresent(
@@ -540,6 +545,13 @@ export function parseUserPreferences(value: unknown): UserPreferences {
         numberValue(wordBreakdown.word_repeats, 2),
         wordBreakdownRepeatCounts,
         2,
+      ),
+    },
+    programming_terms: {
+      word_repeats: nearestNumberOption(
+        programmingTerms.word_repeats,
+        wordBreakdownRepeatCounts,
+        1,
       ),
     },
     personal_vocabulary: {
@@ -712,6 +724,7 @@ export function defaultUserPreferences(
     everyday_english: {
       word_range: "1000",
       word_count: 20,
+      word_repeats: 1,
       sentence_level: "cet4",
       sentence_length: "mixed",
       sentence_count: 5,
@@ -727,6 +740,9 @@ export function defaultUserPreferences(
       enabled_in_comprehensive: true,
       max_items_per_group: 6,
       word_repeats: 2,
+    },
+    programming_terms: {
+      word_repeats: 1,
     },
     personal_vocabulary: {
       enabled_in_comprehensive: true,
@@ -811,6 +827,11 @@ function parseEverydayEnglishSettings(value: unknown): EverydayEnglishSettings {
       object.word_count,
       everydayGroupWordCounts,
       20,
+    ),
+    word_repeats: nearestNumberOption(
+      object.word_repeats,
+      wordBreakdownRepeatCounts,
+      1,
     ),
     sentence_level: literal(object.sentence_level, everydayLevels, "cet4"),
     sentence_length: literal(object.sentence_length, everydaySentenceLengths, "mixed"),

@@ -783,6 +783,7 @@ export function everydaySettingsFromContext(
   return {
     word_range: "1000",
     word_count: 20,
+    word_repeats: 1,
     sentence_level: "cet4",
     sentence_length: "mixed",
     sentence_count: 5,
@@ -1039,6 +1040,9 @@ export function wordFormSettingsFromContext(
         context.wordBreakdownSettings?.enabled_in_comprehensive ?? true,
       max_items_per_group: context.wordBreakdownSettings?.max_items_per_group ?? 6,
       word_repeats: context.wordBreakdownSettings?.word_repeats ?? 2,
+    },
+    programming_terms: {
+      word_repeats: context.programmingTermsSettings?.word_repeats ?? 1,
     },
   };
 }
