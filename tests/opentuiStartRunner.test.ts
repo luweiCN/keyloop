@@ -1600,13 +1600,20 @@ describe("OpenTUI start runner", () => {
   test("word pronunciation plays each active word annotation once while typing", async () => {
     const kit = fakeKit({ keyInput: true });
     let nowMs = 10_000;
-    const played: string[] = [];
+    const played: Array<{ text: string; volumePercent: number }> = [];
+    const prefetched: string[][] = [];
     const runner = createOpenTuiStartRunner({
       kit,
       nowMs: () => nowMs,
       wordAudio: {
+        prefetch: async (requests) => {
+          prefetched.push(requests.map((request) => `${request.text}:${request.volumePercent}`));
+        },
         play: async (request) => {
-          played.push(request.text);
+          played.push({
+            text: request.text,
+            volumePercent: request.volumePercent,
+          });
         },
       },
     });
@@ -1654,15 +1661,19 @@ describe("OpenTUI start runner", () => {
       sourceItem: "everyday_words",
       wordAudioSettings: {
         enabled: true,
+        volume_percent: 70,
       },
     };
 
     const runPromise = runner(context);
     await kit.waitForKeyListener(1);
+    await waitFor(() => prefetched.length === 1);
+
+    expect(prefetched).toEqual([["hello:70", "world:70"]]);
 
     kit.emitKey({ name: "h", sequence: "h" });
     await kit.waitForRenderRequest(1);
-    expect(played).toEqual(["hello"]);
+    expect(played).toEqual([{ text: "hello", volumePercent: 70 }]);
 
     let renderCount = 1;
     for (const char of "ello hello ") {
@@ -1670,7 +1681,10 @@ describe("OpenTUI start runner", () => {
       kit.emitKey({ name: char, sequence: char });
       await kit.waitForRenderRequest(renderCount);
     }
-    expect(played).toEqual(["hello", "world"]);
+    expect(played).toEqual([
+      { text: "hello", volumePercent: 70 },
+      { text: "world", volumePercent: 70 },
+    ]);
 
     kit.emitKey({ name: "c", sequence: "c", ctrl: true });
     const result = await runPromise;
@@ -1681,9 +1695,13 @@ describe("OpenTUI start runner", () => {
   test("word pronunciation stays silent when disabled", async () => {
     const kit = fakeKit({ keyInput: true });
     const played: string[] = [];
+    const prefetched: string[] = [];
     const runner = createOpenTuiStartRunner({
       kit,
       wordAudio: {
+        prefetch: async (requests) => {
+          prefetched.push(...requests.map((request) => request.text));
+        },
         play: async (request) => {
           played.push(request.text);
         },
@@ -1712,6 +1730,7 @@ describe("OpenTUI start runner", () => {
       sourceItem: "everyday_words",
       wordAudioSettings: {
         enabled: false,
+        volume_percent: 100,
       },
     };
 
@@ -1724,6 +1743,7 @@ describe("OpenTUI start runner", () => {
     const result = await runPromise;
 
     expect(played).toEqual([]);
+    expect(prefetched).toEqual([]);
     expect(result.completedRecords).toEqual([]);
   });
 
@@ -2801,4 +2821,17 @@ interface FakeKeyEvent {
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function waitFor(
+  predicate: () => boolean,
+  timeoutMs = 500,
+): Promise<void> {
+  const startedAt = Date.now();
+  while (!predicate()) {
+    if (Date.now() - startedAt > timeoutMs) {
+      throw new Error("timed out waiting for condition");
+    }
+    await delay(5);
+  }
 }

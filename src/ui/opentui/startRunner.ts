@@ -135,10 +135,12 @@ export interface WordAudioPlaybackRequest {
   text: string;
   sourceItem: WordAudioSourceItem;
   dataDir: string;
+  volumePercent: number;
 }
 
 export interface WordAudioPlayback {
   play: (request: WordAudioPlaybackRequest) => Promise<void> | void;
+  prefetch?: (requests: WordAudioPlaybackRequest[]) => Promise<void> | void;
 }
 
 const defaultWordAudioPlayback: WordAudioPlayback = {
@@ -149,7 +151,16 @@ const defaultWordAudioPlayback: WordAudioPlayback = {
       cacheDir: join(request.dataDir, "audio-cache"),
     });
     if (path !== null) {
-      await playWordAudio(path);
+      await playWordAudio(path, undefined, audioVolumeFromPercent(request.volumePercent));
+    }
+  },
+  prefetch: async (requests) => {
+    for (const request of requests) {
+      await resolveWordAudio({
+        text: request.text,
+        sourceItem: request.sourceItem,
+        cacheDir: join(request.dataDir, "audio-cache"),
+      }).catch(() => null);
     }
   },
 };
@@ -197,6 +208,12 @@ export async function openTuiStartRunner(
       ? undefined
       : customLibrarySettingsForContext(context);
   let openPracticeOptionsOnNextRun = false;
+  const withRuntimeSettings = (result: StartRunnerResult): StartRunnerResult => ({
+    ...result,
+    ...(runtimeWordAudioSettings === undefined
+      ? {}
+      : { wordAudioSettings: runtimeWordAudioSettings }),
+  });
 
   for (;;) {
     const runtimeContext = startRunnerContextWithRuntimeSettings(
@@ -215,7 +232,7 @@ export async function openTuiStartRunner(
     openPracticeOptionsOnNextRun = false;
     if (storedSelection === undefined) {
       reusableRenderer?.destroy?.();
-      return { completedRecords };
+      return withRuntimeSettings({ completedRecords });
     }
     const selection =
       forced === undefined
@@ -231,7 +248,7 @@ export async function openTuiStartRunner(
     );
     reusableRenderer = undefined;
     if (renderer.keyInput === undefined) {
-      return { completedRecords };
+      return withRuntimeSettings({ completedRecords });
     }
 
     const runResult = await runLessonUntilComplete(
@@ -264,13 +281,13 @@ export async function openTuiStartRunner(
     if (record === null) {
       if (runResult.renderer !== undefined && context.returnState !== undefined) {
         await runResult.renderer.renderState?.(context.returnState);
-        return {
+        return withRuntimeSettings({
           completedRecords,
           renderer: runResult.renderer,
           state: context.returnState,
-        };
+        });
       }
-      return { completedRecords };
+      return withRuntimeSettings({ completedRecords });
     }
 
     completedRecords.push(record);
@@ -301,19 +318,19 @@ export async function openTuiStartRunner(
     if (completionResult.action === "return") {
       if (context.returnState !== undefined) {
         await completionResult.renderer.renderState?.(context.returnState);
-        return {
+        return withRuntimeSettings({
           completedRecords,
           renderer: completionResult.renderer,
           state: context.returnState,
-        };
+        });
       }
       completionResult.renderer.destroy?.();
-      return { completedRecords };
+      return withRuntimeSettings({ completedRecords });
     }
 
     if (completionResult.action === "stop") {
       completionResult.renderer.destroy?.();
-      return { completedRecords };
+      return withRuntimeSettings({ completedRecords });
     }
 
     reusableRenderer = completionResult.renderer;
@@ -349,7 +366,7 @@ export async function openTuiStartRunner(
         continue;
       }
       await showSummaryPage(context, completedRecords, options, reusableRenderer);
-      return { completedRecords };
+      return withRuntimeSettings({ completedRecords });
     }
   }
 }
@@ -465,9 +482,26 @@ export async function runLessonUntilComplete(
     let lastInputAtMs: number | undefined;
     let timer: ReturnType<typeof setInterval> | undefined;
     let spokenAudioAnnotations = new Set<string>();
+    const prefetchedAudioTargets = new Set<string>();
     const wordAudioPlayback = options.wordAudio ?? defaultWordAudioPlayback;
     const resetSpokenAudioAnnotations = (): void => {
       spokenAudioAnnotations = new Set();
+    };
+    const scheduleWordAudioPrefetch = (): void => {
+      const requests = wordAudioRequestsForTarget(
+        currentContext,
+        selection.lesson.target.annotations,
+      );
+      if (requests.length === 0) {
+        return;
+      }
+      const settings = wordAudioSettingsForContext(currentContext);
+      const key = `${currentContext.sourceItem ?? ""}:${settings.volume_percent}:${selection.lesson.target.source}:${selection.lesson.target.text}`;
+      if (prefetchedAudioTargets.has(key)) {
+        return;
+      }
+      prefetchedAudioTargets.add(key);
+      void Promise.resolve(wordAudioPlayback.prefetch?.(requests)).catch(() => undefined);
     };
     const activeElapsedMs = (currentMs: number): number => {
       if (startedAtMs === undefined) {
@@ -605,6 +639,7 @@ export async function runLessonUntilComplete(
       pausedAtMs = undefined;
       resumeOnNextInput = false;
       clearTimer();
+      scheduleWordAudioPrefetch();
       await saveCheckpointForSelection(currentContext, selection);
       if (refreshOptions.keepPracticeOptionsOpen === true) {
         pausedAtMs = currentMs;
@@ -636,6 +671,7 @@ export async function runLessonUntilComplete(
       pausedAtMs = undefined;
       resumeOnNextInput = false;
       clearTimer();
+      scheduleWordAudioPrefetch();
       await saveCheckpointForSelection(currentContext, selection);
       if (refreshOptions.keepPracticeOptionsOpen === true) {
         pausedAtMs = currentMs;
@@ -670,6 +706,7 @@ export async function runLessonUntilComplete(
       pausedAtMs = undefined;
       resumeOnNextInput = false;
       clearTimer();
+      scheduleWordAudioPrefetch();
       await saveCheckpointForSelection(currentContext, selection);
       if (refreshOptions.keepPracticeOptionsOpen === true) {
         pausedAtMs = currentMs;
@@ -704,6 +741,7 @@ export async function runLessonUntilComplete(
       pausedAtMs = undefined;
       resumeOnNextInput = false;
       clearTimer();
+      scheduleWordAudioPrefetch();
       await saveCheckpointForSelection(currentContext, selection);
       if (refreshOptions.keepPracticeOptionsOpen === true) {
         pausedAtMs = currentMs;
@@ -738,6 +776,7 @@ export async function runLessonUntilComplete(
       pausedAtMs = undefined;
       resumeOnNextInput = false;
       clearTimer();
+      scheduleWordAudioPrefetch();
       await saveCheckpointForSelection(currentContext, selection);
       if (refreshOptions.keepPracticeOptionsOpen === true) {
         pausedAtMs = currentMs;
@@ -763,6 +802,7 @@ export async function runLessonUntilComplete(
         wordAudioSettings: nextSettings,
       };
       onWordAudioSettingsChange(nextSettings);
+      scheduleWordAudioPrefetch();
       if (practiceOptionsOpen) {
         await renderPracticeOptions(currentMs);
       }
@@ -776,6 +816,7 @@ export async function runLessonUntilComplete(
       pausedAtMs = undefined;
       resumeOnNextInput = false;
       clearTimer();
+      scheduleWordAudioPrefetch();
       await saveCheckpointForSelection(currentContext, selection);
       await transitionRenderer(
         runningStateForLesson(
@@ -933,6 +974,7 @@ export async function runLessonUntilComplete(
         const nextSettings = nextWordAudioSettingsForControl(
           wordAudioSettingsForContext(currentContext),
           option.control,
+          direction,
         );
         await updateWordAudioSettings(nextSettings, currentMs);
         return;
@@ -1174,11 +1216,13 @@ export async function runLessonUntilComplete(
           text: annotation.audio_text,
           sourceItem,
           dataDir: currentContext.dataDir,
+          volumePercent: wordAudioSettingsForContext(currentContext).volume_percent,
         }),
       ).catch(() => undefined);
     };
 
     renderer.keyInput?.on("keypress", handleKeypress);
+    scheduleWordAudioPrefetch();
     if (openPracticeOptionsInitially) {
       void showPracticeOptions(nowMs(options));
     }
@@ -1473,6 +1517,46 @@ function activeWordAudioAnnotation(
     }
     return position >= annotation.start && position <= annotation.end;
   });
+}
+
+function wordAudioRequestsForTarget(
+  context: StartRunnerContext,
+  annotations: PracticeTargetAnnotation[] | undefined,
+): WordAudioPlaybackRequest[] {
+  if (!wordAudioSettingsForContext(context).enabled) {
+    return [];
+  }
+  const sourceItem = wordAudioSourceItemForContext(context);
+  if (sourceItem === undefined) {
+    return [];
+  }
+  const settings = wordAudioSettingsForContext(context);
+  const seen = new Set<string>();
+  const requests: WordAudioPlaybackRequest[] = [];
+  for (const annotation of annotations ?? []) {
+    if (annotation.audio_text === undefined) {
+      continue;
+    }
+    if (annotation.display !== "word" && annotation.display !== "word_loose") {
+      continue;
+    }
+    const text = annotation.audio_text.trim();
+    if (text.length === 0 || seen.has(text)) {
+      continue;
+    }
+    seen.add(text);
+    requests.push({
+      text,
+      sourceItem,
+      dataDir: context.dataDir,
+      volumePercent: settings.volume_percent,
+    });
+  }
+  return requests;
+}
+
+function audioVolumeFromPercent(volumePercent: number): number {
+  return Math.min(Math.max(volumePercent, 0), 100) / 100;
 }
 
 
