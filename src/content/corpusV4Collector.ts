@@ -223,14 +223,30 @@ function typeScriptGrammarPath(): string {
   throw new Error("tree-sitter TypeScript grammar wasm not found");
 }
 
+function hasTypeScriptSyntaxError(
+  source: string,
+  filePath: string,
+  scriptKind: ts.ScriptKind,
+): boolean {
+  const compilerOptions: ts.CompilerOptions = {
+    target: ts.ScriptTarget.Latest,
+    ...(scriptKind === ts.ScriptKind.TSX ? { jsx: ts.JsxEmit.Preserve } : {}),
+  };
+  const diagnostics = ts.transpileModule(source, {
+    compilerOptions,
+    fileName: filePath,
+    reportDiagnostics: true,
+  }).diagnostics ?? [];
+  return diagnostics.some((diagnostic) => diagnostic.category === ts.DiagnosticCategory.Error);
+}
+
 function collectTypeScriptFileLevelFallback(
   source: string,
   filePath: string,
   options: CorpusV4SourceOptions,
 ): CorpusV4Record[] {
   const scriptKind = filePath.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
-  const sourceFile = ts.createSourceFile(filePath, source, ts.ScriptTarget.Latest, true, scriptKind);
-  if (sourceFile.parseDiagnostics.length > 0) {
+  if (hasTypeScriptSyntaxError(source, filePath, scriptKind)) {
     return [];
   }
   const normalized = normalizeSnippetText(source);
