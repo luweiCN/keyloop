@@ -12,6 +12,8 @@ KeyLoop 使用 GitHub PR 工作流：
 
 版本发布由 `package.json` 控制。普通代码合并如果没有改版本号，release workflow 会跳过，避免重复发同一个版本。
 
+release 包必须包含 `keyloop` 二进制、`contents/` 运行时语料目录、`README.md` 和 `LICENSE`。Homebrew formula 会把 `keyloop` 安装到 `bin`，并把 `contents/` 安装到同一个版本目录，确保二进制在 Homebrew Cellar 和手动解压目录里都能找到内置语料。
+
 ### 发布一个新版本
 
 1. 修改 `package.json` 里的 `version`。
@@ -64,6 +66,8 @@ KeyLoop uses a GitHub PR workflow:
 5. If the matching `vX.Y.Z` release does not exist, the workflow builds release packages, creates a GitHub Release, and updates the Homebrew tap.
 
 Releases are version-driven. If a merge to `main` does not change the `package.json` version, the release workflow skips publishing to avoid duplicate releases.
+
+Release archives must include the `keyloop` binary, the runtime `contents/` corpus directory, `README.md`, and `LICENSE`. The Homebrew formula installs `keyloop` into `bin` and `contents/` into the same version prefix so the binary can find built-in content both from the Cellar and from manually extracted archives.
 
 ### Publishing A New Version
 

@@ -2,33 +2,37 @@
 
 [English](QUALITY.md)
 
-KeyLoop 是终端打字训练工具，所以代码变更既要检查 Rust 正确性，也要检查 TUI 行为。
+KeyLoop 是基于 TypeScript、Bun 和 OpenTUI 的终端打字训练工具，所以代码变更既要检查类型安全、存储兼容、发布打包，也要检查 TUI 行为。
 
 ## 必跑检查
 
 提交前运行：
 
 ```bash
-cargo fmt --check
-cargo test
-cargo clippy -- -D warnings
+bun install --frozen-lockfile
+bun run typecheck
+bun test tests
+bun run build
+bun run build:binary
+bun run smoke
 ```
 
-`cargo test` 已包含 CLI 集成检查，以及基于 ratatui `TestBackend` 的主要 TUI 页面渲染冒烟测试。
+`bun test tests` 已包含 CLI 集成检查、OpenTUI 渲染测试、存储兼容测试和语料质量检查。`bun run smoke` 还会验证构建后的二进制，以及带运行时 `contents/` 的 release 风格压缩包。
 
 常用冒烟检查：
 
 ```bash
-cargo run -- --help
-cargo run -- plan
-cargo run -- plan --language en
-cargo run -- report today
-cargo run -- import .
+bun src/main.ts --help
+bun src/main.ts plan
+bun src/main.ts plan --language en
+bun src/main.ts report today
+bun src/main.ts sources
+./dist/keyloop sources
 ```
 
 ## TUI Review 重点
 
-- 不要每帧清屏；正常重绘交给 ratatui diff rendering。
+- 不要每帧清屏；正常重绘交给 OpenTUI。
 - 跟打面板保持居中和可读。
 - 中文输入法提交的非 ASCII 字符应被忽略，不能推进练习。
 - 换行和 Tab 标记必须在溢出前换行。

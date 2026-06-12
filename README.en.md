@@ -77,7 +77,7 @@ You can also install from source:
 
 ```bash
 bun install
-bun run build:binary   # produces the dist/keyloop-ts single-file binary
+bun run build:binary   # produces the dist/keyloop single-file binary
 ```
 
 Development runs:
@@ -92,7 +92,7 @@ bun run keyloop plan
 
 The default daily target is 20 minutes. You can finish it in one session or in several short sessions. Each completed lesson adds to today's progress.
 
-Built-in content lives in the root `content/` directory. See [docs/content/CATALOG.md](docs/content/CATALOG.md). Everyday English uses `content/everyday_english.json`, a KeyLoop hand-authored clean corpus for everyday/workplace words, phrases, and short/medium/long sentences. It does not copy external typing-site word lists. Set `KEYLOOP_EVERYDAY_CORPUS=/path/to/everyday.json` to merge a local private corpus with the same schema.
+Built-in runtime content lives in the root `contents/` directory. See [docs/content/CATALOG.md](docs/content/CATALOG.md). Everyday English uses `contents/everyday_english.json`, a KeyLoop hand-authored clean corpus for everyday/workplace words, phrases, and short/medium/long sentences. It does not copy external typing-site word lists. Set `KEYLOOP_EVERYDAY_CORPUS=/path/to/everyday.json` to merge a local private corpus with the same schema.
 
 Code indentation is normalized before practice by removing the shared outer indentation while preserving relative indentation inside functions, HTML/Vue trees, and CSS nesting. In code mode, pressing Enter automatically inserts the expected leading indentation for the next line.
 

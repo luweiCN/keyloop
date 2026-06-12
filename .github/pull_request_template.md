@@ -4,9 +4,12 @@
 
 ## Checks
 
-- [ ] `cargo fmt --check`
-- [ ] `cargo test`
-- [ ] `cargo clippy -- -D warnings`
+- [ ] `bun install --frozen-lockfile`
+- [ ] `bun run typecheck`
+- [ ] `bun test tests`
+- [ ] `bun run build`
+- [ ] `bun run build:binary`
+- [ ] `bun run smoke`
 
 ## TUI / Metrics Notes
 

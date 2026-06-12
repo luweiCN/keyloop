@@ -1,6 +1,6 @@
 {
   "name": "keyloop",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "type": "module",
   "bin": {
@@ -17,6 +17,7 @@
     "smoke:report": "sh -c 'tmp=$(mktemp -d); KEYLOOP_HOME=\"$tmp\" bun src/main.ts report today >/dev/null; rc=$?; rm -rf \"$tmp\"; exit $rc'",
     "smoke:sources": "sh -c 'tmp=$(mktemp -d); KEYLOOP_HOME=\"$tmp\" bun src/main.ts sources >/dev/null; rc=$?; rm -rf \"$tmp\"; exit $rc'",
     "smoke:binary:sources": "sh -c 'root=$(pwd); tmp=$(mktemp -d); cd \"$tmp\"; KEYLOOP_HOME=\"$tmp\" \"$root/dist/keyloop\" sources >/dev/null; rc=$?; rm -rf \"$tmp\"; exit $rc'",
+    "smoke:release:archive": "bun scripts/smokeReleaseArchive.ts",
     "corpus:typing-difficulty": "bun src/tools/analyzeCorpusTypingDifficulty.ts",
     "corpus:build-code-snapshot": "bun src/tools/buildCodeCorpusSnapshot.ts",
     "content:build-everyday-words": "bun src/tools/buildEverydayWordsContent.ts",
@@ -25,7 +26,7 @@
     "content:build-word-decomposition": "bun src/tools/buildEverydayWordDecompositionContent.ts",
     "content:build-dictionary-mini": "bun src/tools/buildDictionaryMini.ts",
     "content:build-programming-basics": "bun src/tools/buildProgrammingBasicsContent.ts",
-    "smoke": "bun run smoke:plan && bun run smoke:report && bun run smoke:sources && bun run smoke:binary:sources",
+    "smoke": "bun run smoke:plan && bun run smoke:report && bun run smoke:sources && bun run smoke:binary:sources && bun run smoke:release:archive",
     "verify:migration": "bun run typecheck && bun test tests && bun run build && bun run build:binary && bun run smoke",
     "verify:all": "bun run verify:migration",
     "content:build-programming-words": "bun src/tools/buildProgrammingWordsContent.ts"

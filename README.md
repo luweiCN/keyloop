@@ -75,7 +75,7 @@ brew install luweiCN/keyloop/keyloop
 
 ```bash
 bun install
-bun run build:binary   # 产出 dist/keyloop-ts 单文件二进制
+bun run build:binary   # 产出 dist/keyloop 单文件二进制
 ```
 
 也可以直接开发运行：
@@ -110,9 +110,9 @@ bun run keyloop plan
 
 ## 内容方向
 
-内置练习内容放在 `content/` 目录。内容结构见 [docs/content/CATALOG.md](docs/content/CATALOG.md)。
+内置运行时练习内容放在 `contents/` 目录。内容结构见 [docs/content/CATALOG.md](docs/content/CATALOG.md)。
 
-日常英语使用 `content/everyday_english.json`，这是 KeyLoop 自有手写清洁语料，覆盖日常/职场常见词、短语和短中长句；不会直接搬运外部打字网站词库。需要加入自己的工作句子或私有表达时，可以用 `KEYLOOP_EVERYDAY_CORPUS=/path/to/everyday.json` 合并本地语料。
+日常英语使用 `contents/everyday_english.json`，这是 KeyLoop 自有手写清洁语料，覆盖日常/职场常见词、短语和短中长句；不会直接搬运外部打字网站词库。需要加入自己的工作句子或私有表达时，可以用 `KEYLOOP_EVERYDAY_CORPUS=/path/to/everyday.json` 合并本地语料。
 
 练习内容会重点丰富：
 
