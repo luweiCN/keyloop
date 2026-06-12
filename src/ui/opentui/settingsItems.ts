@@ -46,7 +46,11 @@ export type OpenTuiFlatSettingsItemKind =
   | "word_audio"
   | "word_audio_volume"
   | "youdao_tts"
-  | "dictionary_status";
+  | "dictionary_status"
+  | "module_foundation"
+  | "module_everyday"
+  | "module_programming"
+  | "module_code";
 
 export interface OpenTuiFlatSettingsItem {
   kind: OpenTuiFlatSettingsItemKind;
@@ -135,8 +139,55 @@ export function openTuiFlatSettingsItems(state: OpenTuiAppState): OpenTuiFlatSet
       label: language === "zh" ? "词典" : "Dictionary",
       value: dictionaryStatusLabel(state),
     },
+    ...comprehensiveModuleItems(state),
   ];
   return items;
+}
+
+const allComprehensiveModules = [
+  "foundation_input",
+  "everyday_english",
+  "programming_basics",
+  "code_practice",
+] as const;
+
+function comprehensiveModuleItems(state: OpenTuiAppState): OpenTuiFlatSettingsItem[] {
+  const language = state.language;
+  const enabled = state.enabledModules ?? [...allComprehensiveModules];
+  const moduleLabels: Record<
+    (typeof allComprehensiveModules)[number],
+    { kind: OpenTuiFlatSettingsItemKind; zh: string; en: string }
+  > = {
+    foundation_input: {
+      kind: "module_foundation",
+      zh: "综合训练·基础输入",
+      en: "Comprehensive: foundation",
+    },
+    everyday_english: {
+      kind: "module_everyday",
+      zh: "综合训练·日常英语",
+      en: "Comprehensive: everyday English",
+    },
+    programming_basics: {
+      kind: "module_programming",
+      zh: "综合训练·编程基础",
+      en: "Comprehensive: programming basics",
+    },
+    code_practice: {
+      kind: "module_code",
+      zh: "综合训练·代码实战",
+      en: "Comprehensive: code practice",
+    },
+  };
+  return allComprehensiveModules.map((module) => {
+    const label = moduleLabels[module];
+    const on = enabled.includes(module);
+    return {
+      kind: label.kind,
+      label: language === "zh" ? label.zh : label.en,
+      value: on ? (language === "zh" ? "开" : "On") : language === "zh" ? "关" : "Off",
+    };
+  });
 }
 
 function youdaoTtsCredentialStatusLabel(state: OpenTuiAppState): string {

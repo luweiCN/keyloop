@@ -136,13 +136,13 @@ export function planReport(plan: PracticePlan, language: Language): string {
   const lines = [language === "zh" ? "下一轮 KeyLoop 计划" : "Next KeyLoop plan", ""];
 
   if (language === "zh") {
-    lines.push("每日目标: 20 分钟");
-    lines.push("默认路径: 基础输入 -> 日常英语 -> 编程基础 -> 代码实战");
+    lines.push("每日目标: 按你的水平动态推荐（10-45 分钟，进入综合训练可见并可调整）");
+    lines.push("训练路径: 按技能诊断组合阶段（键位热身 -> 单词 -> 符号 -> 句子 -> 文章/代码）");
     lines.push(`当前偏重: ${modeLabel(plan.recommended_mode, language)}`);
   } else {
-    lines.push("Daily target: 20 minutes");
+    lines.push("Daily target: adaptive (10-45 min, shown and adjustable on the plan screen)");
     lines.push(
-      "Default path: foundation input -> everyday English -> programming basics -> code practice",
+      "Training path: diagnosis-driven stages (warmup -> words -> symbols -> sentences -> articles/code)",
     );
     lines.push(`Current emphasis: ${modeLabel(plan.recommended_mode, language)}`);
   }
@@ -160,7 +160,7 @@ export function planReport(plan: PracticePlan, language: Language): string {
 
   if (language === "zh") {
     lines.push("课程形态：");
-    lines.push("  1. 综合训练按基础输入、日常英语、编程基础、代码实战四个模块推进。");
+    lines.push("  1. 综合训练按技能诊断生成阶段计划，弱项加权、稳定项降频。");
     lines.push("  2. 可以零碎练，每次完成都会累计到今日进度。");
     lines.push("  3. 每组完成后的错项和慢项会影响后续模块内容。");
     lines.push("  4. 代码块覆盖 TS/JS/Vue/Solidity/Rust/HTML/CSS/Less/Sass。");

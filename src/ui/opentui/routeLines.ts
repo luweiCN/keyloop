@@ -1,4 +1,4 @@
-import type { Language, PracticeLesson, SessionRecord, SpeedUnit } from "../../domain/model";
+import type { DailyPracticePlan, Language, PracticeLesson, SessionRecord, SpeedUnit } from "../../domain/model";
 import {
   aggregateSpeed,
   effectiveActiveMs,
@@ -66,6 +66,8 @@ export function openTuiRouteTitle(state: OpenTuiAppState): string {
       return state.language === "zh" ? "练习选项" : "Practice options";
     case "complete":
       return state.language === "zh" ? "本组完成" : "Lesson complete";
+    case "stage_plan":
+      return state.language === "zh" ? "今日训练计划" : "Today's training plan";
     case "summary":
       return state.language === "zh" ? "今日总结" : "Daily summary";
     case "ansi_palette":
@@ -125,6 +127,8 @@ export function openTuiRouteLines(state: OpenTuiAppState): string[] {
         state.language,
         speedUnit,
       );
+    case "stage_plan":
+      return stagePlanLines(state.route.plan, state.route.diagnosis_lines, state.language);
     case "summary":
       return summaryLines(state.route.records, state.language, speedUnit);
     case "ansi_palette":
@@ -368,4 +372,37 @@ export function statsDailyRouteLines(
 
 function clampIndex(index: number, length: number): number {
   return Math.min(Math.max(Math.trunc(index), 0), Math.max(length - 1, 0));
+}
+
+function stagePlanLines(
+  plan: DailyPracticePlan,
+  diagnosisLines: string[],
+  language: Language,
+): string[] {
+  const zh = language === "zh";
+  const lines: string[] = [];
+  lines.push(zh ? "诊断摘要:" : "Diagnosis:");
+  for (const line of diagnosisLines) {
+    lines.push(`  ${line}`);
+  }
+  lines.push("");
+  const completedMinutes = Math.round(plan.completed_ms / 60_000);
+  lines.push(
+    zh
+      ? `今日计划: ${plan.lessons.length} 个阶段，约 ${plan.target_minutes} 分钟（今日已练 ${completedMinutes} 分钟）`
+      : `Plan: ${plan.lessons.length} stages, ~${plan.target_minutes} min (done today: ${completedMinutes} min)`,
+  );
+  for (const [index, lesson] of plan.lessons.entries()) {
+    const reason = zh ? lesson.reason_zh : lesson.reason_en;
+    lines.push(
+      `  ${index + 1}. ${lesson.estimated_minutes} min  ${reason}`,
+    );
+  }
+  lines.push("");
+  lines.push(
+    zh
+      ? "[Enter] 开始  [←/→] 调整时长  [Esc] 返回"
+      : "[Enter] start  [Left/Right] adjust minutes  [Esc] back",
+  );
+  return lines;
 }

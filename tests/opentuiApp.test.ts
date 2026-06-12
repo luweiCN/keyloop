@@ -1,7 +1,9 @@
 import { describe, expect, test } from "bun:test";
 
+import { reduceFlatSettingsItem } from "../src/ui/opentui/settingsReducers";
 import {
   activateOpenTuiMenuItem,
+  startStagePlanFirstLesson,
   createOpenTuiCompletionState,
   createOpenTuiCodeFilterState,
   createOpenTuiInitialState,
@@ -137,19 +139,28 @@ describe("OpenTUI app model", () => {
     ]);
   });
 
-  test("comprehensive starts the first daily lesson target", () => {
+  test("comprehensive opens the stage plan screen, enter starts stage one", () => {
     const state = activateOpenTuiMenuItem(
       createOpenTuiInitialState("en"),
       "comprehensive",
       appContext(),
     );
 
-    expect(state.route.screen).toBe("running");
-    if (state.route.screen !== "running") {
+    expect(state.route.screen).toBe("stage_plan");
+    if (state.route.screen !== "stage_plan") {
+      throw new Error("expected stage_plan route");
+    }
+    expect(state.route.plan.lessons[0]?.id).toBe("stage:keys:1");
+    expect(state.route.diagnosis_lines.length).toBeGreaterThan(0);
+
+    const started = startStagePlanFirstLesson(state);
+    expect(started.route.screen).toBe("running");
+    if (started.route.screen !== "running") {
       throw new Error("expected running route");
     }
-    expect(state.route.lesson?.module).toBe("foundation_input");
-    expect(state.route.target.source).toContain("keyloop:module:foundation-mix");
+    expect(started.route.lesson?.module).toBe("foundation_input");
+    expect(started.route.target.source).toContain("keyloop:module:foundation-mix");
+    expect(started.route.daily_plan?.lessons.length).toBeGreaterThanOrEqual(3);
   });
 
   test("programming technical long words starts a word breakdown target", () => {
@@ -364,7 +375,7 @@ describe("OpenTUI app model", () => {
       [
         "programming",
         "programming_basics_mix",
-        "keyloop:module:programming-basics-mix",
+        "keyloop:module:programming-basics:mix:adaptive",
       ],
       ["code", "code_mix", "keyloop:code-corpus"],
     ];
@@ -408,6 +419,10 @@ describe("OpenTUI app model", () => {
       "  Pronunciation volume  100%",
       "  Youdao paid voice  not configured",
       "  Dictionary  Not loaded",
+      "  Comprehensive: foundation  On",
+      "  Comprehensive: everyday English  On",
+      "  Comprehensive: programming basics  On",
+      "  Comprehensive: code practice  On",
     ]);
   });
 
@@ -1124,5 +1139,54 @@ describe("custom library menus", () => {
     expect(create.route).toEqual({ screen: "library_create", name: "" });
     const manage = activateOpenTuiMenuItem(libraryState(), "library_manage", appContext());
     expect(manage.route).toEqual({ screen: "library_manage", selected_index: 0 });
+  });
+});
+
+describe("comprehensive module toggles", () => {
+  const flatItem = { kind: "module_code" as const, label: "", value: "" };
+
+  test("toggling a module off removes it from enabledModules", () => {
+    const base = createOpenTuiInitialState("zh");
+    const state = {
+      ...base,
+      route: { screen: "settings" as const, view: "menu" as const, selected_index: 0 },
+    };
+    const result = reduceFlatSettingsItem(state, flatItem, 0, 1, {
+      ...appContext(),
+      language: "zh",
+    });
+    expect(result.state.enabledModules).toEqual([
+      "foundation_input",
+      "everyday_english",
+      "programming_basics",
+    ]);
+  });
+
+  test("last enabled module cannot be turned off", () => {
+    const base = createOpenTuiInitialState("zh");
+    const state = {
+      ...base,
+      enabledModules: ["code_practice" as const],
+      route: { screen: "settings" as const, view: "menu" as const, selected_index: 0 },
+    };
+    const result = reduceFlatSettingsItem(state, flatItem, 0, 1, {
+      ...appContext(),
+      language: "zh",
+    });
+    expect(result.state.enabledModules).toEqual(["code_practice"]);
+  });
+
+  test("disabled modules flow into the stage plan", () => {
+    const base = createOpenTuiInitialState("zh");
+    const state = {
+      ...base,
+      enabledModules: ["foundation_input" as const, "everyday_english" as const],
+    };
+    const planState = activateOpenTuiMenuItem(state, "comprehensive", appContext());
+    if (planState.route.screen !== "stage_plan") {
+      throw new Error("expected stage_plan route");
+    }
+    const forms = planState.route.plan.lessons.map((lesson) => lesson.id.split(":")[1]);
+    expect(forms).not.toContain("code");
   });
 });

@@ -22,6 +22,8 @@ import {
 import type { BuildTargetContext } from "../../training/targets";
 import {
   activateOpenTuiMenuItem,
+  adjustStagePlanMinutes,
+  startStagePlanFirstLesson,
   createOpenTuiCodeFilterState,
   createOpenTuiInitialState,
   createOpenTuiSettingsState,
@@ -302,6 +304,8 @@ export function reduceOpenTuiAppKey(
         event,
         context,
       );
+    case "stage_plan":
+      return reduceStagePlanKey(state, event, context);
     case "running":
     case "exit_confirmation":
     case "code_settings_confirmation":
@@ -311,6 +315,44 @@ export function reduceOpenTuiAppKey(
     case "ansi_palette":
       return { state, action: "continue" };
   }
+}
+
+function reduceStagePlanKey(
+  state: OpenTuiAppState,
+  event: OpenTuiKeyEvent,
+  context: OpenTuiAppSessionContext,
+): OpenTuiAppKeyResult {
+  if (state.route.screen !== "stage_plan") {
+    return { state, action: "continue" };
+  }
+  if (isSelectEvent(event)) {
+    const started = startStagePlanFirstLesson(state);
+    return {
+      state: started,
+      action: started.route.screen === "running" ? "start" : "continue",
+    };
+  }
+  if (isStagePlanLeftEvent(event) || isStagePlanRightEvent(event)) {
+    const delta = isStagePlanLeftEvent(event) ? -5 : 5;
+    return { state: adjustStagePlanMinutes(state, context, delta), action: "continue" };
+  }
+  return { state, action: "continue" };
+}
+
+function isStagePlanLeftEvent(event: OpenTuiKeyEvent): boolean {
+  if (event.ctrl || event.meta) {
+    return false;
+  }
+  const name = event.name.toLowerCase();
+  return name === "left" || event.sequence.toLowerCase() === "left";
+}
+
+function isStagePlanRightEvent(event: OpenTuiKeyEvent): boolean {
+  if (event.ctrl || event.meta) {
+    return false;
+  }
+  const name = event.name.toLowerCase();
+  return name === "right" || event.sequence.toLowerCase() === "right";
 }
 
 export async function runOpenTuiAppSession(
@@ -329,6 +371,9 @@ export async function runOpenTuiAppSession(
       customLibrarySettings: customLibrarySettingsFromContext(context),
       speedUnit: speedUnitFromContext(context),
       customLibraries: context.customLibraries ?? [],
+      ...(context.enabledModules === undefined
+        ? {}
+        : { enabledModules: context.enabledModules }),
       dictionaryTier: context.dictionary?.tier ?? "none",
       youdaoTtsCredentialStatus: context.youdaoTtsCredentialStatus ?? "none",
       todayElapsedMs: todayElapsedMsFromContext(context),

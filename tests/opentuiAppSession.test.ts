@@ -605,6 +605,9 @@ describe("OpenTUI app session", () => {
     });
 
     await kit.waitForKeyListener(1);
+    // 第一个 Enter 进入综合训练诊断屏，第二个 Enter 开始第一阶段
+    kit.emitKey({ name: "enter", sequence: "\r" });
+    await kit.waitForKeyListener(2);
     kit.emitKey({ name: "enter", sequence: "\r" });
 
     const result = await Promise.race([

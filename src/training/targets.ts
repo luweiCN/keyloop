@@ -28,12 +28,16 @@ import type {
 import { recentFeedbackTerms } from "./feedback";
 import {
   buildProgrammingBasicsMixTarget,
+  buildSymbolsNumbersTarget,
   namingLinesFromWords,
 } from "./programmingBasicsTargets";
 import { PLAN_HISTORY_DAYS } from "./plan";
 import {
   type LongWordEntry,
 } from "./vocabulary";
+import { buildSkillProfile, type SkillProfile, type TrainingForm } from "./diagnosis";
+import { buildDailyPrescription, charBudget, type StagePlan } from "./prescription";
+import type { CustomLibrary } from "./customLibrary";
 
 export interface BuildTargetContext {
   records: SessionRecord[];
@@ -49,6 +53,10 @@ export interface BuildTargetContext {
   wordBreakdownSettings?: UserPreferences["word_breakdown"];
   random?: () => number;
   now?: Date;
+  /** 综合训练启用的一级模块（来自 preferences.enabled_modules），缺省全启用 */
+  enabledModules?: TrainingModule[];
+  /** 自建语料库（参与单词/句子形态的语料池） */
+  customLibraries?: CustomLibrary[];
 }
 
 export interface BuildLongWordBreakdownPracticeOptions {
@@ -533,6 +541,24 @@ export function refreshModuleMixTarget(
   lesson: PracticeLesson,
   context: BuildTargetContext,
 ): PracticeTarget {
+  const stageForm = stageFormFromLessonId(lesson.id);
+  if (stageForm !== undefined) {
+    // 阶段课程：用包含最新记录的 context 重建画像与预算（会话内实时修正）
+    const profile = buildSkillProfile(context.records, context.plan, context.now);
+    return buildStageTarget(context, {
+      stage: {
+        form: stageForm,
+        char_budget: charBudget(stageForm, lesson.estimated_minutes, profile.form_speeds),
+      },
+      profile,
+      ...(context.enabledModules === undefined
+        ? {}
+        : { enabledModules: context.enabledModules }),
+      ...(context.customLibraries === undefined
+        ? {}
+        : { customLibraries: context.customLibraries }),
+    });
+  }
   switch (lesson.module) {
     case "foundation_input":
       return foundationMixTarget(context);
@@ -566,28 +592,125 @@ export function buildLongWordBreakdownPracticeTarget(
 }
 
 
-export function buildDailyPracticePlan(context: BuildTargetContext): DailyPracticePlan {
+export interface BuildDailyPracticePlanOptions {
+  /** 覆盖推荐时长（诊断屏手动调整） */
+  targetMinutesOverride?: number;
+}
+
+export function buildDailyPracticePlan(
+  context: BuildTargetContext,
+  options: BuildDailyPracticePlanOptions = {},
+): DailyPracticePlan {
   const now = context.now ?? new Date();
-  const readiness = moduleReadinessFromRecords(context.records, now);
-  const occurrenceCounts = new Map<LessonKind, number>();
-  const lessons = comprehensiveModuleSequence(readiness, context.plan).map((item) =>
-    buildModuleMixLesson(
-      nextLessonId(item.kind, occurrenceCounts),
-      item.kind,
-      item.module,
-      item.category,
-      buildModuleMixTarget(context, item.module),
-      readiness,
-    ),
+  const profile = buildSkillProfile(context.records, context.plan, now);
+  const prescription = buildDailyPrescription({
+    profile,
+    enabledModules: context.enabledModules ?? [
+      "foundation_input",
+      "everyday_english",
+      "programming_basics",
+      "code_practice",
+    ],
+    records: context.records,
+    now,
+    ...(context.random === undefined ? {} : { random: context.random }),
+    ...(options.targetMinutesOverride === undefined
+      ? {}
+      : { targetMinutesOverride: options.targetMinutesOverride }),
+  });
+  const lessons = prescription.stages.map((stage, index) =>
+    stageLessonFromPlan(context, profile, stage, index),
   );
 
   return {
     run_id: "",
     run_number: 0,
-    target_minutes: 20,
+    target_minutes: prescription.target_minutes,
     completed_ms: completedMsForDate(context.records, now),
     lessons,
   };
+}
+
+function stageLessonFromPlan(
+  context: BuildTargetContext,
+  profile: SkillProfile,
+  stage: StagePlan,
+  index: number,
+): PracticeLesson {
+  return {
+    id: `stage:${stage.form}:${index + 1}`,
+    kind: stageLessonKind(stage.form),
+    module: stageLessonModule(stage.form),
+    category: stageLessonCategory(stage.form),
+    mix_profile: "comprehensive",
+    estimated_minutes: stage.minutes,
+    target: buildStageTarget(context, {
+      stage,
+      profile,
+      ...(context.enabledModules === undefined
+        ? {}
+        : { enabledModules: context.enabledModules }),
+      ...(context.customLibraries === undefined
+        ? {}
+        : { customLibraries: context.customLibraries }),
+    }),
+    reason_zh: stage.reason_zh,
+    reason_en: stage.reason_en,
+  };
+}
+
+function stageLessonKind(form: TrainingForm): LessonKind {
+  switch (form) {
+    case "keys":
+      return "foundation";
+    case "words":
+      return "common_words";
+    case "symbols":
+      return "symbols";
+    case "sentences":
+    case "articles":
+      return "words";
+    case "code":
+      return "code_block";
+  }
+}
+
+function stageLessonModule(form: TrainingForm): TrainingModule {
+  switch (form) {
+    case "keys":
+      return "foundation_input";
+    case "words":
+    case "sentences":
+    case "articles":
+      return "everyday_english";
+    case "symbols":
+      return "programming_basics";
+    case "code":
+      return "code_practice";
+  }
+}
+
+/** 阶段会话记录的 category 决定它回流到哪个技能形态（formForCategory 闭环） */
+function stageLessonCategory(form: TrainingForm): TrainingCategory {
+  switch (form) {
+    case "keys":
+      return "foundation_mix";
+    case "words":
+      return "everyday_words";
+    case "symbols":
+      return "symbols_numbers";
+    case "sentences":
+      return "everyday_sentences";
+    case "articles":
+      return "everyday_articles";
+    case "code":
+      return "code_mix";
+  }
+}
+
+export function stageFormFromLessonId(lessonId: string): TrainingForm | undefined {
+  const match = lessonId.match(/^stage:(keys|words|symbols|sentences|articles|code):/u);
+  return match?.[1] as TrainingForm | undefined;
 }
 
 function buildModuleMixLesson(
@@ -2450,4 +2573,334 @@ function moduleReasonEn(module: TrainingModule, readiness: ModuleReadiness): str
     return `${reason} Stable: reduced or shortened this round.`;
   }
   return reason;
+}
+
+// ---------------------------------------------------------------------------
+// 形态生成器（诊断-处方引擎第 2 期）
+// 按训练形态生成阶段语料：数量由字符预算换算，内容回流只读同形态 focus 桶。
+// ---------------------------------------------------------------------------
+
+export interface StageTargetOptions {
+  stage: { form: TrainingForm; char_budget: number };
+  profile: SkillProfile;
+  /** 未提供时视为全部启用 */
+  enabledModules?: TrainingModule[];
+  customLibraries?: CustomLibrary[];
+}
+
+/** 词均长 6 + 空格 */
+const STAGE_CHARS_PER_WORD = 7;
+/** 句均字符 */
+const STAGE_CHARS_PER_SENTENCE = 40;
+/** 代码片段均字符 */
+const STAGE_CHARS_PER_SNIPPET = 180;
+
+export function buildStageTarget(
+  context: BuildTargetContext,
+  options: StageTargetOptions,
+): PracticeTarget {
+  switch (options.stage.form) {
+    case "keys":
+      return foundationMixTarget(context);
+    case "words":
+      return wordsStageTarget(context, options);
+    case "symbols":
+      return symbolsStageTarget(context, options);
+    case "sentences":
+      return sentencesStageTarget(context, options);
+    case "articles":
+      return everydayArticlesTarget(context);
+    case "code": {
+      const count = clamp(
+        Math.round(options.stage.char_budget / STAGE_CHARS_PER_SNIPPET),
+        1,
+        5,
+      );
+      return codeMixTarget(context, count);
+    }
+  }
+}
+
+function stageModuleEnabled(
+  options: StageTargetOptions,
+  module: TrainingModule,
+): boolean {
+  return options.enabledModules === undefined || options.enabledModules.includes(module);
+}
+
+interface StageWordCandidate {
+  text: string;
+  translation_zh?: string;
+}
+
+function wordsStageTarget(
+  context: BuildTargetContext,
+  options: StageTargetOptions,
+): PracticeTarget {
+  const random = context.random ?? Math.random;
+  const count = clamp(
+    Math.round(options.stage.char_budget / STAGE_CHARS_PER_WORD),
+    6,
+    40,
+  );
+  const pool = new Map<string, StageWordCandidate>();
+  const addCandidate = (candidate: StageWordCandidate): void => {
+    const key = candidate.text.toLowerCase();
+    if (!pool.has(key)) {
+      pool.set(key, candidate);
+    }
+  };
+  if (stageModuleEnabled(options, "everyday_english")) {
+    for (const entry of context.library.everyday_words.entries) {
+      if (!hasEverydayEntrySource(entry) || entry.translation_zh.trim().length === 0) {
+        continue;
+      }
+      addCandidate({
+        text: entry.word,
+        translation_zh: conciseChineseMeaning(entry.translation_zh),
+      });
+    }
+  }
+  if (stageModuleEnabled(options, "programming_basics")) {
+    for (const entry of context.library.programming_words) {
+      addCandidate({ text: entry.word, translation_zh: entry.note_zh });
+    }
+  }
+  for (const library of options.customLibraries ?? []) {
+    for (const word of library.words) {
+      if (word.kind !== "word") {
+        continue;
+      }
+      addCandidate({
+        text: word.text,
+        ...(word.meaning_zh === undefined ? {} : { translation_zh: word.meaning_zh }),
+      });
+    }
+  }
+
+  // 同形态回流：focus.words 中能在池里找到的优先入选
+  const selected: StageWordCandidate[] = [];
+  for (const word of options.profile.focus.words) {
+    const hit = pool.get(word.toLowerCase());
+    if (hit !== undefined && !selected.includes(hit)) {
+      selected.push(hit);
+    }
+  }
+  const fill = [...pool.values()].filter((item) => !selected.includes(item));
+  shuffleInPlace(fill, random);
+  selected.push(...fill);
+  const picked = selected.slice(0, count);
+
+  const annotated = annotatedOptionalTokenText(
+    picked.map((item) => ({
+      text: item.text,
+      ...(item.translation_zh === undefined || item.translation_zh.trim().length === 0
+        ? {}
+        : { translation_zh: item.translation_zh }),
+      display: "word" as const,
+      audio_text: item.text,
+    })),
+  );
+  return {
+    mode: "words",
+    text: annotated.text,
+    source: `keyloop:stage:words:count-${picked.length}`,
+    ...(annotated.annotations.length === 0 ? {} : { annotations: annotated.annotations }),
+  };
+}
+
+function sentencesStageTarget(
+  context: BuildTargetContext,
+  options: StageTargetOptions,
+): PracticeTarget {
+  const random = context.random ?? Math.random;
+  const settings = everydaySettings(context);
+  const count = clamp(
+    Math.round(options.stage.char_budget / STAGE_CHARS_PER_SENTENCE),
+    2,
+    8,
+  );
+  interface StageSentenceCandidate {
+    text: string;
+    translation_zh: string;
+    source_title?: string;
+  }
+  const pool = new Map<string, StageSentenceCandidate>();
+  const addCandidate = (candidate: StageSentenceCandidate): void => {
+    if (!pool.has(candidate.text)) {
+      pool.set(candidate.text, candidate);
+    }
+  };
+  const matching = context.library.everyday_sentences.entries
+    .filter(hasEverydayEntrySource)
+    .filter((entry) => entry.translation_zh.trim().length > 0)
+    .filter((entry) => entry.level === settings.sentence_level)
+    .filter((entry) => matchesEverydaySentenceLength(entry.length, settings.sentence_length));
+  const libraryPool =
+    matching.length > 0
+      ? matching
+      : context.library.everyday_sentences.entries
+          .filter(hasEverydayEntrySource)
+          .filter((entry) => entry.translation_zh.trim().length > 0);
+  for (const entry of libraryPool) {
+    addCandidate({
+      text: entry.text,
+      translation_zh: entry.translation_zh,
+      source_title: entry.source_title,
+    });
+  }
+  for (const library of options.customLibraries ?? []) {
+    for (const sentence of library.sentences) {
+      addCandidate({
+        text: sentence.text,
+        translation_zh: sentence.translation_zh ?? "",
+      });
+    }
+  }
+
+  const selected: StageSentenceCandidate[] = [];
+  for (const sentence of options.profile.focus.sentences) {
+    const hit = pool.get(sentence);
+    if (hit !== undefined && !selected.includes(hit)) {
+      selected.push(hit);
+    }
+  }
+  const fill = [...pool.values()].filter((item) => !selected.includes(item));
+  shuffleInPlace(fill, random);
+  selected.push(...fill);
+  const picked = selected.slice(0, count);
+
+  const annotated = annotatedLineText(
+    picked.map((item) => ({
+      text: item.text,
+      translation_zh: item.translation_zh,
+      ...(item.source_title === undefined ? {} : { source_title: item.source_title }),
+      display: "line" as const,
+    })),
+  );
+  return {
+    mode: "words",
+    text: annotated.text,
+    source: `keyloop:stage:sentences:count-${picked.length}`,
+    ...(annotated.annotations.length === 0 ? {} : { annotations: annotated.annotations }),
+  };
+}
+
+function symbolsStageTarget(
+  context: BuildTargetContext,
+  options: StageTargetOptions,
+): PracticeTarget {
+  if (stageModuleEnabled(options, "programming_basics")) {
+    const target = buildSymbolsNumbersTarget(context);
+    if (target.text.trim().length > 0) {
+      return target;
+    }
+  }
+  // 编程基础被禁用（或无卡片内容）：退化到基础输入的数字/标点行
+  const numberRow = foundationDrillTarget(context, "number-row");
+  const punctuation = foundationDrillTarget(context, "punctuation-edges");
+  const lines: string[] = [];
+  let chars = 0;
+  for (const line of [...numberRow.items, ...punctuation.items]) {
+    lines.push(line);
+    chars += line.length + 1;
+    if (chars >= options.stage.char_budget) {
+      break;
+    }
+  }
+  return {
+    mode: "symbols",
+    text: lines.join("\n"),
+    source: "keyloop:stage:symbols:foundation",
+  };
+}
+
+/** 合并多个 PracticeTarget，平移注解偏移 */
+function combinePracticeTargets(
+  targets: PracticeTarget[],
+  mode: PracticeTarget["mode"],
+  source: string,
+  separator = "\n",
+): PracticeTarget {
+  let text = "";
+  const annotations: PracticeTargetAnnotation[] = [];
+  for (const target of targets) {
+    if (target.text.length === 0) {
+      continue;
+    }
+    if (text.length > 0) {
+      text += separator;
+    }
+    const offset = text.length;
+    text += target.text;
+    for (const annotation of target.annotations ?? []) {
+      annotations.push({
+        ...annotation,
+        start: annotation.start + offset,
+        end: annotation.end + offset,
+      });
+    }
+  }
+  return {
+    mode,
+    text,
+    source,
+    ...(annotations.length === 0 ? {} : { annotations }),
+  };
+}
+
+/** 二级菜单「日常综合」：单词 + 句子两段，预算按形态 EWMA，focus 分桶回流 */
+export function buildEverydayMixStageTarget(
+  context: BuildTargetContext,
+  profile: SkillProfile,
+  customLibraries?: CustomLibrary[],
+): PracticeTarget {
+  const enabledModules: TrainingModule[] = ["everyday_english"];
+  const words = wordsStageTarget(context, {
+    stage: { form: "words", char_budget: stageMixBudget(profile, "words") },
+    profile,
+    enabledModules,
+    ...(customLibraries === undefined ? {} : { customLibraries }),
+  });
+  const sentences = sentencesStageTarget(context, {
+    stage: { form: "sentences", char_budget: stageMixBudget(profile, "sentences") },
+    profile,
+    enabledModules,
+    ...(customLibraries === undefined ? {} : { customLibraries }),
+  });
+  return combinePracticeTargets(
+    [words, sentences],
+    "words",
+    "keyloop:module:everyday-english:mix:adaptive",
+  );
+}
+
+/** 二级菜单「编程基础综合」：编程词 + 符号数字两段 */
+export function buildProgrammingBasicsMixStageTarget(
+  context: BuildTargetContext,
+  profile: SkillProfile,
+): PracticeTarget {
+  const enabledModules: TrainingModule[] = ["programming_basics"];
+  const words = wordsStageTarget(context, {
+    stage: { form: "words", char_budget: stageMixBudget(profile, "words") },
+    profile,
+    enabledModules,
+  });
+  const symbols = symbolsStageTarget(context, {
+    stage: { form: "symbols", char_budget: stageMixBudget(profile, "symbols") },
+    profile,
+    enabledModules,
+  });
+  return combinePracticeTargets(
+    [words, symbols],
+    "mixed",
+    "keyloop:module:programming-basics:mix:adaptive",
+  );
+}
+
+/** 二级 mix 的形态预算：固定 4 分钟 × 该形态 EWMA WPM（冷启动折扣由 charBudget 内置） */
+const STAGE_MIX_MINUTES = 4;
+
+function stageMixBudget(profile: SkillProfile, form: TrainingForm): number {
+  return charBudget(form, STAGE_MIX_MINUTES, profile.form_speeds);
 }
