@@ -374,10 +374,9 @@ function programmingTermsTarget(
   library: Pick<ContentLibrary, "programming_words">,
   random: () => number,
 ): PracticeTarget {
-  const blocks = chunkItems(selectedProgrammingWordEntries(library, random), 4).map((entries) =>
-    annotatedOptionalTokenText(entries.map(programmingWordAnnotationItem)),
+  const annotated = annotatedOptionalTokenText(
+    selectedProgrammingWordEntries(library, random).map(programmingWordAnnotationItem),
   );
-  const annotated = combineAnnotatedBlocks(blocks);
   return {
     mode: "words",
     text: annotated.text,

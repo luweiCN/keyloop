@@ -99,6 +99,7 @@ describe("target generation core", () => {
       { word: "state", note_zh: "状态（组件/应用状态）" },
       { word: "token", note_zh: "令牌（认证凭证）" },
       { word: "payload", note_zh: "载荷（请求/事件数据）" },
+      { word: "context", note_zh: "上下文（运行/调用上下文）" },
     ];
 
     const target = buildProgrammingBasicsPracticeTarget(
@@ -111,7 +112,7 @@ describe("target generation core", () => {
       "programming_terms",
     );
 
-    expect(target.text).toBe("state token payload request");
+    expect(target.text).toBe("state token payload context request");
     expect(target.annotations).toEqual([
       {
         start: 0,
@@ -133,7 +134,13 @@ describe("target generation core", () => {
       },
       {
         start: "state token payload ".length,
-        end: "state token payload request".length,
+        end: "state token payload context".length,
+        translation_zh: "上下文（运行/调用上下文）",
+        display: "word",
+      },
+      {
+        start: "state token payload context ".length,
+        end: "state token payload context request".length,
         translation_zh: "请求（HTTP/接口入参）",
         display: "word",
       },
