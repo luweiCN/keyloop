@@ -1,81 +1,78 @@
-{"text":"results.push(parsed);","topic":"vec","api":"Vec::push","note_zh":"向量追加","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let mut buffer: Vec<u8> = Vec::new();","topic":"vec","api":"Vec::new","note_zh":"创建向量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if args.len() < 2 {","topic":"vec","api":"Vec::len","note_zh":"长度检查","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if allowed.contains(&origin) {","topic":"vec","api":"Vec::contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"names.sort();","topic":"vec","api":"Vec::sort","note_zh":"排序","source_id":"keyloop:programming-basics:seeds"}
-{"text":"rows.sort_by_key(|row| row.score);","topic":"vec","api":"Vec::sort_by_key","note_zh":"按键排序","source_id":"keyloop:programming-basics:seeds"}
-{"text":"sessions.retain(|s| !s.expired());","topic":"vec","api":"Vec::retain","note_zh":"条件保留","source_id":"keyloop:programming-basics:seeds"}
-{"text":"merged.extend(extra_rows);","topic":"vec","api":"Vec::extend","note_zh":"批量追加","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let roles = vec![\"admin\", \"editor\"];","topic":"vec","api":"vec!","note_zh":"向量宏","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let ids: Vec<u64> = items.iter().map(|item| item.id).collect();","topic":"iterator","api":"Iterator.map","note_zh":"迭代映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let active: Vec<_> = users.iter().filter(|u| u.active).collect();","topic":"iterator","api":"Iterator.filter","note_zh":"迭代过滤","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let admin = members.iter().find(|m| m.role == \"admin\");","topic":"iterator","api":"Iterator.find","note_zh":"查找元素","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let dirty = fields.iter().any(|f| f.changed);","topic":"iterator","api":"Iterator.any","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let valid = inputs.iter().all(|i| i.ok);","topic":"iterator","api":"Iterator.all","note_zh":"全量判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let sum = prices.iter().fold(0, |acc, p| acc + p);","topic":"iterator","api":"Iterator.fold","note_zh":"折叠累加","source_id":"keyloop:programming-basics:seeds"}
-{"text":"for (index, line) in lines.iter().enumerate() {","topic":"iterator","api":"Iterator.enumerate","note_zh":"带下标遍历","source_id":"keyloop:programming-basics:seeds"}
-{"text":"for (name, score) in names.iter().zip(scores.iter()) {","topic":"iterator","api":"Iterator.zip","note_zh":"并行遍历","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let set: HashSet<_> = tags.into_iter().collect();","topic":"iterator","api":"Iterator.collect","note_zh":"收集为集合","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let total: i64 = orders.iter().map(|o| o.total).sum();","topic":"iterator","api":"Iterator.sum","note_zh":"求和","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let theme = stored.unwrap_or(\"light\");","topic":"option_result","api":"Option.unwrap_or","note_zh":"取值带默认","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let config = load().unwrap_or_else(|_| Config::default());","topic":"option_result","api":"Option.unwrap_or_else","note_zh":"惰性默认","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let label = user.map(|u| u.name.clone());","topic":"option_result","api":"Option.map","note_zh":"可选映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let port = env.get(\"PORT\").and_then(|p| p.parse().ok());","topic":"option_result","api":"Option.and_then","note_zh":"链式转换","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if cached.is_some() {","topic":"option_result","api":"Option.is_some","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let user = found.ok_or(Error::NotFound)?;","topic":"option_result","api":"Result.ok_or","note_zh":"转结果","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let n = raw.parse::<u32>().map_err(Error::BadNumber)?;","topic":"option_result","api":"Result.map_err","note_zh":"错误映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if let Some(handle) = self.worker.take() {","topic":"option_result","api":"Option.take","note_zh":"取出所有权","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let owned = label.to_string();","topic":"string","api":"String::to_string","note_zh":"转拥有串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"report.push_str(&line);","topic":"string","api":"String::push_str","note_zh":"追加字符串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let segments: Vec<&str> = path.split('/').collect();","topic":"string","api":"str::split","note_zh":"路径切分","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let keyword = query.trim();","topic":"string","api":"str::trim","note_zh":"去除空白","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let slug = title.replace(' ', \"-\");","topic":"string","api":"str::replace","note_zh":"替换字符","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if url.starts_with(\"https://\") {","topic":"string","api":"str::starts_with","note_zh":"前缀判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if name.ends_with(\".json\") {","topic":"string","api":"str::ends_with","note_zh":"后缀判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let port: u16 = raw.parse()?;","topic":"string","api":"str::parse","note_zh":"解析数字","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if message.contains(\"error\") {","topic":"string","api":"str::contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let key = label.to_lowercase();","topic":"string","api":"str::to_lowercase","note_zh":"转小写","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let mut cache: HashMap<String, u32> = HashMap::new();","topic":"hashmap","api":"HashMap::new","note_zh":"创建映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"cache.insert(key.clone(), value);","topic":"hashmap","api":"HashMap::insert","note_zh":"写入映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let entry = cache.get(&key);","topic":"hashmap","api":"HashMap::get","note_zh":"读取映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if !index.contains_key(&id) {","topic":"hashmap","api":"HashMap::contains_key","note_zh":"键存在判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"groups.entry(kind).or_insert_with(Vec::new).push(event);","topic":"hashmap","api":"HashMap::entry","note_zh":"默认分组","source_id":"keyloop:programming-basics:seeds"}
-{"text":"sessions.remove(&token);","topic":"hashmap","api":"HashMap::remove","note_zh":"删除条目","source_id":"keyloop:programming-basics:seeds"}
-{"text":"for (topic, count) in topic_counts.iter() {","topic":"hashmap","api":"HashMap::iter","note_zh":"键值遍历","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if !seen.insert(line.clone()) { continue; }","topic":"hashmap","api":"HashSet::insert","note_zh":"集合去重","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let raw = fs::read_to_string(\"config.toml\")?;","topic":"fs_io","api":"fs::read_to_string","note_zh":"读取文本","source_id":"keyloop:programming-basics:seeds"}
-{"text":"fs::write(out_path, rendered)?;","topic":"fs_io","api":"fs::write","note_zh":"写入文件","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if lock_path.exists() {","topic":"fs_io","api":"Path::exists","note_zh":"存在性检查","source_id":"keyloop:programming-basics:seeds"}
-{"text":"fs::create_dir_all(&cache_dir)?;","topic":"fs_io","api":"fs::create_dir_all","note_zh":"递归建目录","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let full = root.join(\"contents\").join(name);","topic":"fs_io","api":"PathBuf::join","note_zh":"拼接路径","source_id":"keyloop:programming-basics:seeds"}
-{"text":"for entry in fs::read_dir(seed_dir)? {","topic":"fs_io","api":"fs::read_dir","note_zh":"列目录","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let language = seed_path.file_stem().unwrap();","topic":"fs_io","api":"Path::file_stem","note_zh":"取文件名","source_id":"keyloop:programming-basics:seeds"}
-{"text":"for line in BufReader::new(file).lines() {","topic":"fs_io","api":"BufReader::lines","note_zh":"按行读取","source_id":"keyloop:programming-basics:seeds"}
-{"text":"println!(\"loaded {count} rows\");","topic":"std_misc","api":"println!","note_zh":"打印输出","source_id":"keyloop:programming-basics:seeds"}
-{"text":"eprintln!(\"usage: app <path>\");","topic":"std_misc","api":"eprintln!","note_zh":"标准错误","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let key = format!(\"{host}:{port}\");","topic":"std_misc","api":"format!","note_zh":"格式化拼键","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let debug = env::var(\"DEBUG\").is_ok();","topic":"std_misc","api":"env::var","note_zh":"环境变量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let args: Vec<String> = env::args().skip(1).collect();","topic":"std_misc","api":"env::args","note_zh":"命令行参数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if failed > 0 { process::exit(1); }","topic":"std_misc","api":"process::exit","note_zh":"失败退出","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let started = Instant::now();","topic":"std_misc","api":"Instant::now","note_zh":"计时起点","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let elapsed = started.elapsed();","topic":"std_misc","api":"Instant::elapsed","note_zh":"耗时计算","source_id":"keyloop:programming-basics:seeds"}
-{"text":"#[derive(Debug, Clone, PartialEq)]","topic":"derive_traits","api":"derive(Debug)","note_zh":"派生特征","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let config = Config::default();","topic":"derive_traits","api":"Default::default","note_zh":"默认值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let snapshot = state.clone();","topic":"derive_traits","api":"Clone::clone","note_zh":"克隆","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let error = Error::from(io_err);","topic":"derive_traits","api":"From::from","note_zh":"类型转换","source_id":"keyloop:programming-basics:seeds"}
-{"text":"impl fmt::Display for Error {","topic":"derive_traits","api":"Display","note_zh":"显示实现","source_id":"keyloop:programming-basics:seeds"}
-{"text":"#[derive(Serialize, Deserialize)]","topic":"derive_traits","api":"serde::Serialize","note_zh":"序列化派生","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let body = serde_json::to_string(&payload)?;","topic":"derive_traits","api":"serde_json::to_string","note_zh":"序列化","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let config: Config = serde_json::from_str(&raw)?;","topic":"derive_traits","api":"serde_json::from_str","note_zh":"反序列化","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if errors.is_empty() {","topic":"vec","api":"Vec::is_empty","note_zh":"空向量判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let preview: Vec<_> = reader.lines().take(5).collect();","topic":"iterator","api":"Iterator.take","note_zh":"取前几项","source_id":"keyloop:programming-basics:seeds"}
-{"text":"for entry in history.iter().rev() {","topic":"iterator","api":"Iterator.rev","note_zh":"倒序遍历","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let peak = samples.iter().max().copied().unwrap_or(0);","topic":"iterator","api":"Iterator.max","note_zh":"最大值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"for line in raw.lines() {","topic":"string","api":"str::lines","note_zh":"按行迭代","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let valid = input.filter(|s| !s.is_empty());","topic":"option_result","api":"Option.filter","note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
-{"text":"thread::sleep(Duration::from_millis(200));","topic":"std_misc","api":"Duration::from_millis","note_zh":"休眠","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let file = File::open(&log_path)?;","topic":"fs_io","api":"File::open","note_zh":"打开文件","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let mut sorted_index: BTreeMap<String, u32> = BTreeMap::new();","topic":"hashmap","api":"BTreeMap::new","note_zh":"有序映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let level = Level::try_from(raw_level)?;","topic":"derive_traits","api":"TryFrom::try_from","note_zh":"可失败转换","source_id":"keyloop:programming-basics:seeds"}
-{"text":"lines.dedup();","topic":"vec","api":"Vec::dedup","note_zh":"相邻去重","source_id":"keyloop:programming-basics:seeds"}
-{"text":"let all: Vec<_> = first.iter().chain(second.iter()).collect();","topic":"iterator","api":"Iterator.chain","note_zh":"串联迭代","source_id":"keyloop:programming-basics:seeds"}
+{"text":"results.push(parsed)","topic":"vec","api":"Vec::push","note_zh":"向量追加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Vec::<u8>::new()","topic":"vec","api":"Vec::new","note_zh":"创建向量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"args.len()","topic":"vec","api":"Vec::len","note_zh":"长度检查","source_id":"keyloop:programming-basics:seeds"}
+{"text":"allowed.contains(&origin)","topic":"vec","api":"Vec::contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"names.sort()","topic":"vec","api":"Vec::sort","note_zh":"排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rows.sort_by_key(|row| row.score)","topic":"vec","api":"Vec::sort_by_key","note_zh":"按键排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sessions.retain(|s| !s.expired())","topic":"vec","api":"Vec::retain","note_zh":"条件保留","source_id":"keyloop:programming-basics:seeds"}
+{"text":"merged.extend(extra_rows)","topic":"vec","api":"Vec::extend","note_zh":"批量追加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"vec![\"admin\", \"editor\"]","topic":"vec","api":"vec!","note_zh":"向量宏","source_id":"keyloop:programming-basics:seeds"}
+{"text":"errors.is_empty()","topic":"vec","api":"Vec::is_empty","note_zh":"空向量判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"lines.dedup()","topic":"vec","api":"Vec::dedup","note_zh":"相邻去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"items.iter().map(|item| item.id).collect::<Vec<_>>()","topic":"iterator","api":"Iterator.map","note_zh":"迭代映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"users.iter().filter(|u| u.active).collect::<Vec<_>>()","topic":"iterator","api":"Iterator.filter","note_zh":"迭代过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"members.iter().find(|m| m.role == \"admin\")","topic":"iterator","api":"Iterator.find","note_zh":"查找元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fields.iter().any(|f| f.changed)","topic":"iterator","api":"Iterator.any","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"inputs.iter().all(|i| i.ok)","topic":"iterator","api":"Iterator.all","note_zh":"全量判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"prices.iter().fold(0, |acc, p| acc + p)","topic":"iterator","api":"Iterator.fold","note_zh":"折叠累加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"lines.iter().enumerate()","topic":"iterator","api":"Iterator.enumerate","note_zh":"带下标迭代","source_id":"keyloop:programming-basics:seeds"}
+{"text":"names.iter().zip(scores.iter())","topic":"iterator","api":"Iterator.zip","note_zh":"并行迭代","source_id":"keyloop:programming-basics:seeds"}
+{"text":"tags.into_iter().collect::<HashSet<_>>()","topic":"iterator","api":"Iterator.collect","note_zh":"收集为集合","source_id":"keyloop:programming-basics:seeds"}
+{"text":"orders.iter().map(|o| o.total).sum::<i64>()","topic":"iterator","api":"Iterator.sum","note_zh":"求和","source_id":"keyloop:programming-basics:seeds"}
+{"text":"reader.lines().take(5).collect::<Vec<_>>()","topic":"iterator","api":"Iterator.take","note_zh":"取前几项","source_id":"keyloop:programming-basics:seeds"}
+{"text":"history.iter().rev()","topic":"iterator","api":"Iterator.rev","note_zh":"倒序迭代","source_id":"keyloop:programming-basics:seeds"}
+{"text":"samples.iter().max().copied().unwrap_or(0)","topic":"iterator","api":"Iterator.max","note_zh":"最大值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"first.iter().chain(second.iter()).collect::<Vec<_>>()","topic":"iterator","api":"Iterator.chain","note_zh":"串联迭代","source_id":"keyloop:programming-basics:seeds"}
+{"text":"stored.unwrap_or(\"light\")","topic":"option_result","api":"Option.unwrap_or","note_zh":"取值带默认","source_id":"keyloop:programming-basics:seeds"}
+{"text":"load().unwrap_or_else(|_| Config::default())","topic":"option_result","api":"Option.unwrap_or_else","note_zh":"惰性默认","source_id":"keyloop:programming-basics:seeds"}
+{"text":"user.map(|u| u.name.clone())","topic":"option_result","api":"Option.map","note_zh":"可选映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"env.get(\"PORT\").and_then(|p| p.parse::<u16>().ok())","topic":"option_result","api":"Option.and_then","note_zh":"链式转换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"cached.is_some()","topic":"option_result","api":"Option.is_some","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"found.ok_or(Error::NotFound)","topic":"option_result","api":"Result.ok_or","note_zh":"转结果","source_id":"keyloop:programming-basics:seeds"}
+{"text":"raw.parse::<u32>().map_err(Error::BadNumber)","topic":"option_result","api":"Result.map_err","note_zh":"错误映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"self.worker.take()","topic":"option_result","api":"Option.take","note_zh":"取出所有权","source_id":"keyloop:programming-basics:seeds"}
+{"text":"input.filter(|s| !s.is_empty())","topic":"option_result","api":"Option.filter","note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"label.to_string()","topic":"string","api":"String::to_string","note_zh":"转拥有串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"report.push_str(&line)","topic":"string","api":"String::push_str","note_zh":"追加字符串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"path.split('/').collect::<Vec<&str>>()","topic":"string","api":"str::split","note_zh":"路径切分","source_id":"keyloop:programming-basics:seeds"}
+{"text":"query.trim()","topic":"string","api":"str::trim","note_zh":"去除空白","source_id":"keyloop:programming-basics:seeds"}
+{"text":"title.replace(' ', \"-\")","topic":"string","api":"str::replace","note_zh":"替换字符","source_id":"keyloop:programming-basics:seeds"}
+{"text":"url.starts_with(\"https://\")","topic":"string","api":"str::starts_with","note_zh":"前缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"name.ends_with(\".json\")","topic":"string","api":"str::ends_with","note_zh":"后缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"raw.parse::<u16>()","topic":"string","api":"str::parse","note_zh":"解析数字","source_id":"keyloop:programming-basics:seeds"}
+{"text":"message.contains(\"error\")","topic":"string","api":"str::contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"label.to_lowercase()","topic":"string","api":"str::to_lowercase","note_zh":"转小写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"raw.lines()","topic":"string","api":"str::lines","note_zh":"按行迭代","source_id":"keyloop:programming-basics:seeds"}
+{"text":"HashMap::<String, u32>::new()","topic":"hashmap","api":"HashMap::new","note_zh":"创建映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"cache.insert(key.clone(), value)","topic":"hashmap","api":"HashMap::insert","note_zh":"写入映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"cache.get(&key)","topic":"hashmap","api":"HashMap::get","note_zh":"读取映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"index.contains_key(&id)","topic":"hashmap","api":"HashMap::contains_key","note_zh":"键存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"groups.entry(kind).or_insert_with(Vec::new).push(event)","topic":"hashmap","api":"HashMap::entry","note_zh":"默认分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sessions.remove(&token)","topic":"hashmap","api":"HashMap::remove","note_zh":"删除条目","source_id":"keyloop:programming-basics:seeds"}
+{"text":"topic_counts.iter()","topic":"hashmap","api":"HashMap::iter","note_zh":"键值迭代","source_id":"keyloop:programming-basics:seeds"}
+{"text":"seen.insert(line.clone())","topic":"hashmap","api":"HashSet::insert","note_zh":"集合去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"BTreeMap::<String, u32>::new()","topic":"hashmap","api":"BTreeMap::new","note_zh":"有序映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fs::read_to_string(\"config.toml\")","topic":"fs_io","api":"fs::read_to_string","note_zh":"读取文本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fs::write(out_path, rendered)","topic":"fs_io","api":"fs::write","note_zh":"写入文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"lock_path.exists()","topic":"fs_io","api":"Path::exists","note_zh":"存在性检查","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fs::create_dir_all(&cache_dir)","topic":"fs_io","api":"fs::create_dir_all","note_zh":"递归建目录","source_id":"keyloop:programming-basics:seeds"}
+{"text":"root.join(\"contents\").join(name)","topic":"fs_io","api":"PathBuf::join","note_zh":"拼接路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fs::read_dir(seed_dir)","topic":"fs_io","api":"fs::read_dir","note_zh":"列目录","source_id":"keyloop:programming-basics:seeds"}
+{"text":"seed_path.file_stem().unwrap()","topic":"fs_io","api":"Path::file_stem","note_zh":"取文件名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"BufReader::new(file).lines()","topic":"fs_io","api":"BufReader::lines","note_zh":"按行读取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"File::open(&log_path)","topic":"fs_io","api":"File::open","note_zh":"打开文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"println!(\"loaded {count} rows\")","topic":"std_misc","api":"println!","note_zh":"打印输出","source_id":"keyloop:programming-basics:seeds"}
+{"text":"eprintln!(\"usage: app <path>\")","topic":"std_misc","api":"eprintln!","note_zh":"标准错误","source_id":"keyloop:programming-basics:seeds"}
+{"text":"format!(\"{host}:{port}\")","topic":"std_misc","api":"format!","note_zh":"格式化拼键","source_id":"keyloop:programming-basics:seeds"}
+{"text":"env::var(\"DEBUG\").is_ok()","topic":"std_misc","api":"env::var","note_zh":"环境变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"env::args().skip(1).collect::<Vec<String>>()","topic":"std_misc","api":"env::args","note_zh":"命令行参数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"process::exit(1)","topic":"std_misc","api":"process::exit","note_zh":"进程退出","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Instant::now()","topic":"std_misc","api":"Instant::now","note_zh":"计时起点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"started.elapsed()","topic":"std_misc","api":"Instant::elapsed","note_zh":"耗时计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"thread::sleep(Duration::from_millis(200))","topic":"std_misc","api":"thread::sleep","note_zh":"休眠","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Config::default()","topic":"traits_convert","api":"Default::default","note_zh":"默认值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"state.clone()","topic":"traits_convert","api":"Clone::clone","note_zh":"克隆","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Error::from(io_err)","topic":"traits_convert","api":"From::from","note_zh":"类型转换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"serde_json::to_string(&payload)","topic":"traits_convert","api":"serde_json::to_string","note_zh":"序列化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"serde_json::from_str::<Config>(&raw)","topic":"traits_convert","api":"serde_json::from_str","note_zh":"反序列化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Level::try_from(raw_level)","topic":"traits_convert","api":"TryFrom::try_from","note_zh":"可失败转换","source_id":"keyloop:programming-basics:seeds"}

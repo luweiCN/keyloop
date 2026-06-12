@@ -2347,7 +2347,10 @@ function testLibrary(): ContentLibrary {
     everyday_sentences: { sources: [], entries: [] },
     everyday_articles: { sources: [], entries: [] },
     everyday_word_decomposition: { sources: [], entries: [] },
-    programming_words: ["enabled", "visible", "archived", "configuration"],
+    programming_words: ["enabled", "visible", "archived", "configuration"].map((word) => ({
+      word,
+      note_zh: "",
+    })),
     code_snippets: [
       {
         language: "typescript",

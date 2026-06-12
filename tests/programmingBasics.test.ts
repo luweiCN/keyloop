@@ -265,7 +265,7 @@ describe("programming basics mix target", () => {
     context.library = {
       programming_words: [
         "filter", "select", "update", "remove", "create", "config", "request", "response",
-      ],
+      ].map((word) => ({ word, note_zh: "" })),
     } as ContentLibrary;
     const target = buildProgrammingBasicsMixTarget(context, options);
     expect(target.mode).toBe("code");

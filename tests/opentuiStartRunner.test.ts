@@ -2213,7 +2213,10 @@ function refreshLibrary(): ContentLibrary {
       sources: [],
       entries: [],
     },
-    programming_words: ["selected", "pending", "performance", "response"],
+    programming_words: ["selected", "pending", "performance", "response"].map((word) => ({
+      word,
+      note_zh: "",
+    })),
     code_snippets: [],
     long_words: [],
   };

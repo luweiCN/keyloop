@@ -26,10 +26,15 @@ export interface ContentLibrary {
   everyday_sentences: EverydaySentencesCorpus;
   everyday_articles: EverydayArticlesCorpus;
   everyday_word_decomposition: EverydayWordDecompositionCorpus;
-  programming_words: string[];
+  programming_words: ProgrammingWordEntry[];
   code_corpus?: CodeCorpus;
   code_snippets: BuiltinCodeSnippet[];
   long_words: LongWordEntry[];
+}
+
+export interface ProgrammingWordEntry {
+  word: string;
+  note_zh: string;
 }
 
 export interface FoundationDrill {
@@ -160,7 +165,7 @@ export async function loadContentLibrary(options: {
     everyday_word_decomposition: await loadJsonFile<EverydayWordDecompositionCorpus>(
       "everyday_word_decomposition.json",
     ),
-    programming_words: await loadJsonFile<string[]>("programming_words.json"),
+    programming_words: await loadJsonFile<ProgrammingWordEntry[]>("programming_words.json"),
     code_corpus: codeCorpus,
     code_snippets: [],
     long_words: await loadJsonFile<LongWordEntry[]>("long_words.json"),

@@ -1,83 +1,84 @@
-{"text":"results.push_back(parsed);","topic":"vector","api":"vector::push_back","note_zh":"向量追加","source_id":"keyloop:programming-basics:seeds"}
-{"text":"rows.emplace_back(id, score);","topic":"vector","api":"vector::emplace_back","note_zh":"原地构造","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (args.size() < 2) {","topic":"vector","api":"vector::size","note_zh":"长度检查","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto& row = table.at(index);","topic":"vector","api":"vector::at","note_zh":"带检查访问","source_id":"keyloop:programming-basics:seeds"}
-{"text":"buffer.clear();","topic":"vector","api":"vector::clear","note_zh":"清空","source_id":"keyloop:programming-basics:seeds"}
-{"text":"items.reserve(expected);","topic":"vector","api":"vector::reserve","note_zh":"预留容量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (errors.empty()) {","topic":"vector","api":"vector::empty","note_zh":"空判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"merged.insert(merged.end(), extra.begin(), extra.end());","topic":"vector","api":"vector::insert","note_zh":"批量插入","source_id":"keyloop:programming-basics:seeds"}
-{"text":"items.erase(items.begin() + index);","topic":"vector","api":"vector::erase","note_zh":"删除元素","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto ext = name.substr(name.rfind('.'));","topic":"string","api":"string::substr","note_zh":"截取扩展名","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (message.find(\"error\") != std::string::npos) {","topic":"string","api":"string::find","note_zh":"子串查找","source_id":"keyloop:programming-basics:seeds"}
-{"text":"report.append(line).append(\"\\n\");","topic":"string","api":"string::append","note_zh":"追加拼接","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (input.empty()) return;","topic":"string","api":"string::empty","note_zh":"空串判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"fopen(path.c_str(), \"r\");","topic":"string","api":"string::c_str","note_zh":"转 C 串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto id = std::to_string(index);","topic":"string","api":"std::to_string","note_zh":"数字转串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"int page = std::stoi(raw);","topic":"string","api":"std::stoi","note_zh":"解析整数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"double price = std::stod(cell);","topic":"string","api":"std::stod","note_zh":"解析浮点","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (url.starts_with(\"https://\")) {","topic":"string","api":"string::starts_with","note_zh":"前缀判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (name.ends_with(\".json\")) {","topic":"string","api":"string::ends_with","note_zh":"后缀判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::sort(names.begin(), names.end());","topic":"algorithm","api":"std::sort","note_zh":"排序","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::sort(rows.begin(), rows.end(), byScoreDesc);","topic":"algorithm","api":"std::sort","note_zh":"自定义排序","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto it = std::find(labels.begin(), labels.end(), \"total\");","topic":"algorithm","api":"std::find","note_zh":"查找元素","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto admin = std::find_if(members.begin(), members.end(), isAdmin);","topic":"algorithm","api":"std::find_if","note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto failures = std::count_if(results.begin(), results.end(), failed);","topic":"algorithm","api":"std::count_if","note_zh":"条件计数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::transform(items.begin(), items.end(), std::back_inserter(ids), toId);","topic":"algorithm","api":"std::transform","note_zh":"映射变换","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto peak = *std::max_element(samples.begin(), samples.end());","topic":"algorithm","api":"std::max_element","note_zh":"最大元素","source_id":"keyloop:programming-basics:seeds"}
-{"text":"int total = std::accumulate(prices.begin(), prices.end(), 0);","topic":"algorithm","api":"std::accumulate","note_zh":"累加求和","source_id":"keyloop:programming-basics:seeds"}
-{"text":"bool dirty = std::any_of(fields.begin(), fields.end(), changed);","topic":"algorithm","api":"std::any_of","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"bool valid = std::all_of(inputs.begin(), inputs.end(), ok);","topic":"algorithm","api":"std::all_of","note_zh":"全量判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"v.erase(std::remove_if(v.begin(), v.end(), expired), v.end());","topic":"algorithm","api":"std::remove_if","note_zh":"删除惯用法","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::reverse(history.begin(), history.end());","topic":"algorithm","api":"std::reverse","note_zh":"反转","source_id":"keyloop:programming-basics:seeds"}
-{"text":"cache.insert({key, value});","topic":"map_set","api":"map::insert","note_zh":"写入映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (auto it = cache.find(key); it != cache.end()) {","topic":"map_set","api":"map::find","note_zh":"查找带声明","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (index.count(id) == 0) {","topic":"map_set","api":"map::count","note_zh":"键存在判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (!visited.contains(node)) {","topic":"map_set","api":"map::contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"topicCounts[topic] += 1;","topic":"map_set","api":"map::operator[]","note_zh":"下标累加","source_id":"keyloop:programming-basics:seeds"}
-{"text":"sessions.erase(token);","topic":"map_set","api":"map::erase","note_zh":"删除条目","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto [it, inserted] = seen.insert(line);","topic":"map_set","api":"set::insert","note_zh":"去重插入","source_id":"keyloop:programming-basics:seeds"}
-{"text":"groups.try_emplace(kind).first->second.push_back(event);","topic":"map_set","api":"map::try_emplace","note_zh":"默认分组","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto service = std::make_unique<ItemService>(repo);","topic":"memory","api":"std::make_unique","note_zh":"独占指针","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto state = std::make_shared<AppState>();","topic":"memory","api":"std::make_shared","note_zh":"共享指针","source_id":"keyloop:programming-basics:seeds"}
-{"text":"queue.push_back(std::move(job));","topic":"memory","api":"std::move","note_zh":"移动语义","source_id":"keyloop:programming-basics:seeds"}
-{"text":"render(widgetPtr.get());","topic":"memory","api":"unique_ptr::get","note_zh":"裸指针访问","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (state.use_count() == 1) {","topic":"memory","api":"shared_ptr::use_count","note_zh":"引用计数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::swap(front, back);","topic":"memory","api":"std::swap","note_zh":"交换","source_id":"keyloop:programming-basics:seeds"}
-{"text":"connection.reset();","topic":"memory","api":"unique_ptr::reset","note_zh":"释放资源","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::weak_ptr<Node> parent = node->parent;","topic":"memory","api":"std::weak_ptr","note_zh":"弱引用","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::cout << \"loaded \" << count << \" rows\\n\";","topic":"iostream","api":"std::cout","note_zh":"标准输出","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::cerr << \"usage: app <path>\\n\";","topic":"iostream","api":"std::cerr","note_zh":"标准错误","source_id":"keyloop:programming-basics:seeds"}
-{"text":"while (std::getline(file, line)) {","topic":"iostream","api":"std::getline","note_zh":"按行读取","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::ifstream file(configPath);","topic":"iostream","api":"std::ifstream","note_zh":"打开输入流","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::ofstream out(\"report.json\");","topic":"iostream","api":"std::ofstream","note_zh":"打开输出流","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::stringstream buffer; buffer << file.rdbuf();","topic":"iostream","api":"std::stringstream","note_zh":"读取全文","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto key = std::format(\"{}:{}\", host, port);","topic":"iostream","api":"std::format","note_zh":"格式化拼键","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::cin >> answer;","topic":"iostream","api":"std::cin","note_zh":"读取输入","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto theme = stored.value_or(\"light\");","topic":"optional_variant","api":"optional::value_or","note_zh":"取值带默认","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (result.has_value()) {","topic":"optional_variant","api":"optional::has_value","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"return std::nullopt;","topic":"optional_variant","api":"std::nullopt","note_zh":"空值返回","source_id":"keyloop:programming-basics:seeds"}
-{"text":"cached.emplace(loadConfig());","topic":"optional_variant","api":"optional::emplace","note_zh":"原地赋值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (auto* text = std::get_if<std::string>(&value)) {","topic":"optional_variant","api":"std::get_if","note_zh":"变体访问","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (std::holds_alternative<int>(value)) {","topic":"optional_variant","api":"std::holds_alternative","note_zh":"变体判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::visit(printer, value);","topic":"optional_variant","api":"std::visit","note_zh":"变体分发","source_id":"keyloop:programming-basics:seeds"}
-{"text":"selection.reset();","topic":"optional_variant","api":"optional::reset","note_zh":"清空可选值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto started = std::chrono::steady_clock::now();","topic":"chrono_thread","api":"steady_clock::now","note_zh":"计时起点","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto ms = duration_cast<milliseconds>(elapsed).count();","topic":"chrono_thread","api":"duration_cast","note_zh":"时长换算","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::this_thread::sleep_for(200ms);","topic":"chrono_thread","api":"std::this_thread::sleep_for","note_zh":"休眠","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::thread worker(process, batch);","topic":"chrono_thread","api":"std::thread","note_zh":"创建线程","source_id":"keyloop:programming-basics:seeds"}
-{"text":"worker.join();","topic":"chrono_thread","api":"thread::join","note_zh":"等待线程","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::lock_guard<std::mutex> lock(mutex_);","topic":"chrono_thread","api":"std::mutex","note_zh":"互斥锁","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto future = std::async(std::launch::async, load);","topic":"chrono_thread","api":"std::async","note_zh":"异步任务","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto data = future.get();","topic":"chrono_thread","api":"future::get","note_zh":"取结果","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (std::filesystem::exists(lockFile)) {","topic":"filesystem","api":"fs::exists","note_zh":"存在性检查","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::filesystem::create_directories(cacheDir);","topic":"filesystem","api":"fs::create_directories","note_zh":"递归建目录","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto language = seedPath.stem().string();","topic":"filesystem","api":"fs::path::stem","note_zh":"取文件名","source_id":"keyloop:programming-basics:seeds"}
-{"text":"for (const auto& entry : fs::directory_iterator(seedDir)) {","topic":"filesystem","api":"fs::directory_iterator","note_zh":"列目录","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto full = root / \"contents\" / name;","topic":"filesystem","api":"fs::path::operator/","note_zh":"路径拼接","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto bytes = std::filesystem::file_size(logPath);","topic":"filesystem","api":"fs::file_size","note_zh":"文件大小","source_id":"keyloop:programming-basics:seeds"}
-{"text":"std::filesystem::remove_all(scratchDir);","topic":"filesystem","api":"fs::remove_all","note_zh":"递归删除","source_id":"keyloop:programming-basics:seeds"}
-{"text":"fs::copy_file(src, dst, fs::copy_options::overwrite_existing);","topic":"filesystem","api":"fs::copy_file","note_zh":"复制文件","source_id":"keyloop:programming-basics:seeds"}
-{"text":"int volume = std::clamp(input, 0, 100);","topic":"algorithm","api":"std::clamp","note_zh":"范围夹取","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto padded = std::string(8 - id.length(), '0') + id;","topic":"string","api":"string::length","note_zh":"前导补零","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto& head = queue.front();","topic":"vector","api":"vector::front","note_zh":"取队首","source_id":"keyloop:programming-basics:seeds"}
-{"text":"auto old = std::exchange(current, next);","topic":"memory","api":"std::exchange","note_zh":"交换取旧值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"results.push_back(parsed)","topic":"vector","api":"vector::push_back","note_zh":"向量追加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rows.emplace_back(id, score)","topic":"vector","api":"vector::emplace_back","note_zh":"原地构造","source_id":"keyloop:programming-basics:seeds"}
+{"text":"items.reserve(expected)","topic":"vector","api":"vector::reserve","note_zh":"预留容量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"buffer.clear()","topic":"vector","api":"vector::clear","note_zh":"清空","source_id":"keyloop:programming-basics:seeds"}
+{"text":"table.at(index)","topic":"vector","api":"vector::at","note_zh":"带检查访问","source_id":"keyloop:programming-basics:seeds"}
+{"text":"queue.front()","topic":"vector","api":"vector::front","note_zh":"取队首","source_id":"keyloop:programming-basics:seeds"}
+{"text":"items.erase(items.begin() + index)","topic":"vector","api":"vector::erase","note_zh":"删除元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"merged.insert(merged.end(), extra.begin(), extra.end())","topic":"vector","api":"vector::insert","note_zh":"批量插入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"names.size()","topic":"vector","api":"vector::size","note_zh":"取长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"errors.empty()","topic":"vector","api":"vector::empty","note_zh":"空判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"name.substr(0, 5)","topic":"string","api":"string::substr","note_zh":"截取子串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"message.find(\"error\")","topic":"string","api":"string::find","note_zh":"子串查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"filename.rfind('.')","topic":"string","api":"string::rfind","note_zh":"反向查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"report.append(line)","topic":"string","api":"string::append","note_zh":"追加拼接","source_id":"keyloop:programming-basics:seeds"}
+{"text":"url.starts_with(\"https://\")","topic":"string","api":"string::starts_with","note_zh":"前缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"name.ends_with(\".json\")","topic":"string","api":"string::ends_with","note_zh":"后缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"path.c_str()","topic":"string","api":"string::c_str","note_zh":"转 C 串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::to_string(index)","topic":"string","api":"std::to_string","note_zh":"数字转串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::stoi(raw)","topic":"string","api":"std::stoi","note_zh":"解析整数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::stod(cell)","topic":"string","api":"std::stod","note_zh":"解析浮点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::sort(items.begin(), items.end())","topic":"algorithm","api":"std::sort","note_zh":"排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::sort(rows.begin(), rows.end(), byScoreDesc)","topic":"algorithm","api":"std::sort","note_zh":"自定义排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::find(labels.begin(), labels.end(), \"total\")","topic":"algorithm","api":"std::find","note_zh":"查找元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::find_if(users.begin(), users.end(), isAdmin)","topic":"algorithm","api":"std::find_if","note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::count_if(results.begin(), results.end(), failed)","topic":"algorithm","api":"std::count_if","note_zh":"条件计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::transform(items.begin(), items.end(), std::back_inserter(ids), toId)","topic":"algorithm","api":"std::transform","note_zh":"映射变换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::max_element(samples.begin(), samples.end())","topic":"algorithm","api":"std::max_element","note_zh":"最大元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::accumulate(prices.begin(), prices.end(), 0)","topic":"algorithm","api":"std::accumulate","note_zh":"累加求和","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::any_of(fields.begin(), fields.end(), changed)","topic":"algorithm","api":"std::any_of","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::clamp(volume, 0, 100)","topic":"algorithm","api":"std::clamp","note_zh":"范围夹取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::max(width, height)","topic":"algorithm","api":"std::max","note_zh":"取最大值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"cache.insert({key, value})","topic":"map_set","api":"map::insert","note_zh":"写入映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"cache.find(key)","topic":"map_set","api":"map::find","note_zh":"查找键","source_id":"keyloop:programming-basics:seeds"}
+{"text":"index.count(id)","topic":"map_set","api":"map::count","note_zh":"键计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"visited.contains(node)","topic":"map_set","api":"map::contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sessions.erase(token)","topic":"map_set","api":"map::erase","note_zh":"删除条目","source_id":"keyloop:programming-basics:seeds"}
+{"text":"seen.insert(line)","topic":"map_set","api":"set::insert","note_zh":"去重插入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"groups.try_emplace(kind)","topic":"map_set","api":"map::try_emplace","note_zh":"缺省构造插入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"counts.at(topic)","topic":"map_set","api":"map::at","note_zh":"带检查取值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::make_unique<ItemService>(repo)","topic":"memory","api":"std::make_unique","note_zh":"独占指针","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::make_shared<AppState>()","topic":"memory","api":"std::make_shared","note_zh":"共享指针","source_id":"keyloop:programming-basics:seeds"}
+{"text":"queue.push_back(std::move(job))","topic":"memory","api":"std::move","note_zh":"移动语义","source_id":"keyloop:programming-basics:seeds"}
+{"text":"widgetPtr.get()","topic":"memory","api":"unique_ptr::get","note_zh":"裸指针访问","source_id":"keyloop:programming-basics:seeds"}
+{"text":"connection.reset()","topic":"memory","api":"unique_ptr::reset","note_zh":"释放资源","source_id":"keyloop:programming-basics:seeds"}
+{"text":"state.use_count()","topic":"memory","api":"shared_ptr::use_count","note_zh":"引用计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::swap(front, back)","topic":"memory","api":"std::swap","note_zh":"交换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::exchange(current, next)","topic":"memory","api":"std::exchange","note_zh":"换值取旧","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::getline(file, line)","topic":"io","api":"std::getline","note_zh":"按行读取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::format(\"{}:{}\", host, port)","topic":"io","api":"std::format","note_zh":"格式化拼键","source_id":"keyloop:programming-basics:seeds"}
+{"text":"out.write(data.data(), data.size())","topic":"io","api":"ostream::write","note_zh":"块写入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::cout.flush()","topic":"io","api":"ostream::flush","note_zh":"刷新缓冲","source_id":"keyloop:programming-basics:seeds"}
+{"text":"file.is_open()","topic":"io","api":"ifstream::is_open","note_zh":"打开判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"file.close()","topic":"io","api":"ifstream::close","note_zh":"关闭文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::print(\"loaded {} rows\\n\", count)","topic":"io","api":"std::print","note_zh":"格式化打印","source_id":"keyloop:programming-basics:seeds"}
+{"text":"buffer.str()","topic":"io","api":"stringstream::str","note_zh":"取缓冲内容","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::abs(current - previous)","topic":"numeric","api":"std::abs","note_zh":"绝对值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::sqrt(dx * dx + dy * dy)","topic":"numeric","api":"std::sqrt","note_zh":"平方根","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::pow(radius, 2)","topic":"numeric","api":"std::pow","note_zh":"幂运算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::ceil(total / 25.0)","topic":"numeric","api":"std::ceil","note_zh":"向上取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::floor(ratio * n)","topic":"numeric","api":"std::floor","note_zh":"向下取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::round(score * 100.0)","topic":"numeric","api":"std::round","note_zh":"四舍五入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::midpoint(low, high)","topic":"numeric","api":"std::midpoint","note_zh":"中点计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::gcd(width, height)","topic":"numeric","api":"std::gcd","note_zh":"最大公约数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::filesystem::exists(lockFile)","topic":"filesystem","api":"fs::exists","note_zh":"存在性检查","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::filesystem::create_directories(cacheDir)","topic":"filesystem","api":"fs::create_directories","note_zh":"递归建目录","source_id":"keyloop:programming-basics:seeds"}
+{"text":"seedPath.stem().string()","topic":"filesystem","api":"fs::path::stem","note_zh":"取文件名主干","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::filesystem::file_size(logPath)","topic":"filesystem","api":"fs::file_size","note_zh":"文件大小","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::filesystem::remove_all(scratchDir)","topic":"filesystem","api":"fs::remove_all","note_zh":"递归删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fs::copy_file(src, dst, fs::copy_options::overwrite_existing)","topic":"filesystem","api":"fs::copy_file","note_zh":"复制文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"entry.path().extension()","topic":"filesystem","api":"fs::path::extension","note_zh":"取扩展名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::filesystem::temp_directory_path()","topic":"filesystem","api":"fs::temp_directory_path","note_zh":"临时目录","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::chrono::steady_clock::now()","topic":"chrono_thread","api":"steady_clock::now","note_zh":"计时起点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"duration_cast<milliseconds>(elapsed).count()","topic":"chrono_thread","api":"duration_cast","note_zh":"时长换算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::this_thread::sleep_for(200ms)","topic":"chrono_thread","api":"sleep_for","note_zh":"休眠","source_id":"keyloop:programming-basics:seeds"}
+{"text":"worker.join()","topic":"chrono_thread","api":"thread::join","note_zh":"等待线程","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::async(std::launch::async, load)","topic":"chrono_thread","api":"std::async","note_zh":"异步任务","source_id":"keyloop:programming-basics:seeds"}
+{"text":"future.get()","topic":"chrono_thread","api":"future::get","note_zh":"取结果","source_id":"keyloop:programming-basics:seeds"}
+{"text":"mutex_.lock()","topic":"chrono_thread","api":"mutex::lock","note_zh":"加锁","source_id":"keyloop:programming-basics:seeds"}
+{"text":"stored.value_or(\"light\")","topic":"optional","api":"optional::value_or","note_zh":"取值带默认","source_id":"keyloop:programming-basics:seeds"}
+{"text":"result.has_value()","topic":"optional","api":"optional::has_value","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"cached.emplace(loadConfig())","topic":"optional","api":"optional::emplace","note_zh":"原地赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"selection.reset()","topic":"optional","api":"optional::reset","note_zh":"清空可选值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::holds_alternative<int>(value)","topic":"optional","api":"std::holds_alternative","note_zh":"变体判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"std::get<std::string>(value)","topic":"optional","api":"std::get","note_zh":"变体取值","source_id":"keyloop:programming-basics:seeds"}

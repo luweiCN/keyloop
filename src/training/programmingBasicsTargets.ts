@@ -99,6 +99,29 @@ function basicsCodeBlock(language: string, lineCount: number) {
   };
 }
 
+// 符号与数字三形态组装：value 卡按空格聚合成行，statement 卡一行一张，
+// block 卡保留多行且块间以空行分隔（与代码实战一致的输入体验）。
+const VALUES_PER_LINE = 4;
+
+function symbolsNumbersText(cards: ProgrammingBasicsCard[]): string {
+  const values = cards.filter((card) => card.form === "value");
+  const statements = cards.filter((card) => card.form !== "value" && card.form !== "block");
+  const blocks = cards.filter((card) => card.form === "block");
+  const singleLines: string[] = [];
+  for (let index = 0; index < values.length; index += VALUES_PER_LINE) {
+    singleLines.push(
+      values
+        .slice(index, index + VALUES_PER_LINE)
+        .map((card) => card.text)
+        .join(" "),
+    );
+  }
+  singleLines.push(...statements.map((card) => card.text));
+  const sections = singleLines.length > 0 ? [singleLines.join("\n")] : [];
+  sections.push(...blocks.map((card) => card.text));
+  return sections.join("\n\n");
+}
+
 function basicsTarget(
   kind: ProgrammingBasicsKind,
   sourceSlug: string,
@@ -110,12 +133,15 @@ function basicsTarget(
   const language = resolveProgrammingBasicsLanguage(context.codeConfig, available, random);
   const cards = loadProgrammingBasicsCards(kind, language, options);
   const picked = pickBalancedCards(cards, recentBasicsLines(context.records), random);
-  const text = picked.map((card) => card.text).join("\n");
+  const text =
+    kind === "symbols_numbers"
+      ? symbolsNumbersText(picked)
+      : picked.map((card) => card.text).join("\n");
   return {
     mode: "code",
     text,
     source: `keyloop:module:programming-basics:${sourceSlug}:${language}`,
-    code_blocks: [basicsCodeBlock(language, picked.length)],
+    code_blocks: [basicsCodeBlock(language, text.split("\n").length)],
   };
 }
 
@@ -160,7 +186,9 @@ export function buildProgrammingBasicsMixTarget(
   const used = recentBasicsLines(context.records);
 
   const symbolCards = pickBalancedCards(
-    loadProgrammingBasicsCards("symbols_numbers", language, options),
+    loadProgrammingBasicsCards("symbols_numbers", language, options).filter(
+      (card) => card.form !== "block",
+    ),
     used,
     random,
   ).slice(0, 3);
@@ -177,17 +205,18 @@ export function buildProgrammingBasicsMixTarget(
   }
   lines.push(...symbolCards.map((card) => card.text));
   lines.push(...apiCards.map((card) => card.text));
-  lines.push(...namingLinesFromWords(context.library.programming_words, random, 2));
-  const words = shuffled(context.library.programming_words, random).slice(0, 8);
+  const wordPool = context.library.programming_words.map((entry) => entry.word);
+  lines.push(...namingLinesFromWords(wordPool, random, 2));
+  const words = shuffled(wordPool, random).slice(0, 8);
   if (words.length > 0) {
     lines.push(...chunkWords(words, 4));
   }
 
-  const cardCount = symbolCards.length + apiCards.length;
+  const text = lines.join("\n");
   return {
     mode: "code",
-    text: lines.join("\n"),
+    text,
     source: `keyloop:module:programming-basics-mix:${language}`,
-    code_blocks: [basicsCodeBlock(language, cardCount)],
+    code_blocks: [basicsCodeBlock(language, text.split("\n").length)],
   };
 }

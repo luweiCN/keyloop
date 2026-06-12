@@ -7,9 +7,12 @@ import {
 
 export type ProgrammingBasicsKind = "symbols_numbers" | "builtin_api";
 
+export type ProgrammingBasicsCardForm = "value" | "statement" | "block";
+
 export interface ProgrammingBasicsCard {
   text: string;
   topic: string;
+  form?: ProgrammingBasicsCardForm;
   focus?: string[];
   api?: string;
   note_zh?: string;

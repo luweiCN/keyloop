@@ -103,7 +103,8 @@ describe("content library", () => {
   test("programming words include common non-keyword state terms", async () => {
     const library = await loadContentLibrary();
 
-    expect(library.programming_words).toEqual(
+    const words = library.programming_words.map((entry) => entry.word);
+    expect(words).toEqual(
       expect.arrayContaining([
         "enabled",
         "pending",
@@ -115,6 +116,10 @@ describe("content library", () => {
         "performance",
       ]),
     );
+    expect(library.programming_words.length).toBeGreaterThanOrEqual(1000);
+    for (const entry of library.programming_words) {
+      expect(entry.note_zh.trim().length).toBeGreaterThan(0);
+    }
   });
 
   test("code snippets use the generated code content index", async () => {

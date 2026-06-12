@@ -1,81 +1,83 @@
-{"text":"val ids = items.map { it.id }","topic":"collections","api":"map","note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val active = users.filter { it.active }","topic":"collections","api":"filter","note_zh":"集合过滤","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val admin = members.firstOrNull { it.role == \"admin\" }","topic":"collections","api":"firstOrNull","note_zh":"查找首个","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val dirty = fields.any { it.changed }","topic":"collections","api":"any","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val valid = inputs.all { it.ok }","topic":"collections","api":"all","note_zh":"全量判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val byKind = events.groupBy { it.kind }","topic":"collections","api":"groupBy","note_zh":"分组","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val byId = items.associateBy { it.id }","topic":"collections","api":"associateBy","note_zh":"转映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val ranked = rows.sortedByDescending { it.score }","topic":"collections","api":"sortedBy","note_zh":"排序","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val total = orders.sumOf { it.total }","topic":"collections","api":"sumOf","note_zh":"求和","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val unique = tags.distinct()","topic":"collections","api":"distinct","note_zh":"去重","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val allTags = posts.flatMap { it.tags }","topic":"collections","api":"flatMap","note_zh":"映射拍平","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val sum = prices.fold(0) { acc, p -> acc + p }","topic":"collections","api":"fold","note_zh":"折叠累加","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val segments = path.split(\"/\")","topic":"string","api":"split","note_zh":"路径切分","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val keyword = query.trim()","topic":"string","api":"trim","note_zh":"去除空白","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val slug = title.replace(\" \", \"-\")","topic":"string","api":"replace","note_zh":"替换字符","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (url.startsWith(\"https://\")) {","topic":"string","api":"startsWith","note_zh":"前缀判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (name.endsWith(\".json\")) {","topic":"string","api":"endsWith","note_zh":"后缀判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (message.contains(\"error\")) {","topic":"string","api":"contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val code = currency.uppercase()","topic":"string","api":"uppercase","note_zh":"转大写","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val csv = fields.joinToString(\",\")","topic":"string","api":"joinToString","note_zh":"拼接为串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val id = index.toString().padStart(4, '0')","topic":"string","api":"padStart","note_zh":"前导补零","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (input.isBlank()) return","topic":"string","api":"isBlank","note_zh":"空白判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"path.split(\"/\")","topic":"string","api":"split","note_zh":"路径切分","source_id":"keyloop:programming-basics:seeds"}
+{"text":"query.trim()","topic":"string","api":"trim","note_zh":"去除空白","source_id":"keyloop:programming-basics:seeds"}
+{"text":"title.replace(\" \", \"-\")","topic":"string","api":"replace","note_zh":"替换字符","source_id":"keyloop:programming-basics:seeds"}
+{"text":"url.startsWith(\"https://\")","topic":"string","api":"startsWith","note_zh":"前缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"name.endsWith(\".json\")","topic":"string","api":"endsWith","note_zh":"后缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"message.contains(\"error\")","topic":"string","api":"contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"currency.uppercase()","topic":"string","api":"uppercase","note_zh":"转大写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"header.lowercase()","topic":"string","api":"lowercase","note_zh":"转小写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fields.joinToString(\",\")","topic":"string","api":"joinToString","note_zh":"拼接为串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"index.toString().padStart(4, '0')","topic":"string","api":"padStart","note_zh":"前导补零","source_id":"keyloop:programming-basics:seeds"}
+{"text":"branch.removePrefix(\"feature/\")","topic":"string","api":"removePrefix","note_zh":"去除前缀","source_id":"keyloop:programming-basics:seeds"}
+{"text":"file.substringAfterLast('.')","topic":"string","api":"substringAfterLast","note_zh":"截取扩展名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"items.map { it.id }","topic":"list","api":"map","note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"users.filter { it.active }","topic":"list","api":"filter","note_zh":"集合过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"members.firstOrNull { it.role == \"admin\" }","topic":"list","api":"firstOrNull","note_zh":"查找首个","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fields.any { it.changed }","topic":"list","api":"any","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"inputs.all { it.ok }","topic":"list","api":"all","note_zh":"全量判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"events.groupBy { it.kind }","topic":"list","api":"groupBy","note_zh":"分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"items.associateBy { it.id }","topic":"list","api":"associateBy","note_zh":"转映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"orders.sortedBy { it.total }","topic":"list","api":"sortedBy","note_zh":"升序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rows.sortedByDescending { it.score }","topic":"list","api":"sortedByDescending","note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"orders.sumOf { it.total }","topic":"list","api":"sumOf","note_zh":"求和","source_id":"keyloop:programming-basics:seeds"}
+{"text":"tags.distinct()","topic":"list","api":"distinct","note_zh":"去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"posts.flatMap { it.tags }","topic":"list","api":"flatMap","note_zh":"映射拍平","source_id":"keyloop:programming-basics:seeds"}
+{"text":"prices.fold(0) { acc, p -> acc + p }","topic":"list","api":"fold","note_zh":"折叠累加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"records.chunked(100)","topic":"list","api":"chunked","note_zh":"分批","source_id":"keyloop:programming-basics:seeds"}
+{"text":"names.zip(scores)","topic":"list","api":"zip","note_zh":"配对","source_id":"keyloop:programming-basics:seeds"}
+{"text":"results.count { it.failed }","topic":"list","api":"count","note_zh":"条件计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"mapOf(\"Accept\" to \"application/json\")","topic":"map","api":"mapOf","note_zh":"不可变映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"mutableMapOf<String, Int>()","topic":"map","api":"mutableMapOf","note_zh":"可变映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"options.getOrDefault(\"limit\", 20)","topic":"map","api":"getOrDefault","note_zh":"取值带默认","source_id":"keyloop:programming-basics:seeds"}
+{"text":"groups.getOrPut(kind) { mutableListOf() }","topic":"map","api":"getOrPut","note_zh":"缺失即建","source_id":"keyloop:programming-basics:seeds"}
+{"text":"index.containsKey(id)","topic":"map","api":"containsKey","note_zh":"键存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"buildMap { put(\"PORT\", \"8080\") }","topic":"map","api":"buildMap","note_zh":"构建映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"stats.mapValues { it.value * 2 }","topic":"map","api":"mapValues","note_zh":"映射值变换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"names.zip(scores).toMap()","topic":"map","api":"toMap","note_zh":"配对转映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"user?.profile?.name","topic":"null_safety","api":"?.","note_zh":"链式空安全","source_id":"keyloop:programming-basics:seeds"}
+{"text":"stored ?: \"light\"","topic":"null_safety","api":"?:","note_zh":"Elvis 默认","source_id":"keyloop:programming-basics:seeds"}
+{"text":"requireNotNull(params[\"id\"])","topic":"null_safety","api":"requireNotNull","note_zh":"非空断言","source_id":"keyloop:programming-basics:seeds"}
+{"text":"checkNotNull(repository) { \"repo missing\" }","topic":"null_safety","api":"checkNotNull","note_zh":"状态断言","source_id":"keyloop:programming-basics:seeds"}
+{"text":"optionals.filterNotNull()","topic":"null_safety","api":"filterNotNull","note_zh":"过滤空值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"lines.mapNotNull { parseOrNull(it) }","topic":"null_safety","api":"mapNotNull","note_zh":"映射去空","source_id":"keyloop:programming-basics:seeds"}
+{"text":"post.tags.orEmpty()","topic":"null_safety","api":"orEmpty","note_zh":"空集合默认","source_id":"keyloop:programming-basics:seeds"}
+{"text":"found.ifEmpty { defaults }","topic":"null_safety","api":"ifEmpty","note_zh":"空集合回退","source_id":"keyloop:programming-basics:seeds"}
 {"text":"user?.let { render(it) }","topic":"scope","api":"let","note_zh":"非空执行","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val config = Config().apply { retries = 3 }","topic":"scope","api":"apply","note_zh":"配置初始化","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val result = compute().also { log.debug(it) }","topic":"scope","api":"also","note_zh":"旁路日志","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val area = rect.run { width * height }","topic":"scope","api":"run","note_zh":"作用域计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"StringBuilder().apply { append(header) }","topic":"scope","api":"apply","note_zh":"配置初始化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"compute().also { log(it) }","topic":"scope","api":"also","note_zh":"旁路日志","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rect.run { width * height }","topic":"scope","api":"run","note_zh":"作用域计算","source_id":"keyloop:programming-basics:seeds"}
 {"text":"with(builder) { append(name); append(count) }","topic":"scope","api":"with","note_zh":"批量调用","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val valid = input.takeIf { it.isNotEmpty() }","topic":"scope","api":"takeIf","note_zh":"条件保留","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val client by lazy { HttpClient() }","topic":"scope","api":"lazy","note_zh":"惰性初始化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"input.takeIf { it.isNotEmpty() }","topic":"scope","api":"takeIf","note_zh":"条件保留","source_id":"keyloop:programming-basics:seeds"}
 {"text":"file.inputStream().use { stream -> load(stream) }","topic":"scope","api":"use","note_zh":"自动关闭","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val name = user?.profile?.name","topic":"null_safety","api":"?.","note_zh":"链式空安全","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val theme = stored ?: \"light\"","topic":"null_safety","api":"?:","note_zh":"Elvis 默认","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val id = requireNotNull(params[\"id\"])","topic":"null_safety","api":"requireNotNull","note_zh":"非空断言","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val repo = checkNotNull(repository) { \"repo missing\" }","topic":"null_safety","api":"checkNotNull","note_zh":"状态断言","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val present = optionals.filterNotNull()","topic":"null_safety","api":"filterNotNull","note_zh":"过滤空值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val parsed = lines.mapNotNull { parseOrNull(it) }","topic":"null_safety","api":"mapNotNull","note_zh":"映射去空","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val tags = post.tags.orEmpty()","topic":"null_safety","api":"orEmpty","note_zh":"空集合默认","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val cached = lookup(key)!!","topic":"null_safety","api":"!!","note_zh":"强制非空","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val roles = listOf(\"admin\", \"editor\")","topic":"builders","api":"listOf","note_zh":"不可变列表","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val headers = mapOf(\"Accept\" to \"application/json\")","topic":"builders","api":"mapOf","note_zh":"不可变映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val allowed = setOf(\"http\", \"https\")","topic":"builders","api":"setOf","note_zh":"不可变集合","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val cache = mutableMapOf<String, Int>()","topic":"builders","api":"mutableMapOf","note_zh":"可变映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val lines = buildList { add(header); addAll(rows) }","topic":"builders","api":"buildList","note_zh":"构建列表","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val report = buildString { append(name); append(count) }","topic":"builders","api":"buildString","note_zh":"构建字符串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val entry = key to value","topic":"builders","api":"to","note_zh":"键值对","source_id":"keyloop:programming-basics:seeds"}
-{"text":"return emptyList()","topic":"builders","api":"emptyList","note_zh":"空列表","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val page = raw.toInt()","topic":"text_number","api":"toInt","note_zh":"解析整数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val limit = input.toIntOrNull() ?: 20","topic":"text_number","api":"toIntOrNull","note_zh":"安全解析","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val price = cell.toDouble()","topic":"text_number","api":"toDouble","note_zh":"解析浮点","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val stamp = timestamp.toString()","topic":"text_number","api":"toString","note_zh":"转字符串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val width = maxOf(minWidth, measured)","topic":"text_number","api":"maxOf","note_zh":"下限约束","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val next = minOf(page + 1, lastPage)","topic":"text_number","api":"minOf","note_zh":"上限约束","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val volume = input.coerceIn(0, 100)","topic":"text_number","api":"coerceIn","note_zh":"范围夹取","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val rounded = (score * 100).roundToInt()","topic":"text_number","api":"roundToInt","note_zh":"四舍五入","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val raw = File(\"config.json\").readText()","topic":"io_file","api":"File.readText","note_zh":"读取文本","source_id":"keyloop:programming-basics:seeds"}
-{"text":"File(\"report.json\").writeText(output)","topic":"io_file","api":"File.writeText","note_zh":"写入文本","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (lockFile.exists()) {","topic":"io_file","api":"File.exists","note_zh":"存在性检查","source_id":"keyloop:programming-basics:seeds"}
-{"text":"cacheDir.mkdirs()","topic":"io_file","api":"File.mkdirs","note_zh":"递归建目录","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val lines = logFile.readLines()","topic":"io_file","api":"File.readLines","note_zh":"按行读取","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val target = outDir.resolve(\"$name.html\")","topic":"io_file","api":"File.resolve","note_zh":"拼接路径","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val seeds = seedDir.listFiles { f -> f.extension == \"json\" }","topic":"io_file","api":"File.listFiles","note_zh":"列文件","source_id":"keyloop:programming-basics:seeds"}
-{"text":"logFile.appendText(\"$entry\\n\")","topic":"io_file","api":"File.appendText","note_zh":"追加写入","source_id":"keyloop:programming-basics:seeds"}
-{"text":"scope.launch { refresh() }","topic":"coroutines","api":"launch","note_zh":"启动协程","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val deferred = scope.async { loadUser(id) }","topic":"coroutines","api":"async","note_zh":"异步求值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val user = deferred.await()","topic":"coroutines","api":"await","note_zh":"等待结果","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val data = withContext(Dispatchers.IO) { fetch() }","topic":"coroutines","api":"withContext","note_zh":"切换调度器","source_id":"keyloop:programming-basics:seeds"}
-{"text":"delay(1_000)","topic":"coroutines","api":"delay","note_zh":"协程延时","source_id":"keyloop:programming-basics:seeds"}
-{"text":"runBlocking { main() }","topic":"coroutines","api":"runBlocking","note_zh":"阻塞入口","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val pages = jobs.awaitAll()","topic":"coroutines","api":"awaitAll","note_zh":"并发等待","source_id":"keyloop:programming-basics:seeds"}
-{"text":"coroutineScope { launch { warmCache() } }","topic":"coroutines","api":"coroutineScope","note_zh":"结构化并发","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val batches = records.chunked(100)","topic":"collections","api":"chunked","note_zh":"分批","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val pairs = names.zip(scores)","topic":"collections","api":"zip","note_zh":"配对","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val rows = raw.lines().filter { it.isNotBlank() }","topic":"string","api":"lines","note_zh":"按行切分","source_id":"keyloop:programming-basics:seeds"}
 {"text":"repeat(3) { attempt -> retry(attempt) }","topic":"scope","api":"repeat","note_zh":"重复执行","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val pct = \"%.1f%%\".format(ratio * 100)","topic":"text_number","api":"format","note_zh":"格式化百分比","source_id":"keyloop:programming-basics:seeds"}
-{"text":"scratchDir.deleteRecursively()","topic":"io_file","api":"File.deleteRecursively","note_zh":"递归删除","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val list = found.ifEmpty { defaults }","topic":"null_safety","api":"ifEmpty","note_zh":"空集合回退","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val env = buildMap { put(\"PORT\", \"8080\") }","topic":"builders","api":"buildMap","note_zh":"构建映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val failures = results.count { it.failed }","topic":"collections","api":"count","note_zh":"条件计数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val name = branch.removePrefix(\"feature/\")","topic":"string","api":"removePrefix","note_zh":"去除前缀","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val updates = flowOf(first, second)","topic":"coroutines","api":"flowOf","note_zh":"构造流","source_id":"keyloop:programming-basics:seeds"}
+{"text":"raw.toInt()","topic":"number","api":"toInt","note_zh":"解析整数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"input.toIntOrNull() ?: 20","topic":"number","api":"toIntOrNull","note_zh":"安全解析","source_id":"keyloop:programming-basics:seeds"}
+{"text":"cell.toDouble()","topic":"number","api":"toDouble","note_zh":"解析浮点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"maxOf(minWidth, measured)","topic":"number","api":"maxOf","note_zh":"下限约束","source_id":"keyloop:programming-basics:seeds"}
+{"text":"minOf(page + 1, lastPage)","topic":"number","api":"minOf","note_zh":"上限约束","source_id":"keyloop:programming-basics:seeds"}
+{"text":"volume.coerceIn(0, 100)","topic":"number","api":"coerceIn","note_zh":"范围夹取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"(score * 100).roundToInt()","topic":"number","api":"roundToInt","note_zh":"四舍五入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"%.1f%%\".format(ratio * 100)","topic":"number","api":"format","note_zh":"格式化百分比","source_id":"keyloop:programming-basics:seeds"}
+{"text":"File(\"config.json\").readText()","topic":"io","api":"readText","note_zh":"读取文本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"File(\"report.json\").writeText(output)","topic":"io","api":"writeText","note_zh":"写入文本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"lockFile.exists()","topic":"io","api":"exists","note_zh":"存在性检查","source_id":"keyloop:programming-basics:seeds"}
+{"text":"cacheDir.mkdirs()","topic":"io","api":"mkdirs","note_zh":"递归建目录","source_id":"keyloop:programming-basics:seeds"}
+{"text":"logFile.readLines()","topic":"io","api":"readLines","note_zh":"按行读取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"outDir.resolve(\"report.html\")","topic":"io","api":"resolve","note_zh":"拼接路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"logFile.appendText(entry + \"\\n\")","topic":"io","api":"appendText","note_zh":"追加写入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"scratchDir.deleteRecursively()","topic":"io","api":"deleteRecursively","note_zh":"递归删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"scope.launch { refresh() }","topic":"coroutines","api":"launch","note_zh":"启动协程","source_id":"keyloop:programming-basics:seeds"}
+{"text":"scope.async { loadUser(id) }","topic":"coroutines","api":"async","note_zh":"异步求值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"deferred.await()","topic":"coroutines","api":"await","note_zh":"等待结果","source_id":"keyloop:programming-basics:seeds"}
+{"text":"withContext(Dispatchers.IO) { fetch() }","topic":"coroutines","api":"withContext","note_zh":"切换调度器","source_id":"keyloop:programming-basics:seeds"}
+{"text":"delay(1_000)","topic":"coroutines","api":"delay","note_zh":"协程延时","source_id":"keyloop:programming-basics:seeds"}
+{"text":"runBlocking { warmCache() }","topic":"coroutines","api":"runBlocking","note_zh":"阻塞入口","source_id":"keyloop:programming-basics:seeds"}
+{"text":"jobs.awaitAll()","topic":"coroutines","api":"awaitAll","note_zh":"并发等待","source_id":"keyloop:programming-basics:seeds"}
+{"text":"flowOf(first, second)","topic":"coroutines","api":"flowOf","note_zh":"构造流","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Instant.now()","topic":"time","api":"Instant.now","note_zh":"当前时刻","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Duration.between(started, Instant.now())","topic":"time","api":"Duration.between","note_zh":"耗时计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"LocalDate.parse(\"2026-06-12\")","topic":"time","api":"LocalDate.parse","note_zh":"解析日期","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DateTimeFormatter.ofPattern(\"HH:mm:ss\")","topic":"time","api":"DateTimeFormatter.ofPattern","note_zh":"时间格式器","source_id":"keyloop:programming-basics:seeds"}
+{"text":"measureTimeMillis { rebuild() }","topic":"time","api":"measureTimeMillis","note_zh":"计时执行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"30.seconds","topic":"time","api":"seconds","note_zh":"时长扩展","source_id":"keyloop:programming-basics:seeds"}
+{"text":"System.currentTimeMillis()","topic":"time","api":"System.currentTimeMillis","note_zh":"毫秒时间戳","source_id":"keyloop:programming-basics:seeds"}

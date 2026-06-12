@@ -12,7 +12,6 @@ import {
   everydayMeaningLines,
   refreshModuleMixTarget,
   defaultSessionRecord,
-  focusNamingLines,
   identifierParts,
   type BuiltinCodeSnippet,
   type ContentLibrary,
@@ -41,34 +40,39 @@ describe("target generation core", () => {
     ]);
   });
 
-  test("focus naming lines include common code naming variants", () => {
-    const lines = focusNamingLines(["selectedPreference"]);
-
-    expect(lines[0]).toBe("selectedPreference getSelectedPreference SELECTED_PREFERENCE");
-  });
-
-  test("lesson words start with unique plan focus and fill to sixteen words", () => {
-    const text = buildLessonWords(testPlan(), testLibrary());
+  test("lesson words draw sixteen random words from the library", () => {
+    const text = buildLessonWords(testLibrary());
     const words = text.split(/\s+/u);
 
-    expect(words.slice(0, 3)).toEqual(["selected", "pending", "performance"]);
     expect(words).toHaveLength(16);
+    const library = testLibrary().programming_words.map((entry) => entry.word);
+    for (const word of words) {
+      expect(library).toContain(word);
+    }
   });
 
-  test("lesson words shuffle fill terms with injected random", () => {
+  test("lesson words shuffle the library with injected random", () => {
     const text = buildLessonWords(
-      unfocusedPlan({ focus_words: ["selected"] }),
-      { programming_words: ["term1", "term2", "term3", "term4", "term5"] },
+      {
+        programming_words: ["term1", "term2", "term3", "term4", "term5"].map((word) => ({
+          word,
+          note_zh: "",
+        })),
+      },
       sequenceRandom([0, 0.99, 0.99, 0.99]),
     );
     const words = text.split(/\s+/u);
 
-    expect(words.slice(0, 2)).toEqual(["selected", "term5"]);
+    expect(words[0]).toBe("term5");
+    expect(words).toHaveLength(5);
   });
 
   test("programming word targets pass injected random to lesson words", () => {
     const library = testLibrary();
-    library.programming_words = numberedLines("programmingTerm", 20);
+    library.programming_words = numberedLines("programmingTerm", 20).map((word) => ({
+      word,
+      note_zh: "",
+    }));
 
     const originalRandom = Math.random;
     Math.random = () => 0.99;
@@ -1798,7 +1802,7 @@ function testLibrary(): ContentLibrary {
       "variant",
       "registry",
       "release",
-    ],
+    ].map((word) => ({ word, note_zh: "" })),
     code_snippets: [
       {
         language: "typescript",

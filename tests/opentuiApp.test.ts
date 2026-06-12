@@ -975,7 +975,7 @@ function testLibrary(): ContentLibrary {
       "variant",
       "registry",
       "release",
-    ],
+    ].map((word) => ({ word, note_zh: "" })),
     code_snippets: [
       {
         language: "typescript",

@@ -999,7 +999,10 @@ function testLibrary(): ContentLibrary {
     everyday_sentences: { sources: [], entries: [] },
     everyday_articles: { sources: [], entries: [] },
     everyday_word_decomposition: { sources: [], entries: [] },
-    programming_words: ["selected", "pending", "enabled"],
+    programming_words: ["selected", "pending", "enabled"].map((word) => ({
+      word,
+      note_zh: "",
+    })),
     code_snippets: [],
     long_words: [],
   };

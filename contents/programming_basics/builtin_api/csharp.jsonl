@@ -1,80 +1,80 @@
-{"text":"var segments = path.Split('/');","topic":"string","api":"String.Split","note_zh":"路径切分","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var csv = string.Join(\",\", fields);","topic":"string","api":"String.Join","note_zh":"拼接为串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (message.Contains(\"error\")) {","topic":"string","api":"String.Contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var keyword = query.Trim();","topic":"string","api":"String.Trim","note_zh":"去除空白","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (url.StartsWith(\"https://\")) {","topic":"string","api":"String.StartsWith","note_zh":"前缀判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (name.EndsWith(\".json\")) {","topic":"string","api":"String.EndsWith","note_zh":"后缀判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (string.IsNullOrEmpty(input)) {","topic":"string","api":"String.IsNullOrEmpty","note_zh":"空串判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var slug = title.Replace(' ', '-');","topic":"string","api":"String.Replace","note_zh":"字符替换","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var key = label.ToLowerInvariant();","topic":"string","api":"String.ToLowerInvariant","note_zh":"转小写","source_id":"keyloop:programming-basics:seeds"}
-{"text":"results.Add(parsed);","topic":"collections","api":"List.Add","note_zh":"列表追加","source_id":"keyloop:programming-basics:seeds"}
-{"text":"merged.AddRange(extraRows);","topic":"collections","api":"List.AddRange","note_zh":"批量追加","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (cache.TryGetValue(key, out var value)) {","topic":"collections","api":"Dictionary.TryGetValue","note_zh":"安全取值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (!index.ContainsKey(id)) {","topic":"collections","api":"Dictionary.ContainsKey","note_zh":"键存在判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (errors.Count == 0) {","topic":"collections","api":"List.Count","note_zh":"计数判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (!seen.Add(line)) continue;","topic":"collections","api":"HashSet.Add","note_zh":"集合去重","source_id":"keyloop:programming-basics:seeds"}
-{"text":"sessions.Remove(token);","topic":"collections","api":"Dictionary.Remove","note_zh":"删除条目","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var next = queue.Dequeue();","topic":"collections","api":"Queue.Dequeue","note_zh":"出队","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var ids = items.Select(item => item.Id).ToList();","topic":"linq","api":"Enumerable.Select","note_zh":"投影","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var active = users.Where(user => user.Active).ToList();","topic":"linq","api":"Enumerable.Where","note_zh":"过滤","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var admin = members.FirstOrDefault(m => m.Role == \"admin\");","topic":"linq","api":"Enumerable.FirstOrDefault","note_zh":"查找首个","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var dirty = fields.Any(field => field.Changed);","topic":"linq","api":"Enumerable.Any","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var valid = inputs.All(input => input.Ok);","topic":"linq","api":"Enumerable.All","note_zh":"全量判断","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var ranked = rows.OrderByDescending(row => row.Score).ToList();","topic":"linq","api":"Enumerable.OrderBy","note_zh":"排序","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var byKind = events.GroupBy(e => e.Kind);","topic":"linq","api":"Enumerable.GroupBy","note_zh":"分组","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var total = orders.Sum(order => order.Total);","topic":"linq","api":"Enumerable.Sum","note_zh":"求和","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var unique = tags.Distinct().ToList();","topic":"linq","api":"Enumerable.Distinct","note_zh":"去重","source_id":"keyloop:programming-basics:seeds"}
-{"text":"await Task.WhenAll(first, second);","topic":"task","api":"Task.WhenAll","note_zh":"并发等待","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var job = Task.Run(() => Process(batch));","topic":"task","api":"Task.Run","note_zh":"后台任务","source_id":"keyloop:programming-basics:seeds"}
-{"text":"await Task.Delay(TimeSpan.FromSeconds(1));","topic":"task","api":"Task.Delay","note_zh":"异步延时","source_id":"keyloop:programming-basics:seeds"}
-{"text":"return Task.FromResult(cached);","topic":"task","api":"Task.FromResult","note_zh":"立即完成","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var winner = await Task.WhenAny(fetchTask, timeoutTask);","topic":"task","api":"Task.WhenAny","note_zh":"竞速取先","source_id":"keyloop:programming-basics:seeds"}
-{"text":"using var cts = new CancellationTokenSource(timeout);","topic":"task","api":"CancellationTokenSource","note_zh":"取消令牌","source_id":"keyloop:programming-basics:seeds"}
-{"text":"load.ContinueWith(t => Render(t.Result));","topic":"task","api":"Task.ContinueWith","note_zh":"续接任务","source_id":"keyloop:programming-basics:seeds"}
-{"text":"public ValueTask<int> CountAsync() => new(cached);","topic":"task","api":"ValueTask","note_zh":"值任务","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var page = int.Parse(raw);","topic":"convert_math","api":"int.Parse","note_zh":"解析整数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (int.TryParse(input, out var limit)) {","topic":"convert_math","api":"int.TryParse","note_zh":"安全解析","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var size = Convert.ToInt32(field);","topic":"convert_math","api":"Convert.ToInt32","note_zh":"类型转换","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var price = double.Parse(cell);","topic":"convert_math","api":"double.Parse","note_zh":"解析浮点","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var width = Math.Max(minWidth, measured);","topic":"convert_math","api":"Math.Max","note_zh":"下限约束","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var next = Math.Min(page + 1, lastPage);","topic":"convert_math","api":"Math.Min","note_zh":"上限约束","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var rounded = Math.Round(score, 2);","topic":"convert_math","api":"Math.Round","note_zh":"四舍五入","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var pages = (int)Math.Ceiling(total / (double)pageSize);","topic":"convert_math","api":"Math.Ceiling","note_zh":"向上取整","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var body = JsonSerializer.Serialize(payload);","topic":"json","api":"JsonSerializer.Serialize","note_zh":"序列化","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var config = JsonSerializer.Deserialize<Config>(raw);","topic":"json","api":"JsonSerializer.Deserialize","note_zh":"反序列化","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var options = new JsonSerializerOptions { WriteIndented = true };","topic":"json","api":"JsonSerializerOptions","note_zh":"序列化选项","source_id":"keyloop:programming-basics:seeds"}
-{"text":"File.WriteAllText(outPath, JsonSerializer.Serialize(report, options));","topic":"json","api":"JsonSerializer.Serialize","note_zh":"格式化写出","source_id":"keyloop:programming-basics:seeds"}
-{"text":"using var doc = JsonDocument.Parse(raw);","topic":"json","api":"JsonDocument.Parse","note_zh":"文档解析","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var name = doc.RootElement.GetProperty(\"name\").GetString();","topic":"json","api":"JsonElement.GetProperty","note_zh":"取属性","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var list = await JsonSerializer.DeserializeAsync<List<Item>>(stream);","topic":"json","api":"JsonSerializer.DeserializeAsync","note_zh":"流式反序列化","source_id":"keyloop:programming-basics:seeds"}
-{"text":"options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;","topic":"json","api":"JsonNamingPolicy.CamelCase","note_zh":"驼峰策略","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var template = File.ReadAllText(\"index.html\");","topic":"io_path","api":"File.ReadAllText","note_zh":"读取文本","source_id":"keyloop:programming-basics:seeds"}
-{"text":"File.WriteAllText(\"report.json\", output);","topic":"io_path","api":"File.WriteAllText","note_zh":"写入文本","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (File.Exists(lockFile)) {","topic":"io_path","api":"File.Exists","note_zh":"存在性检查","source_id":"keyloop:programming-basics:seeds"}
-{"text":"Directory.CreateDirectory(cacheDir);","topic":"io_path","api":"Directory.CreateDirectory","note_zh":"递归建目录","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var full = Path.Combine(root, \"contents\", name);","topic":"io_path","api":"Path.Combine","note_zh":"拼接路径","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var language = Path.GetFileNameWithoutExtension(seedPath);","topic":"io_path","api":"Path.GetFileNameWithoutExtension","note_zh":"取文件名","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var seeds = Directory.GetFiles(seedDir, \"*.json\");","topic":"io_path","api":"Directory.GetFiles","note_zh":"列文件","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var lines = File.ReadAllLines(logPath);","topic":"io_path","api":"File.ReadAllLines","note_zh":"按行读取","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var started = DateTime.UtcNow;","topic":"time","api":"DateTime.UtcNow","note_zh":"当前时间","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var watch = Stopwatch.StartNew();","topic":"time","api":"Stopwatch.StartNew","note_zh":"计时器","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var timeout = TimeSpan.FromSeconds(30);","topic":"time","api":"TimeSpan.FromSeconds","note_zh":"时长构造","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var day = DateTime.Parse(\"2026-06-11\");","topic":"time","api":"DateTime.Parse","note_zh":"解析日期","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var stamp = now.ToString(\"HH:mm:ss\");","topic":"time","api":"DateTime.ToString","note_zh":"格式化时间","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var due = today.AddDays(7);","topic":"time","api":"DateTime.AddDays","note_zh":"日期加减","source_id":"keyloop:programming-basics:seeds"}
-{"text":"Console.WriteLine($\"took {watch.ElapsedMilliseconds}ms\");","topic":"time","api":"Stopwatch.ElapsedMilliseconds","note_zh":"读取耗时","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var ms = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();","topic":"time","api":"DateTimeOffset.ToUnixTimeMilliseconds","note_zh":"转毫秒戳","source_id":"keyloop:programming-basics:seeds"}
-{"text":"Console.WriteLine($\"loaded {count} rows\");","topic":"console_env","api":"Console.WriteLine","note_zh":"打印输出","source_id":"keyloop:programming-basics:seeds"}
-{"text":"Console.Error.WriteLine(\"usage: app <path>\");","topic":"console_env","api":"Console.Error.WriteLine","note_zh":"标准错误","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var debug = Environment.GetEnvironmentVariable(\"DEBUG\") == \"1\";","topic":"console_env","api":"Environment.GetEnvironmentVariable","note_zh":"调试开关","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (failed > 0) Environment.Exit(1);","topic":"console_env","api":"Environment.Exit","note_zh":"失败退出","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var args = Environment.GetCommandLineArgs();","topic":"console_env","api":"Environment.GetCommandLineArgs","note_zh":"命令行参数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var answer = Console.ReadLine();","topic":"console_env","api":"Console.ReadLine","note_zh":"读取输入","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var cwd = Environment.CurrentDirectory;","topic":"console_env","api":"Environment.CurrentDirectory","note_zh":"当前目录","source_id":"keyloop:programming-basics:seeds"}
-{"text":"Console.Write(\"continue? [y/N] \");","topic":"console_env","api":"Console.Write","note_zh":"行内提示","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var byId = items.ToDictionary(item => item.Id);","topic":"linq","api":"Enumerable.ToDictionary","note_zh":"转字典","source_id":"keyloop:programming-basics:seeds"}
-{"text":"rows.Sort((a, b) => a.Label.CompareTo(b.Label));","topic":"collections","api":"List.Sort","note_zh":"原地排序","source_id":"keyloop:programming-basics:seeds"}
-{"text":"report.Append(name).Append(\": \").Append(count);","topic":"string","api":"StringBuilder.Append","note_zh":"构建器拼接","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var pick = Random.Shared.Next(pool.Count);","topic":"convert_math","api":"Random.Shared.Next","note_zh":"随机索引","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var rest = rows.Skip(20).Take(20).ToList();","topic":"linq","api":"Enumerable.Skip","note_zh":"分页跳取","source_id":"keyloop:programming-basics:seeds"}
-{"text":"await gate.WaitAsync(cancellationToken);","topic":"task","api":"SemaphoreSlim.WaitAsync","note_zh":"异步信号量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"path.Split('/')","topic":"string","api":"String.Split","note_zh":"路径切分","source_id":"keyloop:programming-basics:seeds"}
+{"text":"string.Join(\",\", fields)","topic":"string","api":"String.Join","note_zh":"拼接为串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"message.Contains(\"error\")","topic":"string","api":"String.Contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"query.Trim()","topic":"string","api":"String.Trim","note_zh":"去除空白","source_id":"keyloop:programming-basics:seeds"}
+{"text":"url.StartsWith(\"https://\")","topic":"string","api":"String.StartsWith","note_zh":"前缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"name.EndsWith(\".json\")","topic":"string","api":"String.EndsWith","note_zh":"后缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"string.IsNullOrEmpty(input)","topic":"string","api":"String.IsNullOrEmpty","note_zh":"空串判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"title.Replace(' ', '-')","topic":"string","api":"String.Replace","note_zh":"字符替换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"label.ToLowerInvariant()","topic":"string","api":"String.ToLowerInvariant","note_zh":"转小写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"report.Append(name).Append(\": \").Append(count)","topic":"string","api":"StringBuilder.Append","note_zh":"构建器拼接","source_id":"keyloop:programming-basics:seeds"}
+{"text":"results.Add(parsed)","topic":"collections","api":"List.Add","note_zh":"列表追加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"merged.AddRange(extraRows)","topic":"collections","api":"List.AddRange","note_zh":"批量追加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"cache.GetValueOrDefault(key)","topic":"collections","api":"Dictionary.GetValueOrDefault","note_zh":"安全取值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"index.ContainsKey(id)","topic":"collections","api":"Dictionary.ContainsKey","note_zh":"键存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"errors.Clear()","topic":"collections","api":"List.Clear","note_zh":"清空列表","source_id":"keyloop:programming-basics:seeds"}
+{"text":"seen.Add(line)","topic":"collections","api":"HashSet.Add","note_zh":"集合去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sessions.Remove(token)","topic":"collections","api":"Dictionary.Remove","note_zh":"删除条目","source_id":"keyloop:programming-basics:seeds"}
+{"text":"queue.Dequeue()","topic":"collections","api":"Queue.Dequeue","note_zh":"出队","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rows.Sort((a, b) => a.Label.CompareTo(b.Label))","topic":"collections","api":"List.Sort","note_zh":"原地排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"items.Select(item => item.Id).ToList()","topic":"linq","api":"Enumerable.Select","note_zh":"投影","source_id":"keyloop:programming-basics:seeds"}
+{"text":"users.Where(user => user.Active).ToList()","topic":"linq","api":"Enumerable.Where","note_zh":"过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"members.FirstOrDefault(m => m.Role == \"admin\")","topic":"linq","api":"Enumerable.FirstOrDefault","note_zh":"查找首个","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fields.Any(field => field.Changed)","topic":"linq","api":"Enumerable.Any","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"inputs.All(input => input.Ok)","topic":"linq","api":"Enumerable.All","note_zh":"全量判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rows.OrderByDescending(row => row.Score).ToList()","topic":"linq","api":"Enumerable.OrderBy","note_zh":"排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"events.GroupBy(e => e.Kind)","topic":"linq","api":"Enumerable.GroupBy","note_zh":"分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"orders.Sum(order => order.Total)","topic":"linq","api":"Enumerable.Sum","note_zh":"求和","source_id":"keyloop:programming-basics:seeds"}
+{"text":"tags.Distinct().ToList()","topic":"linq","api":"Enumerable.Distinct","note_zh":"去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"items.ToDictionary(item => item.Id)","topic":"linq","api":"Enumerable.ToDictionary","note_zh":"转字典","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rows.Skip(20).Take(20).ToList()","topic":"linq","api":"Enumerable.Skip","note_zh":"分页跳取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"await Task.WhenAll(first, second)","topic":"task","api":"Task.WhenAll","note_zh":"并发等待","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Task.Run(() => Process(batch))","topic":"task","api":"Task.Run","note_zh":"后台任务","source_id":"keyloop:programming-basics:seeds"}
+{"text":"await Task.Delay(TimeSpan.FromSeconds(1))","topic":"task","api":"Task.Delay","note_zh":"异步延时","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Task.FromResult(cached)","topic":"task","api":"Task.FromResult","note_zh":"立即完成","source_id":"keyloop:programming-basics:seeds"}
+{"text":"await Task.WhenAny(fetchTask, timeoutTask)","topic":"task","api":"Task.WhenAny","note_zh":"竞速取先","source_id":"keyloop:programming-basics:seeds"}
+{"text":"new CancellationTokenSource(timeout)","topic":"task","api":"CancellationTokenSource","note_zh":"取消令牌","source_id":"keyloop:programming-basics:seeds"}
+{"text":"load.ContinueWith(t => Render(t.Result))","topic":"task","api":"Task.ContinueWith","note_zh":"续接任务","source_id":"keyloop:programming-basics:seeds"}
+{"text":"new ValueTask<int>(cached)","topic":"task","api":"ValueTask","note_zh":"值任务","source_id":"keyloop:programming-basics:seeds"}
+{"text":"await gate.WaitAsync(cancellationToken)","topic":"task","api":"SemaphoreSlim.WaitAsync","note_zh":"异步信号量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"int.Parse(raw)","topic":"convert_math","api":"int.Parse","note_zh":"解析整数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Math.Clamp(volume, 0, 100)","topic":"convert_math","api":"Math.Clamp","note_zh":"范围夹取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Convert.ToInt32(field)","topic":"convert_math","api":"Convert.ToInt32","note_zh":"类型转换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"double.Parse(cell)","topic":"convert_math","api":"double.Parse","note_zh":"解析浮点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Math.Max(minWidth, measured)","topic":"convert_math","api":"Math.Max","note_zh":"下限约束","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Math.Min(page + 1, lastPage)","topic":"convert_math","api":"Math.Min","note_zh":"上限约束","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Math.Round(score, 2)","topic":"convert_math","api":"Math.Round","note_zh":"四舍五入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Math.Ceiling(total / (double)pageSize)","topic":"convert_math","api":"Math.Ceiling","note_zh":"向上取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Random.Shared.Next(pool.Count)","topic":"convert_math","api":"Random.Shared.Next","note_zh":"随机索引","source_id":"keyloop:programming-basics:seeds"}
+{"text":"JsonSerializer.Serialize(payload)","topic":"json","api":"JsonSerializer.Serialize","note_zh":"序列化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"JsonSerializer.Deserialize<Config>(raw)","topic":"json","api":"JsonSerializer.Deserialize","note_zh":"反序列化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"new JsonSerializerOptions()","topic":"json","api":"JsonSerializerOptions","note_zh":"序列化选项","source_id":"keyloop:programming-basics:seeds"}
+{"text":"JsonSerializer.Serialize(report, options)","topic":"json","api":"JsonSerializer.Serialize","note_zh":"带选项序列化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"JsonDocument.Parse(raw)","topic":"json","api":"JsonDocument.Parse","note_zh":"文档解析","source_id":"keyloop:programming-basics:seeds"}
+{"text":"doc.RootElement.GetProperty(\"name\").GetString()","topic":"json","api":"JsonElement.GetProperty","note_zh":"取属性","source_id":"keyloop:programming-basics:seeds"}
+{"text":"await JsonSerializer.DeserializeAsync<List<Item>>(stream)","topic":"json","api":"JsonSerializer.DeserializeAsync","note_zh":"流式反序列化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"JsonNamingPolicy.CamelCase.ConvertName(\"UserName\")","topic":"json","api":"JsonNamingPolicy.CamelCase","note_zh":"驼峰转换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"File.ReadAllText(\"index.html\")","topic":"io_path","api":"File.ReadAllText","note_zh":"读取文本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"File.WriteAllText(\"report.json\", output)","topic":"io_path","api":"File.WriteAllText","note_zh":"写入文本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"File.Exists(lockFile)","topic":"io_path","api":"File.Exists","note_zh":"存在性检查","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Directory.CreateDirectory(cacheDir)","topic":"io_path","api":"Directory.CreateDirectory","note_zh":"递归建目录","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Path.Combine(root, \"contents\", name)","topic":"io_path","api":"Path.Combine","note_zh":"拼接路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Path.GetFileNameWithoutExtension(seedPath)","topic":"io_path","api":"Path.GetFileNameWithoutExtension","note_zh":"取文件名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Directory.GetFiles(seedDir, \"*.json\")","topic":"io_path","api":"Directory.GetFiles","note_zh":"列文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"File.ReadAllLines(logPath)","topic":"io_path","api":"File.ReadAllLines","note_zh":"按行读取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DateTime.UtcNow.ToString(\"o\")","topic":"time","api":"DateTime.UtcNow","note_zh":"当前时间串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Stopwatch.StartNew()","topic":"time","api":"Stopwatch.StartNew","note_zh":"计时器","source_id":"keyloop:programming-basics:seeds"}
+{"text":"TimeSpan.FromSeconds(30)","topic":"time","api":"TimeSpan.FromSeconds","note_zh":"时长构造","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DateTime.Parse(\"2026-06-11\")","topic":"time","api":"DateTime.Parse","note_zh":"解析日期","source_id":"keyloop:programming-basics:seeds"}
+{"text":"now.ToString(\"HH:mm:ss\")","topic":"time","api":"DateTime.ToString","note_zh":"格式化时间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"today.AddDays(7)","topic":"time","api":"DateTime.AddDays","note_zh":"日期加减","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Console.WriteLine($\"took {watch.ElapsedMilliseconds}ms\")","topic":"time","api":"Stopwatch.ElapsedMilliseconds","note_zh":"读取耗时","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()","topic":"time","api":"DateTimeOffset.ToUnixTimeMilliseconds","note_zh":"转毫秒戳","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Console.WriteLine($\"loaded {count} rows\")","topic":"console_env","api":"Console.WriteLine","note_zh":"打印输出","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Console.Error.WriteLine(\"usage: app <path>\")","topic":"console_env","api":"Console.Error.WriteLine","note_zh":"标准错误","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Environment.GetEnvironmentVariable(\"DEBUG\")","topic":"console_env","api":"Environment.GetEnvironmentVariable","note_zh":"环境变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Environment.Exit(1)","topic":"console_env","api":"Environment.Exit","note_zh":"失败退出","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Environment.GetCommandLineArgs()","topic":"console_env","api":"Environment.GetCommandLineArgs","note_zh":"命令行参数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Console.ReadLine()","topic":"console_env","api":"Console.ReadLine","note_zh":"读取输入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Path.Combine(Environment.CurrentDirectory, \"logs\")","topic":"console_env","api":"Environment.CurrentDirectory","note_zh":"当前目录拼接","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Console.Write(\"continue? [y/N] \")","topic":"console_env","api":"Console.Write","note_zh":"行内提示","source_id":"keyloop:programming-basics:seeds"}
