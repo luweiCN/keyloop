@@ -53,7 +53,7 @@ describe("package verification scripts", () => {
       new URL("../package.json", import.meta.url),
     ).json()) as PackageJson;
 
-    expect(packageJson.version).toBe("0.1.4");
+    expect(packageJson.version).toBe("0.1.5");
   });
 
   test("release workflow packages runtime content and Homebrew installs it", async () => {
@@ -63,15 +63,18 @@ describe("package verification scripts", () => {
 
     expect(releaseWorkflow).toContain("bun_target: bun-linux-x64");
     expect(releaseWorkflow).toContain("archive_target: x86_64-unknown-linux-gnu");
-    expect(releaseWorkflow).toContain("bun_target: bun-darwin-x64");
+    expect(releaseWorkflow).toContain("os: macos-15-intel");
     expect(releaseWorkflow).toContain("archive_target: x86_64-apple-darwin");
-    expect(releaseWorkflow).toContain("bun_target: bun-darwin-arm64");
+    expect(releaseWorkflow).toContain("os: macos-latest");
     expect(releaseWorkflow).toContain("archive_target: aarch64-apple-darwin");
-    expect(releaseWorkflow).toContain('--target "${{ matrix.bun_target }}"');
+    expect(releaseWorkflow).toContain('if [ -n "$BUN_TARGET" ]; then');
+    expect(releaseWorkflow).toContain('--target "$BUN_TARGET"');
+    expect(releaseWorkflow).toContain("bun build src/main.ts --compile --outfile dist/keyloop");
     expect(releaseWorkflow).toContain("TARGET: ${{ matrix.archive_target }}");
     expect(releaseWorkflow).toContain("Smoke release binary");
     expect(releaseWorkflow).toContain("./dist/keyloop --help >/dev/null");
     expect(releaseWorkflow).toContain('./dist/keyloop sources >/dev/null');
+    expect(releaseWorkflow).toContain('bin.install "keyloop"');
     expect(releaseWorkflow).toContain('cp -R contents "dist/keyloop-${VERSION}-${TARGET}/"');
     expect(releaseWorkflow).toContain('prefix.install "contents"');
   });
