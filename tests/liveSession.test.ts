@@ -173,6 +173,46 @@ describe("live session core parity", () => {
     ]);
   });
 
+  test("enter accepts a word-separator space outside code mode", () => {
+    const session = createLiveSession({
+      mode: "words",
+      text: "alpha beta",
+      source: "test",
+    });
+
+    for (const char of "alpha") {
+      applyLiveKey(session, { kind: "char", value: char }, 10);
+    }
+    applyLiveKey(session, { kind: "enter" }, 20);
+
+    expect(session.input).toBe("alpha ");
+    expect(session.events.at(-1)).toEqual({
+      at_ms: 20,
+      action: "insert",
+      position: 5,
+      expected: " ",
+      input: " ",
+      correct: true,
+    });
+  });
+
+  test("enter still records a newline when the target expects newline", () => {
+    const session = createLiveSession({
+      mode: "words",
+      text: "alpha\nbeta",
+      source: "test",
+    });
+
+    for (const char of "alpha") {
+      applyLiveKey(session, { kind: "char", value: char }, 10);
+    }
+    applyLiveKey(session, { kind: "enter" }, 20);
+
+    expect(session.input).toBe("alpha\n");
+    expect(session.events.at(-1)?.input).toBe("\n");
+    expect(session.events.at(-1)?.correct).toBe(true);
+  });
+
   test("code enter auto inserts expected indentation", () => {
     const session = createLiveSession({
       mode: "code",

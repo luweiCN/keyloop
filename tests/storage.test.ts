@@ -63,6 +63,16 @@ describe("storage model defaults", () => {
 
     expect(preferences.word_breakdown.word_repeats).toBe(10);
   });
+
+  test("preferences preserve intermediate long-word repeat counts", () => {
+    const preferences = parseUserPreferences({
+      word_breakdown: {
+        word_repeats: 6,
+      },
+    });
+
+    expect(preferences.word_breakdown.word_repeats).toBe(6);
+  });
 });
 
 describe("storage file io", () => {

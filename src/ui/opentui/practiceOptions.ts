@@ -41,7 +41,7 @@ export const everydaySentenceCountControls = [3, 5, 8, 10] as const;
 
 export const everydayRepeatControls = [1, 3, 5] as const;
 
-export const wordBreakdownRepeatControls = [1, 2, 3, 5, 10] as const;
+export const wordBreakdownRepeatControls = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
 
 export type LiveCodeControl = "difficulty" | "length" | "refresh";
 
