@@ -1,0 +1,81 @@
+{"text":"name.substring(name.lastIndexOf('.'))","topic":"string","api":"String.substring","note_zh":"截取扩展名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"message.contains(\"error\")","topic":"string","api":"String.contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"String.format(\"%s:%d\", host, port)","topic":"string","api":"String.format","note_zh":"格式化拼键","source_id":"keyloop:programming-basics:seeds"}
+{"text":"query.strip()","topic":"string","api":"String.strip","note_zh":"去除空白","source_id":"keyloop:programming-basics:seeds"}
+{"text":"url.startsWith(\"https://\")","topic":"string","api":"String.startsWith","note_zh":"前缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"path.split(\"/\")","topic":"string","api":"String.split","note_zh":"路径切分","source_id":"keyloop:programming-basics:seeds"}
+{"text":"String.join(\",\", fields)","topic":"string","api":"String.join","note_zh":"拼接为串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"String.valueOf(index)","topic":"string","api":"String.valueOf","note_zh":"转字符串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"input.isBlank()","topic":"string","api":"String.isBlank","note_zh":"空白判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"report.append(name).append(\": \").append(count)","topic":"string","api":"StringBuilder.append","note_zh":"构建器拼接","source_id":"keyloop:programming-basics:seeds"}
+{"text":"results.add(parsed)","topic":"list_map","api":"List.add","note_zh":"列表追加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"List.of(\"admin\", \"editor\")","topic":"list_map","api":"List.of","note_zh":"不可变列表","source_id":"keyloop:programming-basics:seeds"}
+{"text":"cache.put(key, value)","topic":"list_map","api":"Map.put","note_zh":"写入映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"index.containsKey(id)","topic":"list_map","api":"Map.containsKey","note_zh":"键存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"options.getOrDefault(\"limit\", 20)","topic":"list_map","api":"Map.getOrDefault","note_zh":"取值带默认","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Map.of(\"Accept\", \"application/json\")","topic":"list_map","api":"Map.of","note_zh":"不可变映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"groups.computeIfAbsent(kind, k -> new ArrayList<>()).add(event)","topic":"list_map","api":"Map.computeIfAbsent","note_zh":"默认分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"errors.isEmpty()","topic":"list_map","api":"List.isEmpty","note_zh":"空列表判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"usage.entrySet()","topic":"list_map","api":"Map.entrySet","note_zh":"键值对集合","source_id":"keyloop:programming-basics:seeds"}
+{"text":"items.stream().map(Item::getId).toList()","topic":"stream","api":"Stream.map","note_zh":"流式映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"users.stream().filter(User::isActive).toList()","topic":"stream","api":"Stream.filter","note_zh":"流式过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"stream.collect(Collectors.toList())","topic":"stream","api":"Collectors.toList","note_zh":"收集为列表","source_id":"keyloop:programming-basics:seeds"}
+{"text":"events.stream().collect(Collectors.groupingBy(Event::getKind))","topic":"stream","api":"Collectors.groupingBy","note_zh":"分组收集","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fields.stream().anyMatch(Field::isChanged)","topic":"stream","api":"Stream.anyMatch","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rows.stream().sorted(comparing(Row::getScore)).toList()","topic":"stream","api":"Stream.sorted","note_zh":"流式排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"prices.stream().reduce(0, Integer::sum)","topic":"stream","api":"Stream.reduce","note_zh":"流式求和","source_id":"keyloop:programming-basics:seeds"}
+{"text":"IntStream.range(0, 10).forEach(this::warm)","topic":"stream","api":"IntStream.range","note_zh":"范围流","source_id":"keyloop:programming-basics:seeds"}
+{"text":"tags.stream().distinct().toList()","topic":"stream","api":"Stream.distinct","note_zh":"去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Optional.of(cached)","topic":"optional","api":"Optional.of","note_zh":"包装存在值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Optional.ofNullable(found)","topic":"optional","api":"Optional.ofNullable","note_zh":"包装可空值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"stored.orElse(\"light\")","topic":"optional","api":"Optional.orElse","note_zh":"取值带默认","source_id":"keyloop:programming-basics:seeds"}
+{"text":"user.map(User::getName).orElse(\"guest\")","topic":"optional","api":"Optional.map","note_zh":"链式取值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"result.isPresent()","topic":"optional","api":"Optional.isPresent","note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"config.ifPresent(this::apply)","topic":"optional","api":"Optional.ifPresent","note_zh":"存在即处理","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Optional.empty()","topic":"optional","api":"Optional.empty","note_zh":"空值返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"found.orElseThrow(() -> new NotFoundException(id))","topic":"optional","api":"Optional.orElseThrow","note_zh":"缺失抛错","source_id":"keyloop:programming-basics:seeds"}
+{"text":"user.filter(User::isAdmin)","topic":"optional","api":"Optional.filter","note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Objects.equals(left.getId(), right.getId())","topic":"objects_util","api":"Objects.equals","note_zh":"空安全相等","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Objects.requireNonNull(repository)","topic":"objects_util","api":"Objects.requireNonNull","note_zh":"非空断言","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Objects.hash(id, name)","topic":"objects_util","api":"Objects.hash","note_zh":"组合哈希","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Collections.sort(names)","topic":"objects_util","api":"Collections.sort","note_zh":"原地排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Collections.unmodifiableList(items)","topic":"objects_util","api":"Collections.unmodifiableList","note_zh":"只读视图","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Collections.emptyList()","topic":"objects_util","api":"Collections.emptyList","note_zh":"空列表","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Arrays.asList(10, 20, 40)","topic":"objects_util","api":"Arrays.asList","note_zh":"数组转列表","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Arrays.stream(samples).max().orElse(0)","topic":"objects_util","api":"Arrays.stream","note_zh":"数组流最大值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"List.copyOf(items)","topic":"objects_util","api":"List.copyOf","note_zh":"防御性拷贝","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Integer.parseInt(raw)","topic":"math_number","api":"Integer.parseInt","note_zh":"解析整数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Long.valueOf(param)","topic":"math_number","api":"Long.valueOf","note_zh":"解析长整型","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Double.parseDouble(cell)","topic":"math_number","api":"Double.parseDouble","note_zh":"解析浮点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Math.max(minWidth, measured)","topic":"math_number","api":"Math.max","note_zh":"下限约束","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Math.min(page + 1, lastPage)","topic":"math_number","api":"Math.min","note_zh":"上限约束","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Math.round(score * 100)","topic":"math_number","api":"Math.round","note_zh":"四舍五入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Math.abs(current - previous)","topic":"math_number","api":"Math.abs","note_zh":"绝对差值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Integer.toHexString(flags)","topic":"math_number","api":"Integer.toHexString","note_zh":"转十六进制串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ThreadLocalRandom.current().nextInt(pool.size())","topic":"math_number","api":"ThreadLocalRandom.nextInt","note_zh":"随机索引","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Files.readString(configPath)","topic":"io_path","api":"Files.readString","note_zh":"读取文本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Files.writeString(out, rendered)","topic":"io_path","api":"Files.writeString","note_zh":"写入文本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Files.exists(lockFile)","topic":"io_path","api":"Files.exists","note_zh":"存在性检查","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Files.createDirectories(cacheDir)","topic":"io_path","api":"Files.createDirectories","note_zh":"递归建目录","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Files.lines(logPath)","topic":"io_path","api":"Files.lines","note_zh":"按行流读","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Path.of(outDir, name + \".html\")","topic":"io_path","api":"Path.of","note_zh":"构造路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"root.resolve(\"contents\").resolve(name)","topic":"io_path","api":"Path.resolve","note_zh":"拼接路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Files.list(seedDir)","topic":"io_path","api":"Files.list","note_zh":"列目录","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Files.copy(src, dst, StandardCopyOption.REPLACE_EXISTING)","topic":"io_path","api":"Files.copy","note_zh":"复制文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Instant.now()","topic":"time","api":"Instant.now","note_zh":"当前时刻","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Duration.between(started, Instant.now())","topic":"time","api":"Duration.between","note_zh":"耗时计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"LocalDate.parse(\"2026-06-11\")","topic":"time","api":"LocalDate.parse","note_zh":"解析日期","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DateTimeFormatter.ofPattern(\"HH:mm:ss\")","topic":"time","api":"DateTimeFormatter.ofPattern","note_zh":"时间格式器","source_id":"keyloop:programming-basics:seeds"}
+{"text":"LocalDateTime.now().format(fmt)","topic":"time","api":"LocalDateTime.now","note_zh":"格式化当前时间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"client.setTimeout(Duration.ofSeconds(30))","topic":"time","api":"Duration.ofSeconds","note_zh":"时长构造","source_id":"keyloop:programming-basics:seeds"}
+{"text":"today.plusDays(7)","topic":"time","api":"LocalDate.plusDays","note_zh":"日期加减","source_id":"keyloop:programming-basics:seeds"}
+{"text":"started.toEpochMilli()","topic":"time","api":"Instant.toEpochMilli","note_zh":"转毫秒","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CompletableFuture.supplyAsync(this::load)","topic":"concurrent","api":"CompletableFuture.supplyAsync","note_zh":"异步执行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CompletableFuture.allOf(first, second).join()","topic":"concurrent","api":"CompletableFuture.allOf","note_zh":"并发等待","source_id":"keyloop:programming-basics:seeds"}
+{"text":"future.thenApply(this::render).thenAccept(view::show)","topic":"concurrent","api":"CompletableFuture.thenApply","note_zh":"链式处理","source_id":"keyloop:programming-basics:seeds"}
+{"text":"executor.submit(() -> process(batch))","topic":"concurrent","api":"ExecutorService.submit","note_zh":"提交任务","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Executors.newFixedThreadPool(4)","topic":"concurrent","api":"Executors.newFixedThreadPool","note_zh":"线程池","source_id":"keyloop:programming-basics:seeds"}
+{"text":"registry.putIfAbsent(name, factory)","topic":"concurrent","api":"ConcurrentHashMap.putIfAbsent","note_zh":"并发注册","source_id":"keyloop:programming-basics:seeds"}
+{"text":"counter.incrementAndGet()","topic":"concurrent","api":"AtomicInteger.incrementAndGet","note_zh":"原子自增","source_id":"keyloop:programming-basics:seeds"}
+{"text":"latch.await(5, TimeUnit.SECONDS)","topic":"concurrent","api":"CountDownLatch.await","note_zh":"等待完成","source_id":"keyloop:programming-basics:seeds"}
+{"text":"executor.awaitTermination(10, TimeUnit.SECONDS)","topic":"concurrent","api":"TimeUnit.SECONDS","note_zh":"等待关闭","source_id":"keyloop:programming-basics:seeds"}

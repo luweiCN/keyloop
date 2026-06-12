@@ -2347,11 +2347,10 @@ function testLibrary(): ContentLibrary {
     everyday_sentences: { sources: [], entries: [] },
     everyday_articles: { sources: [], entries: [] },
     everyday_word_decomposition: { sources: [], entries: [] },
-    programming_words: ["enabled", "visible", "archived", "configuration"],
-    symbols: ["=>", "!==", "&&", "||", "{}", "[]", "()", "_", "-", "="],
-    language_symbols: [],
-    number_drills: ["1 2 3", "0 - =", "7 8 9"],
-    naming: ["selectedPreference SelectedPreference SELECTED_PREFERENCE"],
+    programming_words: ["enabled", "visible", "archived", "configuration"].map((word) => ({
+      word,
+      note_zh: "",
+    })),
     code_snippets: [
       {
         language: "typescript",

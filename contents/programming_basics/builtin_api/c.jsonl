@@ -1,0 +1,79 @@
+{"text":"printf(\"loaded %d rows\\n\", count)","topic":"stdio","api":"printf","note_zh":"格式化打印","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fprintf(stderr, \"usage: app <path>\\n\")","topic":"stdio","api":"fprintf","note_zh":"标准错误","source_id":"keyloop:programming-basics:seeds"}
+{"text":"snprintf(key, sizeof(key), \"%s:%d\", host, port)","topic":"stdio","api":"snprintf","note_zh":"安全格式化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fopen(path, \"r\")","topic":"stdio","api":"fopen","note_zh":"打开文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fclose(fp)","topic":"stdio","api":"fclose","note_zh":"关闭文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fgets(line, sizeof(line), fp)","topic":"stdio","api":"fgets","note_zh":"按行读取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fread(buffer, 1, sizeof(buffer), fp)","topic":"stdio","api":"fread","note_zh":"块读取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fwrite(data, 1, length, out)","topic":"stdio","api":"fwrite","note_zh":"块写入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sscanf(line, \"%d,%63s\", &id, name)","topic":"stdio","api":"sscanf","note_zh":"格式化解析","source_id":"keyloop:programming-basics:seeds"}
+{"text":"perror(\"fopen\")","topic":"stdio","api":"perror","note_zh":"错误信息","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fseek(fp, 0, SEEK_END)","topic":"stdio","api":"fseek","note_zh":"定位文件尾","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ftell(fp)","topic":"stdio","api":"ftell","note_zh":"取文件大小","source_id":"keyloop:programming-basics:seeds"}
+{"text":"getline(&line, &cap, fp)","topic":"stdio","api":"getline","note_zh":"动态读行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"remove(lock_path)","topic":"stdio","api":"remove","note_zh":"删除文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rename(tmp_path, final_path)","topic":"stdio","api":"rename","note_zh":"原子改名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fflush(stdout)","topic":"stdio","api":"fflush","note_zh":"刷新缓冲","source_id":"keyloop:programming-basics:seeds"}
+{"text":"malloc(capacity)","topic":"stdlib","api":"malloc","note_zh":"堆分配","source_id":"keyloop:programming-basics:seeds"}
+{"text":"calloc(n, sizeof(int))","topic":"stdlib","api":"calloc","note_zh":"清零分配","source_id":"keyloop:programming-basics:seeds"}
+{"text":"realloc(items, capacity * 2 * sizeof(*items))","topic":"stdlib","api":"realloc","note_zh":"扩容","source_id":"keyloop:programming-basics:seeds"}
+{"text":"free(buffer)","topic":"stdlib","api":"free","note_zh":"释放内存","source_id":"keyloop:programming-basics:seeds"}
+{"text":"atoi(argv[1])","topic":"stdlib","api":"atoi","note_zh":"解析整数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strtol(field, &end, 10)","topic":"stdlib","api":"strtol","note_zh":"安全解析","source_id":"keyloop:programming-basics:seeds"}
+{"text":"qsort(rows, count, sizeof(*rows), compare_rows)","topic":"stdlib","api":"qsort","note_zh":"快速排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"exit(EXIT_FAILURE)","topic":"stdlib","api":"exit","note_zh":"失败退出","source_id":"keyloop:programming-basics:seeds"}
+{"text":"getenv(\"DEBUG\")","topic":"stdlib","api":"getenv","note_zh":"环境变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"bsearch(&key, table, n, sizeof(*table), compare_keys)","topic":"stdlib","api":"bsearch","note_zh":"二分查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rand() % pool_size","topic":"stdlib","api":"rand","note_zh":"随机索引","source_id":"keyloop:programming-basics:seeds"}
+{"text":"srand((unsigned)time(NULL))","topic":"stdlib","api":"srand","note_zh":"随机种子","source_id":"keyloop:programming-basics:seeds"}
+{"text":"abort()","topic":"stdlib","api":"abort","note_zh":"异常终止","source_id":"keyloop:programming-basics:seeds"}
+{"text":"system(\"mkdir -p cache\")","topic":"stdlib","api":"system","note_zh":"执行命令","source_id":"keyloop:programming-basics:seeds"}
+{"text":"labs(target - actual)","topic":"stdlib","api":"labs","note_zh":"长整型绝对值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strlen(input)","topic":"string_h","api":"strlen","note_zh":"字符串长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strcpy(dest, source)","topic":"string_h","api":"strcpy","note_zh":"字符串复制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strncpy(name, field, sizeof(name) - 1)","topic":"string_h","api":"strncpy","note_zh":"限长复制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strcmp(command, \"start\")","topic":"string_h","api":"strcmp","note_zh":"字符串比较","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strncmp(url, \"https://\", 8)","topic":"string_h","api":"strncmp","note_zh":"前缀比较","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strcat(path, \"/contents\")","topic":"string_h","api":"strcat","note_zh":"字符串拼接","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strstr(message, \"error\")","topic":"string_h","api":"strstr","note_zh":"子串查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strchr(name, '.')","topic":"string_h","api":"strchr","note_zh":"字符查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"memset(buffer, 0, sizeof(buffer))","topic":"string_h","api":"memset","note_zh":"内存清零","source_id":"keyloop:programming-basics:seeds"}
+{"text":"memcpy(dest, src, length)","topic":"string_h","api":"memcpy","note_zh":"内存复制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"memcmp(digest, expected, 16)","topic":"string_h","api":"memcmp","note_zh":"内存比较","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strdup(original)","topic":"string_h","api":"strdup","note_zh":"复制字符串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strrchr(filename, '.')","topic":"string_h","api":"strrchr","note_zh":"反向查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strspn(input, \"0123456789\")","topic":"string_h","api":"strspn","note_zh":"前缀跨度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"abs(current - previous)","topic":"math_h","api":"abs","note_zh":"绝对值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"pow(radius, 2) * M_PI","topic":"math_h","api":"pow","note_zh":"幂运算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sqrt(dx * dx + dy * dy)","topic":"math_h","api":"sqrt","note_zh":"平方根","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ceil(total / (double)page_size)","topic":"math_h","api":"ceil","note_zh":"向上取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"floor(ratio * n)","topic":"math_h","api":"floor","note_zh":"向下取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fabs(a - b)","topic":"math_h","api":"fabs","note_zh":"浮点绝对值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fmin(limit, requested)","topic":"math_h","api":"fmin","note_zh":"最小值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fmax(min_width, measured)","topic":"math_h","api":"fmax","note_zh":"最大值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"lround(score * 100.0)","topic":"math_h","api":"lround","note_zh":"四舍五入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"log2((double)capacity)","topic":"math_h","api":"log2","note_zh":"对数计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"isdigit((unsigned char)*p)","topic":"ctype_convert","api":"isdigit","note_zh":"数字判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"isspace((unsigned char)*p)","topic":"ctype_convert","api":"isspace","note_zh":"空白判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"tolower((unsigned char)key[i])","topic":"ctype_convert","api":"tolower","note_zh":"转小写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"toupper((unsigned char)code[i])","topic":"ctype_convert","api":"toupper","note_zh":"转大写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"isalpha((unsigned char)ch)","topic":"ctype_convert","api":"isalpha","note_zh":"字母判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"atof(cell)","topic":"ctype_convert","api":"atof","note_zh":"解析浮点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strtod(field, &end)","topic":"ctype_convert","api":"strtod","note_zh":"安全解析浮点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"isalnum((unsigned char)*p)","topic":"ctype_convert","api":"isalnum","note_zh":"字母数字判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strtoul(hex, NULL, 16)","topic":"ctype_convert","api":"strtoul","note_zh":"十六进制解析","source_id":"keyloop:programming-basics:seeds"}
+{"text":"time(NULL)","topic":"time_h","api":"time","note_zh":"当前时间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"localtime(&now)","topic":"time_h","api":"localtime","note_zh":"本地时间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strftime(stamp, sizeof(stamp), \"%H:%M:%S\", tm_info)","topic":"time_h","api":"strftime","note_zh":"格式化时间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"clock()","topic":"time_h","api":"clock","note_zh":"CPU 计时","source_id":"keyloop:programming-basics:seeds"}
+{"text":"difftime(finished, started)","topic":"time_h","api":"difftime","note_zh":"时间差","source_id":"keyloop:programming-basics:seeds"}
+{"text":"mktime(&deadline)","topic":"time_h","api":"mktime","note_zh":"构造时间戳","source_id":"keyloop:programming-basics:seeds"}
+{"text":"nanosleep(&interval, NULL)","topic":"time_h","api":"nanosleep","note_zh":"纳秒休眠","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sizeof(struct node)","topic":"memory_struct","api":"sizeof","note_zh":"大小计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"offsetof(struct node, label)","topic":"memory_struct","api":"offsetof","note_zh":"字段偏移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"assert(index < capacity)","topic":"memory_struct","api":"assert","note_zh":"断言检查","source_id":"keyloop:programming-basics:seeds"}
+{"text":"malloc(sizeof(*node))","topic":"memory_struct","api":"malloc","note_zh":"结构体分配","source_id":"keyloop:programming-basics:seeds"}
+{"text":"memmove(items + i, items + i + 1, (count - i - 1) * sizeof(*items))","topic":"memory_struct","api":"memmove","note_zh":"重叠移动","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sizeof(steps) / sizeof(steps[0])","topic":"memory_struct","api":"sizeof","note_zh":"数组长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"assert(node != NULL && node->label != NULL)","topic":"memory_struct","api":"assert","note_zh":"复合断言","source_id":"keyloop:programming-basics:seeds"}
+{"text":"calloc(row_count, sizeof(*rows))","topic":"memory_struct","api":"calloc","note_zh":"数组分配","source_id":"keyloop:programming-basics:seeds"}

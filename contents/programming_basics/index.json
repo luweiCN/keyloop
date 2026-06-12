@@ -1,0 +1,19 @@
+{
+  "schema": "keyloop.programming_basics",
+  "schema_version": 2,
+  "languages": [
+    "c",
+    "cpp",
+    "csharp",
+    "go",
+    "java",
+    "javascript",
+    "kotlin",
+    "php",
+    "python",
+    "ruby",
+    "rust",
+    "swift",
+    "typescript"
+  ]
+}

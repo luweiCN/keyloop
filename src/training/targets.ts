@@ -26,6 +26,10 @@ import type {
   UserPreferences,
 } from "../domain/model";
 import { recentFeedbackTerms } from "./feedback";
+import {
+  buildProgrammingBasicsMixTarget,
+  namingLinesFromWords,
+} from "./programmingBasicsTargets";
 import { PLAN_HISTORY_DAYS } from "./plan";
 import {
   type LongWordEntry,
@@ -66,10 +70,8 @@ export type EverydayPracticeTargetKind =
   | "mix";
 
 export type ProgrammingBasicsPracticeTargetKind =
-  | "operators_brackets_quotes"
   | "programming_terms"
-  | "naming_styles"
-  | "mix";
+  | "naming_styles";
 
 export type FoundationPracticeTargetKind =
   | "home-row"
@@ -106,6 +108,7 @@ interface BreakdownCandidate {
   aliases: string[];
   identifierForms: boolean;
   domain: LongWordEntry["domain"];
+  note_zh?: string;
 }
 
 type ComprehensiveTrainingModule = Extract<
@@ -325,30 +328,6 @@ export function identifierParts(value: string): string[] {
   return parts;
 }
 
-export function focusNamingLines(words: string[]): string[] {
-  const lines: string[] = [];
-  for (const word of words.slice(0, 4)) {
-    const original = word.trim();
-    const parts = identifierParts(original);
-    if (parts.length === 0 || parts.join("").length < 4) {
-      continue;
-    }
-    const camel = camelCase(parts);
-    const pascal = pascalCase(parts);
-    const constant = parts.map((part) => part.toUpperCase()).join("_");
-    lines.push(
-      uniqueLineItems([
-        original,
-        camel,
-        pascal,
-        `get${pascal}`,
-        constant,
-      ]),
-    );
-  }
-  return lines;
-}
-
 function focusWordChunkLines(words: string[]): string[] {
   const lines: string[] = [];
   for (const word of words.slice(0, 5)) {
@@ -382,40 +361,17 @@ function buildLessonWordChunks(
 }
 
 export function buildLessonWords(
-  plan: PracticePlan,
   library: Pick<ContentLibrary, "programming_words">,
   random: () => number = Math.random,
 ): string {
-  const chosen = uniqueFocus(plan.focus_words);
-  fillFrom(chosen, library.programming_words, 16, random);
+  const chosen: string[] = [];
+  fillFrom(
+    chosen,
+    library.programming_words.map((entry) => entry.word),
+    16,
+    random,
+  );
   return chunkWords(chosen.slice(0, 16), 4).join("\n");
-}
-
-export function buildProgrammingBasicsMixTarget(
-  context: BuildTargetContext,
-  profile: MixProfile = "standalone",
-): PracticeTarget {
-  const random = context.random ?? Math.random;
-  const lines: string[] = [];
-  const feedbackTerms = recentFeedbackTerms(context.records);
-  if (feedbackTerms.length > 0) {
-    lines.push(chunkWords(feedbackTerms, 4).join("\n"));
-  }
-
-  const breakdownLines = longWordBreakdownLines(context, feedbackTerms, profile);
-  if (breakdownLines.length > 0) {
-    lines.push(breakdownLines.join("\n"));
-  }
-
-  lines.push(buildLessonSymbols(context));
-  lines.push(buildLessonNaming(context.plan, context.library, random));
-  lines.push(buildLessonWords(context.plan, context.library, random));
-
-  return {
-    mode: "symbols",
-    text: lines.join("\n"),
-    source: "keyloop:module:programming-basics-mix",
-  };
 }
 
 export function buildFoundationMixPracticeTarget(
@@ -467,22 +423,18 @@ export function buildProgrammingBasicsPracticeTarget(
   kind: ProgrammingBasicsPracticeTargetKind,
 ): PracticeTarget {
   switch (kind) {
-    case "operators_brackets_quotes":
-      return programmingOperatorsTarget(context);
     case "programming_terms":
       return {
         mode: "words",
-        text: buildLessonWords(context.plan, context.library, context.random ?? Math.random),
+        text: buildLessonWords(context.library, context.random ?? Math.random),
         source: "keyloop:module:programming-basics:technical-terms",
       };
     case "naming_styles":
       return {
         mode: "case",
-        text: buildLessonNaming(context.plan, context.library, context.random ?? Math.random),
+        text: buildLessonNaming(context.library, context.random ?? Math.random),
         source: "keyloop:module:programming-basics:naming",
       };
-    case "mix":
-      return buildProgrammingBasicsMixTarget(context);
   }
 }
 
@@ -545,7 +497,7 @@ export function refreshModuleMixTarget(
     case "everyday_english":
       return everydayMixTarget(context, lesson.mix_profile);
     case "programming_basics":
-      return buildProgrammingBasicsMixTarget(context, lesson.mix_profile);
+      return buildProgrammingBasicsMixTarget(context);
     case "code_practice":
       return codeMixTarget(context);
     default:
@@ -559,10 +511,30 @@ export function buildLongWordBreakdownPracticeTarget(
 ): PracticeTarget {
   const candidates = standaloneLongWordCandidates(context, options);
   const firstWord = candidates[0]?.word ?? "none";
+  let text = "";
+  const annotations: PracticeTargetAnnotation[] = [];
+  for (const candidate of candidates) {
+    if (text.length > 0) {
+      text += "\n";
+    }
+    const start = text.length;
+    const lines = breakdownCandidateLines(candidate);
+    text += lines.join("\n");
+    const firstLine = lines[0] ?? "";
+    if (candidate.note_zh !== undefined) {
+      annotations.push({
+        start,
+        end: start + firstLine.length,
+        translation_zh: candidate.note_zh,
+        display: "line",
+      });
+    }
+  }
   return {
     mode: "words",
-    text: candidates.flatMap(breakdownCandidateLines).join("\n"),
+    text,
     source: `keyloop:module:word-breakdown:${firstWord}`,
+    ...(annotations.length === 0 ? {} : { annotations }),
   };
 }
 
@@ -622,7 +594,7 @@ function buildModuleMixTarget(
     case "everyday_english":
       return everydayMixTarget(context, "comprehensive");
     case "programming_basics":
-      return buildProgrammingBasicsMixTarget(context, "comprehensive");
+      return buildProgrammingBasicsMixTarget(context);
     case "code_practice":
       return codeMixTarget(context);
   }
@@ -1034,40 +1006,6 @@ function slugifySourcePart(value: string): string {
   return slug.length > 0 ? slug : "untitled";
 }
 
-function languageSymbolItems(context: BuildTargetContext): string[] {
-  const codeConfig = context.codeConfig ?? {};
-  if (
-    codeConfig.language === undefined &&
-    codeConfig.framework === undefined &&
-    (codeConfig.languages?.length ?? 0) === 0 &&
-    (codeConfig.frameworks?.length ?? 0) === 0
-  ) {
-    return [];
-  }
-
-  return context.library.language_symbols
-    .filter(
-      (set) =>
-        symbolSetMatches(set.language, codeConfig.language, codeConfig.languages) ||
-        symbolSetMatches(set.framework, codeConfig.framework, codeConfig.frameworks),
-    )
-    .flatMap((set) => set.items);
-}
-
-function symbolSetMatches(
-  value: string | null,
-  single: string | undefined,
-  many: string[] | undefined,
-): boolean {
-  if (value === null) {
-    return false;
-  }
-  return (
-    (single !== undefined && value.toLowerCase() === single.toLowerCase()) ||
-    (many ?? []).some((expected) => value.toLowerCase() === expected.toLowerCase())
-  );
-}
-
 function everydayMixTarget(
   context: BuildTargetContext,
   profile: MixProfile,
@@ -1440,19 +1378,6 @@ function everydayWordDecompositionTarget(context: BuildTargetContext): PracticeT
   };
 }
 
-function programmingOperatorsTarget(context: BuildTargetContext): PracticeTarget {
-  const random = context.random ?? Math.random;
-  const items = uniqueFocus(context.plan.focus_symbols);
-  fillFrom(items, languageSymbolItems(context), 8, random);
-  fillFrom(items, context.library.symbols, 18, random);
-  fillFrom(items, context.library.number_drills, 20, random);
-  return {
-    mode: "symbols",
-    text: chunkWords(items.slice(0, 20), 6).join("\n"),
-    source: "keyloop:module:programming-basics:operators-brackets-quotes",
-  };
-}
-
 function codeMixTarget(context: BuildTargetContext, count?: number): PracticeTarget {
   const codeConfig = context.codeConfig ?? {};
   const excludedTexts = usedCodeSnippetTexts(context.records);
@@ -1803,6 +1728,7 @@ function standaloneLongWordCandidates(
     return [];
   }
 
+  const random = context.random ?? Math.random;
   const selected: BreakdownCandidate[] = [];
   const seen = new Set<string>();
   const addCandidate = (candidate: BreakdownCandidate): void => {
@@ -1819,16 +1745,9 @@ function standaloneLongWordCandidates(
     }
   };
 
-  for (const word of context.plan.focus_words) {
-    const candidate = breakdownCandidateFromFocusWord(
-      word,
-      primaryBreakdownDomain(options),
-    );
-    if (candidate !== null) {
-      addCandidate(candidate);
-    }
-  }
-  for (const entry of context.library.long_words) {
+  const pool = [...context.library.long_words];
+  shuffleInPlace(pool, random);
+  for (const entry of pool) {
     addCandidate(breakdownCandidateFromLongWord(entry));
   }
   for (const entry of fallbackLongWords) {
@@ -1865,6 +1784,9 @@ function breakdownCandidateFromLongWord(entry: LongWordEntry): BreakdownCandidat
     aliases: entry.aliases ?? [],
     identifierForms: false,
     domain: entry.domain,
+    ...(entry.note_zh === undefined || entry.note_zh.trim().length === 0
+      ? {}
+      : { note_zh: entry.note_zh.trim() }),
   };
 }
 
@@ -1917,12 +1839,6 @@ function matchesAllowedDomain(
   return domains === undefined || domains.includes(candidateDomain);
 }
 
-function primaryBreakdownDomain(
-  options: Pick<BuildLongWordBreakdownPracticeOptions, "domain" | "domains">,
-): LongWordEntry["domain"] | undefined {
-  return options.domain ?? options.domains?.[0];
-}
-
 function isEverydayLongWordEntry(entry: LongWordEntry): boolean {
   return entry.domain === "everyday" || entry.domain === "workplace";
 }
@@ -1938,22 +1854,15 @@ function normalizedMaxItems(value: number): number {
 }
 
 
-function buildLessonSymbols(context: BuildTargetContext): string {
-  const random = context.random ?? Math.random;
-  const chosen = uniqueFocus(context.plan.focus_symbols);
-  appendFrom(chosen, languageSymbolItems(context), 6, random);
-  fillFrom(chosen, context.library.symbols, 18, random);
-  appendFrom(chosen, context.library.number_drills, 2, random);
-  return chunkWords(chosen.slice(0, 26), 5).join("\n");
-}
-
 function buildLessonNaming(
-  plan: PracticePlan,
-  library: Pick<ContentLibrary, "naming">,
-  random?: () => number,
+  library: Pick<ContentLibrary, "programming_words">,
+  random: () => number = Math.random,
 ): string {
-  const lines = focusNamingLines(plan.focus_words);
-  fillFrom(lines, library.naming, 5, random);
+  const lines = namingLinesFromWords(
+    library.programming_words.map((entry) => entry.word),
+    random,
+    5,
+  );
   return lines.slice(0, 5).join("\n");
 }
 
@@ -2030,7 +1939,7 @@ function repeatPool(
   return output.slice(0, targetLen);
 }
 
-function chunkWords(items: string[], chunkSize: number): string[] {
+export function chunkWords(items: string[], chunkSize: number): string[] {
   const lines: string[] = [];
   for (let index = 0; index < items.length; index += chunkSize) {
     lines.push(items.slice(index, index + chunkSize).join(" "));

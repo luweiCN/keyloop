@@ -1,0 +1,81 @@
+{"text":"strings.Split(line, \",\")","topic":"strings","api":"strings.Split","note_zh":"切分字段","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strings.Join(cells, \",\")","topic":"strings","api":"strings.Join","note_zh":"拼接为串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strings.Contains(log, \"error\")","topic":"strings","api":"strings.Contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strings.TrimSpace(input)","topic":"strings","api":"strings.TrimSpace","note_zh":"去除空白","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strings.HasPrefix(url, \"https://\")","topic":"strings","api":"strings.HasPrefix","note_zh":"前缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strings.HasSuffix(name, \"_test.go\")","topic":"strings","api":"strings.HasSuffix","note_zh":"后缀判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strings.ReplaceAll(title, \" \", \"-\")","topic":"strings","api":"strings.ReplaceAll","note_zh":"全量替换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strings.ToLower(header)","topic":"strings","api":"strings.ToLower","note_zh":"转小写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strings.Fields(sentence)","topic":"strings","api":"strings.Fields","note_zh":"按空白切分","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strings.Repeat(\"-\", 40)","topic":"strings","api":"strings.Repeat","note_zh":"重复字符","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strconv.Atoi(raw)","topic":"strconv","api":"strconv.Atoi","note_zh":"字符串转整数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strconv.Itoa(index)","topic":"strconv","api":"strconv.Itoa","note_zh":"整数转字符串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strconv.ParseFloat(cell, 64)","topic":"strconv","api":"strconv.ParseFloat","note_zh":"解析浮点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strconv.ParseBool(os.Getenv(\"VERBOSE\"))","topic":"strconv","api":"strconv.ParseBool","note_zh":"解析布尔","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strconv.FormatInt(ts, 10)","topic":"strconv","api":"strconv.FormatInt","note_zh":"整数格式化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strconv.Quote(userInput)","topic":"strconv","api":"strconv.Quote","note_zh":"加引号转义","source_id":"keyloop:programming-basics:seeds"}
+{"text":"strconv.ParseInt(field, 10, 64)","topic":"strconv","api":"strconv.ParseInt","note_zh":"解析 int64","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fmt.Println(\"server started\")","topic":"fmt","api":"fmt.Println","note_zh":"打印行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fmt.Printf(\"loaded %d rows\\n\", count)","topic":"fmt","api":"fmt.Printf","note_zh":"格式化打印","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fmt.Sprintf(\"%s:%d\", host, port)","topic":"fmt","api":"fmt.Sprintf","note_zh":"格式化拼键","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fmt.Errorf(\"load %s: %w\", path, err)","topic":"fmt","api":"fmt.Errorf","note_zh":"包装错误","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fmt.Fprintf(out, \"total: %d\\n\", total)","topic":"fmt","api":"fmt.Fprintf","note_zh":"写入流","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fmt.Sprint(user.ID)","topic":"fmt","api":"fmt.Sprint","note_zh":"转字符串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fmt.Fprintln(os.Stderr, \"usage: app <path>\")","topic":"fmt","api":"fmt.Fprintln","note_zh":"标准错误输出","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fmt.Printf(\"%-12s %6.2f\\n\", name, score)","topic":"fmt","api":"fmt.Printf","note_zh":"对齐输出","source_id":"keyloop:programming-basics:seeds"}
+{"text":"time.Now()","topic":"time","api":"time.Now","note_zh":"当前时间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"time.Since(started)","topic":"time","api":"time.Since","note_zh":"耗时计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"time.Sleep(200 * time.Millisecond)","topic":"time","api":"time.Sleep","note_zh":"休眠","source_id":"keyloop:programming-basics:seeds"}
+{"text":"time.Parse(\"2006-01-02\", input)","topic":"time","api":"time.Parse","note_zh":"解析日期","source_id":"keyloop:programming-basics:seeds"}
+{"text":"now.Format(\"15:04:05\")","topic":"time","api":"time.Format","note_zh":"格式化时间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"time.NewTicker(30 * time.Second)","topic":"time","api":"time.NewTicker","note_zh":"定时器","source_id":"keyloop:programming-basics:seeds"}
+{"text":"time.After(5 * time.Second)","topic":"time","api":"time.After","note_zh":"超时通道","source_id":"keyloop:programming-basics:seeds"}
+{"text":"time.Unix(stamp, 0)","topic":"time","api":"time.Unix","note_zh":"时间戳转换","source_id":"keyloop:programming-basics:seeds"}
+{"text":"errors.New(\"not found\")","topic":"errors","api":"errors.New","note_zh":"定义错误","source_id":"keyloop:programming-basics:seeds"}
+{"text":"errors.Is(err, ErrNotFound)","topic":"errors","api":"errors.Is","note_zh":"错误比对","source_id":"keyloop:programming-basics:seeds"}
+{"text":"errors.As(err, &pathErr)","topic":"errors","api":"errors.As","note_zh":"错误类型断言","source_id":"keyloop:programming-basics:seeds"}
+{"text":"errors.Unwrap(err)","topic":"errors","api":"errors.Unwrap","note_zh":"解包错误","source_id":"keyloop:programming-basics:seeds"}
+{"text":"errors.Join(closeErr, writeErr)","topic":"errors","api":"errors.Join","note_zh":"合并错误","source_id":"keyloop:programming-basics:seeds"}
+{"text":"errors.Is(err, io.EOF)","topic":"errors","api":"errors.Is","note_zh":"EOF 判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"slices.Contains(allowed, origin)","topic":"slices_maps","api":"slices.Contains","note_zh":"包含判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"slices.Sort(names)","topic":"slices_maps","api":"slices.Sort","note_zh":"切片排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"slices.Index(labels, \"total\")","topic":"slices_maps","api":"slices.Index","note_zh":"查找下标","source_id":"keyloop:programming-basics:seeds"}
+{"text":"slices.Reverse(history)","topic":"slices_maps","api":"slices.Reverse","note_zh":"反转切片","source_id":"keyloop:programming-basics:seeds"}
+{"text":"slices.Max(samples)","topic":"slices_maps","api":"slices.Max","note_zh":"最大值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"slices.Min(samples)","topic":"slices_maps","api":"slices.Min","note_zh":"最小值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"slices.SortFunc(rows, compareScore)","topic":"slices_maps","api":"slices.SortFunc","note_zh":"自定义排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"maps.Clone(state)","topic":"slices_maps","api":"maps.Clone","note_zh":"克隆映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"maps.Keys(index)","topic":"slices_maps","api":"maps.Keys","note_zh":"键迭代器","source_id":"keyloop:programming-basics:seeds"}
+{"text":"os.Open(path)","topic":"os_io","api":"os.Open","note_zh":"打开文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"os.ReadFile(\"config.json\")","topic":"os_io","api":"os.ReadFile","note_zh":"读取文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"os.WriteFile(out, data, 0o644)","topic":"os_io","api":"os.WriteFile","note_zh":"写入文件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"os.Getenv(\"KEYLOOP_HOME\")","topic":"os_io","api":"os.Getenv","note_zh":"读环境变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"os.MkdirAll(cacheDir, 0o755)","topic":"os_io","api":"os.MkdirAll","note_zh":"递归建目录","source_id":"keyloop:programming-basics:seeds"}
+{"text":"os.Stat(lockFile)","topic":"os_io","api":"os.Stat","note_zh":"文件信息","source_id":"keyloop:programming-basics:seeds"}
+{"text":"io.Copy(dst, src)","topic":"os_io","api":"io.Copy","note_zh":"流复制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"os.Exit(1)","topic":"os_io","api":"os.Exit","note_zh":"进程退出","source_id":"keyloop:programming-basics:seeds"}
+{"text":"filepath.Join(root, \"contents\", name)","topic":"os_io","api":"filepath.Join","note_zh":"拼接路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"json.Marshal(payload)","topic":"json","api":"json.Marshal","note_zh":"序列化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"json.Unmarshal(raw, &config)","topic":"json","api":"json.Unmarshal","note_zh":"反序列化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"json.MarshalIndent(report, \"\", \"  \")","topic":"json","api":"json.MarshalIndent","note_zh":"格式化序列化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"json.NewDecoder(resp.Body).Decode(&result)","topic":"json","api":"json.NewDecoder","note_zh":"流式解码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"json.NewEncoder(w).Encode(response)","topic":"json","api":"json.NewEncoder","note_zh":"流式编码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"json.Valid(raw)","topic":"json","api":"json.Valid","note_zh":"合法性检查","source_id":"keyloop:programming-basics:seeds"}
+{"text":"json.Marshal(map[string]string{\"name\": name})","topic":"json","api":"json.Marshal","note_zh":"序列化映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"make(map[string]int)","topic":"builtins","api":"make","note_zh":"创建映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"make(chan Result, 8)","topic":"builtins","api":"make","note_zh":"带缓冲通道","source_id":"keyloop:programming-basics:seeds"}
+{"text":"append(results, parsed)","topic":"builtins","api":"append","note_zh":"切片追加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"append(first, second...)","topic":"builtins","api":"append","note_zh":"展开追加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"len(args)","topic":"builtins","api":"len","note_zh":"取长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"cap(buf)","topic":"builtins","api":"cap","note_zh":"取容量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"copy(dst, src[:n])","topic":"builtins","api":"copy","note_zh":"切片复制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"delete(sessions, token)","topic":"builtins","api":"delete","note_zh":"删除键","source_id":"keyloop:programming-basics:seeds"}
+{"text":"close(done)","topic":"builtins","api":"close","note_zh":"关闭通道","source_id":"keyloop:programming-basics:seeds"}
+{"text":"http.Get(\"https://api.example.com/v1\")","topic":"net_http","api":"http.Get","note_zh":"GET 请求","source_id":"keyloop:programming-basics:seeds"}
+{"text":"http.ListenAndServe(\":8080\", mux)","topic":"net_http","api":"http.ListenAndServe","note_zh":"启动服务","source_id":"keyloop:programming-basics:seeds"}
+{"text":"http.NewRequest(\"GET\", url, nil)","topic":"net_http","api":"http.NewRequest","note_zh":"构造请求","source_id":"keyloop:programming-basics:seeds"}
+{"text":"http.HandleFunc(\"/health\", handleHealth)","topic":"net_http","api":"http.HandleFunc","note_zh":"注册路由","source_id":"keyloop:programming-basics:seeds"}
+{"text":"http.Error(w, \"not found\", http.StatusNotFound)","topic":"net_http","api":"http.Error","note_zh":"返回错误响应","source_id":"keyloop:programming-basics:seeds"}
+{"text":"http.StatusText(404)","topic":"net_http","api":"http.StatusText","note_zh":"状态码文本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"r.URL.Query().Get(\"page\")","topic":"net_http","api":"url.Values.Get","note_zh":"读查询参数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"resp.Body.Close()","topic":"net_http","api":"Body.Close","note_zh":"关闭响应体","source_id":"keyloop:programming-basics:seeds"}

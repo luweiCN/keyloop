@@ -26,14 +26,15 @@ export interface ContentLibrary {
   everyday_sentences: EverydaySentencesCorpus;
   everyday_articles: EverydayArticlesCorpus;
   everyday_word_decomposition: EverydayWordDecompositionCorpus;
-  programming_words: string[];
-  symbols: string[];
-  language_symbols: LanguageSymbolSet[];
-  number_drills: string[];
-  naming: string[];
+  programming_words: ProgrammingWordEntry[];
   code_corpus?: CodeCorpus;
   code_snippets: BuiltinCodeSnippet[];
   long_words: LongWordEntry[];
+}
+
+export interface ProgrammingWordEntry {
+  word: string;
+  note_zh: string;
 }
 
 export interface FoundationDrill {
@@ -42,12 +43,6 @@ export interface FoundationDrill {
   title_en: string;
   hint_zh: string;
   hint_en: string;
-  items: string[];
-}
-
-export interface LanguageSymbolSet {
-  language: string | null;
-  framework: string | null;
   items: string[];
 }
 
@@ -170,11 +165,7 @@ export async function loadContentLibrary(options: {
     everyday_word_decomposition: await loadJsonFile<EverydayWordDecompositionCorpus>(
       "everyday_word_decomposition.json",
     ),
-    programming_words: await loadJsonFile<string[]>("programming_words.json"),
-    symbols: await loadJsonFile<string[]>("symbols.json"),
-    language_symbols: await loadJsonFile<LanguageSymbolSet[]>("language_symbols.json"),
-    number_drills: await loadJsonFile<string[]>("number_drills.json"),
-    naming: await loadJsonFile<string[]>("naming.json"),
+    programming_words: await loadJsonFile<ProgrammingWordEntry[]>("programming_words.json"),
     code_corpus: codeCorpus,
     code_snippets: [],
     long_words: await loadJsonFile<LongWordEntry[]>("long_words.json"),

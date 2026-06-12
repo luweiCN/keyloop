@@ -8,12 +8,10 @@ import {
   buildFoundationPracticeTarget,
   buildLessonWords,
   buildLongWordBreakdownPracticeTarget,
-  buildProgrammingBasicsMixTarget,
   buildProgrammingBasicsPracticeTarget,
   everydayMeaningLines,
   refreshModuleMixTarget,
   defaultSessionRecord,
-  focusNamingLines,
   identifierParts,
   type BuiltinCodeSnippet,
   type ContentLibrary,
@@ -42,38 +40,39 @@ describe("target generation core", () => {
     ]);
   });
 
-  test("focus naming lines include common code naming variants", () => {
-    const lines = focusNamingLines(["selectedPreference"]);
-
-    expect(lines[0]).toBe("selectedPreference getSelectedPreference SELECTED_PREFERENCE");
-  });
-
-  test("lesson words start with unique plan focus and fill to sixteen words", () => {
-    const text = buildLessonWords(testPlan(), testLibrary());
+  test("lesson words draw sixteen random words from the library", () => {
+    const text = buildLessonWords(testLibrary());
     const words = text.split(/\s+/u);
 
-    expect(words.slice(0, 3)).toEqual(["selected", "pending", "performance"]);
     expect(words).toHaveLength(16);
+    const library = testLibrary().programming_words.map((entry) => entry.word);
+    for (const word of words) {
+      expect(library).toContain(word);
+    }
   });
 
-  test("lesson words shuffle fill terms with injected random", () => {
+  test("lesson words shuffle the library with injected random", () => {
     const text = buildLessonWords(
-      unfocusedPlan({ focus_words: ["selected"] }),
-      { programming_words: ["term1", "term2", "term3", "term4", "term5"] },
+      {
+        programming_words: ["term1", "term2", "term3", "term4", "term5"].map((word) => ({
+          word,
+          note_zh: "",
+        })),
+      },
       sequenceRandom([0, 0.99, 0.99, 0.99]),
     );
     const words = text.split(/\s+/u);
 
-    expect(words.slice(0, 2)).toEqual(["selected", "term5"]);
+    expect(words[0]).toBe("term5");
+    expect(words).toHaveLength(5);
   });
 
   test("programming word targets pass injected random to lesson words", () => {
     const library = testLibrary();
-    library.programming_words = numberedLines("programmingTerm", 20);
-    library.language_symbols = [];
-    library.symbols = [];
-    library.number_drills = [];
-    library.naming = [];
+    library.programming_words = numberedLines("programmingTerm", 20).map((word) => ({
+      word,
+      note_zh: "",
+    }));
 
     const originalRandom = Math.random;
     Math.random = () => 0.99;
@@ -87,15 +86,7 @@ describe("target generation core", () => {
         },
         "programming_terms",
       );
-      const mix = buildProgrammingBasicsMixTarget({
-        records: [],
-        plan: unfocusedPlan(),
-        library,
-        random: sequenceRandom([0, 0.99, 0.99, 0.99, 0.99]),
-      });
-
       expect(standalone.text).toContain("programmingTerm 20");
-      expect(mix.text).toContain("programmingTerm 20");
     } finally {
       Math.random = originalRandom;
     }
@@ -652,227 +643,29 @@ describe("target generation core", () => {
     ]);
   });
 
-  test("programming basics mix includes feedback and long-word breakdown without new module", () => {
-    const record = defaultSessionRecord({
-      error_tokens: {
-        response: 2,
-      },
-      token_stats: [
-        {
-          token: "internationalization",
-          kind: "word",
-          start_delay_ms: 900,
-          duration_ms: 500,
-          errors: 1,
-        },
-      ],
-    });
-
-    const target = buildProgrammingBasicsMixTarget({
-      records: [record],
-      plan: testPlan(),
-      library: testLibrary(),
-    });
-
-    expect(target.mode).toBe("symbols");
-    expect(target.source).toBe("keyloop:module:programming-basics-mix");
-    expect(target.text).toContain("internationalization");
-    expect(target.text).not.toContain("response");
-    expect(target.text).toContain("international ization");
-    expect(target.text).toContain("internationalization internationalization");
-  });
 
 
 
-  test("programming basics mix injects split focus words before built-in long words", () => {
-    const record = defaultSessionRecord({
-      token_stats: [
-        {
-          token: "internationalization",
-          kind: "word",
-          start_delay_ms: 900,
-          duration_ms: 500,
-          errors: 1,
-        },
-      ],
-    });
-
-    const target = buildProgrammingBasicsMixTarget(
-      {
-        records: [record],
-        plan: {
-          ...testPlan(),
-          focus_words: ["selectedPreference"],
-        },
-        library: testLibrary(),
-      },
-      "comprehensive",
-    );
-
-    expect(target.text).toContain("selected preference");
-    expect(target.text).toContain("selectedPreference selectedPreference");
-    expect(target.text).toContain("loadSelectedPreference");
-    expect(target.text.indexOf("selected preference")).toBeLessThan(
-      target.text.indexOf("international ization"),
-    );
-  });
 
 
-  test("programming basics mix caps comprehensive focus breakdown at six entries", () => {
-    const focusWords = [
-      "alphaOneConfig",
-      "betaTwoConfig",
-      "gammaThreeConfig",
-      "deltaFourConfig",
-      "epsilonFiveConfig",
-      "zetaSixConfig",
-      "etaSevenConfig",
-    ];
-
-    const target = buildProgrammingBasicsMixTarget(
-      {
-        records: [],
-        plan: { ...testPlan(), focus_words: focusWords },
-        library: testLibrary(),
-        wordBreakdownSettings: {
-          enabled_in_comprehensive: true,
-          max_items_per_group: 8,
-        },
-      },
-      "comprehensive",
-    );
-
-    expect(target.text).toContain("alpha one config");
-    expect(target.text).toContain("zeta six config");
-    expect(target.text).not.toContain("eta seven config");
-  });
 
 
-  test("programming basics mix includes language-specific symbols from code config", () => {
-    const library = testLibrary();
-    library.language_symbols = [
-      {
-        language: "rust",
-        framework: null,
-        items: ["Result<T, E>", ":: ->"],
-      },
-    ];
 
-    const target = buildProgrammingBasicsMixTarget({
-      records: [],
-      plan: unfocusedPlan(),
-      library,
-      codeConfig: {
-        languages: ["rust"],
-        frameworks: [],
-        projects: [],
-        match_any: true,
-      },
-    });
 
-    expect(target.text).toContain("Result<T, E>");
-  });
 
-  test("programming basics symbols shuffle language-specific items with injected random", () => {
-    const library = testLibrary();
-    library.language_symbols = [
-      {
-        language: "rust",
-        framework: "std",
-        items: [
-          "rustSym1",
-          "rustSym2",
-          "rustSym3",
-          "rustSym4",
-          "rustSym5",
-          "rustSym6",
-          "rustSym7",
-          "rustSym8",
-          "rustSym9",
-          "rustSym10",
-        ],
-      },
-    ];
 
-    const target = buildProgrammingBasicsMixTarget({
-      records: [],
-      plan: unfocusedPlan(),
-      library,
-      codeConfig: { languages: ["rust"], frameworks: [], projects: [] },
-      random: sequenceRandom([0, 0.99, 0.99, 0.99, 0.99, 0.99]),
-    });
 
-    expect(target.text).toContain("rustSym10");
-  });
-
-  test("programming operators target shuffles fill pools with injected random", () => {
-    const library = testLibrary();
-    library.language_symbols = [
-      {
-        language: "rust",
-        framework: null,
-        items: numberedLines("rustOp", 10),
-      },
-    ];
-    library.symbols = numberedLines("symbol", 20);
-    library.number_drills = numberedLines("number", 20);
-
-    const target = buildProgrammingBasicsPracticeTarget(
-      {
-        records: [],
-        plan: unfocusedPlan(),
-        library,
-        codeConfig: { languages: ["rust"], frameworks: [], projects: [] },
-        random: sequenceRandom([
-          0,
-          0.99,
-          0.99,
-          0.99,
-          0.99,
-          0.99,
-          0.99,
-          0.99,
-          0.99,
-          0.99,
-          0.99,
-          0.99,
-          0.99,
-        ]),
-      },
-      "operators_brackets_quotes",
-    );
-
-    expect(target.text).toContain("rustOp 10");
-    expect(target.text).toContain("symbol 14");
-  });
-
-  test("programming naming target shuffles naming templates with injected random", () => {
-    const library = testLibrary();
-    library.naming = numberedLines("namingTemplate", 8);
-
-    const target = buildProgrammingBasicsPracticeTarget(
-      {
-        records: [],
-        plan: unfocusedPlan(),
-        library,
-        random: sequenceRandom([0, 0.99, 0.99, 0.99]),
-      },
-      "naming_styles",
-    );
-
-    expect(target.text).toContain("namingTemplate 8");
-  });
 
   test("refreshes programming basics mix from latest symbol records", () => {
     const lesson: PracticeLesson = {
       id: "daily:symbols:1",
-      kind: "symbols",
+      kind: "code_block",
       module: "programming_basics",
       category: "programming_basics_mix",
       mix_profile: "comprehensive",
       estimated_minutes: 4,
       target: {
-        mode: "symbols",
+        mode: "code",
         text: "fallback",
         source: "test:fallback",
       },
@@ -897,11 +690,9 @@ describe("target generation core", () => {
       library: testLibrary(),
     });
 
-    expect(target.source).toBe("keyloop:module:programming-basics-mix");
-    expect(target.text).toContain("=>");
+    expect(target.source).toContain("keyloop:module:programming-basics-mix:");
     expect(target.text).not.toBe("fallback");
   });
-
 
   test("standalone long-word breakdown falls back when no due entries exist", () => {
     const library = testLibrary();
@@ -2011,11 +1802,7 @@ function testLibrary(): ContentLibrary {
       "variant",
       "registry",
       "release",
-    ],
-    symbols: ["=>", "!==", "&&", "||", "{}", "[]", "()", "_", "-", "="],
-    language_symbols: [],
-    number_drills: ["1 2 3", "0 - =", "7 8 9"],
-    naming: ["selectedPreference SelectedPreference SELECTED_PREFERENCE"],
+    ].map((word) => ({ word, note_zh: "" })),
     code_snippets: [
       {
         language: "typescript",

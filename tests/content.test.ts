@@ -32,11 +32,7 @@ describe("content library", () => {
     expect(library.warmup.length).toBeGreaterThanOrEqual(180);
     expect(library.common_words.length).toBeGreaterThanOrEqual(400);
     expect(library.word_chunks.length).toBeGreaterThanOrEqual(300);
-    expect(library.programming_words.length).toBeGreaterThanOrEqual(800);
-    expect(library.symbols.length).toBeGreaterThanOrEqual(200);
-    expect(library.language_symbols.length).toBeGreaterThanOrEqual(8);
-    expect(library.number_drills.length).toBeGreaterThanOrEqual(80);
-    expect(library.naming.length).toBeGreaterThanOrEqual(300);
+    expect(library.programming_words.length).toBeGreaterThanOrEqual(300);
     expect(library.code_corpus?.index.stats.kept).toBeGreaterThanOrEqual(1000);
     expect(library.long_words.map((entry) => entry.word)).toContain(
       "internationalization",
@@ -107,7 +103,8 @@ describe("content library", () => {
   test("programming words include common non-keyword state terms", async () => {
     const library = await loadContentLibrary();
 
-    expect(library.programming_words).toEqual(
+    const words = library.programming_words.map((entry) => entry.word);
+    expect(words).toEqual(
       expect.arrayContaining([
         "enabled",
         "pending",
@@ -119,6 +116,10 @@ describe("content library", () => {
         "performance",
       ]),
     );
+    expect(library.programming_words.length).toBeGreaterThanOrEqual(1000);
+    for (const entry of library.programming_words) {
+      expect(entry.note_zh.trim().length).toBeGreaterThan(0);
+    }
   });
 
   test("code snippets use the generated code content index", async () => {

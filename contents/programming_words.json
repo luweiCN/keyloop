@@ -1,916 +1,5014 @@
 [
-  "abort",
-  "absolute",
-  "abstract",
-  "active",
-  "accessor",
-  "adapter",
-  "address",
-  "aggregate",
-  "allocate",
-  "analytics",
-  "anchor",
-  "animation",
-  "api",
-  "app",
-  "archived",
-  "array",
-  "assert",
-  "async",
-  "attribute",
-  "auth",
-  "authorization",
-  "available",
-  "avatar",
-  "batch",
-  "bigint",
-  "binary",
-  "binding",
-  "boolean",
-  "boundary",
-  "breadcrumb",
-  "browser",
-  "buffer",
-  "bundle",
-  "cache",
-  "callback",
-  "canonical",
-  "canvas",
-  "capture",
-  "cell",
-  "channel",
-  "checksum",
-  "child",
-  "chunk",
-  "class",
-  "client",
-  "clone",
-  "closure",
-  "collection",
-  "column",
-  "command",
-  "component",
-  "compatible",
-  "computed",
-  "config",
-  "configuration",
-  "connection",
-  "constant",
-  "constraint",
-  "container",
-  "content",
-  "context",
-  "contract",
-  "controller",
-  "cookie",
-  "coordinator",
-  "crate",
-  "credential",
-  "cursor",
-  "dashboard",
-  "dataset",
-  "debounce",
-  "decimal",
-  "decoder",
-  "default",
-  "delegate",
-  "dependency",
-  "deploy",
-  "derived",
-  "dialog",
-  "dispatcher",
-  "document",
-  "domain",
-  "draft",
-  "dropdown",
-  "effect",
-  "element",
-  "enabled",
-  "endpoint",
-  "enum",
-  "error",
-  "event",
-  "exception",
-  "export",
-  "factory",
-  "fallback",
-  "fetch",
-  "field",
-  "filter",
-  "fixture",
-  "flag",
-  "formatter",
-  "fragment",
-  "gateway",
-  "generic",
-  "guard",
-  "handler",
-  "header",
-  "hook",
-  "hydrate",
-  "identity",
-  "import",
-  "index",
-  "initialization",
-  "input",
-  "instance",
-  "interceptor",
-  "interface",
-  "iterator",
-  "job",
-  "key",
-  "layout",
-  "ledger",
-  "lifecycle",
-  "listener",
-  "loader",
-  "locale",
-  "logger",
-  "mapper",
-  "matrix",
-  "memo",
-  "middleware",
-  "migration",
-  "mock",
-  "module",
-  "mutation",
-  "namespace",
-  "node",
-  "nonce",
-  "observer",
-  "operator",
-  "option",
-  "output",
-  "overlay",
-  "package",
-  "pagination",
-  "parser",
-  "payload",
-  "pending",
-  "performance",
-  "permission",
-  "pipeline",
-  "portal",
-  "preference",
-  "preview",
-  "promise",
-  "provider",
-  "proxy",
-  "queue",
-  "reducer",
-  "ref",
-  "registry",
-  "renderer",
-  "repository",
-  "request",
-  "resolver",
-  "resource",
-  "response",
-  "retry",
-  "route",
-  "router",
-  "schema",
-  "selector",
-  "selected",
-  "serializer",
-  "serialized",
-  "server",
-  "session",
-  "signal",
-  "snapshot",
-  "socket",
-  "source",
-  "state",
-  "store",
-  "stream",
-  "string",
-  "struct",
-  "subscription",
-  "suspense",
-  "switch",
-  "symbol",
-  "synchronization",
-  "table",
-  "target",
-  "task",
-  "template",
-  "token",
-  "transaction",
-  "transform",
-  "transition",
-  "trigger",
-  "tuple",
-  "type",
-  "union",
-  "upload",
-  "validator",
-  "value",
-  "variable",
-  "variant",
-  "vector",
-  "view",
-  "viewport",
-  "virtual",
-  "visible",
-  "wallet",
-  "watcher",
-  "webhook",
-  "widget",
-  "worker",
-  "workspace",
-  "wrapper",
-  "react",
-  "vue",
-  "svelte",
-  "solid",
-  "nextjs",
-  "nuxt",
-  "remix",
-  "astro",
-  "vite",
-  "webpack",
-  "rollup",
-  "esbuild",
-  "swc",
-  "nestjs",
-  "express",
-  "fastify",
-  "prisma",
-  "drizzle",
-  "foundry",
-  "hardhat",
-  "openzeppelin",
-  "wagmi",
-  "viem",
-  "ethers",
-  "ratatui",
-  "clap",
-  "serde",
-  "tokio",
-  "axum",
-  "tauri",
-  "map",
-  "reduce",
-  "find",
-  "some",
-  "every",
-  "includes",
-  "push",
-  "pop",
-  "slice",
-  "splice",
-  "sort",
-  "flat",
-  "then",
-  "catch",
-  "finally",
-  "await",
-  "return",
-  "yield",
-  "match",
-  "borrow",
-  "flex",
-  "grid",
-  "align",
-  "justify",
-  "margin",
-  "padding",
-  "border",
-  "radius",
-  "shadow",
-  "opacity",
-  "query",
-  "breakpoint",
-  "createAbort",
-  "create_abort",
-  "createAbsolute",
-  "create_absolute",
-  "createAbstract",
-  "create_abstract",
-  "createAccessor",
-  "create_accessor",
-  "createAdapter",
-  "create_adapter",
-  "createAddress",
-  "create_address",
-  "createAggregate",
-  "create_aggregate",
-  "createAllocate",
-  "create_allocate",
-  "createAnalytics",
-  "create_analytics",
-  "createAnchor",
-  "create_anchor",
-  "createAnimation",
-  "create_animation",
-  "createApi",
-  "create_api",
-  "createApp",
-  "create_app",
-  "createArray",
-  "create_array",
-  "createAssert",
-  "create_assert",
-  "createAsync",
-  "create_async",
-  "createAttribute",
-  "create_attribute",
-  "createAuth",
-  "create_auth",
-  "createAuthorization",
-  "create_authorization",
-  "createAvatar",
-  "create_avatar",
-  "createBatch",
-  "create_batch",
-  "createBigint",
-  "create_bigint",
-  "createBinary",
-  "create_binary",
-  "createBinding",
-  "create_binding",
-  "createBoolean",
-  "create_boolean",
-  "createBoundary",
-  "create_boundary",
-  "createBreadcrumb",
-  "create_breadcrumb",
-  "createBrowser",
-  "create_browser",
-  "createBuffer",
-  "create_buffer",
-  "createBundle",
-  "create_bundle",
-  "createCache",
-  "create_cache",
-  "createCallback",
-  "create_callback",
-  "createCanonical",
-  "create_canonical",
-  "createCanvas",
-  "create_canvas",
-  "createCapture",
-  "create_capture",
-  "createCell",
-  "create_cell",
-  "createChannel",
-  "create_channel",
-  "createChecksum",
-  "create_checksum",
-  "createChild",
-  "create_child",
-  "createChunk",
-  "create_chunk",
-  "createClass",
-  "create_class",
-  "createClient",
-  "create_client",
-  "createClone",
-  "create_clone",
-  "createClosure",
-  "create_closure",
-  "createCollection",
-  "create_collection",
-  "createColumn",
-  "create_column",
-  "createCommand",
-  "create_command",
-  "createComponent",
-  "create_component",
-  "createComputed",
-  "create_computed",
-  "createConfig",
-  "create_config",
-  "createConnection",
-  "create_connection",
-  "createConstant",
-  "create_constant",
-  "createConstraint",
-  "create_constraint",
-  "createContainer",
-  "create_container",
-  "createContent",
-  "create_content",
-  "createContext",
-  "create_context",
-  "createContract",
-  "create_contract",
-  "createController",
-  "create_controller",
-  "createCookie",
-  "create_cookie",
-  "createCoordinator",
-  "create_coordinator",
-  "createCrate",
-  "create_crate",
-  "createCredential",
-  "create_credential",
-  "createCursor",
-  "create_cursor",
-  "createDashboard",
-  "create_dashboard",
-  "createDataset",
-  "create_dataset",
-  "createDebounce",
-  "create_debounce",
-  "createDecimal",
-  "create_decimal",
-  "createDecoder",
-  "create_decoder",
-  "createDefault",
-  "create_default",
-  "createDelegate",
-  "create_delegate",
-  "createDependency",
-  "create_dependency",
-  "createDeploy",
-  "create_deploy",
-  "createDerived",
-  "create_derived",
-  "createDialog",
-  "create_dialog",
-  "createDispatcher",
-  "create_dispatcher",
-  "createDocument",
-  "create_document",
-  "createDomain",
-  "create_domain",
-  "createDraft",
-  "create_draft",
-  "createDropdown",
-  "create_dropdown",
-  "createEffect",
-  "create_effect",
-  "updateAbort",
-  "update_abort",
-  "updateAbsolute",
-  "update_absolute",
-  "updateAbstract",
-  "update_abstract",
-  "updateAccessor",
-  "update_accessor",
-  "updateAdapter",
-  "update_adapter",
-  "updateAddress",
-  "update_address",
-  "updateAggregate",
-  "update_aggregate",
-  "updateAllocate",
-  "update_allocate",
-  "updateAnalytics",
-  "update_analytics",
-  "updateAnchor",
-  "update_anchor",
-  "updateAnimation",
-  "update_animation",
-  "updateApi",
-  "update_api",
-  "updateApp",
-  "update_app",
-  "updateArray",
-  "update_array",
-  "updateAssert",
-  "update_assert",
-  "updateAsync",
-  "update_async",
-  "updateAttribute",
-  "update_attribute",
-  "updateAuth",
-  "update_auth",
-  "updateAuthorization",
-  "update_authorization",
-  "updateAvatar",
-  "update_avatar",
-  "updateBatch",
-  "update_batch",
-  "updateBigint",
-  "update_bigint",
-  "updateBinary",
-  "update_binary",
-  "updateBinding",
-  "update_binding",
-  "updateBoolean",
-  "update_boolean",
-  "updateBoundary",
-  "update_boundary",
-  "updateBreadcrumb",
-  "update_breadcrumb",
-  "updateBrowser",
-  "update_browser",
-  "updateBuffer",
-  "update_buffer",
-  "updateBundle",
-  "update_bundle",
-  "updateCache",
-  "update_cache",
-  "updateCallback",
-  "update_callback",
-  "updateCanonical",
-  "update_canonical",
-  "updateCanvas",
-  "update_canvas",
-  "updateCapture",
-  "update_capture",
-  "updateCell",
-  "update_cell",
-  "updateChannel",
-  "update_channel",
-  "updateChecksum",
-  "update_checksum",
-  "updateChild",
-  "update_child",
-  "updateChunk",
-  "update_chunk",
-  "updateClass",
-  "update_class",
-  "updateClient",
-  "update_client",
-  "updateClone",
-  "update_clone",
-  "updateClosure",
-  "update_closure",
-  "updateCollection",
-  "update_collection",
-  "updateColumn",
-  "update_column",
-  "updateCommand",
-  "update_command",
-  "updateComponent",
-  "update_component",
-  "updateComputed",
-  "update_computed",
-  "updateConfig",
-  "update_config",
-  "updateConnection",
-  "update_connection",
-  "updateConstant",
-  "update_constant",
-  "updateConstraint",
-  "update_constraint",
-  "updateContainer",
-  "update_container",
-  "updateContent",
-  "update_content",
-  "updateContext",
-  "update_context",
-  "updateContract",
-  "update_contract",
-  "updateController",
-  "update_controller",
-  "updateCookie",
-  "update_cookie",
-  "updateCoordinator",
-  "update_coordinator",
-  "updateCrate",
-  "update_crate",
-  "updateCredential",
-  "update_credential",
-  "updateCursor",
-  "update_cursor",
-  "updateDashboard",
-  "update_dashboard",
-  "updateDataset",
-  "update_dataset",
-  "updateDebounce",
-  "update_debounce",
-  "updateDecimal",
-  "update_decimal",
-  "updateDecoder",
-  "update_decoder",
-  "updateDefault",
-  "update_default",
-  "updateDelegate",
-  "update_delegate",
-  "updateDependency",
-  "update_dependency",
-  "updateDeploy",
-  "update_deploy",
-  "updateDerived",
-  "update_derived",
-  "updateDialog",
-  "update_dialog",
-  "updateDispatcher",
-  "update_dispatcher",
-  "updateDocument",
-  "update_document",
-  "updateDomain",
-  "update_domain",
-  "updateDraft",
-  "update_draft",
-  "updateDropdown",
-  "update_dropdown",
-  "updateEffect",
-  "update_effect",
-  "deleteAbort",
-  "delete_abort",
-  "deleteAbsolute",
-  "delete_absolute",
-  "deleteAbstract",
-  "delete_abstract",
-  "deleteAccessor",
-  "delete_accessor",
-  "deleteAdapter",
-  "delete_adapter",
-  "deleteAddress",
-  "delete_address",
-  "deleteAggregate",
-  "delete_aggregate",
-  "deleteAllocate",
-  "delete_allocate",
-  "deleteAnalytics",
-  "delete_analytics",
-  "deleteAnchor",
-  "delete_anchor",
-  "deleteAnimation",
-  "delete_animation",
-  "deleteApi",
-  "delete_api",
-  "deleteApp",
-  "delete_app",
-  "deleteArray",
-  "delete_array",
-  "deleteAssert",
-  "delete_assert",
-  "deleteAsync",
-  "delete_async",
-  "deleteAttribute",
-  "delete_attribute",
-  "deleteAuth",
-  "delete_auth",
-  "deleteAuthorization",
-  "delete_authorization",
-  "deleteAvatar",
-  "delete_avatar",
-  "deleteBatch",
-  "delete_batch",
-  "deleteBigint",
-  "delete_bigint",
-  "deleteBinary",
-  "delete_binary",
-  "deleteBinding",
-  "delete_binding",
-  "deleteBoolean",
-  "delete_boolean",
-  "deleteBoundary",
-  "delete_boundary",
-  "deleteBreadcrumb",
-  "delete_breadcrumb",
-  "deleteBrowser",
-  "delete_browser",
-  "deleteBuffer",
-  "delete_buffer",
-  "deleteBundle",
-  "delete_bundle",
-  "deleteCache",
-  "delete_cache",
-  "deleteCallback",
-  "delete_callback",
-  "deleteCanonical",
-  "delete_canonical",
-  "deleteCanvas",
-  "delete_canvas",
-  "deleteCapture",
-  "delete_capture",
-  "deleteCell",
-  "delete_cell",
-  "deleteChannel",
-  "delete_channel",
-  "deleteChecksum",
-  "delete_checksum",
-  "deleteChild",
-  "delete_child",
-  "deleteChunk",
-  "delete_chunk",
-  "deleteClass",
-  "delete_class",
-  "deleteClient",
-  "delete_client",
-  "deleteClone",
-  "delete_clone",
-  "deleteClosure",
-  "delete_closure",
-  "deleteCollection",
-  "delete_collection",
-  "deleteColumn",
-  "delete_column",
-  "deleteCommand",
-  "delete_command",
-  "deleteComponent",
-  "delete_component",
-  "deleteComputed",
-  "delete_computed",
-  "deleteConfig",
-  "delete_config",
-  "deleteConnection",
-  "delete_connection",
-  "deleteConstant",
-  "delete_constant",
-  "deleteConstraint",
-  "delete_constraint",
-  "deleteContainer",
-  "delete_container",
-  "deleteContent",
-  "delete_content",
-  "deleteContext",
-  "delete_context",
-  "deleteContract",
-  "delete_contract",
-  "deleteController",
-  "delete_controller",
-  "deleteCookie",
-  "delete_cookie",
-  "deleteCoordinator",
-  "delete_coordinator",
-  "deleteCrate",
-  "delete_crate",
-  "deleteCredential",
-  "delete_credential",
-  "deleteCursor",
-  "delete_cursor",
-  "deleteDashboard",
-  "delete_dashboard",
-  "deleteDataset",
-  "delete_dataset",
-  "deleteDebounce",
-  "delete_debounce",
-  "deleteDecimal",
-  "delete_decimal",
-  "deleteDecoder",
-  "delete_decoder",
-  "deleteDefault",
-  "delete_default",
-  "deleteDelegate",
-  "delete_delegate",
-  "deleteDependency",
-  "delete_dependency",
-  "deleteDeploy",
-  "delete_deploy",
-  "deleteDerived",
-  "delete_derived",
-  "deleteDialog",
-  "delete_dialog",
-  "deleteDispatcher",
-  "delete_dispatcher",
-  "deleteDocument",
-  "delete_document",
-  "deleteDomain",
-  "delete_domain",
-  "deleteDraft",
-  "delete_draft",
-  "deleteDropdown",
-  "delete_dropdown",
-  "deleteEffect",
-  "delete_effect",
-  "loadAbort",
-  "load_abort",
-  "loadAbsolute",
-  "load_absolute",
-  "loadAbstract",
-  "load_abstract",
-  "loadAccessor",
-  "load_accessor",
-  "loadAdapter",
-  "load_adapter",
-  "loadAddress",
-  "load_address",
-  "loadAggregate",
-  "load_aggregate",
-  "loadAllocate",
-  "load_allocate",
-  "loadAnalytics",
-  "load_analytics",
-  "loadAnchor",
-  "load_anchor",
-  "loadAnimation",
-  "load_animation",
-  "loadApi",
-  "load_api",
-  "loadApp",
-  "load_app",
-  "loadArray",
-  "load_array",
-  "loadAssert",
-  "load_assert",
-  "loadAsync",
-  "load_async",
-  "loadAttribute",
-  "load_attribute",
-  "loadAuth",
-  "load_auth",
-  "loadAuthorization",
-  "load_authorization",
-  "loadAvatar",
-  "load_avatar",
-  "loadBatch",
-  "load_batch",
-  "loadBigint",
-  "load_bigint",
-  "loadBinary",
-  "load_binary",
-  "loadBinding",
-  "load_binding",
-  "loadBoolean",
-  "load_boolean",
-  "loadBoundary",
-  "load_boundary",
-  "loadBreadcrumb",
-  "load_breadcrumb",
-  "loadBrowser",
-  "load_browser",
-  "loadBuffer",
-  "load_buffer",
-  "loadBundle",
-  "load_bundle",
-  "loadCache",
-  "load_cache",
-  "loadCallback",
-  "load_callback",
-  "loadCanonical",
-  "load_canonical",
-  "loadCanvas",
-  "load_canvas",
-  "loadCapture",
-  "load_capture",
-  "loadCell",
-  "load_cell",
-  "loadChannel",
-  "load_channel",
-  "loadChecksum",
-  "load_checksum",
-  "loadChild",
-  "load_child",
-  "loadChunk",
-  "load_chunk",
-  "loadClass",
-  "load_class",
-  "loadClient",
-  "load_client",
-  "loadClone",
-  "load_clone",
-  "loadClosure",
-  "load_closure",
-  "loadCollection",
-  "load_collection",
-  "loadColumn",
-  "load_column",
-  "loadCommand",
-  "load_command",
-  "loadComponent",
-  "load_component",
-  "loadComputed",
-  "load_computed",
-  "loadConfig",
-  "load_config",
-  "loadConnection",
-  "load_connection",
-  "loadConstant",
-  "load_constant",
-  "loadConstraint",
-  "load_constraint",
-  "loadContainer",
-  "load_container",
-  "loadContent",
-  "load_content",
-  "loadContext",
-  "load_context",
-  "loadContract",
-  "load_contract",
-  "loadController",
-  "load_controller",
-  "loadCookie",
-  "load_cookie",
-  "loadCoordinator",
-  "load_coordinator",
-  "loadCrate",
-  "load_crate",
-  "loadCredential",
-  "load_credential",
-  "loadCursor",
-  "load_cursor",
-  "loadDashboard",
-  "load_dashboard",
-  "loadDataset",
-  "load_dataset",
-  "loadDebounce",
-  "load_debounce",
-  "loadDecimal",
-  "load_decimal",
-  "loadDecoder",
-  "load_decoder",
-  "loadDefault",
-  "load_default",
-  "loadDelegate",
-  "load_delegate",
-  "loadDependency",
-  "load_dependency",
-  "loadDeploy",
-  "load_deploy",
-  "loadDerived",
-  "load_derived",
-  "loadDialog",
-  "load_dialog",
-  "loadDispatcher",
-  "load_dispatcher",
-  "loadDocument",
-  "load_document"
+  {
+    "word": "abort",
+    "note_zh": "中止（请求/事务）"
+  },
+  {
+    "word": "absolute",
+    "note_zh": "绝对值；绝对定位"
+  },
+  {
+    "word": "abstract",
+    "note_zh": "抽象的（抽象类/方法）"
+  },
+  {
+    "word": "abstraction",
+    "note_zh": "抽象"
+  },
+  {
+    "word": "accept",
+    "note_zh": "接受（连接/参数）"
+  },
+  {
+    "word": "access",
+    "note_zh": "访问"
+  },
+  {
+    "word": "accessibility",
+    "note_zh": "无障碍（a11y）"
+  },
+  {
+    "word": "accessor",
+    "note_zh": "访问器"
+  },
+  {
+    "word": "accordion",
+    "note_zh": "手风琴（折叠面板）"
+  },
+  {
+    "word": "account",
+    "note_zh": "账户"
+  },
+  {
+    "word": "accumulator",
+    "note_zh": "累加器"
+  },
+  {
+    "word": "accuracy",
+    "note_zh": "准确率"
+  },
+  {
+    "word": "action",
+    "note_zh": "动作（Redux action/CI 任务）"
+  },
+  {
+    "word": "active",
+    "note_zh": "激活的；当前生效的"
+  },
+  {
+    "word": "adapter",
+    "note_zh": "适配器（接口转换层）"
+  },
+  {
+    "word": "add",
+    "note_zh": "添加"
+  },
+  {
+    "word": "addon",
+    "note_zh": "附加组件"
+  },
+  {
+    "word": "address",
+    "note_zh": "地址（内存/网络/钱包）"
+  },
+  {
+    "word": "admin",
+    "note_zh": "管理员"
+  },
+  {
+    "word": "agent",
+    "note_zh": "智能体；代理程序"
+  },
+  {
+    "word": "aggregate",
+    "note_zh": "聚合（统计/聚合根）"
+  },
+  {
+    "word": "alert",
+    "note_zh": "警告提示"
+  },
+  {
+    "word": "alerting",
+    "note_zh": "告警"
+  },
+  {
+    "word": "algorithm",
+    "note_zh": "算法"
+  },
+  {
+    "word": "alias",
+    "note_zh": "别名"
+  },
+  {
+    "word": "alignment",
+    "note_zh": "对齐"
+  },
+  {
+    "word": "allocation",
+    "note_zh": "分配（内存分配）"
+  },
+  {
+    "word": "allow",
+    "note_zh": "允许"
+  },
+  {
+    "word": "allowlist",
+    "note_zh": "允许名单"
+  },
+  {
+    "word": "alpha",
+    "note_zh": "内测版"
+  },
+  {
+    "word": "amount",
+    "note_zh": "金额；数量"
+  },
+  {
+    "word": "analytics",
+    "note_zh": "数据分析（埋点统计）"
+  },
+  {
+    "word": "angular",
+    "note_zh": "Angular 前端框架"
+  },
+  {
+    "word": "animation",
+    "note_zh": "动画"
+  },
+  {
+    "word": "annotation",
+    "note_zh": "注解（Java/Python 类型标注）"
+  },
+  {
+    "word": "anonymous",
+    "note_zh": "匿名的"
+  },
+  {
+    "word": "antipattern",
+    "note_zh": "反模式（常见坏实践）"
+  },
+  {
+    "word": "api",
+    "note_zh": "应用程序接口"
+  },
+  {
+    "word": "app",
+    "note_zh": "应用（application 缩写）"
+  },
+  {
+    "word": "append",
+    "note_zh": "追加到末尾"
+  },
+  {
+    "word": "application",
+    "note_zh": "应用程序"
+  },
+  {
+    "word": "apply",
+    "note_zh": "应用；JS 函数调用方法"
+  },
+  {
+    "word": "approve",
+    "note_zh": "批准"
+  },
+  {
+    "word": "archived",
+    "note_zh": "已归档"
+  },
+  {
+    "word": "area",
+    "note_zh": "区域；面积"
+  },
+  {
+    "word": "args",
+    "note_zh": "参数列表（arguments 缩写）"
+  },
+  {
+    "word": "argument",
+    "note_zh": "实参；命令行参数"
+  },
+  {
+    "word": "array",
+    "note_zh": "数组"
+  },
+  {
+    "word": "artifact",
+    "note_zh": "构建产物"
+  },
+  {
+    "word": "ascii",
+    "note_zh": "基础字符编码"
+  },
+  {
+    "word": "assert",
+    "note_zh": "断言"
+  },
+  {
+    "word": "assertion",
+    "note_zh": "断言"
+  },
+  {
+    "word": "asset",
+    "note_zh": "静态资源"
+  },
+  {
+    "word": "assign",
+    "note_zh": "赋值；分配"
+  },
+  {
+    "word": "astro",
+    "note_zh": "Astro 静态站点框架"
+  },
+  {
+    "word": "atomic",
+    "note_zh": "原子的（不可分割操作）"
+  },
+  {
+    "word": "attach",
+    "note_zh": "附加；挂载"
+  },
+  {
+    "word": "attribute",
+    "note_zh": "特性；HTML 属性"
+  },
+  {
+    "word": "audio",
+    "note_zh": "音频"
+  },
+  {
+    "word": "audit",
+    "note_zh": "审计"
+  },
+  {
+    "word": "auth",
+    "note_zh": "认证授权（缩写）"
+  },
+  {
+    "word": "authentication",
+    "note_zh": "认证（你是谁）"
+  },
+  {
+    "word": "authorization",
+    "note_zh": "授权（你能做什么）"
+  },
+  {
+    "word": "autocomplete",
+    "note_zh": "自动补全"
+  },
+  {
+    "word": "autosave",
+    "note_zh": "自动保存"
+  },
+  {
+    "word": "autoscaling",
+    "note_zh": "自动扩缩容"
+  },
+  {
+    "word": "available",
+    "note_zh": "可用的"
+  },
+  {
+    "word": "avatar",
+    "note_zh": "头像"
+  },
+  {
+    "word": "average",
+    "note_zh": "平均值"
+  },
+  {
+    "word": "await",
+    "note_zh": "等待异步结果"
+  },
+  {
+    "word": "axis",
+    "note_zh": "坐标轴"
+  },
+  {
+    "word": "backend",
+    "note_zh": "后端"
+  },
+  {
+    "word": "backlog",
+    "note_zh": "积压；待办池"
+  },
+  {
+    "word": "backup",
+    "note_zh": "备份"
+  },
+  {
+    "word": "badge",
+    "note_zh": "徽标（角标）"
+  },
+  {
+    "word": "balance",
+    "note_zh": "余额；平衡"
+  },
+  {
+    "word": "bandwidth",
+    "note_zh": "带宽"
+  },
+  {
+    "word": "banner",
+    "note_zh": "横幅"
+  },
+  {
+    "word": "base64",
+    "note_zh": "二进制转文本编码"
+  },
+  {
+    "word": "batch",
+    "note_zh": "批量；批处理"
+  },
+  {
+    "word": "benchmark",
+    "note_zh": "基准测试（性能对比）"
+  },
+  {
+    "word": "beta",
+    "note_zh": "测试版"
+  },
+  {
+    "word": "billing",
+    "note_zh": "计费"
+  },
+  {
+    "word": "binary",
+    "note_zh": "二进制"
+  },
+  {
+    "word": "bind",
+    "note_zh": "绑定（this/端口/事件）"
+  },
+  {
+    "word": "binding",
+    "note_zh": "绑定"
+  },
+  {
+    "word": "bit",
+    "note_zh": "位（二进制位）"
+  },
+  {
+    "word": "blacklist",
+    "note_zh": "黑名单"
+  },
+  {
+    "word": "blame",
+    "note_zh": "逐行追溯（查看每行作者）"
+  },
+  {
+    "word": "blank",
+    "note_zh": "空白的"
+  },
+  {
+    "word": "blob",
+    "note_zh": "二进制大对象"
+  },
+  {
+    "word": "block",
+    "note_zh": "代码块；区块"
+  },
+  {
+    "word": "blockchain",
+    "note_zh": "区块链"
+  },
+  {
+    "word": "blocking",
+    "note_zh": "阻塞的"
+  },
+  {
+    "word": "blocklist",
+    "note_zh": "屏蔽名单"
+  },
+  {
+    "word": "blur",
+    "note_zh": "失焦；模糊效果"
+  },
+  {
+    "word": "body",
+    "note_zh": "请求体；页面主体"
+  },
+  {
+    "word": "boilerplate",
+    "note_zh": "样板代码（项目起手模板）"
+  },
+  {
+    "word": "borrow",
+    "note_zh": "借用（Rust 引用机制）"
+  },
+  {
+    "word": "bottleneck",
+    "note_zh": "瓶颈"
+  },
+  {
+    "word": "boundary",
+    "note_zh": "边界（错误边界等）"
+  },
+  {
+    "word": "bounds",
+    "note_zh": "边界范围；越界检查"
+  },
+  {
+    "word": "branch",
+    "note_zh": "分支"
+  },
+  {
+    "word": "breadcrumb",
+    "note_zh": "面包屑导航"
+  },
+  {
+    "word": "breakpoint",
+    "note_zh": "断点（响应式/调试断点）"
+  },
+  {
+    "word": "bridge",
+    "note_zh": "桥接（跨端通信层）"
+  },
+  {
+    "word": "broadcast",
+    "note_zh": "广播"
+  },
+  {
+    "word": "broker",
+    "note_zh": "消息代理（消息队列中间件）"
+  },
+  {
+    "word": "browser",
+    "note_zh": "浏览器"
+  },
+  {
+    "word": "bucket",
+    "note_zh": "桶（对象存储/令牌桶）"
+  },
+  {
+    "word": "buffer",
+    "note_zh": "缓冲区"
+  },
+  {
+    "word": "bug",
+    "note_zh": "缺陷"
+  },
+  {
+    "word": "bugfix",
+    "note_zh": "缺陷修复"
+  },
+  {
+    "word": "build",
+    "note_zh": "构建"
+  },
+  {
+    "word": "builder",
+    "note_zh": "构建器（链式构造模式）"
+  },
+  {
+    "word": "bulk",
+    "note_zh": "批量（批量写入）"
+  },
+  {
+    "word": "bun",
+    "note_zh": "Bun 高性能 JS 运行时"
+  },
+  {
+    "word": "bundle",
+    "note_zh": "打包（前端构建产物）"
+  },
+  {
+    "word": "button",
+    "note_zh": "按钮"
+  },
+  {
+    "word": "byte",
+    "note_zh": "字节"
+  },
+  {
+    "word": "cache",
+    "note_zh": "缓存"
+  },
+  {
+    "word": "calendar",
+    "note_zh": "日历"
+  },
+  {
+    "word": "call",
+    "note_zh": "调用"
+  },
+  {
+    "word": "callback",
+    "note_zh": "回调函数"
+  },
+  {
+    "word": "canary",
+    "note_zh": "金丝雀版本（灰度发布）"
+  },
+  {
+    "word": "cancel",
+    "note_zh": "取消"
+  },
+  {
+    "word": "cancelled",
+    "note_zh": "已取消"
+  },
+  {
+    "word": "canvas",
+    "note_zh": "画布（绘图元素）"
+  },
+  {
+    "word": "captcha",
+    "note_zh": "人机验证码"
+  },
+  {
+    "word": "card",
+    "note_zh": "卡片"
+  },
+  {
+    "word": "carousel",
+    "note_zh": "轮播图"
+  },
+  {
+    "word": "cascade",
+    "note_zh": "级联（级联删除/更新）"
+  },
+  {
+    "word": "cast",
+    "note_zh": "类型强转"
+  },
+  {
+    "word": "category",
+    "note_zh": "分类"
+  },
+  {
+    "word": "cdn",
+    "note_zh": "内容分发网络"
+  },
+  {
+    "word": "cell",
+    "note_zh": "单元格"
+  },
+  {
+    "word": "certificate",
+    "note_zh": "证书（SSL 证书）"
+  },
+  {
+    "word": "chain",
+    "note_zh": "链（链式调用/区块链）"
+  },
+  {
+    "word": "changed",
+    "note_zh": "已变更"
+  },
+  {
+    "word": "changelog",
+    "note_zh": "变更日志"
+  },
+  {
+    "word": "channel",
+    "note_zh": "通道（Go channel/消息频道）"
+  },
+  {
+    "word": "charset",
+    "note_zh": "字符集"
+  },
+  {
+    "word": "chart",
+    "note_zh": "图表"
+  },
+  {
+    "word": "check",
+    "note_zh": "检查"
+  },
+  {
+    "word": "checkbox",
+    "note_zh": "复选框"
+  },
+  {
+    "word": "checked",
+    "note_zh": "已勾选"
+  },
+  {
+    "word": "checkout",
+    "note_zh": "检出（切换分支/恢复文件）"
+  },
+  {
+    "word": "checkpoint",
+    "note_zh": "检查点（训练中间存档）"
+  },
+  {
+    "word": "checksum",
+    "note_zh": "校验和"
+  },
+  {
+    "word": "cherrypick",
+    "note_zh": "拣选提交"
+  },
+  {
+    "word": "child",
+    "note_zh": "子节点；子元素"
+  },
+  {
+    "word": "children",
+    "note_zh": "子节点集合（React 子内容）"
+  },
+  {
+    "word": "chunk",
+    "note_zh": "分块；数据块"
+  },
+  {
+    "word": "churn",
+    "note_zh": "流失"
+  },
+  {
+    "word": "cipher",
+    "note_zh": "密码算法"
+  },
+  {
+    "word": "cleanup",
+    "note_zh": "清理"
+  },
+  {
+    "word": "clear",
+    "note_zh": "清空"
+  },
+  {
+    "word": "cli",
+    "note_zh": "命令行工具"
+  },
+  {
+    "word": "click",
+    "note_zh": "点击"
+  },
+  {
+    "word": "client",
+    "note_zh": "客户端"
+  },
+  {
+    "word": "clipboard",
+    "note_zh": "剪贴板"
+  },
+  {
+    "word": "clone",
+    "note_zh": "克隆（深拷贝/仓库克隆）"
+  },
+  {
+    "word": "close",
+    "note_zh": "关闭"
+  },
+  {
+    "word": "closure",
+    "note_zh": "闭包"
+  },
+  {
+    "word": "cluster",
+    "note_zh": "集群"
+  },
+  {
+    "word": "code",
+    "note_zh": "代码；状态码"
+  },
+  {
+    "word": "coerce",
+    "note_zh": "类型隐式转换"
+  },
+  {
+    "word": "cohesion",
+    "note_zh": "内聚"
+  },
+  {
+    "word": "cohort",
+    "note_zh": "同期群（用户分组分析）"
+  },
+  {
+    "word": "collection",
+    "note_zh": "集合；MongoDB 的表"
+  },
+  {
+    "word": "colors",
+    "note_zh": "颜色集"
+  },
+  {
+    "word": "column",
+    "note_zh": "列；数据库字段"
+  },
+  {
+    "word": "combination",
+    "note_zh": "组合"
+  },
+  {
+    "word": "command",
+    "note_zh": "命令"
+  },
+  {
+    "word": "comment",
+    "note_zh": "注释；评论"
+  },
+  {
+    "word": "commit",
+    "note_zh": "提交（事务/git 提交）"
+  },
+  {
+    "word": "common",
+    "note_zh": "通用的；公共的"
+  },
+  {
+    "word": "comparator",
+    "note_zh": "比较器（排序比较函数）"
+  },
+  {
+    "word": "compare",
+    "note_zh": "比较"
+  },
+  {
+    "word": "compat",
+    "note_zh": "兼容（compatibility 缩写）"
+  },
+  {
+    "word": "compatibility",
+    "note_zh": "兼容性"
+  },
+  {
+    "word": "compile",
+    "note_zh": "编译"
+  },
+  {
+    "word": "compiler",
+    "note_zh": "编译器"
+  },
+  {
+    "word": "completed",
+    "note_zh": "已完成"
+  },
+  {
+    "word": "completion",
+    "note_zh": "补全（代码/文本生成）"
+  },
+  {
+    "word": "complexity",
+    "note_zh": "复杂度（算法复杂度）"
+  },
+  {
+    "word": "compliance",
+    "note_zh": "合规"
+  },
+  {
+    "word": "component",
+    "note_zh": "组件"
+  },
+  {
+    "word": "composite",
+    "note_zh": "复合的；组合模式"
+  },
+  {
+    "word": "composition",
+    "note_zh": "组合（优于继承的复用方式）"
+  },
+  {
+    "word": "compress",
+    "note_zh": "压缩"
+  },
+  {
+    "word": "compression",
+    "note_zh": "压缩"
+  },
+  {
+    "word": "computed",
+    "note_zh": "计算属性（Vue 派生值）"
+  },
+  {
+    "word": "concat",
+    "note_zh": "连接（拼接数组/字符串）"
+  },
+  {
+    "word": "concise",
+    "note_zh": "简洁的"
+  },
+  {
+    "word": "concrete",
+    "note_zh": "具体的（具体实现类）"
+  },
+  {
+    "word": "concurrency",
+    "note_zh": "并发"
+  },
+  {
+    "word": "condition",
+    "note_zh": "条件"
+  },
+  {
+    "word": "config",
+    "note_zh": "配置（configuration 缩写）"
+  },
+  {
+    "word": "configuration",
+    "note_zh": "配置"
+  },
+  {
+    "word": "configure",
+    "note_zh": "配置"
+  },
+  {
+    "word": "confirm",
+    "note_zh": "确认（确认框）"
+  },
+  {
+    "word": "conflict",
+    "note_zh": "冲突（合并冲突）"
+  },
+  {
+    "word": "connect",
+    "note_zh": "连接"
+  },
+  {
+    "word": "connection",
+    "note_zh": "连接"
+  },
+  {
+    "word": "consensus",
+    "note_zh": "共识（共识机制）"
+  },
+  {
+    "word": "consistency",
+    "note_zh": "一致性"
+  },
+  {
+    "word": "console",
+    "note_zh": "控制台"
+  },
+  {
+    "word": "constant",
+    "note_zh": "常量"
+  },
+  {
+    "word": "constraint",
+    "note_zh": "约束"
+  },
+  {
+    "word": "constructor",
+    "note_zh": "构造函数"
+  },
+  {
+    "word": "consumer",
+    "note_zh": "消费者（消息处理方）"
+  },
+  {
+    "word": "container",
+    "note_zh": "容器（Docker）；容器元素"
+  },
+  {
+    "word": "contains",
+    "note_zh": "包含（成员判断）"
+  },
+  {
+    "word": "content",
+    "note_zh": "内容"
+  },
+  {
+    "word": "context",
+    "note_zh": "上下文；执行环境"
+  },
+  {
+    "word": "contract",
+    "note_zh": "合约（智能合约）；契约"
+  },
+  {
+    "word": "contrast",
+    "note_zh": "对比度"
+  },
+  {
+    "word": "contributor",
+    "note_zh": "贡献者"
+  },
+  {
+    "word": "controller",
+    "note_zh": "控制器（MVC 中的 C）"
+  },
+  {
+    "word": "convention",
+    "note_zh": "约定（约定优于配置）"
+  },
+  {
+    "word": "conversion",
+    "note_zh": "转化（转化率）；转换"
+  },
+  {
+    "word": "convert",
+    "note_zh": "转换"
+  },
+  {
+    "word": "converter",
+    "note_zh": "转换器"
+  },
+  {
+    "word": "cookie",
+    "note_zh": "浏览器存储的会话数据"
+  },
+  {
+    "word": "copy",
+    "note_zh": "复制"
+  },
+  {
+    "word": "core",
+    "note_zh": "核心"
+  },
+  {
+    "word": "coroutine",
+    "note_zh": "协程"
+  },
+  {
+    "word": "corpus",
+    "note_zh": "语料库"
+  },
+  {
+    "word": "cors",
+    "note_zh": "跨域资源共享"
+  },
+  {
+    "word": "count",
+    "note_zh": "计数；数量"
+  },
+  {
+    "word": "counter",
+    "note_zh": "计数器"
+  },
+  {
+    "word": "coupling",
+    "note_zh": "耦合"
+  },
+  {
+    "word": "coverage",
+    "note_zh": "覆盖率（测试覆盖率）"
+  },
+  {
+    "word": "crash",
+    "note_zh": "崩溃"
+  },
+  {
+    "word": "crawler",
+    "note_zh": "爬虫"
+  },
+  {
+    "word": "create",
+    "note_zh": "创建"
+  },
+  {
+    "word": "created",
+    "note_zh": "已创建"
+  },
+  {
+    "word": "credential",
+    "note_zh": "凭证"
+  },
+  {
+    "word": "credentials",
+    "note_zh": "凭证（账号密码/密钥）"
+  },
+  {
+    "word": "critical",
+    "note_zh": "严重的（最高告警级别）"
+  },
+  {
+    "word": "cron",
+    "note_zh": "定时任务表达式"
+  },
+  {
+    "word": "crossplatform",
+    "note_zh": "跨平台"
+  },
+  {
+    "word": "csr",
+    "note_zh": "客户端渲染"
+  },
+  {
+    "word": "csrf",
+    "note_zh": "跨站请求伪造"
+  },
+  {
+    "word": "csv",
+    "note_zh": "逗号分隔值文件"
+  },
+  {
+    "word": "ctx",
+    "note_zh": "上下文（context 缩写）"
+  },
+  {
+    "word": "currency",
+    "note_zh": "货币"
+  },
+  {
+    "word": "current",
+    "note_zh": "当前的"
+  },
+  {
+    "word": "currying",
+    "note_zh": "柯里化（函数分步传参）"
+  },
+  {
+    "word": "cursor",
+    "note_zh": "游标；光标"
+  },
+  {
+    "word": "custom",
+    "note_zh": "自定义的"
+  },
+  {
+    "word": "daemon",
+    "note_zh": "守护进程"
+  },
+  {
+    "word": "dashboard",
+    "note_zh": "仪表盘（数据看板）"
+  },
+  {
+    "word": "data",
+    "note_zh": "数据"
+  },
+  {
+    "word": "database",
+    "note_zh": "数据库"
+  },
+  {
+    "word": "dataset",
+    "note_zh": "数据集"
+  },
+  {
+    "word": "date",
+    "note_zh": "日期"
+  },
+  {
+    "word": "datepicker",
+    "note_zh": "日期选择器"
+  },
+  {
+    "word": "deadline",
+    "note_zh": "截止时间"
+  },
+  {
+    "word": "deadlock",
+    "note_zh": "死锁"
+  },
+  {
+    "word": "deallocation",
+    "note_zh": "释放（内存回收）"
+  },
+  {
+    "word": "debounce",
+    "note_zh": "防抖（延迟合并触发）"
+  },
+  {
+    "word": "debug",
+    "note_zh": "调试"
+  },
+  {
+    "word": "decentralized",
+    "note_zh": "去中心化的"
+  },
+  {
+    "word": "decimal",
+    "note_zh": "十进制小数"
+  },
+  {
+    "word": "declaration",
+    "note_zh": "声明"
+  },
+  {
+    "word": "declarative",
+    "note_zh": "声明式的"
+  },
+  {
+    "word": "decode",
+    "note_zh": "解码"
+  },
+  {
+    "word": "decompress",
+    "note_zh": "解压"
+  },
+  {
+    "word": "decorator",
+    "note_zh": "装饰器"
+  },
+  {
+    "word": "decoupled",
+    "note_zh": "解耦的"
+  },
+  {
+    "word": "decrement",
+    "note_zh": "递减"
+  },
+  {
+    "word": "decrypt",
+    "note_zh": "解密"
+  },
+  {
+    "word": "default",
+    "note_zh": "默认值；缺省"
+  },
+  {
+    "word": "defaults",
+    "note_zh": "默认配置"
+  },
+  {
+    "word": "defect",
+    "note_zh": "缺陷"
+  },
+  {
+    "word": "defer",
+    "note_zh": "延迟执行（Go defer）"
+  },
+  {
+    "word": "define",
+    "note_zh": "定义"
+  },
+  {
+    "word": "definition",
+    "note_zh": "定义"
+  },
+  {
+    "word": "delay",
+    "note_zh": "延迟"
+  },
+  {
+    "word": "delegate",
+    "note_zh": "委托（代理执行）"
+  },
+  {
+    "word": "deleted",
+    "note_zh": "已删除"
+  },
+  {
+    "word": "delimiter",
+    "note_zh": "定界符"
+  },
+  {
+    "word": "demo",
+    "note_zh": "演示"
+  },
+  {
+    "word": "deno",
+    "note_zh": "Deno JS/TS 运行时"
+  },
+  {
+    "word": "deny",
+    "note_zh": "拒绝（权限）"
+  },
+  {
+    "word": "dependencies",
+    "note_zh": "依赖列表"
+  },
+  {
+    "word": "dependency",
+    "note_zh": "依赖"
+  },
+  {
+    "word": "deploy",
+    "note_zh": "部署"
+  },
+  {
+    "word": "deployment",
+    "note_zh": "部署"
+  },
+  {
+    "word": "deprecated",
+    "note_zh": "已废弃的（不建议再用）"
+  },
+  {
+    "word": "depth",
+    "note_zh": "深度（嵌套/递归层级）"
+  },
+  {
+    "word": "description",
+    "note_zh": "描述"
+  },
+  {
+    "word": "deserialize",
+    "note_zh": "反序列化"
+  },
+  {
+    "word": "desktop",
+    "note_zh": "桌面端"
+  },
+  {
+    "word": "destination",
+    "note_zh": "目的地；目标位置"
+  },
+  {
+    "word": "destroy",
+    "note_zh": "销毁"
+  },
+  {
+    "word": "detach",
+    "note_zh": "分离"
+  },
+  {
+    "word": "detail",
+    "note_zh": "详情"
+  },
+  {
+    "word": "deterministic",
+    "note_zh": "确定性的"
+  },
+  {
+    "word": "devdependency",
+    "note_zh": "开发依赖"
+  },
+  {
+    "word": "development",
+    "note_zh": "开发环境"
+  },
+  {
+    "word": "device",
+    "note_zh": "设备"
+  },
+  {
+    "word": "devops",
+    "note_zh": "开发运维一体化"
+  },
+  {
+    "word": "diagnostic",
+    "note_zh": "诊断信息"
+  },
+  {
+    "word": "dialog",
+    "note_zh": "对话框"
+  },
+  {
+    "word": "dict",
+    "note_zh": "字典（Python 键值结构）"
+  },
+  {
+    "word": "dictionary",
+    "note_zh": "字典；键值映射"
+  },
+  {
+    "word": "diff",
+    "note_zh": "差异对比"
+  },
+  {
+    "word": "digit",
+    "note_zh": "数字位"
+  },
+  {
+    "word": "direction",
+    "note_zh": "方向"
+  },
+  {
+    "word": "directory",
+    "note_zh": "目录"
+  },
+  {
+    "word": "dirty",
+    "note_zh": "脏的（已修改未保存）"
+  },
+  {
+    "word": "disable",
+    "note_zh": "禁用"
+  },
+  {
+    "word": "disabled",
+    "note_zh": "已禁用"
+  },
+  {
+    "word": "disconnect",
+    "note_zh": "断开连接"
+  },
+  {
+    "word": "disk",
+    "note_zh": "磁盘"
+  },
+  {
+    "word": "dispatch",
+    "note_zh": "派发（事件/Redux action）"
+  },
+  {
+    "word": "dispatcher",
+    "note_zh": "派发器"
+  },
+  {
+    "word": "display",
+    "note_zh": "显示；CSS 显示模式"
+  },
+  {
+    "word": "dispose",
+    "note_zh": "释放（资源清理）"
+  },
+  {
+    "word": "distribution",
+    "note_zh": "分布"
+  },
+  {
+    "word": "divide",
+    "note_zh": "除"
+  },
+  {
+    "word": "divider",
+    "note_zh": "分割线"
+  },
+  {
+    "word": "django",
+    "note_zh": "Django Python Web 框架"
+  },
+  {
+    "word": "dns",
+    "note_zh": "域名解析系统"
+  },
+  {
+    "word": "doc",
+    "note_zh": "文档（document 缩写）"
+  },
+  {
+    "word": "docker",
+    "note_zh": "容器化平台"
+  },
+  {
+    "word": "document",
+    "note_zh": "文档（DOM/文档数据库记录）"
+  },
+  {
+    "word": "documentation",
+    "note_zh": "文档"
+  },
+  {
+    "word": "domain",
+    "note_zh": "域名；业务领域"
+  },
+  {
+    "word": "downgrade",
+    "note_zh": "降级"
+  },
+  {
+    "word": "download",
+    "note_zh": "下载"
+  },
+  {
+    "word": "downstream",
+    "note_zh": "下游"
+  },
+  {
+    "word": "downtime",
+    "note_zh": "停机时间"
+  },
+  {
+    "word": "draft",
+    "note_zh": "草稿"
+  },
+  {
+    "word": "drag",
+    "note_zh": "拖拽"
+  },
+  {
+    "word": "drain",
+    "note_zh": "排空（队列/连接池）"
+  },
+  {
+    "word": "draw",
+    "note_zh": "绘制"
+  },
+  {
+    "word": "drawer",
+    "note_zh": "抽屉（侧滑面板）"
+  },
+  {
+    "word": "driver",
+    "note_zh": "驱动；数据库驱动"
+  },
+  {
+    "word": "drop",
+    "note_zh": "放置（拖放）；丢弃"
+  },
+  {
+    "word": "dropdown",
+    "note_zh": "下拉菜单"
+  },
+  {
+    "word": "durability",
+    "note_zh": "持久性"
+  },
+  {
+    "word": "duration",
+    "note_zh": "持续时长"
+  },
+  {
+    "word": "dynamic",
+    "note_zh": "动态的；动态规划"
+  },
+  {
+    "word": "e2e",
+    "note_zh": "端到端测试"
+  },
+  {
+    "word": "eager",
+    "note_zh": "急切的（立即求值）"
+  },
+  {
+    "word": "edge",
+    "note_zh": "边（图论）；边缘计算"
+  },
+  {
+    "word": "edit",
+    "note_zh": "编辑"
+  },
+  {
+    "word": "efficiency",
+    "note_zh": "效率"
+  },
+  {
+    "word": "elapsed",
+    "note_zh": "已耗时"
+  },
+  {
+    "word": "element",
+    "note_zh": "元素（数组/DOM 元素）"
+  },
+  {
+    "word": "email",
+    "note_zh": "电子邮件"
+  },
+  {
+    "word": "embedded",
+    "note_zh": "嵌入式的"
+  },
+  {
+    "word": "embedding",
+    "note_zh": "嵌入向量（语义向量化）"
+  },
+  {
+    "word": "emit",
+    "note_zh": "发出（事件）"
+  },
+  {
+    "word": "emitter",
+    "note_zh": "事件发射器"
+  },
+  {
+    "word": "emoji",
+    "note_zh": "表情符号"
+  },
+  {
+    "word": "empty",
+    "note_zh": "空的"
+  },
+  {
+    "word": "enable",
+    "note_zh": "启用"
+  },
+  {
+    "word": "enabled",
+    "note_zh": "已启用"
+  },
+  {
+    "word": "encapsulation",
+    "note_zh": "封装"
+  },
+  {
+    "word": "encode",
+    "note_zh": "编码"
+  },
+  {
+    "word": "encoding",
+    "note_zh": "编码方式（UTF-8 等）"
+  },
+  {
+    "word": "encrypt",
+    "note_zh": "加密"
+  },
+  {
+    "word": "endpoint",
+    "note_zh": "接口地址（API 端点）"
+  },
+  {
+    "word": "engagement",
+    "note_zh": "用户参与度"
+  },
+  {
+    "word": "engine",
+    "note_zh": "引擎（JS 引擎/游戏引擎）"
+  },
+  {
+    "word": "ensure",
+    "note_zh": "确保"
+  },
+  {
+    "word": "entity",
+    "note_zh": "实体（ORM 映射对象）"
+  },
+  {
+    "word": "entries",
+    "note_zh": "条目集（键值对数组）"
+  },
+  {
+    "word": "entry",
+    "note_zh": "条目；入口文件"
+  },
+  {
+    "word": "env",
+    "note_zh": "环境变量（environment 缩写）"
+  },
+  {
+    "word": "environment",
+    "note_zh": "环境（开发/生产环境）"
+  },
+  {
+    "word": "epoch",
+    "note_zh": "轮次（全数据训练一遍）"
+  },
+  {
+    "word": "equals",
+    "note_zh": "相等判断"
+  },
+  {
+    "word": "error",
+    "note_zh": "错误"
+  },
+  {
+    "word": "escape",
+    "note_zh": "转义"
+  },
+  {
+    "word": "eslint",
+    "note_zh": "JS 代码检查工具"
+  },
+  {
+    "word": "evaluation",
+    "note_zh": "评估"
+  },
+  {
+    "word": "event",
+    "note_zh": "事件（点击、回调等）"
+  },
+  {
+    "word": "eventloop",
+    "note_zh": "事件循环"
+  },
+  {
+    "word": "evict",
+    "note_zh": "驱逐（缓存淘汰）"
+  },
+  {
+    "word": "example",
+    "note_zh": "示例"
+  },
+  {
+    "word": "exception",
+    "note_zh": "异常"
+  },
+  {
+    "word": "exclude",
+    "note_zh": "排除"
+  },
+  {
+    "word": "execute",
+    "note_zh": "执行"
+  },
+  {
+    "word": "executor",
+    "note_zh": "执行器"
+  },
+  {
+    "word": "existing",
+    "note_zh": "已存在的"
+  },
+  {
+    "word": "exists",
+    "note_zh": "存在（存在性检查）"
+  },
+  {
+    "word": "exit",
+    "note_zh": "退出"
+  },
+  {
+    "word": "expect",
+    "note_zh": "期望（测试断言）"
+  },
+  {
+    "word": "experiment",
+    "note_zh": "实验（AB 实验）"
+  },
+  {
+    "word": "experimental",
+    "note_zh": "实验性的"
+  },
+  {
+    "word": "expire",
+    "note_zh": "过期"
+  },
+  {
+    "word": "expired",
+    "note_zh": "已过期"
+  },
+  {
+    "word": "expiry",
+    "note_zh": "有效期"
+  },
+  {
+    "word": "explicit",
+    "note_zh": "显式的"
+  },
+  {
+    "word": "exploit",
+    "note_zh": "漏洞利用"
+  },
+  {
+    "word": "exponent",
+    "note_zh": "指数"
+  },
+  {
+    "word": "exponential",
+    "note_zh": "指数级的"
+  },
+  {
+    "word": "express",
+    "note_zh": "Express Node.js 框架"
+  },
+  {
+    "word": "expression",
+    "note_zh": "表达式"
+  },
+  {
+    "word": "extend",
+    "note_zh": "扩展；继承"
+  },
+  {
+    "word": "extension",
+    "note_zh": "扩展；浏览器插件"
+  },
+  {
+    "word": "external",
+    "note_zh": "外部的"
+  },
+  {
+    "word": "extract",
+    "note_zh": "提取"
+  },
+  {
+    "word": "facade",
+    "note_zh": "门面（统一对外接口模式）"
+  },
+  {
+    "word": "factory",
+    "note_zh": "工厂（创建对象的模式）"
+  },
+  {
+    "word": "failed",
+    "note_zh": "已失败"
+  },
+  {
+    "word": "failover",
+    "note_zh": "故障转移"
+  },
+  {
+    "word": "failure",
+    "note_zh": "失败"
+  },
+  {
+    "word": "fallback",
+    "note_zh": "降级方案；兜底值"
+  },
+  {
+    "word": "fastify",
+    "note_zh": "Fastify Node.js 高性能框架"
+  },
+  {
+    "word": "fatal",
+    "note_zh": "致命错误级别"
+  },
+  {
+    "word": "feature",
+    "note_zh": "功能特性"
+  },
+  {
+    "word": "fetch",
+    "note_zh": "拉取（网络请求/git fetch）"
+  },
+  {
+    "word": "field",
+    "note_zh": "字段；结构体/表单中的一项"
+  },
+  {
+    "word": "file",
+    "note_zh": "文件"
+  },
+  {
+    "word": "filename",
+    "note_zh": "文件名"
+  },
+  {
+    "word": "filter",
+    "note_zh": "过滤"
+  },
+  {
+    "word": "final",
+    "note_zh": "最终的"
+  },
+  {
+    "word": "find",
+    "note_zh": "查找"
+  },
+  {
+    "word": "finetune",
+    "note_zh": "微调（在预训练模型上调优）"
+  },
+  {
+    "word": "finished",
+    "note_zh": "已结束"
+  },
+  {
+    "word": "fire",
+    "note_zh": "触发（事件）"
+  },
+  {
+    "word": "firewall",
+    "note_zh": "防火墙"
+  },
+  {
+    "word": "first",
+    "note_zh": "第一个"
+  },
+  {
+    "word": "fixture",
+    "note_zh": "测试固定数据"
+  },
+  {
+    "word": "flag",
+    "note_zh": "标志位；命令行开关"
+  },
+  {
+    "word": "flask",
+    "note_zh": "Flask Python 轻量框架"
+  },
+  {
+    "word": "flexbox",
+    "note_zh": "弹性布局"
+  },
+  {
+    "word": "flush",
+    "note_zh": "冲刷（缓冲区落盘）"
+  },
+  {
+    "word": "focus",
+    "note_zh": "焦点；聚焦"
+  },
+  {
+    "word": "focused",
+    "note_zh": "获得焦点的"
+  },
+  {
+    "word": "folder",
+    "note_zh": "文件夹"
+  },
+  {
+    "word": "footer",
+    "note_zh": "页脚"
+  },
+  {
+    "word": "footprint",
+    "note_zh": "占用（内存/磁盘占用）"
+  },
+  {
+    "word": "foreign",
+    "note_zh": "外部的；外键（foreign key）"
+  },
+  {
+    "word": "fork",
+    "note_zh": "派生进程；复刻仓库"
+  },
+  {
+    "word": "form",
+    "note_zh": "表单"
+  },
+  {
+    "word": "format",
+    "note_zh": "格式；格式化"
+  },
+  {
+    "word": "formatter",
+    "note_zh": "格式化工具"
+  },
+  {
+    "word": "fraction",
+    "note_zh": "分数；小数部分"
+  },
+  {
+    "word": "fragment",
+    "note_zh": "片段（DOM 文档片段）"
+  },
+  {
+    "word": "frame",
+    "note_zh": "帧（动画帧/数据帧）"
+  },
+  {
+    "word": "framework",
+    "note_zh": "框架"
+  },
+  {
+    "word": "frequency",
+    "note_zh": "频率"
+  },
+  {
+    "word": "fresh",
+    "note_zh": "新鲜的（缓存有效）"
+  },
+  {
+    "word": "frontend",
+    "note_zh": "前端"
+  },
+  {
+    "word": "frozen",
+    "note_zh": "冻结的（对象不可改）"
+  },
+  {
+    "word": "fullscreen",
+    "note_zh": "全屏"
+  },
+  {
+    "word": "fullstack",
+    "note_zh": "全栈"
+  },
+  {
+    "word": "fulltext",
+    "note_zh": "全文（全文检索）"
+  },
+  {
+    "word": "functional",
+    "note_zh": "函数式的"
+  },
+  {
+    "word": "funnel",
+    "note_zh": "漏斗（转化漏斗）"
+  },
+  {
+    "word": "future",
+    "note_zh": "异步结果占位（Rust/Java）"
+  },
+  {
+    "word": "fuzzy",
+    "note_zh": "模糊的（模糊匹配）"
+  },
+  {
+    "word": "garbage",
+    "note_zh": "垃圾（GC 回收对象）"
+  },
+  {
+    "word": "gas",
+    "note_zh": "燃料费（链上手续费）"
+  },
+  {
+    "word": "gateway",
+    "note_zh": "网关"
+  },
+  {
+    "word": "generate",
+    "note_zh": "生成"
+  },
+  {
+    "word": "generator",
+    "note_zh": "生成器"
+  },
+  {
+    "word": "generic",
+    "note_zh": "泛型"
+  },
+  {
+    "word": "gesture",
+    "note_zh": "手势"
+  },
+  {
+    "word": "get",
+    "note_zh": "获取"
+  },
+  {
+    "word": "getter",
+    "note_zh": "取值器（属性读取方法）"
+  },
+  {
+    "word": "github",
+    "note_zh": "代码托管平台"
+  },
+  {
+    "word": "gitlab",
+    "note_zh": "代码托管与 CI 平台"
+  },
+  {
+    "word": "glob",
+    "note_zh": "路径通配模式"
+  },
+  {
+    "word": "global",
+    "note_zh": "全局的"
+  },
+  {
+    "word": "golang",
+    "note_zh": "Go 语言"
+  },
+  {
+    "word": "goroutine",
+    "note_zh": "Go 协程"
+  },
+  {
+    "word": "graceful",
+    "note_zh": "优雅的（平滑关闭/降级）"
+  },
+  {
+    "word": "gradient",
+    "note_zh": "渐变"
+  },
+  {
+    "word": "grammar",
+    "note_zh": "文法；语法规则"
+  },
+  {
+    "word": "grant",
+    "note_zh": "授予（权限）"
+  },
+  {
+    "word": "graph",
+    "note_zh": "图（数据结构）；图表"
+  },
+  {
+    "word": "graphql",
+    "note_zh": "查询式 API 语言"
+  },
+  {
+    "word": "greedy",
+    "note_zh": "贪心（算法策略）"
+  },
+  {
+    "word": "grid",
+    "note_zh": "网格布局"
+  },
+  {
+    "word": "group",
+    "note_zh": "分组；组"
+  },
+  {
+    "word": "grpc",
+    "note_zh": "谷歌高性能 RPC 框架"
+  },
+  {
+    "word": "guest",
+    "note_zh": "访客"
+  },
+  {
+    "word": "gui",
+    "note_zh": "图形用户界面"
+  },
+  {
+    "word": "guid",
+    "note_zh": "全局唯一标识符"
+  },
+  {
+    "word": "guide",
+    "note_zh": "指南"
+  },
+  {
+    "word": "hallucination",
+    "note_zh": "幻觉（AI 编造内容）"
+  },
+  {
+    "word": "handle",
+    "note_zh": "处理"
+  },
+  {
+    "word": "handler",
+    "note_zh": "处理器（事件/请求处理函数）"
+  },
+  {
+    "word": "handshake",
+    "note_zh": "握手（建立连接过程）"
+  },
+  {
+    "word": "hash",
+    "note_zh": "哈希"
+  },
+  {
+    "word": "header",
+    "note_zh": "请求头；页头"
+  },
+  {
+    "word": "heading",
+    "note_zh": "标题（h1-h6）"
+  },
+  {
+    "word": "healthcheck",
+    "note_zh": "健康检查"
+  },
+  {
+    "word": "heap",
+    "note_zh": "堆（内存区/优先队列）"
+  },
+  {
+    "word": "heartbeat",
+    "note_zh": "心跳（保活探测）"
+  },
+  {
+    "word": "height",
+    "note_zh": "高度"
+  },
+  {
+    "word": "helper",
+    "note_zh": "辅助函数"
+  },
+  {
+    "word": "heuristic",
+    "note_zh": "启发式（经验法则策略）"
+  },
+  {
+    "word": "hidden",
+    "note_zh": "隐藏的"
+  },
+  {
+    "word": "hide",
+    "note_zh": "隐藏"
+  },
+  {
+    "word": "highlight",
+    "note_zh": "高亮"
+  },
+  {
+    "word": "history",
+    "note_zh": "历史记录"
+  },
+  {
+    "word": "hoisting",
+    "note_zh": "提升（JS 声明提前）"
+  },
+  {
+    "word": "hold",
+    "note_zh": "长按；保持"
+  },
+  {
+    "word": "hook",
+    "note_zh": "钩子（React Hook/git hook）"
+  },
+  {
+    "word": "horizontal",
+    "note_zh": "水平的"
+  },
+  {
+    "word": "host",
+    "note_zh": "主机；域名部分"
+  },
+  {
+    "word": "hostname",
+    "note_zh": "主机名"
+  },
+  {
+    "word": "hotfix",
+    "note_zh": "紧急修复"
+  },
+  {
+    "word": "hour",
+    "note_zh": "小时"
+  },
+  {
+    "word": "hover",
+    "note_zh": "悬停"
+  },
+  {
+    "word": "hybrid",
+    "note_zh": "混合的（混合开发）"
+  },
+  {
+    "word": "hydration",
+    "note_zh": "水合（服务端渲染激活）"
+  },
+  {
+    "word": "icon",
+    "note_zh": "图标"
+  },
+  {
+    "word": "idempotent",
+    "note_zh": "幂等的（重复执行结果一致）"
+  },
+  {
+    "word": "identifier",
+    "note_zh": "标识符"
+  },
+  {
+    "word": "identity",
+    "note_zh": "身份"
+  },
+  {
+    "word": "idiom",
+    "note_zh": "惯用法"
+  },
+  {
+    "word": "ignore",
+    "note_zh": "忽略"
+  },
+  {
+    "word": "image",
+    "note_zh": "图片"
+  },
+  {
+    "word": "immutability",
+    "note_zh": "不可变性"
+  },
+  {
+    "word": "immutable",
+    "note_zh": "不可变的"
+  },
+  {
+    "word": "imperative",
+    "note_zh": "命令式的"
+  },
+  {
+    "word": "implement",
+    "note_zh": "实现（接口）"
+  },
+  {
+    "word": "implementation",
+    "note_zh": "实现（具体实现代码）"
+  },
+  {
+    "word": "implicit",
+    "note_zh": "隐式的"
+  },
+  {
+    "word": "inactive",
+    "note_zh": "未激活的"
+  },
+  {
+    "word": "incident",
+    "note_zh": "事故（线上故障事件）"
+  },
+  {
+    "word": "include",
+    "note_zh": "包含；引入"
+  },
+  {
+    "word": "includes",
+    "note_zh": "包含（JS 数组/字符串判断）"
+  },
+  {
+    "word": "increment",
+    "note_zh": "递增"
+  },
+  {
+    "word": "indent",
+    "note_zh": "缩进"
+  },
+  {
+    "word": "index",
+    "note_zh": "索引；数组下标"
+  },
+  {
+    "word": "indexing",
+    "note_zh": "建立索引"
+  },
+  {
+    "word": "inference",
+    "note_zh": "推理（模型预测）"
+  },
+  {
+    "word": "infinity",
+    "note_zh": "无穷大"
+  },
+  {
+    "word": "info",
+    "note_zh": "信息（日志级别之一）"
+  },
+  {
+    "word": "infrastructure",
+    "note_zh": "基础设施"
+  },
+  {
+    "word": "inherit",
+    "note_zh": "继承"
+  },
+  {
+    "word": "inheritance",
+    "note_zh": "继承"
+  },
+  {
+    "word": "init",
+    "note_zh": "初始化（initialize 缩写）"
+  },
+  {
+    "word": "initial",
+    "note_zh": "初始的"
+  },
+  {
+    "word": "initialize",
+    "note_zh": "初始化"
+  },
+  {
+    "word": "inject",
+    "note_zh": "注入（依赖注入）"
+  },
+  {
+    "word": "injection",
+    "note_zh": "注入攻击（SQL 注入等）"
+  },
+  {
+    "word": "inner",
+    "note_zh": "内层的"
+  },
+  {
+    "word": "input",
+    "note_zh": "输入；输入框"
+  },
+  {
+    "word": "insert",
+    "note_zh": "插入"
+  },
+  {
+    "word": "install",
+    "note_zh": "安装"
+  },
+  {
+    "word": "instance",
+    "note_zh": "实例"
+  },
+  {
+    "word": "integer",
+    "note_zh": "整数"
+  },
+  {
+    "word": "integration",
+    "note_zh": "集成（集成测试）"
+  },
+  {
+    "word": "interceptor",
+    "note_zh": "拦截器"
+  },
+  {
+    "word": "internal",
+    "note_zh": "内部的"
+  },
+  {
+    "word": "interop",
+    "note_zh": "互操作（跨语言/模块调用）"
+  },
+  {
+    "word": "interpreter",
+    "note_zh": "解释器"
+  },
+  {
+    "word": "interval",
+    "note_zh": "时间间隔；定时器"
+  },
+  {
+    "word": "invalid",
+    "note_zh": "无效的"
+  },
+  {
+    "word": "invalidate",
+    "note_zh": "失效化（使缓存作废）"
+  },
+  {
+    "word": "inversion",
+    "note_zh": "反转（控制反转 IoC）"
+  },
+  {
+    "word": "invoice",
+    "note_zh": "发票；账单"
+  },
+  {
+    "word": "invoke",
+    "note_zh": "调用（函数/远程方法）"
+  },
+  {
+    "word": "isolation",
+    "note_zh": "隔离性（事务隔离级别）"
+  },
+  {
+    "word": "issue",
+    "note_zh": "问题；GitHub 工单"
+  },
+  {
+    "word": "item",
+    "note_zh": "条目；列表中的一项"
+  },
+  {
+    "word": "iteration",
+    "note_zh": "迭代"
+  },
+  {
+    "word": "iterator",
+    "note_zh": "迭代器"
+  },
+  {
+    "word": "javascript",
+    "note_zh": "JS 脚本语言"
+  },
+  {
+    "word": "job",
+    "note_zh": "任务（后台作业）"
+  },
+  {
+    "word": "join",
+    "note_zh": "拼接；连表查询"
+  },
+  {
+    "word": "json",
+    "note_zh": "JS 对象表示法（数据格式）"
+  },
+  {
+    "word": "jwt",
+    "note_zh": "JSON Web Token 令牌"
+  },
+  {
+    "word": "keepalive",
+    "note_zh": "保活（连接复用）"
+  },
+  {
+    "word": "kernel",
+    "note_zh": "内核"
+  },
+  {
+    "word": "key",
+    "note_zh": "键；也指密钥（API key）"
+  },
+  {
+    "word": "keyboard",
+    "note_zh": "键盘"
+  },
+  {
+    "word": "keyword",
+    "note_zh": "关键字"
+  },
+  {
+    "word": "kind",
+    "note_zh": "种类"
+  },
+  {
+    "word": "kotlin",
+    "note_zh": "Kotlin 语言（JVM/安卓）"
+  },
+  {
+    "word": "kubernetes",
+    "note_zh": "容器编排平台（k8s）"
+  },
+  {
+    "word": "label",
+    "note_zh": "标签；表单项文字说明"
+  },
+  {
+    "word": "lambda",
+    "note_zh": "匿名函数；AWS 云函数"
+  },
+  {
+    "word": "language",
+    "note_zh": "语言"
+  },
+  {
+    "word": "laravel",
+    "note_zh": "Laravel PHP 框架"
+  },
+  {
+    "word": "last",
+    "note_zh": "最后一个"
+  },
+  {
+    "word": "latency",
+    "note_zh": "延迟"
+  },
+  {
+    "word": "layout",
+    "note_zh": "布局"
+  },
+  {
+    "word": "lazy",
+    "note_zh": "惰性的（延迟求值/懒加载）"
+  },
+  {
+    "word": "leading",
+    "note_zh": "前导的（行首/首字符）"
+  },
+  {
+    "word": "leak",
+    "note_zh": "泄漏（内存泄漏）"
+  },
+  {
+    "word": "learning",
+    "note_zh": "学习（机器学习）"
+  },
+  {
+    "word": "ledger",
+    "note_zh": "账本"
+  },
+  {
+    "word": "legacy",
+    "note_zh": "遗留的（老旧系统/代码）"
+  },
+  {
+    "word": "legend",
+    "note_zh": "图例"
+  },
+  {
+    "word": "length",
+    "note_zh": "长度"
+  },
+  {
+    "word": "level",
+    "note_zh": "级别；层级"
+  },
+  {
+    "word": "library",
+    "note_zh": "库（代码库）"
+  },
+  {
+    "word": "license",
+    "note_zh": "开源许可证"
+  },
+  {
+    "word": "lifetime",
+    "note_zh": "生命周期"
+  },
+  {
+    "word": "limit",
+    "note_zh": "限制；每页条数"
+  },
+  {
+    "word": "line",
+    "note_zh": "行；代码行"
+  },
+  {
+    "word": "linear",
+    "note_zh": "线性的"
+  },
+  {
+    "word": "lint",
+    "note_zh": "静态检查"
+  },
+  {
+    "word": "linter",
+    "note_zh": "代码检查工具"
+  },
+  {
+    "word": "list",
+    "note_zh": "列表"
+  },
+  {
+    "word": "listen",
+    "note_zh": "监听"
+  },
+  {
+    "word": "listener",
+    "note_zh": "监听器"
+  },
+  {
+    "word": "literal",
+    "note_zh": "字面量"
+  },
+  {
+    "word": "load",
+    "note_zh": "加载"
+  },
+  {
+    "word": "loadbalancer",
+    "note_zh": "负载均衡器"
+  },
+  {
+    "word": "loader",
+    "note_zh": "加载器（webpack loader）"
+  },
+  {
+    "word": "loading",
+    "note_zh": "加载中"
+  },
+  {
+    "word": "local",
+    "note_zh": "本地"
+  },
+  {
+    "word": "locale",
+    "note_zh": "区域设置（语言地区）"
+  },
+  {
+    "word": "localhost",
+    "note_zh": "本机"
+  },
+  {
+    "word": "location",
+    "note_zh": "位置；地址栏对象"
+  },
+  {
+    "word": "lock",
+    "note_zh": "锁"
+  },
+  {
+    "word": "locked",
+    "note_zh": "已锁定"
+  },
+  {
+    "word": "lockfile",
+    "note_zh": "依赖锁定文件"
+  },
+  {
+    "word": "log",
+    "note_zh": "日志"
+  },
+  {
+    "word": "logarithm",
+    "note_zh": "对数"
+  },
+  {
+    "word": "logarithmic",
+    "note_zh": "对数级的"
+  },
+  {
+    "word": "logger",
+    "note_zh": "日志记录器"
+  },
+  {
+    "word": "logging",
+    "note_zh": "日志记录"
+  },
+  {
+    "word": "login",
+    "note_zh": "登录"
+  },
+  {
+    "word": "logout",
+    "note_zh": "登出"
+  },
+  {
+    "word": "loopback",
+    "note_zh": "回环地址（127.0.0.1）"
+  },
+  {
+    "word": "machine",
+    "note_zh": "机器；状态机"
+  },
+  {
+    "word": "main",
+    "note_zh": "主入口；主分支"
+  },
+  {
+    "word": "maintainable",
+    "note_zh": "可维护的"
+  },
+  {
+    "word": "maintainer",
+    "note_zh": "维护者"
+  },
+  {
+    "word": "manager",
+    "note_zh": "管理器"
+  },
+  {
+    "word": "manifest",
+    "note_zh": "清单文件（package.json 等）"
+  },
+  {
+    "word": "map",
+    "note_zh": "映射；字典结构；遍历转换"
+  },
+  {
+    "word": "mapper",
+    "note_zh": "映射器（数据转换）"
+  },
+  {
+    "word": "mapping",
+    "note_zh": "映射关系"
+  },
+  {
+    "word": "markdown",
+    "note_zh": "轻量标记语言"
+  },
+  {
+    "word": "mask",
+    "note_zh": "掩码；遮罩"
+  },
+  {
+    "word": "masking",
+    "note_zh": "脱敏（隐藏敏感信息）"
+  },
+  {
+    "word": "matcher",
+    "note_zh": "匹配器"
+  },
+  {
+    "word": "matches",
+    "note_zh": "匹配（正则/选择器）"
+  },
+  {
+    "word": "math",
+    "note_zh": "数学（Math 工具对象）"
+  },
+  {
+    "word": "matrix",
+    "note_zh": "矩阵；二维数组"
+  },
+  {
+    "word": "max",
+    "note_zh": "最大值"
+  },
+  {
+    "word": "media",
+    "note_zh": "媒体"
+  },
+  {
+    "word": "median",
+    "note_zh": "中位数"
+  },
+  {
+    "word": "member",
+    "note_zh": "成员（类的字段/方法）"
+  },
+  {
+    "word": "memoization",
+    "note_zh": "记忆化（缓存函数结果）"
+  },
+  {
+    "word": "memoize",
+    "note_zh": "记忆化"
+  },
+  {
+    "word": "memory",
+    "note_zh": "内存"
+  },
+  {
+    "word": "menu",
+    "note_zh": "菜单"
+  },
+  {
+    "word": "merge",
+    "note_zh": "合并（对象/分支）"
+  },
+  {
+    "word": "message",
+    "note_zh": "消息；报错信息"
+  },
+  {
+    "word": "metadata",
+    "note_zh": "元数据（描述数据的数据）"
+  },
+  {
+    "word": "method",
+    "note_zh": "方法（类的函数成员）"
+  },
+  {
+    "word": "metrics",
+    "note_zh": "指标（监控度量数据）"
+  },
+  {
+    "word": "mfa",
+    "note_zh": "多因素认证"
+  },
+  {
+    "word": "microservice",
+    "note_zh": "微服务"
+  },
+  {
+    "word": "microtask",
+    "note_zh": "微任务（事件循环队列）"
+  },
+  {
+    "word": "middleware",
+    "note_zh": "中间件（请求处理管道层）"
+  },
+  {
+    "word": "migrate",
+    "note_zh": "迁移（数据库/版本）"
+  },
+  {
+    "word": "migration",
+    "note_zh": "迁移（数据库结构变更脚本）"
+  },
+  {
+    "word": "milestone",
+    "note_zh": "里程碑"
+  },
+  {
+    "word": "millisecond",
+    "note_zh": "毫秒"
+  },
+  {
+    "word": "min",
+    "note_zh": "最小值"
+  },
+  {
+    "word": "mint",
+    "note_zh": "铸造（发行代币/NFT）"
+  },
+  {
+    "word": "minute",
+    "note_zh": "分钟"
+  },
+  {
+    "word": "mirror",
+    "note_zh": "镜像（仓库镜像源）"
+  },
+  {
+    "word": "missing",
+    "note_zh": "缺失的"
+  },
+  {
+    "word": "mixin",
+    "note_zh": "混入（复用代码片段）"
+  },
+  {
+    "word": "mobile",
+    "note_zh": "移动端"
+  },
+  {
+    "word": "mock",
+    "note_zh": "模拟（测试替身）"
+  },
+  {
+    "word": "modal",
+    "note_zh": "模态框"
+  },
+  {
+    "word": "mode",
+    "note_zh": "模式"
+  },
+  {
+    "word": "model",
+    "note_zh": "模型（数据模型/AI 模型）"
+  },
+  {
+    "word": "modified",
+    "note_zh": "已修改"
+  },
+  {
+    "word": "modular",
+    "note_zh": "模块化的"
+  },
+  {
+    "word": "module",
+    "note_zh": "模块"
+  },
+  {
+    "word": "modulo",
+    "note_zh": "取模（求余数）"
+  },
+  {
+    "word": "mongodb",
+    "note_zh": "文档型数据库"
+  },
+  {
+    "word": "monitoring",
+    "note_zh": "监控"
+  },
+  {
+    "word": "monorepo",
+    "note_zh": "单仓多包（统一仓库管理）"
+  },
+  {
+    "word": "month",
+    "note_zh": "月份"
+  },
+  {
+    "word": "mount",
+    "note_zh": "挂载（组件/磁盘）"
+  },
+  {
+    "word": "move",
+    "note_zh": "移动"
+  },
+  {
+    "word": "multiple",
+    "note_zh": "多个的"
+  },
+  {
+    "word": "multiply",
+    "note_zh": "乘"
+  },
+  {
+    "word": "mutable",
+    "note_zh": "可变的"
+  },
+  {
+    "word": "mutex",
+    "note_zh": "互斥锁"
+  },
+  {
+    "word": "name",
+    "note_zh": "名称；变量/字段命名"
+  },
+  {
+    "word": "namespace",
+    "note_zh": "命名空间"
+  },
+  {
+    "word": "native",
+    "note_zh": "原生的（原生应用）"
+  },
+  {
+    "word": "navbar",
+    "note_zh": "导航栏"
+  },
+  {
+    "word": "navigation",
+    "note_zh": "导航"
+  },
+  {
+    "word": "negative",
+    "note_zh": "负的"
+  },
+  {
+    "word": "nested",
+    "note_zh": "嵌套的"
+  },
+  {
+    "word": "neural",
+    "note_zh": "神经的（神经网络）"
+  },
+  {
+    "word": "newline",
+    "note_zh": "换行符"
+  },
+  {
+    "word": "next",
+    "note_zh": "下一个"
+  },
+  {
+    "word": "nextjs",
+    "note_zh": "Next.js React 全栈框架"
+  },
+  {
+    "word": "nickname",
+    "note_zh": "昵称"
+  },
+  {
+    "word": "node",
+    "note_zh": "节点（树/链表/DOM）"
+  },
+  {
+    "word": "nonblocking",
+    "note_zh": "非阻塞的"
+  },
+  {
+    "word": "nonce",
+    "note_zh": "一次性随机数"
+  },
+  {
+    "word": "normalize",
+    "note_zh": "规范化（统一格式）"
+  },
+  {
+    "word": "nosql",
+    "note_zh": "非关系型数据库"
+  },
+  {
+    "word": "notification",
+    "note_zh": "通知"
+  },
+  {
+    "word": "notify",
+    "note_zh": "通知"
+  },
+  {
+    "word": "npm",
+    "note_zh": "Node 包管理器"
+  },
+  {
+    "word": "nullable",
+    "note_zh": "可空的"
+  },
+  {
+    "word": "numeric",
+    "note_zh": "数值的"
+  },
+  {
+    "word": "nuxt",
+    "note_zh": "Nuxt Vue 全栈框架"
+  },
+  {
+    "word": "oauth",
+    "note_zh": "开放授权协议"
+  },
+  {
+    "word": "object",
+    "note_zh": "对象"
+  },
+  {
+    "word": "observability",
+    "note_zh": "可观测性"
+  },
+  {
+    "word": "observer",
+    "note_zh": "观察者（观察者模式）"
+  },
+  {
+    "word": "offchain",
+    "note_zh": "链下"
+  },
+  {
+    "word": "offline",
+    "note_zh": "离线的"
+  },
+  {
+    "word": "offset",
+    "note_zh": "偏移量"
+  },
+  {
+    "word": "onboarding",
+    "note_zh": "新手引导；入职"
+  },
+  {
+    "word": "onchain",
+    "note_zh": "链上"
+  },
+  {
+    "word": "online",
+    "note_zh": "在线的"
+  },
+  {
+    "word": "open",
+    "note_zh": "打开"
+  },
+  {
+    "word": "operand",
+    "note_zh": "操作数"
+  },
+  {
+    "word": "operation",
+    "note_zh": "操作"
+  },
+  {
+    "word": "operator",
+    "note_zh": "运算符；操作员"
+  },
+  {
+    "word": "optimization",
+    "note_zh": "优化"
+  },
+  {
+    "word": "option",
+    "note_zh": "选项；可选配置"
+  },
+  {
+    "word": "optional",
+    "note_zh": "可选的"
+  },
+  {
+    "word": "options",
+    "note_zh": "选项；配置项集合"
+  },
+  {
+    "word": "orchestration",
+    "note_zh": "编排（容器/流程调度）"
+  },
+  {
+    "word": "order",
+    "note_zh": "订单；顺序"
+  },
+  {
+    "word": "origin",
+    "note_zh": "源（协议+域名+端口）"
+  },
+  {
+    "word": "original",
+    "note_zh": "原始的"
+  },
+  {
+    "word": "orm",
+    "note_zh": "对象关系映射"
+  },
+  {
+    "word": "outage",
+    "note_zh": "服务中断"
+  },
+  {
+    "word": "outer",
+    "note_zh": "外层的"
+  },
+  {
+    "word": "output",
+    "note_zh": "输出"
+  },
+  {
+    "word": "overflow",
+    "note_zh": "溢出（内容超出容器）"
+  },
+  {
+    "word": "overhead",
+    "note_zh": "开销（额外消耗）"
+  },
+  {
+    "word": "overlay",
+    "note_zh": "遮罩层"
+  },
+  {
+    "word": "overload",
+    "note_zh": "重载（同名不同参）"
+  },
+  {
+    "word": "override",
+    "note_zh": "覆盖（配置/方法重写）"
+  },
+  {
+    "word": "owner",
+    "note_zh": "所有者"
+  },
+  {
+    "word": "ownership",
+    "note_zh": "所有权（Rust 内存模型）"
+  },
+  {
+    "word": "package",
+    "note_zh": "包（依赖包）"
+  },
+  {
+    "word": "packet",
+    "note_zh": "数据包"
+  },
+  {
+    "word": "pad",
+    "note_zh": "填充（补齐位数）"
+  },
+  {
+    "word": "page",
+    "note_zh": "页面"
+  },
+  {
+    "word": "pagination",
+    "note_zh": "分页"
+  },
+  {
+    "word": "paint",
+    "note_zh": "绘制（浏览器渲染阶段）"
+  },
+  {
+    "word": "pair",
+    "note_zh": "键值对；一对"
+  },
+  {
+    "word": "panel",
+    "note_zh": "面板"
+  },
+  {
+    "word": "panic",
+    "note_zh": "崩溃（Go/Rust 不可恢复错误）"
+  },
+  {
+    "word": "parallel",
+    "note_zh": "并行"
+  },
+  {
+    "word": "param",
+    "note_zh": "参数（parameter 缩写）"
+  },
+  {
+    "word": "parameter",
+    "note_zh": "形参；参数"
+  },
+  {
+    "word": "params",
+    "note_zh": "参数集（路由/查询参数）"
+  },
+  {
+    "word": "parent",
+    "note_zh": "父节点；父级"
+  },
+  {
+    "word": "parse",
+    "note_zh": "解析"
+  },
+  {
+    "word": "parser",
+    "note_zh": "解析器（语法解析）"
+  },
+  {
+    "word": "part",
+    "note_zh": "部分；组成部分"
+  },
+  {
+    "word": "partial",
+    "note_zh": "部分的（部分类型/模板片段）"
+  },
+  {
+    "word": "partition",
+    "note_zh": "分区"
+  },
+  {
+    "word": "password",
+    "note_zh": "密码"
+  },
+  {
+    "word": "paste",
+    "note_zh": "粘贴"
+  },
+  {
+    "word": "patch",
+    "note_zh": "补丁"
+  },
+  {
+    "word": "path",
+    "note_zh": "路径（文件或 URL）"
+  },
+  {
+    "word": "pattern",
+    "note_zh": "模式；正则模式串"
+  },
+  {
+    "word": "pause",
+    "note_zh": "暂停"
+  },
+  {
+    "word": "paused",
+    "note_zh": "已暂停"
+  },
+  {
+    "word": "payload",
+    "note_zh": "负载（请求携带的数据）"
+  },
+  {
+    "word": "payment",
+    "note_zh": "支付"
+  },
+  {
+    "word": "peer",
+    "note_zh": "同级（peer dependency）"
+  },
+  {
+    "word": "pending",
+    "note_zh": "等待中（未完成）"
+  },
+  {
+    "word": "percent",
+    "note_zh": "百分比"
+  },
+  {
+    "word": "performance",
+    "note_zh": "性能"
+  },
+  {
+    "word": "permission",
+    "note_zh": "权限"
+  },
+  {
+    "word": "permutation",
+    "note_zh": "排列"
+  },
+  {
+    "word": "persistence",
+    "note_zh": "持久化"
+  },
+  {
+    "word": "piece",
+    "note_zh": "片段；一部分"
+  },
+  {
+    "word": "ping",
+    "note_zh": "探测连通性"
+  },
+  {
+    "word": "pipeline",
+    "note_zh": "流水线（CI/数据管道）"
+  },
+  {
+    "word": "placeholder",
+    "note_zh": "占位符"
+  },
+  {
+    "word": "platform",
+    "note_zh": "平台"
+  },
+  {
+    "word": "plugin",
+    "note_zh": "插件"
+  },
+  {
+    "word": "pnpm",
+    "note_zh": "高效磁盘复用的包管理器"
+  },
+  {
+    "word": "point",
+    "note_zh": "点；坐标点"
+  },
+  {
+    "word": "pointer",
+    "note_zh": "指针"
+  },
+  {
+    "word": "policy",
+    "note_zh": "策略（安全/重试策略）"
+  },
+  {
+    "word": "polling",
+    "note_zh": "轮询"
+  },
+  {
+    "word": "polyfill",
+    "note_zh": "垫片（旧环境功能补齐）"
+  },
+  {
+    "word": "polymorphism",
+    "note_zh": "多态"
+  },
+  {
+    "word": "pool",
+    "note_zh": "池（连接池/线程池）"
+  },
+  {
+    "word": "pop",
+    "note_zh": "弹出（末尾元素）"
+  },
+  {
+    "word": "popover",
+    "note_zh": "气泡弹层"
+  },
+  {
+    "word": "popup",
+    "note_zh": "弹窗"
+  },
+  {
+    "word": "port",
+    "note_zh": "端口"
+  },
+  {
+    "word": "portable",
+    "note_zh": "可移植的"
+  },
+  {
+    "word": "position",
+    "note_zh": "位置；定位"
+  },
+  {
+    "word": "positive",
+    "note_zh": "正的"
+  },
+  {
+    "word": "postgres",
+    "note_zh": "PostgreSQL 关系数据库"
+  },
+  {
+    "word": "postprocessing",
+    "note_zh": "后处理"
+  },
+  {
+    "word": "precision",
+    "note_zh": "精度"
+  },
+  {
+    "word": "predicate",
+    "note_zh": "断言函数（返回布尔的判断函数）"
+  },
+  {
+    "word": "preference",
+    "note_zh": "偏好设置"
+  },
+  {
+    "word": "prefix",
+    "note_zh": "前缀"
+  },
+  {
+    "word": "prepend",
+    "note_zh": "插入到开头"
+  },
+  {
+    "word": "preprocessing",
+    "note_zh": "预处理"
+  },
+  {
+    "word": "preset",
+    "note_zh": "预设"
+  },
+  {
+    "word": "press",
+    "note_zh": "按压；按下"
+  },
+  {
+    "word": "prettier",
+    "note_zh": "代码格式化工具"
+  },
+  {
+    "word": "preview",
+    "note_zh": "预览"
+  },
+  {
+    "word": "previous",
+    "note_zh": "上一个"
+  },
+  {
+    "word": "pricing",
+    "note_zh": "定价"
+  },
+  {
+    "word": "primary",
+    "note_zh": "主要的；主键（primary key）"
+  },
+  {
+    "word": "primitive",
+    "note_zh": "原始类型（基本数据类型）"
+  },
+  {
+    "word": "pristine",
+    "note_zh": "未被修改过的（表单初始态）"
+  },
+  {
+    "word": "privacy",
+    "note_zh": "隐私"
+  },
+  {
+    "word": "probability",
+    "note_zh": "概率"
+  },
+  {
+    "word": "process",
+    "note_zh": "处理；进程"
+  },
+  {
+    "word": "producer",
+    "note_zh": "生产者（消息发送方）"
+  },
+  {
+    "word": "production",
+    "note_zh": "生产环境"
+  },
+  {
+    "word": "profile",
+    "note_zh": "个人资料；配置档"
+  },
+  {
+    "word": "profiling",
+    "note_zh": "性能剖析"
+  },
+  {
+    "word": "progress",
+    "note_zh": "进度；进度条"
+  },
+  {
+    "word": "project",
+    "note_zh": "项目"
+  },
+  {
+    "word": "projection",
+    "note_zh": "投影（查询指定字段）"
+  },
+  {
+    "word": "promise",
+    "note_zh": "异步结果承诺对象"
+  },
+  {
+    "word": "prompt",
+    "note_zh": "提示输入；AI 提示词"
+  },
+  {
+    "word": "properties",
+    "note_zh": "属性集"
+  },
+  {
+    "word": "property",
+    "note_zh": "属性"
+  },
+  {
+    "word": "props",
+    "note_zh": "组件属性（React 入参）"
+  },
+  {
+    "word": "protobuf",
+    "note_zh": "二进制序列化协议"
+  },
+  {
+    "word": "protocol",
+    "note_zh": "协议"
+  },
+  {
+    "word": "prototype",
+    "note_zh": "原型（JS 原型链）"
+  },
+  {
+    "word": "provider",
+    "note_zh": "提供者（依赖/上下文提供方）"
+  },
+  {
+    "word": "provision",
+    "note_zh": "置备（创建基础设施资源）"
+  },
+  {
+    "word": "proxy",
+    "note_zh": "代理"
+  },
+  {
+    "word": "publish",
+    "note_zh": "发布"
+  },
+  {
+    "word": "published",
+    "note_zh": "已发布"
+  },
+  {
+    "word": "publisher",
+    "note_zh": "发布者"
+  },
+  {
+    "word": "pull",
+    "note_zh": "拉取并合并"
+  },
+  {
+    "word": "pure",
+    "note_zh": "纯的（纯函数）"
+  },
+  {
+    "word": "purge",
+    "note_zh": "清除（缓存）"
+  },
+  {
+    "word": "push",
+    "note_zh": "压入（数组末尾）；推送代码"
+  },
+  {
+    "word": "pwa",
+    "note_zh": "渐进式 Web 应用"
+  },
+  {
+    "word": "python",
+    "note_zh": "Python 语言"
+  },
+  {
+    "word": "quantization",
+    "note_zh": "量化（模型压缩）"
+  },
+  {
+    "word": "query",
+    "note_zh": "查询；查询字符串"
+  },
+  {
+    "word": "queue",
+    "note_zh": "队列（先进先出）"
+  },
+  {
+    "word": "quota",
+    "note_zh": "配额"
+  },
+  {
+    "word": "race",
+    "note_zh": "竞态（race condition）"
+  },
+  {
+    "word": "radio",
+    "note_zh": "单选框"
+  },
+  {
+    "word": "rails",
+    "note_zh": "Ruby on Rails 框架"
+  },
+  {
+    "word": "random",
+    "note_zh": "随机"
+  },
+  {
+    "word": "range",
+    "note_zh": "范围；区间"
+  },
+  {
+    "word": "ranking",
+    "note_zh": "排序（搜索结果排名）"
+  },
+  {
+    "word": "ratelimit",
+    "note_zh": "限流"
+  },
+  {
+    "word": "ratio",
+    "note_zh": "比例"
+  },
+  {
+    "word": "raw",
+    "note_zh": "原始的（未处理数据）"
+  },
+  {
+    "word": "react",
+    "note_zh": "React 前端框架"
+  },
+  {
+    "word": "reactive",
+    "note_zh": "响应式的"
+  },
+  {
+    "word": "read",
+    "note_zh": "读取"
+  },
+  {
+    "word": "readable",
+    "note_zh": "可读的"
+  },
+  {
+    "word": "readme",
+    "note_zh": "项目说明文件"
+  },
+  {
+    "word": "readonly",
+    "note_zh": "只读的"
+  },
+  {
+    "word": "realtime",
+    "note_zh": "实时的"
+  },
+  {
+    "word": "reason",
+    "note_zh": "原因"
+  },
+  {
+    "word": "rebase",
+    "note_zh": "变基（重放提交历史）"
+  },
+  {
+    "word": "recall",
+    "note_zh": "召回率"
+  },
+  {
+    "word": "receive",
+    "note_zh": "接收"
+  },
+  {
+    "word": "reconnect",
+    "note_zh": "重连"
+  },
+  {
+    "word": "record",
+    "note_zh": "记录；数据库中的一行"
+  },
+  {
+    "word": "recover",
+    "note_zh": "恢复（从异常中恢复）"
+  },
+  {
+    "word": "recursion",
+    "note_zh": "递归"
+  },
+  {
+    "word": "recursive",
+    "note_zh": "递归的"
+  },
+  {
+    "word": "redirect",
+    "note_zh": "重定向"
+  },
+  {
+    "word": "redis",
+    "note_zh": "内存键值数据库"
+  },
+  {
+    "word": "redo",
+    "note_zh": "重做"
+  },
+  {
+    "word": "redraw",
+    "note_zh": "重绘"
+  },
+  {
+    "word": "reduce",
+    "note_zh": "归约（累计聚合）"
+  },
+  {
+    "word": "reducer",
+    "note_zh": "归约函数（Redux 状态更新）"
+  },
+  {
+    "word": "ref",
+    "note_zh": "引用（React ref/git 引用）"
+  },
+  {
+    "word": "refactor",
+    "note_zh": "重构"
+  },
+  {
+    "word": "reference",
+    "note_zh": "引用"
+  },
+  {
+    "word": "referer",
+    "note_zh": "来源页（HTTP 头）"
+  },
+  {
+    "word": "reflect",
+    "note_zh": "反射（运行时自省）"
+  },
+  {
+    "word": "reflection",
+    "note_zh": "反射机制"
+  },
+  {
+    "word": "refresh",
+    "note_zh": "刷新"
+  },
+  {
+    "word": "refund",
+    "note_zh": "退款"
+  },
+  {
+    "word": "regex",
+    "note_zh": "正则表达式"
+  },
+  {
+    "word": "region",
+    "note_zh": "区域；地域（云服务）"
+  },
+  {
+    "word": "register",
+    "note_zh": "注册"
+  },
+  {
+    "word": "registry",
+    "note_zh": "注册中心；镜像/包仓库"
+  },
+  {
+    "word": "regression",
+    "note_zh": "回归（功能退化）"
+  },
+  {
+    "word": "reject",
+    "note_zh": "拒绝；Promise 失败回调"
+  },
+  {
+    "word": "release",
+    "note_zh": "发布（版本）；释放（资源）"
+  },
+  {
+    "word": "relevance",
+    "note_zh": "相关性"
+  },
+  {
+    "word": "reload",
+    "note_zh": "重新加载"
+  },
+  {
+    "word": "remainder",
+    "note_zh": "余数"
+  },
+  {
+    "word": "remote",
+    "note_zh": "远程（远程仓库）"
+  },
+  {
+    "word": "remove",
+    "note_zh": "移除"
+  },
+  {
+    "word": "removed",
+    "note_zh": "已移除"
+  },
+  {
+    "word": "render",
+    "note_zh": "渲染"
+  },
+  {
+    "word": "renderer",
+    "note_zh": "渲染器"
+  },
+  {
+    "word": "repeat",
+    "note_zh": "重复"
+  },
+  {
+    "word": "replace",
+    "note_zh": "替换"
+  },
+  {
+    "word": "replica",
+    "note_zh": "副本"
+  },
+  {
+    "word": "replication",
+    "note_zh": "复制（主从同步）"
+  },
+  {
+    "word": "repo",
+    "note_zh": "仓库（repository 缩写）"
+  },
+  {
+    "word": "report",
+    "note_zh": "报告"
+  },
+  {
+    "word": "repository",
+    "note_zh": "仓库（代码仓/数据访问层）"
+  },
+  {
+    "word": "request",
+    "note_zh": "请求"
+  },
+  {
+    "word": "required",
+    "note_zh": "必填的；必需的"
+  },
+  {
+    "word": "requirement",
+    "note_zh": "需求"
+  },
+  {
+    "word": "reset",
+    "note_zh": "重置"
+  },
+  {
+    "word": "resilient",
+    "note_zh": "有韧性的（故障自愈）"
+  },
+  {
+    "word": "resize",
+    "note_zh": "调整大小"
+  },
+  {
+    "word": "resolve",
+    "note_zh": "解析；Promise 成功回调"
+  },
+  {
+    "word": "resolved",
+    "note_zh": "已解析的；已解决的"
+  },
+  {
+    "word": "resolver",
+    "note_zh": "解析器（依赖/路径解析）"
+  },
+  {
+    "word": "resource",
+    "note_zh": "资源"
+  },
+  {
+    "word": "response",
+    "note_zh": "响应"
+  },
+  {
+    "word": "responsive",
+    "note_zh": "响应式（适配多端尺寸）"
+  },
+  {
+    "word": "rest",
+    "note_zh": "REST 风格接口规范"
+  },
+  {
+    "word": "restart",
+    "note_zh": "重启"
+  },
+  {
+    "word": "restore",
+    "note_zh": "恢复（从备份还原）"
+  },
+  {
+    "word": "result",
+    "note_zh": "结果；函数返回结果"
+  },
+  {
+    "word": "resume",
+    "note_zh": "恢复（继续执行）"
+  },
+  {
+    "word": "retention",
+    "note_zh": "留存"
+  },
+  {
+    "word": "retry",
+    "note_zh": "重试"
+  },
+  {
+    "word": "reusable",
+    "note_zh": "可复用的"
+  },
+  {
+    "word": "reverse",
+    "note_zh": "反转"
+  },
+  {
+    "word": "revert",
+    "note_zh": "撤销（提交）"
+  },
+  {
+    "word": "review",
+    "note_zh": "评审（代码审查）"
+  },
+  {
+    "word": "reviewer",
+    "note_zh": "评审人"
+  },
+  {
+    "word": "revoke",
+    "note_zh": "撤销（令牌/权限）"
+  },
+  {
+    "word": "rewrite",
+    "note_zh": "重写"
+  },
+  {
+    "word": "roadmap",
+    "note_zh": "路线图"
+  },
+  {
+    "word": "robust",
+    "note_zh": "健壮的"
+  },
+  {
+    "word": "role",
+    "note_zh": "角色（权限角色）"
+  },
+  {
+    "word": "rollback",
+    "note_zh": "回滚"
+  },
+  {
+    "word": "rollout",
+    "note_zh": "灰度发布；逐步放量"
+  },
+  {
+    "word": "rollup",
+    "note_zh": "汇总；前端打包工具"
+  },
+  {
+    "word": "root",
+    "note_zh": "根节点；根目录"
+  },
+  {
+    "word": "rounding",
+    "note_zh": "取整；四舍五入"
+  },
+  {
+    "word": "route",
+    "note_zh": "路由"
+  },
+  {
+    "word": "router",
+    "note_zh": "路由器（路由管理器）"
+  },
+  {
+    "word": "row",
+    "note_zh": "行"
+  },
+  {
+    "word": "rpc",
+    "note_zh": "远程过程调用"
+  },
+  {
+    "word": "rule",
+    "note_zh": "规则"
+  },
+  {
+    "word": "run",
+    "note_zh": "运行"
+  },
+  {
+    "word": "running",
+    "note_zh": "运行中"
+  },
+  {
+    "word": "runtime",
+    "note_zh": "运行时"
+  },
+  {
+    "word": "rust",
+    "note_zh": "Rust 系统编程语言"
+  },
+  {
+    "word": "salt",
+    "note_zh": "盐值（密码加密随机串）"
+  },
+  {
+    "word": "sample",
+    "note_zh": "样例"
+  },
+  {
+    "word": "sandbox",
+    "note_zh": "沙箱（隔离运行环境）"
+  },
+  {
+    "word": "sanitize",
+    "note_zh": "净化（清理危险输入）"
+  },
+  {
+    "word": "save",
+    "note_zh": "保存"
+  },
+  {
+    "word": "scaffold",
+    "note_zh": "脚手架（生成项目骨架）"
+  },
+  {
+    "word": "scalable",
+    "note_zh": "可扩展的（可水平扩容）"
+  },
+  {
+    "word": "scale",
+    "note_zh": "缩放；规模"
+  },
+  {
+    "word": "scaling",
+    "note_zh": "扩缩容"
+  },
+  {
+    "word": "scenario",
+    "note_zh": "场景（测试场景）"
+  },
+  {
+    "word": "schedule",
+    "note_zh": "调度；定时安排"
+  },
+  {
+    "word": "scheduler",
+    "note_zh": "调度器"
+  },
+  {
+    "word": "schema",
+    "note_zh": "模式定义；数据结构约束"
+  },
+  {
+    "word": "scheme",
+    "note_zh": "方案；URL 协议头"
+  },
+  {
+    "word": "scope",
+    "note_zh": "作用域；权限范围"
+  },
+  {
+    "word": "script",
+    "note_zh": "脚本"
+  },
+  {
+    "word": "scroll",
+    "note_zh": "滚动"
+  },
+  {
+    "word": "scrollbar",
+    "note_zh": "滚动条"
+  },
+  {
+    "word": "sdk",
+    "note_zh": "软件开发工具包"
+  },
+  {
+    "word": "search",
+    "note_zh": "搜索"
+  },
+  {
+    "word": "second",
+    "note_zh": "秒"
+  },
+  {
+    "word": "secret",
+    "note_zh": "密钥（敏感配置）"
+  },
+  {
+    "word": "section",
+    "note_zh": "章节；页面区块"
+  },
+  {
+    "word": "seed",
+    "note_zh": "种子数据；随机种子"
+  },
+  {
+    "word": "segment",
+    "note_zh": "片段；分段"
+  },
+  {
+    "word": "select",
+    "note_zh": "选择；SQL 查询"
+  },
+  {
+    "word": "selected",
+    "note_zh": "已选中"
+  },
+  {
+    "word": "selector",
+    "note_zh": "选择器（CSS/状态选取函数）"
+  },
+  {
+    "word": "semaphore",
+    "note_zh": "信号量"
+  },
+  {
+    "word": "send",
+    "note_zh": "发送"
+  },
+  {
+    "word": "seo",
+    "note_zh": "搜索引擎优化"
+  },
+  {
+    "word": "separator",
+    "note_zh": "分隔符"
+  },
+  {
+    "word": "sequence",
+    "note_zh": "序列；有序集合"
+  },
+  {
+    "word": "serialize",
+    "note_zh": "序列化"
+  },
+  {
+    "word": "serializer",
+    "note_zh": "序列化器"
+  },
+  {
+    "word": "series",
+    "note_zh": "系列；时间序列"
+  },
+  {
+    "word": "server",
+    "note_zh": "服务器；服务端"
+  },
+  {
+    "word": "serverless",
+    "note_zh": "无服务器架构"
+  },
+  {
+    "word": "service",
+    "note_zh": "服务"
+  },
+  {
+    "word": "session",
+    "note_zh": "会话"
+  },
+  {
+    "word": "set",
+    "note_zh": "设置；集合类型"
+  },
+  {
+    "word": "setter",
+    "note_zh": "设值器（属性写入方法）"
+  },
+  {
+    "word": "settings",
+    "note_zh": "设置"
+  },
+  {
+    "word": "settle",
+    "note_zh": "落定（Promise 完成）"
+  },
+  {
+    "word": "setup",
+    "note_zh": "安装配置；初始化设置"
+  },
+  {
+    "word": "severity",
+    "note_zh": "严重程度"
+  },
+  {
+    "word": "shadowing",
+    "note_zh": "遮蔽（同名变量覆盖）"
+  },
+  {
+    "word": "shard",
+    "note_zh": "分片（数据水平拆分）"
+  },
+  {
+    "word": "shared",
+    "note_zh": "共享的"
+  },
+  {
+    "word": "shell",
+    "note_zh": "命令行解释器"
+  },
+  {
+    "word": "shift",
+    "note_zh": "移出首元素；位移"
+  },
+  {
+    "word": "shim",
+    "note_zh": "兼容垫层"
+  },
+  {
+    "word": "shortcut",
+    "note_zh": "快捷键"
+  },
+  {
+    "word": "show",
+    "note_zh": "显示"
+  },
+  {
+    "word": "shuffle",
+    "note_zh": "洗牌（随机打乱）"
+  },
+  {
+    "word": "sidebar",
+    "note_zh": "侧边栏"
+  },
+  {
+    "word": "signal",
+    "note_zh": "信号（进程信号/响应式信号）"
+  },
+  {
+    "word": "signature",
+    "note_zh": "签名（函数签名/数字签名）"
+  },
+  {
+    "word": "signin",
+    "note_zh": "登录"
+  },
+  {
+    "word": "signup",
+    "note_zh": "注册"
+  },
+  {
+    "word": "silent",
+    "note_zh": "静默模式"
+  },
+  {
+    "word": "similarity",
+    "note_zh": "相似度"
+  },
+  {
+    "word": "single",
+    "note_zh": "单个的"
+  },
+  {
+    "word": "singleton",
+    "note_zh": "单例（全局唯一实例）"
+  },
+  {
+    "word": "size",
+    "note_zh": "大小；尺寸/字节数"
+  },
+  {
+    "word": "skeleton",
+    "note_zh": "骨架屏"
+  },
+  {
+    "word": "skip",
+    "note_zh": "跳过"
+  },
+  {
+    "word": "sleep",
+    "note_zh": "休眠（暂停执行）"
+  },
+  {
+    "word": "slice",
+    "note_zh": "切片；截取子序列"
+  },
+  {
+    "word": "slider",
+    "note_zh": "滑块"
+  },
+  {
+    "word": "slug",
+    "note_zh": "短标识（URL 友好字符串）"
+  },
+  {
+    "word": "smoke",
+    "note_zh": "冒烟测试（基本可用性验证）"
+  },
+  {
+    "word": "snapshot",
+    "note_zh": "快照"
+  },
+  {
+    "word": "snippet",
+    "note_zh": "代码片段"
+  },
+  {
+    "word": "socket",
+    "note_zh": "套接字（网络连接端点）"
+  },
+  {
+    "word": "sort",
+    "note_zh": "排序"
+  },
+  {
+    "word": "source",
+    "note_zh": "来源；源码"
+  },
+  {
+    "word": "spa",
+    "note_zh": "单页应用"
+  },
+  {
+    "word": "space",
+    "note_zh": "空格；空间"
+  },
+  {
+    "word": "spacing",
+    "note_zh": "间距"
+  },
+  {
+    "word": "spawn",
+    "note_zh": "派生（启动子进程/协程）"
+  },
+  {
+    "word": "spec",
+    "note_zh": "规格说明；测试用例文件"
+  },
+  {
+    "word": "specification",
+    "note_zh": "规格说明书"
+  },
+  {
+    "word": "spider",
+    "note_zh": "爬虫"
+  },
+  {
+    "word": "spinner",
+    "note_zh": "加载转圈动画"
+  },
+  {
+    "word": "split",
+    "note_zh": "拆分（字符串切割）"
+  },
+  {
+    "word": "spring",
+    "note_zh": "Spring Java 框架"
+  },
+  {
+    "word": "sprint",
+    "note_zh": "冲刺（敏捷迭代周期）"
+  },
+  {
+    "word": "spy",
+    "note_zh": "间谍（记录调用的替身）"
+  },
+  {
+    "word": "sql",
+    "note_zh": "结构化查询语言"
+  },
+  {
+    "word": "sqlite",
+    "note_zh": "嵌入式关系数据库"
+  },
+  {
+    "word": "squash",
+    "note_zh": "压缩提交（合并为一个）"
+  },
+  {
+    "word": "sso",
+    "note_zh": "单点登录"
+  },
+  {
+    "word": "ssr",
+    "note_zh": "服务端渲染"
+  },
+  {
+    "word": "stable",
+    "note_zh": "稳定的（稳定版）"
+  },
+  {
+    "word": "stack",
+    "note_zh": "栈（后进先出）；调用栈"
+  },
+  {
+    "word": "stacktrace",
+    "note_zh": "堆栈跟踪信息"
+  },
+  {
+    "word": "staging",
+    "note_zh": "预发环境"
+  },
+  {
+    "word": "stake",
+    "note_zh": "质押"
+  },
+  {
+    "word": "stale",
+    "note_zh": "过期的（数据不新鲜）"
+  },
+  {
+    "word": "start",
+    "note_zh": "启动"
+  },
+  {
+    "word": "starter",
+    "note_zh": "起步模板"
+  },
+  {
+    "word": "stash",
+    "note_zh": "暂存（临时保存改动）"
+  },
+  {
+    "word": "state",
+    "note_zh": "状态（组件/应用状态）"
+  },
+  {
+    "word": "stateful",
+    "note_zh": "有状态的"
+  },
+  {
+    "word": "stateless",
+    "note_zh": "无状态的"
+  },
+  {
+    "word": "statement",
+    "note_zh": "语句"
+  },
+  {
+    "word": "status",
+    "note_zh": "状态值；HTTP 状态码"
+  },
+  {
+    "word": "step",
+    "note_zh": "步骤"
+  },
+  {
+    "word": "stop",
+    "note_zh": "停止"
+  },
+  {
+    "word": "stopped",
+    "note_zh": "已停止"
+  },
+  {
+    "word": "storage",
+    "note_zh": "存储"
+  },
+  {
+    "word": "store",
+    "note_zh": "存储；状态仓库"
+  },
+  {
+    "word": "strategy",
+    "note_zh": "策略（策略模式）"
+  },
+  {
+    "word": "stream",
+    "note_zh": "流（数据流）"
+  },
+  {
+    "word": "streaming",
+    "note_zh": "流式传输"
+  },
+  {
+    "word": "strict",
+    "note_zh": "严格模式"
+  },
+  {
+    "word": "stringify",
+    "note_zh": "转为字符串（JSON.stringify）"
+  },
+  {
+    "word": "structure",
+    "note_zh": "结构"
+  },
+  {
+    "word": "stub",
+    "note_zh": "桩（固定返回的替身）"
+  },
+  {
+    "word": "style",
+    "note_zh": "样式"
+  },
+  {
+    "word": "submit",
+    "note_zh": "提交"
+  },
+  {
+    "word": "subscribe",
+    "note_zh": "订阅"
+  },
+  {
+    "word": "subscriber",
+    "note_zh": "订阅者"
+  },
+  {
+    "word": "subscription",
+    "note_zh": "订阅（订阅制付费）"
+  },
+  {
+    "word": "success",
+    "note_zh": "成功"
+  },
+  {
+    "word": "suffix",
+    "note_zh": "后缀"
+  },
+  {
+    "word": "suggestion",
+    "note_zh": "建议（搜索联想）"
+  },
+  {
+    "word": "suite",
+    "note_zh": "套件（测试套件）"
+  },
+  {
+    "word": "sum",
+    "note_zh": "求和"
+  },
+  {
+    "word": "support",
+    "note_zh": "支持"
+  },
+  {
+    "word": "supported",
+    "note_zh": "受支持的"
+  },
+  {
+    "word": "svelte",
+    "note_zh": "Svelte 前端框架"
+  },
+  {
+    "word": "svg",
+    "note_zh": "矢量图形格式"
+  },
+  {
+    "word": "swap",
+    "note_zh": "交换"
+  },
+  {
+    "word": "swift",
+    "note_zh": "Swift 语言（苹果生态）"
+  },
+  {
+    "word": "swipe",
+    "note_zh": "滑动（触屏手势）"
+  },
+  {
+    "word": "switch",
+    "note_zh": "开关控件；分支语句"
+  },
+  {
+    "word": "symbol",
+    "note_zh": "符号；JS 唯一标识类型"
+  },
+  {
+    "word": "sync",
+    "note_zh": "同步"
+  },
+  {
+    "word": "syntax",
+    "note_zh": "语法"
+  },
+  {
+    "word": "system",
+    "note_zh": "系统"
+  },
+  {
+    "word": "tab",
+    "note_zh": "标签页"
+  },
+  {
+    "word": "table",
+    "note_zh": "表（数据库表/表格）"
+  },
+  {
+    "word": "tag",
+    "note_zh": "标签（版本标记）"
+  },
+  {
+    "word": "tailwind",
+    "note_zh": "Tailwind 原子化 CSS 框架"
+  },
+  {
+    "word": "tap",
+    "note_zh": "轻点（移动端点击）"
+  },
+  {
+    "word": "target",
+    "note_zh": "目标；目标对象/元素"
+  },
+  {
+    "word": "task",
+    "note_zh": "任务"
+  },
+  {
+    "word": "tcp",
+    "note_zh": "传输控制协议"
+  },
+  {
+    "word": "telemetry",
+    "note_zh": "遥测（运行数据采集上报）"
+  },
+  {
+    "word": "template",
+    "note_zh": "模板"
+  },
+  {
+    "word": "tenant",
+    "note_zh": "租户（多租户系统）"
+  },
+  {
+    "word": "tensor",
+    "note_zh": "张量（多维数组）"
+  },
+  {
+    "word": "terminal",
+    "note_zh": "终端"
+  },
+  {
+    "word": "test",
+    "note_zh": "测试"
+  },
+  {
+    "word": "testable",
+    "note_zh": "可测试的"
+  },
+  {
+    "word": "text",
+    "note_zh": "文本内容"
+  },
+  {
+    "word": "textarea",
+    "note_zh": "多行文本框"
+  },
+  {
+    "word": "theme",
+    "note_zh": "主题（配色方案）"
+  },
+  {
+    "word": "thread",
+    "note_zh": "线程"
+  },
+  {
+    "word": "threshold",
+    "note_zh": "阈值"
+  },
+  {
+    "word": "throttle",
+    "note_zh": "节流（限制频率）"
+  },
+  {
+    "word": "throughput",
+    "note_zh": "吞吐量"
+  },
+  {
+    "word": "thumbnail",
+    "note_zh": "缩略图"
+  },
+  {
+    "word": "tick",
+    "note_zh": "时钟周期；定时触发"
+  },
+  {
+    "word": "ticket",
+    "note_zh": "工单"
+  },
+  {
+    "word": "time",
+    "note_zh": "时间"
+  },
+  {
+    "word": "timeline",
+    "note_zh": "时间线"
+  },
+  {
+    "word": "timeout",
+    "note_zh": "超时"
+  },
+  {
+    "word": "timestamp",
+    "note_zh": "时间戳"
+  },
+  {
+    "word": "timezone",
+    "note_zh": "时区"
+  },
+  {
+    "word": "title",
+    "note_zh": "标题"
+  },
+  {
+    "word": "toast",
+    "note_zh": "轻提示（自动消失的提示条）"
+  },
+  {
+    "word": "toggle",
+    "note_zh": "切换（开关状态）"
+  },
+  {
+    "word": "token",
+    "note_zh": "令牌（认证凭证）；词元"
+  },
+  {
+    "word": "tokenizer",
+    "note_zh": "分词器"
+  },
+  {
+    "word": "toml",
+    "note_zh": "简洁配置文件格式"
+  },
+  {
+    "word": "toolbar",
+    "note_zh": "工具栏"
+  },
+  {
+    "word": "tooltip",
+    "note_zh": "文字提示（悬浮提示）"
+  },
+  {
+    "word": "topic",
+    "note_zh": "主题（消息队列订阅单元）"
+  },
+  {
+    "word": "total",
+    "note_zh": "总计"
+  },
+  {
+    "word": "touch",
+    "note_zh": "触摸"
+  },
+  {
+    "word": "trace",
+    "note_zh": "追踪；堆栈跟踪"
+  },
+  {
+    "word": "tracing",
+    "note_zh": "链路追踪"
+  },
+  {
+    "word": "track",
+    "note_zh": "跟踪；埋点"
+  },
+  {
+    "word": "trailing",
+    "note_zh": "尾随的（行尾/末字符）"
+  },
+  {
+    "word": "training",
+    "note_zh": "训练（模型训练）"
+  },
+  {
+    "word": "trait",
+    "note_zh": "特质（Rust/PHP 复用单元）"
+  },
+  {
+    "word": "transaction",
+    "note_zh": "事务"
+  },
+  {
+    "word": "transform",
+    "note_zh": "变换；数据转换"
+  },
+  {
+    "word": "transformer",
+    "note_zh": "变换器；Transformer 模型"
+  },
+  {
+    "word": "transition",
+    "note_zh": "过渡（CSS 过渡动画）"
+  },
+  {
+    "word": "translate",
+    "note_zh": "翻译；平移变换"
+  },
+  {
+    "word": "transpiler",
+    "note_zh": "转译器（高级语言互转）"
+  },
+  {
+    "word": "traversal",
+    "note_zh": "遍历"
+  },
+  {
+    "word": "tree",
+    "note_zh": "树（数据结构）"
+  },
+  {
+    "word": "trigger",
+    "note_zh": "触发"
+  },
+  {
+    "word": "trim",
+    "note_zh": "去除首尾空白"
+  },
+  {
+    "word": "truncate",
+    "note_zh": "截断"
+  },
+  {
+    "word": "tuple",
+    "note_zh": "元组（定长有序集合）"
+  },
+  {
+    "word": "tutorial",
+    "note_zh": "教程"
+  },
+  {
+    "word": "type",
+    "note_zh": "类型"
+  },
+  {
+    "word": "typescript",
+    "note_zh": "带类型的 JavaScript"
+  },
+  {
+    "word": "typography",
+    "note_zh": "排版（字体规范）"
+  },
+  {
+    "word": "udp",
+    "note_zh": "用户数据报协议"
+  },
+  {
+    "word": "unavailable",
+    "note_zh": "不可用的"
+  },
+  {
+    "word": "undefined",
+    "note_zh": "未定义（JS 特殊值）"
+  },
+  {
+    "word": "underflow",
+    "note_zh": "下溢"
+  },
+  {
+    "word": "undo",
+    "note_zh": "撤销"
+  },
+  {
+    "word": "unicode",
+    "note_zh": "统一字符编码标准"
+  },
+  {
+    "word": "uninstall",
+    "note_zh": "卸载"
+  },
+  {
+    "word": "unique",
+    "note_zh": "唯一的；唯一约束"
+  },
+  {
+    "word": "unit",
+    "note_zh": "单位；单元"
+  },
+  {
+    "word": "unittest",
+    "note_zh": "单元测试"
+  },
+  {
+    "word": "unmount",
+    "note_zh": "卸载（组件）"
+  },
+  {
+    "word": "unregister",
+    "note_zh": "注销（移除注册）"
+  },
+  {
+    "word": "unsubscribe",
+    "note_zh": "取消订阅"
+  },
+  {
+    "word": "update",
+    "note_zh": "更新"
+  },
+  {
+    "word": "updated",
+    "note_zh": "已更新"
+  },
+  {
+    "word": "upgrade",
+    "note_zh": "升级"
+  },
+  {
+    "word": "upload",
+    "note_zh": "上传"
+  },
+  {
+    "word": "upsert",
+    "note_zh": "插入或更新（存在即更新）"
+  },
+  {
+    "word": "upstream",
+    "note_zh": "上游（依赖来源/反代后端）"
+  },
+  {
+    "word": "uptime",
+    "note_zh": "在线时长；可用率"
+  },
+  {
+    "word": "uri",
+    "note_zh": "统一资源标识符"
+  },
+  {
+    "word": "url",
+    "note_zh": "网址；统一资源定位符"
+  },
+  {
+    "word": "user",
+    "note_zh": "用户"
+  },
+  {
+    "word": "useragent",
+    "note_zh": "用户代理标识（UA）"
+  },
+  {
+    "word": "username",
+    "note_zh": "用户名"
+  },
+  {
+    "word": "utf8",
+    "note_zh": "通用字符编码"
+  },
+  {
+    "word": "util",
+    "note_zh": "工具函数（utility 缩写）"
+  },
+  {
+    "word": "utils",
+    "note_zh": "工具函数集"
+  },
+  {
+    "word": "uuid",
+    "note_zh": "通用唯一标识符"
+  },
+  {
+    "word": "valid",
+    "note_zh": "有效的；校验通过"
+  },
+  {
+    "word": "validate",
+    "note_zh": "校验"
+  },
+  {
+    "word": "validation",
+    "note_zh": "校验"
+  },
+  {
+    "word": "validator",
+    "note_zh": "校验器"
+  },
+  {
+    "word": "value",
+    "note_zh": "值；键值对中的值"
+  },
+  {
+    "word": "variable",
+    "note_zh": "变量"
+  },
+  {
+    "word": "variant",
+    "note_zh": "变体（组件样式变种）"
+  },
+  {
+    "word": "vector",
+    "note_zh": "向量；动态数组（Vec）"
+  },
+  {
+    "word": "vendor",
+    "note_zh": "第三方代码目录"
+  },
+  {
+    "word": "verbose",
+    "note_zh": "详细输出模式"
+  },
+  {
+    "word": "verify",
+    "note_zh": "验证"
+  },
+  {
+    "word": "version",
+    "note_zh": "版本"
+  },
+  {
+    "word": "vertex",
+    "note_zh": "顶点（图论/图形学）"
+  },
+  {
+    "word": "vertical",
+    "note_zh": "垂直的"
+  },
+  {
+    "word": "video",
+    "note_zh": "视频"
+  },
+  {
+    "word": "view",
+    "note_zh": "视图"
+  },
+  {
+    "word": "viewport",
+    "note_zh": "视口（可视区域）"
+  },
+  {
+    "word": "virtual",
+    "note_zh": "虚拟的（虚拟列表/虚函数）"
+  },
+  {
+    "word": "visible",
+    "note_zh": "可见的"
+  },
+  {
+    "word": "visitor",
+    "note_zh": "访问者（访问者模式）"
+  },
+  {
+    "word": "vite",
+    "note_zh": "新一代前端构建工具"
+  },
+  {
+    "word": "volume",
+    "note_zh": "卷（存储卷）；音量"
+  },
+  {
+    "word": "vue",
+    "note_zh": "Vue 前端框架"
+  },
+  {
+    "word": "vulnerability",
+    "note_zh": "漏洞"
+  },
+  {
+    "word": "wait",
+    "note_zh": "等待"
+  },
+  {
+    "word": "wallet",
+    "note_zh": "钱包（数字钱包）"
+  },
+  {
+    "word": "warn",
+    "note_zh": "警告（日志级别）"
+  },
+  {
+    "word": "warning",
+    "note_zh": "警告"
+  },
+  {
+    "word": "wasm",
+    "note_zh": "WebAssembly 字节码"
+  },
+  {
+    "word": "watcher",
+    "note_zh": "侦听器（监视数据变化）"
+  },
+  {
+    "word": "webgl",
+    "note_zh": "网页 3D 图形接口"
+  },
+  {
+    "word": "webhook",
+    "note_zh": "网络钩子（事件回调通知）"
+  },
+  {
+    "word": "webpack",
+    "note_zh": "前端打包工具"
+  },
+  {
+    "word": "webpage",
+    "note_zh": "网页"
+  },
+  {
+    "word": "website",
+    "note_zh": "网站"
+  },
+  {
+    "word": "websocket",
+    "note_zh": "全双工实时通信协议"
+  },
+  {
+    "word": "week",
+    "note_zh": "周"
+  },
+  {
+    "word": "weekday",
+    "note_zh": "工作日；星期几"
+  },
+  {
+    "word": "weight",
+    "note_zh": "权重；字重"
+  },
+  {
+    "word": "whitelist",
+    "note_zh": "白名单"
+  },
+  {
+    "word": "whitespace",
+    "note_zh": "空白字符"
+  },
+  {
+    "word": "widget",
+    "note_zh": "小部件（UI 控件）"
+  },
+  {
+    "word": "width",
+    "note_zh": "宽度"
+  },
+  {
+    "word": "wildcard",
+    "note_zh": "通配符"
+  },
+  {
+    "word": "worker",
+    "note_zh": "工作线程；后台任务进程"
+  },
+  {
+    "word": "workflow",
+    "note_zh": "工作流"
+  },
+  {
+    "word": "workspace",
+    "note_zh": "工作区"
+  },
+  {
+    "word": "wrap",
+    "note_zh": "换行；包裹"
+  },
+  {
+    "word": "wrapper",
+    "note_zh": "包装器（外层封装）"
+  },
+  {
+    "word": "write",
+    "note_zh": "写入"
+  },
+  {
+    "word": "xml",
+    "note_zh": "可扩展标记语言"
+  },
+  {
+    "word": "xss",
+    "note_zh": "跨站脚本攻击"
+  },
+  {
+    "word": "yaml",
+    "note_zh": "层级配置文件格式"
+  },
+  {
+    "word": "yarn",
+    "note_zh": "Yarn 包管理器"
+  },
+  {
+    "word": "year",
+    "note_zh": "年份"
+  },
+  {
+    "word": "yield",
+    "note_zh": "让出执行权；生成值"
+  },
+  {
+    "word": "zero",
+    "note_zh": "零"
+  },
+  {
+    "word": "zone",
+    "note_zh": "区域；时区（timezone）"
+  },
+  {
+    "word": "zoom",
+    "note_zh": "缩放"
+  }
 ]

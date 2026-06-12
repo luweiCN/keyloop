@@ -39,7 +39,7 @@ The user can run the adaptive full plan or open a second-level menu for one of t
 - Comprehensive practice: run foundation input, everyday English, programming basics, and code practice as module groups. Errors and slow items from each group can influence later module content.
 - Foundation practice: open row, horizontal, vertical, diagonal, punctuation-edge, finger movement, and mixed foundation drills.
 - Everyday practice: open common 100 words, common 500 words, common 1000 words, everyday sentences, and everyday mix. Word entries can switch 10 / 20 / 50 / 100 words per group; the sentence entry switches short / medium / long / mixed inside the same entry.
-- Programming basics: open numbers and symbols, operators/brackets/quotes, naming and camel case, technical terms, and programming basics mix.
+- Programming basics: open symbols and numbers (language-aware context cards), programming terms, naming styles, technical long words, built-in APIs (high-frequency APIs per language ecosystem), and programming basics mix.
 - Code practice: open code blocks, functions, file fragments, or random mix while keeping language/framework/project filters.
 - Stats: review total time, best WPM, weighted accuracy, key heatmap, problem words, daily details, and what the next full practice will prioritize.
 

@@ -342,8 +342,13 @@ describe("OpenTUI app model", () => {
       ["everyday", "everyday_mix", "keyloop:module:everyday-english"],
       [
         "programming",
-        "operators_brackets_quotes",
-        "keyloop:module:programming-basics:operators-brackets-quotes",
+        "symbols_numbers",
+        "keyloop:module:programming-basics:symbols-numbers",
+      ],
+      [
+        "programming",
+        "builtin_api",
+        "keyloop:module:programming-basics:builtin-api",
       ],
       [
         "programming",
@@ -970,11 +975,7 @@ function testLibrary(): ContentLibrary {
       "variant",
       "registry",
       "release",
-    ],
-    symbols: ["=>", "!==", "&&", "||", "{}", "[]", "()", "_", "-", "="],
-    language_symbols: [],
-    number_drills: ["1 2 3", "0 - =", "7 8 9"],
-    naming: ["selectedPreference SelectedPreference SELECTED_PREFERENCE"],
+    ].map((word) => ({ word, note_zh: "" })),
     code_snippets: [
       {
         language: "typescript",
