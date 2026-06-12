@@ -6,6 +6,7 @@ import { describe, expect, test } from "bun:test";
 
 import {
   audioCachePath,
+  createInterruptingAudioPlayer,
   playWordAudio,
   resolveWordAudio,
   wordAudioProviderChain,
@@ -16,12 +17,10 @@ describe("word audio providers", () => {
   test("routes word sources through a stable youdao-first provider chain", () => {
     expect(wordAudioProviderChain("everyday_words")).toEqual([
       "youdao_dictvoice",
-      "dictionaryapi",
       "youdao_tts",
     ]);
     expect(wordAudioProviderChain("library_words")).toEqual([
       "youdao_dictvoice",
-      "dictionaryapi",
       "youdao_tts",
     ]);
     expect(wordAudioProviderChain("programming_terms")).toEqual([
@@ -34,49 +33,27 @@ describe("word audio providers", () => {
     ]);
   });
 
-  test("downloads dictionaryapi phonetic audio and reuses cache", async () => {
+  test("does not use dictionaryapi when dictvoice has no audio", async () => {
     const dir = await tempDir();
     const calls: string[] = [];
     const fetcher: WordAudioFetcher = async (input) => {
       const url = String(input);
       calls.push(url);
-      if (url.startsWith("https://api.dictionaryapi.dev/")) {
-        return jsonResponse([
-          {
-            phonetics: [
-              { text: "/həˈləʊ/" },
-              { audio: "https://audio.example/hello.mp3" },
-            ],
-          },
-        ]);
-      }
-      if (url === "https://audio.example/hello.mp3") {
-        return audioResponse("hello-audio");
-      }
       return jsonResponse({ error: "unexpected" }, 404);
     };
 
     try {
-      const first = await resolveWordAudio({
+      const path = await resolveWordAudio({
         text: "hello",
         sourceItem: "everyday_words",
         cacheDir: dir,
         fetcher,
-      });
-      const second = await resolveWordAudio({
-        text: "hello",
-        sourceItem: "everyday_words",
-        cacheDir: dir,
-        fetcher,
+        env: {},
       });
 
-      expect(first).toBe(audioCachePath(dir, "dictionaryapi", "hello", "default"));
-      expect(second).toBe(first);
-      expect(existsSync(first ?? "")).toBe(true);
+      expect(path).toBeNull();
       expect(calls).toEqual([
         "https://dict.youdao.com/dictvoice?audio=hello&type=2",
-        "https://api.dictionaryapi.dev/api/v2/entries/en/hello",
-        "https://audio.example/hello.mp3",
       ]);
     } finally {
       await rm(dir, { recursive: true, force: true });
@@ -162,6 +139,30 @@ describe("word audio providers", () => {
     }, 0.42);
 
     expect(played).toEqual([{ path: "cached.mp3", volume: 0.42 }]);
+  });
+
+  test("interrupting audio player stops the previous process before playing the next word", async () => {
+    const killed: string[] = [];
+    const started: string[] = [];
+    const pending: Array<() => void> = [];
+    const player = createInterruptingAudioPlayer((path) => {
+      started.push(path);
+      return {
+        kill: () => killed.push(path),
+        exited: new Promise<void>((resolve) => {
+          pending.push(resolve);
+        }),
+      };
+    });
+
+    const first = player("first.mp3", 1);
+    const second = player("second.mp3", 1);
+
+    expect(started).toEqual(["first.mp3", "second.mp3"]);
+    expect(killed).toEqual(["first.mp3"]);
+
+    pending.splice(0).forEach((resolve) => resolve());
+    await Promise.all([first, second]);
   });
 });
 

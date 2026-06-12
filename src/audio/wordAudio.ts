@@ -3,7 +3,7 @@ import { mkdir } from "node:fs/promises";
 import { createHash, randomUUID } from "node:crypto";
 import { dirname, join } from "node:path";
 
-export type WordAudioProvider = "dictionaryapi" | "youdao_dictvoice" | "youdao_tts";
+export type WordAudioProvider = "youdao_dictvoice" | "youdao_tts";
 
 export type WordAudioSourceItem =
   | "everyday_words"
@@ -17,6 +17,11 @@ export type WordAudioFetcher = (
 ) => Promise<Response>;
 
 export type AudioPlayer = (path: string, volume: number) => Promise<void> | void;
+export interface AudioProcess {
+  kill: () => void;
+  exited: Promise<unknown>;
+}
+export type AudioProcessSpawner = (path: string, volume: number) => AudioProcess;
 
 export interface ResolveWordAudioOptions {
   text: string;
@@ -29,7 +34,6 @@ export interface ResolveWordAudioOptions {
   curtime?: () => number;
 }
 
-const dictionaryApiBaseUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 const youdaoDictvoiceBaseUrl = "https://dict.youdao.com/dictvoice";
 const youdaoTtsUrl = "https://openapi.youdao.com/ttsapi";
 const defaultYoudaoVoiceName = "youmeimei";
@@ -39,7 +43,7 @@ export function wordAudioProviderChain(sourceItem: WordAudioSourceItem): WordAud
   switch (sourceItem) {
     case "everyday_words":
     case "library_words":
-      return ["youdao_dictvoice", "dictionaryapi", "youdao_tts"];
+      return ["youdao_dictvoice", "youdao_tts"];
     case "programming_terms":
     case "technical_long_words":
       return ["youdao_dictvoice", "youdao_tts"];
@@ -104,29 +108,11 @@ async function fetchProviderAudio(
   options: ResolveWordAudioOptions,
 ): Promise<Uint8Array | null> {
   switch (provider) {
-    case "dictionaryapi":
-      return fetchDictionaryApiAudio(text, fetcher);
     case "youdao_dictvoice":
       return fetchAudioResponse(youdaoDictvoiceUrl(text), fetcher);
     case "youdao_tts":
       return fetchYoudaoTtsAudio(text, fetcher, options);
   }
-}
-
-async function fetchDictionaryApiAudio(
-  text: string,
-  fetcher: WordAudioFetcher,
-): Promise<Uint8Array | null> {
-  const response = await fetcher(`${dictionaryApiBaseUrl}${encodeURIComponent(text)}`);
-  if (!response.ok) {
-    return null;
-  }
-  const entries = await response.json().catch(() => null);
-  const audioUrl = firstDictionaryAudioUrl(entries);
-  if (audioUrl === null) {
-    return null;
-  }
-  return fetchAudioResponse(audioUrl, fetcher);
 }
 
 async function fetchYoudaoTtsAudio(
@@ -177,30 +163,6 @@ async function fetchAudioResponse(
   return bytes.length === 0 ? null : bytes;
 }
 
-function firstDictionaryAudioUrl(value: unknown): string | null {
-  if (!Array.isArray(value)) {
-    return null;
-  }
-  for (const entry of value) {
-    if (!isObject(entry) || !Array.isArray(entry.phonetics)) {
-      continue;
-    }
-    for (const phonetic of entry.phonetics) {
-      if (!isObject(phonetic) || typeof phonetic.audio !== "string") {
-        continue;
-      }
-      const audio = phonetic.audio.trim();
-      if (audio.startsWith("//")) {
-        return `https:${audio}`;
-      }
-      if (audio.startsWith("http://") || audio.startsWith("https://")) {
-        return audio;
-      }
-    }
-  }
-  return null;
-}
-
 function isAudioResponse(response: Response): boolean {
   const contentType = response.headers.get("content-type")?.toLowerCase() ?? "";
   return response.status === 200 && contentType.startsWith("audio/");
@@ -229,10 +191,6 @@ function normalizeAudioText(text: string): string {
   return text.trim();
 }
 
-function isObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
-}
-
 function clampAudioVolume(volume: number): number {
   if (!Number.isFinite(volume)) {
     return 1;
@@ -240,13 +198,37 @@ function clampAudioVolume(volume: number): number {
   return Math.min(Math.max(volume, 0), 1);
 }
 
-async function defaultAudioPlayer(path: string, volume: number): Promise<void> {
+export function createInterruptingAudioPlayer(
+  spawnProcess: AudioProcessSpawner,
+): AudioPlayer {
+  let activeProcess: AudioProcess | undefined;
+  return async (path, volume) => {
+    activeProcess?.kill();
+    const process = spawnProcess(path, volume);
+    activeProcess = process;
+    try {
+      await process.exited;
+    } finally {
+      if (activeProcess === process) {
+        activeProcess = undefined;
+      }
+    }
+  };
+}
+
+const defaultAudioPlayer = createInterruptingAudioPlayer((path, volume) => {
   if (process.platform !== "darwin") {
-    return;
+    return {
+      kill: () => undefined,
+      exited: Promise.resolve(),
+    };
   }
   const proc = Bun.spawn(["afplay", "-v", String(volume), path], {
     stdout: "ignore",
     stderr: "ignore",
   });
-  await proc.exited;
-}
+  return {
+    kill: () => proc.kill(),
+    exited: proc.exited,
+  };
+});
