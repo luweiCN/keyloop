@@ -35,6 +35,8 @@ import {
   type StartRunnerContext,
 } from "../src/index";
 
+const START_CLI_TEST_TIMEOUT_MS = 10_000;
+
 describe("TS CLI parser parity", () => {
   test("bare keyloop has no command and defaults to zh", () => {
     expect(parseCliArgs([])).toEqual({
@@ -322,7 +324,7 @@ describe("TS CLI command dispatch", () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
-  });
+  }, START_CLI_TEST_TIMEOUT_MS);
 
   test("import extracts snippets and renders preview", async () => {
     const dir = await tempDir();
@@ -612,7 +614,7 @@ describe("TS CLI command dispatch", () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
-  }, 10_000);
+  }, START_CLI_TEST_TIMEOUT_MS);
 
   test("bare keyloop start passes return state and today elapsed time to runner", async () => {
     const dir = await tempDir();
@@ -751,7 +753,7 @@ describe("TS CLI command dispatch", () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
-  });
+  }, START_CLI_TEST_TIMEOUT_MS);
 
   test("start updates key stats from completed record key events", async () => {
     const dir = await tempDir();
@@ -817,7 +819,7 @@ describe("TS CLI command dispatch", () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
-  });
+  }, START_CLI_TEST_TIMEOUT_MS);
 
   test("start runner context saveRecord persists immediately and avoids duplicate append", async () => {
     const dir = await tempDir();
@@ -882,7 +884,7 @@ describe("TS CLI command dispatch", () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
-  });
+  }, START_CLI_TEST_TIMEOUT_MS);
 
   test("start saves checkpoint before runner and clears it after completed save", async () => {
     const dir = await tempDir();
@@ -955,7 +957,7 @@ describe("TS CLI command dispatch", () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
-  });
+  }, START_CLI_TEST_TIMEOUT_MS);
 
   test("start checkpoint hashes refreshed target from reused daily plan", async () => {
     const dir = await tempDir();
@@ -1026,7 +1028,7 @@ describe("TS CLI command dispatch", () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
-  });
+  }, START_CLI_TEST_TIMEOUT_MS);
 
   test("start runner context exposes checkpoint saver", async () => {
     const dir = await tempDir();
@@ -1062,7 +1064,7 @@ describe("TS CLI command dispatch", () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
-  });
+  }, START_CLI_TEST_TIMEOUT_MS);
 
 
   test("start repo snippets enter the generated code lesson", async () => {
@@ -1091,7 +1093,7 @@ describe("TS CLI command dispatch", () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
-  });
+  }, START_CLI_TEST_TIMEOUT_MS);
 
   test("start repo scan failure falls back to built-in code source", async () => {
     const dir = await tempDir();
@@ -1115,7 +1117,7 @@ describe("TS CLI command dispatch", () => {
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
-  });
+  }, START_CLI_TEST_TIMEOUT_MS);
 
 
 
