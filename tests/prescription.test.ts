@@ -5,6 +5,8 @@ import {
   buildDailyPrescription,
   FORM_FALLBACK_WPM,
   recommendedDailyMinutes,
+  reviseStages,
+  type CompletedStage,
   type PrescriptionInput,
 } from "../src/training/prescription";
 import type { SkillDiagnosis, SkillProfile } from "../src/training/diagnosis";
@@ -202,5 +204,65 @@ describe("buildDailyPrescription", () => {
       expect(stage.reason_zh.length).toBeGreaterThan(0);
       expect(stage.reason_en.length).toBeGreaterThan(0);
     }
+  });
+});
+
+describe("reviseStages", () => {
+  function prescriptionFixture() {
+    return buildDailyPrescription(
+      baseInput({ profile: profileWith([["digits", "normal"]], 30) }),
+    );
+  }
+
+  test("slower-than-expected stage shrinks remaining budgets", () => {
+    const prescription = prescriptionFixture();
+    const first = prescription.stages[1]!; // stages[0] 是 keys 热身
+    const completed: CompletedStage[] = [
+      { form: prescription.stages[0]!.form, actual_minutes: 2, actual_wpm: 18 },
+      // 实际花了预估的 2 倍时间，实测 WPM 只有预算假设的一半
+      {
+        form: first.form,
+        actual_minutes: first.minutes * 2,
+        actual_wpm: FORM_FALLBACK_WPM[first.form] * 0.8 * 0.5,
+      },
+    ];
+    const revised = reviseStages(prescription, completed);
+    // 已完成阶段被移除
+    expect(revised.stages.find((stage) => stage.form === first.form)).toBeUndefined();
+    // 总时长向今日目标对齐
+    const remainingMinutes = revised.stages.reduce((sum, stage) => sum + stage.minutes, 0);
+    const spentMinutes = completed.reduce((sum, stage) => sum + stage.actual_minutes, 0);
+    expect(remainingMinutes + spentMinutes).toBeLessThanOrEqual(
+      prescription.target_minutes + 1,
+    );
+  });
+
+  test("weak stages survive trimming before regular ones", () => {
+    const prescription = buildDailyPrescription(
+      baseInput({ profile: profileWith([["symbols", "weak"]], 30) }),
+    );
+    // 耗尽几乎全部时间，只剩 3 分钟
+    const completed: CompletedStage[] = [
+      {
+        form: "keys",
+        actual_minutes: prescription.target_minutes - 3,
+        actual_wpm: 18,
+      },
+    ];
+    const revised = reviseStages(prescription, completed);
+    const forms = revised.stages.map((stage) => stage.form);
+    // 弱项 symbols 阶段必须保留
+    expect(forms).toContain("symbols");
+  });
+
+  test("all stages done returns empty remaining", () => {
+    const prescription = prescriptionFixture();
+    const completed: CompletedStage[] = prescription.stages.map((stage) => ({
+      form: stage.form,
+      actual_minutes: stage.minutes,
+      actual_wpm: 25,
+    }));
+    const revised = reviseStages(prescription, completed);
+    expect(revised.stages).toHaveLength(0);
   });
 });

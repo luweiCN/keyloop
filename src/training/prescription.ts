@@ -272,3 +272,95 @@ function stageReasonEn(
   }
   return `${base[form]}: regular rotation to keep touch`;
 }
+
+export interface CompletedStage {
+  form: TrainingForm;
+  actual_minutes: number;
+  actual_wpm: number;
+}
+
+/**
+ * 会话内修正：移除已完成阶段，按实测速度重算剩余阶段预算，
+ * 并向今日目标对齐——剩余时间不足时按"先砍常规、保留弱项"裁剪。
+ */
+export function reviseStages(
+  prescription: DailyPrescription,
+  completed: CompletedStage[],
+): DailyPrescription {
+  const doneCount = completed.length;
+  const remaining = prescription.stages.slice(doneCount);
+  const spentMinutes = completed.reduce((sum, stage) => sum + stage.actual_minutes, 0);
+  let minutesLeft = Math.max(prescription.target_minutes - spentMinutes, 0);
+
+  // 本会话实测速度（同形态多次取平均）
+  const measured = new Map<TrainingForm, number>();
+  for (const stage of completed) {
+    if (stage.actual_wpm <= 0) {
+      continue;
+    }
+    const existing = measured.get(stage.form);
+    measured.set(
+      stage.form,
+      existing === undefined ? stage.actual_wpm : (existing + stage.actual_wpm) / 2,
+    );
+  }
+
+  // 裁剪：时间不足时先砍常规阶段（保持原顺序），弱项阶段最后砍
+  const regularFirst = [...remaining].sort(
+    (left, right) => Number(left.weak) - Number(right.weak),
+  );
+  const dropped = new Set<StagePlan>();
+  let needed = remaining.reduce(
+    (sum, stage) => sum + Math.max(stage.minutes, MIN_STAGE_MINUTES),
+    0,
+  );
+  for (const stage of regularFirst) {
+    if (needed <= minutesLeft || minutesLeft < MIN_STAGE_MINUTES) {
+      break;
+    }
+    if (needed - stage.minutes >= Math.max(minutesLeft, MIN_STAGE_MINUTES)) {
+      dropped.add(stage);
+      needed -= stage.minutes;
+    }
+  }
+
+  const survivors = remaining.filter((stage) => !dropped.has(stage));
+  if (survivors.length === 0) {
+    return { target_minutes: prescription.target_minutes, stages: [] };
+  }
+  if (minutesLeft < MIN_STAGE_MINUTES) {
+    // 时间已超目标：只保留弱项阶段，给最低剂量
+    const weakOnly = survivors.filter((stage) => stage.weak);
+    return {
+      target_minutes: prescription.target_minutes,
+      stages: weakOnly.map((stage) => rebudget(stage, MIN_STAGE_MINUTES, measured)),
+    };
+  }
+
+  // 按原计划比例缩放剩余分钟
+  const plannedTotal = survivors.reduce((sum, stage) => sum + stage.minutes, 0);
+  const scale = plannedTotal === 0 ? 1 : minutesLeft / plannedTotal;
+  return {
+    target_minutes: prescription.target_minutes,
+    stages: survivors.map((stage) =>
+      rebudget(
+        stage,
+        Math.max(Math.round(stage.minutes * scale), MIN_STAGE_MINUTES),
+        measured,
+      ),
+    ),
+  };
+}
+
+function rebudget(
+  stage: StagePlan,
+  minutes: number,
+  measured: Map<TrainingForm, number>,
+): StagePlan {
+  const measuredWpm = measured.get(stage.form);
+  const budget =
+    measuredWpm === undefined
+      ? Math.round((stage.char_budget / Math.max(stage.minutes, 1)) * minutes)
+      : Math.round(minutes * measuredWpm * 5);
+  return { ...stage, minutes, char_budget: budget };
+}
