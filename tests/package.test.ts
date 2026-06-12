@@ -53,7 +53,7 @@ describe("package verification scripts", () => {
       new URL("../package.json", import.meta.url),
     ).json()) as PackageJson;
 
-    expect(packageJson.version).toBe("0.1.3");
+    expect(packageJson.version).toBe("0.1.4");
   });
 
   test("release workflow packages runtime content and Homebrew installs it", async () => {
@@ -69,6 +69,9 @@ describe("package verification scripts", () => {
     expect(releaseWorkflow).toContain("archive_target: aarch64-apple-darwin");
     expect(releaseWorkflow).toContain('--target "${{ matrix.bun_target }}"');
     expect(releaseWorkflow).toContain("TARGET: ${{ matrix.archive_target }}");
+    expect(releaseWorkflow).toContain("Smoke release binary");
+    expect(releaseWorkflow).toContain("./dist/keyloop --help >/dev/null");
+    expect(releaseWorkflow).toContain('./dist/keyloop sources >/dev/null');
     expect(releaseWorkflow).toContain('cp -R contents "dist/keyloop-${VERSION}-${TARGET}/"');
     expect(releaseWorkflow).toContain('prefix.install "contents"');
   });
