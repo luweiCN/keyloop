@@ -9,6 +9,7 @@ import {
   type CompletedStage,
   type PrescriptionInput,
 } from "../src/training/prescription";
+import { buildSkillProfile } from "../src/training/diagnosis";
 import type { SkillDiagnosis, SkillProfile } from "../src/training/diagnosis";
 
 const ALL_MODULES = [
@@ -264,5 +265,93 @@ describe("reviseStages", () => {
     }));
     const revised = reviseStages(prescription, completed);
     expect(revised.stages).toHaveLength(0);
+  });
+});
+
+describe("end-to-end: spec acceptance scenarios", () => {
+  const emptyPlan = {
+    focus_words: [],
+    focus_symbols: [],
+    focus_code: [],
+    focus_keys: [],
+    advice: [],
+    recommended_mode: "mixed" as const,
+    has_recent_history: false,
+  };
+  const now = new Date("2026-06-13T08:00:00Z");
+
+  test("no history yields 15-minute default plan with cold-start budgets", () => {
+    const profile = buildSkillProfile([], emptyPlan, now);
+    expect(profile.dimensions.every((item) => item.status === "unrated")).toBe(true);
+    const prescription = buildDailyPrescription({
+      profile,
+      enabledModules: [...ALL_MODULES],
+      records: [],
+      now,
+      random: () => 0.99,
+    });
+    expect(prescription.target_minutes).toBe(15);
+    for (const stage of prescription.stages) {
+      const fallback = FORM_FALLBACK_WPM[stage.form];
+      expect(stage.char_budget).toBe(Math.round(stage.minutes * fallback * 0.8 * 5));
+    }
+  });
+
+  test("symbol-heavy errors from code-only history force symbols stage", () => {
+    // 用户只练代码，但符号键错误率高 → 跨模块诊断出 symbols 弱项
+    const events: Array<[string, boolean]> = [
+      [";", false],
+      ["{", false],
+      ["}", false],
+      ["(", true],
+      [")", false],
+      ...[..."constreturn".repeat(3)].map((c): [string, boolean] => [c, true]),
+    ];
+    const records = [8, 9, 10, 11].map((day) =>
+      defaultSessionRecord({
+        started_at: `2026-06-${String(day).padStart(2, "0")}T08:00:00Z`,
+        category: "code_snippet",
+        module: "code_practice",
+        typed_len: events.length,
+        correct_chars: events.length - 4,
+        active_ms: 60_000,
+        key_events: events.map(([expected, correct], index) => ({
+          at_ms: index * 200,
+          action: "insert" as const,
+          position: index,
+          expected,
+          input: correct ? expected : "x",
+          correct,
+        })),
+      }),
+    );
+    const profile = buildSkillProfile(records, emptyPlan, now);
+    const symbols = profile.dimensions.find((item) => item.id === "symbols");
+    expect(symbols?.status).toBe("weak");
+    const prescription = buildDailyPrescription({
+      profile,
+      enabledModules: [...ALL_MODULES],
+      records,
+      now,
+      random: () => 0.99,
+    });
+    const symbolsStage = prescription.stages.find((stage) => stage.form === "symbols");
+    expect(symbolsStage?.weak).toBe(true);
+  });
+
+  test("word errors never leak into non-word focus pools", () => {
+    const record = defaultSessionRecord({
+      started_at: "2026-06-12T08:00:00Z",
+      category: "everyday_words",
+      module: "everyday_english",
+      typed_len: 100,
+      correct_chars: 95,
+      active_ms: 60_000,
+      error_tokens: { algorithm: 3 },
+    });
+    const profile = buildSkillProfile([record], emptyPlan, now);
+    expect(profile.focus.words).toContain("algorithm");
+    expect(profile.focus.sentences).not.toContain("algorithm");
+    expect(profile.focus.code).not.toContain("algorithm");
   });
 });
