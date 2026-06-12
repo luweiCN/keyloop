@@ -114,6 +114,7 @@ async function renderRoute(state: OpenTuiAppState, kit: OpenTuiRendererKit): Pro
       );
     case "stats":
       return renderAppFrame(state, renderStatsScreen(state, kit), kit);
+    case "stage_plan":
     case "summary":
       return renderAppFrame(
         state,

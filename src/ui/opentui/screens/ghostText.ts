@@ -91,7 +91,13 @@ export async function renderGhostText(
     spaceDot: spaceGlyph === "dot",
   });
   const articleTranslation = renderGhostArticleTranslation(annotations, wrapColumns, kit);
-  const children: unknown[] = [];
+  interface GhostRowEntry {
+    node: unknown;
+    hasCursor: boolean;
+  }
+  const entries: GhostRowEntry[] = [];
+  const segmentsHaveCursor = (segments: GhostSegment[]): boolean =>
+    segments.some((segment) => segment.state === "cursor");
   let visualIndex = 0;
   for (let sourceLineIndex = 0; sourceLineIndex < sourceRows.length; sourceLineIndex += 1) {
     const row = sourceRows[sourceLineIndex] ?? [];
@@ -102,38 +108,60 @@ export async function renderGhostText(
         ? wrapGhostWordBlockLoose(row, columns, wrapColumns)
         : wrapGhostWordBlock(row, columns, wrapColumns);
       for (const blockRow of blockRows) {
-        children.push(
-          renderGhostVisualLine(
+        entries.push({
+          node: renderGhostVisualLine(
             { sourceLineIndex, continuation: false, segments: blockRow.segments },
             visualIndex,
             showLineNumbers,
             kit,
           ),
-        );
+          hasCursor: segmentsHaveCursor(blockRow.segments),
+        });
         if (!looseBlock || blockRow.meaning.length > 0) {
-          children.push(renderGhostMeaningLine(visualIndex, blockRow.meaning, kit));
+          entries.push({
+            node: renderGhostMeaningLine(visualIndex, blockRow.meaning, kit),
+            hasCursor: false,
+          });
         }
         visualIndex += 1;
       }
       continue;
     }
     for (const visualRow of wrapGhostRows([row], wrapColumns)) {
-      children.push(
-        renderGhostVisualLine(
+      entries.push({
+        node: renderGhostVisualLine(
           { ...visualRow, sourceLineIndex },
           visualIndex,
           showLineNumbers,
           kit,
         ),
-      );
+        hasCursor: segmentsHaveCursor(visualRow.segments),
+      });
       visualIndex += 1;
     }
     const translation = lineTranslations.get(sourceLineIndex);
     if (translation !== undefined) {
-      children.push(renderGhostLineTranslation(visualIndex - 1, translation, wrapColumns, kit));
+      entries.push({
+        node: renderGhostLineTranslation(visualIndex - 1, translation, wrapColumns, kit),
+        hasCursor: false,
+      });
     }
   }
   const completed = completedTitle !== undefined;
+
+  // 视口窗口：长内容只渲染光标附近的行（自动跟随翻页），
+  // 同时把每键渲染成本从 O(全文行数) 降为 O(视口行数)。
+  const viewportRows = ghostViewportRows();
+  const cursorIndex = entries.findIndex((entry) => entry.hasCursor);
+  const slice = ghostViewportSlice(entries.length, cursorIndex, completed ? Number.POSITIVE_INFINITY : viewportRows);
+  const children: unknown[] = entries.slice(slice.start, slice.end).map((entry) => entry.node);
+  const hiddenAbove = slice.start;
+  const hiddenBelow = entries.length - slice.end;
+  const progressTitle =
+    hiddenAbove > 0 || hiddenBelow > 0
+      ? ` ↑${hiddenAbove} · ${slice.start + 1}-${slice.end}/${entries.length} 行 · ↓${hiddenBelow} `
+      : undefined;
+
   return kit.Box(
     {
       id: "keyloop-ghost-text",
@@ -141,8 +169,8 @@ export async function renderGhostText(
       borderStyle: "rounded",
       borderColor: completed ? theme.accent : targetMode === "code" ? theme.info : theme.border,
       title: targetMode === "code" ? " 代码 " : " 跟打文本 ",
-      bottomTitle: completed ? ` ${completedTitle} ` : undefined,
-      bottomTitleAlignment: completed ? "right" : undefined,
+      bottomTitle: completed ? ` ${completedTitle} ` : progressTitle,
+      bottomTitleAlignment: completed || progressTitle !== undefined ? "right" : undefined,
       backgroundColor: theme.background,
       paddingX: 1,
       flexGrow: 1,
@@ -152,6 +180,34 @@ export async function renderGhostText(
     ...children,
     ...(articleTranslation === undefined ? [] : [articleTranslation]),
   );
+}
+
+/** 跟打区可视行数：按终端高度扣除界面 chrome；非 TTY（测试）不限制 */
+function ghostViewportRows(): number {
+  const rows =
+    typeof process === "undefined" ? undefined : process.stdout?.rows;
+  if (rows === undefined || !Number.isFinite(rows) || rows <= 0) {
+    return Number.POSITIVE_INFINITY;
+  }
+  // 标题/指标面板/训练诊断/快捷键提示/边框等固定占用约 18 行
+  return Math.max(rows - 18, 8);
+}
+
+/** 纯函数：给定总行数、光标行与视口高度，计算渲染窗口（光标行约在视口 40% 处） */
+export function ghostViewportSlice(
+  totalRows: number,
+  cursorIndex: number,
+  viewportRows: number,
+): { start: number; end: number } {
+  if (!Number.isFinite(viewportRows) || totalRows <= viewportRows) {
+    return { start: 0, end: totalRows };
+  }
+  const anchor = cursorIndex < 0 ? 0 : cursorIndex;
+  const start = Math.min(
+    Math.max(anchor - Math.floor(viewportRows * 0.4), 0),
+    totalRows - viewportRows,
+  );
+  return { start, end: start + viewportRows };
 }
 
 export function renderGhostVisualLine(
