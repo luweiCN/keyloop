@@ -422,6 +422,33 @@ describe("TS CLI command dispatch", () => {
     }
   });
 
+  test("start persists word pronunciation settings returned by runner", async () => {
+    const dir = await tempDir();
+    try {
+      await savePreferencesToPath(defaultPreferences("en"), preferencesPath(dir));
+
+      await runCli(["start"], {
+        env: { KEYLOOP_HOME: dir },
+        now: new Date("2026-06-05T04:00:00Z"),
+        runner: async () => ({
+          completedRecords: [],
+          wordAudioSettings: {
+            enabled: true,
+            volume_percent: 60,
+          },
+        }),
+      });
+
+      const preferences = await loadPreferencesFromPath(preferencesPath(dir));
+      expect(preferences.word_audio).toEqual({
+        enabled: true,
+        volume_percent: 60,
+      });
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  }, START_CLI_TEST_TIMEOUT_MS);
+
   test("bare keyloop persists code filter settings and starts with returned state config", async () => {
     const dir = await tempDir();
     let selectedPreference: CodeFilterPreference | undefined;
@@ -1148,6 +1175,7 @@ function defaultPreferences(language: Language) {
     },
     word_audio: {
       enabled: false,
+      volume_percent: 100,
     },
     custom_library: {
       word_repeats: 1,

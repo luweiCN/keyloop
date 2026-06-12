@@ -53,6 +53,7 @@ describe("storage model defaults", () => {
     expect(preferences.word_breakdown.word_repeats).toBe(2);
     expect(preferences.programming_terms.word_repeats).toBe(1);
     expect(preferences.word_audio.enabled).toBe(false);
+    expect(preferences.word_audio.volume_percent).toBe(100);
     expect(preferences.custom_library.word_repeats).toBe(1);
     expect(preferences.personal_vocabulary.enabled_in_comprehensive).toBe(true);
     expect(preferences.personal_vocabulary.daily_review_limit).toBe(8);
@@ -92,6 +93,7 @@ describe("storage model defaults", () => {
     const preferences = parseUserPreferences({
       word_audio: {
         enabled: true,
+        volume_percent: 60,
       },
       custom_library: {
         word_repeats: 10,
@@ -99,7 +101,18 @@ describe("storage model defaults", () => {
     });
 
     expect(preferences.word_audio.enabled).toBe(true);
+    expect(preferences.word_audio.volume_percent).toBe(60);
     expect(preferences.custom_library.word_repeats).toBe(10);
+  });
+
+  test("preferences clamp word audio volume to supported steps", () => {
+    const preferences = parseUserPreferences({
+      word_audio: {
+        volume_percent: 87,
+      },
+    });
+
+    expect(preferences.word_audio.volume_percent).toBe(90);
   });
 
   test("preferences preserve intermediate long-word repeat counts", () => {

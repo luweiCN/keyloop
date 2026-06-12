@@ -405,6 +405,7 @@ describe("OpenTUI app model", () => {
       "  Code semicolons  Always",
       "  Code quotes  Double",
       "  Word pronunciation  off",
+      "  Pronunciation volume  100%",
       "  Dictionary  Not loaded",
     ]);
   });

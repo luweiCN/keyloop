@@ -136,6 +136,7 @@ export interface StartRunnerResult {
   lastSavedTo?: string | null;
   renderer?: OpenTuiRenderer;
   state?: OpenTuiAppState;
+  wordAudioSettings?: UserPreferences["word_audio"];
 }
 
 export type StartRunner = (context: StartRunnerContext) => Promise<StartRunnerResult>;
@@ -625,7 +626,7 @@ function wordAudioSettingsEqual(
   left: UserPreferences["word_audio"],
   right: UserPreferences["word_audio"],
 ): boolean {
-  return left.enabled === right.enabled;
+  return left.enabled === right.enabled && left.volume_percent === right.volume_percent;
 }
 
 function customLibrarySettingsEqual(
@@ -799,6 +800,20 @@ async function runStartRunner(
 
   for (const record of result.completedRecords) {
     await saveRecord(record);
+  }
+
+  if (
+    result.wordAudioSettings !== undefined &&
+    !wordAudioSettingsEqual(result.wordAudioSettings, context.wordAudioSettings ?? result.wordAudioSettings)
+  ) {
+    const preferences = await loadPreferencesFromPath(preferencesPath(dataDir));
+    await savePreferencesToPath(
+      {
+        ...preferences,
+        word_audio: { ...result.wordAudioSettings },
+      },
+      preferencesPath(dataDir),
+    );
   }
 
   if (result.renderer !== undefined && result.state !== undefined) {

@@ -1220,7 +1220,7 @@ export function defaultWordFormSettings(): OpenTuiWordFormSettings {
 }
 
 export function defaultWordAudioSettings(): OpenTuiWordAudioSettings {
-  return { enabled: false };
+  return { enabled: false, volume_percent: 100 };
 }
 
 export function defaultCustomLibrarySettings(): OpenTuiCustomLibrarySettings {

@@ -9,6 +9,7 @@ import {
   type Language,
   type SpeedUnit,
   type UserPreferences,
+  wordAudioVolumePercents,
 } from "../../domain/model";
 import { codePracticeOptionsForLibrary } from "../../content/library";
 import {
@@ -381,7 +382,21 @@ export function reduceFlatSettingsItem(
       });
     case "word_audio":
       return flatSettingsResult(state.language, state, selectedIndex, {
-        wordAudioSettings: { enabled: !wordAudioSettings.enabled },
+        wordAudioSettings: {
+          ...wordAudioSettings,
+          enabled: !wordAudioSettings.enabled,
+        },
+      });
+    case "word_audio_volume":
+      return flatSettingsResult(state.language, state, selectedIndex, {
+        wordAudioSettings: {
+          ...wordAudioSettings,
+          volume_percent: cycleNumberOption(
+            wordAudioVolumePercents,
+            wordAudioSettings.volume_percent,
+            direction,
+          ),
+        },
       });
     case "code_filters":
     case "dictionary_status":

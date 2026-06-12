@@ -3,6 +3,7 @@ import { describe, expect, test } from "bun:test";
 import {
   everydayPracticeOptionItems,
   nextEverydaySettingsForControl,
+  nextWordAudioSettingsForControl,
   practiceOptionControlForIndex,
   practiceOptionsStateForContext,
   wordBreakdownRepeatControls,
@@ -23,6 +24,7 @@ describe("practice option controls", () => {
       { id: "everyday_word_count", label: "每组单词", value: "20" },
       { id: "everyday_word_repeats", label: "单词重复", value: "1" },
       { id: "word_audio_enabled", label: "发音", value: "关" },
+      { id: "word_audio_volume", label: "音量", value: "100%" },
     ]);
     expect(nextEverydaySettingsForControl(settings, "word_repeats", 1).word_repeats).toBe(2);
     expect(
@@ -49,6 +51,7 @@ describe("practice option controls", () => {
     expect(practiceOptionsStateForContext(context, 0, "en").items).toEqual([
       { id: "programming_terms_word_repeats", label: "Word repeats", value: "4" },
       { id: "word_audio_enabled", label: "Pronunciation", value: "off" },
+      { id: "word_audio_volume", label: "Volume", value: "100%" },
     ]);
     expect(practiceOptionControlForIndex(context, 0)).toEqual({
       domain: "programming_terms",
@@ -57,6 +60,10 @@ describe("practice option controls", () => {
     expect(practiceOptionControlForIndex(context, 1)).toEqual({
       domain: "word_audio",
       control: "enabled",
+    });
+    expect(practiceOptionControlForIndex(context, 2)).toEqual({
+      domain: "word_audio",
+      control: "volume_percent",
     });
   });
 
@@ -76,10 +83,15 @@ describe("practice option controls", () => {
     expect(practiceOptionsStateForContext(technicalContext, 1, "zh").items).toEqual([
       { id: "word_breakdown_word_repeats", label: "完整词重复", value: "2" },
       { id: "word_audio_enabled", label: "发音", value: "关" },
+      { id: "word_audio_volume", label: "音量", value: "100%" },
     ]);
     expect(practiceOptionControlForIndex(technicalContext, 1)).toEqual({
       domain: "word_audio",
       control: "enabled",
+    });
+    expect(practiceOptionControlForIndex(technicalContext, 2)).toEqual({
+      domain: "word_audio",
+      control: "volume_percent",
     });
 
     const libraryContext: StartRunnerContext = {
@@ -100,11 +112,13 @@ describe("practice option controls", () => {
       },
       wordAudioSettings: {
         enabled: true,
+        volume_percent: 70,
       },
     };
     expect(practiceOptionsStateForContext(libraryContext, 1, "en").items).toEqual([
       { id: "custom_library_word_repeats", label: "Word repeats", value: "3" },
       { id: "word_audio_enabled", label: "Pronunciation", value: "on" },
+      { id: "word_audio_volume", label: "Volume", value: "70%" },
     ]);
     expect(practiceOptionControlForIndex(libraryContext, 0)).toEqual({
       domain: "custom_library",
@@ -114,6 +128,27 @@ describe("practice option controls", () => {
       domain: "word_audio",
       control: "enabled",
     });
+    expect(practiceOptionControlForIndex(libraryContext, 2)).toEqual({
+      domain: "word_audio",
+      control: "volume_percent",
+    });
+  });
+
+  test("word audio volume cycles through global volume steps", () => {
+    expect(
+      nextWordAudioSettingsForControl(
+        { enabled: true, volume_percent: 100 },
+        "volume_percent",
+        1,
+      ).volume_percent,
+    ).toBe(0);
+    expect(
+      nextWordAudioSettingsForControl(
+        { enabled: true, volume_percent: 0 },
+        "volume_percent",
+        -1,
+      ).volume_percent,
+    ).toBe(100);
   });
 });
 

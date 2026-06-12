@@ -3,6 +3,7 @@ import type {
   EverydayEnglishSettings,
   UserPreferences,
 } from "../../domain/model";
+import { wordAudioVolumePercents } from "../../domain/model";
 import type { StartRunnerContext } from "../../cli";
 import type { OpenTuiMenuItemId, OpenTuiPracticeOptionsState } from "./appModel";
 import {
@@ -63,7 +64,7 @@ export type LiveEverydayControl =
 export type LiveWordBreakdownControl = "word_repeats";
 export type LiveProgrammingTermsControl = "word_repeats";
 export type LiveCustomLibraryControl = "word_repeats";
-export type LiveWordAudioControl = "enabled";
+export type LiveWordAudioControl = "enabled" | "volume_percent";
 
 export type PracticeOptionControl =
   | { domain: "code"; control: LiveCodeControl }
@@ -200,7 +201,7 @@ export function everydayPracticeOptionItems(
   sourceItem: OpenTuiMenuItemId | undefined,
   settings: EverydayEnglishSettings,
   language: StartRunnerContext["language"],
-  wordAudio: UserPreferences["word_audio"] = { enabled: false },
+  wordAudio: UserPreferences["word_audio"] = defaultPracticeWordAudioSettings(),
 ): OpenTuiPracticeOptionsState["items"] {
   switch (sourceItem) {
     case "everyday_words":
@@ -221,6 +222,7 @@ export function everydayPracticeOptionItems(
           value: String(settings.word_repeats),
         },
         wordAudioPracticeOptionItem(wordAudio, language),
+        wordAudioVolumePracticeOptionItem(wordAudio, language),
       ];
     case "everyday_sentences":
       return [
@@ -284,7 +286,7 @@ export function everydayPracticeOptionItems(
 export function wordBreakdownPracticeOptionItems(
   settings: UserPreferences["word_breakdown"],
   language: StartRunnerContext["language"],
-  wordAudio: UserPreferences["word_audio"] = { enabled: false },
+  wordAudio: UserPreferences["word_audio"] = defaultPracticeWordAudioSettings(),
 ): OpenTuiPracticeOptionsState["items"] {
   return [
     {
@@ -293,13 +295,14 @@ export function wordBreakdownPracticeOptionItems(
       value: String(settings.word_repeats),
     },
     wordAudioPracticeOptionItem(wordAudio, language),
+    wordAudioVolumePracticeOptionItem(wordAudio, language),
   ];
 }
 
 export function programmingTermsPracticeOptionItems(
   settings: UserPreferences["programming_terms"],
   language: StartRunnerContext["language"],
-  wordAudio: UserPreferences["word_audio"] = { enabled: false },
+  wordAudio: UserPreferences["word_audio"] = defaultPracticeWordAudioSettings(),
 ): OpenTuiPracticeOptionsState["items"] {
   return [
     {
@@ -308,6 +311,7 @@ export function programmingTermsPracticeOptionItems(
       value: String(settings.word_repeats),
     },
     wordAudioPracticeOptionItem(wordAudio, language),
+    wordAudioVolumePracticeOptionItem(wordAudio, language),
   ];
 }
 
@@ -323,6 +327,7 @@ export function customLibraryPracticeOptionItems(
       value: String(settings.word_repeats),
     },
     wordAudioPracticeOptionItem(wordAudio, language),
+    wordAudioVolumePracticeOptionItem(wordAudio, language),
   ];
 }
 
@@ -334,6 +339,17 @@ function wordAudioPracticeOptionItem(
     id: "word_audio_enabled",
     label: language === "zh" ? "发音" : "Pronunciation",
     value: onOffLabel(settings.enabled, language),
+  };
+}
+
+function wordAudioVolumePracticeOptionItem(
+  settings: UserPreferences["word_audio"],
+  language: StartRunnerContext["language"],
+): OpenTuiPracticeOptionsState["items"][number] {
+  return {
+    id: "word_audio_volume",
+    label: language === "zh" ? "音量" : "Volume",
+    value: `${settings.volume_percent}%`,
   };
 }
 
@@ -357,15 +373,22 @@ export function practiceOptionControlForIndex(
     return { domain: "code", control: index <= 0 ? "difficulty" : "length" };
   }
   if (isLiveCustomLibraryWordOptionsEnabled(context)) {
-    return index <= 0
-      ? { domain: "custom_library", control: "word_repeats" }
-      : { domain: "word_audio", control: "enabled" };
+    if (index <= 0) {
+      return { domain: "custom_library", control: "word_repeats" };
+    }
+    return {
+      domain: "word_audio",
+      control: index === 1 ? "enabled" : "volume_percent",
+    };
   }
   const sourceItem = context.sourceItem;
   if (!isLiveEverydayOptionsEnabled(context)) {
     if (isLiveWordBreakdownOptionsEnabled(context)) {
       if (index > 0) {
-        return { domain: "word_audio", control: "enabled" };
+        return {
+          domain: "word_audio",
+          control: index === 1 ? "enabled" : "volume_percent",
+        };
       }
       if (context.sourceItem === "programming_terms") {
         return { domain: "programming_terms", control: "word_repeats" };
@@ -377,7 +400,10 @@ export function practiceOptionControlForIndex(
   switch (sourceItem) {
     case "everyday_words":
       if (index > 2) {
-        return { domain: "word_audio", control: "enabled" };
+        return {
+          domain: "word_audio",
+          control: index === 3 ? "enabled" : "volume_percent",
+        };
       }
       return {
         domain: "everyday",
@@ -415,7 +441,7 @@ export function practiceOptionControlForIndex(
 export function wordAudioSettingsForContext(
   context: StartRunnerContext,
 ): UserPreferences["word_audio"] {
-  return context.wordAudioSettings ?? { enabled: false };
+  return context.wordAudioSettings ?? defaultPracticeWordAudioSettings();
 }
 
 export function customLibrarySettingsForContext(
@@ -519,9 +545,22 @@ export function nextCustomLibrarySettingsForControl(
 
 export function nextWordAudioSettingsForControl(
   settings: UserPreferences["word_audio"],
-  _control: LiveWordAudioControl,
+  control: LiveWordAudioControl,
+  direction: -1 | 1 = 1,
 ): UserPreferences["word_audio"] {
-  return { ...settings, enabled: !settings.enabled };
+  switch (control) {
+    case "enabled":
+      return { ...settings, enabled: !settings.enabled };
+    case "volume_percent":
+      return {
+        ...settings,
+        volume_percent: cycleNumberOption(
+          wordAudioVolumePercents,
+          settings.volume_percent,
+          direction,
+        ),
+      };
+  }
 }
 
 export function nextEverydaySettingsForControl(
@@ -633,6 +672,10 @@ export function cycleCodeOption<const T extends readonly string[]>(
 
 function onOffLabel(enabled: boolean, language: StartRunnerContext["language"]): string {
   return language === "zh" ? (enabled ? "开" : "关") : enabled ? "on" : "off";
+}
+
+function defaultPracticeWordAudioSettings(): UserPreferences["word_audio"] {
+  return { enabled: false, volume_percent: 100 };
 }
 
 export function cycleStringOption<const T extends readonly string[]>(

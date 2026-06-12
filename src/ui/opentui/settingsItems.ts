@@ -43,6 +43,7 @@ export type OpenTuiFlatSettingsItemKind =
   | "code_quotes"
   | "code_filters"
   | "word_audio"
+  | "word_audio_volume"
   | "dictionary_status";
 
 export interface OpenTuiFlatSettingsItem {
@@ -116,6 +117,11 @@ export function openTuiFlatSettingsItems(state: OpenTuiAppState): OpenTuiFlatSet
       kind: "word_audio",
       label: language === "zh" ? "单词发音" : "Word pronunciation",
       value: onOffLabel((state.wordAudioSettings ?? defaultWordAudioSettings()).enabled, language),
+    },
+    {
+      kind: "word_audio_volume",
+      label: language === "zh" ? "发音音量" : "Pronunciation volume",
+      value: `${(state.wordAudioSettings ?? defaultWordAudioSettings()).volume_percent}%`,
     },
     {
       kind: "dictionary_status",

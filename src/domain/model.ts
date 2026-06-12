@@ -91,6 +91,7 @@ export type EverydaySentenceLength = EverydayPracticeLength;
 export type EverydayGroupWordCount = number;
 export type EverydaySentenceCount = number;
 export type EverydayRepeatCount = number;
+export type WordAudioVolumePercent = number;
 export type SpeedUnit = "wpm" | "cpm";
 
 export interface CharStats {
@@ -222,6 +223,7 @@ export interface UserPreferences {
   };
   word_audio: {
     enabled: boolean;
+    volume_percent: WordAudioVolumePercent;
   };
   custom_library: {
     word_repeats: EverydayRepeatCount;
@@ -413,6 +415,7 @@ const everydayGroupWordCounts = [10, 20, 30, 50] as const;
 const everydaySentenceCounts = [3, 5, 8, 10] as const;
 const everydayRepeatCounts = [1, 3, 5] as const;
 const wordBreakdownRepeatCounts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;
+export const wordAudioVolumePercents = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100] as const;
 
 export function parsePracticeTarget(value: unknown): PracticeTarget {
   const object = asObject(value);
@@ -567,6 +570,11 @@ export function parseUserPreferences(value: unknown): UserPreferences {
     },
     word_audio: {
       enabled: booleanValue(wordAudio.enabled, false),
+      volume_percent: nearestNumberOption(
+        numberValue(wordAudio.volume_percent, 100),
+        wordAudioVolumePercents,
+        100,
+      ),
     },
     custom_library: {
       word_repeats: nearestNumberOption(
@@ -767,6 +775,7 @@ export function defaultUserPreferences(
     },
     word_audio: {
       enabled: false,
+      volume_percent: 100,
     },
     custom_library: {
       word_repeats: 1,
