@@ -219,6 +219,12 @@ export interface UserPreferences {
   programming_terms: {
     word_repeats: EverydayRepeatCount;
   };
+  word_audio: {
+    enabled: boolean;
+  };
+  custom_library: {
+    word_repeats: EverydayRepeatCount;
+  };
   personal_vocabulary: {
     enabled_in_comprehensive: boolean;
     daily_review_limit: number;
@@ -499,6 +505,8 @@ export function parseUserPreferences(value: unknown): UserPreferences {
   const codeStyle = asObject(object.code_style);
   const wordBreakdown = asObject(object.word_breakdown);
   const programmingTerms = asObject(object.programming_terms);
+  const wordAudio = asObject(object.word_audio);
+  const customLibrary = asObject(object.custom_library);
   const personalVocabulary = asObject(object.personal_vocabulary);
   return {
     interface_language: literalIfPresent(
@@ -550,6 +558,16 @@ export function parseUserPreferences(value: unknown): UserPreferences {
     programming_terms: {
       word_repeats: nearestNumberOption(
         programmingTerms.word_repeats,
+        wordBreakdownRepeatCounts,
+        1,
+      ),
+    },
+    word_audio: {
+      enabled: booleanValue(wordAudio.enabled, false),
+    },
+    custom_library: {
+      word_repeats: nearestNumberOption(
+        customLibrary.word_repeats,
         wordBreakdownRepeatCounts,
         1,
       ),
@@ -742,6 +760,12 @@ export function defaultUserPreferences(
       word_repeats: 2,
     },
     programming_terms: {
+      word_repeats: 1,
+    },
+    word_audio: {
+      enabled: false,
+    },
+    custom_library: {
       word_repeats: 1,
     },
     personal_vocabulary: {

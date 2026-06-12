@@ -52,6 +52,8 @@ describe("storage model defaults", () => {
     expect(preferences.word_breakdown.max_items_per_group).toBe(6);
     expect(preferences.word_breakdown.word_repeats).toBe(2);
     expect(preferences.programming_terms.word_repeats).toBe(1);
+    expect(preferences.word_audio.enabled).toBe(false);
+    expect(preferences.custom_library.word_repeats).toBe(1);
     expect(preferences.personal_vocabulary.enabled_in_comprehensive).toBe(true);
     expect(preferences.personal_vocabulary.daily_review_limit).toBe(8);
   });
@@ -84,6 +86,20 @@ describe("storage model defaults", () => {
     });
 
     expect(preferences.programming_terms.word_repeats).toBe(10);
+  });
+
+  test("preferences allow word audio and custom library word repeats", () => {
+    const preferences = parseUserPreferences({
+      word_audio: {
+        enabled: true,
+      },
+      custom_library: {
+        word_repeats: 10,
+      },
+    });
+
+    expect(preferences.word_audio.enabled).toBe(true);
+    expect(preferences.custom_library.word_repeats).toBe(10);
   });
 
   test("preferences preserve intermediate long-word repeat counts", () => {

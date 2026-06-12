@@ -1118,6 +1118,12 @@ function defaultPreferences(language: Language) {
     programming_terms: {
       word_repeats: 1,
     },
+    word_audio: {
+      enabled: false,
+    },
+    custom_library: {
+      word_repeats: 1,
+    },
     personal_vocabulary: {
       enabled_in_comprehensive: true,
       daily_review_limit: 8,
