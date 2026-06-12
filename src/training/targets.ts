@@ -28,12 +28,15 @@ import type {
 import { recentFeedbackTerms } from "./feedback";
 import {
   buildProgrammingBasicsMixTarget,
+  buildSymbolsNumbersTarget,
   namingLinesFromWords,
 } from "./programmingBasicsTargets";
 import { PLAN_HISTORY_DAYS } from "./plan";
 import {
   type LongWordEntry,
 } from "./vocabulary";
+import type { SkillProfile, TrainingForm } from "./diagnosis";
+import type { CustomLibrary } from "./customLibrary";
 
 export interface BuildTargetContext {
   records: SessionRecord[];
@@ -2450,4 +2453,244 @@ function moduleReasonEn(module: TrainingModule, readiness: ModuleReadiness): str
     return `${reason} Stable: reduced or shortened this round.`;
   }
   return reason;
+}
+
+// ---------------------------------------------------------------------------
+// 形态生成器（诊断-处方引擎第 2 期）
+// 按训练形态生成阶段语料：数量由字符预算换算，内容回流只读同形态 focus 桶。
+// ---------------------------------------------------------------------------
+
+export interface StageTargetOptions {
+  stage: { form: TrainingForm; char_budget: number };
+  profile: SkillProfile;
+  /** 未提供时视为全部启用 */
+  enabledModules?: TrainingModule[];
+  customLibraries?: CustomLibrary[];
+}
+
+/** 词均长 6 + 空格 */
+const STAGE_CHARS_PER_WORD = 7;
+/** 句均字符 */
+const STAGE_CHARS_PER_SENTENCE = 40;
+/** 代码片段均字符 */
+const STAGE_CHARS_PER_SNIPPET = 180;
+
+export function buildStageTarget(
+  context: BuildTargetContext,
+  options: StageTargetOptions,
+): PracticeTarget {
+  switch (options.stage.form) {
+    case "keys":
+      return foundationMixTarget(context);
+    case "words":
+      return wordsStageTarget(context, options);
+    case "symbols":
+      return symbolsStageTarget(context, options);
+    case "sentences":
+      return sentencesStageTarget(context, options);
+    case "articles":
+      return everydayArticlesTarget(context);
+    case "code": {
+      const count = clamp(
+        Math.round(options.stage.char_budget / STAGE_CHARS_PER_SNIPPET),
+        1,
+        5,
+      );
+      return codeMixTarget(context, count);
+    }
+  }
+}
+
+function stageModuleEnabled(
+  options: StageTargetOptions,
+  module: TrainingModule,
+): boolean {
+  return options.enabledModules === undefined || options.enabledModules.includes(module);
+}
+
+interface StageWordCandidate {
+  text: string;
+  translation_zh?: string;
+}
+
+function wordsStageTarget(
+  context: BuildTargetContext,
+  options: StageTargetOptions,
+): PracticeTarget {
+  const random = context.random ?? Math.random;
+  const count = clamp(
+    Math.round(options.stage.char_budget / STAGE_CHARS_PER_WORD),
+    6,
+    40,
+  );
+  const pool = new Map<string, StageWordCandidate>();
+  const addCandidate = (candidate: StageWordCandidate): void => {
+    const key = candidate.text.toLowerCase();
+    if (!pool.has(key)) {
+      pool.set(key, candidate);
+    }
+  };
+  if (stageModuleEnabled(options, "everyday_english")) {
+    for (const entry of context.library.everyday_words.entries) {
+      if (!hasEverydayEntrySource(entry) || entry.translation_zh.trim().length === 0) {
+        continue;
+      }
+      addCandidate({
+        text: entry.word,
+        translation_zh: conciseChineseMeaning(entry.translation_zh),
+      });
+    }
+  }
+  if (stageModuleEnabled(options, "programming_basics")) {
+    for (const entry of context.library.programming_words) {
+      addCandidate({ text: entry.word, translation_zh: entry.note_zh });
+    }
+  }
+  for (const library of options.customLibraries ?? []) {
+    for (const word of library.words) {
+      if (word.kind !== "word") {
+        continue;
+      }
+      addCandidate({
+        text: word.text,
+        ...(word.meaning_zh === undefined ? {} : { translation_zh: word.meaning_zh }),
+      });
+    }
+  }
+
+  // 同形态回流：focus.words 中能在池里找到的优先入选
+  const selected: StageWordCandidate[] = [];
+  for (const word of options.profile.focus.words) {
+    const hit = pool.get(word.toLowerCase());
+    if (hit !== undefined && !selected.includes(hit)) {
+      selected.push(hit);
+    }
+  }
+  const fill = [...pool.values()].filter((item) => !selected.includes(item));
+  shuffleInPlace(fill, random);
+  selected.push(...fill);
+  const picked = selected.slice(0, count);
+
+  const annotated = annotatedOptionalTokenText(
+    picked.map((item) => ({
+      text: item.text,
+      ...(item.translation_zh === undefined || item.translation_zh.trim().length === 0
+        ? {}
+        : { translation_zh: item.translation_zh }),
+      display: "word" as const,
+      audio_text: item.text,
+    })),
+  );
+  return {
+    mode: "words",
+    text: annotated.text,
+    source: `keyloop:stage:words:count-${picked.length}`,
+    ...(annotated.annotations.length === 0 ? {} : { annotations: annotated.annotations }),
+  };
+}
+
+function sentencesStageTarget(
+  context: BuildTargetContext,
+  options: StageTargetOptions,
+): PracticeTarget {
+  const random = context.random ?? Math.random;
+  const settings = everydaySettings(context);
+  const count = clamp(
+    Math.round(options.stage.char_budget / STAGE_CHARS_PER_SENTENCE),
+    2,
+    8,
+  );
+  interface StageSentenceCandidate {
+    text: string;
+    translation_zh: string;
+    source_title?: string;
+  }
+  const pool = new Map<string, StageSentenceCandidate>();
+  const addCandidate = (candidate: StageSentenceCandidate): void => {
+    if (!pool.has(candidate.text)) {
+      pool.set(candidate.text, candidate);
+    }
+  };
+  const matching = context.library.everyday_sentences.entries
+    .filter(hasEverydayEntrySource)
+    .filter((entry) => entry.translation_zh.trim().length > 0)
+    .filter((entry) => entry.level === settings.sentence_level)
+    .filter((entry) => matchesEverydaySentenceLength(entry.length, settings.sentence_length));
+  const libraryPool =
+    matching.length > 0
+      ? matching
+      : context.library.everyday_sentences.entries
+          .filter(hasEverydayEntrySource)
+          .filter((entry) => entry.translation_zh.trim().length > 0);
+  for (const entry of libraryPool) {
+    addCandidate({
+      text: entry.text,
+      translation_zh: entry.translation_zh,
+      source_title: entry.source_title,
+    });
+  }
+  for (const library of options.customLibraries ?? []) {
+    for (const sentence of library.sentences) {
+      addCandidate({
+        text: sentence.text,
+        translation_zh: sentence.translation_zh ?? "",
+      });
+    }
+  }
+
+  const selected: StageSentenceCandidate[] = [];
+  for (const sentence of options.profile.focus.sentences) {
+    const hit = pool.get(sentence);
+    if (hit !== undefined && !selected.includes(hit)) {
+      selected.push(hit);
+    }
+  }
+  const fill = [...pool.values()].filter((item) => !selected.includes(item));
+  shuffleInPlace(fill, random);
+  selected.push(...fill);
+  const picked = selected.slice(0, count);
+
+  const annotated = annotatedLineText(
+    picked.map((item) => ({
+      text: item.text,
+      translation_zh: item.translation_zh,
+      ...(item.source_title === undefined ? {} : { source_title: item.source_title }),
+      display: "line" as const,
+    })),
+  );
+  return {
+    mode: "words",
+    text: annotated.text,
+    source: `keyloop:stage:sentences:count-${picked.length}`,
+    ...(annotated.annotations.length === 0 ? {} : { annotations: annotated.annotations }),
+  };
+}
+
+function symbolsStageTarget(
+  context: BuildTargetContext,
+  options: StageTargetOptions,
+): PracticeTarget {
+  if (stageModuleEnabled(options, "programming_basics")) {
+    const target = buildSymbolsNumbersTarget(context);
+    if (target.text.trim().length > 0) {
+      return target;
+    }
+  }
+  // 编程基础被禁用（或无卡片内容）：退化到基础输入的数字/标点行
+  const numberRow = foundationDrillTarget(context, "number-row");
+  const punctuation = foundationDrillTarget(context, "punctuation-edges");
+  const lines: string[] = [];
+  let chars = 0;
+  for (const line of [...numberRow.items, ...punctuation.items]) {
+    lines.push(line);
+    chars += line.length + 1;
+    if (chars >= options.stage.char_budget) {
+      break;
+    }
+  }
+  return {
+    mode: "symbols",
+    text: lines.join("\n"),
+    source: "keyloop:stage:symbols:foundation",
+  };
 }

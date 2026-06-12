@@ -1,0 +1,271 @@
+import { describe, expect, test } from "bun:test";
+
+import type { ContentLibrary } from "../src/content/library";
+import type { CustomLibrary } from "../src/training/customLibrary";
+import type { SkillProfile } from "../src/training/diagnosis";
+import { buildStageTarget, type BuildTargetContext } from "../src/training/targets";
+
+function stageLibrary(): ContentLibrary {
+  return {
+    warmup: ["asdf jkl;", "fdsa ;lkj", "a;sldkfj", "jkl; asdf"],
+    foundation_drills: [
+      {
+        id: "home-row",
+        title_zh: "中排",
+        title_en: "Home row",
+        hint_zh: "",
+        hint_en: "",
+        items: ["asdf jkl;", "sad fall;", "ask dad;", "lads flask;"],
+      },
+      {
+        id: "number-row",
+        title_zh: "数字行",
+        title_en: "Number row",
+        hint_zh: "",
+        hint_en: "",
+        items: ["1 2 3 4 5", "6 7 8 9 0", "12 34 56", "78 90 12"],
+      },
+      {
+        id: "punctuation-edges",
+        title_zh: "标点边界",
+        title_en: "Punctuation edges",
+        hint_zh: "",
+        hint_en: "",
+        items: ["; ; ;", "[ ] { }", "- = _ +", "/ ? . ,"],
+      },
+    ],
+    word_chunks: [],
+    common_words: ["today", "review"],
+    everyday_english: { sources: [], entries: [] },
+    everyday_words: {
+      sources: [],
+      entries: [
+        "algorithm",
+        "weather",
+        "morning",
+        "coffee",
+        "window",
+        "garden",
+        "letter",
+        "summer",
+        "winter",
+        "spring",
+      ].map((word, index) => ({
+        word,
+        rank: index + 1,
+        range: "200" as const,
+        level: "cet4" as const,
+        translation_zh: `释义${index}`,
+        source_id: "test",
+      })),
+    },
+    everyday_sentences: {
+      sources: [],
+      entries: [
+        "The weather is nice today.",
+        "She finished the report.",
+        "He walks to work every day.",
+        "The coffee tastes great.",
+        "Birds sing in the morning.",
+        "We watched a movie tonight.",
+      ].map((text, index) => ({
+        text,
+        translation_zh: `句释${index}`,
+        level: "cet4" as const,
+        length: "short" as const,
+        source_id: "test",
+        source_title: "Test Source",
+      })),
+    },
+    everyday_articles: {
+      sources: [],
+      entries: [
+        {
+          title: "A Day",
+          level: "cet4" as const,
+          length: "short" as const,
+          source_id: "test",
+          paragraphs: [
+            { text: "It was a sunny day.", translation_zh: "晴天。" },
+            { text: "We went outside.", translation_zh: "出门。" },
+          ],
+        },
+      ],
+    },
+    everyday_word_decomposition: { sources: [], entries: [] },
+    programming_words: [
+      { word: "closure", note_zh: "闭包" },
+      { word: "mutex", note_zh: "互斥锁" },
+    ],
+    code_snippets: [1, 2, 3, 4, 5].map((index) => ({
+      text: `const value${index} = compute(${index});\nreturn value${index};`,
+      source: `test:snippet-${index}`,
+      language: "typescript",
+      framework: "none",
+      project: "test",
+      level: "block" as const,
+    })),
+    long_words: [],
+  };
+}
+
+function emptyProfile(overrides: Partial<SkillProfile["focus"]> = {}): SkillProfile {
+  return {
+    dimensions: [],
+    form_speeds: [],
+    focus: { words: [], sentences: [], code: [], chars: [], ...overrides },
+    daily_active_minutes_7d: 0,
+    generated_at: "2026-06-13T08:00:00Z",
+  };
+}
+
+function stageContext(): BuildTargetContext {
+  return {
+    records: [],
+    plan: {
+      focus_words: [],
+      focus_symbols: [],
+      focus_code: [],
+      focus_keys: [],
+      advice: [],
+      recommended_mode: "mixed",
+      has_recent_history: false,
+    },
+    library: stageLibrary(),
+    random: () => 0.42,
+  };
+}
+
+function customLibraryFixture(): CustomLibrary {
+  return {
+    version: 1,
+    slug: "mine",
+    name: "我的词库",
+    created_at: "2026-06-01T00:00:00Z",
+    words: [
+      { id: "w1", text: "bespoke", kind: "word", meaning_zh: "定制的", source: "manual" },
+    ],
+    sentences: [{ id: "s1", text: "My custom sentence here.", translation_zh: "自建句。" }],
+    articles: [],
+  };
+}
+
+describe("buildStageTarget words", () => {
+  test("budget scales word count", () => {
+    const small = buildStageTarget(stageContext(), {
+      stage: { form: "words", char_budget: 45 },
+      profile: emptyProfile(),
+    });
+    // 45/7 ≈ 6 词（下限 6）
+    expect(small.text.split(" ")).toHaveLength(6);
+  });
+
+  test("focus words flow back into words stage", () => {
+    const target = buildStageTarget(stageContext(), {
+      stage: { form: "words", char_budget: 45 },
+      profile: emptyProfile({ words: ["algorithm"] }),
+    });
+    expect(target.text).toContain("algorithm");
+  });
+
+  test("programming and custom library words join the pool", () => {
+    const target = buildStageTarget(stageContext(), {
+      stage: { form: "words", char_budget: 700 },
+      profile: emptyProfile(),
+      customLibraries: [customLibraryFixture()],
+    });
+    // 预算足够大时全池入选
+    expect(target.text).toContain("closure");
+    expect(target.text).toContain("bespoke");
+  });
+
+  test("disabling programming module excludes programming words", () => {
+    const target = buildStageTarget(stageContext(), {
+      stage: { form: "words", char_budget: 700 },
+      profile: emptyProfile(),
+      enabledModules: ["foundation_input", "everyday_english"],
+    });
+    expect(target.text).not.toContain("closure");
+  });
+});
+
+describe("buildStageTarget symbols", () => {
+  test("falls back to foundation rows when programming disabled", () => {
+    const target = buildStageTarget(stageContext(), {
+      stage: { form: "symbols", char_budget: 80 },
+      profile: emptyProfile(),
+      enabledModules: ["foundation_input", "everyday_english"],
+    });
+    expect(target.source).toBe("keyloop:stage:symbols:foundation");
+    expect(target.text.length).toBeGreaterThan(0);
+  });
+
+  test("focus words never leak into symbols stage", () => {
+    const target = buildStageTarget(stageContext(), {
+      stage: { form: "symbols", char_budget: 80 },
+      profile: emptyProfile({ words: ["algorithm"] }),
+      enabledModules: ["foundation_input"],
+    });
+    expect(target.text).not.toContain("algorithm");
+  });
+});
+
+describe("buildStageTarget sentences", () => {
+  test("budget scales sentence count", () => {
+    const target = buildStageTarget(stageContext(), {
+      stage: { form: "sentences", char_budget: 80 },
+      profile: emptyProfile(),
+    });
+    // 80/40 = 2 句
+    expect(target.text.split("\n")).toHaveLength(2);
+  });
+
+  test("focus sentences flow back first", () => {
+    const target = buildStageTarget(stageContext(), {
+      stage: { form: "sentences", char_budget: 80 },
+      profile: emptyProfile({ sentences: ["We watched a movie tonight."] }),
+    });
+    expect(target.text).toContain("We watched a movie tonight.");
+  });
+
+  test("custom library sentences join the pool", () => {
+    const target = buildStageTarget(stageContext(), {
+      stage: { form: "sentences", char_budget: 400 },
+      profile: emptyProfile(),
+      customLibraries: [customLibraryFixture()],
+    });
+    expect(target.text).toContain("My custom sentence here.");
+  });
+});
+
+describe("buildStageTarget code and keys", () => {
+  test("code snippet count follows budget", () => {
+    const big = buildStageTarget(stageContext(), {
+      stage: { form: "code", char_budget: 900 },
+      profile: emptyProfile(),
+    });
+    expect(big.code_blocks?.length).toBe(5);
+
+    const small = buildStageTarget(stageContext(), {
+      stage: { form: "code", char_budget: 100 },
+      profile: emptyProfile(),
+    });
+    expect(small.code_blocks?.length).toBe(1);
+  });
+
+  test("keys stage reuses foundation mix", () => {
+    const target = buildStageTarget(stageContext(), {
+      stage: { form: "keys", char_budget: 180 },
+      profile: emptyProfile(),
+    });
+    expect(target.source).toContain("keyloop:module:foundation-mix");
+  });
+
+  test("articles stage picks an article", () => {
+    const target = buildStageTarget(stageContext(), {
+      stage: { form: "articles", char_budget: 300 },
+      profile: emptyProfile(),
+    });
+    expect(target.text).toContain("It was a sunny day.");
+  });
+});
