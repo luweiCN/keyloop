@@ -333,7 +333,7 @@ describe("storage file io", () => {
         field: "module",
         value: "typing_core",
         message:
-          "lesson.module must be one of: unknown, comprehensive, foundation_input, everyday_english, programming_basics, code_practice",
+          "lesson.module must be one of: unknown, comprehensive, foundation_input, everyday_english, programming_basics, custom_corpus, code_practice",
       },
       {
         field: "category",

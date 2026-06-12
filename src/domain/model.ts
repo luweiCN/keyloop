@@ -349,6 +349,7 @@ const trainingModules = [
   "foundation_input",
   "everyday_english",
   "programming_basics",
+  "custom_corpus",
   "code_practice",
 ] as const;
 const trainingCategories = [

@@ -43,6 +43,16 @@ describe("domain model compatibility", () => {
     });
   });
 
+  test("session records accept custom corpus module", () => {
+    const record = parseSessionRecord({
+      module: "custom_corpus",
+      category: "custom_library",
+    });
+
+    expect(record.module).toBe("custom_corpus");
+    expect(record.category).toBe("custom_library");
+  });
+
   test("practice lessons default missing module fields like Rust serde defaults", () => {
     const lesson = parsePracticeLesson({
       id: "daily-words-1",
