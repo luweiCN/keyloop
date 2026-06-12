@@ -14,6 +14,10 @@ import {
   resolveWordAudio,
   type WordAudioSourceItem,
 } from "../../audio/wordAudio";
+import {
+  createMacOsYoudaoCredentialStore,
+  resolveYoudaoTtsCredentials,
+} from "../../audio/youdaoCredentials";
 import type { StartRunner, StartRunnerContext, StartRunnerResult } from "../../cli";
 import {
   applyLiveKey,
@@ -145,25 +149,40 @@ export interface WordAudioPlayback {
 
 const defaultWordAudioPlayback: WordAudioPlayback = {
   play: async (request) => {
+    const credentials = await resolveDefaultYoudaoCredentials();
     const path = await resolveWordAudio({
       text: request.text,
       sourceItem: request.sourceItem,
       cacheDir: join(request.dataDir, "audio-cache"),
+      credentials,
     });
     if (path !== null) {
       await playWordAudio(path, undefined, audioVolumeFromPercent(request.volumePercent));
     }
   },
   prefetch: async (requests) => {
+    const credentials = await resolveDefaultYoudaoCredentials();
     for (const request of requests) {
       await resolveWordAudio({
         text: request.text,
         sourceItem: request.sourceItem,
         cacheDir: join(request.dataDir, "audio-cache"),
+        credentials,
       }).catch(() => null);
     }
   },
 };
+
+const defaultYoudaoCredentialStore = createMacOsYoudaoCredentialStore();
+
+async function resolveDefaultYoudaoCredentials() {
+  const credentials = await resolveYoudaoTtsCredentials({
+    ...(defaultYoudaoCredentialStore === null ? {} : { store: defaultYoudaoCredentialStore }),
+  });
+  return credentials === null
+    ? null
+    : { appKey: credentials.appKey, appSecret: credentials.appSecret };
+}
 
 export interface LessonRunResult {
   record: SessionRecord | null;

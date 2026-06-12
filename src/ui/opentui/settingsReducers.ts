@@ -31,6 +31,7 @@ import {
   type OpenTuiFlatSettingsItem,
   type OpenTuiSettingsView,
   type OpenTuiWordFormSettings,
+  type OpenTuiYoudaoTtsCredentialStatus,
 } from "./appModel";
 import type { OpenTuiKeyEvent } from "./kit";
 import type { OpenTuiAppKeyResult, OpenTuiAppSessionContext } from "./appSession";
@@ -145,6 +146,28 @@ export function settingsViewState(
         customLibrarySettings: appState.customLibrarySettings,
         speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
       });
+    case "youdao_tts":
+      return {
+        ...createOpenTuiSettingsState(language, "youdao_tts", {
+          codeFilters: appState.codeFilters,
+          codeSettings: appState.codeSettings,
+          codeStyleSettings: appState.codeStyleSettings,
+          everydaySettings: appState.everydaySettings,
+          wordFormSettings: appState.wordFormSettings,
+          wordAudioSettings: appState.wordAudioSettings,
+          customLibrarySettings: appState.customLibrarySettings,
+          speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
+          youdaoTtsCredentialStatus:
+            appState.youdaoTtsCredentialStatus ?? youdaoTtsCredentialStatusFromContext(context),
+        }),
+        route: {
+          screen: "settings",
+          view: "youdao_tts",
+          selected_index: 0,
+          youdao_app_key_input: "",
+          youdao_app_secret_input: "",
+        },
+      };
   }
 }
 
@@ -162,6 +185,8 @@ export function settingsRootState(
     wordAudioSettings: state.wordAudioSettings ?? wordAudioSettingsFromContext(context),
     customLibrarySettings: state.customLibrarySettings ?? customLibrarySettingsFromContext(context),
     speedUnit: state.speed_unit ?? speedUnitFromContext(context),
+    youdaoTtsCredentialStatus:
+      state.youdaoTtsCredentialStatus ?? youdaoTtsCredentialStatusFromContext(context),
     todayElapsedMs: state.today_elapsed_ms,
   });
   return {
@@ -204,6 +229,8 @@ export function flatSettingsKindForView(
       return undefined;
     case "word_forms":
       return undefined;
+    case "youdao_tts":
+      return "youdao_tts";
   }
 }
 
@@ -266,6 +293,10 @@ export function reduceSettingsKey(
     return reduceWordFormSettingsKey(appState, event, context);
   }
 
+  if (state.route.view === "youdao_tts") {
+    return reduceYoudaoTtsSettingsKey(appState, event, context);
+  }
+
   return { state: appState, action: "continue" };
 }
 
@@ -306,9 +337,9 @@ export function reduceFlatSettingsKey(
   if (item === undefined) {
     return { state, action: "continue" };
   }
-  if (item.kind === "code_filters" && isSelectEvent(event)) {
+  if ((item.kind === "code_filters" || item.kind === "youdao_tts") && isSelectEvent(event)) {
     return {
-      state: settingsViewState(state.language, "code_filters", state, context),
+      state: settingsViewState(state.language, item.kind, state, context),
       action: "continue",
     };
   }
@@ -320,6 +351,14 @@ export function reduceFlatSettingsKey(
     return direction === 1
       ? {
           state: settingsViewState(state.language, "code_filters", state, context),
+          action: "continue",
+        }
+      : { state, action: "continue" };
+  }
+  if (item.kind === "youdao_tts") {
+    return direction === 1
+      ? {
+          state: settingsViewState(state.language, "youdao_tts", state, context),
           action: "continue",
         }
       : { state, action: "continue" };
@@ -399,6 +438,7 @@ export function reduceFlatSettingsItem(
         },
       });
     case "code_filters":
+    case "youdao_tts":
     case "dictionary_status":
       return { state, action: "continue" };
   }
@@ -527,6 +567,131 @@ export function settingsSearchInput(event: OpenTuiKeyEvent): string | "backspace
 
 export function isFocusedCodeFilterSearchInput(state: OpenTuiAppState): boolean {
   return state.route.screen === "settings" && state.route.view === "code_filters";
+}
+
+export function reduceYoudaoTtsSettingsKey(
+  state: OpenTuiAppState,
+  event: OpenTuiKeyEvent,
+  context: OpenTuiAppSessionContext,
+): OpenTuiAppKeyResult {
+  if (state.route.screen !== "settings" || state.route.view !== "youdao_tts") {
+    return { state, action: "continue" };
+  }
+  const selected = Math.min(Math.max(state.route.selected_index ?? 0, 0), 3);
+  const input = youdaoSettingsInput(event);
+  if (input !== undefined && selected <= 1) {
+    const field = selected === 0 ? "youdao_app_key_input" : "youdao_app_secret_input";
+    const current = state.route[field] ?? "";
+    const nextValue =
+      input === "backspace" ? Array.from(current).slice(0, -1).join("") : current + input;
+    const { youdao_message: _message, ...routeWithoutMessage } = state.route;
+    return {
+      state: {
+        ...state,
+        route: {
+          ...routeWithoutMessage,
+          [field]: nextValue,
+        },
+      },
+      action: "continue",
+    };
+  }
+  if (isMenuDownEvent(event)) {
+    return { state: youdaoTtsSettingsState(state, (selected + 1) % 4), action: "continue" };
+  }
+  if (isMenuUpEvent(event)) {
+    return { state: youdaoTtsSettingsState(state, (selected - 1 + 4) % 4), action: "continue" };
+  }
+  const index = numberKeyIndex(event);
+  if (index !== undefined && index < 4) {
+    return { state: youdaoTtsSettingsState(state, index), action: "continue" };
+  }
+  if (isSelectEvent(event)) {
+    if (selected === 2) {
+      const appKey = (state.route.youdao_app_key_input ?? "").trim();
+      const appSecret = (state.route.youdao_app_secret_input ?? "").trim();
+      if (appKey === "" || appSecret === "") {
+        return {
+          state: youdaoTtsSettingsState(
+            state,
+            selected,
+            state.language === "zh" ? "请填写 App Key 和 App Secret" : "Enter both App Key and App Secret",
+          ),
+          action: "continue",
+        };
+      }
+      return {
+        state: {
+          ...youdaoTtsSettingsState(
+            state,
+            selected,
+            state.language === "zh" ? "已保存到钥匙串" : "Saved to Keychain",
+          ),
+          youdaoTtsCredentialStatus: "keychain",
+        },
+        action: "continue",
+        persist: {
+          kind: "save_youdao_credentials",
+          credentials: { appKey, appSecret },
+        },
+      };
+    }
+    if (selected === 3) {
+      return {
+        state: {
+          ...youdaoTtsSettingsState(
+            state,
+            selected,
+            state.language === "zh" ? "已清除钥匙串配置" : "Cleared Keychain credentials",
+          ),
+          youdaoTtsCredentialStatus: "none",
+        },
+        action: "continue",
+        persist: { kind: "clear_youdao_credentials" },
+      };
+    }
+  }
+  return { state, action: "continue" };
+}
+
+function youdaoTtsSettingsState(
+  state: OpenTuiAppState,
+  selectedIndex: number,
+  message?: string,
+): OpenTuiAppState {
+  if (state.route.screen !== "settings" || state.route.view !== "youdao_tts") {
+    return state;
+  }
+  const nextRoute: OpenTuiSettingsRoute = {
+    ...state.route,
+    selected_index: selectedIndex,
+  };
+  if (message !== undefined) {
+    nextRoute.youdao_message = message;
+  } else if (state.route.youdao_message !== undefined) {
+    nextRoute.youdao_message = state.route.youdao_message;
+  }
+  return {
+    ...state,
+    route: nextRoute,
+  };
+}
+
+function youdaoSettingsInput(event: OpenTuiKeyEvent): string | "backspace" | undefined {
+  if (event.ctrl || event.meta) {
+    return undefined;
+  }
+  const name = event.name.toLowerCase();
+  if (name === "backspace" || name === "delete") {
+    return "backspace";
+  }
+  if (name === "paste") {
+    return event.sequence.replace(/\s+/gu, "");
+  }
+  if (event.sequence.length === 1 && event.sequence >= " " && event.sequence !== "\x7f") {
+    return event.sequence;
+  }
+  return undefined;
 }
 
 export function reduceWordFormSettingsKey(
@@ -1123,6 +1288,12 @@ export function codeStyleSettingsFromContext(context: OpenTuiAppSessionContext):
 
 export function speedUnitFromContext(context: OpenTuiAppSessionContext): SpeedUnit {
   return context.speedUnit ?? "wpm";
+}
+
+export function youdaoTtsCredentialStatusFromContext(
+  context: OpenTuiAppSessionContext,
+): OpenTuiYoudaoTtsCredentialStatus {
+  return context.youdaoTtsCredentialStatus ?? "none";
 }
 
 export function codeFilterPreferencesFromConfig(

@@ -14,6 +14,7 @@ import {
 import { codePracticeOptionsForLibrary } from "../../content/library";
 import type { Dictionary } from "../../content/dictionary";
 import type { CustomLibrary } from "../../training/customLibrary";
+import type { YoudaoCredentialStore, YoudaoTtsCredentials } from "../../audio/youdaoCredentials";
 import {
   deleteCustomLibraryAtDir,
   saveCustomLibraryToDir,
@@ -43,6 +44,7 @@ import {
   type OpenTuiStatsStateOptions,
   type OpenTuiStatsView,
   type OpenTuiWordFormSettings,
+  type OpenTuiYoudaoTtsCredentialStatus,
 } from "./appModel";
 import {
   renderOpenTuiAppOnce,
@@ -97,6 +99,8 @@ export interface OpenTuiAppSessionContext extends BuildTargetContext {
   customLibraries?: CustomLibrary[];
   dictionary?: Dictionary;
   librariesDir?: string;
+  youdaoCredentialStore?: YoudaoCredentialStore;
+  youdaoTtsCredentialStatus?: OpenTuiYoudaoTtsCredentialStatus;
 }
 
 export interface OpenTuiAppSessionOptions {
@@ -111,10 +115,14 @@ export type LibraryPersist =
   | { kind: "save"; library: CustomLibrary }
   | { kind: "delete"; slug: string };
 
+export type YoudaoCredentialsPersist =
+  | { kind: "save_youdao_credentials"; credentials: YoudaoTtsCredentials }
+  | { kind: "clear_youdao_credentials" };
+
 export interface OpenTuiAppKeyResult {
   state: OpenTuiAppState;
   action: OpenTuiAppAction;
-  persist?: LibraryPersist;
+  persist?: LibraryPersist | YoudaoCredentialsPersist;
 }
 
 export interface OpenTuiAppSessionResult {
@@ -322,6 +330,7 @@ export async function runOpenTuiAppSession(
       speedUnit: speedUnitFromContext(context),
       customLibraries: context.customLibraries ?? [],
       dictionaryTier: context.dictionary?.tier ?? "none",
+      youdaoTtsCredentialStatus: context.youdaoTtsCredentialStatus ?? "none",
       todayElapsedMs: todayElapsedMsFromContext(context),
     });
   // 今日时长每次进入会话都按最新记录重算（context 已含刚完成的练习），
@@ -355,11 +364,21 @@ export async function runOpenTuiAppSession(
     }
 
     const result = reduceOpenTuiAppKey(state, event, context);
-    if (result.persist !== undefined && context.librariesDir !== undefined) {
-      if (result.persist.kind === "save") {
+    if (result.persist !== undefined) {
+      if (result.persist.kind === "save" && context.librariesDir !== undefined) {
         await saveCustomLibraryToDir(result.persist.library, context.librariesDir);
-      } else {
+      } else if (result.persist.kind === "delete" && context.librariesDir !== undefined) {
         await deleteCustomLibraryAtDir(result.persist.slug, context.librariesDir);
+      } else if (
+        result.persist.kind === "save_youdao_credentials" &&
+        context.youdaoCredentialStore !== undefined
+      ) {
+        await context.youdaoCredentialStore.save(result.persist.credentials);
+      } else if (
+        result.persist.kind === "clear_youdao_credentials" &&
+        context.youdaoCredentialStore !== undefined
+      ) {
+        await context.youdaoCredentialStore.clear();
       }
     }
     const previousState = state;

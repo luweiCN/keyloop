@@ -193,6 +193,43 @@ describe("OpenTUI app session", () => {
     expect(openTuiRouteLines(length.state)).toContain("> Code length  Short");
   });
 
+  test("settings page saves youdao paid voice credentials through persist action", () => {
+    const context = appContext();
+    const settings = reduceOpenTuiAppKey(
+      createOpenTuiInitialState("en"),
+      key("7", "7"),
+      context,
+    );
+    const youdaoRow = pressSettingsDown(settings.state, context, 10);
+    const youdaoPage = reduceOpenTuiAppKey(youdaoRow, key("return", "\r"), context);
+
+    expect(youdaoPage.state.route.screen).toBe("settings");
+    if (youdaoPage.state.route.screen !== "settings") {
+      throw new Error("expected settings route");
+    }
+    expect(youdaoPage.state.route.view).toBe("youdao_tts");
+
+    let state = youdaoPage.state;
+    for (const char of "app-key") {
+      state = reduceOpenTuiAppKey(state, key(char, char), context).state;
+    }
+    state = reduceOpenTuiAppKey(state, key("down", ""), context).state;
+    for (const char of "app-secret") {
+      state = reduceOpenTuiAppKey(state, key(char, char), context).state;
+    }
+    state = reduceOpenTuiAppKey(state, key("down", ""), context).state;
+    const saved = reduceOpenTuiAppKey(state, key("return", "\r"), context);
+
+    expect(saved.persist).toEqual({
+      kind: "save_youdao_credentials",
+      credentials: {
+        appKey: "app-key",
+        appSecret: "app-secret",
+      },
+    });
+    expect(openTuiRouteLines(saved.state)).toContain("> Save to Keychain");
+  });
+
   test("running route remembers the menu it started from", () => {
     const context = appContext();
     const foundationMenu = reduceOpenTuiAppKey(

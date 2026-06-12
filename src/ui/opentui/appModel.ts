@@ -126,6 +126,7 @@ export interface OpenTuiWordFormSettings {
 
 export type OpenTuiWordAudioSettings = UserPreferences["word_audio"];
 export type OpenTuiCustomLibrarySettings = UserPreferences["custom_library"];
+export type OpenTuiYoudaoTtsCredentialStatus = "keychain" | "env" | "none" | "unavailable";
 
 export interface OpenTuiCodeSettings {
   difficulty: UserPreferences["code_practice"]["difficulty"];
@@ -164,6 +165,7 @@ export interface OpenTuiStateOptions {
   todayElapsedMs?: number | undefined;
   customLibraries?: CustomLibrary[] | undefined;
   dictionaryTier?: DictionaryTier | undefined;
+  youdaoTtsCredentialStatus?: OpenTuiYoudaoTtsCredentialStatus | undefined;
 }
 
 export type OpenTuiReturnRoute =
@@ -174,7 +176,14 @@ export type OpenTuiReturnRoute =
 export type OpenTuiRoute =
   | { screen: "main_menu"; selected_index?: number }
   | { screen: "submenu"; menu: OpenTuiSubmenu; selected_index?: number }
-  | { screen: "settings"; view: OpenTuiSettingsView; selected_index?: number }
+  | {
+      screen: "settings";
+      view: OpenTuiSettingsView;
+      selected_index?: number;
+      youdao_app_key_input?: string;
+      youdao_app_secret_input?: string;
+      youdao_message?: string;
+    }
   | {
       screen: "stats";
       records: SessionRecord[];
@@ -314,6 +323,7 @@ export interface OpenTuiSessionState {
   customLibrarySettings?: OpenTuiCustomLibrarySettings | undefined;
   customLibraries?: CustomLibrary[] | undefined;
   dictionaryTier?: DictionaryTier | undefined;
+  youdaoTtsCredentialStatus?: OpenTuiYoudaoTtsCredentialStatus | undefined;
   today_elapsed_ms?: number | undefined;
 }
 
@@ -1084,6 +1094,9 @@ function appState(
   if (options.dictionaryTier !== undefined) {
     state.dictionaryTier = options.dictionaryTier;
   }
+  if (options.youdaoTtsCredentialStatus !== undefined) {
+    state.youdaoTtsCredentialStatus = options.youdaoTtsCredentialStatus;
+  }
   if (options.todayElapsedMs !== undefined) {
     state.today_elapsed_ms = options.todayElapsedMs;
   }
@@ -1156,6 +1169,9 @@ export function stateOptions(state: OpenTuiAppState): OpenTuiStateOptions {
   }
   if (state.dictionaryTier !== undefined) {
     options.dictionaryTier = state.dictionaryTier;
+  }
+  if (state.youdaoTtsCredentialStatus !== undefined) {
+    options.youdaoTtsCredentialStatus = state.youdaoTtsCredentialStatus;
   }
   if (state.today_elapsed_ms !== undefined) {
     options.todayElapsedMs = state.today_elapsed_ms;

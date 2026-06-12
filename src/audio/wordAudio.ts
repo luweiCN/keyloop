@@ -23,12 +23,18 @@ export interface AudioProcess {
 }
 export type AudioProcessSpawner = (path: string, volume: number) => AudioProcess;
 
+export interface YoudaoTtsCredentials {
+  appKey: string;
+  appSecret: string;
+}
+
 export interface ResolveWordAudioOptions {
   text: string;
   sourceItem: WordAudioSourceItem;
   cacheDir: string;
   fetcher?: WordAudioFetcher;
   env?: Record<string, string | undefined>;
+  credentials?: YoudaoTtsCredentials | null;
   voiceName?: string;
   salt?: () => string;
   curtime?: () => number;
@@ -121,8 +127,12 @@ async function fetchYoudaoTtsAudio(
   options: ResolveWordAudioOptions,
 ): Promise<Uint8Array | null> {
   const env = options.env ?? process.env;
-  const appKey = env.YOUDAO_APP_KEY?.trim();
-  const appSecret = env.YOUDAO_APP_SECRET?.trim();
+  const credentials = normalizeYoudaoCredentials(options.credentials) ?? normalizeYoudaoCredentials({
+    appKey: env.YOUDAO_APP_KEY,
+    appSecret: env.YOUDAO_APP_SECRET,
+  });
+  const appKey = credentials?.appKey;
+  const appSecret = credentials?.appSecret;
   if (appKey === undefined || appKey === "" || appSecret === undefined || appSecret === "") {
     return null;
   }
@@ -189,6 +199,17 @@ function sha256(value: string): string {
 
 function normalizeAudioText(text: string): string {
   return text.trim();
+}
+
+function normalizeYoudaoCredentials(
+  credentials: { appKey?: string | undefined; appSecret?: string | undefined } | null | undefined,
+): YoudaoTtsCredentials | null {
+  const appKey = credentials?.appKey?.trim();
+  const appSecret = credentials?.appSecret?.trim();
+  if (appKey === undefined || appKey === "" || appSecret === undefined || appSecret === "") {
+    return null;
+  }
+  return { appKey, appSecret };
 }
 
 function clampAudioVolume(volume: number): number {

@@ -19,7 +19,8 @@ export type OpenTuiSettingsView =
   | "code_difficulty"
   | "code_style"
   | "everyday"
-  | "word_forms";
+  | "word_forms"
+  | "youdao_tts";
 export type OpenTuiSettingsMenuItemId =
   | "settings-language"
   | "settings-code-filters"
@@ -44,6 +45,7 @@ export type OpenTuiFlatSettingsItemKind =
   | "code_filters"
   | "word_audio"
   | "word_audio_volume"
+  | "youdao_tts"
   | "dictionary_status";
 
 export interface OpenTuiFlatSettingsItem {
@@ -124,12 +126,31 @@ export function openTuiFlatSettingsItems(state: OpenTuiAppState): OpenTuiFlatSet
       value: `${(state.wordAudioSettings ?? defaultWordAudioSettings()).volume_percent}%`,
     },
     {
+      kind: "youdao_tts",
+      label: language === "zh" ? "有道付费发音" : "Youdao paid voice",
+      value: youdaoTtsCredentialStatusLabel(state),
+    },
+    {
       kind: "dictionary_status",
       label: language === "zh" ? "词典" : "Dictionary",
       value: dictionaryStatusLabel(state),
     },
   ];
   return items;
+}
+
+function youdaoTtsCredentialStatusLabel(state: OpenTuiAppState): string {
+  const zh = state.language === "zh";
+  switch (state.youdaoTtsCredentialStatus ?? "none") {
+    case "keychain":
+      return zh ? "已配置（钥匙串）" : "configured (Keychain)";
+    case "env":
+      return zh ? "已配置（环境变量）" : "configured (env)";
+    case "unavailable":
+      return zh ? "钥匙串不可用" : "Keychain unavailable";
+    case "none":
+      return zh ? "未配置" : "not configured";
+  }
 }
 
 function dictionaryStatusLabel(state: OpenTuiAppState): string {
@@ -306,6 +327,31 @@ export function settingsRouteLines(state: OpenTuiAppState): string[] {
     return state.language === "zh"
       ? [`长词每组  ${settings.word_breakdown.max_items_per_group}`]
       : [`Breakdown items per group  ${settings.word_breakdown.max_items_per_group}`];
+  }
+
+  if (state.route.view === "youdao_tts") {
+    const selected = Math.min(Math.max(state.route.selected_index ?? 0, 0), 3);
+    const appKey = state.route.youdao_app_key_input ?? "";
+    const appSecret = state.route.youdao_app_secret_input ?? "";
+    const secret = appSecret.length === 0 ? "" : "•".repeat(Math.min(appSecret.length, 12));
+    const lines = state.language === "zh"
+      ? [
+          `App Key  ${appKey}`,
+          `App Secret  ${secret}`,
+          "保存到钥匙串",
+          "清除钥匙串配置",
+        ]
+      : [
+          `App Key  ${appKey}`,
+          `App Secret  ${secret}`,
+          "Save to Keychain",
+          "Clear Keychain credentials",
+        ];
+    const message = state.route.youdao_message;
+    return [
+      ...lines.map((line, index) => `${index === selected ? ">" : " "} ${line}`),
+      ...(message === undefined || message === "" ? [] : ["", message]),
+    ];
   }
 
   return openTuiSettingsMenuItems(state.language).map((item, index) => `${index + 1}. ${item.label}`);

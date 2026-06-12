@@ -406,6 +406,7 @@ describe("OpenTUI app model", () => {
       "  Code quotes  Double",
       "  Word pronunciation  off",
       "  Pronunciation volume  100%",
+      "  Youdao paid voice  not configured",
       "  Dictionary  Not loaded",
     ]);
   });

@@ -104,6 +104,84 @@ describe("word audio providers", () => {
     }
   });
 
+  test("uses configured youdao credentials before environment variables", async () => {
+    const dir = await tempDir();
+    const calls: Array<{ url: string; body?: string }> = [];
+    const fetcher: WordAudioFetcher = async (input, init) => {
+      const url = String(input);
+      const body = init?.body?.toString();
+      calls.push(body === undefined ? { url } : { url, body });
+      if (url.startsWith("https://dict.youdao.com/dictvoice")) {
+        return jsonResponse({ errorCode: 500 }, 500);
+      }
+      if (url === "https://openapi.youdao.com/ttsapi") {
+        return audioResponse("configured-tts-audio");
+      }
+      return jsonResponse({ error: "unexpected" }, 404);
+    };
+
+    try {
+      await resolveWordAudio({
+        text: "fallback",
+        sourceItem: "everyday_words",
+        cacheDir: dir,
+        fetcher,
+        credentials: {
+          appKey: "configured-key",
+          appSecret: "configured-secret",
+        },
+        env: {
+          YOUDAO_APP_KEY: "env-key",
+          YOUDAO_APP_SECRET: "env-secret",
+        },
+        salt: () => "salt-1",
+        curtime: () => 1_234,
+      });
+
+      expect(calls[1]?.body).toContain("appKey=configured-key");
+      expect(calls[1]?.body).not.toContain("appKey=env-key");
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
+  test("falls back to environment youdao credentials when no app credentials are configured", async () => {
+    const dir = await tempDir();
+    const calls: Array<{ url: string; body?: string }> = [];
+    const fetcher: WordAudioFetcher = async (input, init) => {
+      const url = String(input);
+      const body = init?.body?.toString();
+      calls.push(body === undefined ? { url } : { url, body });
+      if (url.startsWith("https://dict.youdao.com/dictvoice")) {
+        return jsonResponse({ errorCode: 500 }, 500);
+      }
+      if (url === "https://openapi.youdao.com/ttsapi") {
+        return audioResponse("env-tts-audio");
+      }
+      return jsonResponse({ error: "unexpected" }, 404);
+    };
+
+    try {
+      await resolveWordAudio({
+        text: "fallback",
+        sourceItem: "everyday_words",
+        cacheDir: dir,
+        fetcher,
+        credentials: null,
+        env: {
+          YOUDAO_APP_KEY: "env-key",
+          YOUDAO_APP_SECRET: "env-secret",
+        },
+        salt: () => "salt-1",
+        curtime: () => 1_234,
+      });
+
+      expect(calls[1]?.body).toContain("appKey=env-key");
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
   test("skips paid tts when credentials are missing", async () => {
     const dir = await tempDir();
     const calls: string[] = [];
@@ -119,6 +197,7 @@ describe("word audio providers", () => {
         sourceItem: "programming_terms",
         cacheDir: dir,
         fetcher,
+        credentials: null,
         env: {},
       });
 

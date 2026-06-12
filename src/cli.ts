@@ -66,6 +66,10 @@ import {
   type OpenTuiAppSessionResult,
 } from "./ui/opentui/appSession";
 import {
+  createMacOsYoudaoCredentialStore,
+  resolveYoudaoTtsCredentials,
+} from "./audio/youdaoCredentials";
+import {
   openTuiCodeConfig,
   type OpenTuiAppState,
   type OpenTuiReturnRoute,
@@ -310,6 +314,13 @@ async function runApp(
   if (dictionary.tier !== "full") {
     void ensureFullDictionary({ dbPath: fullDictionaryPath }); // 后台静默下载，失败下次启动重试
   }
+  const youdaoCredentialStore = createMacOsYoudaoCredentialStore();
+  const youdaoCredentials = await resolveYoudaoTtsCredentials({
+    ...(youdaoCredentialStore === null ? {} : { store: youdaoCredentialStore }),
+    ...(options.env === undefined ? {} : { env: options.env }),
+  });
+  const youdaoTtsCredentialStatus =
+    youdaoCredentials?.source ?? (youdaoCredentialStore === null ? "unavailable" : "none");
   let initialState: OpenTuiAppState | undefined;
   let initialRenderer: OpenTuiRenderer | undefined;
 
@@ -334,6 +345,8 @@ async function runApp(
       speedUnit: preferences.speed_unit,
       todayElapsedMs: todayElapsedMsFromRecords(records, options.now ?? new Date()),
       dataDir,
+      ...(youdaoCredentialStore === null ? {} : { youdaoCredentialStore }),
+      youdaoTtsCredentialStatus,
     };
 
     if (keyAggregates.length > 0) {
