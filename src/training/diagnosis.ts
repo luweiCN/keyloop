@@ -238,6 +238,277 @@ export function diagnoseCharSkills(records: SessionRecord[]): SkillDiagnosis[] {
   });
 }
 
+export type TrainingForm =
+  | "keys"
+  | "words"
+  | "symbols"
+  | "sentences"
+  | "articles"
+  | "code";
+
+export const TRAINING_FORMS: TrainingForm[] = [
+  "keys",
+  "words",
+  "symbols",
+  "sentences",
+  "articles",
+  "code",
+];
+
+export interface FormSpeed {
+  form: TrainingForm;
+  samples: number;
+  ewma_wpm: number | null;
+}
+
+export interface FocusPools {
+  /** 仅供单词形态回流 */
+  words: string[];
+  /** 仅供句子形态回流（整句） */
+  sentences: string[];
+  /** 仅供代码形态回流 */
+  code: string[];
+  /** 键位/符号技能特征，全形态可用于调整语料特征含量 */
+  chars: string[];
+}
+
+export interface SkillProfile {
+  dimensions: SkillDiagnosis[];
+  form_speeds: FormSpeed[];
+  focus: FocusPools;
+  /** 近 7 天有练习的日子的日均活跃分钟（中位数），无数据为 0 */
+  daily_active_minutes_7d: number;
+  generated_at: string;
+}
+
+export function formForCategory(category: TrainingCategory): TrainingForm | null {
+  switch (category) {
+    case "foundation_mix":
+    case "home_row":
+    case "top_row":
+    case "bottom_row":
+    case "finger_transitions":
+    case "punctuation_edges":
+    case "letter_combinations":
+      return "keys";
+    case "basic_words":
+    case "everyday_words":
+    case "everyday_phrases":
+    case "everyday_word_decomposition":
+    case "everyday_mix":
+    case "programming_terms":
+    case "naming_styles":
+    case "builtin_api":
+    case "word_breakdown":
+    case "personal_vocabulary":
+    case "custom_library":
+      return "words";
+    case "numbers_symbols":
+    case "symbols_numbers":
+    case "programming_basics_mix":
+      return "symbols";
+    case "everyday_sentences":
+      return "sentences";
+    case "everyday_articles":
+      return "articles";
+    case "code_snippet":
+    case "code_function":
+    case "code_file_fragment":
+    case "code_mix":
+      return "code";
+    case "review":
+    case "unknown":
+      return null;
+  }
+}
+
+const FOCUS_WORDS_LIMIT = 12;
+const FOCUS_SENTENCES_LIMIT = 5;
+const FOCUS_CODE_LIMIT = 8;
+
+function formSpeeds(records: SessionRecord[]): FormSpeed[] {
+  const ordered = [...records].sort(
+    (left, right) => Date.parse(left.started_at) - Date.parse(right.started_at),
+  );
+  const perForm = new Map<TrainingForm, number[]>();
+  for (const record of ordered) {
+    const form = formForCategory(record.category);
+    if (form === null || record.active_ms <= 0 || record.correct_chars <= 0) {
+      continue;
+    }
+    const wpm = record.correct_chars / 5 / (record.active_ms / 60_000);
+    const list = perForm.get(form) ?? [];
+    list.push(wpm);
+    perForm.set(form, list);
+  }
+  return TRAINING_FORMS.map((form) => {
+    const window = (perForm.get(form) ?? []).slice(-DIAGNOSIS_WINDOW_SESSIONS);
+    return {
+      form,
+      samples: window.length,
+      ewma_wpm: ewmaAverage(window),
+    };
+  });
+}
+
+function focusPools(records: SessionRecord[], plan: PracticePlan): FocusPools {
+  const wordErrors = new Map<string, number>();
+  const sentenceErrors = new Map<string, number>();
+  const codeErrors = new Map<string, number>();
+  const window = [...records]
+    .sort((left, right) => Date.parse(left.started_at) - Date.parse(right.started_at))
+    .slice(-DIAGNOSIS_WINDOW_SESSIONS * 3);
+  for (const record of window) {
+    const form = formForCategory(record.category);
+    if (form === null) {
+      continue;
+    }
+    for (const [token, count] of Object.entries(record.error_tokens)) {
+      if (form === "words") {
+        wordErrors.set(token, (wordErrors.get(token) ?? 0) + count);
+      } else if (form === "code") {
+        codeErrors.set(token, (codeErrors.get(token) ?? 0) + count);
+      } else if (form === "sentences" || form === "articles") {
+        const line = record.target_text
+          .split("\n")
+          .find((candidate) => candidate.includes(token));
+        if (line !== undefined && line.trim().length > 0) {
+          sentenceErrors.set(line, (sentenceErrors.get(line) ?? 0) + count);
+        }
+      }
+    }
+  }
+  return {
+    words: topEntries(wordErrors, FOCUS_WORDS_LIMIT),
+    sentences: topEntries(sentenceErrors, FOCUS_SENTENCES_LIMIT),
+    code: topEntries(codeErrors, FOCUS_CODE_LIMIT),
+    chars: [...new Set([...plan.focus_keys, ...plan.focus_symbols])],
+  };
+}
+
+function topEntries(map: Map<string, number>, limit: number): string[] {
+  return [...map.entries()]
+    .sort(([leftKey, left], [rightKey, right]) =>
+      right === left ? leftKey.localeCompare(rightKey) : right - left,
+    )
+    .slice(0, limit)
+    .map(([key]) => key);
+}
+
+function dailyActiveMinutesMedian7d(records: SessionRecord[], now: Date): number {
+  const cutoffMs = now.getTime() - 7 * 24 * 60 * 60 * 1000;
+  const perDay = new Map<string, number>();
+  for (const record of records) {
+    const startedMs = Date.parse(record.started_at);
+    if (!Number.isFinite(startedMs) || startedMs < cutoffMs) {
+      continue;
+    }
+    const day = record.started_at.slice(0, 10);
+    perDay.set(day, (perDay.get(day) ?? 0) + record.active_ms);
+  }
+  const minutes = [...perDay.values()]
+    .map((ms) => ms / 60_000)
+    .sort((left, right) => left - right);
+  if (minutes.length === 0) {
+    return 0;
+  }
+  const middle = Math.floor(minutes.length / 2);
+  return minutes.length % 2 === 1
+    ? minutes[middle]!
+    : (minutes[middle - 1]! + minutes[middle]!) / 2;
+}
+
+export function buildSkillProfile(
+  records: SessionRecord[],
+  plan: PracticePlan,
+  now: Date = new Date(),
+): SkillProfile {
+  return {
+    dimensions: [...diagnoseCharSkills(records), ...diagnoseTokenSkills(records)],
+    form_speeds: formSpeeds(records),
+    focus: focusPools(records, plan),
+    daily_active_minutes_7d: dailyActiveMinutesMedian7d(records, now),
+    generated_at: now.toISOString(),
+  };
+}
+
+/** 词级维度：word_fluency（普通词）与 long_words（长度 ≥8 的词） */
+const LONG_WORD_MIN_LENGTH = 8;
+
+function diagnoseTokenSkills(records: SessionRecord[]): SkillDiagnosis[] {
+  const ordered = [...records].sort(
+    (left, right) => Date.parse(left.started_at) - Date.parse(right.started_at),
+  );
+  const fluencySessions: Array<{ wpm: number; errorRate: number; events: number }> = [];
+  const longWordSessions: Array<{ wpm: number; errorRate: number; events: number }> = [];
+  for (const record of ordered) {
+    const wordStats = record.token_stats.filter((stat) => stat.kind === "word");
+    collectTokenSample(
+      wordStats.filter((stat) => [...stat.token].length < LONG_WORD_MIN_LENGTH),
+      fluencySessions,
+    );
+    collectTokenSample(
+      wordStats.filter((stat) => [...stat.token].length >= LONG_WORD_MIN_LENGTH),
+      longWordSessions,
+    );
+  }
+  return [
+    tokenDiagnosis("word_fluency", fluencySessions),
+    tokenDiagnosis("long_words", longWordSessions),
+  ];
+}
+
+function collectTokenSample(
+  stats: Array<{ token: string; duration_ms: number; errors: number }>,
+  sessions: Array<{ wpm: number; errorRate: number; events: number }>,
+): void {
+  if (stats.length < MIN_DIMENSION_EVENTS) {
+    return;
+  }
+  const chars = stats.reduce((sum, stat) => sum + [...stat.token].length, 0);
+  const durationMs = stats.reduce((sum, stat) => sum + stat.duration_ms, 0);
+  const errors = stats.reduce((sum, stat) => sum + stat.errors, 0);
+  if (durationMs <= 0 || chars === 0) {
+    return;
+  }
+  sessions.push({
+    wpm: chars / 5 / (durationMs / 60_000),
+    errorRate: (errors / chars) * 100,
+    events: stats.length,
+  });
+}
+
+function tokenDiagnosis(
+  id: SkillDimensionId,
+  sessions: Array<{ wpm: number; errorRate: number; events: number }>,
+): SkillDiagnosis {
+  const window = sessions.slice(-DIAGNOSIS_WINDOW_SESSIONS);
+  const events = window.reduce((sum, session) => sum + session.events, 0);
+  if (window.length === 0 || events < MIN_RATED_EVENTS) {
+    return {
+      id,
+      samples: window.length,
+      events,
+      ewma_error_rate: null,
+      ewma_speed: null,
+      trend: "insufficient",
+      status: "unrated",
+    };
+  }
+  const ewmaErrorRate = ewmaAverage(window.map((session) => session.errorRate));
+  const wpmSeries = window.map((session) => session.wpm);
+  const trend = seriesTrend(wpmSeries, "higher_is_better");
+  return {
+    id,
+    samples: window.length,
+    events,
+    ewma_error_rate: ewmaErrorRate,
+    ewma_speed: ewmaAverage(wpmSeries),
+    trend,
+    status: dimensionStatus(window.length, ewmaErrorRate, trend),
+  };
+}
+
 function dimensionStatus(
   samples: number,
   ewmaErrorRate: number | null,
