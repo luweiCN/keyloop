@@ -711,21 +711,23 @@ describe("target generation core", () => {
     );
 
     expect(target.source).toBe("keyloop:module:word-breakdown:internationalization");
-    expect(target.text).toContain("international ization");
-    expect(target.text).toContain("access ibility");
+    expect(target.text).toContain("internationalization internationalization");
+    expect(target.text).toContain("accessibility accessibility");
+    expect(target.text).not.toContain("international ization");
+    expect(target.text).not.toContain("access ibility");
     expect(target.text).not.toContain("authentic ation");
   });
 
-  test("standalone long-word breakdown hides non-literal parts", () => {
+  test("standalone long-word breakdown does not render decomposition parts", () => {
     const library = testLibrary();
     library.long_words = [
       {
-        word: "maintainability",
-        parts: ["maintainable", "ity"],
+        word: "deallocation",
+        parts: ["de", "allocation"],
         domain: "programming",
         tier: 3,
         source_id: "test",
-        note_zh: "可维护性",
+        note_zh: "释放",
       },
     ];
 
@@ -738,8 +740,8 @@ describe("target generation core", () => {
       { profile: "standalone", domain: "programming", maxItems: 1 },
     );
 
-    expect(target.text).toBe("maintainability maintainability");
-    expect(target.text).not.toContain("maintainable ity");
+    expect(target.text).toBe("deallocation deallocation");
+    expect(target.text).not.toContain("de allocation");
   });
 
   test("standalone long-word breakdown annotates the word group end", () => {
@@ -767,9 +769,7 @@ describe("target generation core", () => {
 
     const lastLine = "spec specification";
     const start = target.text.indexOf(lastLine);
-    expect(target.text).toBe(
-      "specific ation\nspecification specification\nspec specification",
-    );
+    expect(target.text).toBe("specification specification\nspec specification");
     expect(target.annotations).toEqual([
       {
         start,

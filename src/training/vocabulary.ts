@@ -19,13 +19,8 @@ export function buildLongWordBreakdownTarget(
   entry: LongWordEntry,
   options: LongWordBreakdownOptions = {},
 ): PracticeTarget {
-  const partRepetitions = options.partRepetitions ?? 1;
   const wordRepetitions = options.wordRepetitions ?? 2;
-  const parts = entry.parts.length === 0 ? [entry.word] : entry.parts;
-  const lines = [
-    parts.flatMap((part) => repeat(part, partRepetitions)).join(" "),
-    repeat(entry.word, wordRepetitions).join(" "),
-  ];
+  const lines = [repeat(entry.word, wordRepetitions).join(" ")];
   const alias = entry.aliases?.find((value) => value.trim().length > 0)?.trim();
   if (alias !== undefined) {
     lines.push(`${alias} ${entry.word}`);

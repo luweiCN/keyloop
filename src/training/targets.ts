@@ -1797,11 +1797,7 @@ function breakdownCandidateFromLongWord(entry: LongWordEntry): BreakdownCandidat
 }
 
 function breakdownCandidateLines(candidate: BreakdownCandidate): string[] {
-  const partLine = breakdownCandidatePartLine(candidate);
-  const lines =
-    partLine === candidate.word
-      ? [`${candidate.word} ${candidate.word}`]
-      : [partLine, `${candidate.word} ${candidate.word}`];
+  const lines = [`${candidate.word} ${candidate.word}`];
   const alias = firstTrimmedAlias(candidate.aliases);
   if (alias !== undefined) {
     lines.push(`${alias} ${candidate.word}`);
@@ -1818,13 +1814,6 @@ function breakdownCandidateLines(candidate: BreakdownCandidate): string[] {
     );
   }
   return lines;
-}
-
-function breakdownCandidatePartLine(candidate: BreakdownCandidate): string {
-  const parts = candidate.parts.map((part) => part.trim()).filter((part) => part.length > 0);
-  return parts.length > 1 && parts.join("") === candidate.word
-    ? parts.join(" ")
-    : candidate.word;
 }
 
 function firstTrimmedAlias(aliases: string[] | undefined): string | undefined {

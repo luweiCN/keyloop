@@ -171,7 +171,8 @@ describe("OpenTUI app model", () => {
     expect(running.route.target.source).toBe(
       "keyloop:module:word-breakdown:serialization",
     );
-    expect(running.route.target.text).toContain("serial ization");
+    expect(running.route.target.text).toContain("serialization serialization");
+    expect(running.route.target.text).not.toContain("serial ization");
   });
 
 
