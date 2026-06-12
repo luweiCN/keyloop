@@ -37,3 +37,6 @@ __pycache__/
 
 # Corpus rebuild intermediates (candidates + per-item reviews).
 /content/corpus-rebuild/
+
+# Rust build artifacts
+target/
