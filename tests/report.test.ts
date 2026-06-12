@@ -148,7 +148,7 @@ describe("CLI report parity", () => {
     );
 
     expect(report).toContain("下一轮 KeyLoop 计划");
-    expect(report).toContain("默认路径: 基础输入 -> 日常英语 -> 编程基础 -> 代码实战");
+    expect(report).toContain("训练路径: 按技能诊断组合阶段");
     expect(report).toContain("键位热区:\n  j");
     expect(report).toContain("  1. 慢一点，把 selected 打准。");
   });

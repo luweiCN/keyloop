@@ -158,7 +158,7 @@ describe("TS CLI command dispatch", () => {
       });
 
       expect(result.stdout).toContain("Next KeyLoop plan");
-      expect(result.stdout).toContain("Daily target: 20 minutes");
+      expect(result.stdout).toContain("Daily target: adaptive");
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
