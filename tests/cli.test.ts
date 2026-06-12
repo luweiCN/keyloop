@@ -1184,6 +1184,12 @@ function defaultPreferences(language: Language) {
       enabled_in_comprehensive: true,
       daily_review_limit: 8,
     },
+    enabled_modules: [
+      "foundation_input" as const,
+      "everyday_english" as const,
+      "programming_basics" as const,
+      "code_practice" as const,
+    ],
   };
 }
 

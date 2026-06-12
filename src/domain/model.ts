@@ -232,6 +232,8 @@ export interface UserPreferences {
     enabled_in_comprehensive: boolean;
     daily_review_limit: number;
   };
+  /** 综合训练启用的一级模块；处方层只会开出启用模块的语料 */
+  enabled_modules: TrainingModule[];
 }
 
 export interface KeyEventRecord {
@@ -591,7 +593,26 @@ export function parseUserPreferences(value: unknown): UserPreferences {
       ),
       daily_review_limit: numberValue(personalVocabulary.daily_review_limit, 8),
     },
+    enabled_modules: parseEnabledModules(object.enabled_modules),
   };
+}
+
+const adaptiveModules = [
+  "foundation_input",
+  "everyday_english",
+  "programming_basics",
+  "code_practice",
+] as const;
+
+function parseEnabledModules(value: unknown): TrainingModule[] {
+  if (!Array.isArray(value)) {
+    return [...adaptiveModules];
+  }
+  const result = value.filter(
+    (item): item is TrainingModule =>
+      typeof item === "string" && (adaptiveModules as readonly string[]).includes(item),
+  );
+  return result.length === 0 ? [...adaptiveModules] : result;
 }
 
 export function defaultCodeStyleSettings(
@@ -785,6 +806,7 @@ export function defaultUserPreferences(
       enabled_in_comprehensive: true,
       daily_review_limit: 8,
     },
+    enabled_modules: [...adaptiveModules],
     ...overrides,
   };
 }
