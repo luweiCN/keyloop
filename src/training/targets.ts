@@ -1884,7 +1884,7 @@ function normalizedWordRepeats(value: number): number {
   if (!Number.isFinite(value)) {
     return 2;
   }
-  return Math.min(5, Math.max(1, Math.floor(value)));
+  return Math.min(10, Math.max(1, Math.floor(value)));
 }
 
 function firstTrimmedAlias(aliases: string[] | undefined): string | undefined {

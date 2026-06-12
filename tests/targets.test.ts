@@ -847,6 +847,45 @@ describe("target generation core", () => {
     ]);
   });
 
+  test("standalone long-word breakdown supports ten whole-word repeats", () => {
+    const library = testLibrary();
+    library.long_words = [
+      {
+        word: "deallocation",
+        parts: ["de", "allocation"],
+        domain: "programming",
+        tier: 3,
+        source_id: "test",
+        note_zh: "释放",
+      },
+    ];
+
+    const target = buildLongWordBreakdownPracticeTarget(
+      {
+        records: [],
+        plan: testPlan(),
+        library,
+        wordBreakdownSettings: {
+          enabled_in_comprehensive: true,
+          max_items_per_group: 6,
+          word_repeats: 10,
+        },
+      },
+      { profile: "standalone", domain: "programming", maxItems: 1 },
+    );
+
+    const repeated = Array.from({ length: 10 }, () => "deallocation").join(" ");
+    expect(target.text).toBe(repeated);
+    expect(target.annotations).toEqual([
+      {
+        start: 0,
+        end: repeated.length,
+        translation_zh: "释放",
+        display: "word_loose",
+      },
+    ]);
+  });
+
   test("daily practice plan keeps the four module sequence", () => {
     const plan = buildDailyPracticePlan({
       records: [],

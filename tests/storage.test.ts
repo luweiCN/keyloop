@@ -53,6 +53,16 @@ describe("storage model defaults", () => {
     expect(preferences.personal_vocabulary.enabled_in_comprehensive).toBe(true);
     expect(preferences.personal_vocabulary.daily_review_limit).toBe(8);
   });
+
+  test("preferences allow ten long-word repeats", () => {
+    const preferences = parseUserPreferences({
+      word_breakdown: {
+        word_repeats: 10,
+      },
+    });
+
+    expect(preferences.word_breakdown.word_repeats).toBe(10);
+  });
 });
 
 describe("storage file io", () => {

@@ -401,7 +401,7 @@ const everydaySentenceLengths = ["short", "medium", "long", "mixed"] as const;
 const everydayGroupWordCounts = [10, 20, 30, 50] as const;
 const everydaySentenceCounts = [3, 5, 8, 10] as const;
 const everydayRepeatCounts = [1, 3, 5] as const;
-const wordBreakdownRepeatCounts = [1, 2, 3, 5] as const;
+const wordBreakdownRepeatCounts = [1, 2, 3, 5, 10] as const;
 
 export function parsePracticeTarget(value: unknown): PracticeTarget {
   const object = asObject(value);
