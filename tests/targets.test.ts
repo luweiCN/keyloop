@@ -716,7 +716,69 @@ describe("target generation core", () => {
     expect(target.text).not.toContain("authentic ation");
   });
 
+  test("standalone long-word breakdown hides non-literal parts", () => {
+    const library = testLibrary();
+    library.long_words = [
+      {
+        word: "maintainability",
+        parts: ["maintainable", "ity"],
+        domain: "programming",
+        tier: 3,
+        source_id: "test",
+        note_zh: "可维护性",
+      },
+    ];
 
+    const target = buildLongWordBreakdownPracticeTarget(
+      {
+        records: [],
+        plan: testPlan(),
+        library,
+      },
+      { profile: "standalone", domain: "programming", maxItems: 1 },
+    );
+
+    expect(target.text).toBe("maintainability maintainability");
+    expect(target.text).not.toContain("maintainable ity");
+  });
+
+  test("standalone long-word breakdown annotates the word group end", () => {
+    const library = testLibrary();
+    library.long_words = [
+      {
+        word: "specification",
+        parts: ["specific", "ation"],
+        aliases: ["spec"],
+        domain: "programming",
+        tier: 2,
+        source_id: "test",
+        note_zh: "规格说明（技术规范）",
+      },
+    ];
+
+    const target = buildLongWordBreakdownPracticeTarget(
+      {
+        records: [],
+        plan: testPlan(),
+        library,
+      },
+      { profile: "standalone", domain: "programming", maxItems: 1 },
+    );
+
+    const lastLine = "spec specification";
+    const start = target.text.indexOf(lastLine);
+    expect(target.text).toBe(
+      "specific ation\nspecification specification\nspec specification",
+    );
+    expect(target.annotations).toEqual([
+      {
+        start,
+        end: start + lastLine.length,
+        translation_zh: "规格说明（技术规范）",
+        display: "line",
+      },
+    ]);
+  });
 
   test("daily practice plan keeps the four module sequence", () => {
     const plan = buildDailyPracticePlan({

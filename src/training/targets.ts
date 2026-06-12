@@ -520,11 +520,17 @@ export function buildLongWordBreakdownPracticeTarget(
     const start = text.length;
     const lines = breakdownCandidateLines(candidate);
     text += lines.join("\n");
-    const firstLine = lines[0] ?? "";
+    const annotationLineIndex = Math.max(0, lines.length - 1);
+    const annotationStart =
+      start +
+      lines
+        .slice(0, annotationLineIndex)
+        .reduce((sum, line) => sum + line.length + 1, 0);
+    const annotationLine = lines[annotationLineIndex] ?? "";
     if (candidate.note_zh !== undefined) {
       annotations.push({
-        start,
-        end: start + firstLine.length,
+        start: annotationStart,
+        end: annotationStart + annotationLine.length,
         translation_zh: candidate.note_zh,
         display: "line",
       });
@@ -1791,10 +1797,11 @@ function breakdownCandidateFromLongWord(entry: LongWordEntry): BreakdownCandidat
 }
 
 function breakdownCandidateLines(candidate: BreakdownCandidate): string[] {
-  const lines = [
-    candidate.parts.length === 0 ? candidate.word : candidate.parts.join(" "),
-    `${candidate.word} ${candidate.word}`,
-  ];
+  const partLine = breakdownCandidatePartLine(candidate);
+  const lines =
+    partLine === candidate.word
+      ? [`${candidate.word} ${candidate.word}`]
+      : [partLine, `${candidate.word} ${candidate.word}`];
   const alias = firstTrimmedAlias(candidate.aliases);
   if (alias !== undefined) {
     lines.push(`${alias} ${candidate.word}`);
@@ -1813,10 +1820,12 @@ function breakdownCandidateLines(candidate: BreakdownCandidate): string[] {
   return lines;
 }
 
-
-
-
-
+function breakdownCandidatePartLine(candidate: BreakdownCandidate): string {
+  const parts = candidate.parts.map((part) => part.trim()).filter((part) => part.length > 0);
+  return parts.length > 1 && parts.join("") === candidate.word
+    ? parts.join(" ")
+    : candidate.word;
+}
 
 function firstTrimmedAlias(aliases: string[] | undefined): string | undefined {
   return aliases?.map((value) => value.trim()).find((value) => value.length > 0);
