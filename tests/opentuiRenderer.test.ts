@@ -512,6 +512,37 @@ describe("OpenTUI renderer adapter", () => {
     ]).replace(/\n/gu, "")).toBe("很长的伽马释义 丁");
   });
 
+  test("keeps the cursor visible on the separator after a repeated long-word item", async () => {
+    const running: OpenTuiAppState = {
+      language: "zh",
+      route: {
+        screen: "running",
+        source_item: "technical_long_words",
+        target: {
+          mode: "words",
+          text: "alpha alpha beta beta",
+          source: "keyloop:module:word-breakdown:alpha",
+          annotations: [
+            { start: 0, end: 11, translation_zh: "甲", display: "word_loose" },
+            { start: 12, end: 21, translation_zh: "乙", display: "word_loose" },
+          ],
+        },
+        live: {
+          input: "alpha alpha",
+          elapsed_ms: 1000,
+          key_events: [],
+          metrics: { wpm: 0, raw_wpm: 0, accuracy: 100, errors: 0, backspaces: 0 },
+        },
+      },
+    };
+    const kit = fakeKit();
+
+    await renderOpenTuiAppOnce(running, kit);
+
+    const cursorNodes = findNodesByIdPrefix(kit.addedNodes, "keyloop-ghost-cursor-");
+    expect(cursorNodes.map((node) => node.props.content)).toEqual([" "]);
+  });
+
   test("wraps long decomposition rows and shows the full translation below", async () => {
     const text =
       "information in in for for ma ma tion tion information information information";

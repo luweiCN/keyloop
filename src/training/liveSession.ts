@@ -62,7 +62,7 @@ export function applyLiveKey(
       applyBackspace(state, atMs);
       return;
     case "enter":
-      pushChar(state, enterCharForSession(state), atMs);
+      pushChar(state, "\n", atMs);
       return;
     case "tab":
       pushChar(state, "\t", atMs);
@@ -147,14 +147,6 @@ export function sessionRecordFromLiveSession(
   }
 
   return record;
-}
-
-function enterCharForSession(state: LiveSessionState): "\n" | " " {
-  const position = Array.from(state.input).length;
-  if (state.target.mode !== "code" && state.target_chars[position] === " ") {
-    return " ";
-  }
-  return "\n";
 }
 
 function applyChar(state: LiveSessionState, value: string, atMs: number): void {

@@ -238,20 +238,21 @@ export function wrapGhostWordBlockLoose(
   maxColumns: number,
 ): GhostWordBlockRow[] {
   const cells = ghostCells(row);
-  const items = columns.map((column) => ghostLooseWordItem(cells, column));
+  const items = columns.map((column, index) =>
+    ghostLooseWordItem(cells, column, columns[index + 1]),
+  );
   const safeMaxColumns = Math.max(1, Math.trunc(maxColumns));
   const blockRows: GhostWordBlockRow[] = [];
   let current: GhostLooseWordItem[] = [];
   let currentWidth = 0;
 
   for (const item of items) {
-    const nextWidth = current.length === 0
-      ? item.width
-      : currentWidth + 1 + item.width;
+    const itemWidth = ghostLooseWordItemWidth(item);
+    const nextWidth = current.length === 0 ? itemWidth : currentWidth + itemWidth;
     if (current.length > 0 && nextWidth > safeMaxColumns) {
       blockRows.push(ghostLooseWordBlockRow(current, safeMaxColumns));
       current = [item];
-      currentWidth = item.width;
+      currentWidth = itemWidth;
       continue;
     }
     current.push(item);
@@ -267,19 +268,28 @@ export function wrapGhostWordBlockLoose(
 
 interface GhostLooseWordItem {
   cells: GhostCell[];
+  separatorCells: GhostCell[];
   translation: string;
   width: number;
+}
+
+function ghostLooseWordItemWidth(item: GhostLooseWordItem): number {
+  return item.width + item.separatorCells.length;
 }
 
 function ghostLooseWordItem(
   cells: readonly GhostCell[],
   column: GhostWordColumn,
+  nextColumn: GhostWordColumn | undefined,
 ): GhostLooseWordItem {
   const itemCells = cells.slice(column.srcStartCol, column.srcEndCol);
+  const separatorCells =
+    nextColumn === undefined ? [] : cells.slice(column.srcEndCol, nextColumn.srcStartCol);
   const textWidth = displayWidth(itemCells.map((cell) => cell.text).join(""));
   const translationWidth = displayWidth(column.translation);
   return {
     cells: itemCells,
+    separatorCells,
     translation: column.translation,
     width: Math.max(1, textWidth, translationWidth),
   };
@@ -298,10 +308,6 @@ function ghostLooseWordBlockRow(
     if (item === undefined) {
       continue;
     }
-    if (index > 0) {
-      out.push({ text: " ", state: "pending", syntax: "plain" });
-      colStart += 1;
-    }
     out.push(...item.cells);
     const itemTextWidth = displayWidth(item.cells.map((cell) => cell.text).join(""));
     const itemWidth = Math.max(1, item.width);
@@ -315,13 +321,28 @@ function ghostLooseWordBlockRow(
     if (translation.length > 0) {
       meaning += " ".repeat(Math.max(colStart - displayWidth(meaning), 0)) + translation;
     }
-    colStart += itemWidth;
+    const separatorCells = looseSeparatorCellsForRowItem(item, index, items.length);
+    out.push(...separatorCells);
+    colStart += itemWidth + separatorCells.length;
   }
 
   return {
     segments: ghostSegmentsFromCells(out),
     meaning,
   };
+}
+
+function looseSeparatorCellsForRowItem(
+  item: GhostLooseWordItem,
+  index: number,
+  itemCount: number,
+): GhostCell[] {
+  if (index < itemCount - 1) {
+    return item.separatorCells;
+  }
+  return item.separatorCells.some((cell) => cell.state !== "pending")
+    ? item.separatorCells
+    : [];
 }
 
 export function ghostWordGroupSegments(

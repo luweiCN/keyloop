@@ -173,7 +173,7 @@ describe("live session core parity", () => {
     ]);
   });
 
-  test("enter accepts a word-separator space outside code mode", () => {
+  test("enter stays a newline at word-separator spaces outside code mode", () => {
     const session = createLiveSession({
       mode: "words",
       text: "alpha beta",
@@ -185,14 +185,14 @@ describe("live session core parity", () => {
     }
     applyLiveKey(session, { kind: "enter" }, 20);
 
-    expect(session.input).toBe("alpha ");
+    expect(session.input).toBe("alpha\n");
     expect(session.events.at(-1)).toEqual({
       at_ms: 20,
       action: "insert",
       position: 5,
       expected: " ",
-      input: " ",
-      correct: true,
+      input: "\n",
+      correct: false,
     });
   });
 
