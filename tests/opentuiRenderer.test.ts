@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  ghostViewportSlice,
   ghostRows,
   wrapGhostWordBlockLoose,
 } from "../src/ui/opentui/screens/ghostText";
@@ -2533,5 +2534,30 @@ describe("ghostRows space glyph", () => {
     const rows = ghostRows("give up", "", undefined, false);
     const texts = (rows[0] ?? []).map((segment) => segment.text).join("");
     expect(texts).toBe("give up");
+  });
+});
+
+describe("ghost viewport slice", () => {
+  test("short content renders fully", () => {
+    expect(ghostViewportSlice(10, 3, 20)).toEqual({ start: 0, end: 10 });
+    expect(ghostViewportSlice(10, 3, Number.POSITIVE_INFINITY)).toEqual({ start: 0, end: 10 });
+  });
+
+  test("cursor near top keeps window at start", () => {
+    expect(ghostViewportSlice(100, 2, 20)).toEqual({ start: 0, end: 20 });
+  });
+
+  test("cursor mid-content keeps cursor around 40% of viewport", () => {
+    const slice = ghostViewportSlice(100, 50, 20);
+    expect(slice.start).toBe(42);
+    expect(slice.end).toBe(62);
+  });
+
+  test("cursor near bottom clamps window to end", () => {
+    expect(ghostViewportSlice(100, 99, 20)).toEqual({ start: 80, end: 100 });
+  });
+
+  test("missing cursor anchors at top", () => {
+    expect(ghostViewportSlice(100, -1, 20)).toEqual({ start: 0, end: 20 });
   });
 });
