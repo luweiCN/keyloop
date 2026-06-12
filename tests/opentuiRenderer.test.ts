@@ -565,7 +565,61 @@ describe("OpenTUI renderer adapter", () => {
       "infrastructure infrastructure",
       "infrastructure infrastructure",
     ]);
-    expect(blockRows.map((blockRow) => blockRow.meaning)).toEqual(["基础设施", ""]);
+    expect(blockRows.map((blockRow) => blockRow.meaning)).toEqual(["", "基础设施"]);
+  });
+
+  test("renders wrapped repeated word translations below all English rows", async () => {
+    const text = [
+      "availability",
+      "availability",
+      "availability",
+      "availability",
+      "availability",
+    ].join(" ");
+    const running: OpenTuiAppState = {
+      language: "zh",
+      route: {
+        screen: "running",
+        source_item: "technical_long_words",
+        target: {
+          mode: "words",
+          text,
+          source: "keyloop:module:word-breakdown:availability",
+          annotations: [
+            {
+              start: 0,
+              end: text.length,
+              translation_zh: "有效性",
+              display: "word_loose",
+            },
+          ],
+        },
+      },
+    };
+    const kit = fakeKit();
+
+    await withStdoutColumns(64, async () => {
+      await renderOpenTuiAppOnce(running, kit);
+    });
+
+    expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+      (child) => child.props.id,
+    )).toEqual([
+      "keyloop-ghost-line-0",
+      "keyloop-ghost-line-1",
+      "keyloop-ghost-meaning-line-1",
+    ]);
+    expect(flattenContent([
+      findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode,
+    ]).replace(/\n/gu, "")).toBe(
+      "availability availability availability availability",
+    );
+    expect(flattenContent([
+      findNodeById(kit.addedNodes, "keyloop-ghost-line-1") as FakeNode,
+    ]).replace(/\n/gu, "")).toBe("availability");
+    expect(flattenContent([
+      findNodeById(kit.addedNodes, "keyloop-ghost-meaning-line-1") as FakeNode,
+    ]).replace(/\n/gu, "")).toBe("有效性");
   });
 
   test("keeps the cursor visible on a wrapped repeated long-word separator", () => {

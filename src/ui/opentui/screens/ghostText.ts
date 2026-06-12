@@ -97,7 +97,8 @@ export async function renderGhostText(
     const row = sourceRows[sourceLineIndex] ?? [];
     const columns = wordColumns.get(sourceLineIndex);
     if (columns !== undefined && columns.length > 0) {
-      const blockRows = columns.some((column) => column.loose === true)
+      const looseBlock = columns.some((column) => column.loose === true);
+      const blockRows = looseBlock
         ? wrapGhostWordBlockLoose(row, columns, wrapColumns)
         : wrapGhostWordBlock(row, columns, wrapColumns);
       for (const blockRow of blockRows) {
@@ -109,7 +110,9 @@ export async function renderGhostText(
             kit,
           ),
         );
-        children.push(renderGhostMeaningLine(visualIndex, blockRow.meaning, kit));
+        if (!looseBlock || blockRow.meaning.length > 0) {
+          children.push(renderGhostMeaningLine(visualIndex, blockRow.meaning, kit));
+        }
         visualIndex += 1;
       }
       continue;
@@ -321,7 +324,6 @@ function splitLooseWordItem(
   const safeMaxColumns = Math.max(1, Math.trunc(maxColumns));
   const chunks: GhostLooseWordItem[] = [];
   let start = 0;
-  let translation = item.translation;
 
   while (start < item.cells.length) {
     const hardEnd = Math.min(start + safeMaxColumns, item.cells.length);
@@ -330,8 +332,8 @@ function splitLooseWordItem(
     const separatorCells = split.nextStart >= item.cells.length
       ? item.separatorCells
       : item.cells.slice(split.end, split.nextStart);
+    const translation = split.nextStart >= item.cells.length ? item.translation : "";
     chunks.push(ghostLooseWordItemFromCells(chunkCells, separatorCells, translation));
-    translation = "";
     start = split.nextStart;
   }
 
