@@ -35,7 +35,13 @@ import { PLAN_HISTORY_DAYS } from "./plan";
 import {
   type LongWordEntry,
 } from "./vocabulary";
-import { buildSkillProfile, formForCategory, type SkillProfile, type TrainingForm } from "./diagnosis";
+import {
+  buildSkillProfile,
+  formForCategory,
+  type SkillDimensionId,
+  type SkillProfile,
+  type TrainingForm,
+} from "./diagnosis";
 import { buildDailyPrescription, charBudget, type StagePlan } from "./prescription";
 import type { CustomLibrary } from "./customLibrary";
 
@@ -2642,6 +2648,13 @@ function stageModuleEnabled(
   return options.enabledModules === undefined || options.enabledModules.includes(module);
 }
 
+/** 某技能维度是否处于弱项（用于特征偏重选料） */
+function isDimensionWeak(profile: SkillProfile, id: SkillDimensionId): boolean {
+  return profile.dimensions.some(
+    (dimension) => dimension.id === id && dimension.status === "weak",
+  );
+}
+
 interface StageWordCandidate {
   text: string;
   translation_zh?: string;
@@ -2692,7 +2705,7 @@ function wordsStageTarget(
     }
   }
 
-  // 同形态回流：focus.words 中能在池里找到的优先入选
+  // 同形态回流：focus.words 中能在池里找到的优先入选（内容不跨形态）
   const selected: StageWordCandidate[] = [];
   for (const word of options.profile.focus.words) {
     const hit = pool.get(word.toLowerCase());
@@ -2700,8 +2713,17 @@ function wordsStageTarget(
       selected.push(hit);
     }
   }
+  // 技能跨阶段（特征偏重）：弱维度偏好对应特征的词
+  // —— 大小写弱 → 多选含大写/驼峰词；长词弱 → 多选长词（spec §3.4/§4.5）
+  const capWeak = isDimensionWeak(options.profile, "capitalization");
+  const longWeak = isDimensionWeak(options.profile, "long_words");
+  const wordBiasScore = (text: string): number =>
+    (capWeak && /[A-Z]/u.test(text) ? 1 : 0) +
+    (longWeak && Array.from(text).length >= 8 ? 1 : 0);
   const fill = [...pool.values()].filter((item) => !selected.includes(item));
   shuffleInPlace(fill, random);
+  // 稳定排序把弱特征匹配的词排前；同分保持上面 shuffle 的随机序（JSC 排序稳定）
+  fill.sort((left, right) => wordBiasScore(right.text) - wordBiasScore(left.text));
   selected.push(...fill);
   const picked = selected.slice(0, count);
 
@@ -2807,7 +2829,9 @@ function symbolsStageTarget(
   if (stageModuleEnabled(options, "programming_basics")) {
     const target = buildSymbolsNumbersTarget(context);
     if (target.text.trim().length > 0) {
-      return target;
+      // 按形态预算缩放：符号卡固定 8-10 张，对慢用户（小预算）按行裁剪，
+      // 避免快慢用户拿到一样多的符号语料
+      return trimTargetToCharBudget(target, options.stage.char_budget);
     }
   }
   // 编程基础被禁用（或无卡片内容）：退化到基础输入的数字/标点行
@@ -2826,6 +2850,36 @@ function symbolsStageTarget(
     mode: "symbols",
     text: lines.join("\n"),
     source: "keyloop:stage:symbols:foundation",
+  };
+}
+
+/** 按字符预算在行边界裁剪 target（至少保留 1 行），同步修正 code_blocks 行数 */
+function trimTargetToCharBudget(target: PracticeTarget, budget: number): PracticeTarget {
+  if (budget <= 0) {
+    return target;
+  }
+  const lines = target.text.split("\n");
+  const kept: string[] = [];
+  let chars = 0;
+  for (const line of lines) {
+    const next = chars + line.length + 1;
+    if (kept.length > 0 && next > budget) {
+      break;
+    }
+    kept.push(line);
+    chars = next;
+  }
+  if (kept.length === lines.length) {
+    return target;
+  }
+  const text = kept.join("\n");
+  const firstBlock = target.code_blocks?.[0];
+  return {
+    ...target,
+    text,
+    ...(firstBlock === undefined
+      ? {}
+      : { code_blocks: [{ ...firstBlock, line_count: kept.length }] }),
   };
 }
 

@@ -74,7 +74,20 @@ export type HighlightRows = Awaited<ReturnType<typeof highlightCodeSyntax>>;
 type GhostRowDescriptor =
   | { kind: "line"; sourceLineIndex: number; continuation: boolean; segments: GhostSegment[]; visualIndex: number; hasCursor: boolean }
   | { kind: "meaning"; visualIndex: number; meaning: string }
-  | { kind: "translation"; anchorVisualIndex: number; translation: string };
+  | { kind: "translation"; anchorVisualIndex: number; translation: string }
+  | { kind: "article_spacer"; rowIndex: number }
+  | { kind: "article_line"; rowIndex: number; text: string };
+
+/** 文章整篇翻译的清洗文本（display=article 的注解），无则 undefined。 */
+function articleTranslationText(
+  annotations: readonly PracticeTargetAnnotation[] | undefined,
+): string | undefined {
+  const article = (annotations ?? []).find(
+    (annotation) => annotation.display === "article",
+  );
+  const translation = article?.translation_zh.replace(/\s+/gu, " ").trim();
+  return translation === undefined || translation.length === 0 ? undefined : translation;
+}
 
 /**
  * 同步构建所有可视行描述符（含换行、词块释义、整句翻译）。语法高亮只影响段落颜色、
@@ -139,6 +152,16 @@ function buildGhostRowPlan(
       plan.push({ kind: "translation", anchorVisualIndex: visualIndex - 1, translation });
     }
   }
+  // 文章整篇翻译并入 plan（而非游离 append），这样它参与计数与窗口滚动：
+  // 否则文章模式复盘时 maxStart 偏小、翻译滚不到底
+  const article = articleTranslationText(annotations);
+  if (article !== undefined) {
+    const articleLines = wrapToDisplayWidth(article, wrapColumns);
+    plan.push({ kind: "article_spacer", rowIndex: plan.length });
+    for (const line of articleLines) {
+      plan.push({ kind: "article_line", rowIndex: plan.length, text: line });
+    }
+  }
   return plan;
 }
 
@@ -169,6 +192,21 @@ function renderGhostRowDescriptor(
         wrapColumns,
         kit,
       );
+    case "article_spacer":
+      return kit.Box({
+        id: `keyloop-ghost-article-spacer-${descriptor.rowIndex}`,
+        height: 1,
+        width: "100%",
+      });
+    case "article_line":
+      return kit.Text({
+        id: `keyloop-ghost-article-translation-${descriptor.rowIndex}`,
+        content: descriptor.text,
+        fg: theme.muted,
+        height: 1,
+        truncate: true,
+        wrapMode: "none",
+      });
   }
 }
 
@@ -203,7 +241,6 @@ export async function renderGhostText(
       : undefined;
   const showLineNumbers = targetMode === "code";
   const wrapColumns = ghostTextWrapColumns(showLineNumbers);
-  const articleTranslation = renderGhostArticleTranslation(annotations, wrapColumns, kit);
   const plan = buildGhostRowPlan(
     targetText,
     inputText,
@@ -257,7 +294,6 @@ export async function renderGhostText(
       overflow: "hidden",
     },
     ...children,
-    ...(articleTranslation === undefined ? [] : [articleTranslation]),
   );
   // picker 风格滚动条（实心色块），贴右边框
   const scrollbar = clipped
@@ -706,40 +742,6 @@ export function renderGhostLineTranslation(
     ...lines.map((line, index) =>
       kit.Text({
         id: `keyloop-ghost-line-translation-${visualIndex}-${index}`,
-        content: line,
-        fg: theme.muted,
-        height: 1,
-        truncate: true,
-        wrapMode: "none",
-      }),
-    ),
-  );
-}
-
-export function renderGhostArticleTranslation(
-  annotations: readonly PracticeTargetAnnotation[] | undefined,
-  maxColumns: number,
-  kit: OpenTuiRendererKit,
-): unknown | undefined {
-  const article = (annotations ?? []).find(
-    (annotation) => annotation.display === "article",
-  );
-  const translation = article?.translation_zh.replace(/\s+/gu, " ").trim();
-  if (translation === undefined || translation.length === 0) {
-    return undefined;
-  }
-  const lines = wrapToDisplayWidth(translation, maxColumns);
-  return kit.Box(
-    {
-      id: "keyloop-ghost-article-translation",
-      flexDirection: "column",
-      width: "100%",
-      marginTop: 1,
-      flexShrink: 0,
-    },
-    ...lines.map((line, index) =>
-      kit.Text({
-        id: `keyloop-ghost-article-translation-${index}`,
         content: line,
         fg: theme.muted,
         height: 1,

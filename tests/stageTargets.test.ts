@@ -365,3 +365,79 @@ describe("stage detection survives daily-run id rewrite", () => {
     expect(refreshed.annotations?.some((item) => item.display === "line")).toBe(true);
   });
 });
+
+describe("buildStageTarget symbols budget", () => {
+  test("small budget trims the symbols corpus, large budget keeps it", () => {
+    const big = buildStageTarget(stageContext(), {
+      stage: { form: "symbols", char_budget: 4000 },
+      profile: emptyProfile(),
+    });
+    const small = buildStageTarget(stageContext(), {
+      stage: { form: "symbols", char_budget: 90 },
+      profile: emptyProfile(),
+    });
+    // 小预算行数更少，且裁剪后内容不超预算太多（保留至少 1 行）
+    const bigLines = big.text.split("\n").length;
+    const smallLines = small.text.split("\n").length;
+    expect(smallLines).toBeGreaterThanOrEqual(1);
+    expect(smallLines).toBeLessThan(bigLines);
+    expect(small.text.length).toBeLessThanOrEqual(big.text.length);
+    // code_blocks 行数与实际行数一致
+    expect(small.code_blocks?.[0]?.line_count).toBe(smallLines);
+  });
+});
+
+describe("buildStageTarget words skill feature-biasing", () => {
+  function profileWithWeak(dim: SkillProfile["dimensions"][number]["id"]): SkillProfile {
+    return {
+      dimensions: [
+        {
+          id: dim,
+          samples: 5,
+          events: 100,
+          ewma_error_rate: 10,
+          ewma_speed: 200,
+          trend: "stable",
+          status: "weak",
+        },
+      ],
+      form_speeds: [],
+      focus: { words: [], sentences: [], code: [], chars: [] },
+      daily_active_minutes_7d: 0,
+      generated_at: "2026-06-13T08:00:00Z",
+    };
+  }
+  const camelLib: CustomLibrary = {
+    version: 1,
+    slug: "camel",
+    name: "camel",
+    created_at: "2026-06-01T00:00:00Z",
+    words: [
+      { id: "c1", text: "useEffect", kind: "word", source: "manual" },
+      { id: "c2", text: "getUserName", kind: "word", source: "manual" },
+      { id: "c3", text: "ApiClient", kind: "word", source: "manual" },
+    ],
+    sentences: [],
+    articles: [],
+  };
+
+  test("capitalization weak prioritizes uppercase-containing words", () => {
+    const stage = { form: "words" as const, char_budget: 21 }; // count ≈ 3
+    const weak = buildStageTarget(stageContext(), {
+      stage,
+      profile: profileWithWeak("capitalization"),
+      customLibraries: [camelLib],
+    });
+    const normal = buildStageTarget(stageContext(), {
+      stage,
+      profile: emptyProfile(),
+      customLibraries: [camelLib],
+    });
+    const countUpper = (text: string) =>
+      text.split(" ").filter((w) => /[A-Z]/u.test(w)).length;
+    // 弱项时 3 个驼峰词被排到最前，全部入选
+    expect(countUpper(weak.text)).toBe(3);
+    // 非弱项（纯随机）通常不会把 3 个驼峰词都排到前 3
+    expect(countUpper(normal.text)).toBeLessThan(3);
+  });
+});
