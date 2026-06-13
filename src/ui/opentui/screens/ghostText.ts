@@ -18,6 +18,8 @@ import {
   truncateToDisplayWidth,
   wrapToDisplayWidth,
 } from "./shared";
+import { vScrollbar } from "../components";
+import { injectUiEvent, WHEEL_DOWN_EVENT, WHEEL_UP_EVENT } from "../uiEventBus";
 
 export const MIN_GHOST_TEXT_WRAP_COLUMNS = 24;
 
@@ -68,34 +70,32 @@ export type GhostCell = Omit<GhostSegment, "text"> & { text: string };
 
 export type HighlightRows = Awaited<ReturnType<typeof highlightCodeSyntax>>;
 
-export async function renderGhostText(
+/** 单个可视行的描述（不含 kit 节点）——渲染与计数共用，保证行数永不漂移。 */
+type GhostRowDescriptor =
+  | { kind: "line"; sourceLineIndex: number; continuation: boolean; segments: GhostSegment[]; visualIndex: number; hasCursor: boolean }
+  | { kind: "meaning"; visualIndex: number; meaning: string }
+  | { kind: "translation"; anchorVisualIndex: number; translation: string };
+
+/**
+ * 同步构建所有可视行描述符（含换行、词块释义、整句翻译）。语法高亮只影响段落颜色、
+ * 不影响行数，因此计数时传 undefined 即可。本函数不依赖 kit，可在无渲染器的
+ * 完成页直接用于计算可滚动行数。
+ */
+function buildGhostRowPlan(
   targetText: string,
   inputText: string,
   targetMode: Mode,
-  source: string,
-  codeBlocks: PracticeTargetCodeBlock[] | undefined,
   annotations: PracticeTargetAnnotation[] | undefined,
-  kit: OpenTuiRendererKit,
-  completedTitle?: string,
-  spaceGlyph?: "dot",
-): Promise<unknown> {
-  const syntaxRows =
-    targetMode === "code"
-      ? await highlightCodeSyntax(targetText, { source, blocks: codeBlocks })
-      : undefined;
-  const showLineNumbers = targetMode === "code";
-  const wrapColumns = ghostTextWrapColumns(showLineNumbers);
+  spaceGlyph: "dot" | undefined,
+  syntaxRows: HighlightRows | undefined,
+): GhostRowDescriptor[] {
+  const wrapColumns = ghostTextWrapColumns(targetMode === "code");
   const wordColumns = ghostWordColumnRows(targetText, annotations);
   const lineTranslations = ghostLineTranslationRows(targetText, annotations);
   const sourceRows = ghostRows(targetText, inputText, syntaxRows, targetMode === "code", {
     spaceDot: spaceGlyph === "dot",
   });
-  const articleTranslation = renderGhostArticleTranslation(annotations, wrapColumns, kit);
-  interface GhostRowEntry {
-    node: unknown;
-    hasCursor: boolean;
-  }
-  const entries: GhostRowEntry[] = [];
+  const plan: GhostRowDescriptor[] = [];
   const segmentsHaveCursor = (segments: GhostSegment[]): boolean =>
     segments.some((segment) => segment.state === "cursor");
   let visualIndex = 0;
@@ -108,73 +108,184 @@ export async function renderGhostText(
         ? wrapGhostWordBlockLoose(row, columns, wrapColumns)
         : wrapGhostWordBlock(row, columns, wrapColumns);
       for (const blockRow of blockRows) {
-        entries.push({
-          node: renderGhostVisualLine(
-            { sourceLineIndex, continuation: false, segments: blockRow.segments },
-            visualIndex,
-            showLineNumbers,
-            kit,
-          ),
+        plan.push({
+          kind: "line",
+          sourceLineIndex,
+          continuation: false,
+          segments: blockRow.segments,
+          visualIndex,
           hasCursor: segmentsHaveCursor(blockRow.segments),
         });
         if (!looseBlock || blockRow.meaning.length > 0) {
-          entries.push({
-            node: renderGhostMeaningLine(visualIndex, blockRow.meaning, kit),
-            hasCursor: false,
-          });
+          plan.push({ kind: "meaning", visualIndex, meaning: blockRow.meaning });
         }
         visualIndex += 1;
       }
       continue;
     }
     for (const visualRow of wrapGhostRows([row], wrapColumns)) {
-      entries.push({
-        node: renderGhostVisualLine(
-          { ...visualRow, sourceLineIndex },
-          visualIndex,
-          showLineNumbers,
-          kit,
-        ),
+      plan.push({
+        kind: "line",
+        sourceLineIndex,
+        continuation: visualRow.continuation,
+        segments: visualRow.segments,
+        visualIndex,
         hasCursor: segmentsHaveCursor(visualRow.segments),
       });
       visualIndex += 1;
     }
     const translation = lineTranslations.get(sourceLineIndex);
     if (translation !== undefined) {
-      entries.push({
-        node: renderGhostLineTranslation(visualIndex - 1, translation, wrapColumns, kit),
-        hasCursor: false,
-      });
+      plan.push({ kind: "translation", anchorVisualIndex: visualIndex - 1, translation });
     }
   }
+  return plan;
+}
+
+function renderGhostRowDescriptor(
+  descriptor: GhostRowDescriptor,
+  showLineNumbers: boolean,
+  wrapColumns: number,
+  kit: OpenTuiRendererKit,
+): unknown {
+  switch (descriptor.kind) {
+    case "line":
+      return renderGhostVisualLine(
+        {
+          sourceLineIndex: descriptor.sourceLineIndex,
+          continuation: descriptor.continuation,
+          segments: descriptor.segments,
+        },
+        descriptor.visualIndex,
+        showLineNumbers,
+        kit,
+      );
+    case "meaning":
+      return renderGhostMeaningLine(descriptor.visualIndex, descriptor.meaning, kit);
+    case "translation":
+      return renderGhostLineTranslation(
+        descriptor.anchorVisualIndex,
+        descriptor.translation,
+        wrapColumns,
+        kit,
+      );
+  }
+}
+
+/** 跟打区可视总行数（供完成态滚动复盘 clamp 用）。不需要 kit。 */
+export function ghostVisualRowCount(
+  targetText: string,
+  inputText: string,
+  targetMode: Mode,
+  annotations: PracticeTargetAnnotation[] | undefined,
+  spaceGlyph: "dot" | undefined,
+): number {
+  return buildGhostRowPlan(targetText, inputText, targetMode, annotations, spaceGlyph, undefined)
+    .length;
+}
+
+export async function renderGhostText(
+  targetText: string,
+  inputText: string,
+  targetMode: Mode,
+  source: string,
+  codeBlocks: PracticeTargetCodeBlock[] | undefined,
+  annotations: PracticeTargetAnnotation[] | undefined,
+  kit: OpenTuiRendererKit,
+  completedTitle?: string,
+  spaceGlyph?: "dot",
+  /** 完成态复盘：窗口起始行（用户用滚轮/方向键控制）；undefined 时按光标自动跟随 */
+  reviewScroll?: number,
+): Promise<unknown> {
+  const syntaxRows =
+    targetMode === "code"
+      ? await highlightCodeSyntax(targetText, { source, blocks: codeBlocks })
+      : undefined;
+  const showLineNumbers = targetMode === "code";
+  const wrapColumns = ghostTextWrapColumns(showLineNumbers);
+  const articleTranslation = renderGhostArticleTranslation(annotations, wrapColumns, kit);
+  const plan = buildGhostRowPlan(
+    targetText,
+    inputText,
+    targetMode,
+    annotations,
+    spaceGlyph,
+    syntaxRows,
+  );
+  const entries = plan.map((descriptor) => ({
+    node: renderGhostRowDescriptor(descriptor, showLineNumbers, wrapColumns, kit),
+    hasCursor: descriptor.kind === "line" && descriptor.hasCursor,
+  }));
   const completed = completedTitle !== undefined;
 
-  // 视口窗口：长内容只渲染光标附近的行（自动跟随翻页），
-  // 同时把每键渲染成本从 O(全文行数) 降为 O(视口行数)。
+  // 视口窗口：长内容只渲染窗口内的行——既把每键渲染成本从 O(全文) 降为 O(视口)，
+  // 也实现自动翻页。打字时跟随光标；完成态由 reviewScroll 控制（默认停在底部，
+  // 这样刚打完的最后几行可见，再向上滚动复盘）。
   const viewportRows = ghostViewportRows();
-  const cursorIndex = entries.findIndex((entry) => entry.hasCursor);
-  const slice = ghostViewportSlice(entries.length, cursorIndex, completed ? Number.POSITIVE_INFINITY : viewportRows);
+  const maxStart =
+    Number.isFinite(viewportRows) && entries.length > viewportRows
+      ? entries.length - (viewportRows as number)
+      : 0;
+  let slice: { start: number; end: number };
+  if (reviewScroll !== undefined) {
+    const start = Math.min(Math.max(Math.round(reviewScroll), 0), maxStart);
+    slice = { start, end: Math.min(start + (viewportRows as number), entries.length) };
+  } else if (completed && maxStart > 0) {
+    slice = { start: maxStart, end: entries.length };
+  } else {
+    const cursorIndex = entries.findIndex((entry) => entry.hasCursor);
+    slice = ghostViewportSlice(entries.length, cursorIndex, viewportRows);
+  }
   const children: unknown[] = entries.slice(slice.start, slice.end).map((entry) => entry.node);
   const hiddenAbove = slice.start;
   const hiddenBelow = entries.length - slice.end;
   const clipped = hiddenAbove > 0 || hiddenBelow > 0;
-  const progressTitle = clipped
+  const progressHint = clipped
     ? ` ↑${hiddenAbove} · ${slice.start + 1}-${slice.end}/${entries.length} 行 · ↓${hiddenBelow} `
     : undefined;
+  // 完成态优先显示"本组完成"标题，但若内容被裁剪则改显滚动位置（提示可滚动复盘）
+  const bottomTitle = clipped ? progressHint : completed ? ` ${completedTitle} ` : undefined;
 
   const contentColumn = kit.Box(
     {
       id: "keyloop-ghost-content",
       flexDirection: "column",
       flexGrow: 1,
+      // 滚动条贴右边框：内容列只在无滚动条时补右内边距
+      paddingLeft: 1,
+      paddingRight: clipped ? 0 : 1,
       overflow: "hidden",
     },
     ...children,
     ...(articleTranslation === undefined ? [] : [articleTranslation]),
   );
+  // picker 风格滚动条（实心色块），贴右边框
   const scrollbar = clipped
-    ? renderGhostScrollbar(slice, entries.length, children.length, kit)
+    ? vScrollbar(
+        "keyloop-ghost-scrollbar",
+        {
+          total: entries.length,
+          visible: children.length,
+          start: slice.start,
+          viewportHeight: children.length,
+        },
+        kit,
+      )
     : undefined;
+  // 完成态复盘：鼠标滚轮注入合成事件，与方向键走同一条滚动路径
+  const wheelProps =
+    reviewScroll !== undefined
+      ? {
+          onMouseScroll: (event: { scroll?: { direction: string } }) => {
+            const direction = event.scroll?.direction;
+            if (direction === "up") {
+              injectUiEvent(WHEEL_UP_EVENT);
+            } else if (direction === "down") {
+              injectUiEvent(WHEEL_DOWN_EVENT);
+            }
+          },
+        }
+      : {};
 
   return kit.Box(
     {
@@ -183,60 +294,21 @@ export async function renderGhostText(
       borderStyle: "rounded",
       borderColor: completed ? theme.accent : targetMode === "code" ? theme.info : theme.border,
       title: targetMode === "code" ? " 代码 " : " 跟打文本 ",
-      bottomTitle: completed ? ` ${completedTitle} ` : progressTitle,
-      bottomTitleAlignment: completed || progressTitle !== undefined ? "right" : undefined,
+      bottomTitle,
+      bottomTitleAlignment: bottomTitle !== undefined ? "right" : undefined,
       backgroundColor: theme.background,
-      paddingX: 1,
       flexGrow: 1,
       flexDirection: "row",
       overflow: "hidden",
+      ...wheelProps,
     },
     contentColumn,
     ...(scrollbar === undefined ? [] : [scrollbar]),
   );
 }
 
-/** 右侧滚动条：视口在全文中的位置（█ 为可视区，│ 为其余） */
-function renderGhostScrollbar(
-  slice: { start: number; end: number },
-  totalRows: number,
-  barHeight: number,
-  kit: OpenTuiRendererKit,
-): unknown {
-  const safeHeight = Math.max(barHeight, 1);
-  const thumbStart = Math.min(
-    Math.floor((slice.start / totalRows) * safeHeight),
-    safeHeight - 1,
-  );
-  const thumbEnd = Math.max(
-    Math.ceil((slice.end / totalRows) * safeHeight),
-    thumbStart + 1,
-  );
-  const cells: unknown[] = [];
-  for (let index = 0; index < safeHeight; index += 1) {
-    const inThumb = index >= thumbStart && index < thumbEnd;
-    cells.push(
-      kit.Text({
-        id: `keyloop-ghost-scrollbar-${index}`,
-        content: inThumb ? "█" : "│",
-        fg: inThumb ? theme.accent : theme.muted,
-        height: 1,
-      }),
-    );
-  }
-  return kit.Box(
-    {
-      id: "keyloop-ghost-scrollbar",
-      flexDirection: "column",
-      width: 1,
-      overflow: "hidden",
-    },
-    ...cells,
-  );
-}
-
 /** 跟打区可视行数：按终端高度扣除界面 chrome；非 TTY（测试）不限制 */
-function ghostViewportRows(): number {
+export function ghostViewportRows(): number {
   const rows =
     typeof process === "undefined" ? undefined : process.stdout?.rows;
   if (rows === undefined || !Number.isFinite(rows) || rows <= 0) {

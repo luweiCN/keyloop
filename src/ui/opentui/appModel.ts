@@ -248,6 +248,8 @@ export type OpenTuiRoute =
       target?: PracticeTarget;
       live?: OpenTuiRunningLiveState;
       result_visible: boolean;
+      /** 弹窗关闭后复盘滚动的窗口起始行；undefined 时默认停在底部 */
+      review_scroll?: number;
     }
   | {
       screen: "summary";

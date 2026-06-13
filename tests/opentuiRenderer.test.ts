@@ -2,6 +2,8 @@ import { describe, expect, test } from "bun:test";
 
 import {
   ghostViewportSlice,
+  ghostVisualRowCount,
+  renderGhostText,
   ghostRows,
   wrapGhostWordBlockLoose,
 } from "../src/ui/opentui/screens/ghostText";
@@ -2551,5 +2553,97 @@ describe("ghost viewport slice", () => {
 
   test("missing cursor anchors at top", () => {
     expect(ghostViewportSlice(100, -1, 20)).toEqual({ start: 0, end: 20 });
+  });
+});
+
+describe("ghost visual row count", () => {
+  test("counts one visual row per short code line", () => {
+    const text = Array.from({ length: 12 }, (_, i) => `const v${i} = ${i};`).join("\n");
+    expect(ghostVisualRowCount(text, text, "code", undefined, undefined)).toBe(12);
+  });
+
+  test("counts sentence translation lines", () => {
+    const text = "The weather is nice.\nShe left early.";
+    const annotations = [
+      { start: 0, end: 20, translation_zh: "天气不错。", display: "line" as const },
+      { start: 21, end: 36, translation_zh: "她早走了。", display: "line" as const },
+    ];
+    // 2 句 + 2 行翻译 = 4 可视行
+    expect(ghostVisualRowCount(text, text, "words", annotations, undefined)).toBe(4);
+  });
+});
+
+describe("ghost text review scroll windowing", () => {
+  const ghostKit = (): OpenTuiRendererKit & { addedNodes: never } =>
+    ({
+      Box: (props: unknown, ...children: unknown[]) => ({ type: "Box", props, children }),
+      ScrollBox: (props: unknown, ...children: unknown[]) => ({ type: "ScrollBox", props, children }),
+      Text: (props: unknown) => ({ type: "Text", props, children: [] }),
+    }) as never;
+
+  function flattenText(node: unknown, out: string[] = []): string[] {
+    const value = node as { props?: { content?: unknown }; children?: unknown[] };
+    if (typeof value.props?.content === "string") {
+      out.push(value.props.content);
+    }
+    for (const child of value.children ?? []) {
+      flattenText(child, out);
+    }
+    return out;
+  }
+
+  const longCode = Array.from({ length: 60 }, (_, i) =>
+    i === 0 ? "const FIRST = 1;" : i === 59 ? "const LAST = 60;" : `const v${i} = ${i};`,
+  ).join("\n");
+  const blocks = [
+    { start_line: 0, line_count: 60, language: "typescript", framework: "l", project: "p", source: "s" },
+  ];
+
+  async function withRows<T>(rows: number, run: () => Promise<T>): Promise<T> {
+    const original = Object.getOwnPropertyDescriptor(process.stdout, "rows");
+    Object.defineProperty(process.stdout, "rows", { value: rows, configurable: true });
+    try {
+      return await run();
+    } finally {
+      if (original) {
+        Object.defineProperty(process.stdout, "rows", original);
+      }
+    }
+  }
+
+  test("reviewScroll undefined on completed snapshot shows the bottom", async () => {
+    await withRows(30, async () => {
+      const tree = await renderGhostText(
+        longCode, longCode, "code", "s", blocks, undefined, ghostKit(),
+        "✓ done", undefined, undefined,
+      );
+      const content = flattenText(tree).join("\n");
+      // 完成态默认停底部：末行可见、首行不可见
+      expect(content).toContain("LAST");
+      expect(content).not.toContain("FIRST");
+    });
+  });
+
+  test("reviewScroll 0 scrolls to the top", async () => {
+    await withRows(30, async () => {
+      const tree = await renderGhostText(
+        longCode, longCode, "code", "s", blocks, undefined, ghostKit(),
+        "✓ done", undefined, 0,
+      );
+      const content = flattenText(tree).join("\n");
+      expect(content).toContain("FIRST");
+      expect(content).not.toContain("LAST");
+    });
+  });
+
+  test("oversized reviewScroll clamps to the bottom", async () => {
+    await withRows(30, async () => {
+      const tree = await renderGhostText(
+        longCode, longCode, "code", "s", blocks, undefined, ghostKit(),
+        "✓ done", undefined, 9999,
+      );
+      const content = flattenText(tree).join("\n");
+      expect(content).toContain("LAST");
+    });
   });
 });

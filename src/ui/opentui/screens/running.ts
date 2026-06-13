@@ -42,7 +42,7 @@ export const DIAGNOSTIC_KEY_CELL_WIDTH = 3;
 export async function renderRunningScreen(
   state: OpenTuiAppState,
   kit: OpenTuiRendererKit,
-  options: { completed?: boolean } = {},
+  options: { completed?: boolean; reviewScroll?: number } = {},
 ): Promise<unknown> {
   if (state.route.screen !== "running") {
     return renderPanel("keyloop-route-panel", openTuiRouteTitle(state), openTuiRouteLines(state), kit);
@@ -63,6 +63,7 @@ export async function renderRunningScreen(
         : "✓ Group complete · Enter for next"
       : undefined,
     route.target.space_glyph,
+    options.reviewScroll,
   );
   return kit.Box(
     {
