@@ -53,7 +53,7 @@ describe("package verification scripts", () => {
       new URL("../package.json", import.meta.url),
     ).json()) as PackageJson;
 
-    expect(packageJson.version).toBe("0.1.8");
+    expect(packageJson.version).toBe("0.2.0");
   });
 
   test("release workflow packages runtime content and Homebrew installs it", async () => {
