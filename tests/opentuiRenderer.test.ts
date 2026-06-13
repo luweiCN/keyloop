@@ -755,13 +755,11 @@ describe("OpenTUI renderer adapter", () => {
     await renderOpenTuiAppOnce(articleState, kit);
 
     expect(findNodeById(kit.addedNodes, "keyloop-target-article-translation")).toBeUndefined();
-    const articleBlock = findNodeById(kit.addedNodes, "keyloop-ghost-article-translation");
-    expect(articleBlock).toBeDefined();
-    expect(flattenContent([articleBlock as FakeNode])).toContain("第一段。 第二段。");
-    const ghostChildIds = findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
-      (child) => child.props.id,
-    );
-    expect(ghostChildIds?.at(-1)).toBe("keyloop-ghost-article-translation");
+    // 文章翻译扁平化为内容列内的行（参与窗口滚动），不再是游离 Box
+    const content = findNodeById(kit.addedNodes, "keyloop-ghost-content") as FakeNode;
+    expect(flattenContent([content]).replace(/\n/gu, "")).toContain("第一段。 第二段。");
+    const ghostChildIds = content.children.map((child) => child.props.id);
+    expect(ghostChildIds.at(-1)).toMatch(/^keyloop-ghost-article-translation-/u);
   });
 
   test("keeps the article translation fully visible by wrapping long text", async () => {
@@ -792,10 +790,13 @@ describe("OpenTUI renderer adapter", () => {
 
     await renderOpenTuiAppOnce(articleState, kit);
 
-    const articleBlock = findNodeById(kit.addedNodes, "keyloop-ghost-article-translation");
-    expect(articleBlock).toBeDefined();
-    expect((articleBlock as FakeNode).children.length).toBeGreaterThan(1);
-    expect(flattenContent([articleBlock as FakeNode]).replace(/\n/gu, "")).toBe(translation);
+    // 长翻译换行成多行 article_line，全部完整可见（非 TTY 测试不裁剪窗口）
+    const content = findNodeById(kit.addedNodes, "keyloop-ghost-content") as FakeNode;
+    const articleLines = content.children.filter((child) =>
+      String(child.props.id).startsWith("keyloop-ghost-article-translation-"),
+    );
+    expect(articleLines.length).toBeGreaterThan(1);
+    expect(articleLines.map((node) => String(node.props.content)).join("")).toBe(translation);
   });
 
   test("wraps everyday sentences to the fixed app width in wide terminals", async () => {
@@ -2571,6 +2572,22 @@ describe("ghost visual row count", () => {
     // 2 句 + 2 行翻译 = 4 可视行
     expect(ghostVisualRowCount(text, text, "words", annotations, undefined)).toBe(4);
   });
+
+  test("counts the article translation rows (spacer + wrapped lines)", () => {
+    const text = "First para.\nSecond para.";
+    const withoutArticle = ghostVisualRowCount(text, text, "words", undefined, undefined);
+    const annotations = [
+      {
+        start: 0,
+        end: text.length,
+        translation_zh: "第一段。第二段。",
+        display: "article" as const,
+      },
+    ];
+    const withArticle = ghostVisualRowCount(text, text, "words", annotations, undefined);
+    // 文章翻译现在计入行数（1 行间隔 + 至少 1 行翻译），否则复盘滚不到底
+    expect(withArticle).toBeGreaterThanOrEqual(withoutArticle + 2);
+  });
 });
 
 describe("ghost text review scroll windowing", () => {
@@ -2645,5 +2662,49 @@ describe("ghost text review scroll windowing", () => {
       const content = flattenText(tree).join("\n");
       expect(content).toContain("LAST");
     });
+  });
+});
+
+describe("render tree disposal (memory-leak guard)", () => {
+  test("replacing the route destroys the previous tree via destroyRecursively", async () => {
+    let destroyCalls = 0;
+    const kit = {
+      Box: (props: unknown, ...children: unknown[]) => ({ type: "Box", props, children }),
+      ScrollBox: (props: unknown, ...children: unknown[]) => ({ type: "ScrollBox", props, children }),
+      Text: (props: unknown) => ({ type: "Text", props, children: [] }),
+      createCliRenderer: async () => {
+        const store = new Map<string, { destroyRecursively: () => void }>();
+        return {
+          root: {
+            add: (...nodes: unknown[]) => {
+              for (const node of nodes) {
+                const id = (node as { props?: { id?: string } }).props?.id;
+                if (id !== undefined) {
+                  store.set(id, {
+                    destroyRecursively: () => {
+                      destroyCalls += 1;
+                    },
+                  });
+                }
+              }
+            },
+            remove: (id: string) => {
+              store.delete(id);
+            },
+            getRenderable: (id: string) => store.get(id),
+          },
+          idle: async () => {},
+          requestRender: () => {},
+        };
+      },
+    } as unknown as OpenTuiRendererKit;
+
+    const renderer = await renderOpenTuiAppOnce(createOpenTuiInitialState("en"), kit);
+    expect(destroyCalls).toBe(0); // 首帧无旧树可销毁
+    await renderer.renderState?.(createOpenTuiInitialState("zh"));
+    // 替换路由树时旧树被 destroyRecursively（释放 yoga native 节点，修复泄漏）
+    expect(destroyCalls).toBe(1);
+    await renderer.renderState?.(createOpenTuiInitialState("en"));
+    expect(destroyCalls).toBe(2);
   });
 });
