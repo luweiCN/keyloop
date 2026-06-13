@@ -14,6 +14,8 @@ import {
   saveCustomLibraryToDir,
   type CustomLibrary,
   loadOrCreateDailyPracticePlanFromPath,
+  loadUnfinishedDailyPlanFromPath,
+  completedDailyLessonIds,
   loadKeyAggregatesFromPath,
   loadPreferencesFromPath,
   loadSessionCheckpointFromPath,
@@ -672,3 +674,83 @@ async function expectRejectsWith(promise: Promise<unknown>, message: string): Pr
   }
   throw new Error(`Expected promise to reject with ${message}`);
 }
+
+describe("resume from stored daily plan", () => {
+  test("loadUnfinishedDailyPlanFromPath returns the day's incomplete plan, undefined when complete", async () => {
+    const dir = await tempDir();
+    try {
+      const path = join(dir, "daily_runs.json");
+      const today = "2026-06-13";
+      const plan = await loadOrCreateDailyPracticePlanFromPath({
+        path,
+        today,
+        freshPlan: testPlan("resume"),
+        records: [],
+        now: "2026-06-13T10:00:00Z",
+        idFactory: () => "rid",
+      });
+
+      // 无完成记录：返回当日未完成计划
+      const unfinished = await loadUnfinishedDailyPlanFromPath(path, today, []);
+      expect(unfinished?.run_id).toBe(plan.run_id);
+
+      // 完成全部 lesson：返回 undefined
+      const records = plan.lessons.map((lesson, index) =>
+        defaultSessionRecord({
+          started_at: "2026-06-13T12:00:00Z",
+          daily_run_id: plan.run_id,
+          lesson_id: lesson.id,
+          lesson_index: index,
+          completion_state: "completed",
+        }),
+      );
+      const finished = await loadUnfinishedDailyPlanFromPath(path, today, records);
+      expect(finished).toBeUndefined();
+
+      // 另一天：返回 undefined
+      const otherDay = await loadUnfinishedDailyPlanFromPath(path, "2026-06-14", []);
+      expect(otherDay).toBeUndefined();
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
+  test("completedDailyLessonIds collects finished lesson ids for the run", async () => {
+    const dir = await tempDir();
+    try {
+      const path = join(dir, "daily_runs.json");
+      const plan = await loadOrCreateDailyPracticePlanFromPath({
+        path,
+        today: "2026-06-13",
+        freshPlan: testPlan("ids"),
+        records: [],
+        now: "2026-06-13T10:00:00Z",
+        idFactory: () => "iid",
+      });
+      const firstId = plan.lessons[0]!.id;
+      const records = [
+        defaultSessionRecord({
+          daily_run_id: plan.run_id,
+          lesson_id: firstId,
+          completion_state: "completed",
+        }),
+        defaultSessionRecord({
+          daily_run_id: plan.run_id,
+          lesson_id: plan.lessons[1]!.id,
+          completion_state: "partial", // 未完成不计入
+        }),
+        defaultSessionRecord({
+          daily_run_id: "other-run",
+          lesson_id: "x",
+          completion_state: "completed", // 别的 run 不计入
+        }),
+      ];
+      const done = completedDailyLessonIds(plan, records);
+      expect(done.has(firstId)).toBe(true);
+      expect(done.has(plan.lessons[1]!.id)).toBe(false);
+      expect(done.size).toBe(1);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+});

@@ -1,8 +1,10 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  createOpenTuiCompletionState,
   createOpenTuiInitialState,
   createOpenTuiStartRunner,
+  waitForPostCompletionAction,
   defaultCodePracticeConfig,
   defaultSessionRecord,
   renderOpenTuiAppOnce,
@@ -11,12 +13,14 @@ import {
   type ContentLibrary,
   type CustomLibrary,
   type DailyPracticePlan,
+  type OpenTuiAppState,
   type OpenTuiRendererKit,
   type PracticeLesson,
   type PracticePlan,
   type SessionRecord,
   type StartRunnerContext,
 } from "../src/index";
+import { injectUiEvent, WHEEL_UP_EVENT } from "../src/ui/opentui/uiEventBus";
 
 interface FakeNode {
   type: "Box" | "Text";
@@ -2836,3 +2840,86 @@ async function waitFor(
     await delay(5);
   }
 }
+
+describe("completion review scroll (global sink)", () => {
+  test("wheel events adjust review_scroll, clamp to 0, and the sink is cleared on settle", async () => {
+    const originalRows = Object.getOwnPropertyDescriptor(process.stdout, "rows");
+    Object.defineProperty(process.stdout, "rows", { value: 14, configurable: true });
+    try {
+      const text = Array.from({ length: 60 }, (_, i) => `const v${i} = ${i};`).join("\n");
+      const record = defaultSessionRecord({
+        mode: "code",
+        source: "local:x.ts",
+        target_text: text,
+        user_input: text,
+        typed_len: text.length,
+        correct_chars: text.length,
+        accuracy: 100,
+      });
+      const target = {
+        mode: "code" as const,
+        text,
+        source: "local:x.ts",
+        code_blocks: [
+          { start_line: 0, line_count: 60, language: "typescript", framework: "l", project: "p", source: "x.ts:1" },
+        ],
+      };
+      const state = createOpenTuiCompletionState("zh", record, {
+        sourceItem: "code_mix",
+        target,
+        resultVisible: false,
+      });
+
+      const rendered: OpenTuiAppState[] = [];
+      let keypress: ((event: { name: string; sequence: string; ctrl: boolean; meta: boolean }) => void) | undefined;
+      const renderer = {
+        keyInput: {
+          on: (_event: string, handler: typeof keypress) => {
+            keypress = handler;
+          },
+          off: () => {},
+        },
+        renderState: async (next: OpenTuiAppState) => {
+          rendered.push(next);
+        },
+        destroy: () => {},
+      } as unknown as Parameters<typeof waitForPostCompletionAction>[0];
+
+      const promise = waitForPostCompletionAction(renderer, state, {});
+
+      // 一次滚轮上滚：从底部（默认 maxStart）减小 review_scroll
+      injectUiEvent(WHEEL_UP_EVENT);
+      await delay(5);
+      const first = rendered.at(-1);
+      expect(first?.route.screen).toBe("complete");
+      if (first?.route.screen !== "complete") throw new Error("expected complete route");
+      const firstScroll = first.route.review_scroll;
+      expect(typeof firstScroll).toBe("number");
+      expect(firstScroll!).toBeGreaterThanOrEqual(0);
+
+      // 持续上滚：clamp 到 0，不会变负
+      for (let i = 0; i < 40; i += 1) {
+        injectUiEvent(WHEEL_UP_EVENT);
+        await delay(1);
+      }
+      const top = rendered.at(-1);
+      if (top?.route.screen !== "complete") throw new Error("expected complete route");
+      expect(top.route.review_scroll).toBe(0);
+
+      // 回车结算 → sink 应被清理
+      keypress?.({ name: "enter", sequence: "\r", ctrl: false, meta: false });
+      const action = await promise;
+      expect(action).toBe("continue");
+
+      const renderCountAfterSettle = rendered.length;
+      injectUiEvent(WHEEL_UP_EVENT);
+      await delay(5);
+      // sink 已清空：注入不再触发渲染
+      expect(rendered.length).toBe(renderCountAfterSettle);
+    } finally {
+      if (originalRows) {
+        Object.defineProperty(process.stdout, "rows", originalRows);
+      }
+    }
+  });
+});
