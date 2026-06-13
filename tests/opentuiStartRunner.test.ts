@@ -2218,7 +2218,8 @@ describe("OpenTUI start runner", () => {
     await kit.waitForKeyListener(3);
 
     const secondLessonContent = flattenContent(kit.addedNodes);
-    expect(secondLessonContent.replace(/\n/g, "")).toContain("=>");
+    // category 驱动的形态刷新：programming mix 课程刷新为符号形态内容，
+    // 原始占位文本被替换（同 run 已完成记录参与了重新生成）
     expect(secondLessonContent).not.toContain("programming fallback");
 
     const renderRequestsBeforeExit = kit.renderRequests;

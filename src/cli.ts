@@ -18,6 +18,7 @@ import {
   keyloopDataDir,
   loadKeyAggregatesFromPath,
   loadCustomLibrariesFromDir,
+  loadUnfinishedDailyPlanFromPath,
   loadOrCreateDailyPracticePlanFromPath,
   loadPreferencesFromPath,
   loadSessionsFromPath,
@@ -325,6 +326,11 @@ async function runApp(
   let initialRenderer: OpenTuiRenderer | undefined;
 
   for (;;) {
+    const todayDailyPlan = await loadUnfinishedDailyPlanFromPath(
+      dailyRunsPath(dataDir),
+      localDateKey(options.now ?? new Date()),
+      records,
+    );
     const context: AppRunnerContext = {
       language,
       records,
@@ -342,6 +348,7 @@ async function runApp(
       wordBreakdownSettings: preferences.word_breakdown,
       wordAudioSettings: preferences.word_audio,
       customLibrarySettings: preferences.custom_library,
+      enabledModules: preferences.enabled_modules,
       speedUnit: preferences.speed_unit,
       todayElapsedMs: todayElapsedMsFromRecords(records, options.now ?? new Date()),
       dataDir,
@@ -358,6 +365,9 @@ async function runApp(
     context.customLibraries = customLibraries;
     context.dictionary = dictionary;
     context.librariesDir = librariesDir;
+    if (todayDailyPlan !== undefined) {
+      context.todayDailyPlan = todayDailyPlan;
+    }
 
     const appResult =
       options.appRunner === undefined
@@ -511,6 +521,17 @@ function preferencesFromAppState(
     !codeStyleSettingsEqual(state.codeStyleSettings, preferences.code_style)
   ) {
     next.code_style = { ...state.codeStyleSettings };
+    changed = true;
+  }
+
+  if (
+    state.enabledModules !== undefined &&
+    (state.enabledModules.length !== preferences.enabled_modules.length ||
+      state.enabledModules.some(
+        (module) => !preferences.enabled_modules.includes(module),
+      ))
+  ) {
+    next.enabled_modules = [...state.enabledModules];
     changed = true;
   }
 
@@ -723,6 +744,7 @@ async function runStart(
       localCodeScanError = errorMessage(error);
     }
   }
+  const customLibraries = await loadCustomLibrariesFromDir(customLibrariesDirPath(dataDir));
   const targetContext: Parameters<typeof buildDailyPracticePlan>[0] = {
     records,
     plan,
@@ -732,6 +754,8 @@ async function runStart(
     everydaySettings: preferences.everyday_english,
     programmingTermsSettings: preferences.programming_terms,
     wordBreakdownSettings: preferences.word_breakdown,
+    enabledModules: preferences.enabled_modules,
+    customLibraries,
     localCodeSnippets,
     ...(command.repo === undefined ? {} : { localCodeSource: command.repo }),
     ...(localCodeScanError === undefined ? {} : { localCodeScanError }),
@@ -750,6 +774,7 @@ async function runStart(
       targetContext,
       wordAudioSettings: preferences.word_audio,
       customLibrarySettings: preferences.custom_library,
+      customLibraries,
       ...(options.now === undefined ? {} : { now: options.now }),
     },
     dataDir,
@@ -906,7 +931,8 @@ async function startContextFromAppState(
       ? await loadDailyPracticePlan(
           dataDir,
           effectiveAppContext.records,
-          buildDailyPracticePlan(effectiveAppContext),
+          // 诊断屏确认过的计划优先（所见即所练），否则现场生成
+          state.route.daily_plan ?? buildDailyPracticePlan(effectiveAppContext),
           options,
         )
       : standaloneDailyPlanFromRoute(state.route);

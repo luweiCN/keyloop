@@ -42,7 +42,7 @@ export const DIAGNOSTIC_KEY_CELL_WIDTH = 3;
 export async function renderRunningScreen(
   state: OpenTuiAppState,
   kit: OpenTuiRendererKit,
-  options: { completed?: boolean } = {},
+  options: { completed?: boolean; reviewScroll?: number } = {},
 ): Promise<unknown> {
   if (state.route.screen !== "running") {
     return renderPanel("keyloop-route-panel", openTuiRouteTitle(state), openTuiRouteLines(state), kit);
@@ -63,6 +63,7 @@ export async function renderRunningScreen(
         : "✓ Group complete · Enter for next"
       : undefined,
     route.target.space_glyph,
+    options.reviewScroll,
   );
   return kit.Box(
     {
@@ -727,13 +728,16 @@ export function renderDiagnosticKeyCell(
   kit: OpenTuiRendererKit,
 ): unknown {
   const level = metric === "speed" ? item.speed_level : item.error_level;
+  // 初始全部无背景色：速度快起来 / 错误多起来才渐进着色，
+  // 打完一眼能看出哪些键错过、哪些键从头到尾干净
+  const heat = level > 0;
   const color =
     metric === "speed" ? heatScaleColor("success", level) : heatScaleColor("danger", level);
   return kit.Text({
     id: `keyloop-diagnostic-${metric}-key-${diagnosticKeyId(item.label)}`,
     content: ` ${item.label} `,
     fg: theme.foreground,
-    bg: color,
+    ...(heat ? { bg: color } : {}),
     width: DIAGNOSTIC_KEY_CELL_WIDTH,
     height: 1,
     wrapMode: "none",

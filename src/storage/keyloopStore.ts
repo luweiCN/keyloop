@@ -309,6 +309,41 @@ function assignDailyRunMetadata(
   };
 }
 
+/** 只读：当天最近一次未完成的综合训练计划；没有则返回 undefined */
+export async function loadUnfinishedDailyPlanFromPath(
+  path: string,
+  today: string,
+  records: SessionRecord[],
+): Promise<DailyPracticePlan | undefined> {
+  const store = await loadDailyRunStore(path);
+  const latestToday = store.runs
+    .filter((entry) => entry.date === today)
+    .sort((left, right) => right.plan.run_number - left.plan.run_number)[0];
+  if (latestToday === undefined || dailyRunComplete(latestToday.plan, records)) {
+    return undefined;
+  }
+  return {
+    ...latestToday.plan,
+    completed_ms: completedMsForDate(records, today),
+  };
+}
+
+/** 计划中已完成的 lesson id 集合 */
+export function completedDailyLessonIds(
+  plan: DailyPracticePlan,
+  records: SessionRecord[],
+): Set<string> {
+  if (plan.run_id.length === 0) {
+    return new Set();
+  }
+  return new Set(
+    records
+      .filter((record) => record.daily_run_id === plan.run_id)
+      .filter((record) => record.completion_state === "completed")
+      .map((record) => record.lesson_id),
+  );
+}
+
 function dailyRunComplete(plan: DailyPracticePlan, records: SessionRecord[]): boolean {
   if (plan.lessons.length === 0 || plan.run_id.length === 0) {
     return false;

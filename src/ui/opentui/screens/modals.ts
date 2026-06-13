@@ -36,7 +36,13 @@ export async function renderCompleteScreen(
         live: completedSnapshotLive(state.route.live, state.route.record),
       },
     };
-    const runningScreen = await renderRunningScreen(runningState, kit, { completed: true });
+    // 弹窗关闭后进入复盘态：reviewScroll 控制滚动；弹窗显示时保持默认（停底部）
+    const runningScreen = await renderRunningScreen(runningState, kit, {
+      completed: true,
+      ...(state.route.result_visible
+        ? {}
+        : { reviewScroll: state.route.review_scroll ?? Number.POSITIVE_INFINITY }),
+    });
     if (!state.route.result_visible) {
       return runningScreen;
     }

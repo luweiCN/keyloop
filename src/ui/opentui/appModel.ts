@@ -12,6 +12,8 @@ import {
   defaultCodeStyleSettings,
   type CodeFilterPreference,
   type CodePracticeConfig,
+  type DailyPracticePlan,
+  type TrainingModule,
   type CodePracticeOption,
   type CodeStyleSettings,
   type EverydayEnglishSettings,
@@ -60,7 +62,9 @@ import {
   buildCodeMixPracticeTarget,
   buildCodeSpecialistPracticeTarget,
   buildDailyPracticePlan,
+  buildEverydayMixStageTarget,
   buildEverydayPracticeTarget,
+  buildProgrammingBasicsMixStageTarget,
   everydayMeaningLines,
   buildFoundationPracticeTarget,
   buildFoundationMixPracticeTarget,
@@ -75,6 +79,8 @@ import {
   buildSymbolsNumbersTarget,
 } from "../../training/programmingBasicsTargets";
 import type { LiveMetrics } from "../../training/liveSession";
+import { buildSkillProfile, type SkillProfile } from "../../training/diagnosis";
+import { completedDailyLessonIds } from "../../storage/keyloopStore";
 
 export const openTuiStatsViews = [
   "overview",
@@ -166,6 +172,7 @@ export interface OpenTuiStateOptions {
   customLibraries?: CustomLibrary[] | undefined;
   dictionaryTier?: DictionaryTier | undefined;
   youdaoTtsCredentialStatus?: OpenTuiYoudaoTtsCredentialStatus | undefined;
+  enabledModules?: TrainingModule[] | undefined;
 }
 
 export type OpenTuiReturnRoute =
@@ -200,6 +207,15 @@ export type OpenTuiRoute =
       source_item: OpenTuiMenuItemId;
       live?: OpenTuiRunningLiveState;
       return_route?: OpenTuiReturnRoute;
+      /** 综合训练：诊断屏确认的当日阶段计划（保证所见即所练） */
+      daily_plan?: DailyPracticePlan;
+    }
+  | {
+      screen: "stage_plan";
+      plan: DailyPracticePlan;
+      diagnosis_lines: string[];
+      /** 当日恢复场景：已完成的 lesson id（计划行打 ✓，开始时跳过） */
+      completed_lesson_ids?: string[];
     }
   | {
       screen: "exit_confirmation";
@@ -232,6 +248,8 @@ export type OpenTuiRoute =
       target?: PracticeTarget;
       live?: OpenTuiRunningLiveState;
       result_visible: boolean;
+      /** 弹窗关闭后复盘滚动的窗口起始行；undefined 时默认停在底部 */
+      review_scroll?: number;
     }
   | {
       screen: "summary";
@@ -325,6 +343,7 @@ export interface OpenTuiSessionState {
   dictionaryTier?: DictionaryTier | undefined;
   youdaoTtsCredentialStatus?: OpenTuiYoudaoTtsCredentialStatus | undefined;
   today_elapsed_ms?: number | undefined;
+  enabledModules?: TrainingModule[] | undefined;
 }
 
 export interface OpenTuiAppState extends OpenTuiSessionState {
@@ -669,6 +688,7 @@ export function activateOpenTuiMenuItem(
     case "settings":
     case "stats":
     case "running":
+    case "stage_plan":
     case "exit_confirmation":
     case "code_settings_confirmation":
     case "practice_options":
@@ -693,13 +713,11 @@ function activateMainMenuItem(
   context: BuildTargetContext,
 ): OpenTuiAppState {
   switch (itemId) {
-    case "comprehensive": {
-      const effectiveContext = buildTargetContextForState(state, context);
-      const lesson = buildDailyPracticePlan(effectiveContext).lessons[0];
-      return lesson === undefined
-        ? state
-        : runningState(state.language, itemId, lesson.target, lesson, stateOptions(state));
-    }
+    case "comprehensive":
+      return comprehensiveStagePlanState(
+        state,
+        buildTargetContextForState(state, context),
+      );
     case "foundation":
     case "everyday":
     case "programming":
@@ -889,7 +907,11 @@ function activateSubmenuItem(
       return runningState(
         state.language,
         itemId,
-        buildEverydayPracticeTarget(effectiveContext, "mix"),
+        buildEverydayMixStageTarget(
+          effectiveContext,
+          buildSkillProfile(effectiveContext.records, effectiveContext.plan, effectiveContext.now),
+          state.customLibraries,
+        ),
         undefined,
         stateOptions(state),
       );
@@ -929,7 +951,10 @@ function activateSubmenuItem(
       return runningState(
         state.language,
         itemId,
-        buildProgrammingBasicsMixTarget(effectiveContext),
+        buildProgrammingBasicsMixStageTarget(
+          effectiveContext,
+          buildSkillProfile(effectiveContext.records, effectiveContext.plan, effectiveContext.now),
+        ),
         undefined,
         stateOptions(state),
       );
@@ -1070,6 +1095,9 @@ function appState(
   if (options.codeFilters !== undefined) {
     state.codeFilters = cloneCodeFilterState(options.codeFilters);
   }
+  if (options.enabledModules !== undefined) {
+    state.enabledModules = [...options.enabledModules];
+  }
   if (options.codeSettings !== undefined) {
     state.codeSettings = cloneCodeSettings(options.codeSettings);
   }
@@ -1114,13 +1142,17 @@ function buildTargetContextForState(
   const wordFormSettings = state.wordFormSettings;
   const wordAudioSettings = state.wordAudioSettings;
   const customLibrarySettings = state.customLibrarySettings;
+  const enabledModules = state.enabledModules;
+  const customLibraries = state.customLibraries;
   if (
     codeConfig === undefined &&
     codeStyle === undefined &&
     everydaySettings === undefined &&
     wordFormSettings === undefined &&
     wordAudioSettings === undefined &&
-    customLibrarySettings === undefined
+    customLibrarySettings === undefined &&
+    enabledModules === undefined &&
+    customLibraries === undefined
   ) {
     return context;
   }
@@ -1129,6 +1161,8 @@ function buildTargetContextForState(
     ...(codeConfig === undefined ? {} : { codeConfig }),
     ...(codeStyle === undefined ? {} : { codeStyle }),
     ...(everydaySettings === undefined ? {} : { everydaySettings }),
+    ...(enabledModules === undefined ? {} : { enabledModules }),
+    ...(customLibraries === undefined ? {} : { customLibraries }),
     ...(wordFormSettings === undefined
       ? {}
       : {
@@ -1166,6 +1200,9 @@ export function stateOptions(state: OpenTuiAppState): OpenTuiStateOptions {
   }
   if (state.customLibraries !== undefined) {
     options.customLibraries = state.customLibraries;
+  }
+  if (state.enabledModules !== undefined) {
+    options.enabledModules = state.enabledModules;
   }
   if (state.dictionaryTier !== undefined) {
     options.dictionaryTier = state.dictionaryTier;
@@ -1380,3 +1417,139 @@ export {
   type OpenTuiSettingsView,
 } from "./settingsItems";
 export { openTuiRouteLines, openTuiRouteTitle } from "./routeLines";
+
+/** 综合训练诊断/计划屏：构建当日阶段计划与诊断摘要 */
+export function comprehensiveStagePlanState(
+  state: OpenTuiAppState,
+  effectiveContext: BuildTargetContext,
+  targetMinutesOverride?: number,
+): OpenTuiAppState {
+  // 当日已有未完成计划时复用（保证所见即所练、可恢复进度）；手动调时长则重新生成
+  const storedPlan =
+    targetMinutesOverride === undefined ? effectiveContext.todayDailyPlan : undefined;
+  const plan =
+    storedPlan ??
+    buildDailyPracticePlan(
+      effectiveContext,
+      targetMinutesOverride === undefined ? {} : { targetMinutesOverride },
+    );
+  const profile = buildSkillProfile(
+    effectiveContext.records,
+    effectiveContext.plan,
+    effectiveContext.now,
+  );
+  const completedLessonIds =
+    storedPlan === undefined
+      ? []
+      : [...completedDailyLessonIds(storedPlan, effectiveContext.records)];
+  return appState(
+    state.language,
+    {
+      screen: "stage_plan",
+      plan,
+      diagnosis_lines: diagnosisSummaryLines(profile, state.language),
+      ...(completedLessonIds.length === 0 ? {} : { completed_lesson_ids: completedLessonIds }),
+    },
+    stateOptions(state),
+  );
+}
+
+/** 诊断屏上按 ←/→ 调整今日目标时长 */
+export function adjustStagePlanMinutes(
+  state: OpenTuiAppState,
+  context: BuildTargetContext,
+  deltaMinutes: number,
+): OpenTuiAppState {
+  if (state.route.screen !== "stage_plan") {
+    return state;
+  }
+  if (state.route.plan.run_id.length > 0) {
+    // 当日计划已落盘开练，时长不再可调
+    return state;
+  }
+  return comprehensiveStagePlanState(
+    state,
+    buildTargetContextForState(state, context),
+    state.route.plan.target_minutes + deltaMinutes,
+  );
+}
+
+/** 诊断屏回车：开始第一阶段（计划随 running route 下传，保证所见即所练） */
+export function startStagePlanFirstLesson(state: OpenTuiAppState): OpenTuiAppState {
+  if (state.route.screen !== "stage_plan") {
+    return state;
+  }
+  const plan = state.route.plan;
+  const completed = new Set(state.route.completed_lesson_ids ?? []);
+  const lesson = plan.lessons.find((item) => !completed.has(item.id)) ?? plan.lessons[0];
+  if (lesson === undefined) {
+    return state;
+  }
+  const running = runningState(
+    state.language,
+    "comprehensive",
+    lesson.target,
+    lesson,
+    stateOptions(state),
+  );
+  if (running.route.screen !== "running") {
+    return running;
+  }
+  return { ...running, route: { ...running.route, daily_plan: plan } };
+}
+
+const skillDimensionLabels: Record<
+  string,
+  { zh: string; en: string }
+> = {
+  home_row: { zh: "中排键位", en: "home row" },
+  top_row: { zh: "上排键位", en: "top row" },
+  bottom_row: { zh: "下排键位", en: "bottom row" },
+  left_hand: { zh: "左手键区", en: "left hand" },
+  right_hand: { zh: "右手键区", en: "right hand" },
+  digits: { zh: "数字", en: "digits" },
+  symbols: { zh: "符号标点", en: "symbols" },
+  capitalization: { zh: "大小写切换", en: "capitalization" },
+  word_fluency: { zh: "单词流畅度", en: "word fluency" },
+  long_words: { zh: "长词", en: "long words" },
+};
+
+export function diagnosisSummaryLines(
+  profile: SkillProfile,
+  language: Language,
+): string[] {
+  const rated = profile.dimensions.filter((item) => item.status !== "unrated");
+  if (rated.length === 0) {
+    return [
+      language === "zh"
+        ? "还没有足够数据，先按默认计划练起来。"
+        : "Not enough data yet - starting with the default plan.",
+    ];
+  }
+  const lines: string[] = [];
+  for (const dimension of profile.dimensions) {
+    if (dimension.status !== "weak") {
+      continue;
+    }
+    const label = skillDimensionLabels[dimension.id];
+    const name =
+      label === undefined ? dimension.id : language === "zh" ? label.zh : label.en;
+    const errorRate =
+      dimension.ewma_error_rate === null
+        ? ""
+        : ` ${dimension.ewma_error_rate.toFixed(1)}%`;
+    lines.push(
+      language === "zh"
+        ? `${name}：错误率${errorRate}（弱项）`
+        : `${name}: error rate${errorRate} (weak)`,
+    );
+  }
+  if (lines.length === 0) {
+    lines.push(
+      language === "zh"
+        ? "各项技能状态正常，按常规轮换安排。"
+        : "All skills look healthy - regular rotation today.",
+    );
+  }
+  return lines;
+}

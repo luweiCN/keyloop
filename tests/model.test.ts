@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  defaultUserPreferences,
   parsePracticeLesson,
   parsePracticeTarget,
   parseSessionRecord,
@@ -158,5 +159,29 @@ describe("domain model compatibility", () => {
     expect(legacy.everyday_english.word_repeats).toBe(1);
     expect(legacy.everyday_english.sentence_length).toBe("short");
     expect(legacy.everyday_english.include_phrases).toBe(false);
+  });
+});
+
+describe("enabled_modules preference", () => {
+  test("defaults to all four practice modules", () => {
+    const prefs = defaultUserPreferences();
+    expect(prefs.enabled_modules).toEqual([
+      "foundation_input",
+      "everyday_english",
+      "programming_basics",
+      "code_practice",
+    ]);
+  });
+
+  test("parse keeps valid modules and drops unknown values", () => {
+    const prefs = parseUserPreferences({
+      enabled_modules: ["everyday_english", "nonsense", "code_practice"],
+    });
+    expect(prefs.enabled_modules).toEqual(["everyday_english", "code_practice"]);
+  });
+
+  test("parse falls back to default when absent", () => {
+    const prefs = parseUserPreferences({});
+    expect(prefs.enabled_modules).toHaveLength(4);
   });
 });

@@ -41,6 +41,7 @@ export interface OpenTuiRenderer {
   root: {
     add(...nodes: unknown[]): void;
     remove?(id: string): void;
+    getRenderable?(id: string): unknown;
   };
   keyInput?: OpenTuiKeyInput;
   requestRender?: () => void;

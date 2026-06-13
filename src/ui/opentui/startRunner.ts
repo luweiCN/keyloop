@@ -6,6 +6,7 @@ import type {
   EverydayEnglishSettings,
   PracticeTargetAnnotation,
   PracticeLesson,
+  PracticeTarget,
   SessionRecord,
   UserPreferences,
 } from "../../domain/model";
@@ -46,6 +47,8 @@ import {
   refreshModuleMixTarget,
   type BuildTargetContext,
 } from "../../training/targets";
+import { ghostVisualRowCount, ghostViewportRows } from "./screens/ghostText";
+import { setUiEventSink } from "./uiEventBus";
 import {
   renderOpenTuiAppOnce,
   type OpenTuiKeyEvent,
@@ -187,6 +190,8 @@ async function resolveDefaultYoudaoCredentials() {
 export interface LessonRunResult {
   record: SessionRecord | null;
   renderer?: OpenTuiRenderer;
+  /** 实际练习的 target；练习选项变更会重建 target，与 lesson.target 可能不同 */
+  target?: PracticeTarget;
 }
 
 export interface PostCompletionResult {
@@ -325,11 +330,15 @@ export async function openTuiStartRunner(
             nextSelection,
             completedRecords,
           ).lesson;
+    const completedLesson =
+      runResult.target === undefined
+        ? selection.lesson
+        : { ...selection.lesson, target: runResult.target };
     const completionResult = await showCompletionPage(
       context,
       record,
       nextLesson,
-      selection.lesson,
+      completedLesson,
       runResult.renderer,
       options,
       todayElapsedBeforeLesson,
@@ -483,7 +492,7 @@ export async function runLessonUntilComplete(
       duration_ms: 0,
     });
     await saveRecordIfAvailable(context, record);
-    return { record, renderer: initialRenderer };
+    return { record, renderer: initialRenderer, target: session.target };
   }
 
   return new Promise<LessonRunResult>((resolve) => {
@@ -1030,11 +1039,11 @@ export async function runLessonUntilComplete(
       clearTimer();
       renderer.keyInput?.off("keypress", handleKeypress);
       if (keepRenderer) {
-        resolve({ record, renderer });
+        resolve({ record, renderer, target: session.target });
         return;
       }
       renderer.destroy?.();
-      resolve({ record });
+      resolve({ record, target: session.target });
     };
     const handleKeypress = (event: OpenTuiKeyEvent): void => {
       void handleKeypressEvent(event);
@@ -1367,6 +1376,7 @@ export function waitForPostCompletionAction(
     const settle = (action: PostCompletionAction): void => {
       settled = true;
       keyInput.off("keypress", handleKeypress);
+      setUiEventSink(null);
       if (options.destroyOnSettle !== false) {
         renderer.destroy?.();
       }
@@ -1388,9 +1398,61 @@ export function waitForPostCompletionAction(
       };
       await renderer.renderState?.(state);
     };
+    // 弹窗关闭后复盘滚动：滚轮/方向键/翻页键调整 review_scroll（窗口起始行），
+    // clamp 用 ghostVisualRowCount + ghostViewportRows 算出可滚动上限
+    const scrollReview = async (delta: number): Promise<void> => {
+      if (state.route.screen !== "complete" || state.route.result_visible) {
+        return;
+      }
+      const target = state.route.target;
+      if (target === undefined) {
+        return;
+      }
+      const totalRows = ghostVisualRowCount(
+        target.text,
+        target.text,
+        target.mode,
+        target.annotations,
+        target.space_glyph,
+      );
+      const viewport = ghostViewportRows();
+      const maxStart = Number.isFinite(viewport)
+        ? Math.max(0, totalRows - (viewport as number))
+        : 0;
+      if (maxStart === 0) {
+        return;
+      }
+      const current = state.route.review_scroll ?? maxStart;
+      const next = Math.min(Math.max(current + delta, 0), maxStart);
+      if (next === current) {
+        return;
+      }
+      state = { ...state, route: { ...state.route, review_scroll: next } };
+      await renderer.renderState?.(state);
+    };
     const handleKeypressEvent = async (event: OpenTuiKeyEvent): Promise<void> => {
       if (settled) {
         return;
+      }
+      // 复盘态（弹窗已关）：优先处理滚动，不下穿到 Enter/Esc 等动作
+      if (state.route.screen === "complete" && !state.route.result_visible) {
+        if (event.name === "wheel_up" || isArrowUpEvent(event)) {
+          await scrollReview(event.name === "wheel_up" ? -3 : -1);
+          return;
+        }
+        if (event.name === "wheel_down" || isArrowDownEvent(event)) {
+          await scrollReview(event.name === "wheel_down" ? 3 : 1);
+          return;
+        }
+        const lower = event.name.toLowerCase();
+        if (lower === "pageup") {
+          await scrollReview(-Math.max(ghostViewportRows() - 2, 4));
+          return;
+        }
+        if (lower === "pagedown") {
+          await scrollReview(Math.max(ghostViewportRows() - 2, 4));
+          return;
+        }
       }
       if (isEnterEvent(event)) {
         if (state.route.screen === "complete" && state.route.result_visible) {
@@ -1431,6 +1493,10 @@ export function waitForPostCompletionAction(
     };
 
     keyInput.on("keypress", handleKeypress);
+    // 跟打区滚轮回调把合成的 wheel 事件注入这里，与键盘走同一条处理路径
+    setUiEventSink((event) => {
+      void handleKeypressEvent(event);
+    });
   });
 }
 

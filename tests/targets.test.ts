@@ -3,6 +3,7 @@ import { describe, expect, test } from "bun:test";
 import {
   buildDailyPracticePlan,
   buildCodeMixPracticeTarget,
+  buildFoundationMixPracticeTarget,
   buildCodeSpecialistPracticeTarget,
   buildEverydayPracticeTarget,
   buildFoundationPracticeTarget,
@@ -830,7 +831,8 @@ describe("target generation core", () => {
       library: testLibrary(),
     });
 
-    expect(target.source).toContain("keyloop:module:programming-basics-mix:");
+    // category 驱动的形态刷新：programming mix 课程刷新为符号形态内容
+    expect(target.source).toContain("keyloop:module:programming-basics:symbols-numbers");
     expect(target.text).not.toBe("fallback");
   });
 
@@ -1021,26 +1023,21 @@ describe("target generation core", () => {
     ]);
   });
 
-  test("daily practice plan keeps the four module sequence", () => {
+  test("daily practice plan builds prescription stages", () => {
     const plan = buildDailyPracticePlan({
       records: [],
       plan: testPlan(),
       library: testLibrary(),
+      random: () => 0.99,
     });
 
-    expect(plan.target_minutes).toBe(20);
-    expect(plan.lessons.map((lesson) => lesson.module)).toEqual([
-      "foundation_input",
-      "everyday_english",
-      "programming_basics",
-      "code_practice",
-    ]);
-    expect(plan.lessons.map((lesson) => lesson.id)).toEqual([
-      "daily:foundation:1",
-      "daily:common-words:1",
-      "daily:symbols:1",
-      "daily:code-block:1",
-    ]);
+    // 无历史 → 15 分钟默认目标，阶段制课程
+    expect(plan.target_minutes).toBe(15);
+    expect(plan.lessons[0]?.id).toBe("stage:keys:1");
+    expect(plan.lessons.every((lesson) => lesson.mix_profile === "comprehensive")).toBe(
+      true,
+    );
+    expect(plan.lessons.some((lesson) => lesson.id.startsWith("stage:words"))).toBe(true);
   });
 
   test("daily plan completed time uses injected now", () => {
@@ -1059,79 +1056,52 @@ describe("target generation core", () => {
     expect(daily.completed_ms).toBe(60_000);
   });
 
-  test("daily plan readiness uses injected now", () => {
-    const daily = buildDailyPracticePlan({
-      records: stableModuleRecords(
-        "foundation_input",
-        "foundation_mix",
-        "2020-01-02T03:00:00.000Z",
-      ),
-      plan: unfocusedPlan(),
-      library: testLibrary(),
-      now: new Date("2020-01-02T04:00:00.000Z"),
-    });
-
-    expect(daily.lessons.map((lesson) => lesson.module)).toEqual([
-      "everyday_english",
-      "programming_basics",
-      "code_practice",
-    ]);
-  });
 
   test("daily foundation mix boosts drill probability from focus key hotspots", () => {
-    const daily = buildDailyPracticePlan({
+    const foundation = buildFoundationMixPracticeTarget({
       records: [],
       plan: unfocusedPlan({ focus_keys: ["q"], has_recent_history: false }),
       library: foundationDrillLibrary(),
       random: sequenceRandom([0.1, ...Array.from({ length: 20 }, () => 0)]),
     });
-    const foundation = daily.lessons.find(
-      (lesson) => lesson.module === "foundation_input",
-    );
 
-    expect(foundation?.target.source).toBe("keyloop:module:foundation-mix:top-row");
-    expect(foundation?.target.text).toContain("top row line");
-    expect(foundation?.target.text).not.toContain("punctuation line 1");
+    expect(foundation.source).toBe("keyloop:module:foundation-mix:top-row");
+    expect(foundation.text).toContain("top row line");
+    expect(foundation.text).not.toContain("punctuation line 1");
   });
 
   test("daily foundation mix keeps non-focus drills possible with focus key hotspots", () => {
-    const daily = buildDailyPracticePlan({
+    const foundation = buildFoundationMixPracticeTarget({
       records: [],
       plan: unfocusedPlan({ focus_keys: ["q"], has_recent_history: false }),
       library: foundationDrillLibrary(),
       random: sequenceRandom([0.99, ...Array.from({ length: 20 }, () => 0)]),
     });
-    const foundation = daily.lessons.find(
-      (lesson) => lesson.module === "foundation_input",
-    );
 
-    expect(foundation?.target.source).toBe(
+    expect(foundation.source).toBe(
       "keyloop:module:foundation-mix:punctuation-edges",
     );
-    expect(foundation?.target.text).toContain("punctuation line");
-    expect(foundation?.target.text).not.toContain("top row line");
+    expect(foundation.text).toContain("punctuation line");
+    expect(foundation.text).not.toContain("top row line");
   });
 
   test("daily foundation mix randomly selects a drill without focus key hotspots", () => {
-    const daily = buildDailyPracticePlan({
+    const foundation = buildFoundationMixPracticeTarget({
       records: [],
       plan: unfocusedPlan({ focus_keys: [], has_recent_history: false }),
       library: foundationDrillLibrary(),
       random: sequenceRandom([0.5, ...Array.from({ length: 20 }, () => 0)]),
     });
-    const foundation = daily.lessons.find(
-      (lesson) => lesson.module === "foundation_input",
-    );
 
-    expect(foundation?.target.source).toBe(
+    expect(foundation.source).toBe(
       "keyloop:module:foundation-mix:index-fingers",
     );
-    expect(foundation?.target.text).toContain("index finger line");
-    expect(foundation?.target.text).not.toContain("home row line");
+    expect(foundation.text).toContain("index finger line");
+    expect(foundation.text).not.toContain("home row line");
   });
 
   test("daily foundation mix avoids recently selected drill when randomizing", () => {
-    const daily = buildDailyPracticePlan({
+    const foundation = buildFoundationMixPracticeTarget({
       records: [
         defaultSessionRecord({
           source: "keyloop:module:foundation-mix:home-row",
@@ -1142,31 +1112,25 @@ describe("target generation core", () => {
       library: foundationDrillLibrary(),
       random: sequenceRandom([0, ...Array.from({ length: 20 }, () => 0)]),
     });
-    const foundation = daily.lessons.find(
-      (lesson) => lesson.module === "foundation_input",
-    );
 
-    expect(foundation?.target.source).toBe("keyloop:module:foundation-mix:top-row");
-    expect(foundation?.target.text).toContain("top row line");
-    expect(foundation?.target.text).not.toContain("home row line");
+    expect(foundation.source).toBe("keyloop:module:foundation-mix:top-row");
+    expect(foundation.text).toContain("top row line");
+    expect(foundation.text).not.toContain("home row line");
   });
 
   test("daily foundation mix shuffles drill lines with injected random", () => {
-    const daily = buildDailyPracticePlan({
+    const foundation = buildFoundationMixPracticeTarget({
       records: [],
       plan: unfocusedPlan({ focus_keys: ["q"], has_recent_history: false }),
       library: foundationDrillLibrary(),
       random: sequenceRandom([0.1, 0, 0.99, 0.99, 0.99, 0.99]),
     });
-    const foundation = daily.lessons.find(
-      (lesson) => lesson.module === "foundation_input",
-    );
 
-    expect(foundation?.target.text).toContain("top row line 10");
+    expect(foundation.text).toContain("top row line 10");
   });
 
   test("daily foundation mix avoids recently practiced drill lines", () => {
-    const daily = buildDailyPracticePlan({
+    const foundation = buildFoundationMixPracticeTarget({
       records: [
         defaultSessionRecord({
           source: "keyloop:module:foundation-mix:home-row",
@@ -1197,10 +1161,7 @@ describe("target generation core", () => {
       library: foundationDrillLibrary(),
       random: sequenceRandom([0.6, ...Array.from({ length: 20 }, () => 0)]),
     });
-    const foundation = daily.lessons.find(
-      (lesson) => lesson.module === "foundation_input",
-    );
-    const lines = foundation?.target.text.split("\n") ?? [];
+    const lines = foundation.text.split("\n") ?? [];
     const drillLines = lines.filter((line) => line.startsWith("punctuation line"));
 
     expect(drillLines).not.toContain("punctuation line 1");
@@ -1218,7 +1179,7 @@ describe("target generation core", () => {
     }
     punctuation.items = ["shared line", ...numberedLines("punctuation line", 9)];
 
-    const daily = buildDailyPracticePlan({
+    const foundation = buildFoundationMixPracticeTarget({
       records: [
         defaultSessionRecord({
           source: "keyloop:foundation:top-row",
@@ -1229,10 +1190,7 @@ describe("target generation core", () => {
       library,
       random: sequenceRandom(Array.from({ length: 20 }, () => 0.999)),
     });
-    const foundation = daily.lessons.find(
-      (lesson) => lesson.module === "foundation_input",
-    );
-    const lines = foundation?.target.text.split("\n") ?? [];
+    const lines = foundation.text.split("\n") ?? [];
 
     expect(lines).toContain("shared line");
   });
@@ -1329,70 +1287,9 @@ describe("target generation core", () => {
     expect(lines.every((line) => line.startsWith("top row line"))).toBe(true);
   });
 
-  test("daily plan reduces stable non-code module frequency", () => {
-    const daily = buildDailyPracticePlan({
-      records: stableModuleRecords("foundation_input", "foundation_mix"),
-      plan: unfocusedPlan(),
-      library: testLibrary(),
-    });
 
-    expect(daily.lessons.map((lesson) => lesson.module)).toEqual([
-      "everyday_english",
-      "programming_basics",
-      "code_practice",
-    ]);
-    expect(daily.lessons).not.toContainEqual(
-      expect.objectContaining({ module: "foundation_input" }),
-    );
-  });
 
-  test("daily plan keeps weak foundation as one short review group", () => {
-    const daily = buildDailyPracticePlan({
-      records: weakModuleRecords("foundation_input", "foundation_mix"),
-      plan: unfocusedPlan({ focus_keys: ["j", ";"] }),
-      library: testLibrary(),
-    });
 
-    const foundation = daily.lessons.filter(
-      (lesson) => lesson.module === "foundation_input",
-    );
-
-    expect(foundation).toHaveLength(1);
-    expect(foundation[0]?.estimated_minutes).toBeLessThanOrEqual(4);
-    expect(foundation[0]?.reason_zh).toContain("短复习");
-  });
-
-  test("daily plan shortens stable code practice instead of skipping it", () => {
-    const daily = buildDailyPracticePlan({
-      records: stableModuleRecords("code_practice", "code_mix"),
-      plan: unfocusedPlan(),
-      library: testLibrary(),
-    });
-
-    const code = daily.lessons.find((lesson) => lesson.module === "code_practice");
-
-    expect(code).toBeDefined();
-    expect(code?.estimated_minutes).toBe(3);
-    expect(code?.reason_zh).toContain("已稳定");
-  });
-
-  test("daily plan falls back to four modules when stable filtering would leave fewer than three", () => {
-    const daily = buildDailyPracticePlan({
-      records: [
-        ...stableModuleRecords("foundation_input", "foundation_mix"),
-        ...stableModuleRecords("everyday_english", "everyday_mix"),
-      ],
-      plan: unfocusedPlan(),
-      library: testLibrary(),
-    });
-
-    expect(daily.lessons.map((lesson) => lesson.module)).toEqual([
-      "foundation_input",
-      "everyday_english",
-      "programming_basics",
-      "code_practice",
-    ]);
-  });
 
 
 
@@ -1406,15 +1303,14 @@ describe("target generation core", () => {
       ...hardCodeSnippets(),
     ];
 
-    const daily = buildDailyPracticePlan({
+    const code = buildCodeMixPracticeTarget({
       records: strongCodeRecords(),
       plan: unfocusedPlan(),
       library,
     });
-    const code = daily.lessons.find((lesson) => lesson.module === "code_practice");
 
-    expect(code?.target.text).toContain("hardAlpha");
-    expect(code?.target.text).not.toContain("easyAlpha");
+    expect(code.text).toContain("hardAlpha");
+    expect(code.text).not.toContain("easyAlpha");
   });
 
   test("daily code practice follows weak recent code performance with easy snippets", () => {
@@ -1424,15 +1320,14 @@ describe("target generation core", () => {
       ...easyCodeSnippets(),
     ];
 
-    const daily = buildDailyPracticePlan({
+    const code = buildCodeMixPracticeTarget({
       records: weakCodeRecords(),
       plan: unfocusedPlan(),
       library,
     });
-    const code = daily.lessons.find((lesson) => lesson.module === "code_practice");
 
-    expect(code?.target.text).toContain("easyAlpha");
-    expect(code?.target.text).not.toContain("hardAlpha");
+    expect(code.text).toContain("easyAlpha");
+    expect(code.text).not.toContain("hardAlpha");
   });
 
   test("daily code practice uses snippet picker focus ordering", () => {
@@ -1456,14 +1351,13 @@ describe("target generation core", () => {
       },
     ];
 
-    const daily = buildDailyPracticePlan({
+    const code = buildCodeMixPracticeTarget({
       records: [],
       plan: testPlan(),
       library,
     });
-    const code = daily.lessons.find((lesson) => lesson.module === "code_practice");
 
-    expect(code?.target.text.startsWith("function selectedValue")).toBe(true);
+    expect(code.text.startsWith("function selectedValue")).toBe(true);
   });
 
   test("daily code practice honors code filter config", () => {
@@ -1487,7 +1381,7 @@ describe("target generation core", () => {
       },
     ];
 
-    const daily = buildDailyPracticePlan({
+    const code = buildCodeMixPracticeTarget({
       records: [],
       plan: testPlan(),
       library,
@@ -1499,54 +1393,51 @@ describe("target generation core", () => {
         match_any: false,
       },
     });
-    const code = daily.lessons.find((lesson) => lesson.module === "code_practice");
 
-    expect(code?.target.text).toContain("selectedOwner");
-    expect(code?.target.text).not.toContain("selectedValue");
+    expect(code.text).toContain("selectedOwner");
+    expect(code.text).not.toContain("selectedValue");
   });
 
   test("daily code practice can prefer local repo snippets", () => {
-    const daily = buildDailyPracticePlan({
+    const code = buildCodeMixPracticeTarget({
       records: [],
       plan: testPlan(),
       library: testLibrary(),
       localCodeSnippets: localCodeSnippets(1),
     });
-    const code = daily.lessons.find((lesson) => lesson.module === "code_practice");
 
-    expect(code?.target.text).toContain("localSelected1");
-    expect(code?.target.text).toContain("selectedValue");
+    expect(code.text).toContain("localSelected1");
+    expect(code.text).toContain("selectedValue");
   });
 
   test("daily code practice limits repo-backed plans to three snippets", () => {
-    const daily = buildDailyPracticePlan({
+    const code = buildCodeMixPracticeTarget({
       records: [],
       plan: testPlan(),
       library: testLibrary(),
       localCodeSnippets: localCodeSnippets(4),
     });
-    const code = daily.lessons.find((lesson) => lesson.module === "code_practice");
 
-    expect(code?.target.text.split("\n\n")).toHaveLength(3);
+    expect(code.text.split("\n\n")).toHaveLength(3);
   });
 
   test("daily code practice source labels built-in repo and fallback origins", () => {
-    const builtInOnly = buildDailyPracticePlan({
+    const builtInOnly = buildCodeMixPracticeTarget({
       records: [],
       plan: testPlan(),
       library: testLibrary(),
-    }).lessons.find((lesson) => lesson.module === "code_practice");
-    expect(builtInOnly?.target.source).toBe("keyloop:code-corpus");
+    });
+    expect(builtInOnly.source).toBe("keyloop:code-corpus");
 
-    const repoOnly = buildDailyPracticePlan({
+    const repoOnly = buildCodeMixPracticeTarget({
       records: [],
       plan: testPlan(),
       library: testLibrary(),
       localCodeSource: "/tmp/project",
       localCodeSnippets: localCodeSnippets(3),
-    }).lessons.find((lesson) => lesson.module === "code_practice");
-    expect(repoOnly?.target.source).toBe("/tmp/project");
-    const repoBlocks = repoOnly?.target.code_blocks ?? [];
+    });
+    expect(repoOnly.source).toBe("/tmp/project");
+    const repoBlocks = repoOnly.code_blocks ?? [];
     expect(repoBlocks.map((block) => block.start_line)).toEqual([0, 4, 8]);
     expect(repoBlocks.map((block) => block.line_count)).toEqual([3, 3, 3]);
     expect(repoBlocks.every((block) => block.language === "typescript")).toBe(true);
@@ -1558,14 +1449,14 @@ describe("target generation core", () => {
       "src/local3.ts:1",
     ]);
 
-    const repoPlusFallback = buildDailyPracticePlan({
+    const repoPlusFallback = buildCodeMixPracticeTarget({
       records: [],
       plan: testPlan(),
       library: testLibrary(),
       localCodeSource: "/tmp/project",
       localCodeSnippets: localCodeSnippets(1),
-    }).lessons.find((lesson) => lesson.module === "code_practice");
-    expect(repoPlusFallback?.target.source).toBe("/tmp/project + keyloop:fallback-code");
+    });
+    expect(repoPlusFallback.source).toBe("/tmp/project + keyloop:fallback-code");
   });
 
   test("code specialist target respects level filters and source labels", () => {

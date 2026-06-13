@@ -1,10 +1,14 @@
 import { describe, expect, test } from "bun:test";
 
 import {
+  ghostViewportSlice,
+  ghostVisualRowCount,
+  renderGhostText,
   ghostRows,
   wrapGhostWordBlockLoose,
 } from "../src/ui/opentui/screens/ghostText";
 import {
+  startStagePlanFirstLesson,
   activateOpenTuiMenuItem,
   createOpenTuiCompletionState,
   createOpenTuiExitConfirmationState,
@@ -350,10 +354,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders running route target text", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -414,7 +416,7 @@ describe("OpenTUI renderer adapter", () => {
     expect(flattenContent([meaningLine as FakeNode]).replace(/\n/gu, "")).toBe(
       "信息；资料 练习",
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
       (child) => child.props.id,
     )).toEqual(["keyloop-ghost-line-0", "keyloop-ghost-meaning-line-0"]);
   });
@@ -445,7 +447,7 @@ describe("OpenTUI renderer adapter", () => {
       await renderOpenTuiAppOnce(running, kit);
     });
 
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
       (child) => child.props.id,
     )).toEqual([
       "keyloop-ghost-line-0",
@@ -493,7 +495,7 @@ describe("OpenTUI renderer adapter", () => {
       await renderOpenTuiAppOnce(running, kit);
     });
 
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
       (child) => child.props.id,
     )).toEqual([
       "keyloop-ghost-line-0",
@@ -602,7 +604,7 @@ describe("OpenTUI renderer adapter", () => {
       await renderOpenTuiAppOnce(running, kit);
     });
 
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
       (child) => child.props.id,
     )).toEqual([
       "keyloop-ghost-line-0",
@@ -669,7 +671,7 @@ describe("OpenTUI renderer adapter", () => {
 
     // The 78-column row must wrap instead of being cut off at 32 columns.
     expect(findNodeById(kit.addedNodes, "keyloop-ghost-line-1")).toBeDefined();
-    const ghost = findNodeById(kit.addedNodes, "keyloop-ghost-text") as FakeNode;
+    const ghost = findNodeById(kit.addedNodes, "keyloop-ghost-content") as FakeNode;
     const ids = ghost.children.map((child) => String(child.props.id));
     expect(ids.at(-1)).toMatch(/^keyloop-ghost-line-translation-/u);
     const translationNode = ghost.children.at(-1) as FakeNode;
@@ -710,7 +712,7 @@ describe("OpenTUI renderer adapter", () => {
     await renderOpenTuiAppOnce(sentenceState, kit);
 
     expect(findNodeById(kit.addedNodes, "keyloop-target-line-translations")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
       (child) => child.props.id,
     )).toEqual([
       "keyloop-ghost-line-0",
@@ -756,7 +758,7 @@ describe("OpenTUI renderer adapter", () => {
     const articleBlock = findNodeById(kit.addedNodes, "keyloop-ghost-article-translation");
     expect(articleBlock).toBeDefined();
     expect(flattenContent([articleBlock as FakeNode])).toContain("第一段。 第二段。");
-    const ghostChildIds = findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+    const ghostChildIds = findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
       (child) => child.props.id,
     );
     expect(ghostChildIds?.at(-1)).toBe("keyloop-ghost-article-translation");
@@ -847,10 +849,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders running route with live metric strip above ghost text", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1024,9 +1024,8 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).not.toContain("All keys:");
     expect(content).toContain("Speed:");
     expect(content).toContain("Errors:");
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-D")?.props.bg).toBe(
-      heatScaleColor("success", 0),
-    );
+    // 零档（无数据/低速）不再上背景色
+    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-D")?.props.bg).toBeUndefined();
     expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-row-0")?.props.flexWrap).toBe(
       "nowrap",
     );
@@ -1037,9 +1036,7 @@ describe("OpenTUI renderer adapter", () => {
     expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-S")?.props.bg).toBe(
       heatScaleColor("success", 2),
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-S")?.props.bg).toBe(
-      heatScaleColor("danger", 0),
-    );
+    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-S")?.props.bg).toBeUndefined();
     expectDefaultForeground(
       findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-D")?.props.fg,
     );
@@ -1062,10 +1059,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders current target keys in the diagnostics panel before typing starts", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("zh"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("zh"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1101,24 +1096,17 @@ describe("OpenTUI renderer adapter", () => {
     expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-1")).toBeDefined();
     expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")).toBeDefined();
     expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-A")).toBeDefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-A")?.props.bg).toBe(
-      heatScaleColor("success", 0),
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u2b")?.props.bg).toBe(
-      heatScaleColor("danger", 0),
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")?.props.bg).toBe(
-      heatScaleColor("success", 0),
-    );
+    // 开打前所有键零档：无背景色，一眼区分"练过的"和"没碰过的"
+    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-A")?.props.bg).toBeUndefined();
+    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u2b")?.props.bg).toBeUndefined();
+    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")?.props.bg).toBeUndefined();
     expect(content).not.toContain("重点符号:");
   });
 
   test("renders live diagnostics for only the keys present in the current target", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1183,9 +1171,7 @@ describe("OpenTUI renderer adapter", () => {
     expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")?.props.bg).toBe(
       heatScaleColor("success", 1),
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u2b")?.props.bg).toBe(
-      heatScaleColor("danger", 0),
-    );
+    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u2b")?.props.bg).toBeUndefined();
     expectDefaultForeground(
       findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-Z")?.props.fg,
     );
@@ -1193,10 +1179,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("keeps long diagnostic key rows aligned without clipping", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1233,10 +1217,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders line numbers only for code targets", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1255,10 +1237,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("soft wraps long code rows instead of clipping hidden target text", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1283,10 +1263,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("soft wraps long code rows at word boundaries when possible", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1309,10 +1287,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("does not apply syntax fallback colors to non-code targets", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1344,10 +1320,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders explicit default foreground for plain code instead of ANSI white", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1376,10 +1350,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders cursor position and newline markers without an error hint row", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1418,10 +1390,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("renders code practice with Shiki-backed syntax colors", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1676,10 +1646,8 @@ describe("OpenTUI renderer adapter", () => {
 
   test("keeps ghost text stable when repeated wrong enters are typed", async () => {
     const context = appContext();
-    const state = activateOpenTuiMenuItem(
-      createOpenTuiInitialState("en"),
-      "comprehensive",
-      context,
+    const state = startStagePlanFirstLesson(
+      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -2558,5 +2526,124 @@ describe("ghostRows space glyph", () => {
     const rows = ghostRows("give up", "", undefined, false);
     const texts = (rows[0] ?? []).map((segment) => segment.text).join("");
     expect(texts).toBe("give up");
+  });
+});
+
+describe("ghost viewport slice", () => {
+  test("short content renders fully", () => {
+    expect(ghostViewportSlice(10, 3, 20)).toEqual({ start: 0, end: 10 });
+    expect(ghostViewportSlice(10, 3, Number.POSITIVE_INFINITY)).toEqual({ start: 0, end: 10 });
+  });
+
+  test("cursor near top keeps window at start", () => {
+    expect(ghostViewportSlice(100, 2, 20)).toEqual({ start: 0, end: 20 });
+  });
+
+  test("cursor mid-content keeps cursor around 40% of viewport", () => {
+    const slice = ghostViewportSlice(100, 50, 20);
+    expect(slice.start).toBe(42);
+    expect(slice.end).toBe(62);
+  });
+
+  test("cursor near bottom keeps cursor near window top so last rows always scroll in", () => {
+    // 不贴底截停：光标行保持在窗口顶部偏移处，即使窗口尾部不足 viewport 行
+    expect(ghostViewportSlice(100, 99, 20)).toEqual({ start: 91, end: 100 });
+    expect(ghostViewportSlice(62, 61, 20)).toEqual({ start: 53, end: 62 });
+  });
+
+  test("missing cursor anchors at top", () => {
+    expect(ghostViewportSlice(100, -1, 20)).toEqual({ start: 0, end: 20 });
+  });
+});
+
+describe("ghost visual row count", () => {
+  test("counts one visual row per short code line", () => {
+    const text = Array.from({ length: 12 }, (_, i) => `const v${i} = ${i};`).join("\n");
+    expect(ghostVisualRowCount(text, text, "code", undefined, undefined)).toBe(12);
+  });
+
+  test("counts sentence translation lines", () => {
+    const text = "The weather is nice.\nShe left early.";
+    const annotations = [
+      { start: 0, end: 20, translation_zh: "天气不错。", display: "line" as const },
+      { start: 21, end: 36, translation_zh: "她早走了。", display: "line" as const },
+    ];
+    // 2 句 + 2 行翻译 = 4 可视行
+    expect(ghostVisualRowCount(text, text, "words", annotations, undefined)).toBe(4);
+  });
+});
+
+describe("ghost text review scroll windowing", () => {
+  const ghostKit = (): OpenTuiRendererKit & { addedNodes: never } =>
+    ({
+      Box: (props: unknown, ...children: unknown[]) => ({ type: "Box", props, children }),
+      ScrollBox: (props: unknown, ...children: unknown[]) => ({ type: "ScrollBox", props, children }),
+      Text: (props: unknown) => ({ type: "Text", props, children: [] }),
+    }) as never;
+
+  function flattenText(node: unknown, out: string[] = []): string[] {
+    const value = node as { props?: { content?: unknown }; children?: unknown[] };
+    if (typeof value.props?.content === "string") {
+      out.push(value.props.content);
+    }
+    for (const child of value.children ?? []) {
+      flattenText(child, out);
+    }
+    return out;
+  }
+
+  const longCode = Array.from({ length: 60 }, (_, i) =>
+    i === 0 ? "const FIRST = 1;" : i === 59 ? "const LAST = 60;" : `const v${i} = ${i};`,
+  ).join("\n");
+  const blocks = [
+    { start_line: 0, line_count: 60, language: "typescript", framework: "l", project: "p", source: "s" },
+  ];
+
+  async function withRows<T>(rows: number, run: () => Promise<T>): Promise<T> {
+    const original = Object.getOwnPropertyDescriptor(process.stdout, "rows");
+    Object.defineProperty(process.stdout, "rows", { value: rows, configurable: true });
+    try {
+      return await run();
+    } finally {
+      if (original) {
+        Object.defineProperty(process.stdout, "rows", original);
+      }
+    }
+  }
+
+  test("reviewScroll undefined on completed snapshot shows the bottom", async () => {
+    await withRows(30, async () => {
+      const tree = await renderGhostText(
+        longCode, longCode, "code", "s", blocks, undefined, ghostKit(),
+        "✓ done", undefined, undefined,
+      );
+      const content = flattenText(tree).join("\n");
+      // 完成态默认停底部：末行可见、首行不可见
+      expect(content).toContain("LAST");
+      expect(content).not.toContain("FIRST");
+    });
+  });
+
+  test("reviewScroll 0 scrolls to the top", async () => {
+    await withRows(30, async () => {
+      const tree = await renderGhostText(
+        longCode, longCode, "code", "s", blocks, undefined, ghostKit(),
+        "✓ done", undefined, 0,
+      );
+      const content = flattenText(tree).join("\n");
+      expect(content).toContain("FIRST");
+      expect(content).not.toContain("LAST");
+    });
+  });
+
+  test("oversized reviewScroll clamps to the bottom", async () => {
+    await withRows(30, async () => {
+      const tree = await renderGhostText(
+        longCode, longCode, "code", "s", blocks, undefined, ghostKit(),
+        "✓ done", undefined, 9999,
+      );
+      const content = flattenText(tree).join("\n");
+      expect(content).toContain("LAST");
+    });
   });
 });

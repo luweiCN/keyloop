@@ -1,4 +1,5 @@
 import {
+  type TrainingModule,
   type CodeFilterPreference,
   type CodePracticeConfig,
   type CodePracticeOption,
@@ -437,11 +438,49 @@ export function reduceFlatSettingsItem(
           ),
         },
       });
+    case "module_foundation":
+      return flatSettingsResult(state.language, state, selectedIndex, {
+        enabledModules: toggleEnabledModule(state, "foundation_input"),
+      });
+    case "module_everyday":
+      return flatSettingsResult(state.language, state, selectedIndex, {
+        enabledModules: toggleEnabledModule(state, "everyday_english"),
+      });
+    case "module_programming":
+      return flatSettingsResult(state.language, state, selectedIndex, {
+        enabledModules: toggleEnabledModule(state, "programming_basics"),
+      });
+    case "module_code":
+      return flatSettingsResult(state.language, state, selectedIndex, {
+        enabledModules: toggleEnabledModule(state, "code_practice"),
+      });
     case "code_filters":
     case "youdao_tts":
     case "dictionary_status":
       return { state, action: "continue" };
   }
+}
+
+const allPracticeModules: TrainingModule[] = [
+  "foundation_input",
+  "everyday_english",
+  "programming_basics",
+  "code_practice",
+];
+
+/** 切换科目开关；至少保留一个启用 */
+function toggleEnabledModule(
+  state: OpenTuiAppState,
+  module: TrainingModule,
+): TrainingModule[] {
+  const enabled = state.enabledModules ?? [...allPracticeModules];
+  if (enabled.includes(module)) {
+    const next = enabled.filter((item) => item !== module);
+    return next.length === 0 ? enabled : next;
+  }
+  return allPracticeModules.filter(
+    (item) => enabled.includes(item) || item === module,
+  );
 }
 
 export function flatSettingsResult(
@@ -477,6 +516,7 @@ export function flatSettingsOptions(
     overrides.customLibrarySettings ?? state.customLibrarySettings;
   const speedUnit = overrides.speedUnit ?? state.speed_unit;
   const todayElapsedMs = overrides.todayElapsedMs ?? state.today_elapsed_ms;
+  const enabledModules = overrides.enabledModules ?? state.enabledModules;
   if (codeFilters !== undefined) {
     options.codeFilters = codeFilters;
   }
@@ -503,6 +543,9 @@ export function flatSettingsOptions(
   }
   if (todayElapsedMs !== undefined) {
     options.todayElapsedMs = todayElapsedMs;
+  }
+  if (enabledModules !== undefined) {
+    options.enabledModules = enabledModules;
   }
   return options;
 }

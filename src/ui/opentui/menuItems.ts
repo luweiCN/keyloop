@@ -79,6 +79,7 @@ export function openTuiMenuItems(state: OpenTuiAppState): OpenTuiMenuItem[] {
     case "settings":
     case "stats":
     case "running":
+    case "stage_plan":
     case "exit_confirmation":
     case "code_settings_confirmation":
     case "practice_options":
