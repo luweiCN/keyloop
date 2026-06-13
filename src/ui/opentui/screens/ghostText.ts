@@ -247,7 +247,12 @@ function ghostViewportRows(): number {
   return Math.max(rows - 22, 8);
 }
 
-/** 纯函数：给定总行数、光标行与视口高度，计算渲染窗口（光标行约在视口 40% 处） */
+/**
+ * 纯函数：给定总行数、光标行与视口高度，计算渲染窗口。
+ * 光标行固定在窗口顶部第 N 行处，且尾部不做"贴底"截停——
+ * 这样无论终端实际能显示多少行（chrome 估算永远不精确），
+ * 光标行都在窗口前部、必然可见，最后一行也总能滚上来。
+ */
 export function ghostViewportSlice(
   totalRows: number,
   cursorIndex: number,
@@ -257,11 +262,9 @@ export function ghostViewportSlice(
     return { start: 0, end: totalRows };
   }
   const anchor = cursorIndex < 0 ? 0 : cursorIndex;
-  const start = Math.min(
-    Math.max(anchor - Math.floor(viewportRows * 0.4), 0),
-    totalRows - viewportRows,
-  );
-  return { start, end: start + viewportRows };
+  const cursorTopOffset = Math.min(Math.floor(viewportRows * 0.4), 12);
+  const start = Math.max(anchor - cursorTopOffset, 0);
+  return { start, end: Math.min(start + viewportRows, totalRows) };
 }
 
 export function renderGhostVisualLine(

@@ -727,13 +727,16 @@ export function renderDiagnosticKeyCell(
   kit: OpenTuiRendererKit,
 ): unknown {
   const level = metric === "speed" ? item.speed_level : item.error_level;
+  // 初始全部无背景色：速度快起来 / 错误多起来才渐进着色，
+  // 打完一眼能看出哪些键错过、哪些键从头到尾干净
+  const heat = level > 0;
   const color =
     metric === "speed" ? heatScaleColor("success", level) : heatScaleColor("danger", level);
   return kit.Text({
     id: `keyloop-diagnostic-${metric}-key-${diagnosticKeyId(item.label)}`,
     content: ` ${item.label} `,
     fg: theme.foreground,
-    bg: color,
+    ...(heat ? { bg: color } : {}),
     width: DIAGNOSTIC_KEY_CELL_WIDTH,
     height: 1,
     wrapMode: "none",

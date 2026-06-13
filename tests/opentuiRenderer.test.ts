@@ -1022,9 +1022,8 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).not.toContain("All keys:");
     expect(content).toContain("Speed:");
     expect(content).toContain("Errors:");
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-D")?.props.bg).toBe(
-      heatScaleColor("success", 0),
-    );
+    // 零档（无数据/低速）不再上背景色
+    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-D")?.props.bg).toBeUndefined();
     expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-row-0")?.props.flexWrap).toBe(
       "nowrap",
     );
@@ -1035,9 +1034,7 @@ describe("OpenTUI renderer adapter", () => {
     expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-S")?.props.bg).toBe(
       heatScaleColor("success", 2),
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-S")?.props.bg).toBe(
-      heatScaleColor("danger", 0),
-    );
+    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-S")?.props.bg).toBeUndefined();
     expectDefaultForeground(
       findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-D")?.props.fg,
     );
@@ -1097,15 +1094,10 @@ describe("OpenTUI renderer adapter", () => {
     expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-1")).toBeDefined();
     expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")).toBeDefined();
     expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-A")).toBeDefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-A")?.props.bg).toBe(
-      heatScaleColor("success", 0),
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u2b")?.props.bg).toBe(
-      heatScaleColor("danger", 0),
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")?.props.bg).toBe(
-      heatScaleColor("success", 0),
-    );
+    // 开打前所有键零档：无背景色，一眼区分"练过的"和"没碰过的"
+    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-A")?.props.bg).toBeUndefined();
+    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u2b")?.props.bg).toBeUndefined();
+    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")?.props.bg).toBeUndefined();
     expect(content).not.toContain("重点符号:");
   });
 
@@ -1177,9 +1169,7 @@ describe("OpenTUI renderer adapter", () => {
     expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")?.props.bg).toBe(
       heatScaleColor("success", 1),
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u2b")?.props.bg).toBe(
-      heatScaleColor("danger", 0),
-    );
+    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u2b")?.props.bg).toBeUndefined();
     expectDefaultForeground(
       findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-Z")?.props.fg,
     );
@@ -2553,8 +2543,10 @@ describe("ghost viewport slice", () => {
     expect(slice.end).toBe(62);
   });
 
-  test("cursor near bottom clamps window to end", () => {
-    expect(ghostViewportSlice(100, 99, 20)).toEqual({ start: 80, end: 100 });
+  test("cursor near bottom keeps cursor near window top so last rows always scroll in", () => {
+    // 不贴底截停：光标行保持在窗口顶部偏移处，即使窗口尾部不足 viewport 行
+    expect(ghostViewportSlice(100, 99, 20)).toEqual({ start: 91, end: 100 });
+    expect(ghostViewportSlice(62, 61, 20)).toEqual({ start: 53, end: 62 });
   });
 
   test("missing cursor anchors at top", () => {

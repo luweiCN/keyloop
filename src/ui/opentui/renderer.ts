@@ -64,7 +64,7 @@ export async function renderOpenTuiAppOnce(
         if (destroyed) {
           return;
         }
-        renderer.root.remove?.(OPEN_TUI_ROOT_ID);
+        destroyPreviousRoute(renderer);
         renderer.root.add(nextRoute);
         if (queueDepth <= 1) {
           await renderer.idle?.();
@@ -84,6 +84,23 @@ export async function renderOpenTuiAppOnce(
   };
   await renderer.idle?.();
   return renderer;
+}
+
+/**
+ * 替换路由树前必须销毁旧树：OpenTUI 的 remove(id) 只从树上摘除节点，
+ * 不释放其 yoga 布局节点（native 内存，GC 不回收）。每键重建 UI 树时
+ * 若只 remove 不销毁，旧树持续泄漏，表现为越打越卡、连菜单都卡。
+ */
+function destroyPreviousRoute(renderer: OpenTuiRenderer): void {
+  const previous = renderer.root.getRenderable?.(OPEN_TUI_ROOT_ID) as
+    | { destroyRecursively?: () => void }
+    | undefined;
+  if (previous?.destroyRecursively !== undefined) {
+    // destroyRecursively 内部会先从 parent 摘除，再逐节点 free yoga 节点
+    previous.destroyRecursively();
+    return;
+  }
+  renderer.root.remove?.(OPEN_TUI_ROOT_ID);
 }
 
 async function renderRoute(state: OpenTuiAppState, kit: OpenTuiRendererKit): Promise<unknown> {
