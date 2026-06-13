@@ -157,10 +157,24 @@ export async function renderGhostText(
   const children: unknown[] = entries.slice(slice.start, slice.end).map((entry) => entry.node);
   const hiddenAbove = slice.start;
   const hiddenBelow = entries.length - slice.end;
-  const progressTitle =
-    hiddenAbove > 0 || hiddenBelow > 0
-      ? ` ↑${hiddenAbove} · ${slice.start + 1}-${slice.end}/${entries.length} 行 · ↓${hiddenBelow} `
-      : undefined;
+  const clipped = hiddenAbove > 0 || hiddenBelow > 0;
+  const progressTitle = clipped
+    ? ` ↑${hiddenAbove} · ${slice.start + 1}-${slice.end}/${entries.length} 行 · ↓${hiddenBelow} `
+    : undefined;
+
+  const contentColumn = kit.Box(
+    {
+      id: "keyloop-ghost-content",
+      flexDirection: "column",
+      flexGrow: 1,
+      overflow: "hidden",
+    },
+    ...children,
+    ...(articleTranslation === undefined ? [] : [articleTranslation]),
+  );
+  const scrollbar = clipped
+    ? renderGhostScrollbar(slice, entries.length, children.length, kit)
+    : undefined;
 
   return kit.Box(
     {
@@ -174,11 +188,50 @@ export async function renderGhostText(
       backgroundColor: theme.background,
       paddingX: 1,
       flexGrow: 1,
-      flexDirection: "column",
+      flexDirection: "row",
       overflow: "hidden",
     },
-    ...children,
-    ...(articleTranslation === undefined ? [] : [articleTranslation]),
+    contentColumn,
+    ...(scrollbar === undefined ? [] : [scrollbar]),
+  );
+}
+
+/** 右侧滚动条：视口在全文中的位置（█ 为可视区，│ 为其余） */
+function renderGhostScrollbar(
+  slice: { start: number; end: number },
+  totalRows: number,
+  barHeight: number,
+  kit: OpenTuiRendererKit,
+): unknown {
+  const safeHeight = Math.max(barHeight, 1);
+  const thumbStart = Math.min(
+    Math.floor((slice.start / totalRows) * safeHeight),
+    safeHeight - 1,
+  );
+  const thumbEnd = Math.max(
+    Math.ceil((slice.end / totalRows) * safeHeight),
+    thumbStart + 1,
+  );
+  const cells: unknown[] = [];
+  for (let index = 0; index < safeHeight; index += 1) {
+    const inThumb = index >= thumbStart && index < thumbEnd;
+    cells.push(
+      kit.Text({
+        id: `keyloop-ghost-scrollbar-${index}`,
+        content: inThumb ? "█" : "│",
+        fg: inThumb ? theme.accent : theme.muted,
+        height: 1,
+      }),
+    );
+  }
+  return kit.Box(
+    {
+      id: "keyloop-ghost-scrollbar",
+      flexDirection: "column",
+      width: 1,
+      overflow: "hidden",
+    },
+    ...cells,
   );
 }
 
@@ -189,8 +242,9 @@ function ghostViewportRows(): number {
   if (rows === undefined || !Number.isFinite(rows) || rows <= 0) {
     return Number.POSITIVE_INFINITY;
   }
-  // 标题/指标面板/训练诊断/快捷键提示/边框等固定占用约 18 行
-  return Math.max(rows - 18, 8);
+  // 标题/指标面板/训练诊断/快捷键提示/边框等固定占用，保守取 22 行，
+  // 宁可视口略小也不能让光标行被 box 裁掉（否则表现为"滚动卡住"）
+  return Math.max(rows - 22, 8);
 }
 
 /** 纯函数：给定总行数、光标行与视口高度，计算渲染窗口（光标行约在视口 40% 处） */

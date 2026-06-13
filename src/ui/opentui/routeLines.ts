@@ -128,7 +128,12 @@ export function openTuiRouteLines(state: OpenTuiAppState): string[] {
         speedUnit,
       );
     case "stage_plan":
-      return stagePlanLines(state.route.plan, state.route.diagnosis_lines, state.language);
+      return stagePlanLines(
+        state.route.plan,
+        state.route.diagnosis_lines,
+        state.language,
+        state.route.completed_lesson_ids ?? [],
+      );
     case "summary":
       return summaryLines(state.route.records, state.language, speedUnit);
     case "ansi_palette":
@@ -378,8 +383,10 @@ function stagePlanLines(
   plan: DailyPracticePlan,
   diagnosisLines: string[],
   language: Language,
+  completedLessonIds: string[],
 ): string[] {
   const zh = language === "zh";
+  const completed = new Set(completedLessonIds);
   const lines: string[] = [];
   lines.push(zh ? "诊断摘要:" : "Diagnosis:");
   for (const line of diagnosisLines) {
@@ -394,15 +401,21 @@ function stagePlanLines(
   );
   for (const [index, lesson] of plan.lessons.entries()) {
     const reason = zh ? lesson.reason_zh : lesson.reason_en;
+    const mark = completed.has(lesson.id) ? "✓" : " ";
     lines.push(
-      `  ${index + 1}. ${lesson.estimated_minutes} min  ${reason}`,
+      `  ${mark} ${index + 1}. ${lesson.estimated_minutes} min  ${reason}`,
     );
   }
   lines.push("");
+  const adjustable = plan.run_id.length === 0;
   lines.push(
     zh
-      ? "[Enter] 开始  [←/→] 调整时长  [Esc] 返回"
-      : "[Enter] start  [Left/Right] adjust minutes  [Esc] back",
+      ? adjustable
+        ? "[Enter] 开始  [←/→] 调整时长  [Esc] 返回"
+        : "[Enter] 继续（跳过已完成阶段）  [Esc] 返回"
+      : adjustable
+        ? "[Enter] start  [Left/Right] adjust minutes  [Esc] back"
+        : "[Enter] continue (skips finished stages)  [Esc] back",
   );
   return lines;
 }

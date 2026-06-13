@@ -80,6 +80,7 @@ import {
 } from "../../training/programmingBasicsTargets";
 import type { LiveMetrics } from "../../training/liveSession";
 import { buildSkillProfile, type SkillProfile } from "../../training/diagnosis";
+import { completedDailyLessonIds } from "../../storage/keyloopStore";
 
 export const openTuiStatsViews = [
   "overview",
@@ -213,6 +214,8 @@ export type OpenTuiRoute =
       screen: "stage_plan";
       plan: DailyPracticePlan;
       diagnosis_lines: string[];
+      /** 当日恢复场景：已完成的 lesson id（计划行打 ✓，开始时跳过） */
+      completed_lesson_ids?: string[];
     }
   | {
       screen: "exit_confirmation";
@@ -1419,21 +1422,31 @@ export function comprehensiveStagePlanState(
   effectiveContext: BuildTargetContext,
   targetMinutesOverride?: number,
 ): OpenTuiAppState {
-  const plan = buildDailyPracticePlan(
-    effectiveContext,
-    targetMinutesOverride === undefined ? {} : { targetMinutesOverride },
-  );
+  // 当日已有未完成计划时复用（保证所见即所练、可恢复进度）；手动调时长则重新生成
+  const storedPlan =
+    targetMinutesOverride === undefined ? effectiveContext.todayDailyPlan : undefined;
+  const plan =
+    storedPlan ??
+    buildDailyPracticePlan(
+      effectiveContext,
+      targetMinutesOverride === undefined ? {} : { targetMinutesOverride },
+    );
   const profile = buildSkillProfile(
     effectiveContext.records,
     effectiveContext.plan,
     effectiveContext.now,
   );
+  const completedLessonIds =
+    storedPlan === undefined
+      ? []
+      : [...completedDailyLessonIds(storedPlan, effectiveContext.records)];
   return appState(
     state.language,
     {
       screen: "stage_plan",
       plan,
       diagnosis_lines: diagnosisSummaryLines(profile, state.language),
+      ...(completedLessonIds.length === 0 ? {} : { completed_lesson_ids: completedLessonIds }),
     },
     stateOptions(state),
   );
@@ -1446,6 +1459,10 @@ export function adjustStagePlanMinutes(
   deltaMinutes: number,
 ): OpenTuiAppState {
   if (state.route.screen !== "stage_plan") {
+    return state;
+  }
+  if (state.route.plan.run_id.length > 0) {
+    // 当日计划已落盘开练，时长不再可调
     return state;
   }
   return comprehensiveStagePlanState(
@@ -1461,7 +1478,8 @@ export function startStagePlanFirstLesson(state: OpenTuiAppState): OpenTuiAppSta
     return state;
   }
   const plan = state.route.plan;
-  const lesson = plan.lessons[0];
+  const completed = new Set(state.route.completed_lesson_ids ?? []);
+  const lesson = plan.lessons.find((item) => !completed.has(item.id)) ?? plan.lessons[0];
   if (lesson === undefined) {
     return state;
   }

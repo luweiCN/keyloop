@@ -18,6 +18,7 @@ import {
   keyloopDataDir,
   loadKeyAggregatesFromPath,
   loadCustomLibrariesFromDir,
+  loadUnfinishedDailyPlanFromPath,
   loadOrCreateDailyPracticePlanFromPath,
   loadPreferencesFromPath,
   loadSessionsFromPath,
@@ -325,6 +326,11 @@ async function runApp(
   let initialRenderer: OpenTuiRenderer | undefined;
 
   for (;;) {
+    const todayDailyPlan = await loadUnfinishedDailyPlanFromPath(
+      dailyRunsPath(dataDir),
+      localDateKey(options.now ?? new Date()),
+      records,
+    );
     const context: AppRunnerContext = {
       language,
       records,
@@ -359,6 +365,9 @@ async function runApp(
     context.customLibraries = customLibraries;
     context.dictionary = dictionary;
     context.librariesDir = librariesDir;
+    if (todayDailyPlan !== undefined) {
+      context.todayDailyPlan = todayDailyPlan;
+    }
 
     const appResult =
       options.appRunner === undefined

@@ -414,7 +414,7 @@ describe("OpenTUI renderer adapter", () => {
     expect(flattenContent([meaningLine as FakeNode]).replace(/\n/gu, "")).toBe(
       "信息；资料 练习",
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
       (child) => child.props.id,
     )).toEqual(["keyloop-ghost-line-0", "keyloop-ghost-meaning-line-0"]);
   });
@@ -445,7 +445,7 @@ describe("OpenTUI renderer adapter", () => {
       await renderOpenTuiAppOnce(running, kit);
     });
 
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
       (child) => child.props.id,
     )).toEqual([
       "keyloop-ghost-line-0",
@@ -493,7 +493,7 @@ describe("OpenTUI renderer adapter", () => {
       await renderOpenTuiAppOnce(running, kit);
     });
 
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
       (child) => child.props.id,
     )).toEqual([
       "keyloop-ghost-line-0",
@@ -602,7 +602,7 @@ describe("OpenTUI renderer adapter", () => {
       await renderOpenTuiAppOnce(running, kit);
     });
 
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
       (child) => child.props.id,
     )).toEqual([
       "keyloop-ghost-line-0",
@@ -669,7 +669,7 @@ describe("OpenTUI renderer adapter", () => {
 
     // The 78-column row must wrap instead of being cut off at 32 columns.
     expect(findNodeById(kit.addedNodes, "keyloop-ghost-line-1")).toBeDefined();
-    const ghost = findNodeById(kit.addedNodes, "keyloop-ghost-text") as FakeNode;
+    const ghost = findNodeById(kit.addedNodes, "keyloop-ghost-content") as FakeNode;
     const ids = ghost.children.map((child) => String(child.props.id));
     expect(ids.at(-1)).toMatch(/^keyloop-ghost-line-translation-/u);
     const translationNode = ghost.children.at(-1) as FakeNode;
@@ -710,7 +710,7 @@ describe("OpenTUI renderer adapter", () => {
     await renderOpenTuiAppOnce(sentenceState, kit);
 
     expect(findNodeById(kit.addedNodes, "keyloop-target-line-translations")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
       (child) => child.props.id,
     )).toEqual([
       "keyloop-ghost-line-0",
@@ -756,7 +756,7 @@ describe("OpenTUI renderer adapter", () => {
     const articleBlock = findNodeById(kit.addedNodes, "keyloop-ghost-article-translation");
     expect(articleBlock).toBeDefined();
     expect(flattenContent([articleBlock as FakeNode])).toContain("第一段。 第二段。");
-    const ghostChildIds = findNodeById(kit.addedNodes, "keyloop-ghost-text")?.children.map(
+    const ghostChildIds = findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
       (child) => child.props.id,
     );
     expect(ghostChildIds?.at(-1)).toBe("keyloop-ghost-article-translation");

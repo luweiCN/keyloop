@@ -35,7 +35,7 @@ import { PLAN_HISTORY_DAYS } from "./plan";
 import {
   type LongWordEntry,
 } from "./vocabulary";
-import { buildSkillProfile, type SkillProfile, type TrainingForm } from "./diagnosis";
+import { buildSkillProfile, formForCategory, type SkillProfile, type TrainingForm } from "./diagnosis";
 import { buildDailyPrescription, charBudget, type StagePlan } from "./prescription";
 import type { CustomLibrary } from "./customLibrary";
 
@@ -57,6 +57,8 @@ export interface BuildTargetContext {
   enabledModules?: TrainingModule[];
   /** 自建语料库（参与单词/句子形态的语料池） */
   customLibraries?: CustomLibrary[];
+  /** 当日已存在且未完成的综合训练计划；诊断屏优先复用，保证所见即所练 */
+  todayDailyPlan?: DailyPracticePlan;
 }
 
 export interface BuildLongWordBreakdownPracticeOptions {
@@ -541,8 +543,8 @@ export function refreshModuleMixTarget(
   lesson: PracticeLesson,
   context: BuildTargetContext,
 ): PracticeTarget {
-  const stageForm = stageFormFromLessonId(lesson.id);
-  if (stageForm !== undefined) {
+  const stageForm = stageFormFromLesson(lesson);
+  if (stageForm !== null) {
     // 阶段课程：用包含最新记录的 context 重建画像与预算（会话内实时修正）
     const profile = buildSkillProfile(context.records, context.plan, context.now);
     return buildStageTarget(context, {
@@ -711,6 +713,18 @@ function stageLessonCategory(form: TrainingForm): TrainingCategory {
 export function stageFormFromLessonId(lessonId: string): TrainingForm | undefined {
   const match = lessonId.match(/^stage:(keys|words|symbols|sentences|articles|code):/u);
   return match?.[1] as TrainingForm | undefined;
+}
+
+/**
+ * 综合训练阶段课程 → 训练形态。
+ * 注意必须用 category 识别而不是 lesson.id：当日计划存盘时
+ * assignDailyRunMetadata 会重写 id（丢掉 stage: 前缀），category 不变。
+ */
+export function stageFormFromLesson(lesson: PracticeLesson): TrainingForm | null {
+  if (lesson.mix_profile !== "comprehensive") {
+    return null;
+  }
+  return formForCategory(lesson.category);
 }
 
 function buildModuleMixLesson(

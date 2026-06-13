@@ -345,3 +345,23 @@ describe("buildDailyPracticePlan (stage-based)", () => {
     expect(refreshed.source).toContain("keyloop:stage:words");
   });
 });
+
+describe("stage detection survives daily-run id rewrite", () => {
+  test("refreshModuleMixTarget keeps stage path after id rewrite", () => {
+    const context = { ...stageContext(), now: new Date("2026-06-13T08:00:00Z") };
+    const plan = buildDailyPracticePlan(context);
+    const sentencesLesson = plan.lessons.find((lesson) =>
+      lesson.id.startsWith("stage:sentences"),
+    );
+    expect(sentencesLesson).toBeDefined();
+    // 模拟 assignDailyRunMetadata 的 id 重写（丢失 stage: 前缀）
+    const rewritten = {
+      ...sentencesLesson!,
+      id: "20260613-1-abc123-03-words",
+    };
+    const refreshed = refreshModuleMixTarget(rewritten, context);
+    // 必须仍走句子形态生成器，而不是退化为旧的 everyday mix
+    expect(refreshed.source).toContain("keyloop:stage:sentences");
+    expect(refreshed.annotations?.some((item) => item.display === "line")).toBe(true);
+  });
+});

@@ -6,6 +6,7 @@ import type {
   EverydayEnglishSettings,
   PracticeTargetAnnotation,
   PracticeLesson,
+  PracticeTarget,
   SessionRecord,
   UserPreferences,
 } from "../../domain/model";
@@ -187,6 +188,8 @@ async function resolveDefaultYoudaoCredentials() {
 export interface LessonRunResult {
   record: SessionRecord | null;
   renderer?: OpenTuiRenderer;
+  /** 实际练习的 target；练习选项变更会重建 target，与 lesson.target 可能不同 */
+  target?: PracticeTarget;
 }
 
 export interface PostCompletionResult {
@@ -325,11 +328,15 @@ export async function openTuiStartRunner(
             nextSelection,
             completedRecords,
           ).lesson;
+    const completedLesson =
+      runResult.target === undefined
+        ? selection.lesson
+        : { ...selection.lesson, target: runResult.target };
     const completionResult = await showCompletionPage(
       context,
       record,
       nextLesson,
-      selection.lesson,
+      completedLesson,
       runResult.renderer,
       options,
       todayElapsedBeforeLesson,
@@ -483,7 +490,7 @@ export async function runLessonUntilComplete(
       duration_ms: 0,
     });
     await saveRecordIfAvailable(context, record);
-    return { record, renderer: initialRenderer };
+    return { record, renderer: initialRenderer, target: session.target };
   }
 
   return new Promise<LessonRunResult>((resolve) => {
@@ -1030,11 +1037,11 @@ export async function runLessonUntilComplete(
       clearTimer();
       renderer.keyInput?.off("keypress", handleKeypress);
       if (keepRenderer) {
-        resolve({ record, renderer });
+        resolve({ record, renderer, target: session.target });
         return;
       }
       renderer.destroy?.();
-      resolve({ record });
+      resolve({ record, target: session.target });
     };
     const handleKeypress = (event: OpenTuiKeyEvent): void => {
       void handleKeypressEvent(event);

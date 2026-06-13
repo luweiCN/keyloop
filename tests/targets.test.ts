@@ -831,7 +831,8 @@ describe("target generation core", () => {
       library: testLibrary(),
     });
 
-    expect(target.source).toContain("keyloop:module:programming-basics-mix:");
+    // category 驱动的形态刷新：programming mix 课程刷新为符号形态内容
+    expect(target.source).toContain("keyloop:module:programming-basics:symbols-numbers");
     expect(target.text).not.toBe("fallback");
   });
 
