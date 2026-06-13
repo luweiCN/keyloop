@@ -345,17 +345,36 @@ export function reviseStages(
     };
   }
 
-  // 按原计划比例缩放剩余分钟
-  const plannedTotal = survivors.reduce((sum, stage) => sum + stage.minutes, 0);
-  const scale = plannedTotal === 0 ? 1 : minutesLeft / plannedTotal;
+  // 弱项阶段优先保剂量：保留原分钟，由常规阶段吸收压缩；
+  // 仅当剩余时间连弱项都装不下时，才按比例压缩弱项兜底
+  const weakMinutes = survivors
+    .filter((stage) => stage.weak)
+    .reduce((sum, stage) => sum + stage.minutes, 0);
+  if (weakMinutes >= minutesLeft) {
+    const weakOnly = survivors.filter((stage) => stage.weak);
+    const scale = weakMinutes === 0 ? 1 : minutesLeft / weakMinutes;
+    return {
+      target_minutes: prescription.target_minutes,
+      stages: weakOnly.map((stage) =>
+        rebudget(stage, Math.max(Math.round(stage.minutes * scale), MIN_STAGE_MINUTES), measured),
+      ),
+    };
+  }
+  const regularPlanned = survivors
+    .filter((stage) => !stage.weak)
+    .reduce((sum, stage) => sum + stage.minutes, 0);
+  const regularScale =
+    regularPlanned === 0 ? 1 : (minutesLeft - weakMinutes) / regularPlanned;
   return {
     target_minutes: prescription.target_minutes,
     stages: survivors.map((stage) =>
-      rebudget(
-        stage,
-        Math.max(Math.round(stage.minutes * scale), MIN_STAGE_MINUTES),
-        measured,
-      ),
+      stage.weak
+        ? rebudget(stage, stage.minutes, measured)
+        : rebudget(
+            stage,
+            Math.max(Math.round(stage.minutes * regularScale), MIN_STAGE_MINUTES),
+            measured,
+          ),
     ),
   };
 }

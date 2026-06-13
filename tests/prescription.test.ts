@@ -355,3 +355,40 @@ describe("end-to-end: spec acceptance scenarios", () => {
     expect(profile.focus.code).not.toContain("algorithm");
   });
 });
+
+describe("reviseStages protects weak stage dose", () => {
+  test("weak stage keeps its planned minutes while regular stages compress", () => {
+    // 弱项 symbols → symbols 阶段标记 weak；构造时间紧张场景
+    const prescription = buildDailyPrescription(
+      baseInput({ profile: profileWith([["symbols", "weak"]], 30) }),
+    );
+    const symbols = prescription.stages.find((s) => s.form === "symbols");
+    expect(symbols?.weak).toBe(true);
+    const symbolsPlanned = symbols!.minutes;
+
+    // 第一阶段（keys 热身）花了远超预估的时间，剩余时间被压缩
+    const completed: CompletedStage[] = [
+      {
+        form: prescription.stages[0]!.form,
+        actual_minutes: prescription.target_minutes - symbolsPlanned - 2,
+        actual_wpm: 18,
+      },
+    ];
+    const revised = reviseStages(prescription, completed);
+    const revisedSymbols = revised.stages.find((s) => s.form === "symbols");
+    // 弱项阶段分钟数不被压到原计划以下
+    expect(revisedSymbols).toBeDefined();
+    expect(revisedSymbols!.minutes).toBeGreaterThanOrEqual(symbolsPlanned);
+  });
+});
+
+describe("buildDailyPrescription targetMinutesOverride clamping", () => {
+  test("override clamps to [10, 60]", () => {
+    const tiny = buildDailyPrescription(baseInput({ targetMinutesOverride: 3 }));
+    expect(tiny.target_minutes).toBe(10);
+    const huge = buildDailyPrescription(baseInput({ targetMinutesOverride: 200 }));
+    expect(huge.target_minutes).toBe(60);
+    const mid = buildDailyPrescription(baseInput({ targetMinutesOverride: 35 }));
+    expect(mid.target_minutes).toBe(35);
+  });
+});
