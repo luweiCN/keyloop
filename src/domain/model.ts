@@ -1,3 +1,5 @@
+import type { TrainingForm } from "../training/diagnosis";
+
 export type Language = "zh" | "en";
 
 export type Mode =
@@ -234,6 +236,15 @@ export interface UserPreferences {
   };
   /** 综合训练启用的一级模块；处方层只会开出启用模块的语料 */
   enabled_modules: TrainingModule[];
+  /** 目标驱动训练的主目标；undefined = 纯自适应综合训练 */
+  main_goal?: MainGoal | undefined;
+}
+
+export interface MainGoal {
+  form: TrainingForm;
+  target_wpm: number;
+  deadline: string;
+  created_at: string;
 }
 
 export interface KeyEventRecord {
@@ -594,6 +605,7 @@ export function parseUserPreferences(value: unknown): UserPreferences {
       daily_review_limit: numberValue(personalVocabulary.daily_review_limit, 8),
     },
     enabled_modules: parseEnabledModules(object.enabled_modules),
+    main_goal: parseMainGoal(object.main_goal),
   };
 }
 
@@ -613,6 +625,26 @@ function parseEnabledModules(value: unknown): TrainingModule[] {
       typeof item === "string" && (adaptiveModules as readonly string[]).includes(item),
   );
   return result.length === 0 ? [...adaptiveModules] : result;
+}
+
+const TRAINING_FORMS = ["keys", "words", "symbols", "sentences", "articles", "code"] as const;
+
+function parseMainGoal(value: unknown): MainGoal | undefined {
+  if (typeof value !== "object" || value === null) {
+    return undefined;
+  }
+  const object = value as Record<string, unknown>;
+  const form = object.form;
+  if (typeof form !== "string" || !(TRAINING_FORMS as readonly string[]).includes(form)) {
+    return undefined;
+  }
+  const targetWpm = numberValue(object.target_wpm, 0);
+  const deadline = stringValue(object.deadline, "");
+  const createdAt = stringValue(object.created_at, "");
+  if (targetWpm <= 0 || deadline === "" || createdAt === "") {
+    return undefined;
+  }
+  return { form: form as TrainingForm, target_wpm: targetWpm, deadline, created_at: createdAt };
 }
 
 export function defaultCodeStyleSettings(
