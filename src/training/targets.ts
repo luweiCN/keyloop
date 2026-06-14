@@ -42,7 +42,12 @@ import {
   type SkillProfile,
   type TrainingForm,
 } from "./diagnosis";
-import { buildDailyPrescription, charBudget, type StagePlan } from "./prescription";
+import {
+  buildDailyPrescription,
+  charBudget,
+  estimatedMinutesFromChars,
+  type StagePlan,
+} from "./prescription";
 import type { CustomLibrary } from "./customLibrary";
 
 export interface BuildTargetContext {
@@ -645,23 +650,28 @@ function stageLessonFromPlan(
   stage: StagePlan,
   index: number,
 ): PracticeLesson {
+  const target = buildStageTarget(context, {
+    stage,
+    profile,
+    ...(context.enabledModules === undefined
+      ? {}
+      : { enabledModules: context.enabledModules }),
+    ...(context.customLibraries === undefined
+      ? {}
+      : { customLibraries: context.customLibraries }),
+  });
   return {
     id: `stage:${stage.form}:${index + 1}`,
     kind: stageLessonKind(stage.form),
     module: stageLessonModule(stage.form),
     category: stageLessonCategory(stage.form),
     mix_profile: "comprehensive",
-    estimated_minutes: stage.minutes,
-    target: buildStageTarget(context, {
-      stage,
-      profile,
-      ...(context.enabledModules === undefined
-        ? {}
-        : { enabledModules: context.enabledModules }),
-      ...(context.customLibraries === undefined
-        ? {}
-        : { customLibraries: context.customLibraries }),
-    }),
+    estimated_minutes: estimatedMinutesFromChars(
+      [...target.text].length,
+      stage.form,
+      profile.form_speeds,
+    ),
+    target,
     reason_zh: stage.reason_zh,
     reason_en: stage.reason_en,
   };

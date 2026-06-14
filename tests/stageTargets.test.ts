@@ -2,7 +2,9 @@ import { describe, expect, test } from "bun:test";
 
 import type { ContentLibrary } from "../src/content/library";
 import type { CustomLibrary } from "../src/training/customLibrary";
+import { formForCategory } from "../src/training/diagnosis";
 import type { SkillProfile } from "../src/training/diagnosis";
+import { estimatedMinutesFromChars } from "../src/training/prescription";
 import {
   buildDailyPracticePlan,
   buildEverydayMixStageTarget,
@@ -440,4 +442,18 @@ describe("buildStageTarget words skill feature-biasing", () => {
     // 非弱项（纯随机）通常不会把 3 个驼峰词都排到前 3
     expect(countUpper(normal.text)).toBeLessThan(3);
   });
+});
+
+test("comprehensive lesson estimated_minutes is recomputed from real target chars, not the quota", () => {
+  // records 为空 → profile.form_speeds 无样本 → 回算用冷启动 wpm（与传 [] 等价）
+  const plan = buildDailyPracticePlan(stageContext(), { targetMinutesOverride: 20 });
+  expect(plan.lessons.length).toBeGreaterThan(0);
+  for (const lesson of plan.lessons) {
+    const form = formForCategory(lesson.category);
+    if (form === null) {
+      continue;
+    }
+    const chars = [...lesson.target.text].length;
+    expect(lesson.estimated_minutes).toBe(estimatedMinutesFromChars(chars, form, []));
+  }
 });
