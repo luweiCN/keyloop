@@ -14,6 +14,7 @@ import type {
   DailyPracticePlan,
   EverydayEnglishSettings,
   LessonKind,
+  MainGoal,
   MixProfile,
   PracticeLesson,
   PracticePlan,
@@ -70,6 +71,8 @@ export interface BuildTargetContext {
   customLibraries?: CustomLibrary[];
   /** 当日已存在且未完成的综合训练计划；诊断屏优先复用，保证所见即所练 */
   todayDailyPlan?: DailyPracticePlan;
+  /** 目标驱动训练的主目标（来自 preferences.main_goal）；主攻权重 + 推荐时长用 */
+  mainGoal?: MainGoal;
 }
 
 export interface BuildLongWordBreakdownPracticeOptions {
@@ -630,6 +633,7 @@ export function buildDailyPracticePlan(
     ...(options.targetMinutesOverride === undefined
       ? {}
       : { targetMinutesOverride: options.targetMinutesOverride }),
+    ...(context.mainGoal === undefined ? {} : { mainGoalForm: context.mainGoal.form }),
   });
   const lessons = prescription.stages.map((stage, index) =>
     stageLessonFromPlan(context, profile, stage, index),

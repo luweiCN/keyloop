@@ -21,6 +21,7 @@ import {
   type KeyAggregate,
   type KeyEventRecord,
   type Language,
+  type MainGoal,
   type PracticeLesson,
   type PracticeTarget,
   type SessionRecord,
@@ -85,6 +86,7 @@ import {
   recommendedDailyMinutes,
   snapToPreset,
 } from "../../training/prescription";
+import { recommendGoalPlan } from "../../training/goalPlan";
 import { completedDailyLessonIds } from "../../storage/keyloopStore";
 
 export const openTuiStatsViews = [
@@ -178,6 +180,7 @@ export interface OpenTuiStateOptions {
   dictionaryTier?: DictionaryTier | undefined;
   youdaoTtsCredentialStatus?: OpenTuiYoudaoTtsCredentialStatus | undefined;
   enabledModules?: TrainingModule[] | undefined;
+  mainGoal?: MainGoal | undefined;
 }
 
 export type OpenTuiReturnRoute =
@@ -349,6 +352,7 @@ export interface OpenTuiSessionState {
   youdaoTtsCredentialStatus?: OpenTuiYoudaoTtsCredentialStatus | undefined;
   today_elapsed_ms?: number | undefined;
   enabledModules?: TrainingModule[] | undefined;
+  mainGoal?: MainGoal | undefined;
 }
 
 export interface OpenTuiAppState extends OpenTuiSessionState {
@@ -1103,6 +1107,9 @@ function appState(
   if (options.enabledModules !== undefined) {
     state.enabledModules = [...options.enabledModules];
   }
+  if (options.mainGoal !== undefined) {
+    state.mainGoal = options.mainGoal;
+  }
   if (options.codeSettings !== undefined) {
     state.codeSettings = cloneCodeSettings(options.codeSettings);
   }
@@ -1149,6 +1156,7 @@ function buildTargetContextForState(
   const customLibrarySettings = state.customLibrarySettings;
   const enabledModules = state.enabledModules;
   const customLibraries = state.customLibraries;
+  const mainGoal = state.mainGoal;
   if (
     codeConfig === undefined &&
     codeStyle === undefined &&
@@ -1157,7 +1165,8 @@ function buildTargetContextForState(
     wordAudioSettings === undefined &&
     customLibrarySettings === undefined &&
     enabledModules === undefined &&
-    customLibraries === undefined
+    customLibraries === undefined &&
+    mainGoal === undefined
   ) {
     return context;
   }
@@ -1168,6 +1177,7 @@ function buildTargetContextForState(
     ...(everydaySettings === undefined ? {} : { everydaySettings }),
     ...(enabledModules === undefined ? {} : { enabledModules }),
     ...(customLibraries === undefined ? {} : { customLibraries }),
+    ...(mainGoal === undefined ? {} : { mainGoal }),
     ...(wordFormSettings === undefined
       ? {}
       : {
@@ -1208,6 +1218,9 @@ export function stateOptions(state: OpenTuiAppState): OpenTuiStateOptions {
   }
   if (state.enabledModules !== undefined) {
     options.enabledModules = state.enabledModules;
+  }
+  if (state.mainGoal !== undefined) {
+    options.mainGoal = state.mainGoal;
   }
   if (state.dictionaryTier !== undefined) {
     options.dictionaryTier = state.dictionaryTier;
@@ -1435,7 +1448,17 @@ export function comprehensiveStagePlanState(
     effectiveContext.plan,
     effectiveContext.now,
   );
-  const defaultMinutes = snapToPreset(recommendedDailyMinutes(profile));
+  const goal = effectiveContext.mainGoal;
+  const baseMinutes = goal
+    ? recommendGoalPlan(
+        goal,
+        effectiveContext.records,
+        profile,
+        effectiveContext.now ?? new Date(),
+        recommendedDailyMinutes(profile),
+      ).daily_minutes
+    : recommendedDailyMinutes(profile);
+  const defaultMinutes = snapToPreset(baseMinutes);
   const storedPlan =
     targetMinutesOverride === undefined ? effectiveContext.todayDailyPlan : undefined;
   const plan =
