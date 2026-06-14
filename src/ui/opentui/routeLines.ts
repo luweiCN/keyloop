@@ -375,6 +375,11 @@ export function statsDailyRouteLines(
   return statsDayLines(date, index, dates.length, dayRecords, 2, language, { speedUnit });
 }
 
+/** 本次综合训练的真实计划分钟 = 各阶段回算后 estimated_minutes 之和 */
+export function comprehensivePlanMinutes(plan: DailyPracticePlan): number {
+  return plan.lessons.reduce((sum, lesson) => sum + lesson.estimated_minutes, 0);
+}
+
 function clampIndex(index: number, length: number): number {
   return Math.min(Math.max(Math.trunc(index), 0), Math.max(length - 1, 0));
 }
@@ -394,10 +399,11 @@ function stagePlanLines(
   }
   lines.push("");
   const completedMinutes = Math.round(plan.completed_ms / 60_000);
+  const planMinutes = comprehensivePlanMinutes(plan);
   lines.push(
     zh
-      ? `今日计划: ${plan.lessons.length} 个阶段，约 ${plan.target_minutes} 分钟（今日已练 ${completedMinutes} 分钟）`
-      : `Plan: ${plan.lessons.length} stages, ~${plan.target_minutes} min (done today: ${completedMinutes} min)`,
+      ? `今日计划: ${plan.lessons.length} 个阶段，本次约 ${planMinutes} 分钟（选定 ${plan.target_minutes} 分 · 今日已练 ${completedMinutes} 分钟）`
+      : `Plan: ${plan.lessons.length} stages, ~${planMinutes} min this run (target ${plan.target_minutes} · done today: ${completedMinutes} min)`,
   );
   for (const [index, lesson] of plan.lessons.entries()) {
     const reason = zh ? lesson.reason_zh : lesson.reason_en;

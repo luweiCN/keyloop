@@ -13,6 +13,7 @@ import {
   refreshModuleMixTarget,
   type BuildTargetContext,
 } from "../src/training/targets";
+import { comprehensivePlanMinutes } from "../src/ui/opentui/routeLines";
 
 function stageLibrary(): ContentLibrary {
   return {
@@ -478,4 +479,10 @@ test("code stage fills snippets up to the char budget, keeping whole snippets", 
   const blockLines = blocks.reduce((sum, b) => sum + b.line_count, 0);
   const gaps = Math.max(blocks.length - 1, 0);
   expect(blockLines + gaps).toBe(target.text.split("\n").length);
+});
+
+test("comprehensivePlanMinutes sums lesson estimated_minutes (honest plan time)", () => {
+  const plan = buildDailyPracticePlan(stageContext(), { targetMinutesOverride: 20 });
+  const expected = plan.lessons.reduce((sum, lesson) => sum + lesson.estimated_minutes, 0);
+  expect(comprehensivePlanMinutes(plan)).toBe(expected);
 });
