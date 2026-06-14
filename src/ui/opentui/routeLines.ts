@@ -1,4 +1,5 @@
 import type { DailyPracticePlan, Language, PracticeLesson, SessionRecord, SpeedUnit } from "../../domain/model";
+import { SESSION_LENGTH_PRESETS, snapToPreset } from "../../training/prescription";
 import {
   aggregateSpeed,
   effectiveActiveMs,
@@ -412,15 +413,20 @@ function stagePlanLines(
       `  ${mark} ${index + 1}. ${lesson.estimated_minutes} min  ${reason}`,
     );
   }
+  const activePreset = snapToPreset(plan.target_minutes);
+  const presets = SESSION_LENGTH_PRESETS.map((minutes) =>
+    minutes === activePreset ? `[${minutes}]` : ` ${minutes} `,
+  ).join(" ");
+  lines.push(zh ? `时长档位: ${presets}  (←/→ 切换)` : `Length: ${presets}  (←/→)`);
   lines.push("");
   const adjustable = plan.run_id.length === 0;
   lines.push(
     zh
       ? adjustable
-        ? "[Enter] 开始  [←/→] 调整时长  [Esc] 返回"
+        ? "[Enter] 开始  [←/→] 切换档位  [Esc] 返回"
         : "[Enter] 继续（跳过已完成阶段）  [Esc] 返回"
       : adjustable
-        ? "[Enter] start  [Left/Right] adjust minutes  [Esc] back"
+        ? "[Enter] start  [Left/Right] switch length  [Esc] back"
         : "[Enter] continue (skips finished stages)  [Esc] back",
   );
   return lines;

@@ -333,8 +333,8 @@ function reduceStagePlanKey(
     };
   }
   if (isStagePlanLeftEvent(event) || isStagePlanRightEvent(event)) {
-    const delta = isStagePlanLeftEvent(event) ? -5 : 5;
-    return { state: adjustStagePlanMinutes(state, context, delta), action: "continue" };
+    const direction: -1 | 1 = isStagePlanLeftEvent(event) ? -1 : 1;
+    return { state: adjustStagePlanMinutes(state, context, direction), action: "continue" };
   }
   return { state, action: "continue" };
 }

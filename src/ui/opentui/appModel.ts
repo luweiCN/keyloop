@@ -80,6 +80,11 @@ import {
 } from "../../training/programmingBasicsTargets";
 import type { LiveMetrics } from "../../training/liveSession";
 import { buildSkillProfile, type SkillProfile } from "../../training/diagnosis";
+import {
+  cyclePreset,
+  recommendedDailyMinutes,
+  snapToPreset,
+} from "../../training/prescription";
 import { completedDailyLessonIds } from "../../storage/keyloopStore";
 
 export const openTuiStatsViews = [
@@ -1424,20 +1429,20 @@ export function comprehensiveStagePlanState(
   effectiveContext: BuildTargetContext,
   targetMinutesOverride?: number,
 ): OpenTuiAppState {
-  // 当日已有未完成计划时复用（保证所见即所练、可恢复进度）；手动调时长则重新生成
-  const storedPlan =
-    targetMinutesOverride === undefined ? effectiveContext.todayDailyPlan : undefined;
-  const plan =
-    storedPlan ??
-    buildDailyPracticePlan(
-      effectiveContext,
-      targetMinutesOverride === undefined ? {} : { targetMinutesOverride },
-    );
+  // 无显式选择时：默认落到"最接近推荐值"的档位（首次/手动调时长都重新生成）
   const profile = buildSkillProfile(
     effectiveContext.records,
     effectiveContext.plan,
     effectiveContext.now,
   );
+  const defaultMinutes = snapToPreset(recommendedDailyMinutes(profile));
+  const storedPlan =
+    targetMinutesOverride === undefined ? effectiveContext.todayDailyPlan : undefined;
+  const plan =
+    storedPlan ??
+    buildDailyPracticePlan(effectiveContext, {
+      targetMinutesOverride: targetMinutesOverride ?? defaultMinutes,
+    });
   const completedLessonIds =
     storedPlan === undefined
       ? []
@@ -1454,11 +1459,11 @@ export function comprehensiveStagePlanState(
   );
 }
 
-/** 诊断屏上按 ←/→ 调整今日目标时长 */
+/** 诊断屏上按 ←/→ 切换时长档位 */
 export function adjustStagePlanMinutes(
   state: OpenTuiAppState,
   context: BuildTargetContext,
-  deltaMinutes: number,
+  direction: -1 | 1,
 ): OpenTuiAppState {
   if (state.route.screen !== "stage_plan") {
     return state;
@@ -1470,7 +1475,7 @@ export function adjustStagePlanMinutes(
   return comprehensiveStagePlanState(
     state,
     buildTargetContextForState(state, context),
-    state.route.plan.target_minutes + deltaMinutes,
+    cyclePreset(state.route.plan.target_minutes, direction),
   );
 }
 

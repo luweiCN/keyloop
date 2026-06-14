@@ -3,10 +3,13 @@ import { describe, expect, test } from "bun:test";
 import { defaultSessionRecord } from "../src/domain/model";
 import {
   buildDailyPrescription,
+  cyclePreset,
   estimatedMinutesFromChars,
   FORM_FALLBACK_WPM,
   recommendedDailyMinutes,
   reviseStages,
+  SESSION_LENGTH_PRESETS,
+  snapToPreset,
   type CompletedStage,
   type PrescriptionInput,
 } from "../src/training/prescription";
@@ -409,5 +412,29 @@ describe("estimatedMinutesFromChars", () => {
   test("never returns below 1 minute", () => {
     expect(estimatedMinutesFromChars(0, "words", [])).toBe(1);
     expect(estimatedMinutesFromChars(5, "words", [])).toBe(1);
+  });
+});
+
+describe("session length presets", () => {
+  test("presets are 10/20/30/45", () => {
+    expect(SESSION_LENGTH_PRESETS).toEqual([10, 20, 30, 45]);
+  });
+
+  test("snapToPreset picks the nearest preset", () => {
+    expect(snapToPreset(12)).toBe(10);
+    expect(snapToPreset(16)).toBe(20);
+    expect(snapToPreset(23)).toBe(20);
+    expect(snapToPreset(38)).toBe(45);
+    expect(snapToPreset(100)).toBe(45);
+    expect(snapToPreset(3)).toBe(10);
+  });
+
+  test("cyclePreset moves to the adjacent preset and clamps at ends", () => {
+    expect(cyclePreset(20, 1)).toBe(30);
+    expect(cyclePreset(20, -1)).toBe(10);
+    expect(cyclePreset(10, -1)).toBe(10);
+    expect(cyclePreset(45, 1)).toBe(45);
+    expect(cyclePreset(23, 1)).toBe(30);
+    expect(cyclePreset(23, -1)).toBe(10);
   });
 });

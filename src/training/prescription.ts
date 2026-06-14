@@ -66,6 +66,26 @@ export interface PrescriptionInput {
 /** 手动调整时长的上限（高于自动推荐上限，允许用户主动加练） */
 const MAX_OVERRIDE_MINUTES = 60;
 
+/** 单次综合训练的时长档位（分钟） */
+export const SESSION_LENGTH_PRESETS = [10, 20, 30, 45] as const;
+
+/** 取最接近的档位（用于把推荐值/旧值落到档位上） */
+export function snapToPreset(minutes: number): number {
+  return SESSION_LENGTH_PRESETS.reduce((best, preset) =>
+    Math.abs(preset - minutes) < Math.abs(best - minutes) ? preset : best,
+  );
+}
+
+/** 切换到相邻档位；direction: -1 上一档 / +1 下一档；两端 clamp */
+export function cyclePreset(current: number, direction: -1 | 1): number {
+  const snapped = snapToPreset(current);
+  const index = SESSION_LENGTH_PRESETS.indexOf(
+    snapped as (typeof SESSION_LENGTH_PRESETS)[number],
+  );
+  const next = clamp(index + direction, 0, SESSION_LENGTH_PRESETS.length - 1);
+  return SESSION_LENGTH_PRESETS[next] ?? snapped;
+}
+
 /** 冷启动各形态保守默认 WPM */
 export const FORM_FALLBACK_WPM: Record<TrainingForm, number> = {
   keys: 18,
