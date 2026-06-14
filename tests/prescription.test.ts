@@ -438,3 +438,19 @@ describe("session length presets", () => {
     expect(cyclePreset(23, -1)).toBe(10);
   });
 });
+
+test("mainGoalForm gives the goal form a dominant share of distributable minutes", () => {
+  const profile = profileWith([], 0); // 无弱项，基线均衡
+  const base = {
+    profile,
+    enabledModules: [...ALL_MODULES],
+    records: [],
+    now: new Date("2026-06-14T00:00:00Z"),
+    random: () => 0.99,
+  };
+  const withoutGoal = buildDailyPrescription(base);
+  const withGoal = buildDailyPrescription({ ...base, mainGoalForm: "code" });
+  const codeMinutes = (plan: ReturnType<typeof buildDailyPrescription>) =>
+    plan.stages.find((stage) => stage.form === "code")?.minutes ?? 0;
+  expect(codeMinutes(withGoal)).toBeGreaterThan(codeMinutes(withoutGoal));
+});

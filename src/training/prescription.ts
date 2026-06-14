@@ -61,6 +61,8 @@ export interface PrescriptionInput {
   random?: () => number;
   /** 覆盖推荐时长（诊断屏手动调整），clamp [10, 60] */
   targetMinutesOverride?: number;
+  /** 主目标形态：组卷时给它主攻权重，保证占大头 */
+  mainGoalForm?: TrainingForm;
 }
 
 /** 手动调整时长的上限（高于自动推荐上限，允许用户主动加练） */
@@ -107,6 +109,8 @@ const SYMBOLS_ROTATION_PROBABILITY = 0.5;
 /** 弱项阶段权重 / 稳定阶段权重 */
 const WEAK_WEIGHT = 1.5;
 const STABLE_WEIGHT = 0.5;
+/** 主目标形态的组卷权重（高于弱项，保证主攻占大头） */
+const GOAL_FORM_WEIGHT = 2.5;
 /** 权重分配阶段的最少分钟数 */
 const MIN_STAGE_MINUTES = 2;
 
@@ -152,11 +156,14 @@ export function buildDailyPrescription(input: PrescriptionInput): DailyPrescript
   const distributable = Math.max(targetMinutes - WARMUP_MINUTES, MIN_STAGE_MINUTES);
   const weighted = forms.map((form) => ({
     form,
-    weight: weakForms.has(form)
-      ? WEAK_WEIGHT
-      : stableForms.has(form)
-        ? STABLE_WEIGHT
-        : 1,
+    weight:
+      form === input.mainGoalForm
+        ? GOAL_FORM_WEIGHT
+        : weakForms.has(form)
+          ? WEAK_WEIGHT
+          : stableForms.has(form)
+            ? STABLE_WEIGHT
+            : 1,
   }));
   const weightTotal = weighted.reduce((sum, item) => sum + item.weight, 0);
   const stages: StagePlan[] = [
