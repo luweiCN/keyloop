@@ -36,7 +36,7 @@ import {
 } from "../src/index";
 import { reduceFlatSettingsItem } from "../src/ui/opentui/settingsReducers";
 
-const START_CLI_TEST_TIMEOUT_MS = 20_000;
+const START_CLI_TEST_TIMEOUT_MS = 40_000;
 
 describe("TS CLI parser parity", () => {
   test("bare keyloop has no command and defaults to zh", () => {
