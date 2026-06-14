@@ -249,17 +249,21 @@ describe("buildStageTarget sentences", () => {
 
 describe("buildStageTarget code and keys", () => {
   test("code snippet count follows budget", () => {
+    // 预算充足：库存 5 片都装得下
     const big = buildStageTarget(stageContext(), {
       stage: { form: "code", char_budget: 900 },
       profile: emptyProfile(),
     });
     expect(big.code_blocks?.length).toBe(5);
 
+    // 预算很小：按预算累加截断到更少片，总量受 1.3× 容差约束（不再固定 180/片）
     const small = buildStageTarget(stageContext(), {
       stage: { form: "code", char_budget: 100 },
       profile: emptyProfile(),
     });
-    expect(small.code_blocks?.length).toBe(1);
+    expect(small.code_blocks?.length).toBeGreaterThanOrEqual(1);
+    expect(small.code_blocks?.length).toBeLessThan(5);
+    expect([...small.text].length).toBeLessThanOrEqual(Math.round(100 * 1.3));
   });
 
   test("keys stage reuses foundation mix", () => {
@@ -456,4 +460,22 @@ test("comprehensive lesson estimated_minutes is recomputed from real target char
     const chars = [...lesson.target.text].length;
     expect(lesson.estimated_minutes).toBe(estimatedMinutesFromChars(chars, form, []));
   }
+});
+
+test("code stage fills snippets up to the char budget, keeping whole snippets", () => {
+  // stageLibrary 的 code_snippets 每片 ~41 字符；旧逻辑 clamp(round(120/180),1,5)=1 片，
+  // 新逻辑按预算累加应 ≥2 片
+  const target = buildStageTarget(stageContext(), {
+    stage: { form: "code", char_budget: 120 },
+    profile: emptyProfile(),
+  });
+  const blocks = target.code_blocks ?? [];
+  const chars = [...target.text].length;
+  expect(blocks.length).toBeGreaterThanOrEqual(2);
+  // 总量不超预算 × 1.3 容差
+  expect(chars).toBeLessThanOrEqual(Math.round(120 * 1.3));
+  // 每片完整：各 block 行数 + 片间空行 == 文本总行数（没有被截断）
+  const blockLines = blocks.reduce((sum, b) => sum + b.line_count, 0);
+  const gaps = Math.max(blocks.length - 1, 0);
+  expect(blockLines + gaps).toBe(target.text.split("\n").length);
 });

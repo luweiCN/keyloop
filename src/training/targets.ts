@@ -1612,11 +1612,19 @@ function everydayWordDecompositionTarget(context: BuildTargetContext): PracticeT
   };
 }
 
-function codeMixTarget(context: BuildTargetContext, count?: number): PracticeTarget {
+function codeMixTarget(
+  context: BuildTargetContext,
+  count?: number,
+  charBudget?: number,
+): PracticeTarget {
   const codeConfig = context.codeConfig ?? {};
   const excludedTexts = usedCodeSnippetTexts(context.records);
   const difficulty = codeDifficultyForContext(context);
-  const targetCount = count ?? ((context.localCodeSnippets?.length ?? 0) > 0 ? 3 : 4);
+  // 按预算控量时多抽候选再截取；否则沿用固定 count
+  const targetCount =
+    charBudget !== undefined
+      ? STAGE_CODE_MAX_SNIPPETS
+      : count ?? ((context.localCodeSnippets?.length ?? 0) > 0 ? 3 : 4);
   const localSnippets =
     context.localCodeSnippets === undefined
       ? []
@@ -1640,7 +1648,14 @@ function codeMixTarget(context: BuildTargetContext, count?: number): PracticeTar
     difficulty,
     codePickerOptions(context.random),
   );
-  const snippets = formatCodeSnippetsForContext([...localSnippets, ...builtinSnippets], context);
+  const formatted = formatCodeSnippetsForContext(
+    [...localSnippets, ...builtinSnippets],
+    context,
+  );
+  const snippets =
+    charBudget === undefined
+      ? formatted
+      : selectSnippetsWithinBudget(formatted, charBudget);
   const source = codeMixSource(
     context.localCodeSource,
     context.localCodeScanError,
@@ -1653,6 +1668,27 @@ function codeMixTarget(context: BuildTargetContext, count?: number): PracticeTar
     source,
     code_blocks: codeBlocksFromSnippets(snippets),
   };
+}
+
+/** 按字符预算累加完整片段：至少 1 片，每片完整不切碎，总量不超 budget × 容差 */
+function selectSnippetsWithinBudget(
+  snippets: CodeSnippet[],
+  charBudget: number,
+): CodeSnippet[] {
+  const picked: CodeSnippet[] = [];
+  let chars = 0;
+  for (const snippet of snippets) {
+    const length = [...snippet.text].length;
+    if (picked.length >= 1 && chars + length > charBudget * STAGE_CODE_BUDGET_TOLERANCE) {
+      break;
+    }
+    picked.push(snippet);
+    chars += length;
+    if (chars >= charBudget) {
+      break;
+    }
+  }
+  return picked;
 }
 
 function formatCodeSnippetsForContext(
@@ -2622,8 +2658,10 @@ export interface StageTargetOptions {
 const STAGE_CHARS_PER_WORD = 7;
 /** 句均字符 */
 const STAGE_CHARS_PER_SENTENCE = 40;
-/** 代码片段均字符 */
-const STAGE_CHARS_PER_SNIPPET = 180;
+/** 代码阶段防御性硬上限：再大的预算也不超这么多片 */
+const STAGE_CODE_MAX_SNIPPETS = 8;
+/** 最后一片完整保留可略超预算，但总量不超 budget × 此容差 */
+const STAGE_CODE_BUDGET_TOLERANCE = 1.3;
 
 export function buildStageTarget(
   context: BuildTargetContext,
@@ -2640,14 +2678,8 @@ export function buildStageTarget(
       return sentencesStageTarget(context, options);
     case "articles":
       return everydayArticlesTarget(context);
-    case "code": {
-      const count = clamp(
-        Math.round(options.stage.char_budget / STAGE_CHARS_PER_SNIPPET),
-        1,
-        5,
-      );
-      return codeMixTarget(context, count);
-    }
+    case "code":
+      return codeMixTarget(context, undefined, options.stage.char_budget);
   }
 }
 
