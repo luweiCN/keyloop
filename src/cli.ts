@@ -581,7 +581,31 @@ function preferencesFromAppState(
     changed = true;
   }
 
+  if (!mainGoalEqual(state.mainGoal, preferences.main_goal)) {
+    if (state.mainGoal === undefined) {
+      delete next.main_goal;
+    } else {
+      next.main_goal = { ...state.mainGoal };
+    }
+    changed = true;
+  }
+
   return changed ? next : undefined;
+}
+
+function mainGoalEqual(
+  left: UserPreferences["main_goal"],
+  right: UserPreferences["main_goal"],
+): boolean {
+  if (left === undefined || right === undefined) {
+    return left === right;
+  }
+  return (
+    left.form === right.form &&
+    left.target_wpm === right.target_wpm &&
+    left.deadline === right.deadline &&
+    left.created_at === right.created_at
+  );
 }
 
 function cloneCodeFilterPreference(

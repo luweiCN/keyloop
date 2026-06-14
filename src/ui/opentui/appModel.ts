@@ -86,7 +86,7 @@ import {
   recommendedDailyMinutes,
   snapToPreset,
 } from "../../training/prescription";
-import { recommendGoalPlan } from "../../training/goalPlan";
+import { recommendGoalPlan, type GoalRecommendation } from "../../training/goalPlan";
 import { completedDailyLessonIds } from "../../storage/keyloopStore";
 
 export const openTuiStatsViews = [
@@ -222,6 +222,9 @@ export type OpenTuiRoute =
       screen: "stage_plan";
       plan: DailyPracticePlan;
       diagnosis_lines: string[];
+      /** 目标驱动：主目标 + 推荐结果，用于渲染顶部进度行 */
+      goal?: MainGoal;
+      goal_recommendation?: GoalRecommendation;
       /** 当日恢复场景：已完成的 lesson id（计划行打 ✓，开始时跳过） */
       completed_lesson_ids?: string[];
     }
@@ -1449,15 +1452,16 @@ export function comprehensiveStagePlanState(
     effectiveContext.now,
   );
   const goal = effectiveContext.mainGoal;
-  const baseMinutes = goal
+  const goalRecommendation = goal
     ? recommendGoalPlan(
         goal,
         effectiveContext.records,
         profile,
         effectiveContext.now ?? new Date(),
         recommendedDailyMinutes(profile),
-      ).daily_minutes
-    : recommendedDailyMinutes(profile);
+      )
+    : undefined;
+  const baseMinutes = goalRecommendation?.daily_minutes ?? recommendedDailyMinutes(profile);
   const defaultMinutes = snapToPreset(baseMinutes);
   const storedPlan =
     targetMinutesOverride === undefined ? effectiveContext.todayDailyPlan : undefined;
@@ -1476,6 +1480,9 @@ export function comprehensiveStagePlanState(
       screen: "stage_plan",
       plan,
       diagnosis_lines: diagnosisSummaryLines(profile, state.language),
+      ...(goal && goalRecommendation
+        ? { goal, goal_recommendation: goalRecommendation }
+        : {}),
       ...(completedLessonIds.length === 0 ? {} : { completed_lesson_ids: completedLessonIds }),
     },
     stateOptions(state),

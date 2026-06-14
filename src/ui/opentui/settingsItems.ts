@@ -1,5 +1,5 @@
 import type { CodeStyleSettings, Language, SpeedUnit } from "../../domain/model";
-import { codeDifficultyLabel, codeIndentLabel, codeLengthLabel, everydayLengthLabel } from "./labels";
+import { codeDifficultyLabel, codeIndentLabel, codeLengthLabel, everydayLengthLabel, formLabel } from "./labels";
 import type { OpenTuiAppState, OpenTuiCodeFilterState } from "./appModel";
 import {
   codeDifficultyOptions,
@@ -50,7 +50,11 @@ export type OpenTuiFlatSettingsItemKind =
   | "module_foundation"
   | "module_everyday"
   | "module_programming"
-  | "module_code";
+  | "module_code"
+  | "goal_enabled"
+  | "goal_form"
+  | "goal_target_wpm"
+  | "goal_deadline";
 
 export interface OpenTuiFlatSettingsItem {
   kind: OpenTuiFlatSettingsItemKind;
@@ -140,7 +144,42 @@ export function openTuiFlatSettingsItems(state: OpenTuiAppState): OpenTuiFlatSet
       value: dictionaryStatusLabel(state),
     },
     ...comprehensiveModuleItems(state),
+    ...goalSettingsItems(state),
   ];
+  return items;
+}
+
+/** 目标驱动训练设置：开关 + （开启时）训练形态/目标速度/期限 */
+function goalSettingsItems(state: OpenTuiAppState): OpenTuiFlatSettingsItem[] {
+  const zh = state.language === "zh";
+  const goal = state.mainGoal;
+  const items: OpenTuiFlatSettingsItem[] = [
+    {
+      kind: "goal_enabled",
+      label: zh ? "目标驱动训练" : "Goal-driven training",
+      value: goal ? (zh ? "开" : "On") : zh ? "关" : "Off",
+    },
+  ];
+  if (goal === undefined) {
+    return items;
+  }
+  items.push(
+    {
+      kind: "goal_form",
+      label: zh ? "目标·训练形态" : "Goal: form",
+      value: formLabel(goal.form, state.language),
+    },
+    {
+      kind: "goal_target_wpm",
+      label: zh ? "目标·目标速度" : "Goal: target WPM",
+      value: `${goal.target_wpm}`,
+    },
+    {
+      kind: "goal_deadline",
+      label: zh ? "目标·期限" : "Goal: deadline",
+      value: goal.deadline,
+    },
+  );
   return items;
 }
 

@@ -4,6 +4,7 @@ import type {
   Language,
   UserPreferences,
 } from "../../domain/model";
+import type { TrainingForm } from "../../training/diagnosis";
 
 /**
  * Single source of truth for user-facing option labels. Settings rows, the
@@ -197,4 +198,23 @@ export function codeIndentLabel(settings: CodeStyleSettings, language: Language)
     return "Tab";
   }
   return language === "zh" ? `${settings.indent_width} 空格` : `${settings.indent_width} spaces`;
+}
+
+/** 训练形态的展示名（目标设置项、目标进度行共用）。 */
+export function formLabel(form: TrainingForm, language: Language): string {
+  const zh = language === "zh";
+  switch (form) {
+    case "keys":
+      return zh ? "键位" : "Keys";
+    case "words":
+      return zh ? "单词" : "Words";
+    case "symbols":
+      return zh ? "符号" : "Symbols";
+    case "sentences":
+      return zh ? "句子" : "Sentences";
+    case "articles":
+      return zh ? "文章" : "Articles";
+    case "code":
+      return zh ? "代码" : "Code";
+  }
 }

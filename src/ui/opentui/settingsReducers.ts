@@ -8,11 +8,14 @@ import {
   type EverydayEnglishSettings,
   type EverydaySentenceLength,
   type Language,
+  type MainGoal,
   type SpeedUnit,
   type UserPreferences,
   wordAudioVolumePercents,
 } from "../../domain/model";
 import { codePracticeOptionsForLibrary } from "../../content/library";
+import { TRAINING_FORMS } from "../../training/diagnosis";
+import { GOAL_WPM_BASELINE } from "../../training/goalPlan";
 import {
   createOpenTuiCodeFilterState,
   createOpenTuiSettingsState,
@@ -454,6 +457,56 @@ export function reduceFlatSettingsItem(
       return flatSettingsResult(state.language, state, selectedIndex, {
         enabledModules: toggleEnabledModule(state, "code_practice"),
       });
+    case "goal_enabled": {
+      if (state.mainGoal !== undefined) {
+        return flatSettingsResult(state.language, state, selectedIndex, {
+          mainGoal: undefined,
+        });
+      }
+      return flatSettingsResult(state.language, state, selectedIndex, {
+        mainGoal: defaultMainGoal(context.now ?? new Date()),
+      });
+    }
+    case "goal_form": {
+      if (state.mainGoal === undefined) {
+        return { state, action: "continue" };
+      }
+      const form = cycleStringOption(TRAINING_FORMS, state.mainGoal.form, direction);
+      return flatSettingsResult(state.language, state, selectedIndex, {
+        mainGoal: {
+          ...state.mainGoal,
+          form,
+          target_wpm: GOAL_WPM_BASELINE[form],
+          created_at: (context.now ?? new Date()).toISOString(),
+        },
+      });
+    }
+    case "goal_target_wpm": {
+      if (state.mainGoal === undefined) {
+        return { state, action: "continue" };
+      }
+      return flatSettingsResult(state.language, state, selectedIndex, {
+        mainGoal: {
+          ...state.mainGoal,
+          target_wpm: clampGoalTargetWpm(state.mainGoal.target_wpm + direction * GOAL_WPM_STEP),
+        },
+      });
+    }
+    case "goal_deadline": {
+      if (state.mainGoal === undefined) {
+        return { state, action: "continue" };
+      }
+      return flatSettingsResult(state.language, state, selectedIndex, {
+        mainGoal: {
+          ...state.mainGoal,
+          deadline: cycleGoalDeadline(
+            state.mainGoal.deadline,
+            context.now ?? new Date(),
+            direction,
+          ),
+        },
+      });
+    }
     case "code_filters":
     case "youdao_tts":
     case "dictionary_status":
@@ -481,6 +534,37 @@ function toggleEnabledModule(
   return allPracticeModules.filter(
     (item) => enabled.includes(item) || item === module,
   );
+}
+
+const GOAL_WPM_STEP = 5;
+const GOAL_WPM_MIN = 10;
+const GOAL_WPM_MAX = 200;
+const GOAL_DEADLINE_DAY_PRESETS = [30, 60, 90, 120, 180, 365] as const;
+const GOAL_DAY_MS = 86_400_000;
+
+/** 开启目标时的默认目标：代码形态、基线速度、now+90 天期限、锚定 now */
+function defaultMainGoal(now: Date): MainGoal {
+  return {
+    form: "code",
+    target_wpm: GOAL_WPM_BASELINE.code,
+    deadline: addGoalDays(now, 90),
+    created_at: now.toISOString(),
+  };
+}
+
+function clampGoalTargetWpm(value: number): number {
+  return Math.min(GOAL_WPM_MAX, Math.max(GOAL_WPM_MIN, value));
+}
+
+function addGoalDays(now: Date, days: number): string {
+  return new Date(now.getTime() + days * GOAL_DAY_MS).toISOString().slice(0, 10);
+}
+
+/** 按天数档位循环期限：从当前剩余天数找最近档位，±1 切换，换算回绝对日期 */
+function cycleGoalDeadline(deadline: string, now: Date, direction: -1 | 1): string {
+  const daysLeft = Math.round((Date.parse(deadline) - now.getTime()) / GOAL_DAY_MS);
+  const nextDays = cycleNumberOption(GOAL_DEADLINE_DAY_PRESETS, daysLeft, direction);
+  return addGoalDays(now, nextDays);
 }
 
 export function flatSettingsResult(
@@ -517,6 +601,8 @@ export function flatSettingsOptions(
   const speedUnit = overrides.speedUnit ?? state.speed_unit;
   const todayElapsedMs = overrides.todayElapsedMs ?? state.today_elapsed_ms;
   const enabledModules = overrides.enabledModules ?? state.enabledModules;
+  // mainGoal 可被显式清除（关闭目标 → undefined），故用 "in" 判断而非 ?? 合并
+  const mainGoal = "mainGoal" in overrides ? overrides.mainGoal : state.mainGoal;
   if (codeFilters !== undefined) {
     options.codeFilters = codeFilters;
   }
@@ -546,6 +632,9 @@ export function flatSettingsOptions(
   }
   if (enabledModules !== undefined) {
     options.enabledModules = enabledModules;
+  }
+  if (mainGoal !== undefined) {
+    options.mainGoal = mainGoal;
   }
   return options;
 }

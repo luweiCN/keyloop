@@ -1,4 +1,4 @@
-import type { DailyPracticePlan, Language, PracticeLesson, SessionRecord, SpeedUnit } from "../../domain/model";
+import type { DailyPracticePlan, Language, MainGoal, PracticeLesson, SessionRecord, SpeedUnit } from "../../domain/model";
 import { SESSION_LENGTH_PRESETS, snapToPreset } from "../../training/prescription";
 import {
   aggregateSpeed,
@@ -28,6 +28,8 @@ import { everydayMeaningLines } from "../../training/targets";
 import { openTuiStatsViews } from "./appModel";
 import { openTuiMenuItems, submenuTitle, type OpenTuiMenuItemId } from "./menuItems";
 import { flatSettingsRouteLines, settingsRouteLines } from "./settingsItems";
+import { formLabel } from "./labels";
+import type { GoalRecommendation } from "../../training/goalPlan";
 
 export function openTuiRouteTitle(state: OpenTuiAppState): string {
   switch (state.route.screen) {
@@ -134,6 +136,8 @@ export function openTuiRouteLines(state: OpenTuiAppState): string[] {
         state.route.diagnosis_lines,
         state.language,
         state.route.completed_lesson_ids ?? [],
+        state.route.goal,
+        state.route.goal_recommendation,
       );
     case "summary":
       return summaryLines(state.route.records, state.language, speedUnit);
@@ -376,6 +380,56 @@ export function statsDailyRouteLines(
   return statsDayLines(date, index, dates.length, dayRecords, 2, language, { speedUnit });
 }
 
+/**
+ * 目标进度行（诊断屏顶部「方向盘 + 仪表盘」）。按推荐阶段展示当前 WPM、
+ * 目标、达成预期与理想每日节奏。on_track 为主路径范例，其余 3 个阶段待填。
+ */
+export function goalProgressLines(
+  goal: MainGoal,
+  recommendation: GoalRecommendation,
+  language: Language,
+): string[] {
+  const zh = language === "zh";
+  const head = `${zh ? "目标" : "Goal"}:${formLabel(goal.form, language)}`;
+  const current = Math.round(recommendation.current_wpm);
+  const span = `${current}→${goal.target_wpm}`;
+  switch (recommendation.phase) {
+    case "on_track": {
+      const eta = recommendation.projected_date
+        ? formatMonthDay(recommendation.projected_date)
+        : "?";
+      return [
+        zh
+          ? `${head} ${span} · 预计 ${eta} · 理想每日 ~${recommendation.daily_minutes} 分`
+          : `${head} ${span} · ETA ${eta} · ideal ~${recommendation.daily_minutes} min/day`,
+      ];
+    }
+    case "cold_start":
+      return [
+        zh
+          ? `${head} ${span} · 数据积累中，先练满 7 天给精准计划 · 暂按 ~${recommendation.daily_minutes} 分`
+          : `${head} ${span} · warming up — practice 7 days for a precise plan · ~${recommendation.daily_minutes} min for now`,
+      ];
+    case "unreachable": {
+      const projected = Math.round(recommendation.projected_wpm_at_deadline ?? current);
+      return [
+        zh
+          ? `${head} ${span} · 按当前节奏期限内约到 ${projected} · 可延期/加量/调目标`
+          : `${head} ${span} · ~${projected} by deadline at this pace · extend / add time / adjust`,
+      ];
+    }
+    case "achieved":
+      return [
+        zh ? `${head} 已达成 ${goal.target_wpm} 🎉` : `${head} reached ${goal.target_wpm} 🎉`,
+      ];
+  }
+}
+
+function formatMonthDay(isoDate: string): string {
+  const parts = isoDate.split("-");
+  return `${Number(parts[1])}/${Number(parts[2])}`;
+}
+
 /** 本次综合训练的真实计划分钟 = 各阶段回算后 estimated_minutes 之和 */
 export function comprehensivePlanMinutes(plan: DailyPracticePlan): number {
   return plan.lessons.reduce((sum, lesson) => sum + lesson.estimated_minutes, 0);
@@ -390,10 +444,16 @@ function stagePlanLines(
   diagnosisLines: string[],
   language: Language,
   completedLessonIds: string[],
+  goal: MainGoal | undefined,
+  goalRecommendation: GoalRecommendation | undefined,
 ): string[] {
   const zh = language === "zh";
   const completed = new Set(completedLessonIds);
   const lines: string[] = [];
+  if (goal !== undefined && goalRecommendation !== undefined) {
+    lines.push(...goalProgressLines(goal, goalRecommendation, language));
+    lines.push("");
+  }
   lines.push(zh ? "诊断摘要:" : "Diagnosis:");
   for (const line of diagnosisLines) {
     lines.push(`  ${line}`);

@@ -34,6 +34,7 @@ import {
   type SessionRecord,
   type StartRunnerContext,
 } from "../src/index";
+import { reduceFlatSettingsItem } from "../src/ui/opentui/settingsReducers";
 
 const START_CLI_TEST_TIMEOUT_MS = 20_000;
 
@@ -391,6 +392,79 @@ describe("TS CLI command dispatch", () => {
 
       const preferences = await loadPreferencesFromPath(preferencesPath(dir));
       expect(preferences.interface_language).toBe("en");
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
+  test("bare keyloop persists a main goal enabled in app settings", async () => {
+    const dir = await tempDir();
+    try {
+      await savePreferencesToPath(defaultPreferences("zh"), preferencesPath(dir));
+
+      await runCli([], {
+        env: { KEYLOOP_HOME: dir },
+        appRunner: async (context) => {
+          const settingsState = {
+            ...createOpenTuiInitialState(context.language),
+            route: { screen: "settings" as const, view: "menu" as const, selected_index: 0 },
+          };
+          const enabled = reduceFlatSettingsItem(
+            settingsState,
+            { kind: "goal_enabled" as const, label: "", value: "" },
+            0,
+            1,
+            context,
+          );
+          return { state: enabled.state, action: "quit" };
+        },
+      });
+
+      const preferences = await loadPreferencesFromPath(preferencesPath(dir));
+      expect(preferences.main_goal?.form).toBe("code");
+      expect(preferences.main_goal?.target_wpm).toBe(35);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
+  test("bare keyloop clears a main goal disabled in app settings", async () => {
+    const dir = await tempDir();
+    try {
+      await savePreferencesToPath(
+        {
+          ...defaultPreferences("zh"),
+          main_goal: {
+            form: "code" as const,
+            target_wpm: 50,
+            deadline: "2026-09-14",
+            created_at: "2026-06-15T00:00:00.000Z",
+          },
+        },
+        preferencesPath(dir),
+      );
+
+      await runCli([], {
+        env: { KEYLOOP_HOME: dir },
+        appRunner: async (context) => {
+          const settingsState = {
+            ...createOpenTuiInitialState(context.language),
+            mainGoal: context.mainGoal,
+            route: { screen: "settings" as const, view: "menu" as const, selected_index: 0 },
+          };
+          const disabled = reduceFlatSettingsItem(
+            settingsState,
+            { kind: "goal_enabled" as const, label: "", value: "" },
+            0,
+            1,
+            context,
+          );
+          return { state: disabled.state, action: "quit" };
+        },
+      });
+
+      const preferences = await loadPreferencesFromPath(preferencesPath(dir));
+      expect(preferences.main_goal).toBeUndefined();
     } finally {
       await rm(dir, { recursive: true, force: true });
     }

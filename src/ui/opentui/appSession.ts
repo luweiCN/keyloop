@@ -374,6 +374,7 @@ export async function runOpenTuiAppSession(
       ...(context.enabledModules === undefined
         ? {}
         : { enabledModules: context.enabledModules }),
+      ...(context.mainGoal === undefined ? {} : { mainGoal: context.mainGoal }),
       dictionaryTier: context.dictionary?.tier ?? "none",
       youdaoTtsCredentialStatus: context.youdaoTtsCredentialStatus ?? "none",
       todayElapsedMs: todayElapsedMsFromContext(context),

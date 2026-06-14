@@ -1,6 +1,8 @@
 import { describe, expect, test } from "bun:test";
 
 import { reduceFlatSettingsItem } from "../src/ui/opentui/settingsReducers";
+import { openTuiFlatSettingsItems } from "../src/ui/opentui/settingsItems";
+import { goalProgressLines } from "../src/ui/opentui/routeLines";
 import {
   activateOpenTuiMenuItem,
   startStagePlanFirstLesson,
@@ -423,6 +425,7 @@ describe("OpenTUI app model", () => {
       "  Comprehensive: everyday English  On",
       "  Comprehensive: programming basics  On",
       "  Comprehensive: code practice  On",
+      "  Goal-driven training  Off",
     ]);
   });
 
@@ -1188,5 +1191,179 @@ describe("comprehensive module toggles", () => {
     }
     const forms = planState.route.plan.lessons.map((lesson) => lesson.id.split(":")[1]);
     expect(forms).not.toContain("code");
+  });
+});
+
+describe("main goal settings items", () => {
+  test("shows the goal toggle off and hides detail items when no goal is set", () => {
+    const items = openTuiFlatSettingsItems(createOpenTuiInitialState("zh"));
+    expect(items.find((item) => item.kind === "goal_enabled")?.value).toBe("关");
+    expect(items.find((item) => item.kind === "goal_form")).toBeUndefined();
+    expect(items.find((item) => item.kind === "goal_target_wpm")).toBeUndefined();
+    expect(items.find((item) => item.kind === "goal_deadline")).toBeUndefined();
+  });
+
+  test("shows form/target/deadline detail items when a goal is set", () => {
+    const state = {
+      ...createOpenTuiInitialState("zh"),
+      mainGoal: {
+        form: "code" as const,
+        target_wpm: 50,
+        deadline: "2026-09-14",
+        created_at: "2026-06-15T00:00:00Z",
+      },
+    };
+    const items = openTuiFlatSettingsItems(state);
+    expect(items.find((item) => item.kind === "goal_enabled")?.value).toBe("开");
+    expect(items.find((item) => item.kind === "goal_form")?.value).toBe("代码");
+    expect(items.find((item) => item.kind === "goal_target_wpm")?.value).toBe("50");
+    expect(items.find((item) => item.kind === "goal_deadline")?.value).toBe("2026-09-14");
+  });
+});
+
+describe("main goal settings reducer", () => {
+  const NOW = new Date("2026-06-15T00:00:00.000Z");
+  const settingsState = () => ({
+    ...createOpenTuiInitialState("zh"),
+    route: { screen: "settings" as const, view: "menu" as const, selected_index: 0 },
+  });
+  const goalItem = (
+    kind: "goal_enabled" | "goal_form" | "goal_target_wpm" | "goal_deadline",
+  ) => ({ kind, label: "", value: "" }) as const;
+  const ctx = () => ({ ...appContext(), language: "zh" as const, now: NOW });
+  const goalWith = (overrides: Record<string, unknown>) => ({
+    ...settingsState(),
+    mainGoal: {
+      form: "code" as const,
+      target_wpm: 35,
+      deadline: "2026-09-13",
+      created_at: "2026-06-15T00:00:00.000Z",
+      ...overrides,
+    },
+  });
+
+  test("enabling the goal creates a default code goal anchored at now", () => {
+    const result = reduceFlatSettingsItem(settingsState(), goalItem("goal_enabled"), 0, 1, ctx());
+    expect(result.state.mainGoal).toEqual({
+      form: "code",
+      target_wpm: 35,
+      deadline: "2026-09-13",
+      created_at: "2026-06-15T00:00:00.000Z",
+    });
+  });
+
+  test("disabling an existing goal clears it", () => {
+    const result = reduceFlatSettingsItem(goalWith({}), goalItem("goal_enabled"), 0, 1, ctx());
+    expect(result.state.mainGoal).toBeUndefined();
+  });
+
+  test("cycling the goal form resets target and anchor but keeps the deadline", () => {
+    const state = goalWith({ created_at: "2026-05-01T00:00:00.000Z" });
+    const result = reduceFlatSettingsItem(state, goalItem("goal_form"), 1, 1, ctx());
+    expect(result.state.mainGoal?.form).toBe("keys");
+    expect(result.state.mainGoal?.target_wpm).toBe(45);
+    expect(result.state.mainGoal?.created_at).toBe("2026-06-15T00:00:00.000Z");
+    expect(result.state.mainGoal?.deadline).toBe("2026-09-13");
+  });
+
+  test("cycling target wpm steps by 5 and clamps at the lower bound", () => {
+    expect(
+      reduceFlatSettingsItem(goalWith({ target_wpm: 35 }), goalItem("goal_target_wpm"), 1, 1, ctx())
+        .state.mainGoal?.target_wpm,
+    ).toBe(40);
+    expect(
+      reduceFlatSettingsItem(goalWith({ target_wpm: 35 }), goalItem("goal_target_wpm"), 1, -1, ctx())
+        .state.mainGoal?.target_wpm,
+    ).toBe(30);
+    expect(
+      reduceFlatSettingsItem(goalWith({ target_wpm: 10 }), goalItem("goal_target_wpm"), 1, -1, ctx())
+        .state.mainGoal?.target_wpm,
+    ).toBe(10);
+  });
+
+  test("cycling deadline moves through day presets measured from now", () => {
+    // deadline 2026-09-13 距 now 正好 90 天（档位 index 2）；+1 → 120 天 → now+120d
+    const result = reduceFlatSettingsItem(goalWith({}), goalItem("goal_deadline"), 1, 1, ctx());
+    expect(result.state.mainGoal?.deadline).toBe("2026-10-13");
+  });
+});
+
+describe("goalProgressLines", () => {
+  const goal = {
+    form: "code" as const,
+    target_wpm: 50,
+    deadline: "2026-09-14",
+    created_at: "2026-06-15T00:00:00.000Z",
+  };
+
+  test("on_track shows current→target, ETA, and ideal daily minutes", () => {
+    const lines = goalProgressLines(
+      goal,
+      { phase: "on_track", daily_minutes: 16, current_wpm: 19, projected_date: "2026-09-05" },
+      "zh",
+    );
+    expect(lines[0]).toBe("目标:代码 19→50 · 预计 9/5 · 理想每日 ~16 分");
+  });
+
+  test("cold_start tells the user to keep practicing for a precise plan", () => {
+    const lines = goalProgressLines(
+      goal,
+      { phase: "cold_start", daily_minutes: 20, current_wpm: 19 },
+      "zh",
+    );
+    expect(lines[0]).toBe("目标:代码 19→50 · 数据积累中，先练满 7 天给精准计划 · 暂按 ~20 分");
+  });
+
+  test("unreachable shows projected wpm and offers ways out", () => {
+    const lines = goalProgressLines(
+      goal,
+      {
+        phase: "unreachable",
+        daily_minutes: 60,
+        current_wpm: 19,
+        projected_wpm_at_deadline: 38,
+        alternatives: { lower_target_wpm: 38 },
+      },
+      "zh",
+    );
+    expect(lines[0]).toBe("目标:代码 19→50 · 按当前节奏期限内约到 38 · 可延期/加量/调目标");
+  });
+
+  test("achieved celebrates reaching the target", () => {
+    const lines = goalProgressLines(
+      goal,
+      { phase: "achieved", daily_minutes: 10, current_wpm: 52 },
+      "zh",
+    );
+    expect(lines[0]).toBe("目标:代码 已达成 50 🎉");
+  });
+});
+
+describe("stage plan goal progress line", () => {
+  test("renders the goal line at the very top when a goal is set", () => {
+    const goal = {
+      form: "code" as const,
+      target_wpm: 50,
+      deadline: "2026-09-14",
+      created_at: "2026-06-15T00:00:00.000Z",
+    };
+    const state = { ...createOpenTuiInitialState("zh"), mainGoal: goal };
+    const planState = activateOpenTuiMenuItem(state, "comprehensive", appContext());
+    if (planState.route.screen !== "stage_plan") {
+      throw new Error("expected stage_plan route");
+    }
+    expect(openTuiRouteLines(planState)[0]?.startsWith("目标:代码")).toBe(true);
+  });
+
+  test("omits the goal line when no goal is set", () => {
+    const planState = activateOpenTuiMenuItem(
+      createOpenTuiInitialState("zh"),
+      "comprehensive",
+      appContext(),
+    );
+    if (planState.route.screen !== "stage_plan") {
+      throw new Error("expected stage_plan route");
+    }
+    expect(openTuiRouteLines(planState).some((line) => line.startsWith("目标:"))).toBe(false);
   });
 });

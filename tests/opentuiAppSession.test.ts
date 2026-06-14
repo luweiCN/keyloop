@@ -566,6 +566,21 @@ describe("OpenTUI app session", () => {
     expect(kit.destroyed).toBe(1);
   });
 
+  test("session seeds the main goal from context preferences", async () => {
+    const kit = fakeKit();
+    const goal = {
+      form: "code" as const,
+      target_wpm: 50,
+      deadline: "2026-09-14",
+      created_at: "2026-06-15T00:00:00.000Z",
+    };
+    const runPromise = runOpenTuiAppSession({ ...appContext(), mainGoal: goal }, { kit });
+    await kit.waitForKeyListener(1);
+    kit.emitKey({ name: "q", sequence: "q" });
+    const result = await Promise.race([runPromise, delay(50).then(() => null)]);
+    expect(result?.state.mainGoal).toEqual(goal);
+  });
+
   test("session runner keeps one renderer while navigating with arrows", async () => {
     const kit = fakeKit();
     const runPromise = runOpenTuiAppSession(appContext(), {
