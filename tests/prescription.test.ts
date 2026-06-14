@@ -3,6 +3,7 @@ import { describe, expect, test } from "bun:test";
 import { defaultSessionRecord } from "../src/domain/model";
 import {
   buildDailyPrescription,
+  estimatedMinutesFromChars,
   FORM_FALLBACK_WPM,
   recommendedDailyMinutes,
   reviseStages,
@@ -10,7 +11,7 @@ import {
   type PrescriptionInput,
 } from "../src/training/prescription";
 import { buildSkillProfile } from "../src/training/diagnosis";
-import type { SkillDiagnosis, SkillProfile } from "../src/training/diagnosis";
+import type { FormSpeed, SkillDiagnosis, SkillProfile } from "../src/training/diagnosis";
 
 const ALL_MODULES = [
   "foundation_input",
@@ -390,5 +391,23 @@ describe("buildDailyPrescription targetMinutesOverride clamping", () => {
     expect(huge.target_minutes).toBe(60);
     const mid = buildDailyPrescription(baseInput({ targetMinutesOverride: 35 }));
     expect(mid.target_minutes).toBe(35);
+  });
+});
+
+describe("estimatedMinutesFromChars", () => {
+  test("inverts charBudget at the measured speed", () => {
+    const speeds: FormSpeed[] = [{ form: "code", samples: 10, ewma_wpm: 40 }];
+    // 40 wpm × 5 = 200 字符/分；600 字符 ≈ 3 分
+    expect(estimatedMinutesFromChars(600, "code", speeds)).toBe(3);
+  });
+
+  test("falls back to cold-start wpm when the form has no samples", () => {
+    // code 冷启动 14 × 0.8 = 11.2 wpm × 5 = 56 字符/分；560 字符 ≈ 10 分
+    expect(estimatedMinutesFromChars(560, "code", [])).toBe(10);
+  });
+
+  test("never returns below 1 minute", () => {
+    expect(estimatedMinutesFromChars(0, "words", [])).toBe(1);
+    expect(estimatedMinutesFromChars(5, "words", [])).toBe(1);
   });
 });

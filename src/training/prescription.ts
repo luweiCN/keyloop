@@ -172,14 +172,30 @@ function stagePlan(
   };
 }
 
+/** 形态速度解析：实测 EWMA 优先，冷启动回退到保守默认 × 折扣 */
+function formWpm(form: TrainingForm, speeds: FormSpeed[]): number {
+  const measured = speeds.find((item) => item.form === form)?.ewma_wpm ?? null;
+  return measured ?? FORM_FALLBACK_WPM[form] * COLD_START_DISCOUNT;
+}
+
 export function charBudget(
   form: TrainingForm,
   minutes: number,
   speeds: FormSpeed[],
 ): number {
-  const measured = speeds.find((item) => item.form === form)?.ewma_wpm ?? null;
-  const wpm = measured ?? FORM_FALLBACK_WPM[form] * COLD_START_DISCOUNT;
-  return Math.round(minutes * wpm * 5);
+  return Math.round(minutes * formWpm(form, speeds) * 5);
+}
+
+/** charBudget 的逆运算：一段已生成语料按形态速度估算实际练习分钟（≥1） */
+export function estimatedMinutesFromChars(
+  chars: number,
+  form: TrainingForm,
+  speeds: FormSpeed[],
+): number {
+  if (chars <= 0) {
+    return 1;
+  }
+  return Math.max(1, Math.round(chars / (formWpm(form, speeds) * 5)));
 }
 
 function collectWeakForms(profile: SkillProfile): Set<TrainingForm> {
