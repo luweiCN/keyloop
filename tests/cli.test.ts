@@ -1264,6 +1264,7 @@ function defaultPreferences(language: Language) {
       "programming_basics" as const,
       "code_practice" as const,
     ],
+    goal_prompt_opted_out: false,
   };
 }
 
