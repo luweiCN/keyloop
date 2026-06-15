@@ -466,7 +466,7 @@ function contentLibraryOptions(options: RunCliOptions): {
     : { userEverydayCorpusPath: path };
 }
 
-function preferencesFromAppState(
+export function preferencesFromAppState(
   preferences: UserPreferences,
   state: OpenTuiAppSessionResult["state"],
   initialLanguage: Language,
@@ -587,6 +587,22 @@ function preferencesFromAppState(
     } else {
       next.main_goal = { ...state.mainGoal };
     }
+    changed = true;
+  }
+
+  if (
+    state.goalPromptOptedOut !== undefined &&
+    state.goalPromptOptedOut !== preferences.goal_prompt_opted_out
+  ) {
+    next.goal_prompt_opted_out = state.goalPromptOptedOut;
+    changed = true;
+  }
+
+  if (
+    state.goalPromptLastShown !== undefined &&
+    state.goalPromptLastShown !== preferences.goal_prompt_last_shown
+  ) {
+    next.goal_prompt_last_shown = state.goalPromptLastShown;
     changed = true;
   }
 

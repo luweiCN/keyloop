@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { parseUserPreferences, defaultUserPreferences } from "../src/domain/model";
+import { preferencesFromAppState } from "../src/cli";
 
 describe("goal prompt preferences", () => {
   test("defaults opted_out to false and last_shown undefined", () => {
@@ -21,5 +22,17 @@ describe("goal prompt preferences", () => {
     });
     expect(parsed.goal_prompt_opted_out).toBe(true);
     expect(parsed.goal_prompt_last_shown).toBe("2026-06-10");
+  });
+
+  test("goal prompt state flows back into preferences", () => {
+    const base = defaultUserPreferences();
+    const state = {
+      language: "zh",
+      goalPromptOptedOut: true,
+      goalPromptLastShown: "2026-06-15",
+    } as never;
+    const next = preferencesFromAppState(base, state, "zh");
+    expect(next?.goal_prompt_opted_out).toBe(true);
+    expect(next?.goal_prompt_last_shown).toBe("2026-06-15");
   });
 });
