@@ -109,6 +109,7 @@ import {
   cloneCodeConfig,
   completedLessonsForRun,
   firstUnfinishedLesson,
+  materializeSelection,
   refreshSelectionForCurrentRecords,
   refreshTargetContext,
   refreshedStandaloneSelection,
@@ -258,10 +259,16 @@ export async function openTuiStartRunner(
       reusableRenderer?.destroy?.();
       return withRuntimeSettings({ completedRecords });
     }
-    const selection =
+    const refreshedSelection =
       forced === undefined
         ? refreshSelectionForCurrentRecords(runtimeContext, storedSelection, completedRecords)
         : storedSelection;
+    // 惰性课开练时组卷成可打 target（pending 为空的课原样返回）
+    const selection = materializeSelection(
+      runtimeContext,
+      refreshedSelection,
+      completedRecords,
+    );
     await saveCheckpointForSelection(runtimeContext, selection);
     const todayElapsedBeforeLesson = todayElapsedMsForRun(runtimeContext, completedRecords);
 
@@ -393,7 +400,20 @@ export async function openTuiStartRunner(
         );
         continue;
       }
-      await showSummaryPage(context, completedRecords, options, reusableRenderer);
+      const summaryRenderer = await showSummaryPage(
+        context,
+        completedRecords,
+        options,
+        reusableRenderer,
+      );
+      if (context.returnState !== undefined) {
+        await summaryRenderer.renderState?.(context.returnState);
+        return withRuntimeSettings({
+          completedRecords,
+          renderer: summaryRenderer,
+          state: context.returnState,
+        });
+      }
       return withRuntimeSettings({ completedRecords });
     }
   }
@@ -1342,16 +1362,18 @@ export async function showSummaryPage(
   completedRecords: SessionRecord[],
   options: OpenTuiStartRunnerOptions,
   reusableRenderer: OpenTuiRenderer | undefined,
-): Promise<void> {
+): Promise<OpenTuiRenderer> {
   const renderer = await rendererForState(
     createOpenTuiSummaryState(context.language, completedRecords, {
       dailyRunId: context.dailyPlan.run_id,
       speedUnit: context.speedUnit ?? "wpm",
+      lessons: context.dailyPlan.lessons,
     }),
     options,
     reusableRenderer,
   );
   await waitForSummaryDismiss(renderer);
+  return renderer;
 }
 
 export function waitForPostCompletionAction(

@@ -2,7 +2,8 @@ import { describe, expect, test } from "bun:test";
 
 import { reduceFlatSettingsItem } from "../src/ui/opentui/settingsReducers";
 import { openTuiFlatSettingsItems } from "../src/ui/opentui/settingsItems";
-import { goalProgressLines } from "../src/ui/opentui/routeLines";
+import { goalProgressLines, summaryLines } from "../src/ui/opentui/routeLines";
+import { plannedMinutesValue } from "../src/ui/opentui/screens/running";
 import {
   activateOpenTuiMenuItem,
   startStagePlanFirstLesson,
@@ -11,11 +12,13 @@ import {
   createOpenTuiInitialState,
   createOpenTuiSettingsState,
   createOpenTuiStatsState,
+  createOpenTuiGoalOnboardingState,
   createOpenTuiSummaryState,
   defaultKeyAggregate,
   defaultSessionRecord,
   nextOpenTuiStatsView,
   openTuiMenuItems,
+  openTuiRouteEmphasis,
   openTuiRouteLines,
   openTuiRouteTitle,
   type BuildTargetContext,
@@ -25,8 +28,25 @@ import {
   type PracticeLesson,
   type PracticePlan,
 } from "../src/index";
+import { reduceGoalOnboardingKey } from "../src/ui/opentui/goalOnboardingReducer";
 
 describe("OpenTUI app model", () => {
+  test("planned minutes value only applies to comprehensive lessons", () => {
+    expect(
+      plannedMinutesValue({
+        mix_profile: "comprehensive",
+        estimated_minutes: 8,
+      } as unknown as PracticeLesson),
+    ).toBe(8);
+    expect(
+      plannedMinutesValue({
+        mix_profile: "standalone",
+        estimated_minutes: 8,
+      } as unknown as PracticeLesson),
+    ).toBeUndefined();
+    expect(plannedMinutesValue(undefined)).toBeUndefined();
+  });
+
   test("main menu exposes product entries plus the temporary ANSI palette", () => {
     const items = openTuiMenuItems(createOpenTuiInitialState("zh"));
 
@@ -141,6 +161,43 @@ describe("OpenTUI app model", () => {
     ]);
   });
 
+  test("stage plan emphasizes the plan and length-tier guide lines", () => {
+    const state = activateOpenTuiMenuItem(
+      createOpenTuiInitialState("en"),
+      "comprehensive",
+      appContext(),
+    );
+    if (state.route.screen !== "stage_plan") {
+      throw new Error("expected stage_plan route");
+    }
+
+    const lines = openTuiRouteLines(state);
+    const emphasized = [...openTuiRouteEmphasis(state)].map((index) => lines[index]);
+
+    expect(emphasized.some((line) => line?.startsWith("Plan:"))).toBe(true);
+    expect(emphasized.some((line) => line?.startsWith("Length:"))).toBe(true);
+    expect([...openTuiRouteEmphasis(createOpenTuiInitialState("en"))]).toEqual([]);
+  });
+
+  test("stage plan defers corpus generation (lazy) until a lesson opens", () => {
+    const state = activateOpenTuiMenuItem(
+      createOpenTuiInitialState("en"),
+      "comprehensive",
+      appContext(),
+    );
+    if (state.route.screen !== "stage_plan") {
+      throw new Error("expected stage_plan route");
+    }
+
+    // 诊断屏/切档只产计划时长，不组卷（target 待开练 materialize）
+    expect(state.route.plan.lessons.length).toBeGreaterThan(0);
+    for (const lesson of state.route.plan.lessons) {
+      expect(lesson.estimated_minutes).toBeGreaterThan(0);
+      expect(lesson.target.text).toBe("");
+      expect(lesson.pending).toBeDefined();
+    }
+  });
+
   test("comprehensive opens the stage plan screen, enter starts stage one", () => {
     const state = activateOpenTuiMenuItem(
       createOpenTuiInitialState("en"),
@@ -161,8 +218,80 @@ describe("OpenTUI app model", () => {
       throw new Error("expected running route");
     }
     expect(started.route.lesson?.module).toBe("foundation_input");
-    expect(started.route.target.source).toContain("keyloop:module:foundation-mix");
+    // 惰性：诊断屏层无 context，target 仍是待组卷占位，真正组卷由 startRunner 开练时 materialize
+    expect(started.route.target.source).toContain("keyloop:stage:pending:keys");
+    expect(started.route.lesson?.pending).toBeDefined();
     expect(started.route.daily_plan?.lessons.length).toBeGreaterThanOrEqual(3);
+  });
+
+  test("comprehensive summary lists planned vs actual per lesson and totals", () => {
+    const lessons: PracticeLesson[] = [
+      summaryLesson("foundation_input", "foundation_mix", 4),
+      summaryLesson("everyday_english", "everyday_words", 3),
+    ];
+    const records = [
+      defaultSessionRecord({ lesson_index: 0, active_ms: 180_000, duration_ms: 180_000 }),
+      defaultSessionRecord({ lesson_index: 1, active_ms: 240_000, duration_ms: 240_000 }),
+    ];
+
+    const joined = summaryLines(records, "en", "wpm", lessons).join("\n");
+
+    expect(joined).toContain("Keys planned 4m · actual 3.0m");
+    expect(joined).toContain("Words planned 3m · actual 4.0m");
+    expect(joined).toContain("planned 7m · actual 7.0m");
+
+    const zhJoined = summaryLines(records, "zh", "wpm", lessons).join("\n");
+    expect(zhJoined).toContain("键位 计划 4 分 · 实际 3.0 分");
+    expect(zhJoined).toContain("单词 计划 3 分 · 实际 4.0 分");
+    expect(zhJoined).toContain("计划 7 分 · 实际 7.0 分");
+  });
+
+  test("goal onboarding arrow cycles direction, enter sets mapped goal", () => {
+    const now = new Date("2026-06-15T00:00:00Z");
+    const welcome = createOpenTuiGoalOnboardingState("zh", { scenario: "welcome" });
+    const right = reduceGoalOnboardingKey(
+      welcome,
+      { name: "right", sequence: "right", ctrl: false, meta: false },
+      now,
+    );
+    if (right.state.route.screen !== "goal_onboarding") throw new Error("stay");
+    expect(right.state.route.selected_direction_index).toBe(1);
+    const enter = reduceGoalOnboardingKey(
+      right.state,
+      { name: "return", sequence: "\r", ctrl: false, meta: false },
+      now,
+    );
+    expect(enter.state.route.screen).toBe("main_menu");
+    expect(enter.state.mainGoal?.form).toBe("code");
+    expect(enter.state.mainGoal?.target_wpm).toBeGreaterThan(0);
+  });
+
+  test("goal onboarding N opts out, S skips", () => {
+    const now = new Date("2026-06-15T00:00:00Z");
+    const welcome = createOpenTuiGoalOnboardingState("zh", { scenario: "welcome" });
+    const opted = reduceGoalOnboardingKey(
+      welcome,
+      { name: "n", sequence: "n", ctrl: false, meta: false },
+      now,
+    );
+    expect(opted.state.route.screen).toBe("main_menu");
+    expect(opted.state.goalPromptOptedOut).toBe(true);
+
+    const skipped = reduceGoalOnboardingKey(
+      welcome,
+      { name: "s", sequence: "s", ctrl: false, meta: false },
+      now,
+    );
+    expect(skipped.state.route.screen).toBe("main_menu");
+    expect(skipped.state.goalPromptOptedOut).toBeFalsy();
+  });
+
+  test("createOpenTuiGoalOnboardingState builds welcome route", () => {
+    const state = createOpenTuiGoalOnboardingState("zh", { scenario: "welcome" });
+    expect(state.route.screen).toBe("goal_onboarding");
+    if (state.route.screen !== "goal_onboarding") throw new Error("expected goal_onboarding");
+    expect(state.route.scenario).toBe("welcome");
+    expect(state.route.selected_direction_index).toBe(0);
   });
 
   test("programming technical long words starts a word breakdown target", () => {
@@ -767,6 +896,24 @@ describe("OpenTUI app model", () => {
     ]);
   });
 });
+
+function summaryLesson(
+  module: PracticeLesson["module"],
+  category: PracticeLesson["category"],
+  estimatedMinutes: number,
+): PracticeLesson {
+  return {
+    id: `stage:${category}`,
+    kind: "common_words",
+    module,
+    category,
+    mix_profile: "comprehensive",
+    estimated_minutes: estimatedMinutes,
+    target: { mode: "words", text: "x", source: "test" },
+    reason_zh: "",
+    reason_en: "",
+  };
+}
 
 function appContext(
   overrides: Partial<BuildTargetContext> = {},

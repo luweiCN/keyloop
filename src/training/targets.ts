@@ -611,6 +611,8 @@ export function buildLongWordBreakdownPracticeTarget(
 export interface BuildDailyPracticePlanOptions {
   /** 覆盖推荐时长（诊断屏手动调整） */
   targetMinutesOverride?: number;
+  /** 惰性组卷：只产时长与待组卷标记，不调 buildStageTarget（切档秒级，组卷推迟到开练） */
+  lazy?: boolean;
 }
 
 export function buildDailyPracticePlan(
@@ -636,7 +638,7 @@ export function buildDailyPracticePlan(
     ...(context.mainGoal === undefined ? {} : { mainGoalForm: context.mainGoal.form }),
   });
   const lessons = prescription.stages.map((stage, index) =>
-    stageLessonFromPlan(context, profile, stage, index),
+    stageLessonFromPlan(context, profile, stage, index, options.lazy ?? false),
   );
 
   return {
@@ -653,7 +655,26 @@ function stageLessonFromPlan(
   profile: SkillProfile,
   stage: StagePlan,
   index: number,
+  lazy: boolean,
 ): PracticeLesson {
+  const base = {
+    id: `stage:${stage.form}:${index + 1}`,
+    kind: stageLessonKind(stage.form),
+    module: stageLessonModule(stage.form),
+    category: stageLessonCategory(stage.form),
+    mix_profile: "comprehensive" as const,
+    reason_zh: stage.reason_zh,
+    reason_en: stage.reason_en,
+  };
+  if (lazy) {
+    // 惰性：用处方分配的计划分钟当 estimated，target 留空待 materializeStageLesson 组卷
+    return {
+      ...base,
+      estimated_minutes: Math.max(1, Math.round(stage.minutes)),
+      target: { mode: "words", text: "", source: `keyloop:stage:pending:${stage.form}` },
+      pending: { char_budget: stage.char_budget },
+    };
+  }
   const target = buildStageTarget(context, {
     stage,
     profile,
@@ -665,20 +686,42 @@ function stageLessonFromPlan(
       : { customLibraries: context.customLibraries }),
   });
   return {
-    id: `stage:${stage.form}:${index + 1}`,
-    kind: stageLessonKind(stage.form),
-    module: stageLessonModule(stage.form),
-    category: stageLessonCategory(stage.form),
-    mix_profile: "comprehensive",
+    ...base,
     estimated_minutes: estimatedMinutesFromChars(
       [...target.text].length,
       stage.form,
       profile.form_speeds,
     ),
     target,
-    reason_zh: stage.reason_zh,
-    reason_en: stage.reason_en,
   };
+}
+
+/** 惰性组卷的开练侧：把 pending lesson 真正组卷成可练 target（仅综合训练阶段课）。 */
+export function materializeStageLesson(
+  context: BuildTargetContext,
+  lesson: PracticeLesson,
+): PracticeLesson {
+  if (lesson.pending === undefined) {
+    return lesson;
+  }
+  const materialized: PracticeLesson = { ...lesson };
+  delete materialized.pending;
+  const form = stageFormFromLesson(lesson);
+  if (form === null) {
+    return materialized;
+  }
+  const profile = buildSkillProfile(context.records, context.plan, context.now ?? new Date());
+  materialized.target = buildStageTarget(context, {
+    stage: { form, char_budget: lesson.pending.char_budget },
+    profile,
+    ...(context.enabledModules === undefined
+      ? {}
+      : { enabledModules: context.enabledModules }),
+    ...(context.customLibraries === undefined
+      ? {}
+      : { customLibraries: context.customLibraries }),
+  });
+  return materialized;
 }
 
 function stageLessonKind(form: TrainingForm): LessonKind {
@@ -1039,6 +1082,33 @@ function matchesEverydaySentenceLength(
 
 function hasEverydayEntrySource(entry: { source_id: string }): boolean {
   return entry.source_id.trim().length > 0;
+}
+
+/** 精确 level+length 文章档位低于此数时，扩大选取池以避免短期内反复抽到同几篇 */
+const ARTICLE_MIN_POOL = 8;
+
+/**
+ * 文章选取池：精确 level+length 档位太小（如 CET4+短文仅 3 篇，必然高频重复）时，
+ * 回退到该 level 的全部长度，扩大真随机的候选范围。不引入防重复历史算法。
+ */
+export function everydayArticlePool(
+  entries: ContentLibrary["everyday_articles"]["entries"],
+  level: ContentLibrary["everyday_articles"]["entries"][number]["level"],
+  length: EverydayEnglishSettings["article_length"],
+  minPool: number = ARTICLE_MIN_POOL,
+): ContentLibrary["everyday_articles"]["entries"] {
+  const sourced = entries.filter(hasEverydayEntrySource);
+  const exact = sourced.filter(
+    (entry) => entry.level === level && matchesEverydaySentenceLength(entry.length, length),
+  );
+  if (exact.length >= minPool) {
+    return exact;
+  }
+  const byLevel = sourced.filter((entry) => entry.level === level);
+  if (byLevel.length > exact.length) {
+    return byLevel;
+  }
+  return exact.length > 0 ? exact : sourced;
 }
 
 function excludeRecentEverydayWords<T extends { word: string }>(
@@ -1532,14 +1602,11 @@ function everydayTranslatedSentencesTarget(context: BuildTargetContext): Practic
 function everydayArticlesTarget(context: BuildTargetContext): PracticeTarget {
   const random = context.random ?? Math.random;
   const settings = everydaySettings(context);
-  const matching = context.library.everyday_articles.entries
-    .filter(hasEverydayEntrySource)
-    .filter((entry) => entry.level === settings.article_level)
-    .filter((entry) => matchesEverydaySentenceLength(entry.length, settings.article_length));
-  const pool =
-    matching.length > 0
-      ? matching
-      : context.library.everyday_articles.entries.filter(hasEverydayEntrySource);
+  const pool = everydayArticlePool(
+    context.library.everyday_articles.entries,
+    settings.article_level,
+    settings.article_length,
+  );
   const candidates = [...pool];
   shuffleInPlace(candidates, random);
   const article = candidates[0];
@@ -2681,7 +2748,7 @@ export function buildStageTarget(
     case "sentences":
       return sentencesStageTarget(context, options);
     case "articles":
-      return everydayArticlesTarget(context);
+      return articlesStageTarget(context, options);
     case "code":
       return codeMixTarget(context, undefined, options.stage.char_budget);
   }
@@ -2865,6 +2932,69 @@ function sentencesStageTarget(
     text: annotated.text,
     source: `keyloop:stage:sentences:count-${picked.length}`,
     ...(annotated.annotations.length === 0 ? {} : { annotations: annotated.annotations }),
+  };
+}
+
+const MAX_STAGE_ARTICLES = 5;
+
+/**
+ * 综合训练文章阶段：按 char_budget 拼接多篇文章填满时长（解决「选45实际20」与重复）。
+ * 每篇生成独立的 display:"article" 注解（各自 start/end/标题/翻译），交由 ghostText
+ * 渲染换篇分隔与篇内翻译。无可用文章时回退到句子。
+ */
+function articlesStageTarget(
+  context: BuildTargetContext,
+  options: StageTargetOptions,
+): PracticeTarget {
+  const random = context.random ?? Math.random;
+  const settings = everydaySettings(context);
+  const pool = everydayArticlePool(
+    context.library.everyday_articles.entries,
+    settings.article_level,
+    settings.article_length,
+  );
+  const shuffled = [...pool];
+  shuffleInPlace(shuffled, random);
+  let fullText = "";
+  const annotations: PracticeTargetAnnotation[] = [];
+  for (const article of shuffled) {
+    const paragraphs = article.paragraphs.filter(
+      (paragraph) =>
+        paragraph.text.trim().length > 0 && paragraph.translation_zh.trim().length > 0,
+    );
+    const text = paragraphs.map((paragraph) => paragraph.text.trim()).join("\n");
+    if (text.length === 0) {
+      continue;
+    }
+    if (fullText.length > 0) {
+      fullText += "\n";
+    }
+    const start = fullText.length;
+    fullText += text;
+    annotations.push({
+      start,
+      end: fullText.length,
+      translation_zh: paragraphs
+        .map((paragraph) => paragraph.translation_zh.trim())
+        .join("\n"),
+      source_title: article.title,
+      display: "article",
+    });
+    if (
+      fullText.length >= options.stage.char_budget ||
+      annotations.length >= MAX_STAGE_ARTICLES
+    ) {
+      break;
+    }
+  }
+  if (annotations.length === 0) {
+    return everydaySentencesTarget(context);
+  }
+  return {
+    mode: "words",
+    text: fullText,
+    source: `keyloop:stage:articles:${settings.article_level}:${settings.article_length}:count-${annotations.length}`,
+    annotations,
   };
 }
 

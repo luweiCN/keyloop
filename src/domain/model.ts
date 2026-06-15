@@ -145,6 +145,8 @@ export interface PracticeLesson {
   target: PracticeTarget;
   reason_zh: string;
   reason_en: string;
+  /** 惰性组卷：诊断屏只产时长，target 留空，待 materializeStageLesson 开练时按此预算组卷 */
+  pending?: { char_budget: number };
 }
 
 export interface DailyPracticePlan {
@@ -238,6 +240,10 @@ export interface UserPreferences {
   enabled_modules: TrainingModule[];
   /** 目标驱动训练的主目标；undefined = 纯自适应综合训练 */
   main_goal?: MainGoal | undefined;
+  /** 新手目标弹窗：用户明确"不再用目标模式"后永久不弹 */
+  goal_prompt_opted_out: boolean;
+  /** 新手目标弹窗：上次提醒日期(YYYY-MM-DD)，控制达成后再提醒间隔；缺失=从未提醒 */
+  goal_prompt_last_shown?: string | undefined;
 }
 
 export interface MainGoal {
@@ -606,6 +612,10 @@ export function parseUserPreferences(value: unknown): UserPreferences {
     },
     enabled_modules: parseEnabledModules(object.enabled_modules),
     main_goal: parseMainGoal(object.main_goal),
+    goal_prompt_opted_out: booleanValue(object.goal_prompt_opted_out, false),
+    ...(typeof object.goal_prompt_last_shown === "string" && object.goal_prompt_last_shown !== ""
+      ? { goal_prompt_last_shown: object.goal_prompt_last_shown }
+      : {}),
   };
 }
 
@@ -839,6 +849,7 @@ export function defaultUserPreferences(
       daily_review_limit: 8,
     },
     enabled_modules: [...adaptiveModules],
+    goal_prompt_opted_out: false,
     ...overrides,
   };
 }

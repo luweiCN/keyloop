@@ -7,6 +7,7 @@ import type { SkillProfile } from "../src/training/diagnosis";
 import { estimatedMinutesFromChars } from "../src/training/prescription";
 import {
   buildDailyPracticePlan,
+  materializeStageLesson,
   buildEverydayMixStageTarget,
   buildProgrammingBasicsMixStageTarget,
   buildStageTarget,
@@ -159,6 +160,75 @@ function customLibraryFixture(): CustomLibrary {
     articles: [],
   };
 }
+
+describe("daily plan lazy materialization", () => {
+  test("lazy plan defers corpus generation until materialized", () => {
+    const context = stageContext();
+    const lazy = buildDailyPracticePlan(context, { targetMinutesOverride: 15, lazy: true });
+
+    expect(lazy.lessons.length).toBeGreaterThan(0);
+    for (const lesson of lazy.lessons) {
+      // 惰性：有计划时长，但未组卷（target 文本为空 + 待组卷标记）
+      expect(lesson.estimated_minutes).toBeGreaterThan(0);
+      expect(lesson.target.text).toBe("");
+      expect(lesson.pending).toBeDefined();
+    }
+
+    // 开练时组卷：materialize 后才生成真正的 target
+    const materialized = materializeStageLesson(context, lazy.lessons[0]!);
+    expect(materialized.target.text.length).toBeGreaterThan(0);
+    expect(materialized.pending).toBeUndefined();
+  });
+
+  test("eager plan (default) still generates targets up front", () => {
+    const context = stageContext();
+    const eager = buildDailyPracticePlan(context, { targetMinutesOverride: 15 });
+    expect(eager.lessons.every((lesson) => lesson.target.text.length > 0)).toBe(true);
+    expect(eager.lessons.every((lesson) => lesson.pending === undefined)).toBe(true);
+  });
+});
+
+describe("buildStageTarget articles", () => {
+  test("concatenates multiple articles to fill the budget with per-article annotations", () => {
+    const context = stageContext();
+    context.library.everyday_articles.entries = ["First", "Second", "Third"].map((title) => ({
+      title,
+      level: "cet4" as const,
+      length: "short" as const,
+      source_id: "test",
+      paragraphs: [
+        { text: `Article ${title} paragraph one.`, translation_zh: `${title} 第一段。` },
+        { text: `Article ${title} paragraph two.`, translation_zh: `${title} 第二段。` },
+      ],
+    }));
+
+    const target = buildStageTarget(context, {
+      stage: { form: "articles", char_budget: 1000 },
+      profile: emptyProfile(),
+    });
+
+    const articleAnnotations = (target.annotations ?? []).filter(
+      (annotation) => annotation.display === "article",
+    );
+    expect(articleAnnotations.length).toBeGreaterThan(1);
+    for (const annotation of articleAnnotations) {
+      expect(annotation.source_title).toBeDefined();
+      expect(target.text.slice(annotation.start, annotation.end).length).toBeGreaterThan(0);
+    }
+    expect(new Set(articleAnnotations.map((a) => a.source_title)).size).toBeGreaterThan(1);
+  });
+
+  test("keeps a single article when the budget is tiny", () => {
+    const target = buildStageTarget(stageContext(), {
+      stage: { form: "articles", char_budget: 5 },
+      profile: emptyProfile(),
+    });
+    const articleAnnotations = (target.annotations ?? []).filter(
+      (annotation) => annotation.display === "article",
+    );
+    expect(articleAnnotations.length).toBe(1);
+  });
+});
 
 describe("buildStageTarget words", () => {
   test("budget scales word count", () => {

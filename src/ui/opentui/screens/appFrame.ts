@@ -146,6 +146,13 @@ export function routeHints(state: OpenTuiAppState): KeyHint[] {
         { key: "←/→", label: zh ? "调整时长" : "adjust" },
         { key: "Esc", label: zh ? "返回" : "back" },
       ];
+    case "goal_onboarding":
+      return [
+        { key: "Enter", label: zh ? "设为目标" : "set goal" },
+        { key: "←/→", label: zh ? "切换方向" : "switch" },
+        { key: "S", label: zh ? "跳过" : "skip" },
+        { key: "N", label: zh ? "不再提醒" : "stop" },
+      ];
     case "summary":
     case "ansi_palette":
       return [
@@ -182,6 +189,7 @@ export function routeCrumb(state: OpenTuiAppState): string {
     case "code_settings_confirmation":
     case "practice_options":
     case "summary":
+    case "goal_onboarding":
     case "ansi_palette":
     case "library_menu":
     case "library_create":

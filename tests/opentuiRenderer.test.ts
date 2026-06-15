@@ -17,6 +17,7 @@ import {
   createOpenTuiPracticeOptionsState,
   createOpenTuiSettingsState,
   createOpenTuiStatsState,
+  createOpenTuiGoalOnboardingState,
   createOpenTuiSummaryState,
   defaultKeyAggregate,
   defaultSessionRecord,
@@ -25,6 +26,7 @@ import {
   type ContentLibrary,
   type OpenTuiAppState,
   type OpenTuiRendererKit,
+  type PracticeLesson,
   type PracticePlan,
 } from "../src/index";
 
@@ -797,6 +799,51 @@ describe("OpenTUI renderer adapter", () => {
     );
     expect(articleLines.length).toBeGreaterThan(1);
     expect(articleLines.map((node) => String(node.props.content)).join("")).toBe(translation);
+  });
+
+  test("renders per-article headers and translations for concatenated articles", async () => {
+    const text = "First A.\nSecond A.\nFirst B.\nSecond B.";
+    const firstEnd = "First A.\nSecond A.".length;
+    const secondStart = firstEnd + 1;
+    const articleState: OpenTuiAppState = {
+      language: "zh",
+      route: {
+        screen: "running",
+        source_item: "everyday_articles",
+        target: {
+          mode: "words",
+          text,
+          source: "keyloop:stage:articles:cet4:short:count-2",
+          annotations: [
+            {
+              start: 0,
+              end: firstEnd,
+              translation_zh: "甲一。\n甲二。",
+              source_title: "Article A",
+              display: "article",
+            },
+            {
+              start: secondStart,
+              end: text.length,
+              translation_zh: "乙一。\n乙二。",
+              source_title: "Article B",
+              display: "article",
+            },
+          ],
+        },
+      },
+    };
+    const kit = fakeKit();
+
+    await renderOpenTuiAppOnce(articleState, kit);
+
+    const content = findNodeById(kit.addedNodes, "keyloop-ghost-content") as FakeNode;
+    const ids = content.children.map((child) => String(child.props.id));
+    expect(ids.some((id) => id.startsWith("keyloop-ghost-article-header-"))).toBe(true);
+    const all = flattenContent([content]).replace(/\n/gu, "");
+    expect(all).toContain("Article B");
+    expect(all).toContain("甲一。");
+    expect(all).toContain("乙一。");
   });
 
   test("wraps everyday sentences to the fixed app width in wide terminals", async () => {
@@ -2155,6 +2202,53 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("Daily summary");
     expect(content).toContain("2 sessions | active 2m | WPM 25.0 | accuracy 96.2%");
     expect(content).toContain("Errors 4 | Backspace 3");
+  });
+
+  test("goal onboarding welcome renders directions and actions", async () => {
+    const kit = fakeKit();
+    const state = createOpenTuiGoalOnboardingState("zh", { scenario: "welcome" });
+    await renderOpenTuiAppOnce(state, kit);
+    const content = flattenContent(kit.addedNodes);
+    expect(content).toContain("普通打字");
+    expect(content).toContain("打代码");
+    expect(content).toContain("键位基础");
+    expect(content).toContain("不再提醒");
+  });
+
+  test("goal onboarding achieved renders old goal form", async () => {
+    const kit = fakeKit();
+    const state = createOpenTuiGoalOnboardingState("zh", {
+      scenario: "achieved",
+      achievedGoal: { form: "code", target_wpm: 60, deadline: "2026-06-01", created_at: "2026-03-01" },
+    });
+    await renderOpenTuiAppOnce(state, kit);
+    expect(flattenContent(kit.addedNodes)).toContain("代码");
+  });
+
+  test("comprehensive summary renders planned vs actual per lesson", async () => {
+    const kit = fakeKit();
+    const lesson: PracticeLesson = {
+      id: "stage:keys:1",
+      kind: "common_words",
+      module: "foundation_input",
+      category: "foundation_mix",
+      mix_profile: "comprehensive",
+      estimated_minutes: 4,
+      target: { mode: "words", text: "x", source: "t" },
+      reason_zh: "",
+      reason_en: "",
+    };
+    const state = createOpenTuiSummaryState(
+      "en",
+      [defaultSessionRecord({ lesson_index: 0, active_ms: 180_000, duration_ms: 180_000 })],
+      { lessons: [lesson] },
+    );
+
+    await renderOpenTuiAppOnce(state, kit);
+
+    const content = flattenContent(kit.addedNodes);
+    expect(content).toContain("Keys planned 4m · actual 3.0m");
+    expect(content).toContain("planned 4m · actual 3.0m");
   });
 
   test("renders stats route overview metrics", async () => {

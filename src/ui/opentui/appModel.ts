@@ -181,6 +181,8 @@ export interface OpenTuiStateOptions {
   youdaoTtsCredentialStatus?: OpenTuiYoudaoTtsCredentialStatus | undefined;
   enabledModules?: TrainingModule[] | undefined;
   mainGoal?: MainGoal | undefined;
+  goalPromptOptedOut?: boolean | undefined;
+  goalPromptLastShown?: string | undefined;
 }
 
 export type OpenTuiReturnRoute =
@@ -266,6 +268,13 @@ export type OpenTuiRoute =
       screen: "summary";
       records: SessionRecord[];
       daily_run_id?: string;
+      lessons?: PracticeLesson[];
+    }
+  | {
+      screen: "goal_onboarding";
+      scenario: "welcome" | "achieved";
+      selected_direction_index: number;
+      achieved_goal?: MainGoal;
     }
   | { screen: "ansi_palette" }
   | { screen: "library_menu"; slug: string; selected_index?: number }
@@ -356,6 +365,8 @@ export interface OpenTuiSessionState {
   today_elapsed_ms?: number | undefined;
   enabledModules?: TrainingModule[] | undefined;
   mainGoal?: MainGoal | undefined;
+  goalPromptOptedOut?: boolean | undefined;
+  goalPromptLastShown?: string | undefined;
 }
 
 export interface OpenTuiAppState extends OpenTuiSessionState {
@@ -396,6 +407,7 @@ export interface OpenTuiPracticeOptionsStateOptions extends OpenTuiStateOptions 
 
 export interface OpenTuiSummaryStateOptions extends OpenTuiStateOptions {
   dailyRunId?: string;
+  lessons?: PracticeLesson[];
 }
 
 export interface OpenTuiStatsStateOptions extends OpenTuiStateOptions {
@@ -566,6 +578,29 @@ export function createOpenTuiSummaryState(
   if (options.dailyRunId !== undefined) {
     route.daily_run_id = options.dailyRunId;
   }
+  if (options.lessons !== undefined) {
+    route.lessons = [...options.lessons];
+  }
+  return appState(language, route, options);
+}
+
+export interface OpenTuiGoalOnboardingStateOptions extends OpenTuiStateOptions {
+  scenario: "welcome" | "achieved";
+  achievedGoal?: MainGoal;
+}
+
+export function createOpenTuiGoalOnboardingState(
+  language: Language,
+  options: OpenTuiGoalOnboardingStateOptions,
+): OpenTuiAppState {
+  const route: OpenTuiRoute = {
+    screen: "goal_onboarding",
+    scenario: options.scenario,
+    selected_direction_index: 0,
+  };
+  if (options.achievedGoal !== undefined) {
+    route.achieved_goal = options.achievedGoal;
+  }
   return appState(language, route, options);
 }
 
@@ -706,6 +741,7 @@ export function activateOpenTuiMenuItem(
     case "practice_options":
     case "complete":
     case "summary":
+    case "goal_onboarding":
     case "ansi_palette":
     case "library_create":
     case "library_manage":
@@ -1113,6 +1149,12 @@ function appState(
   if (options.mainGoal !== undefined) {
     state.mainGoal = options.mainGoal;
   }
+  if (options.goalPromptOptedOut !== undefined) {
+    state.goalPromptOptedOut = options.goalPromptOptedOut;
+  }
+  if (options.goalPromptLastShown !== undefined) {
+    state.goalPromptLastShown = options.goalPromptLastShown;
+  }
   if (options.codeSettings !== undefined) {
     state.codeSettings = cloneCodeSettings(options.codeSettings);
   }
@@ -1437,7 +1479,7 @@ export {
   type OpenTuiSettingsMenuItemId,
   type OpenTuiSettingsView,
 } from "./settingsItems";
-export { openTuiRouteLines, openTuiRouteTitle } from "./routeLines";
+export { openTuiRouteEmphasis, openTuiRouteLines, openTuiRouteTitle } from "./routeLines";
 
 /** 综合训练诊断/计划屏：构建当日阶段计划与诊断摘要 */
 export function comprehensiveStagePlanState(
@@ -1469,6 +1511,8 @@ export function comprehensiveStagePlanState(
     storedPlan ??
     buildDailyPracticePlan(effectiveContext, {
       targetMinutesOverride: targetMinutesOverride ?? defaultMinutes,
+      // 惰性组卷：诊断屏/切档只产时长，组卷推迟到开练（startRunner materialize），切档秒级
+      lazy: true,
     });
   const completedLessonIds =
     storedPlan === undefined

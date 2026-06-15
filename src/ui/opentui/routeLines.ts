@@ -29,6 +29,8 @@ import { openTuiStatsViews } from "./appModel";
 import { openTuiMenuItems, submenuTitle, type OpenTuiMenuItemId } from "./menuItems";
 import { flatSettingsRouteLines, settingsRouteLines } from "./settingsItems";
 import { formLabel } from "./labels";
+import { formForCategory } from "../../training/diagnosis";
+import { GOAL_DIRECTIONS } from "../../training/goalPrompt";
 import type { GoalRecommendation } from "../../training/goalPlan";
 
 export function openTuiRouteTitle(state: OpenTuiAppState): string {
@@ -73,6 +75,8 @@ export function openTuiRouteTitle(state: OpenTuiAppState): string {
       return state.language === "zh" ? "今日训练计划" : "Today's training plan";
     case "summary":
       return state.language === "zh" ? "今日总结" : "Daily summary";
+    case "goal_onboarding":
+      return state.language === "zh" ? "训练目标" : "Training goal";
     case "ansi_palette":
       return state.language === "zh" ? "ANSI 色板" : "ANSI palette";
     case "library_menu": {
@@ -140,7 +144,14 @@ export function openTuiRouteLines(state: OpenTuiAppState): string[] {
         state.route.goal_recommendation,
       );
     case "summary":
-      return summaryLines(state.route.records, state.language, speedUnit);
+      return summaryLines(
+        state.route.records,
+        state.language,
+        speedUnit,
+        state.route.lessons ?? [],
+      );
+    case "goal_onboarding":
+      return goalOnboardingLines(state.route, state.language);
     case "ansi_palette":
       return ansiPaletteLines(state.language);
     case "library_create":
@@ -301,7 +312,12 @@ export function isStandaloneCompletion(
   return record.daily_run_id === "" || sourceItem !== "comprehensive";
 }
 
-export function summaryLines(records: SessionRecord[], language: Language, speedUnit: SpeedUnit): string[] {
+export function summaryLines(
+  records: SessionRecord[],
+  language: Language,
+  speedUnit: SpeedUnit,
+  lessons: PracticeLesson[] = [],
+): string[] {
   if (records.length === 0) {
     return [
       language === "zh"
@@ -316,16 +332,87 @@ export function summaryLines(records: SessionRecord[], language: Language, speed
   const speed = aggregateSpeed(records, speedUnit);
   const speedLabel = speedUnitLabel(speedUnit);
   const accuracy = weightedAccuracy(records);
+  const zh = language === "zh";
 
-  return language === "zh"
-    ? [
-        `${records.length} 次练习 | active ${formatDurationShort(activeMs, language)} | ${speedLabel} ${speed.toFixed(1)} | 正确率 ${accuracy.toFixed(1)}%`,
-        `错误 ${errors} | 退格 ${backspaces}`,
-      ]
-    : [
-        `${records.length} sessions | active ${formatDurationShort(activeMs, language)} | ${speedLabel} ${speed.toFixed(1)} | accuracy ${accuracy.toFixed(1)}%`,
-        `Errors ${errors} | Backspace ${backspaces}`,
-      ];
+  const aggregateLine = zh
+    ? `${records.length} 次练习 | active ${formatDurationShort(activeMs, language)} | ${speedLabel} ${speed.toFixed(1)} | 正确率 ${accuracy.toFixed(1)}%`
+    : `${records.length} sessions | active ${formatDurationShort(activeMs, language)} | ${speedLabel} ${speed.toFixed(1)} | accuracy ${accuracy.toFixed(1)}%`;
+  const errorLine = zh ? `错误 ${errors} | 退格 ${backspaces}` : `Errors ${errors} | Backspace ${backspaces}`;
+
+  // 综合训练：逐练习「计划 vs 实际」时长 + 总计行（无 lessons 时退回纯汇总）
+  const planLines = perLessonPlannedActualLines(records, lessons, language);
+  if (planLines.length === 0) {
+    return [aggregateLine, errorLine];
+  }
+  return [...planLines, aggregateLine, errorLine];
+}
+
+function perLessonPlannedActualLines(
+  records: SessionRecord[],
+  lessons: PracticeLesson[],
+  language: Language,
+): string[] {
+  if (lessons.length === 0) {
+    return [];
+  }
+  const zh = language === "zh";
+  const lines: string[] = [];
+  let totalPlanned = 0;
+  let totalActual = 0;
+  for (const record of records) {
+    const lesson = record.lesson_index === null ? undefined : lessons[record.lesson_index];
+    if (lesson === undefined || lesson.mix_profile !== "comprehensive") {
+      continue;
+    }
+    const form = formForCategory(lesson.category);
+    if (form === null) {
+      continue;
+    }
+    const planned = lesson.estimated_minutes;
+    const actual = effectiveActiveMs(record) / 60_000;
+    totalPlanned += planned;
+    totalActual += actual;
+    const label = formLabel(form, language);
+    lines.push(
+      zh
+        ? `${label} 计划 ${planned} 分 · 实际 ${actual.toFixed(1)} 分`
+        : `${label} planned ${planned}m · actual ${actual.toFixed(1)}m`,
+    );
+  }
+  if (lines.length === 0) {
+    return [];
+  }
+  lines.push(
+    zh
+      ? `计划 ${totalPlanned} 分 · 实际 ${totalActual.toFixed(1)} 分`
+      : `planned ${totalPlanned}m · actual ${totalActual.toFixed(1)}m`,
+  );
+  return lines;
+}
+
+export function goalOnboardingLines(
+  route: Extract<OpenTuiRoute, { screen: "goal_onboarding" }>,
+  language: Language,
+): string[] {
+  const zh = language === "zh";
+  const dirs = GOAL_DIRECTIONS.map((d, i) =>
+    i === route.selected_direction_index ? `‹ ${zh ? d.zh : d.en} ›` : zh ? d.zh : d.en,
+  );
+  const goalForm =
+    route.achieved_goal !== undefined ? formLabel(route.achieved_goal.form, language) : "";
+  const header =
+    route.scenario === "welcome"
+      ? zh
+        ? "设个训练目标，让练习更有方向？系统会按目标调整每日训练侧重。"
+        : "Set a training goal to focus your practice. The plan adapts to it."
+      : zh
+        ? `目标达成 🎉 你的「${goalForm}」目标已完成，设个新目标继续？`
+        : `Goal done 🎉 Your "${goalForm}" goal is complete. Set a new one?`;
+  return [
+    header,
+    (zh ? "主要想练：" : "I mainly want: ") + dirs.join(" · "),
+    zh ? "Enter 设为目标   S 先跳过   N 不再提醒" : "Enter set goal   S skip   N stop reminding",
+  ];
 }
 
 export function statsRouteLines(
@@ -490,4 +577,30 @@ function stagePlanLines(
         : "[Enter] continue (skips finished stages)  [Esc] back",
   );
   return lines;
+}
+
+const EMPTY_EMPHASIS: ReadonlySet<number> = new Set();
+
+/**
+ * stage_plan 面板里需要提亮的引导行（今日计划 / 时长档位）。
+ * renderPanel 默认把非首行渲染为暗灰 muted，这两行太暗易被用户跳过，
+ * 故单独标出行索引交由渲染层用前景色高亮。其它路由不强调（返回空集）。
+ */
+export function openTuiRouteEmphasis(state: OpenTuiAppState): ReadonlySet<number> {
+  if (state.route.screen !== "stage_plan") {
+    return EMPTY_EMPHASIS;
+  }
+  const indexes = new Set<number>();
+  openTuiRouteLines(state).forEach((line, index) => {
+    const trimmed = line.trimStart();
+    if (
+      trimmed.startsWith("今日计划") ||
+      trimmed.startsWith("Plan:") ||
+      trimmed.startsWith("时长档位") ||
+      trimmed.startsWith("Length:")
+    ) {
+      indexes.add(index);
+    }
+  });
+  return indexes;
 }

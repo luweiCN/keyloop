@@ -21,6 +21,7 @@ import {
   type StartRunnerContext,
 } from "../src/index";
 import { injectUiEvent, WHEEL_UP_EVENT } from "../src/ui/opentui/uiEventBus";
+import { refreshSelectionForCurrentRecords } from "../src/ui/opentui/runnerSelection";
 
 interface FakeNode {
   type: "Box" | "Text";
@@ -112,6 +113,41 @@ describe("OpenTUI start runner", () => {
     expect(result.completedRecords).toEqual([]);
     expect(kit.addedNodes).toEqual([]);
     expect(kit.createdOptions).toEqual([]);
+  });
+
+  test("materializes a pending lazy stage lesson on open so it can be typed", async () => {
+    const kit = fakeKit({ keyInput: true });
+    const runner = createOpenTuiStartRunner({ kit });
+
+    const runPromise = runner(contextWithStageLibrary(pendingComprehensivePlan()));
+
+    await kit.waitForKeyListener(1);
+    // 惰性课开练时必须组卷成可打 target：首帧渲染真实单词而非空 pending 文本
+    const ghost = findNodeById(kit.addedNodes, "keyloop-ghost-pending-0-0");
+    expect((ghost?.props.content as string)?.length ?? 0).toBeGreaterThan(0);
+    expect(flattenContent(kit.addedNodes)).toMatch(/today|practice|information/);
+
+    kit.emitKey({ name: "c", sequence: "c", ctrl: true });
+    await runPromise;
+  });
+
+  test("refreshing a comprehensive lesson clears pending once corpus is built", () => {
+    // 已落盘开练（run_id 非空）的 pending 课经 refresh 即组卷成可打 target，
+    // pending 标记应一并清除，避免 startRunner 再 materialize 时重复组卷
+    const plan: DailyPracticePlan = {
+      ...pendingComprehensivePlan(),
+      run_id: "20260615-1-run",
+    };
+    const context = contextWithStageLibrary(plan);
+
+    const result = refreshSelectionForCurrentRecords(
+      context,
+      { lesson: plan.lessons[0]!, index: 0 },
+      [],
+    );
+
+    expect(result.lesson.target.text.length).toBeGreaterThan(0);
+    expect(result.lesson.pending).toBeUndefined();
   });
 
   test("typing the displayed lesson returns a completed session record", async () => {
@@ -719,6 +755,60 @@ describe("OpenTUI start runner", () => {
     const result = await runPromise;
     expect(result.completedRecords).toHaveLength(1);
     expect(result.completedRecords[0]?.lesson_id).toBe("lesson-foundation");
+  });
+
+  test("daily summary returns to the menu when launched with a returnState", async () => {
+    const kit = fakeKit({ keyInput: true });
+    let nowMs = 4_000;
+    const initialState = {
+      language: "en" as const,
+      route: { screen: "submenu" as const, menu: "foundation" as const, selected_index: 0 },
+    };
+    const runner = createOpenTuiStartRunner({
+      kit,
+      nowMs: () => nowMs,
+    });
+    const plan = testSingleLessonPlan("a");
+
+    const runPromise = runner({
+      ...contextWithPlan(plan),
+      returnState: initialState,
+    });
+    const runningReady = await Promise.race([
+      kit.waitForKeyListener().then(() => true),
+      runPromise.then(() => false),
+      delay(50).then(() => false),
+    ]);
+    expect(runningReady).toBe(true);
+
+    nowMs = 4_100;
+    kit.emitKey({ name: "a", sequence: "a" });
+
+    const completeReady = await Promise.race([
+      kit.waitForKeyListener(2).then(() => true),
+      runPromise.then(() => false),
+      delay(50).then(() => false),
+    ]);
+    expect(completeReady).toBe(true);
+    expect(flattenContent(kit.addedNodes)).toContain("Lesson complete");
+
+    await dismissCompletionResult(kit);
+    kit.emitKey({ name: "enter", sequence: "\r" });
+
+    const summaryReady = await Promise.race([
+      kit.waitForKeyListener(3).then(() => true),
+      runPromise.then(() => false),
+      delay(50).then(() => false),
+    ]);
+    expect(summaryReady).toBe(true);
+    expect(flattenContent(kit.addedNodes)).toContain("Daily summary");
+
+    kit.emitKey({ name: "enter", sequence: "\r" });
+    const result = await runPromise;
+
+    expect(result.completedRecords).toHaveLength(1);
+    expect(result.renderer).toBeDefined();
+    expect(result.state?.route.screen).toBe("submenu");
   });
 
   test("completion popup can be dismissed before enter continues", async () => {
@@ -2712,6 +2802,42 @@ function everydayWordLibrary(): ContentLibrary {
     },
   ];
   return library;
+}
+
+function pendingComprehensivePlan(): DailyPracticePlan {
+  // 模拟惰性组卷：诊断屏只产时长，target 留空待开练 materialize（run_id 仍为空）
+  return {
+    run_id: "",
+    run_number: 0,
+    target_minutes: 15,
+    completed_ms: 0,
+    lessons: [
+      {
+        id: "stage:words:1",
+        kind: "common_words",
+        module: "everyday_english",
+        category: "everyday_words",
+        mix_profile: "comprehensive",
+        estimated_minutes: 4,
+        target: { mode: "words", text: "", source: "keyloop:stage:pending:words" },
+        pending: { char_budget: 120 },
+        reason_zh: "",
+        reason_en: "",
+      },
+    ],
+  };
+}
+
+function contextWithStageLibrary(plan: DailyPracticePlan): StartRunnerContext {
+  return {
+    ...contextWithPlan(plan),
+    targetContext: {
+      records: [],
+      plan: refreshPlan(),
+      library: everydayWordLibrary(),
+      random: () => 0.42,
+    },
+  };
 }
 
 function everydayOptionsLibrary(): ContentLibrary {

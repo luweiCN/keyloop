@@ -1,5 +1,5 @@
 import type { OpenTuiAppState } from "./appModel";
-import { openTuiRouteLines, openTuiRouteTitle } from "./appModel";
+import { openTuiRouteEmphasis, openTuiRouteLines, openTuiRouteTitle } from "./appModel";
 import { type OpenTuiRenderer, type OpenTuiRendererKit, loadOpenTuiKit } from "./kit";
 import { OPEN_TUI_ROOT_ID, renderAppFrame } from "./screens/appFrame";
 import { renderPanel } from "./screens/shared";
@@ -144,16 +144,21 @@ async function renderRoute(state: OpenTuiAppState, kit: OpenTuiRendererKit): Pro
           ? renderSettingsMenuScreen(state, kit)
           : state.route.view === "code_filters"
             ? renderCodeFilterPickerScreen(state, kit)
-          : renderPanel("keyloop-route-panel", openTuiRouteTitle(state), openTuiRouteLines(state), kit),
+          : renderPanel("keyloop-route-panel", openTuiRouteTitle(state), openTuiRouteLines(state), kit, {
+          emphasizedLines: openTuiRouteEmphasis(state),
+        }),
         kit,
       );
     case "stats":
       return renderAppFrame(state, renderStatsScreen(state, kit), kit);
     case "stage_plan":
     case "summary":
+    case "goal_onboarding":
       return renderAppFrame(
         state,
-        renderPanel("keyloop-route-panel", openTuiRouteTitle(state), openTuiRouteLines(state), kit),
+        renderPanel("keyloop-route-panel", openTuiRouteTitle(state), openTuiRouteLines(state), kit, {
+          emphasizedLines: openTuiRouteEmphasis(state),
+        }),
         kit,
       );
   }

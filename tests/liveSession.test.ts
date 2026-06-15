@@ -5,10 +5,48 @@ import {
   createLiveSession,
   liveMetrics,
   sessionRecordFromLiveSession,
+  wordWpmExtremes,
   type KeyEventRecord,
 } from "../src/index";
 
+function insertEventsForWords(target: string, times: number[]): KeyEventRecord[] {
+  return Array.from(target).map((ch, index) => ({
+    at_ms: times[index] ?? 0,
+    action: "insert" as const,
+    position: index,
+    expected: ch,
+    input: ch,
+    correct: true,
+  }));
+}
+
 describe("live session core parity", () => {
+  test("word wpm extremes reports per-word fastest and slowest", () => {
+    // 词1 abcd 每字符 100ms（≈120 wpm）；词2 efgh 起步停顿 600ms 后再每字符 100ms，整体更慢
+    const events = insertEventsForWords("abcd efgh", [0, 100, 200, 300, 400, 1000, 1100, 1200, 1300]);
+    const result = wordWpmExtremes("abcd efgh", events);
+    expect(result).toBeDefined();
+    if (result === undefined) {
+      throw new Error("expected extremes");
+    }
+    expect(result.fastest).toBeGreaterThan(result.slowest);
+    expect(result.fastest).toBeCloseTo(120, 0);
+  });
+
+  test("word wpm extremes returns undefined without 2+ char words", () => {
+    expect(
+      wordWpmExtremes("a b c", insertEventsForWords("a b c", [0, 100, 200, 300, 400])),
+    ).toBeUndefined();
+  });
+
+  test("live metrics include word wpm extremes when available", () => {
+    const events = insertEventsForWords("abcd efgh", [0, 100, 200, 300, 400, 1000, 1100, 1200, 1300]);
+    const metrics = liveMetrics("abcd efgh", "abcd efgh", events, 60_000);
+    expect(metrics.fastest_wpm).toBeDefined();
+    expect(metrics.slowest_wpm).toBeDefined();
+    expect(metrics.fastest_wpm ?? 0).toBeGreaterThanOrEqual(metrics.slowest_wpm ?? 0);
+  });
+
   test("live raw wpm counts backspaced inserts", () => {
     const events: KeyEventRecord[] = [
       {

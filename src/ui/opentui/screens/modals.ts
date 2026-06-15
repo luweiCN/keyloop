@@ -15,7 +15,8 @@ import {
   type PracticeOptionsRoute,
   type RunningRoute,
 } from "./shared";
-import { renderRunningScreen } from "./running";
+import { plannedDurationValue, plannedMinutesValue, renderRunningScreen } from "./running";
+import { wordWpmExtremes } from "../../../training/liveSession";
 
 export async function renderCompleteScreen(
   state: OpenTuiAppState,
@@ -402,6 +403,7 @@ export function renderCompletionPopup(state: OpenTuiAppState, kit: OpenTuiRender
   const next = completionNextLine(state.route, state.language);
   const speedUnit = state.speed_unit ?? "wpm";
   const metricLabel = speedUnitLabel(speedUnit);
+  const extremes = wordWpmExtremes(record.target_text, record.key_events);
   return renderModalPopup(
     "keyloop-complete",
     openTuiRouteTitle(state),
@@ -458,8 +460,22 @@ export function renderCompletionPopup(state: OpenTuiAppState, kit: OpenTuiRender
             "bad",
             kit,
           ),
+          ...(extremes === undefined
+            ? []
+            : [
+                statCell(
+                  "keyloop-complete-stat-extremes",
+                  state.language === "zh" ? "最快/最慢" : "Fast/Slow",
+                  `${speedFromWpm(extremes.fastest, speedUnit).toFixed(0)}/${speedFromWpm(
+                    extremes.slowest,
+                    speedUnit,
+                  ).toFixed(0)}`,
+                  "neutral",
+                  kit,
+                ),
+              ]),
         ),
-        renderCompletionDetails(record, state.language, kit),
+        renderCompletionDetails(record, state.route.lesson, state.language, kit),
         ...renderCompletionKeyDiagnostics(record, state.language, kit),
         ...(next === undefined
           ? []
@@ -471,9 +487,11 @@ export function renderCompletionPopup(state: OpenTuiAppState, kit: OpenTuiRender
 
 export function renderCompletionDetails(
   record: CompleteRoute["record"],
+  lesson: CompleteRoute["lesson"],
   language: OpenTuiAppState["language"],
   kit: OpenTuiRendererKit,
 ): unknown {
+  const planned = plannedMinutesValue(lesson);
   return kit.Box(
     {
       id: "keyloop-complete-details",
@@ -492,6 +510,20 @@ export function renderCompletionDetails(
       height: 1,
       wrapMode: "none",
     }),
+    ...(planned === undefined
+      ? []
+      : [
+          kit.Text({
+            content:
+              language === "zh"
+                ? `计划 ${plannedDurationValue(planned, language)}`
+                : `Planned ${plannedDurationValue(planned, language)}`,
+            fg: theme.muted,
+            id: "keyloop-complete-planned",
+            height: 1,
+            wrapMode: "none",
+          }),
+        ]),
     kit.Text({
       content:
         language === "zh"

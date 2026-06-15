@@ -8,6 +8,8 @@ import {
   type BuildTargetContext,
 } from "./training/targets";
 import { buildPlan } from "./training/plan";
+import { buildSkillProfile, type FormSpeed } from "./training/diagnosis";
+import { shouldShowGoalPrompt } from "./training/goalPrompt";
 import {
   appendSessionToPath,
   clearSessionCheckpointAtPath,
@@ -71,6 +73,7 @@ import {
   resolveYoudaoTtsCredentials,
 } from "./audio/youdaoCredentials";
 import {
+  createOpenTuiGoalOnboardingState,
   openTuiCodeConfig,
   type OpenTuiAppState,
   type OpenTuiReturnRoute,
@@ -322,7 +325,18 @@ async function runApp(
   });
   const youdaoTtsCredentialStatus =
     youdaoCredentials?.source ?? (youdaoCredentialStore === null ? "unavailable" : "none");
-  let initialState: OpenTuiAppState | undefined;
+  const startupNow = options.now ?? new Date();
+  const startupProfile = buildSkillProfile(
+    records,
+    buildPlan(records, language, options.now),
+    startupNow,
+  );
+  let initialState: OpenTuiAppState | undefined = initialRouteForStartup(
+    preferences,
+    startupProfile.form_speeds,
+    startupNow,
+    language,
+  );
   let initialRenderer: OpenTuiRenderer | undefined;
 
   for (;;) {
@@ -466,7 +480,26 @@ function contentLibraryOptions(options: RunCliOptions): {
     : { userEverydayCorpusPath: path };
 }
 
-function preferencesFromAppState(
+/** 启动时按目标弹窗状态机决定初始 route：需弹则返回 goal_onboarding state，否则 undefined（照常 main_menu） */
+export function initialRouteForStartup(
+  preferences: UserPreferences,
+  formSpeeds: FormSpeed[],
+  now: Date,
+  language: Language,
+): OpenTuiAppState | undefined {
+  const decision = shouldShowGoalPrompt(preferences, formSpeeds, now);
+  if (!decision.show) {
+    return undefined;
+  }
+  return createOpenTuiGoalOnboardingState(language, {
+    scenario: decision.scenario,
+    ...(decision.scenario === "achieved" && preferences.main_goal !== undefined
+      ? { achievedGoal: preferences.main_goal }
+      : {}),
+  });
+}
+
+export function preferencesFromAppState(
   preferences: UserPreferences,
   state: OpenTuiAppSessionResult["state"],
   initialLanguage: Language,
@@ -587,6 +620,22 @@ function preferencesFromAppState(
     } else {
       next.main_goal = { ...state.mainGoal };
     }
+    changed = true;
+  }
+
+  if (
+    state.goalPromptOptedOut !== undefined &&
+    state.goalPromptOptedOut !== preferences.goal_prompt_opted_out
+  ) {
+    next.goal_prompt_opted_out = state.goalPromptOptedOut;
+    changed = true;
+  }
+
+  if (
+    state.goalPromptLastShown !== undefined &&
+    state.goalPromptLastShown !== preferences.goal_prompt_last_shown
+  ) {
+    next.goal_prompt_last_shown = state.goalPromptLastShown;
     changed = true;
   }
 
