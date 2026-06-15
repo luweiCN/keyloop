@@ -556,6 +556,19 @@ export function renderLiveMetrics(
         value: String(values.errors),
         tone: "bad",
       },
+      ...(metrics?.fastest_wpm === undefined || metrics.slowest_wpm === undefined
+        ? []
+        : [
+            {
+              key: "extremes",
+              label: language === "zh" ? "最快/最慢" : "Fast/Slow",
+              value: `${speedFromWpm(metrics.fastest_wpm, speedUnit).toFixed(0)}/${speedFromWpm(
+                metrics.slowest_wpm,
+                speedUnit,
+              ).toFixed(0)}`,
+              tone: "neutral" as const,
+            },
+          ]),
     ],
     kit,
     options,

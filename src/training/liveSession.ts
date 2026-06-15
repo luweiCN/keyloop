@@ -28,6 +28,8 @@ export interface LiveMetrics {
   accuracy: number;
   errors: number;
   backspaces: number;
+  fastest_wpm?: number;
+  slowest_wpm?: number;
 }
 
 export interface LiveSessionRecordOptions {
@@ -106,6 +108,7 @@ export function liveMetrics(
     };
   }
   const minutes = Math.max(elapsedMs, 1) / 60_000;
+  const extremes = wordWpmExtremes(targetText, events);
 
   return {
     wpm: correct / 5 / minutes,
@@ -113,6 +116,70 @@ export function liveMetrics(
     accuracy,
     errors,
     backspaces,
+    ...(extremes === undefined
+      ? {}
+      : { fastest_wpm: extremes.fastest, slowest_wpm: extremes.slowest }),
+  };
+}
+
+const MAX_WORD_KEY_DELAY_MS = 5_000;
+
+/**
+ * 本组逐词打字速度的最快/最慢（WPM）。按 target 空白切词，累加每个正确字符
+ * 相对上一次敲击的 delay 得到每词平均速度。逐键瞬时速度太抖、逐词更稳。
+ * 无 2+ 字符的有效词时返回 undefined。
+ */
+export function wordWpmExtremes(
+  targetText: string,
+  events: KeyEventRecord[],
+): { fastest: number; slowest: number } | undefined {
+  const chars = Array.from(targetText);
+  const wordOfPosition: Array<number | undefined> = [];
+  let wordIndex = -1;
+  let inWord = false;
+  for (let i = 0; i < chars.length; i += 1) {
+    if (/\s/u.test(chars[i] ?? " ")) {
+      inWord = false;
+      wordOfPosition[i] = undefined;
+    } else {
+      if (!inWord) {
+        wordIndex += 1;
+        inWord = true;
+      }
+      wordOfPosition[i] = wordIndex;
+    }
+  }
+  const words = new Map<number, { chars: number; ms: number }>();
+  let previous: KeyEventRecord | undefined;
+  for (const event of events) {
+    if (event.action === "backspace") {
+      previous = event;
+      continue;
+    }
+    if (event.action !== "insert" && event.action !== "auto_indent") {
+      continue;
+    }
+    if (event.correct && previous !== undefined) {
+      const word = wordOfPosition[event.position];
+      const delay = event.at_ms - previous.at_ms;
+      if (word !== undefined && delay > 0 && delay <= MAX_WORD_KEY_DELAY_MS) {
+        const entry = words.get(word) ?? { chars: 0, ms: 0 };
+        entry.chars += 1;
+        entry.ms += delay;
+        words.set(word, entry);
+      }
+    }
+    previous = event;
+  }
+  const wpms = [...words.values()]
+    .filter((word) => word.chars >= 2 && word.ms > 0)
+    .map((word) => word.chars / 5 / (word.ms / 60_000));
+  if (wpms.length === 0) {
+    return undefined;
+  }
+  return {
+    fastest: Math.max(...wpms),
+    slowest: Math.min(...wpms),
   };
 }
 
