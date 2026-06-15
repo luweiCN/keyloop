@@ -160,6 +160,48 @@ function customLibraryFixture(): CustomLibrary {
   };
 }
 
+describe("buildStageTarget articles", () => {
+  test("concatenates multiple articles to fill the budget with per-article annotations", () => {
+    const context = stageContext();
+    context.library.everyday_articles.entries = ["First", "Second", "Third"].map((title) => ({
+      title,
+      level: "cet4" as const,
+      length: "short" as const,
+      source_id: "test",
+      paragraphs: [
+        { text: `Article ${title} paragraph one.`, translation_zh: `${title} 第一段。` },
+        { text: `Article ${title} paragraph two.`, translation_zh: `${title} 第二段。` },
+      ],
+    }));
+
+    const target = buildStageTarget(context, {
+      stage: { form: "articles", char_budget: 1000 },
+      profile: emptyProfile(),
+    });
+
+    const articleAnnotations = (target.annotations ?? []).filter(
+      (annotation) => annotation.display === "article",
+    );
+    expect(articleAnnotations.length).toBeGreaterThan(1);
+    for (const annotation of articleAnnotations) {
+      expect(annotation.source_title).toBeDefined();
+      expect(target.text.slice(annotation.start, annotation.end).length).toBeGreaterThan(0);
+    }
+    expect(new Set(articleAnnotations.map((a) => a.source_title)).size).toBeGreaterThan(1);
+  });
+
+  test("keeps a single article when the budget is tiny", () => {
+    const target = buildStageTarget(stageContext(), {
+      stage: { form: "articles", char_budget: 5 },
+      profile: emptyProfile(),
+    });
+    const articleAnnotations = (target.annotations ?? []).filter(
+      (annotation) => annotation.display === "article",
+    );
+    expect(articleAnnotations.length).toBe(1);
+  });
+});
+
 describe("buildStageTarget words", () => {
   test("budget scales word count", () => {
     const small = buildStageTarget(stageContext(), {

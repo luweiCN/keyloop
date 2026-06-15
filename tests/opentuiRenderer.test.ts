@@ -799,6 +799,51 @@ describe("OpenTUI renderer adapter", () => {
     expect(articleLines.map((node) => String(node.props.content)).join("")).toBe(translation);
   });
 
+  test("renders per-article headers and translations for concatenated articles", async () => {
+    const text = "First A.\nSecond A.\nFirst B.\nSecond B.";
+    const firstEnd = "First A.\nSecond A.".length;
+    const secondStart = firstEnd + 1;
+    const articleState: OpenTuiAppState = {
+      language: "zh",
+      route: {
+        screen: "running",
+        source_item: "everyday_articles",
+        target: {
+          mode: "words",
+          text,
+          source: "keyloop:stage:articles:cet4:short:count-2",
+          annotations: [
+            {
+              start: 0,
+              end: firstEnd,
+              translation_zh: "甲一。\n甲二。",
+              source_title: "Article A",
+              display: "article",
+            },
+            {
+              start: secondStart,
+              end: text.length,
+              translation_zh: "乙一。\n乙二。",
+              source_title: "Article B",
+              display: "article",
+            },
+          ],
+        },
+      },
+    };
+    const kit = fakeKit();
+
+    await renderOpenTuiAppOnce(articleState, kit);
+
+    const content = findNodeById(kit.addedNodes, "keyloop-ghost-content") as FakeNode;
+    const ids = content.children.map((child) => String(child.props.id));
+    expect(ids.some((id) => id.startsWith("keyloop-ghost-article-header-"))).toBe(true);
+    const all = flattenContent([content]).replace(/\n/gu, "");
+    expect(all).toContain("Article B");
+    expect(all).toContain("甲一。");
+    expect(all).toContain("乙一。");
+  });
+
   test("wraps everyday sentences to the fixed app width in wide terminals", async () => {
     const running: OpenTuiAppState = {
       language: "en",

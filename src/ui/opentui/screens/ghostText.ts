@@ -76,7 +76,8 @@ type GhostRowDescriptor =
   | { kind: "meaning"; visualIndex: number; meaning: string }
   | { kind: "translation"; anchorVisualIndex: number; translation: string }
   | { kind: "article_spacer"; rowIndex: number }
-  | { kind: "article_line"; rowIndex: number; text: string };
+  | { kind: "article_line"; rowIndex: number; text: string }
+  | { kind: "article_header"; rowIndex: number; text: string };
 
 /** 文章整篇翻译的清洗文本（display=article 的注解），无则 undefined。 */
 function articleTranslationText(
@@ -87,6 +88,50 @@ function articleTranslationText(
   );
   const translation = article?.translation_zh.replace(/\s+/gu, " ").trim();
   return translation === undefined || translation.length === 0 ? undefined : translation;
+}
+
+/** 每个 target 源行的起始字符 offset（用于把行映射到所属文章注解） */
+function lineStartOffsets(text: string): number[] {
+  const offsets: number[] = [];
+  let offset = 0;
+  for (const line of text.split("\n")) {
+    offsets.push(offset);
+    offset += line.length + 1;
+  }
+  return offsets;
+}
+
+function articleIndexForOffset(
+  offset: number,
+  articles: readonly PracticeTargetAnnotation[],
+): number {
+  return articles.findIndex((article) => offset >= article.start && offset < article.end);
+}
+
+/** 换篇分隔行文本：「──── 标题 · 当前/总数 ────」（不依赖语言） */
+function articleHeaderText(
+  article: PracticeTargetAnnotation,
+  current: number,
+  total: number,
+): string {
+  const title = (article.source_title ?? "").trim();
+  const label = title.length > 0 ? `${title} · ${current}/${total}` : `${current}/${total}`;
+  return `──── ${label} ────`;
+}
+
+function pushArticleTranslation(
+  plan: GhostRowDescriptor[],
+  article: PracticeTargetAnnotation,
+  wrapColumns: number,
+): void {
+  const translation = article.translation_zh.replace(/\s+/gu, " ").trim();
+  if (translation.length === 0) {
+    return;
+  }
+  plan.push({ kind: "article_spacer", rowIndex: plan.length });
+  for (const line of wrapToDisplayWidth(translation, wrapColumns)) {
+    plan.push({ kind: "article_line", rowIndex: plan.length, text: line });
+  }
 }
 
 /**
@@ -111,9 +156,39 @@ function buildGhostRowPlan(
   const plan: GhostRowDescriptor[] = [];
   const segmentsHaveCursor = (segments: GhostSegment[]): boolean =>
     segments.some((segment) => segment.state === "cursor");
+  const articleAnnotations = (annotations ?? [])
+    .filter((annotation) => annotation.display === "article")
+    .slice()
+    .sort((left, right) => left.start - right.start);
+  const multiArticle = articleAnnotations.length >= 2;
+  const lineStarts = multiArticle ? lineStartOffsets(targetText) : [];
+  let currentArticle = -1;
   let visualIndex = 0;
   for (let sourceLineIndex = 0; sourceLineIndex < sourceRows.length; sourceLineIndex += 1) {
     const row = sourceRows[sourceLineIndex] ?? [];
+    if (multiArticle) {
+      const articleIndex = articleIndexForOffset(
+        lineStarts[sourceLineIndex] ?? 0,
+        articleAnnotations,
+      );
+      if (articleIndex !== currentArticle) {
+        if (currentArticle !== -1) {
+          pushArticleTranslation(plan, articleAnnotations[currentArticle]!, wrapColumns);
+        }
+        if (articleIndex !== -1) {
+          plan.push({
+            kind: "article_header",
+            rowIndex: plan.length,
+            text: articleHeaderText(
+              articleAnnotations[articleIndex]!,
+              articleIndex + 1,
+              articleAnnotations.length,
+            ),
+          });
+        }
+        currentArticle = articleIndex;
+      }
+    }
     const columns = wordColumns.get(sourceLineIndex);
     if (columns !== undefined && columns.length > 0) {
       const looseBlock = columns.some((column) => column.loose === true);
@@ -154,12 +229,19 @@ function buildGhostRowPlan(
   }
   // 文章整篇翻译并入 plan（而非游离 append），这样它参与计数与窗口滚动：
   // 否则文章模式复盘时 maxStart 偏小、翻译滚不到底
-  const article = articleTranslationText(annotations);
-  if (article !== undefined) {
-    const articleLines = wrapToDisplayWidth(article, wrapColumns);
-    plan.push({ kind: "article_spacer", rowIndex: plan.length });
-    for (const line of articleLines) {
-      plan.push({ kind: "article_line", rowIndex: plan.length, text: line });
+  if (multiArticle) {
+    // 多篇拼接：收尾最后一篇翻译（每篇标题分隔行已在其正文前插入）
+    if (currentArticle !== -1) {
+      pushArticleTranslation(plan, articleAnnotations[currentArticle]!, wrapColumns);
+    }
+  } else {
+    const article = articleTranslationText(annotations);
+    if (article !== undefined) {
+      const articleLines = wrapToDisplayWidth(article, wrapColumns);
+      plan.push({ kind: "article_spacer", rowIndex: plan.length });
+      for (const line of articleLines) {
+        plan.push({ kind: "article_line", rowIndex: plan.length, text: line });
+      }
     }
   }
   return plan;
@@ -203,6 +285,15 @@ function renderGhostRowDescriptor(
         id: `keyloop-ghost-article-translation-${descriptor.rowIndex}`,
         content: descriptor.text,
         fg: theme.muted,
+        height: 1,
+        truncate: true,
+        wrapMode: "none",
+      });
+    case "article_header":
+      return kit.Text({
+        id: `keyloop-ghost-article-header-${descriptor.rowIndex}`,
+        content: descriptor.text,
+        fg: theme.accent,
         height: 1,
         truncate: true,
         wrapMode: "none",

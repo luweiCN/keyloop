@@ -2705,7 +2705,7 @@ export function buildStageTarget(
     case "sentences":
       return sentencesStageTarget(context, options);
     case "articles":
-      return everydayArticlesTarget(context);
+      return articlesStageTarget(context, options);
     case "code":
       return codeMixTarget(context, undefined, options.stage.char_budget);
   }
@@ -2889,6 +2889,69 @@ function sentencesStageTarget(
     text: annotated.text,
     source: `keyloop:stage:sentences:count-${picked.length}`,
     ...(annotated.annotations.length === 0 ? {} : { annotations: annotated.annotations }),
+  };
+}
+
+const MAX_STAGE_ARTICLES = 5;
+
+/**
+ * 综合训练文章阶段：按 char_budget 拼接多篇文章填满时长（解决「选45实际20」与重复）。
+ * 每篇生成独立的 display:"article" 注解（各自 start/end/标题/翻译），交由 ghostText
+ * 渲染换篇分隔与篇内翻译。无可用文章时回退到句子。
+ */
+function articlesStageTarget(
+  context: BuildTargetContext,
+  options: StageTargetOptions,
+): PracticeTarget {
+  const random = context.random ?? Math.random;
+  const settings = everydaySettings(context);
+  const pool = everydayArticlePool(
+    context.library.everyday_articles.entries,
+    settings.article_level,
+    settings.article_length,
+  );
+  const shuffled = [...pool];
+  shuffleInPlace(shuffled, random);
+  let fullText = "";
+  const annotations: PracticeTargetAnnotation[] = [];
+  for (const article of shuffled) {
+    const paragraphs = article.paragraphs.filter(
+      (paragraph) =>
+        paragraph.text.trim().length > 0 && paragraph.translation_zh.trim().length > 0,
+    );
+    const text = paragraphs.map((paragraph) => paragraph.text.trim()).join("\n");
+    if (text.length === 0) {
+      continue;
+    }
+    if (fullText.length > 0) {
+      fullText += "\n";
+    }
+    const start = fullText.length;
+    fullText += text;
+    annotations.push({
+      start,
+      end: fullText.length,
+      translation_zh: paragraphs
+        .map((paragraph) => paragraph.translation_zh.trim())
+        .join("\n"),
+      source_title: article.title,
+      display: "article",
+    });
+    if (
+      fullText.length >= options.stage.char_budget ||
+      annotations.length >= MAX_STAGE_ARTICLES
+    ) {
+      break;
+    }
+  }
+  if (annotations.length === 0) {
+    return everydaySentencesTarget(context);
+  }
+  return {
+    mode: "words",
+    text: fullText,
+    source: `keyloop:stage:articles:${settings.article_level}:${settings.article_length}:count-${annotations.length}`,
+    annotations,
   };
 }
 
