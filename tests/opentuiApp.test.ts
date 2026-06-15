@@ -177,6 +177,25 @@ describe("OpenTUI app model", () => {
     expect([...openTuiRouteEmphasis(createOpenTuiInitialState("en"))]).toEqual([]);
   });
 
+  test("stage plan defers corpus generation (lazy) until a lesson opens", () => {
+    const state = activateOpenTuiMenuItem(
+      createOpenTuiInitialState("en"),
+      "comprehensive",
+      appContext(),
+    );
+    if (state.route.screen !== "stage_plan") {
+      throw new Error("expected stage_plan route");
+    }
+
+    // 诊断屏/切档只产计划时长，不组卷（target 待开练 materialize）
+    expect(state.route.plan.lessons.length).toBeGreaterThan(0);
+    for (const lesson of state.route.plan.lessons) {
+      expect(lesson.estimated_minutes).toBeGreaterThan(0);
+      expect(lesson.target.text).toBe("");
+      expect(lesson.pending).toBeDefined();
+    }
+  });
+
   test("comprehensive opens the stage plan screen, enter starts stage one", () => {
     const state = activateOpenTuiMenuItem(
       createOpenTuiInitialState("en"),
@@ -197,7 +216,9 @@ describe("OpenTUI app model", () => {
       throw new Error("expected running route");
     }
     expect(started.route.lesson?.module).toBe("foundation_input");
-    expect(started.route.target.source).toContain("keyloop:module:foundation-mix");
+    // 惰性：诊断屏层无 context，target 仍是待组卷占位，真正组卷由 startRunner 开练时 materialize
+    expect(started.route.target.source).toContain("keyloop:stage:pending:keys");
+    expect(started.route.lesson?.pending).toBeDefined();
     expect(started.route.daily_plan?.lessons.length).toBeGreaterThanOrEqual(3);
   });
 

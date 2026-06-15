@@ -7,7 +7,11 @@ import type {
 } from "../../domain/model";
 import type { StartRunnerContext } from "../../cli";
 import { buildPlan } from "../../training/plan";
-import { refreshModuleMixTarget, type BuildTargetContext } from "../../training/targets";
+import {
+  materializeStageLesson,
+  refreshModuleMixTarget,
+  type BuildTargetContext,
+} from "../../training/targets";
 import {
   activateOpenTuiMenuItem,
   everydayLiveOptionSources,
@@ -85,6 +89,30 @@ export function refreshSelectionForCurrentRecords(
   } catch {
     return selection;
   }
+}
+
+/**
+ * 惰性组卷的开练接入：把 pending 阶段课在开练前真正组卷成可打 target。
+ * 仅综合训练 pending 课需要（独立练习/已 eager 组卷的课 pending 为空，原样返回）。
+ * 用 refreshedTargetContext 取上下文，因诊断屏首组 run_id 仍为空，
+ * refreshSelectionForCurrentRecords 会跳过组卷，必须由此兜底。
+ */
+export function materializeSelection(
+  context: StartRunnerContext,
+  selection: LessonSelection,
+  completedRecords: SessionRecord[],
+): LessonSelection {
+  if (selection.lesson.pending === undefined) {
+    return selection;
+  }
+  const targetContext = refreshedTargetContext(context, completedRecords);
+  if (targetContext === undefined) {
+    return selection;
+  }
+  return {
+    ...selection,
+    lesson: materializeStageLesson(targetContext, selection.lesson),
+  };
 }
 
 export function refreshTargetContext(

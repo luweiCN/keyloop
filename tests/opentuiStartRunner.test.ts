@@ -114,6 +114,22 @@ describe("OpenTUI start runner", () => {
     expect(kit.createdOptions).toEqual([]);
   });
 
+  test("materializes a pending lazy stage lesson on open so it can be typed", async () => {
+    const kit = fakeKit({ keyInput: true });
+    const runner = createOpenTuiStartRunner({ kit });
+
+    const runPromise = runner(contextWithStageLibrary(pendingComprehensivePlan()));
+
+    await kit.waitForKeyListener(1);
+    // 惰性课开练时必须组卷成可打 target：首帧渲染真实单词而非空 pending 文本
+    const ghost = findNodeById(kit.addedNodes, "keyloop-ghost-pending-0-0");
+    expect((ghost?.props.content as string)?.length ?? 0).toBeGreaterThan(0);
+    expect(flattenContent(kit.addedNodes)).toMatch(/today|practice|information/);
+
+    kit.emitKey({ name: "c", sequence: "c", ctrl: true });
+    await runPromise;
+  });
+
   test("typing the displayed lesson returns a completed session record", async () => {
     const kit = fakeKit({ keyInput: true });
     let nowMs = 1_000;
@@ -2766,6 +2782,42 @@ function everydayWordLibrary(): ContentLibrary {
     },
   ];
   return library;
+}
+
+function pendingComprehensivePlan(): DailyPracticePlan {
+  // 模拟惰性组卷：诊断屏只产时长，target 留空待开练 materialize（run_id 仍为空）
+  return {
+    run_id: "",
+    run_number: 0,
+    target_minutes: 15,
+    completed_ms: 0,
+    lessons: [
+      {
+        id: "stage:words:1",
+        kind: "common_words",
+        module: "everyday_english",
+        category: "everyday_words",
+        mix_profile: "comprehensive",
+        estimated_minutes: 4,
+        target: { mode: "words", text: "", source: "keyloop:stage:pending:words" },
+        pending: { char_budget: 120 },
+        reason_zh: "",
+        reason_en: "",
+      },
+    ],
+  };
+}
+
+function contextWithStageLibrary(plan: DailyPracticePlan): StartRunnerContext {
+  return {
+    ...contextWithPlan(plan),
+    targetContext: {
+      records: [],
+      plan: refreshPlan(),
+      library: everydayWordLibrary(),
+      random: () => 0.42,
+    },
+  };
 }
 
 function everydayOptionsLibrary(): ContentLibrary {

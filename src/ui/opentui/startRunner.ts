@@ -109,6 +109,7 @@ import {
   cloneCodeConfig,
   completedLessonsForRun,
   firstUnfinishedLesson,
+  materializeSelection,
   refreshSelectionForCurrentRecords,
   refreshTargetContext,
   refreshedStandaloneSelection,
@@ -258,10 +259,16 @@ export async function openTuiStartRunner(
       reusableRenderer?.destroy?.();
       return withRuntimeSettings({ completedRecords });
     }
-    const selection =
+    const refreshedSelection =
       forced === undefined
         ? refreshSelectionForCurrentRecords(runtimeContext, storedSelection, completedRecords)
         : storedSelection;
+    // 惰性课开练时组卷成可打 target（pending 为空的课原样返回）
+    const selection = materializeSelection(
+      runtimeContext,
+      refreshedSelection,
+      completedRecords,
+    );
     await saveCheckpointForSelection(runtimeContext, selection);
     const todayElapsedBeforeLesson = todayElapsedMsForRun(runtimeContext, completedRecords);
 

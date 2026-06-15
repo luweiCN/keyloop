@@ -1469,6 +1469,8 @@ export function comprehensiveStagePlanState(
     storedPlan ??
     buildDailyPracticePlan(effectiveContext, {
       targetMinutesOverride: targetMinutesOverride ?? defaultMinutes,
+      // 惰性组卷：诊断屏/切档只产时长，组卷推迟到开练（startRunner materialize），切档秒级
+      lazy: true,
     });
   const completedLessonIds =
     storedPlan === undefined
