@@ -153,6 +153,7 @@ async function renderRoute(state: OpenTuiAppState, kit: OpenTuiRendererKit): Pro
       return renderAppFrame(state, renderStatsScreen(state, kit), kit);
     case "stage_plan":
     case "summary":
+    case "goal_onboarding":
       return renderAppFrame(
         state,
         renderPanel("keyloop-route-panel", openTuiRouteTitle(state), openTuiRouteLines(state), kit, {

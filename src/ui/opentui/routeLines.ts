@@ -30,6 +30,7 @@ import { openTuiMenuItems, submenuTitle, type OpenTuiMenuItemId } from "./menuIt
 import { flatSettingsRouteLines, settingsRouteLines } from "./settingsItems";
 import { formLabel } from "./labels";
 import { formForCategory } from "../../training/diagnosis";
+import { GOAL_DIRECTIONS } from "../../training/goalPrompt";
 import type { GoalRecommendation } from "../../training/goalPlan";
 
 export function openTuiRouteTitle(state: OpenTuiAppState): string {
@@ -150,7 +151,7 @@ export function openTuiRouteLines(state: OpenTuiAppState): string[] {
         state.route.lessons ?? [],
       );
     case "goal_onboarding":
-      return [];
+      return goalOnboardingLines(state.route, state.language);
     case "ansi_palette":
       return ansiPaletteLines(state.language);
     case "library_create":
@@ -387,6 +388,31 @@ function perLessonPlannedActualLines(
       : `planned ${totalPlanned}m · actual ${totalActual.toFixed(1)}m`,
   );
   return lines;
+}
+
+export function goalOnboardingLines(
+  route: Extract<OpenTuiRoute, { screen: "goal_onboarding" }>,
+  language: Language,
+): string[] {
+  const zh = language === "zh";
+  const dirs = GOAL_DIRECTIONS.map((d, i) =>
+    i === route.selected_direction_index ? `‹ ${zh ? d.zh : d.en} ›` : zh ? d.zh : d.en,
+  );
+  const goalForm =
+    route.achieved_goal !== undefined ? formLabel(route.achieved_goal.form, language) : "";
+  const header =
+    route.scenario === "welcome"
+      ? zh
+        ? "设个训练目标，让练习更有方向？系统会按目标调整每日训练侧重。"
+        : "Set a training goal to focus your practice. The plan adapts to it."
+      : zh
+        ? `目标达成 🎉 你的「${goalForm}」目标已完成，设个新目标继续？`
+        : `Goal done 🎉 Your "${goalForm}" goal is complete. Set a new one?`;
+  return [
+    header,
+    (zh ? "主要想练：" : "I mainly want: ") + dirs.join(" · "),
+    zh ? "Enter 设为目标   S 先跳过   N 不再提醒" : "Enter set goal   S skip   N stop reminding",
+  ];
 }
 
 export function statsRouteLines(

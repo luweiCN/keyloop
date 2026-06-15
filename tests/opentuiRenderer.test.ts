@@ -17,6 +17,7 @@ import {
   createOpenTuiPracticeOptionsState,
   createOpenTuiSettingsState,
   createOpenTuiStatsState,
+  createOpenTuiGoalOnboardingState,
   createOpenTuiSummaryState,
   defaultKeyAggregate,
   defaultSessionRecord,
@@ -2201,6 +2202,27 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("Daily summary");
     expect(content).toContain("2 sessions | active 2m | WPM 25.0 | accuracy 96.2%");
     expect(content).toContain("Errors 4 | Backspace 3");
+  });
+
+  test("goal onboarding welcome renders directions and actions", async () => {
+    const kit = fakeKit();
+    const state = createOpenTuiGoalOnboardingState("zh", { scenario: "welcome" });
+    await renderOpenTuiAppOnce(state, kit);
+    const content = flattenContent(kit.addedNodes);
+    expect(content).toContain("普通打字");
+    expect(content).toContain("打代码");
+    expect(content).toContain("键位基础");
+    expect(content).toContain("不再提醒");
+  });
+
+  test("goal onboarding achieved renders old goal form", async () => {
+    const kit = fakeKit();
+    const state = createOpenTuiGoalOnboardingState("zh", {
+      scenario: "achieved",
+      achievedGoal: { form: "code", target_wpm: 60, deadline: "2026-06-01", created_at: "2026-03-01" },
+    });
+    await renderOpenTuiAppOnce(state, kit);
+    expect(flattenContent(kit.addedNodes)).toContain("代码");
   });
 
   test("comprehensive summary renders planned vs actual per lesson", async () => {
