@@ -268,6 +268,12 @@ export type OpenTuiRoute =
       daily_run_id?: string;
       lessons?: PracticeLesson[];
     }
+  | {
+      screen: "goal_onboarding";
+      scenario: "welcome" | "achieved";
+      selected_direction_index: number;
+      achieved_goal?: MainGoal;
+    }
   | { screen: "ansi_palette" }
   | { screen: "library_menu"; slug: string; selected_index?: number }
   | { screen: "library_create"; name: string }
@@ -574,6 +580,26 @@ export function createOpenTuiSummaryState(
   return appState(language, route, options);
 }
 
+export interface OpenTuiGoalOnboardingStateOptions extends OpenTuiStateOptions {
+  scenario: "welcome" | "achieved";
+  achievedGoal?: MainGoal;
+}
+
+export function createOpenTuiGoalOnboardingState(
+  language: Language,
+  options: OpenTuiGoalOnboardingStateOptions,
+): OpenTuiAppState {
+  const route: OpenTuiRoute = {
+    screen: "goal_onboarding",
+    scenario: options.scenario,
+    selected_direction_index: 0,
+  };
+  if (options.achievedGoal !== undefined) {
+    route.achieved_goal = options.achievedGoal;
+  }
+  return appState(language, route, options);
+}
+
 export function createOpenTuiStatsState(
   language: Language,
   records: SessionRecord[],
@@ -711,6 +737,7 @@ export function activateOpenTuiMenuItem(
     case "practice_options":
     case "complete":
     case "summary":
+    case "goal_onboarding":
     case "ansi_palette":
     case "library_create":
     case "library_manage":

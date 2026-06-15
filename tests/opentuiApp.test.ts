@@ -12,6 +12,7 @@ import {
   createOpenTuiInitialState,
   createOpenTuiSettingsState,
   createOpenTuiStatsState,
+  createOpenTuiGoalOnboardingState,
   createOpenTuiSummaryState,
   defaultKeyAggregate,
   defaultSessionRecord,
@@ -242,6 +243,14 @@ describe("OpenTUI app model", () => {
     expect(zhJoined).toContain("键位 计划 4 分 · 实际 3.0 分");
     expect(zhJoined).toContain("单词 计划 3 分 · 实际 4.0 分");
     expect(zhJoined).toContain("计划 7 分 · 实际 7.0 分");
+  });
+
+  test("createOpenTuiGoalOnboardingState builds welcome route", () => {
+    const state = createOpenTuiGoalOnboardingState("zh", { scenario: "welcome" });
+    expect(state.route.screen).toBe("goal_onboarding");
+    if (state.route.screen !== "goal_onboarding") throw new Error("expected goal_onboarding");
+    expect(state.route.scenario).toBe("welcome");
+    expect(state.route.selected_direction_index).toBe(0);
   });
 
   test("programming technical long words starts a word breakdown target", () => {

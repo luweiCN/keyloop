@@ -85,6 +85,7 @@ export function openTuiMenuItems(state: OpenTuiAppState): OpenTuiMenuItem[] {
     case "practice_options":
     case "complete":
     case "summary":
+    case "goal_onboarding":
     case "ansi_palette":
     case "library_create":
     case "library_manage":

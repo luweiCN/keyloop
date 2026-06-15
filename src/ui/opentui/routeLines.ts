@@ -74,6 +74,8 @@ export function openTuiRouteTitle(state: OpenTuiAppState): string {
       return state.language === "zh" ? "今日训练计划" : "Today's training plan";
     case "summary":
       return state.language === "zh" ? "今日总结" : "Daily summary";
+    case "goal_onboarding":
+      return state.language === "zh" ? "训练目标" : "Training goal";
     case "ansi_palette":
       return state.language === "zh" ? "ANSI 色板" : "ANSI palette";
     case "library_menu": {
@@ -147,6 +149,8 @@ export function openTuiRouteLines(state: OpenTuiAppState): string[] {
         speedUnit,
         state.route.lessons ?? [],
       );
+    case "goal_onboarding":
+      return [];
     case "ansi_palette":
       return ansiPaletteLines(state.language);
     case "library_create":

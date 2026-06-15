@@ -312,6 +312,7 @@ export function reduceOpenTuiAppKey(
     case "practice_options":
     case "complete":
     case "summary":
+    case "goal_onboarding":
     case "ansi_palette":
       return { state, action: "continue" };
   }
