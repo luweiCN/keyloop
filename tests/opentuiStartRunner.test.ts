@@ -21,6 +21,7 @@ import {
   type StartRunnerContext,
 } from "../src/index";
 import { injectUiEvent, WHEEL_UP_EVENT } from "../src/ui/opentui/uiEventBus";
+import { refreshSelectionForCurrentRecords } from "../src/ui/opentui/runnerSelection";
 
 interface FakeNode {
   type: "Box" | "Text";
@@ -128,6 +129,25 @@ describe("OpenTUI start runner", () => {
 
     kit.emitKey({ name: "c", sequence: "c", ctrl: true });
     await runPromise;
+  });
+
+  test("refreshing a comprehensive lesson clears pending once corpus is built", () => {
+    // 已落盘开练（run_id 非空）的 pending 课经 refresh 即组卷成可打 target，
+    // pending 标记应一并清除，避免 startRunner 再 materialize 时重复组卷
+    const plan: DailyPracticePlan = {
+      ...pendingComprehensivePlan(),
+      run_id: "20260615-1-run",
+    };
+    const context = contextWithStageLibrary(plan);
+
+    const result = refreshSelectionForCurrentRecords(
+      context,
+      { lesson: plan.lessons[0]!, index: 0 },
+      [],
+    );
+
+    expect(result.lesson.target.text.length).toBeGreaterThan(0);
+    expect(result.lesson.pending).toBeUndefined();
   });
 
   test("typing the displayed lesson returns a completed session record", async () => {

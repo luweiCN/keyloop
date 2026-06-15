@@ -79,12 +79,12 @@ export function refreshSelectionForCurrentRecords(
 
   try {
     const target = refreshModuleMixTarget(selection.lesson, targetContext);
+    // 组卷成功即视为已 materialize：清除 pending，避免 startRunner 再重复组卷
+    const lesson = { ...selection.lesson, target };
+    delete lesson.pending;
     return {
       ...selection,
-      lesson: {
-        ...selection.lesson,
-        target,
-      },
+      lesson,
     };
   } catch {
     return selection;
