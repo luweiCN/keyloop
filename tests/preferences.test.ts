@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { parseUserPreferences, defaultUserPreferences } from "../src/domain/model";
-import { preferencesFromAppState } from "../src/cli";
+import { preferencesFromAppState, initialRouteForStartup } from "../src/cli";
 
 describe("goal prompt preferences", () => {
   test("defaults opted_out to false and last_shown undefined", () => {
@@ -34,5 +34,16 @@ describe("goal prompt preferences", () => {
     const next = preferencesFromAppState(base, state, "zh");
     expect(next?.goal_prompt_opted_out).toBe(true);
     expect(next?.goal_prompt_last_shown).toBe("2026-06-15");
+  });
+
+  test("new user (no goal) starts on goal_onboarding welcome", () => {
+    const prefs = defaultUserPreferences();
+    const state = initialRouteForStartup(prefs, [], new Date("2026-06-15"), "zh");
+    expect(state?.route.screen).toBe("goal_onboarding");
+  });
+
+  test("opted-out user starts with no forced route", () => {
+    const prefs = { ...defaultUserPreferences(), goal_prompt_opted_out: true };
+    expect(initialRouteForStartup(prefs, [], new Date("2026-06-15"), "zh")).toBeUndefined();
   });
 });
