@@ -55,10 +55,18 @@ goal_prompt_last_shown?: string;     // ISO 日期(YYYY-MM-DD)；控制达成后
 {
   screen: "goal_onboarding";
   scenario: "welcome" | "achieved";
-  selected_form_index: number;          // 0..5，←/→ 切换
+  selected_direction_index: number;     // 0..2，←/→ 切换：普通打字/打代码/键位基础
   achieved_goal?: MainGoal;             // achieved 场景用于显示旧目标信息
 }
 ```
+
+**主练方向用「用途大方向」而非细分 form**——新手分不清单词/句子/文章，只知道自己想练普通打字还是代码。3 个方向各映射一个代表 form（`MainGoal.form` 是单一 form，处方据此加权侧重，其余 form 仍正常练）：
+
+| 大方向 | 映射 form | 含义 |
+|---|---|---|
+| 普通打字 | `articles` | 侧重日常英语文章（连续成段打字） |
+| 打代码 | `code` | 侧重编程代码 |
+| 键位基础 | `keys` | 零基础练指法 |
 
 **场景 A·无目标（welcome）：**
 ```
@@ -66,8 +74,8 @@ goal_prompt_last_shown?: string;     // ISO 日期(YYYY-MM-DD)；控制达成后
 │  设个训练目标，让练习更有方向？      │
 │  系统会按目标调整每日训练侧重。      │
 │                                     │
-│  主要想练：‹ 键位 ›                  │
-│   键位 · 单词 · 符号 · 句子 · 文章 · 代码 │
+│  主要想练：‹ 普通打字 ›              │
+│   普通打字 · 打代码 · 键位基础        │
 │                                     │
 │  Enter 设为目标   S 先跳过   N 不再提醒 │
 └─────────────────────────────────────┘
@@ -79,24 +87,24 @@ goal_prompt_last_shown?: string;     // ISO 日期(YYYY-MM-DD)；控制达成后
 │  你的「代码」已达到 60 WPM 目标！    │
 │  （过期时改为：目标期限已到）        │
 │  设个新目标继续保持？                │
-│  主要想练：‹ 代码 ›                  │
+│  主要想练：‹ 打代码 ›                │
 │  Enter 设新目标   S 先跳过   N 不再提醒 │
 └─────────────────────────────────────┘
 ```
 
-- 主练方向 = **6 个 form 平铺**，直接复用 `formLabel`（键位/单词/符号/句子/文章/代码），零映射层。
+- 主练方向 = **3 个用途大方向**（普通打字/打代码/键位基础），见上方映射表。
 - 中英文双语，沿用现有 route 渲染与 `theme`。
 
 ## 4. 交互与持久化
 
 | 键 | 行为 |
 |---|---|
-| **← / →** | 切换 `selected_form_index`（6 个 form 循环） |
-| **Enter** | 用 `MainGoal{ form: 选中, target_wpm: GOAL_WPM_BASELINE[form], deadline: now+90天, created_at: now }` 设目标 → 写 preferences（含 `goal_prompt_last_shown=今天`）→ 进 `main_menu` |
+| **← / →** | 切换 `selected_direction_index`（3 个大方向循环） |
+| **Enter** | `form = DIRECTION_TO_FORM[选中方向]`（articles/code/keys）；用 `MainGoal{ form, target_wpm: GOAL_WPM_BASELINE[form], deadline: now+90天, created_at: now }` 设目标 → 写 preferences（含 `goal_prompt_last_shown=今天`）→ 进 `main_menu` |
 | **S 先跳过** | 进 `main_menu`；**场景 B 额外写 `goal_prompt_last_shown=今天`**（7 天静默），场景 A 不写（下次启动仍温和提醒，直到设目标或永久关闭） |
 | **N 不再提醒** | 写 `goal_prompt_opted_out=true` → 进 `main_menu`（永不弹） |
 
-设目标复用 `defaultMainGoal` 的构造逻辑（form 改为选中值，`target_wpm` 取 `GOAL_WPM_BASELINE[form]`）。
+`DIRECTION_TO_FORM = { 普通打字: "articles", 打代码: "code", 键位基础: "keys" }`。设目标复用 `defaultMainGoal` 的构造逻辑（form 改为映射值，`target_wpm` 取 `GOAL_WPM_BASELINE[form]`）。
 
 ## 5. 集成点
 
@@ -125,13 +133,14 @@ goal_prompt_last_shown?: string;     // ISO 日期(YYYY-MM-DD)；控制达成后
 - 有目标·达成且 last_shown ≥7天 → achieved
 
 **reducer `reduceGoalOnboardingKey`：**
-- ←/→ 切 form index（循环边界）
-- Enter → state 带正确 MainGoal（form/baseline wpm/+90天）+ 路由 main_menu + preferences 变更
+- ←/→ 切方向 index（3 个循环边界）
+- Enter → state 带正确 MainGoal（form=DIRECTION_TO_FORM[方向]/baseline wpm/+90天）+ 路由 main_menu + preferences 变更
+- 三个方向各自映射 form 正确（普通打字→articles、打代码→code、键位基础→keys）
 - S → main_menu；场景B 写 last_shown，场景A 不写
 - N → opted_out=true + main_menu
 
 **渲染（opentuiRenderer）：**
-- welcome 场景渲染欢迎文案 + 6 form + 三个操作键
+- welcome 场景渲染欢迎文案 + 3 个大方向 + 三个操作键
 - achieved 场景渲染达成文案 + 旧目标 form/wpm
 
 **集成（cli/appSession）：**
