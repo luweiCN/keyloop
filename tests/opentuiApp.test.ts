@@ -16,6 +16,7 @@ import {
   defaultSessionRecord,
   nextOpenTuiStatsView,
   openTuiMenuItems,
+  openTuiRouteEmphasis,
   openTuiRouteLines,
   openTuiRouteTitle,
   type BuildTargetContext,
@@ -139,6 +140,24 @@ describe("OpenTUI app model", () => {
       "大小写基础",
       "基础综合",
     ]);
+  });
+
+  test("stage plan emphasizes the plan and length-tier guide lines", () => {
+    const state = activateOpenTuiMenuItem(
+      createOpenTuiInitialState("en"),
+      "comprehensive",
+      appContext(),
+    );
+    if (state.route.screen !== "stage_plan") {
+      throw new Error("expected stage_plan route");
+    }
+
+    const lines = openTuiRouteLines(state);
+    const emphasized = [...openTuiRouteEmphasis(state)].map((index) => lines[index]);
+
+    expect(emphasized.some((line) => line?.startsWith("Plan:"))).toBe(true);
+    expect(emphasized.some((line) => line?.startsWith("Length:"))).toBe(true);
+    expect([...openTuiRouteEmphasis(createOpenTuiInitialState("en"))]).toEqual([]);
   });
 
   test("comprehensive opens the stage plan screen, enter starts stage one", () => {

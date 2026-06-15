@@ -135,6 +135,7 @@ export function renderPanel(
     width?: number | string;
     flexGrow?: number;
     gap?: number;
+    emphasizedLines?: ReadonlySet<number>;
   } = {},
 ): unknown {
   const props: OpenTuiBoxProps = {
@@ -165,7 +166,10 @@ export function renderPanel(
     ...lines.map((line, index) =>
       kit.Text({
         content: line,
-        fg: index === 0 ? theme.foreground : theme.muted,
+        fg:
+          index === 0 || options.emphasizedLines?.has(index)
+            ? theme.foreground
+            : theme.muted,
         id: `${id}-line-${index}`,
         height: 1,
         truncate: true,

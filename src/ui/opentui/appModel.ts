@@ -1437,7 +1437,7 @@ export {
   type OpenTuiSettingsMenuItemId,
   type OpenTuiSettingsView,
 } from "./settingsItems";
-export { openTuiRouteLines, openTuiRouteTitle } from "./routeLines";
+export { openTuiRouteEmphasis, openTuiRouteLines, openTuiRouteTitle } from "./routeLines";
 
 /** 综合训练诊断/计划屏：构建当日阶段计划与诊断摘要 */
 export function comprehensiveStagePlanState(

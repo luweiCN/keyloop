@@ -491,3 +491,29 @@ function stagePlanLines(
   );
   return lines;
 }
+
+const EMPTY_EMPHASIS: ReadonlySet<number> = new Set();
+
+/**
+ * stage_plan 面板里需要提亮的引导行（今日计划 / 时长档位）。
+ * renderPanel 默认把非首行渲染为暗灰 muted，这两行太暗易被用户跳过，
+ * 故单独标出行索引交由渲染层用前景色高亮。其它路由不强调（返回空集）。
+ */
+export function openTuiRouteEmphasis(state: OpenTuiAppState): ReadonlySet<number> {
+  if (state.route.screen !== "stage_plan") {
+    return EMPTY_EMPHASIS;
+  }
+  const indexes = new Set<number>();
+  openTuiRouteLines(state).forEach((line, index) => {
+    const trimmed = line.trimStart();
+    if (
+      trimmed.startsWith("今日计划") ||
+      trimmed.startsWith("Plan:") ||
+      trimmed.startsWith("时长档位") ||
+      trimmed.startsWith("Length:")
+    ) {
+      indexes.add(index);
+    }
+  });
+  return indexes;
+}
