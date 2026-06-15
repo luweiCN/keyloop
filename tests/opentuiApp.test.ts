@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import { reduceFlatSettingsItem } from "../src/ui/opentui/settingsReducers";
 import { openTuiFlatSettingsItems } from "../src/ui/opentui/settingsItems";
-import { goalProgressLines } from "../src/ui/opentui/routeLines";
+import { goalProgressLines, summaryLines } from "../src/ui/opentui/routeLines";
 import { plannedMinutesValue } from "../src/ui/opentui/screens/running";
 import {
   activateOpenTuiMenuItem,
@@ -220,6 +220,28 @@ describe("OpenTUI app model", () => {
     expect(started.route.target.source).toContain("keyloop:stage:pending:keys");
     expect(started.route.lesson?.pending).toBeDefined();
     expect(started.route.daily_plan?.lessons.length).toBeGreaterThanOrEqual(3);
+  });
+
+  test("comprehensive summary lists planned vs actual per lesson and totals", () => {
+    const lessons: PracticeLesson[] = [
+      summaryLesson("foundation_input", "foundation_mix", 4),
+      summaryLesson("everyday_english", "everyday_words", 3),
+    ];
+    const records = [
+      defaultSessionRecord({ lesson_index: 0, active_ms: 180_000, duration_ms: 180_000 }),
+      defaultSessionRecord({ lesson_index: 1, active_ms: 240_000, duration_ms: 240_000 }),
+    ];
+
+    const joined = summaryLines(records, "en", "wpm", lessons).join("\n");
+
+    expect(joined).toContain("Keys planned 4m · actual 3.0m");
+    expect(joined).toContain("Words planned 3m · actual 4.0m");
+    expect(joined).toContain("planned 7m · actual 7.0m");
+
+    const zhJoined = summaryLines(records, "zh", "wpm", lessons).join("\n");
+    expect(zhJoined).toContain("键位 计划 4 分 · 实际 3.0 分");
+    expect(zhJoined).toContain("单词 计划 3 分 · 实际 4.0 分");
+    expect(zhJoined).toContain("计划 7 分 · 实际 7.0 分");
   });
 
   test("programming technical long words starts a word breakdown target", () => {
@@ -824,6 +846,24 @@ describe("OpenTUI app model", () => {
     ]);
   });
 });
+
+function summaryLesson(
+  module: PracticeLesson["module"],
+  category: PracticeLesson["category"],
+  estimatedMinutes: number,
+): PracticeLesson {
+  return {
+    id: `stage:${category}`,
+    kind: "common_words",
+    module,
+    category,
+    mix_profile: "comprehensive",
+    estimated_minutes: estimatedMinutes,
+    target: { mode: "words", text: "x", source: "test" },
+    reason_zh: "",
+    reason_en: "",
+  };
+}
 
 function appContext(
   overrides: Partial<BuildTargetContext> = {},

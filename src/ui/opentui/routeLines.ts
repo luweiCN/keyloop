@@ -29,6 +29,7 @@ import { openTuiStatsViews } from "./appModel";
 import { openTuiMenuItems, submenuTitle, type OpenTuiMenuItemId } from "./menuItems";
 import { flatSettingsRouteLines, settingsRouteLines } from "./settingsItems";
 import { formLabel } from "./labels";
+import { formForCategory } from "../../training/diagnosis";
 import type { GoalRecommendation } from "../../training/goalPlan";
 
 export function openTuiRouteTitle(state: OpenTuiAppState): string {
@@ -140,7 +141,12 @@ export function openTuiRouteLines(state: OpenTuiAppState): string[] {
         state.route.goal_recommendation,
       );
     case "summary":
-      return summaryLines(state.route.records, state.language, speedUnit);
+      return summaryLines(
+        state.route.records,
+        state.language,
+        speedUnit,
+        state.route.lessons ?? [],
+      );
     case "ansi_palette":
       return ansiPaletteLines(state.language);
     case "library_create":
@@ -301,7 +307,12 @@ export function isStandaloneCompletion(
   return record.daily_run_id === "" || sourceItem !== "comprehensive";
 }
 
-export function summaryLines(records: SessionRecord[], language: Language, speedUnit: SpeedUnit): string[] {
+export function summaryLines(
+  records: SessionRecord[],
+  language: Language,
+  speedUnit: SpeedUnit,
+  lessons: PracticeLesson[] = [],
+): string[] {
   if (records.length === 0) {
     return [
       language === "zh"
@@ -316,16 +327,62 @@ export function summaryLines(records: SessionRecord[], language: Language, speed
   const speed = aggregateSpeed(records, speedUnit);
   const speedLabel = speedUnitLabel(speedUnit);
   const accuracy = weightedAccuracy(records);
+  const zh = language === "zh";
 
-  return language === "zh"
-    ? [
-        `${records.length} 次练习 | active ${formatDurationShort(activeMs, language)} | ${speedLabel} ${speed.toFixed(1)} | 正确率 ${accuracy.toFixed(1)}%`,
-        `错误 ${errors} | 退格 ${backspaces}`,
-      ]
-    : [
-        `${records.length} sessions | active ${formatDurationShort(activeMs, language)} | ${speedLabel} ${speed.toFixed(1)} | accuracy ${accuracy.toFixed(1)}%`,
-        `Errors ${errors} | Backspace ${backspaces}`,
-      ];
+  const aggregateLine = zh
+    ? `${records.length} 次练习 | active ${formatDurationShort(activeMs, language)} | ${speedLabel} ${speed.toFixed(1)} | 正确率 ${accuracy.toFixed(1)}%`
+    : `${records.length} sessions | active ${formatDurationShort(activeMs, language)} | ${speedLabel} ${speed.toFixed(1)} | accuracy ${accuracy.toFixed(1)}%`;
+  const errorLine = zh ? `错误 ${errors} | 退格 ${backspaces}` : `Errors ${errors} | Backspace ${backspaces}`;
+
+  // 综合训练：逐练习「计划 vs 实际」时长 + 总计行（无 lessons 时退回纯汇总）
+  const planLines = perLessonPlannedActualLines(records, lessons, language);
+  if (planLines.length === 0) {
+    return [aggregateLine, errorLine];
+  }
+  return [...planLines, aggregateLine, errorLine];
+}
+
+function perLessonPlannedActualLines(
+  records: SessionRecord[],
+  lessons: PracticeLesson[],
+  language: Language,
+): string[] {
+  if (lessons.length === 0) {
+    return [];
+  }
+  const zh = language === "zh";
+  const lines: string[] = [];
+  let totalPlanned = 0;
+  let totalActual = 0;
+  for (const record of records) {
+    const lesson = record.lesson_index === null ? undefined : lessons[record.lesson_index];
+    if (lesson === undefined || lesson.mix_profile !== "comprehensive") {
+      continue;
+    }
+    const form = formForCategory(lesson.category);
+    if (form === null) {
+      continue;
+    }
+    const planned = lesson.estimated_minutes;
+    const actual = effectiveActiveMs(record) / 60_000;
+    totalPlanned += planned;
+    totalActual += actual;
+    const label = formLabel(form, language);
+    lines.push(
+      zh
+        ? `${label} 计划 ${planned} 分 · 实际 ${actual.toFixed(1)} 分`
+        : `${label} planned ${planned}m · actual ${actual.toFixed(1)}m`,
+    );
+  }
+  if (lines.length === 0) {
+    return [];
+  }
+  lines.push(
+    zh
+      ? `计划 ${totalPlanned} 分 · 实际 ${totalActual.toFixed(1)} 分`
+      : `planned ${totalPlanned}m · actual ${totalActual.toFixed(1)}m`,
+  );
+  return lines;
 }
 
 export function statsRouteLines(

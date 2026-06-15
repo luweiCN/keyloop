@@ -266,6 +266,7 @@ export type OpenTuiRoute =
       screen: "summary";
       records: SessionRecord[];
       daily_run_id?: string;
+      lessons?: PracticeLesson[];
     }
   | { screen: "ansi_palette" }
   | { screen: "library_menu"; slug: string; selected_index?: number }
@@ -396,6 +397,7 @@ export interface OpenTuiPracticeOptionsStateOptions extends OpenTuiStateOptions 
 
 export interface OpenTuiSummaryStateOptions extends OpenTuiStateOptions {
   dailyRunId?: string;
+  lessons?: PracticeLesson[];
 }
 
 export interface OpenTuiStatsStateOptions extends OpenTuiStateOptions {
@@ -565,6 +567,9 @@ export function createOpenTuiSummaryState(
   };
   if (options.dailyRunId !== undefined) {
     route.daily_run_id = options.dailyRunId;
+  }
+  if (options.lessons !== undefined) {
+    route.lessons = [...options.lessons];
   }
   return appState(language, route, options);
 }

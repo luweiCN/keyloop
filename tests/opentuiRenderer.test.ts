@@ -25,6 +25,7 @@ import {
   type ContentLibrary,
   type OpenTuiAppState,
   type OpenTuiRendererKit,
+  type PracticeLesson,
   type PracticePlan,
 } from "../src/index";
 
@@ -2200,6 +2201,32 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("Daily summary");
     expect(content).toContain("2 sessions | active 2m | WPM 25.0 | accuracy 96.2%");
     expect(content).toContain("Errors 4 | Backspace 3");
+  });
+
+  test("comprehensive summary renders planned vs actual per lesson", async () => {
+    const kit = fakeKit();
+    const lesson: PracticeLesson = {
+      id: "stage:keys:1",
+      kind: "common_words",
+      module: "foundation_input",
+      category: "foundation_mix",
+      mix_profile: "comprehensive",
+      estimated_minutes: 4,
+      target: { mode: "words", text: "x", source: "t" },
+      reason_zh: "",
+      reason_en: "",
+    };
+    const state = createOpenTuiSummaryState(
+      "en",
+      [defaultSessionRecord({ lesson_index: 0, active_ms: 180_000, duration_ms: 180_000 })],
+      { lessons: [lesson] },
+    );
+
+    await renderOpenTuiAppOnce(state, kit);
+
+    const content = flattenContent(kit.addedNodes);
+    expect(content).toContain("Keys planned 4m · actual 3.0m");
+    expect(content).toContain("planned 4m · actual 3.0m");
   });
 
   test("renders stats route overview metrics", async () => {

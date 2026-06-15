@@ -1367,6 +1367,7 @@ export async function showSummaryPage(
     createOpenTuiSummaryState(context.language, completedRecords, {
       dailyRunId: context.dailyPlan.run_id,
       speedUnit: context.speedUnit ?? "wpm",
+      lessons: context.dailyPlan.lessons,
     }),
     options,
     reusableRenderer,
