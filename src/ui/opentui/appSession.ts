@@ -73,6 +73,7 @@ import {
   wordFormSettingsFromContext,
 } from "./settingsReducers";
 import { reduceStatsKey, statsState } from "./statsReducer";
+import { reduceGoalOnboardingKey } from "./goalOnboardingReducer";
 import { setUiEventSink } from "./uiEventBus";
 import {
   reduceLibraryDetailKey,
@@ -306,13 +307,17 @@ export function reduceOpenTuiAppKey(
       );
     case "stage_plan":
       return reduceStagePlanKey(state, event, context);
+    case "goal_onboarding":
+      return {
+        state: reduceGoalOnboardingKey(state, event, context.now ?? new Date()).state,
+        action: "continue",
+      };
     case "running":
     case "exit_confirmation":
     case "code_settings_confirmation":
     case "practice_options":
     case "complete":
     case "summary":
-    case "goal_onboarding":
     case "ansi_palette":
       return { state, action: "continue" };
   }

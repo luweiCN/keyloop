@@ -28,6 +28,7 @@ import {
   type PracticeLesson,
   type PracticePlan,
 } from "../src/index";
+import { reduceGoalOnboardingKey } from "../src/ui/opentui/goalOnboardingReducer";
 
 describe("OpenTUI app model", () => {
   test("planned minutes value only applies to comprehensive lessons", () => {
@@ -243,6 +244,46 @@ describe("OpenTUI app model", () => {
     expect(zhJoined).toContain("键位 计划 4 分 · 实际 3.0 分");
     expect(zhJoined).toContain("单词 计划 3 分 · 实际 4.0 分");
     expect(zhJoined).toContain("计划 7 分 · 实际 7.0 分");
+  });
+
+  test("goal onboarding arrow cycles direction, enter sets mapped goal", () => {
+    const now = new Date("2026-06-15T00:00:00Z");
+    const welcome = createOpenTuiGoalOnboardingState("zh", { scenario: "welcome" });
+    const right = reduceGoalOnboardingKey(
+      welcome,
+      { name: "right", sequence: "right", ctrl: false, meta: false },
+      now,
+    );
+    if (right.state.route.screen !== "goal_onboarding") throw new Error("stay");
+    expect(right.state.route.selected_direction_index).toBe(1);
+    const enter = reduceGoalOnboardingKey(
+      right.state,
+      { name: "return", sequence: "\r", ctrl: false, meta: false },
+      now,
+    );
+    expect(enter.state.route.screen).toBe("main_menu");
+    expect(enter.state.mainGoal?.form).toBe("code");
+    expect(enter.state.mainGoal?.target_wpm).toBeGreaterThan(0);
+  });
+
+  test("goal onboarding N opts out, S skips", () => {
+    const now = new Date("2026-06-15T00:00:00Z");
+    const welcome = createOpenTuiGoalOnboardingState("zh", { scenario: "welcome" });
+    const opted = reduceGoalOnboardingKey(
+      welcome,
+      { name: "n", sequence: "n", ctrl: false, meta: false },
+      now,
+    );
+    expect(opted.state.route.screen).toBe("main_menu");
+    expect(opted.state.goalPromptOptedOut).toBe(true);
+
+    const skipped = reduceGoalOnboardingKey(
+      welcome,
+      { name: "s", sequence: "s", ctrl: false, meta: false },
+      now,
+    );
+    expect(skipped.state.route.screen).toBe("main_menu");
+    expect(skipped.state.goalPromptOptedOut).toBeFalsy();
   });
 
   test("createOpenTuiGoalOnboardingState builds welcome route", () => {

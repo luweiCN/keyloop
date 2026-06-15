@@ -181,6 +181,8 @@ export interface OpenTuiStateOptions {
   youdaoTtsCredentialStatus?: OpenTuiYoudaoTtsCredentialStatus | undefined;
   enabledModules?: TrainingModule[] | undefined;
   mainGoal?: MainGoal | undefined;
+  goalPromptOptedOut?: boolean | undefined;
+  goalPromptLastShown?: string | undefined;
 }
 
 export type OpenTuiReturnRoute =
@@ -363,6 +365,8 @@ export interface OpenTuiSessionState {
   today_elapsed_ms?: number | undefined;
   enabledModules?: TrainingModule[] | undefined;
   mainGoal?: MainGoal | undefined;
+  goalPromptOptedOut?: boolean | undefined;
+  goalPromptLastShown?: string | undefined;
 }
 
 export interface OpenTuiAppState extends OpenTuiSessionState {
@@ -1144,6 +1148,12 @@ function appState(
   }
   if (options.mainGoal !== undefined) {
     state.mainGoal = options.mainGoal;
+  }
+  if (options.goalPromptOptedOut !== undefined) {
+    state.goalPromptOptedOut = options.goalPromptOptedOut;
+  }
+  if (options.goalPromptLastShown !== undefined) {
+    state.goalPromptLastShown = options.goalPromptLastShown;
   }
   if (options.codeSettings !== undefined) {
     state.codeSettings = cloneCodeSettings(options.codeSettings);
