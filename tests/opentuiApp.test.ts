@@ -3,6 +3,7 @@ import { describe, expect, test } from "bun:test";
 import { reduceFlatSettingsItem } from "../src/ui/opentui/settingsReducers";
 import { openTuiFlatSettingsItems } from "../src/ui/opentui/settingsItems";
 import { goalProgressLines } from "../src/ui/opentui/routeLines";
+import { plannedMinutesValue } from "../src/ui/opentui/screens/running";
 import {
   activateOpenTuiMenuItem,
   startStagePlanFirstLesson,
@@ -28,6 +29,22 @@ import {
 } from "../src/index";
 
 describe("OpenTUI app model", () => {
+  test("planned minutes value only applies to comprehensive lessons", () => {
+    expect(
+      plannedMinutesValue({
+        mix_profile: "comprehensive",
+        estimated_minutes: 8,
+      } as unknown as PracticeLesson),
+    ).toBe(8);
+    expect(
+      plannedMinutesValue({
+        mix_profile: "standalone",
+        estimated_minutes: 8,
+      } as unknown as PracticeLesson),
+    ).toBeUndefined();
+    expect(plannedMinutesValue(undefined)).toBeUndefined();
+  });
+
   test("main menu exposes product entries plus the temporary ANSI palette", () => {
     const items = openTuiMenuItems(createOpenTuiInitialState("zh"));
 

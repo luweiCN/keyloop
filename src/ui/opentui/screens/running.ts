@@ -5,7 +5,7 @@ import {
   openTuiRouteTitle,
   targetRefreshAvailableForSource,
 } from "../appModel";
-import type { EverydayEnglishSettings, SpeedUnit } from "../../../domain/model";
+import type { EverydayEnglishSettings, PracticeLesson, SpeedUnit } from "../../../domain/model";
 import { speedFromWpm, speedUnitLabel } from "../../../report/stats";
 import { heatScaleColor } from "../../heatScale";
 import { TEXT_BOLD, theme, toneColor, type OpenTuiColorInput, type Tone } from "../theme";
@@ -334,6 +334,7 @@ export function renderPracticeTimeStack(state: OpenTuiAppState, kit: OpenTuiRend
   if (state.route.screen !== "running") {
     return kit.Box({});
   }
+  const planned = plannedMinutesValue(state.route.lesson);
   return kit.Box(
     {
       id: "keyloop-practice-time-stack",
@@ -342,6 +343,17 @@ export function renderPracticeTimeStack(state: OpenTuiAppState, kit: OpenTuiRend
       flexShrink: 0,
       gap: 0,
     },
+    ...(planned === undefined
+      ? []
+      : [
+          renderTimeValueRow(
+            "keyloop-lesson-planned",
+            plannedDurationLabel(state.language),
+            plannedDurationValue(planned, state.language),
+            theme.foreground,
+            kit,
+          ),
+        ]),
     renderTimeValueRow(
       "keyloop-lesson-duration",
       groupDurationLabel(state.language),
@@ -411,6 +423,25 @@ export function pauseStateLabel(language: OpenTuiAppState["language"]): string {
 
 export function groupDurationLabel(language: OpenTuiAppState["language"]): string {
   return language === "zh" ? "本组用时" : "Group";
+}
+
+/** 综合训练才有意义的本组计划用时（分钟）；非综合训练或无值返回 undefined。 */
+export function plannedMinutesValue(lesson: PracticeLesson | undefined): number | undefined {
+  if (lesson === undefined || lesson.mix_profile !== "comprehensive") {
+    return undefined;
+  }
+  return lesson.estimated_minutes > 0 ? lesson.estimated_minutes : undefined;
+}
+
+export function plannedDurationLabel(language: OpenTuiAppState["language"]): string {
+  return language === "zh" ? "本组计划" : "Planned";
+}
+
+export function plannedDurationValue(
+  minutes: number,
+  language: OpenTuiAppState["language"],
+): string {
+  return language === "zh" ? `${minutes} 分` : `${minutes} min`;
 }
 
 export function codeStatusSegments(
