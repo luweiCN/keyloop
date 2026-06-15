@@ -145,6 +145,8 @@ export interface PracticeLesson {
   target: PracticeTarget;
   reason_zh: string;
   reason_en: string;
+  /** 惰性组卷：诊断屏只产时长，target 留空，待 materializeStageLesson 开练时按此预算组卷 */
+  pending?: { char_budget: number };
 }
 
 export interface DailyPracticePlan {

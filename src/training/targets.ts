@@ -611,6 +611,8 @@ export function buildLongWordBreakdownPracticeTarget(
 export interface BuildDailyPracticePlanOptions {
   /** 覆盖推荐时长（诊断屏手动调整） */
   targetMinutesOverride?: number;
+  /** 惰性组卷：只产时长与待组卷标记，不调 buildStageTarget（切档秒级，组卷推迟到开练） */
+  lazy?: boolean;
 }
 
 export function buildDailyPracticePlan(
@@ -636,7 +638,7 @@ export function buildDailyPracticePlan(
     ...(context.mainGoal === undefined ? {} : { mainGoalForm: context.mainGoal.form }),
   });
   const lessons = prescription.stages.map((stage, index) =>
-    stageLessonFromPlan(context, profile, stage, index),
+    stageLessonFromPlan(context, profile, stage, index, options.lazy ?? false),
   );
 
   return {
@@ -653,7 +655,26 @@ function stageLessonFromPlan(
   profile: SkillProfile,
   stage: StagePlan,
   index: number,
+  lazy: boolean,
 ): PracticeLesson {
+  const base = {
+    id: `stage:${stage.form}:${index + 1}`,
+    kind: stageLessonKind(stage.form),
+    module: stageLessonModule(stage.form),
+    category: stageLessonCategory(stage.form),
+    mix_profile: "comprehensive" as const,
+    reason_zh: stage.reason_zh,
+    reason_en: stage.reason_en,
+  };
+  if (lazy) {
+    // 惰性：用处方分配的计划分钟当 estimated，target 留空待 materializeStageLesson 组卷
+    return {
+      ...base,
+      estimated_minutes: Math.max(1, Math.round(stage.minutes)),
+      target: { mode: "words", text: "", source: `keyloop:stage:pending:${stage.form}` },
+      pending: { char_budget: stage.char_budget },
+    };
+  }
   const target = buildStageTarget(context, {
     stage,
     profile,
@@ -665,20 +686,42 @@ function stageLessonFromPlan(
       : { customLibraries: context.customLibraries }),
   });
   return {
-    id: `stage:${stage.form}:${index + 1}`,
-    kind: stageLessonKind(stage.form),
-    module: stageLessonModule(stage.form),
-    category: stageLessonCategory(stage.form),
-    mix_profile: "comprehensive",
+    ...base,
     estimated_minutes: estimatedMinutesFromChars(
       [...target.text].length,
       stage.form,
       profile.form_speeds,
     ),
     target,
-    reason_zh: stage.reason_zh,
-    reason_en: stage.reason_en,
   };
+}
+
+/** 惰性组卷的开练侧：把 pending lesson 真正组卷成可练 target（仅综合训练阶段课）。 */
+export function materializeStageLesson(
+  context: BuildTargetContext,
+  lesson: PracticeLesson,
+): PracticeLesson {
+  if (lesson.pending === undefined) {
+    return lesson;
+  }
+  const materialized: PracticeLesson = { ...lesson };
+  delete materialized.pending;
+  const form = stageFormFromLesson(lesson);
+  if (form === null) {
+    return materialized;
+  }
+  const profile = buildSkillProfile(context.records, context.plan, context.now ?? new Date());
+  materialized.target = buildStageTarget(context, {
+    stage: { form, char_budget: lesson.pending.char_budget },
+    profile,
+    ...(context.enabledModules === undefined
+      ? {}
+      : { enabledModules: context.enabledModules }),
+    ...(context.customLibraries === undefined
+      ? {}
+      : { customLibraries: context.customLibraries }),
+  });
+  return materialized;
 }
 
 function stageLessonKind(form: TrainingForm): LessonKind {

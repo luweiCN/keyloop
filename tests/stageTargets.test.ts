@@ -7,6 +7,7 @@ import type { SkillProfile } from "../src/training/diagnosis";
 import { estimatedMinutesFromChars } from "../src/training/prescription";
 import {
   buildDailyPracticePlan,
+  materializeStageLesson,
   buildEverydayMixStageTarget,
   buildProgrammingBasicsMixStageTarget,
   buildStageTarget,
@@ -159,6 +160,33 @@ function customLibraryFixture(): CustomLibrary {
     articles: [],
   };
 }
+
+describe("daily plan lazy materialization", () => {
+  test("lazy plan defers corpus generation until materialized", () => {
+    const context = stageContext();
+    const lazy = buildDailyPracticePlan(context, { targetMinutesOverride: 15, lazy: true });
+
+    expect(lazy.lessons.length).toBeGreaterThan(0);
+    for (const lesson of lazy.lessons) {
+      // 惰性：有计划时长，但未组卷（target 文本为空 + 待组卷标记）
+      expect(lesson.estimated_minutes).toBeGreaterThan(0);
+      expect(lesson.target.text).toBe("");
+      expect(lesson.pending).toBeDefined();
+    }
+
+    // 开练时组卷：materialize 后才生成真正的 target
+    const materialized = materializeStageLesson(context, lazy.lessons[0]!);
+    expect(materialized.target.text.length).toBeGreaterThan(0);
+    expect(materialized.pending).toBeUndefined();
+  });
+
+  test("eager plan (default) still generates targets up front", () => {
+    const context = stageContext();
+    const eager = buildDailyPracticePlan(context, { targetMinutesOverride: 15 });
+    expect(eager.lessons.every((lesson) => lesson.target.text.length > 0)).toBe(true);
+    expect(eager.lessons.every((lesson) => lesson.pending === undefined)).toBe(true);
+  });
+});
 
 describe("buildStageTarget articles", () => {
   test("concatenates multiple articles to fill the budget with per-article annotations", () => {
