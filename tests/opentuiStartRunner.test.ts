@@ -721,6 +721,60 @@ describe("OpenTUI start runner", () => {
     expect(result.completedRecords[0]?.lesson_id).toBe("lesson-foundation");
   });
 
+  test("daily summary returns to the menu when launched with a returnState", async () => {
+    const kit = fakeKit({ keyInput: true });
+    let nowMs = 4_000;
+    const initialState = {
+      language: "en" as const,
+      route: { screen: "submenu" as const, menu: "foundation" as const, selected_index: 0 },
+    };
+    const runner = createOpenTuiStartRunner({
+      kit,
+      nowMs: () => nowMs,
+    });
+    const plan = testSingleLessonPlan("a");
+
+    const runPromise = runner({
+      ...contextWithPlan(plan),
+      returnState: initialState,
+    });
+    const runningReady = await Promise.race([
+      kit.waitForKeyListener().then(() => true),
+      runPromise.then(() => false),
+      delay(50).then(() => false),
+    ]);
+    expect(runningReady).toBe(true);
+
+    nowMs = 4_100;
+    kit.emitKey({ name: "a", sequence: "a" });
+
+    const completeReady = await Promise.race([
+      kit.waitForKeyListener(2).then(() => true),
+      runPromise.then(() => false),
+      delay(50).then(() => false),
+    ]);
+    expect(completeReady).toBe(true);
+    expect(flattenContent(kit.addedNodes)).toContain("Lesson complete");
+
+    await dismissCompletionResult(kit);
+    kit.emitKey({ name: "enter", sequence: "\r" });
+
+    const summaryReady = await Promise.race([
+      kit.waitForKeyListener(3).then(() => true),
+      runPromise.then(() => false),
+      delay(50).then(() => false),
+    ]);
+    expect(summaryReady).toBe(true);
+    expect(flattenContent(kit.addedNodes)).toContain("Daily summary");
+
+    kit.emitKey({ name: "enter", sequence: "\r" });
+    const result = await runPromise;
+
+    expect(result.completedRecords).toHaveLength(1);
+    expect(result.renderer).toBeDefined();
+    expect(result.state?.route.screen).toBe("submenu");
+  });
+
   test("completion popup can be dismissed before enter continues", async () => {
     const kit = fakeKit({ keyInput: true });
     let nowMs = 4_000;

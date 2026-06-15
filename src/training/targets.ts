@@ -1041,6 +1041,33 @@ function hasEverydayEntrySource(entry: { source_id: string }): boolean {
   return entry.source_id.trim().length > 0;
 }
 
+/** 精确 level+length 文章档位低于此数时，扩大选取池以避免短期内反复抽到同几篇 */
+const ARTICLE_MIN_POOL = 8;
+
+/**
+ * 文章选取池：精确 level+length 档位太小（如 CET4+短文仅 3 篇，必然高频重复）时，
+ * 回退到该 level 的全部长度，扩大真随机的候选范围。不引入防重复历史算法。
+ */
+export function everydayArticlePool(
+  entries: ContentLibrary["everyday_articles"]["entries"],
+  level: ContentLibrary["everyday_articles"]["entries"][number]["level"],
+  length: EverydayEnglishSettings["article_length"],
+  minPool: number = ARTICLE_MIN_POOL,
+): ContentLibrary["everyday_articles"]["entries"] {
+  const sourced = entries.filter(hasEverydayEntrySource);
+  const exact = sourced.filter(
+    (entry) => entry.level === level && matchesEverydaySentenceLength(entry.length, length),
+  );
+  if (exact.length >= minPool) {
+    return exact;
+  }
+  const byLevel = sourced.filter((entry) => entry.level === level);
+  if (byLevel.length > exact.length) {
+    return byLevel;
+  }
+  return exact.length > 0 ? exact : sourced;
+}
+
 function excludeRecentEverydayWords<T extends { word: string }>(
   entries: T[],
   records: SessionRecord[],
@@ -1532,14 +1559,11 @@ function everydayTranslatedSentencesTarget(context: BuildTargetContext): Practic
 function everydayArticlesTarget(context: BuildTargetContext): PracticeTarget {
   const random = context.random ?? Math.random;
   const settings = everydaySettings(context);
-  const matching = context.library.everyday_articles.entries
-    .filter(hasEverydayEntrySource)
-    .filter((entry) => entry.level === settings.article_level)
-    .filter((entry) => matchesEverydaySentenceLength(entry.length, settings.article_length));
-  const pool =
-    matching.length > 0
-      ? matching
-      : context.library.everyday_articles.entries.filter(hasEverydayEntrySource);
+  const pool = everydayArticlePool(
+    context.library.everyday_articles.entries,
+    settings.article_level,
+    settings.article_length,
+  );
   const candidates = [...pool];
   shuffleInPlace(candidates, random);
   const article = candidates[0];

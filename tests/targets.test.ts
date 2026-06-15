@@ -6,6 +6,7 @@ import {
   buildFoundationMixPracticeTarget,
   buildCodeSpecialistPracticeTarget,
   buildEverydayPracticeTarget,
+  everydayArticlePool,
   buildFoundationPracticeTarget,
   buildLessonWords,
   buildLongWordBreakdownPracticeTarget,
@@ -740,6 +741,37 @@ describe("target generation core", () => {
         display: "article",
       },
     ]);
+  });
+
+  test("everyday article pool widens to the whole level when the exact length is too small", () => {
+    const entries = [
+      dailyArticle("S1", "cet4", "short", [["a", "甲"]]),
+      dailyArticle("S2", "cet4", "short", [["b", "乙"]]),
+      dailyArticle("S3", "cet4", "short", [["c", "丙"]]),
+      dailyArticle("M1", "cet4", "medium", [["d", "丁"]]),
+      dailyArticle("M2", "cet4", "medium", [["e", "戊"]]),
+      dailyArticle("L1", "cet4", "long", [["f", "己"]]),
+      dailyArticle("Other", "cet6", "short", [["g", "庚"]]),
+    ];
+
+    const pool = everydayArticlePool(entries, "cet4", "short");
+
+    expect(pool).toHaveLength(6);
+    expect(pool.every((entry) => entry.level === "cet4")).toBe(true);
+  });
+
+  test("everyday article pool keeps the exact length when it is large enough", () => {
+    const entries = [
+      ...Array.from({ length: 9 }, (_, index) =>
+        dailyArticle(`S${index}`, "cet4", "short", [["a", "甲"]]),
+      ),
+      dailyArticle("M1", "cet4", "medium", [["b", "乙"]]),
+    ];
+
+    const pool = everydayArticlePool(entries, "cet4", "short");
+
+    expect(pool).toHaveLength(9);
+    expect(pool.every((entry) => entry.length === "short")).toBe(true);
   });
 
   test("everyday word decomposition repeats explicit parts and full words", () => {

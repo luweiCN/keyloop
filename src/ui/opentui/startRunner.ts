@@ -393,7 +393,20 @@ export async function openTuiStartRunner(
         );
         continue;
       }
-      await showSummaryPage(context, completedRecords, options, reusableRenderer);
+      const summaryRenderer = await showSummaryPage(
+        context,
+        completedRecords,
+        options,
+        reusableRenderer,
+      );
+      if (context.returnState !== undefined) {
+        await summaryRenderer.renderState?.(context.returnState);
+        return withRuntimeSettings({
+          completedRecords,
+          renderer: summaryRenderer,
+          state: context.returnState,
+        });
+      }
       return withRuntimeSettings({ completedRecords });
     }
   }
@@ -1342,7 +1355,7 @@ export async function showSummaryPage(
   completedRecords: SessionRecord[],
   options: OpenTuiStartRunnerOptions,
   reusableRenderer: OpenTuiRenderer | undefined,
-): Promise<void> {
+): Promise<OpenTuiRenderer> {
   const renderer = await rendererForState(
     createOpenTuiSummaryState(context.language, completedRecords, {
       dailyRunId: context.dailyPlan.run_id,
@@ -1352,6 +1365,7 @@ export async function showSummaryPage(
     reusableRenderer,
   );
   await waitForSummaryDismiss(renderer);
+  return renderer;
 }
 
 export function waitForPostCompletionAction(
