@@ -58,6 +58,9 @@ export function openTuiRouteTitle(state: OpenTuiAppState): string {
       if (state.route.view === "language") {
         return state.language === "zh" ? "界面语言" : "Interface language";
       }
+      if (state.route.view === "youdao_tts") {
+        return state.language === "zh" ? "有道发音" : "Youdao pronunciation";
+      }
       return state.language === "zh" ? "设置" : "Settings";
     case "stats":
       return state.language === "zh" ? "统计" : "Stats";
@@ -331,12 +334,14 @@ export function summaryLines(
   const backspaces = records.reduce((sum, record) => sum + record.backspace_count, 0);
   const speed = aggregateSpeed(records, speedUnit);
   const speedLabel = speedUnitLabel(speedUnit);
+  const rawSpeed = aggregateRawSpeed(records, speedUnit);
+  const speedRange = aggregateSpeedRange(records, speedUnit);
   const accuracy = weightedAccuracy(records);
   const zh = language === "zh";
 
   const aggregateLine = zh
-    ? `${records.length} 次练习 | active ${formatDurationShort(activeMs, language)} | ${speedLabel} ${speed.toFixed(1)} | 正确率 ${accuracy.toFixed(1)}%`
-    : `${records.length} sessions | active ${formatDurationShort(activeMs, language)} | ${speedLabel} ${speed.toFixed(1)} | accuracy ${accuracy.toFixed(1)}%`;
+    ? `${records.length} 次练习 | active ${formatDurationShort(activeMs, language)} | ${speedLabel} ${speed.toFixed(1)} | 原始 ${speedLabel} ${rawSpeed.toFixed(1)} | 最快/最慢 ${speedRange.fastest.toFixed(1)}/${speedRange.slowest.toFixed(1)} | 正确率 ${accuracy.toFixed(1)}%`
+    : `${records.length} sessions | active ${formatDurationShort(activeMs, language)} | ${speedLabel} ${speed.toFixed(1)} | Raw ${speedLabel} ${rawSpeed.toFixed(1)} | Best/slowest ${speedRange.fastest.toFixed(1)}/${speedRange.slowest.toFixed(1)} | accuracy ${accuracy.toFixed(1)}%`;
   const errorLine = zh ? `错误 ${errors} | 退格 ${backspaces}` : `Errors ${errors} | Backspace ${backspaces}`;
 
   // 综合训练：逐练习「计划 vs 实际」时长 + 总计行（无 lessons 时退回纯汇总）
@@ -345,6 +350,39 @@ export function summaryLines(
     return [aggregateLine, errorLine];
   }
   return [...planLines, aggregateLine, errorLine];
+}
+
+function aggregateRawSpeed(records: SessionRecord[], speedUnit: SpeedUnit): number {
+  return speedFromWpm(weightedRecordWpm(records, (record) => record.raw_wpm), speedUnit);
+}
+
+function aggregateSpeedRange(
+  records: SessionRecord[],
+  speedUnit: SpeedUnit,
+): { fastest: number; slowest: number } {
+  if (records.length === 0) {
+    return { fastest: 0, slowest: 0 };
+  }
+  const speeds = records.map((record) => speedFromWpm(record.wpm, speedUnit));
+  return {
+    fastest: Math.max(...speeds),
+    slowest: Math.min(...speeds),
+  };
+}
+
+function weightedRecordWpm(
+  records: SessionRecord[],
+  valueForRecord: (record: SessionRecord) => number,
+): number {
+  const weighted = records.reduce((sum, record) => {
+    const weight = effectiveActiveMs(record);
+    return sum + valueForRecord(record) * weight;
+  }, 0);
+  const totalWeight = records.reduce((sum, record) => sum + effectiveActiveMs(record), 0);
+  if (totalWeight > 0) {
+    return weighted / totalWeight;
+  }
+  return records.reduce((sum, record) => sum + valueForRecord(record), 0) / records.length;
 }
 
 function perLessonPlannedActualLines(
@@ -375,7 +413,7 @@ function perLessonPlannedActualLines(
     const label = formLabel(form, language);
     lines.push(
       zh
-        ? `${label} 计划 ${planned} 分 · 实际 ${actual.toFixed(1)} 分`
+        ? `${label} 计划 ${planned} 分钟 · 实际 ${actual.toFixed(1)} 分钟`
         : `${label} planned ${planned}m · actual ${actual.toFixed(1)}m`,
     );
   }
@@ -384,7 +422,7 @@ function perLessonPlannedActualLines(
   }
   lines.push(
     zh
-      ? `计划 ${totalPlanned} 分 · 实际 ${totalActual.toFixed(1)} 分`
+      ? `计划 ${totalPlanned} 分钟 · 实际 ${totalActual.toFixed(1)} 分钟`
       : `planned ${totalPlanned}m · actual ${totalActual.toFixed(1)}m`,
   );
   return lines;
@@ -487,15 +525,15 @@ export function goalProgressLines(
         : "?";
       return [
         zh
-          ? `${head} ${span} · 预计 ${eta} · 理想每日 ~${recommendation.daily_minutes} 分`
+          ? `${head} ${span} · 预计 ${eta} · 理想每日 ~${recommendation.daily_minutes} 分钟`
           : `${head} ${span} · ETA ${eta} · ideal ~${recommendation.daily_minutes} min/day`,
       ];
     }
     case "cold_start":
       return [
         zh
-          ? `${head} ${span} · 数据积累中，先练满 7 天给精准计划 · 暂按 ~${recommendation.daily_minutes} 分`
-          : `${head} ${span} · warming up — practice 7 days for a precise plan · ~${recommendation.daily_minutes} min for now`,
+          ? `${head} ${span} · 数据积累中，先练满 7 天给精准计划 · 建议每日约 ${recommendation.daily_minutes} 分钟`
+          : `${head} ${span} · building history; practice 7 days for a precise plan · about ${recommendation.daily_minutes} min/day`,
       ];
     case "unreachable": {
       const projected = Math.round(recommendation.projected_wpm_at_deadline ?? current);
@@ -550,14 +588,15 @@ function stagePlanLines(
   const planMinutes = comprehensivePlanMinutes(plan);
   lines.push(
     zh
-      ? `今日计划: ${plan.lessons.length} 个阶段，本次约 ${planMinutes} 分钟（选定 ${plan.target_minutes} 分 · 今日已练 ${completedMinutes} 分钟）`
+      ? `今日计划: ${plan.lessons.length} 个阶段，本次约 ${planMinutes} 分钟（选定 ${plan.target_minutes} 分钟 · 今日已练 ${completedMinutes} 分钟）`
       : `Plan: ${plan.lessons.length} stages, ~${planMinutes} min this run (target ${plan.target_minutes} · done today: ${completedMinutes} min)`,
   );
   for (const [index, lesson] of plan.lessons.entries()) {
     const reason = zh ? lesson.reason_zh : lesson.reason_en;
     const mark = completed.has(lesson.id) ? "✓" : " ";
+    const minutes = zh ? `${lesson.estimated_minutes} 分钟` : `${lesson.estimated_minutes} min`;
     lines.push(
-      `  ${mark} ${index + 1}. ${lesson.estimated_minutes} min  ${reason}`,
+      `  ${mark} ${index + 1}. ${minutes}  ${reason}`,
     );
   }
   const activePreset = snapToPreset(plan.target_minutes);
@@ -587,6 +626,9 @@ const EMPTY_EMPHASIS: ReadonlySet<number> = new Set();
  * 故单独标出行索引交由渲染层用前景色高亮。其它路由不强调（返回空集）。
  */
 export function openTuiRouteEmphasis(state: OpenTuiAppState): ReadonlySet<number> {
+  if (state.route.screen === "summary") {
+    return new Set(openTuiRouteLines(state).map((_, index) => index));
+  }
   if (state.route.screen !== "stage_plan") {
     return EMPTY_EMPHASIS;
   }

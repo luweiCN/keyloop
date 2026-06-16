@@ -140,7 +140,7 @@ export function openTuiFlatSettingsItems(state: OpenTuiAppState): OpenTuiFlatSet
     },
     {
       kind: "dictionary_status",
-      label: language === "zh" ? "词典" : "Dictionary",
+      label: language === "zh" ? "词典状态" : "Dictionary status",
       value: dictionaryStatusLabel(state),
     },
     ...comprehensiveModuleItems(state),
@@ -426,16 +426,16 @@ export function settingsRouteLines(state: OpenTuiAppState): string[] {
     const secret = appSecret.length === 0 ? "" : "•".repeat(Math.min(appSecret.length, 12));
     const lines = state.language === "zh"
       ? [
-          `App Key  ${appKey}`,
-          `App Secret  ${secret}`,
-          "保存到钥匙串",
-          "清除钥匙串配置",
+          `有道智云 App Key  ${appKey}`,
+          `有道智云 App Secret  ${secret}`,
+          "保存到 macOS 钥匙串",
+          "清除 macOS 钥匙串配置",
         ]
       : [
-          `App Key  ${appKey}`,
-          `App Secret  ${secret}`,
-          "Save to Keychain",
-          "Clear Keychain credentials",
+          `Youdao App Key  ${appKey}`,
+          `Youdao App Secret  ${secret}`,
+          "Save to macOS Keychain",
+          "Clear macOS Keychain credentials",
         ];
     const message = state.route.youdao_message;
     return [

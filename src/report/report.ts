@@ -394,7 +394,7 @@ function formatDuration(durationMs: number, language: Language): string {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
   if (minutes > 0) {
-    return language === "zh" ? `${minutes} 分 ${seconds} 秒` : `${minutes}m ${seconds}s`;
+    return language === "zh" ? `${minutes} 分钟 ${seconds} 秒` : `${minutes}m ${seconds}s`;
   }
   return language === "zh" ? `${seconds} 秒` : `${seconds}s`;
 }

@@ -1,4 +1,4 @@
-import type { ContentLibrary, ProgrammingWordEntry } from "../content/library";
+import type { ContentLibrary, EverydayArticleEntry, ProgrammingWordEntry } from "../content/library";
 import { pickCodeCorpusSnippetsExcludingByDifficulty } from "../content/codeCorpus";
 import { formatCodeSnippetsForPractice } from "../content/codeFormatter";
 import {
@@ -721,6 +721,11 @@ export function materializeStageLesson(
       ? {}
       : { customLibraries: context.customLibraries }),
   });
+  materialized.estimated_minutes = estimatedMinutesFromChars(
+    [...materialized.target.text].length,
+    form,
+    profile.form_speeds,
+  );
   return materialized;
 }
 
@@ -1127,10 +1132,13 @@ function excludeRecentEverydayWords<T extends { word: string }>(
 function recentEverydayWords(records: SessionRecord[]): Set<string> {
   const recent = new Set<string>();
   for (const record of records.slice(-12)) {
-    if (!record.source.includes("everyday-english")) {
+    if (
+      record.category !== "everyday_words" &&
+      !record.source.includes("everyday-english")
+    ) {
       continue;
     }
-    for (const word of record.target_text.split(/[^A-Za-z]+/u)) {
+    for (const word of record.target_text.split(/[^A-Za-z0-9]+/u)) {
       if (word.length > 0) {
         recent.add(word.toLowerCase());
       }
@@ -2727,12 +2735,98 @@ export interface StageTargetOptions {
 
 /** 词均长 6 + 空格 */
 const STAGE_CHARS_PER_WORD = 7;
+const STAGE_WORD_MIN_COUNT = 6;
+const STAGE_WORD_IDEAL_MIN_COUNT = 25;
+const STAGE_WORD_IDEAL_MAX_COUNT = 60;
+const STAGE_WORD_MAX_REPEATS = 10;
 /** 句均字符 */
 const STAGE_CHARS_PER_SENTENCE = 40;
+const STAGE_SENTENCE_MIN_COUNT = 2;
+const STAGE_SENTENCE_IDEAL_MAX_COUNT = 10;
+const STAGE_SENTENCE_SOFT_MAX_COUNT = 12;
+const STAGE_SENTENCE_ARTICLE_THRESHOLD = 360;
+const STAGE_SENTENCE_MAX_ARTICLES = 3;
 /** 代码阶段防御性硬上限：再大的预算也不超这么多片 */
 const STAGE_CODE_MAX_SNIPPETS = 8;
 /** 最后一片完整保留可略超预算，但总量不超 budget × 此容差 */
 const STAGE_CODE_BUDGET_TOLERANCE = 1.3;
+
+interface StageWordDose {
+  count: number;
+  repeats: number;
+}
+
+function chooseStageWordDose(
+  candidates: StageWordCandidate[],
+  charBudget: number,
+): StageWordDose {
+  const available = candidates.length;
+  if (available === 0) {
+    return { count: 0, repeats: 1 };
+  }
+  const safeBudget = Math.max(1, charBudget);
+  let best: { dose: StageWordDose; score: number } | undefined;
+  for (let repeats = 1; repeats <= STAGE_WORD_MAX_REPEATS; repeats += 1) {
+    const estimatedCount = Math.max(
+      1,
+      Math.round(safeBudget / Math.max(1, averageRepeatedWordLength(candidates, repeats))),
+    );
+    const countOptions = new Set<number>([
+      STAGE_WORD_MIN_COUNT,
+      STAGE_WORD_IDEAL_MIN_COUNT,
+      STAGE_WORD_IDEAL_MAX_COUNT,
+      estimatedCount,
+      estimatedCount - 8,
+      estimatedCount - 4,
+      estimatedCount + 4,
+      estimatedCount + 8,
+      available,
+    ]);
+    for (const countOption of countOptions) {
+      const count = clamp(Math.round(countOption), 1, available);
+      const chars = repeatedWordItemsLength(candidates.slice(0, count), repeats);
+      const mismatch = Math.abs(chars - safeBudget) / safeBudget;
+      const denseUniquePenalty =
+        count > STAGE_WORD_IDEAL_MAX_COUNT
+          ? ((count - STAGE_WORD_IDEAL_MAX_COUNT) / STAGE_WORD_IDEAL_MAX_COUNT) * 1.6
+          : 0;
+      const tooFewPenalty =
+        count < STAGE_WORD_IDEAL_MIN_COUNT && safeBudget > STAGE_WORD_IDEAL_MIN_COUNT * STAGE_CHARS_PER_WORD
+          ? ((STAGE_WORD_IDEAL_MIN_COUNT - count) / STAGE_WORD_IDEAL_MIN_COUNT) * 0.8
+          : 0;
+      const repeatPenalty = (repeats - 1) * 0.18;
+      const score = mismatch * 4 + denseUniquePenalty + tooFewPenalty + repeatPenalty;
+      if (best === undefined || score < best.score) {
+        best = { dose: { count, repeats }, score };
+      }
+    }
+  }
+  return best?.dose ?? { count: Math.min(available, STAGE_WORD_MIN_COUNT), repeats: 1 };
+}
+
+function averageRepeatedWordLength(candidates: StageWordCandidate[], repeats: number): number {
+  const sample = candidates.slice(0, Math.min(candidates.length, 80));
+  if (sample.length === 0) {
+    return STAGE_CHARS_PER_WORD;
+  }
+  return (
+    sample.reduce(
+      (sum, item) => sum + repeatedWordText(item.text, repeats).length + 1,
+      0,
+    ) / sample.length
+  );
+}
+
+function repeatedWordItemsLength(items: StageWordCandidate[], repeats: number): number {
+  if (items.length === 0) {
+    return 0;
+  }
+  return items.reduce(
+    (sum, item, index) =>
+      sum + repeatedWordText(item.text, repeats).length + (index === 0 ? 0 : 1),
+    0,
+  );
+}
 
 export function buildStageTarget(
   context: BuildTargetContext,
@@ -2773,16 +2867,23 @@ interface StageWordCandidate {
   translation_zh?: string;
 }
 
+interface StageSentenceCandidate {
+  text: string;
+  translation_zh: string;
+  source_title?: string;
+}
+
+interface StageArticleBlock {
+  text: string;
+  translation_zh: string;
+  source_title: string;
+}
+
 function wordsStageTarget(
   context: BuildTargetContext,
   options: StageTargetOptions,
 ): PracticeTarget {
   const random = context.random ?? Math.random;
-  const count = clamp(
-    Math.round(options.stage.char_budget / STAGE_CHARS_PER_WORD),
-    6,
-    40,
-  );
   const pool = new Map<string, StageWordCandidate>();
   const addCandidate = (candidate: StageWordCandidate): void => {
     const key = candidate.text.toLowerCase();
@@ -2838,24 +2939,156 @@ function wordsStageTarget(
   // 稳定排序把弱特征匹配的词排前；同分保持上面 shuffle 的随机序（JSC 排序稳定）
   fill.sort((left, right) => wordBiasScore(right.text) - wordBiasScore(left.text));
   selected.push(...fill);
-  const picked = selected.slice(0, count);
+  const dose = chooseStageWordDose(selected, options.stage.char_budget);
+  const picked = selected.slice(0, dose.count);
 
   const annotated = annotatedOptionalTokenText(
     picked.map((item) => ({
-      text: item.text,
+      text: repeatedWordText(item.text, dose.repeats),
       ...(item.translation_zh === undefined || item.translation_zh.trim().length === 0
         ? {}
         : { translation_zh: item.translation_zh }),
-      display: "word" as const,
+      display: wordAnnotationDisplay(dose.repeats),
       audio_text: item.text,
     })),
   );
   return {
     mode: "words",
     text: annotated.text,
-    source: `keyloop:stage:words:count-${picked.length}`,
+    source: `keyloop:stage:words:count-${picked.length}:repeat-${dose.repeats}`,
     ...(annotated.annotations.length === 0 ? {} : { annotations: annotated.annotations }),
   };
+}
+
+function stageArticleBlocks(
+  context: BuildTargetContext,
+  settings: EverydayEnglishSettings,
+  random: () => number,
+): StageArticleBlock[] {
+  const pool = everydayArticlePool(
+    context.library.everyday_articles.entries,
+    settings.article_level,
+    settings.article_length,
+  );
+  const shuffled = [...pool];
+  shuffleInPlace(shuffled, random);
+  return shuffled
+    .map((article) => articleBlock(article))
+    .filter((block): block is StageArticleBlock => block !== null);
+}
+
+function articleBlock(article: EverydayArticleEntry): StageArticleBlock | null {
+  const paragraphs = article.paragraphs.filter(
+    (paragraph) =>
+      paragraph.text.trim().length > 0 && paragraph.translation_zh.trim().length > 0,
+  );
+  const text = paragraphs.map((paragraph) => paragraph.text.trim()).join("\n");
+  if (text.length === 0) {
+    return null;
+  }
+  return {
+    text,
+    translation_zh: paragraphs
+      .map((paragraph) => paragraph.translation_zh.trim())
+      .join("\n"),
+    source_title: article.title,
+  };
+}
+
+function articleAnnotatedBlock(block: StageArticleBlock): AnnotatedTargetText {
+  return {
+    text: block.text,
+    annotations: [
+      {
+        start: 0,
+        end: block.text.length,
+        translation_zh: block.translation_zh,
+        source_title: block.source_title,
+        display: "article",
+      },
+    ],
+  };
+}
+
+function chooseSentenceArticleMix(
+  sentences: StageSentenceCandidate[],
+  articles: StageArticleBlock[],
+  charBudget: number,
+): { sentenceCount: number; articleCount: number } {
+  const safeBudget = Math.max(1, charBudget);
+  const maxSentenceOptions = Math.min(
+    sentences.length,
+    Math.max(STAGE_SENTENCE_SOFT_MAX_COUNT + 4, Math.ceil(safeBudget / 30)),
+  );
+  const maxArticleOptions =
+    safeBudget >= STAGE_SENTENCE_ARTICLE_THRESHOLD
+      ? Math.min(articles.length, STAGE_SENTENCE_MAX_ARTICLES)
+      : 0;
+  let best:
+    | { mix: { sentenceCount: number; articleCount: number }; score: number }
+    | undefined;
+  for (let articleCount = 0; articleCount <= maxArticleOptions; articleCount += 1) {
+    for (let sentenceCount = 0; sentenceCount <= maxSentenceOptions; sentenceCount += 1) {
+      if (sentenceCount === 0 && articleCount === 0) {
+        continue;
+      }
+      if (articleCount === 0 && sentenceCount < STAGE_SENTENCE_MIN_COUNT) {
+        continue;
+      }
+      const chars = sentenceArticleMixLength(sentences, sentenceCount, articles, articleCount);
+      const mismatch = Math.abs(chars - safeBudget) / safeBudget;
+      const denseSentencePenalty =
+        sentenceCount > STAGE_SENTENCE_IDEAL_MAX_COUNT
+          ? ((sentenceCount - STAGE_SENTENCE_IDEAL_MAX_COUNT) /
+              STAGE_SENTENCE_IDEAL_MAX_COUNT) *
+            1.4
+          : 0;
+      const articleMissingPenalty =
+        safeBudget >= STAGE_SENTENCE_ARTICLE_THRESHOLD && articleCount === 0 ? 1.2 : 0;
+      const articlePenalty = articleCount * 0.12;
+      const emptySentencePenalty = sentenceCount === 0 ? 0.35 : 0;
+      const score =
+        mismatch * 4 +
+        denseSentencePenalty +
+        articleMissingPenalty +
+        articlePenalty +
+        emptySentencePenalty;
+      if (best === undefined || score < best.score) {
+        best = { mix: { sentenceCount, articleCount }, score };
+      }
+    }
+  }
+  if (best !== undefined) {
+    return best.mix;
+  }
+  return {
+    sentenceCount: Math.min(
+      sentences.length,
+      Math.max(STAGE_SENTENCE_MIN_COUNT, Math.ceil(safeBudget / STAGE_CHARS_PER_SENTENCE)),
+    ),
+    articleCount: 0,
+  };
+}
+
+function sentenceArticleMixLength(
+  sentences: StageSentenceCandidate[],
+  sentenceCount: number,
+  articles: StageArticleBlock[],
+  articleCount: number,
+): number {
+  const sentenceLength = sentences
+    .slice(0, sentenceCount)
+    .reduce((sum, sentence, index) => sum + sentence.text.length + (index === 0 ? 0 : 1), 0);
+  const articleLength = articles
+    .slice(0, articleCount)
+    .reduce((sum, article, index) => sum + article.text.length + (index === 0 ? 0 : 1), 0);
+  if (sentenceLength === 0) {
+    return articleLength;
+  }
+  if (articleLength === 0) {
+    return sentenceLength;
+  }
+  return sentenceLength + 1 + articleLength;
 }
 
 function sentencesStageTarget(
@@ -2864,16 +3097,6 @@ function sentencesStageTarget(
 ): PracticeTarget {
   const random = context.random ?? Math.random;
   const settings = everydaySettings(context);
-  const count = clamp(
-    Math.round(options.stage.char_budget / STAGE_CHARS_PER_SENTENCE),
-    2,
-    8,
-  );
-  interface StageSentenceCandidate {
-    text: string;
-    translation_zh: string;
-    source_title?: string;
-  }
   const pool = new Map<string, StageSentenceCandidate>();
   const addCandidate = (candidate: StageSentenceCandidate): void => {
     if (!pool.has(candidate.text)) {
@@ -2917,9 +3140,11 @@ function sentencesStageTarget(
   const fill = [...pool.values()].filter((item) => !selected.includes(item));
   shuffleInPlace(fill, random);
   selected.push(...fill);
-  const picked = selected.slice(0, count);
+  const articleBlocks = stageArticleBlocks(context, settings, random);
+  const mix = chooseSentenceArticleMix(selected, articleBlocks, options.stage.char_budget);
+  const picked = selected.slice(0, mix.sentenceCount);
 
-  const annotated = annotatedLineText(
+  const sentenceBlock = annotatedLineText(
     picked.map((item) => ({
       text: item.text,
       translation_zh: item.translation_zh,
@@ -2927,10 +3152,14 @@ function sentencesStageTarget(
       display: "line" as const,
     })),
   );
+  const articleTargets = articleBlocks
+    .slice(0, mix.articleCount)
+    .map((article) => articleAnnotatedBlock(article));
+  const annotated = combineAnnotatedBlocks([sentenceBlock, ...articleTargets]);
   return {
     mode: "words",
     text: annotated.text,
-    source: `keyloop:stage:sentences:count-${picked.length}`,
+    source: `keyloop:stage:sentences:count-${picked.length}:articles-${mix.articleCount}`,
     ...(annotated.annotations.length === 0 ? {} : { annotations: annotated.annotations }),
   };
 }
@@ -3007,7 +3236,7 @@ function symbolsStageTarget(
     if (target.text.trim().length > 0) {
       // 按形态预算缩放：符号卡固定 8-10 张，对慢用户（小预算）按行裁剪，
       // 避免快慢用户拿到一样多的符号语料
-      return trimTargetToCharBudget(target, options.stage.char_budget);
+      return fitSymbolsTargetToBudget(context, target, options.stage.char_budget);
     }
   }
   // 编程基础被禁用（或无卡片内容）：退化到基础输入的数字/标点行
@@ -3027,6 +3256,52 @@ function symbolsStageTarget(
     text: lines.join("\n"),
     source: "keyloop:stage:symbols:foundation",
   };
+}
+
+function fitSymbolsTargetToBudget(
+  context: BuildTargetContext,
+  target: PracticeTarget,
+  budget: number,
+): PracticeTarget {
+  if (target.text.length >= budget) {
+    return trimTargetToCharBudget(target, budget);
+  }
+  const supplement = symbolSupplementLines(context);
+  if (supplement.length === 0) {
+    return target;
+  }
+  const lines = target.text.split("\n");
+  let chars = target.text.length;
+  let index = 0;
+  while (chars < budget && index < supplement.length * 32) {
+    const line = supplement[index % supplement.length] ?? "";
+    if (line.trim().length > 0) {
+      lines.push(line);
+      chars += line.length + 1;
+    }
+    index += 1;
+  }
+  const text = lines.join("\n");
+  const firstBlock = target.code_blocks?.[0];
+  return {
+    ...target,
+    text,
+    ...(firstBlock === undefined
+      ? {}
+      : { code_blocks: [{ ...firstBlock, line_count: lines.length }] }),
+  };
+}
+
+function symbolSupplementLines(context: BuildTargetContext): string[] {
+  const ids = ["number-row", "punctuation-edges"];
+  const lines = context.library.foundation_drills
+    .filter((drill) => ids.includes(drill.id))
+    .flatMap((drill) => drill.items)
+    .filter((line) => line.trim().length > 0);
+  if (lines.length > 0) {
+    return lines;
+  }
+  return ["1 2 3 4 5", "6 7 8 9 0", "; : , . / ?", "[ ] { } ( )", "- = _ +"];
 }
 
 /** 按字符预算在行边界裁剪 target（至少保留 1 行），同步修正 code_blocks 行数 */

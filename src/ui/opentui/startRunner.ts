@@ -33,6 +33,7 @@ import {
   createOpenTuiCodeSettingsConfirmationState,
   createOpenTuiCompletionState,
   createOpenTuiExitConfirmationState,
+  createOpenTuiInitialState,
   createOpenTuiPracticeOptionsState,
   createOpenTuiSummaryState,
   type OpenTuiAppState,
@@ -200,6 +201,11 @@ export interface PostCompletionResult {
   renderer: OpenTuiRenderer;
 }
 
+export interface SummaryDismissResult {
+  action: "return" | "quit";
+  renderer: OpenTuiRenderer;
+}
+
 export function createOpenTuiStartRunner(
   options: OpenTuiStartRunnerOptions = {},
 ): StartRunner {
@@ -213,6 +219,7 @@ export async function openTuiStartRunner(
   const completedRecords: SessionRecord[] = [];
   let forcedSelection: LessonSelection | undefined;
   let reusableRenderer = context.initialRenderer;
+  const materializedLessons = [...context.dailyPlan.lessons];
   let runtimeCodeConfig = cloneCodeConfig(context.codeConfig);
   let runtimeEverydaySettings =
     context.targetContext?.everydaySettings === undefined
@@ -269,6 +276,7 @@ export async function openTuiStartRunner(
       refreshedSelection,
       completedRecords,
     );
+    materializedLessons[selection.index] = selection.lesson;
     await saveCheckpointForSelection(runtimeContext, selection);
     const todayElapsedBeforeLesson = todayElapsedMsForRun(runtimeContext, completedRecords);
 
@@ -400,21 +408,28 @@ export async function openTuiStartRunner(
         );
         continue;
       }
-      const summaryRenderer = await showSummaryPage(
+      const summaryResult = await showSummaryPage(
         context,
         completedRecords,
+        materializedLessons,
         options,
         reusableRenderer,
       );
-      if (context.returnState !== undefined) {
-        await summaryRenderer.renderState?.(context.returnState);
-        return withRuntimeSettings({
-          completedRecords,
-          renderer: summaryRenderer,
-          state: context.returnState,
-        });
+      if (summaryResult.action === "quit") {
+        return withRuntimeSettings({ completedRecords });
       }
-      return withRuntimeSettings({ completedRecords });
+      const returnState =
+        context.returnState ??
+        createOpenTuiInitialState(context.language, {
+          speedUnit: context.speedUnit ?? "wpm",
+          todayElapsedMs: todayElapsedMsForRun(context, completedRecords),
+        });
+      await summaryResult.renderer.renderState?.(returnState);
+      return withRuntimeSettings({
+        completedRecords,
+        renderer: summaryResult.renderer,
+        state: returnState,
+      });
     }
   }
 }
@@ -1360,20 +1375,23 @@ export function completionLiveStateFromRecord(record: SessionRecord): OpenTuiRun
 export async function showSummaryPage(
   context: StartRunnerContext,
   completedRecords: SessionRecord[],
+  lessons: PracticeLesson[],
   options: OpenTuiStartRunnerOptions,
   reusableRenderer: OpenTuiRenderer | undefined,
-): Promise<OpenTuiRenderer> {
+): Promise<SummaryDismissResult> {
   const renderer = await rendererForState(
     createOpenTuiSummaryState(context.language, completedRecords, {
       dailyRunId: context.dailyPlan.run_id,
       speedUnit: context.speedUnit ?? "wpm",
-      lessons: context.dailyPlan.lessons,
+      lessons,
     }),
     options,
     reusableRenderer,
   );
-  await waitForSummaryDismiss(renderer);
-  return renderer;
+  const action = await waitForSummaryDismiss(renderer, {
+    enterAction: context.returnState === undefined ? "quit" : "return",
+  });
+  return { action, renderer };
 }
 
 export function waitForPostCompletionAction(
@@ -1522,27 +1540,40 @@ export function waitForPostCompletionAction(
   });
 }
 
-export function waitForSummaryDismiss(renderer: OpenTuiRenderer): Promise<void> {
+export function waitForSummaryDismiss(
+  renderer: OpenTuiRenderer,
+  options: { enterAction?: "return" | "quit" } = {},
+): Promise<"return" | "quit"> {
   if (renderer.keyInput === undefined) {
     renderer.destroy?.();
-    return Promise.resolve();
+    return Promise.resolve("quit");
   }
   const keyInput = renderer.keyInput;
 
-  return new Promise<void>((resolve) => {
+  return new Promise<"return" | "quit">((resolve) => {
     let settled = false;
-    const settle = (): void => {
+    const settle = (action: "return" | "quit"): void => {
       settled = true;
       keyInput.off("keypress", handleKeypress);
-      renderer.destroy?.();
-      resolve();
+      if (action === "quit") {
+        renderer.destroy?.();
+      }
+      resolve(action);
     };
     const handleKeypress = (event: OpenTuiKeyEvent): void => {
       if (settled) {
         return;
       }
-      if (isEnterEvent(event) || isEscapeEvent(event) || isQuitEvent(event)) {
-        settle();
+      if (isQuitEvent(event)) {
+        settle("quit");
+        return;
+      }
+      if (isEnterEvent(event)) {
+        settle(options.enterAction ?? "quit");
+        return;
+      }
+      if (isEscapeEvent(event)) {
+        settle("return");
       }
     };
 

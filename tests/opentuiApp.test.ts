@@ -230,8 +230,20 @@ describe("OpenTUI app model", () => {
       summaryLesson("everyday_english", "everyday_words", 3),
     ];
     const records = [
-      defaultSessionRecord({ lesson_index: 0, active_ms: 180_000, duration_ms: 180_000 }),
-      defaultSessionRecord({ lesson_index: 1, active_ms: 240_000, duration_ms: 240_000 }),
+      defaultSessionRecord({
+        lesson_index: 0,
+        active_ms: 180_000,
+        duration_ms: 180_000,
+        wpm: 20,
+        raw_wpm: 24,
+      }),
+      defaultSessionRecord({
+        lesson_index: 1,
+        active_ms: 240_000,
+        duration_ms: 240_000,
+        wpm: 30,
+        raw_wpm: 36,
+      }),
     ];
 
     const joined = summaryLines(records, "en", "wpm", lessons).join("\n");
@@ -241,9 +253,11 @@ describe("OpenTUI app model", () => {
     expect(joined).toContain("planned 7m · actual 7.0m");
 
     const zhJoined = summaryLines(records, "zh", "wpm", lessons).join("\n");
-    expect(zhJoined).toContain("键位 计划 4 分 · 实际 3.0 分");
-    expect(zhJoined).toContain("单词 计划 3 分 · 实际 4.0 分");
-    expect(zhJoined).toContain("计划 7 分 · 实际 7.0 分");
+    expect(zhJoined).toContain("键位 计划 4 分钟 · 实际 3.0 分钟");
+    expect(zhJoined).toContain("单词 计划 3 分钟 · 实际 4.0 分钟");
+    expect(zhJoined).toContain("计划 7 分钟 · 实际 7.0 分钟");
+    expect(zhJoined).toContain("原始 WPM 30.9");
+    expect(zhJoined).toContain("最快/最慢 30.0/20.0");
   });
 
   test("goal onboarding arrow cycles direction, enter sets mapped goal", () => {
@@ -549,7 +563,7 @@ describe("OpenTUI app model", () => {
       "  Word pronunciation  off",
       "  Pronunciation volume  100%",
       "  Youdao paid voice  not configured",
-      "  Dictionary  Not loaded",
+      "  Dictionary status  Not loaded",
       "  Comprehensive: foundation  On",
       "  Comprehensive: everyday English  On",
       "  Comprehensive: programming basics  On",
@@ -873,6 +887,8 @@ describe("OpenTUI app model", () => {
         duration_ms: 60_000,
         correct_chars: 150,
         typed_len: 160,
+        wpm: 30,
+        raw_wpm: 32,
         accuracy: 93.75,
         error_count: 4,
         backspace_count: 2,
@@ -882,6 +898,8 @@ describe("OpenTUI app model", () => {
         duration_ms: 60_000,
         correct_chars: 100,
         typed_len: 100,
+        wpm: 20,
+        raw_wpm: 22,
         accuracy: 100,
         error_count: 0,
         backspace_count: 1,
@@ -891,7 +909,7 @@ describe("OpenTUI app model", () => {
     expect(state.route.screen).toBe("summary");
     expect(openTuiRouteTitle(state)).toBe("Daily summary");
     expect(openTuiRouteLines(state)).toEqual([
-      "2 sessions | active 2m | WPM 25.0 | accuracy 96.2%",
+      "2 sessions | active 2m | WPM 25.0 | Raw WPM 27.0 | Best/slowest 30.0/20.0 | accuracy 96.2%",
       "Errors 4 | Backspace 3",
     ]);
   });
@@ -1449,7 +1467,7 @@ describe("goalProgressLines", () => {
       { phase: "on_track", daily_minutes: 16, current_wpm: 19, projected_date: "2026-09-05" },
       "zh",
     );
-    expect(lines[0]).toBe("目标:代码 19→50 · 预计 9/5 · 理想每日 ~16 分");
+    expect(lines[0]).toBe("目标:代码 19→50 · 预计 9/5 · 理想每日 ~16 分钟");
   });
 
   test("cold_start tells the user to keep practicing for a precise plan", () => {
@@ -1458,7 +1476,7 @@ describe("goalProgressLines", () => {
       { phase: "cold_start", daily_minutes: 20, current_wpm: 19 },
       "zh",
     );
-    expect(lines[0]).toBe("目标:代码 19→50 · 数据积累中，先练满 7 天给精准计划 · 暂按 ~20 分");
+    expect(lines[0]).toBe("目标:代码 19→50 · 数据积累中，先练满 7 天给精准计划 · 建议每日约 20 分钟");
   });
 
   test("unreachable shows projected wpm and offers ways out", () => {

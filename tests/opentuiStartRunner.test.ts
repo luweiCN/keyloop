@@ -811,6 +811,60 @@ describe("OpenTUI start runner", () => {
     expect(result.state?.route.screen).toBe("submenu");
   });
 
+  test("daily summary escape returns to the app without destroying the renderer", async () => {
+    const kit = fakeKit({ keyInput: true });
+    let nowMs = 4_000;
+    const returnState = {
+      language: "en" as const,
+      route: { screen: "main_menu" as const, selected_index: 0 },
+    };
+    const runner = createOpenTuiStartRunner({
+      kit,
+      nowMs: () => nowMs,
+    });
+    const plan = testSingleLessonPlan("a");
+
+    const runPromise = runner({
+      ...contextWithPlan(plan),
+      returnState,
+    });
+    expect(
+      await Promise.race([
+        kit.waitForKeyListener().then(() => true),
+        runPromise.then(() => false),
+        delay(50).then(() => false),
+      ]),
+    ).toBe(true);
+
+    nowMs = 4_100;
+    kit.emitKey({ name: "a", sequence: "a" });
+    expect(
+      await Promise.race([
+        kit.waitForKeyListener(2).then(() => true),
+        runPromise.then(() => false),
+        delay(50).then(() => false),
+      ]),
+    ).toBe(true);
+    await dismissCompletionResult(kit);
+    kit.emitKey({ name: "enter", sequence: "\r" });
+    expect(
+      await Promise.race([
+        kit.waitForKeyListener(3).then(() => true),
+        runPromise.then(() => false),
+        delay(50).then(() => false),
+      ]),
+    ).toBe(true);
+
+    kit.emitKey({ name: "escape", sequence: "\x1b" });
+    const result = await runPromise;
+
+    expect(result.state?.route.screen).toBe("main_menu");
+    expect(result.renderer).toBeDefined();
+    expect(kit.destroyed).toBe(0);
+    expect(flattenContent(kit.addedNodes)).toContain("Practice menu");
+    expect(flattenContent(kit.addedNodes)).not.toContain("Daily summary");
+  });
+
   test("completion popup can be dismissed before enter continues", async () => {
     const kit = fakeKit({ keyInput: true });
     let nowMs = 4_000;

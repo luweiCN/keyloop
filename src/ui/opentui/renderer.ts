@@ -14,7 +14,8 @@ import {
   renderLibraryPreviewScreen,
 } from "./screens/library";
 import { renderMenuScreen } from "./screens/menu";
-import { renderSettingsMenuScreen } from "./screens/settings";
+import { renderSettingsMenuScreen, renderYoudaoTtsSettingsScreen } from "./screens/settings";
+import { renderStagePlanScreen } from "./screens/stagePlan";
 import { renderCodeFilterPickerScreen } from "./screens/codeFilterPicker";
 import { renderStatsScreen } from "./screens/stats";
 import { renderAnsiPaletteScreen } from "./screens/ansiPalette";
@@ -144,6 +145,8 @@ async function renderRoute(state: OpenTuiAppState, kit: OpenTuiRendererKit): Pro
           ? renderSettingsMenuScreen(state, kit)
           : state.route.view === "code_filters"
             ? renderCodeFilterPickerScreen(state, kit)
+          : state.route.view === "youdao_tts"
+            ? renderYoudaoTtsSettingsScreen(state, kit)
           : renderPanel("keyloop-route-panel", openTuiRouteTitle(state), openTuiRouteLines(state), kit, {
           emphasizedLines: openTuiRouteEmphasis(state),
         }),
@@ -152,6 +155,7 @@ async function renderRoute(state: OpenTuiAppState, kit: OpenTuiRendererKit): Pro
     case "stats":
       return renderAppFrame(state, renderStatsScreen(state, kit), kit);
     case "stage_plan":
+      return renderAppFrame(state, renderStagePlanScreen(state, kit), kit);
     case "summary":
     case "goal_onboarding":
       return renderAppFrame(

@@ -3,6 +3,7 @@ import { describe, expect, test } from "bun:test";
 import {
   createOpenTuiInitialState,
   openTuiMenuItems,
+  openTuiFlatSettingsItems,
   defaultKeyAggregate,
   defaultSessionRecord,
   openTuiRouteLines,
@@ -193,6 +194,53 @@ describe("OpenTUI app session", () => {
     expect(openTuiRouteLines(length.state)).toContain("> Code length  Short");
   });
 
+  test("settings entry preserves session-scoped settings", () => {
+    const context = appContext();
+    const initial = createOpenTuiInitialState("en", {
+      enabledModules: ["foundation_input"],
+      dictionaryTier: "mini",
+      mainGoal: {
+        form: "code",
+        target_wpm: 50,
+        deadline: "2026-09-14",
+        created_at: "2026-06-05T00:00:00.000Z",
+      },
+    });
+    const settings = reduceOpenTuiAppKey(initial, key("7", "7"), context);
+
+    expect(openTuiRouteLines(settings.state)).toContain(
+      "  Dictionary status  Mini (full downloading in background)",
+    );
+    expect(openTuiRouteLines(settings.state)).toContain(
+      "  Comprehensive: code practice  Off",
+    );
+    expect(openTuiRouteLines(settings.state)).toContain(
+      "  Goal-driven training  On",
+    );
+  });
+
+  test("goal-driven training stays enabled after returning to settings", () => {
+    const context = appContext();
+    const settings = reduceOpenTuiAppKey(
+      createOpenTuiInitialState("en"),
+      key("7", "7"),
+      context,
+    );
+    const goalIndex = openTuiFlatSettingsItems(settings.state).findIndex(
+      (item) => item.kind === "goal_enabled",
+    );
+    expect(goalIndex).toBeGreaterThanOrEqual(0);
+
+    const goalRow = pressSettingsDown(settings.state, context, goalIndex);
+    const enabled = reduceOpenTuiAppKey(goalRow, key("right", ""), context);
+    const mainMenu = reduceOpenTuiAppKey(enabled.state, key("escape", "\x1b"), context);
+    const reopened = reduceOpenTuiAppKey(mainMenu.state, key("7", "7"), context);
+
+    expect(openTuiRouteLines(reopened.state)).toContain(
+      "  Goal-driven training  On",
+    );
+  });
+
   test("settings page saves youdao paid voice credentials through persist action", () => {
     const context = appContext();
     const settings = reduceOpenTuiAppKey(
@@ -208,6 +256,12 @@ describe("OpenTUI app session", () => {
       throw new Error("expected settings route");
     }
     expect(youdaoPage.state.route.view).toBe("youdao_tts");
+    expect(openTuiRouteLines(youdaoPage.state)).toContain(
+      "> Youdao App Key  ",
+    );
+    expect(openTuiRouteLines(youdaoPage.state)).toContain(
+      "  Save to macOS Keychain",
+    );
 
     let state = youdaoPage.state;
     for (const char of "app-key") {
@@ -227,7 +281,24 @@ describe("OpenTUI app session", () => {
         appSecret: "app-secret",
       },
     });
-    expect(openTuiRouteLines(saved.state)).toContain("> Save to Keychain");
+    expect(openTuiRouteLines(saved.state)).toContain("> Save to macOS Keychain");
+  });
+
+  test("youdao credential fields accept q instead of treating it as quit", () => {
+    const context = appContext();
+    const settings = reduceOpenTuiAppKey(
+      createOpenTuiInitialState("en"),
+      key("7", "7"),
+      context,
+    );
+    const youdaoRow = pressSettingsDown(settings.state, context, 10);
+    let state = reduceOpenTuiAppKey(youdaoRow, key("return", "\r"), context).state;
+
+    const typed = reduceOpenTuiAppKey(state, key("q", "q"), context);
+    state = typed.state;
+
+    expect(typed.action).toBe("continue");
+    expect(openTuiRouteLines(state)).toContain("> Youdao App Key  q");
   });
 
   test("running route remembers the menu it started from", () => {

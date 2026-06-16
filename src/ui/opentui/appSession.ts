@@ -145,7 +145,8 @@ export function reduceOpenTuiAppKey(
   if (
     isQuitEvent(event) &&
     !isFocusedCodeFilterSearchInput(state) &&
-    !isLibraryTextInputScreen(state)
+    !isLibraryTextInputScreen(state) &&
+    !isYoudaoCredentialInputScreen(state)
   ) {
     return { state, action: "quit" };
   }
@@ -639,6 +640,14 @@ function isLibraryTextInputScreen(state: OpenTuiAppState): boolean {
     state.route.screen === "library_browse" ||
     (state.route.screen === "library_detail" && state.route.editing !== undefined)
   );
+}
+
+function isYoudaoCredentialInputScreen(state: OpenTuiAppState): boolean {
+  if (state.route.screen !== "settings" || state.route.view !== "youdao_tts") {
+    return false;
+  }
+  const selected = Math.min(Math.max(state.route.selected_index ?? 0, 0), 3);
+  return selected <= 1;
 }
 
 /**

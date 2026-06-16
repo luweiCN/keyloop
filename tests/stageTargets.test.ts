@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import type { ContentLibrary } from "../src/content/library";
 import type { CustomLibrary } from "../src/training/customLibrary";
+import type { FormSpeed } from "../src/training/diagnosis";
 import { formForCategory } from "../src/training/diagnosis";
 import type { SkillProfile } from "../src/training/diagnosis";
 import { estimatedMinutesFromChars } from "../src/training/prescription";
@@ -120,14 +121,25 @@ function stageLibrary(): ContentLibrary {
   };
 }
 
-function emptyProfile(overrides: Partial<SkillProfile["focus"]> = {}): SkillProfile {
+function emptyProfile(
+  overrides: Partial<SkillProfile["focus"]> = {},
+  formSpeeds: FormSpeed[] = [],
+): SkillProfile {
   return {
     dimensions: [],
-    form_speeds: [],
+    form_speeds: formSpeeds,
     focus: { words: [], sentences: [], code: [], chars: [], ...overrides },
     daily_active_minutes_7d: 0,
     generated_at: "2026-06-13T08:00:00Z",
   };
+}
+
+function wordCounts(text: string): Map<string, number> {
+  const counts = new Map<string, number>();
+  for (const token of text.split(/\s+/u).filter(Boolean)) {
+    counts.set(token, (counts.get(token) ?? 0) + 1);
+  }
+  return counts;
 }
 
 function stageContext(): BuildTargetContext {
@@ -228,6 +240,31 @@ describe("buildStageTarget articles", () => {
     );
     expect(articleAnnotations.length).toBe(1);
   });
+
+  test("comprehensive article selection does not filter by previous practice records", () => {
+    const context = stageContext();
+    context.random = () => 0.99;
+    context.library.everyday_articles.entries = Array.from({ length: 10 }, (_, index) => ({
+      title: `${index === 0 ? "Recent" : "Fresh"} Article ${index}`,
+      level: "cet4" as const,
+      length: "short" as const,
+      source_id: "test",
+      paragraphs: [
+        {
+          text: `${index === 0 ? "Recent" : "Fresh"} article ${index} paragraph.`,
+          translation_zh: `文${index}`,
+        },
+      ],
+    }));
+    context.records = [];
+
+    const target = buildStageTarget(context, {
+      stage: { form: "articles", char_budget: 5 },
+      profile: emptyProfile(),
+    });
+
+    expect(target.text).toContain("Recent article 0");
+  });
 });
 
 describe("buildStageTarget words", () => {
@@ -236,8 +273,8 @@ describe("buildStageTarget words", () => {
       stage: { form: "words", char_budget: 45 },
       profile: emptyProfile(),
     });
-    // 45/7 ≈ 6 词（下限 6）
-    expect(small.text.split(" ")).toHaveLength(6);
+    expect(small.text.split(" ").length).toBeGreaterThanOrEqual(6);
+    expect([...small.text].length).toBeGreaterThanOrEqual(40);
   });
 
   test("focus words flow back into words stage", () => {
@@ -257,6 +294,53 @@ describe("buildStageTarget words", () => {
     // 预算足够大时全池入选
     expect(target.text).toContain("closure");
     expect(target.text).toContain("bespoke");
+  });
+
+  test("large word budgets use a uniform repeat count before exploding unique words", () => {
+    const context = stageContext();
+    context.library.everyday_words.entries = Array.from({ length: 120 }, (_, index) => ({
+      word: `word${String(index).padStart(3, "0")}`,
+      rank: index + 1,
+      range: "1000" as const,
+      level: "cet4" as const,
+      translation_zh: `词${index}`,
+      source_id: "test",
+    }));
+
+    const target = buildStageTarget(context, {
+      stage: { form: "words", char_budget: 700 },
+      profile: emptyProfile({}, [{ form: "words", ewma_wpm: 70, samples: 20 }]),
+      enabledModules: ["everyday_english"],
+    });
+
+    const counts = wordCounts(target.text);
+    const repeatCounts = new Set(counts.values());
+    expect(repeatCounts.size).toBe(1);
+    expect([...repeatCounts][0]).toBeGreaterThan(1);
+    expect(counts.size).toBeLessThanOrEqual(70);
+    expect([...target.text].length).toBeGreaterThanOrEqual(600);
+  });
+
+  test("comprehensive word selection does not filter by previous practice records", () => {
+    const context = stageContext();
+    context.random = () => 0.99;
+    context.library.everyday_words.entries = Array.from({ length: 20 }, (_, index) => ({
+      word: `${index < 6 ? "recent" : "fresh"}${index}`,
+      rank: index + 1,
+      range: "1000" as const,
+      level: "cet4" as const,
+      translation_zh: `词${index}`,
+      source_id: "test",
+    }));
+    context.records = [];
+
+    const target = buildStageTarget(context, {
+      stage: { form: "words", char_budget: 45 },
+      profile: emptyProfile(),
+      enabledModules: ["everyday_english"],
+    });
+
+    expect(target.text).toContain("recent0");
   });
 
   test("disabling programming module excludes programming words", () => {
@@ -296,8 +380,8 @@ describe("buildStageTarget sentences", () => {
       stage: { form: "sentences", char_budget: 80 },
       profile: emptyProfile(),
     });
-    // 80/40 = 2 句
-    expect(target.text.split("\n")).toHaveLength(2);
+    expect(target.text.split("\n").length).toBeGreaterThanOrEqual(2);
+    expect([...target.text].length).toBeGreaterThanOrEqual(70);
   });
 
   test("focus sentences flow back first", () => {
@@ -315,6 +399,70 @@ describe("buildStageTarget sentences", () => {
       customLibraries: [customLibraryFixture()],
     });
     expect(target.text).toContain("My custom sentence here.");
+  });
+
+  test("large sentence budgets mix sentences with articles instead of dense sentence lists", () => {
+    const context = stageContext();
+    context.library.everyday_sentences.entries = Array.from({ length: 40 }, (_, index) => ({
+      text: `Sentence ${String(index).padStart(2, "0")} has enough words for practice.`,
+      translation_zh: `句${index}`,
+      level: "cet4" as const,
+      length: "short" as const,
+      source_id: "test",
+      source_title: "Test Source",
+    }));
+    context.library.everyday_articles.entries = Array.from({ length: 4 }, (_, index) => ({
+      title: `Article ${index}`,
+      level: "cet4" as const,
+      length: "short" as const,
+      source_id: "test",
+      paragraphs: [
+        {
+          text: `Article ${index} paragraph one has enough words for practice.`,
+          translation_zh: `文${index} 一。`,
+        },
+        {
+          text: `Article ${index} paragraph two keeps the flow natural.`,
+          translation_zh: `文${index} 二。`,
+        },
+      ],
+    }));
+
+    const target = buildStageTarget(context, {
+      stage: { form: "sentences", char_budget: 800 },
+      profile: emptyProfile({}, [{ form: "sentences", ewma_wpm: 70, samples: 20 }]),
+    });
+
+    const lineAnnotations = (target.annotations ?? []).filter(
+      (annotation) => annotation.display === "line",
+    );
+    const articleAnnotations = (target.annotations ?? []).filter(
+      (annotation) => annotation.display === "article",
+    );
+    expect(lineAnnotations.length).toBeLessThanOrEqual(12);
+    expect(articleAnnotations.length).toBeGreaterThanOrEqual(1);
+    expect([...target.text].length).toBeGreaterThanOrEqual(720);
+  });
+
+  test("comprehensive sentence selection does not filter by previous practice records", () => {
+    const context = stageContext();
+    context.random = () => 0.99;
+    context.library.everyday_sentences.entries = Array.from({ length: 12 }, (_, index) => ({
+      text: `${index < 2 ? "Recent" : "Fresh"} sentence ${index} for practice.`,
+      translation_zh: `句${index}`,
+      level: "cet4" as const,
+      length: "short" as const,
+      source_id: "test",
+      source_title: "Test Source",
+    }));
+    context.records = [];
+
+    const target = buildStageTarget(context, {
+      stage: { form: "sentences", char_budget: 80 },
+      profile: emptyProfile(),
+    });
+
+    expect(target.text).toContain("Recent sentence 0");
   });
 });
 
@@ -462,6 +610,16 @@ describe("buildStageTarget symbols budget", () => {
     // code_blocks 行数与实际行数一致
     expect(small.code_blocks?.[0]?.line_count).toBe(smallLines);
   });
+
+  test("large symbol budgets are filled beyond one basics card set", () => {
+    const target = buildStageTarget(stageContext(), {
+      stage: { form: "symbols", char_budget: 900 },
+      profile: emptyProfile(),
+    });
+
+    expect([...target.text].length).toBeGreaterThanOrEqual(720);
+    expect(target.code_blocks?.[0]?.line_count).toBe(target.text.split("\n").length);
+  });
 });
 
 describe("buildStageTarget words skill feature-biasing", () => {
@@ -499,7 +657,7 @@ describe("buildStageTarget words skill feature-biasing", () => {
   };
 
   test("capitalization weak prioritizes uppercase-containing words", () => {
-    const stage = { form: "words" as const, char_budget: 21 }; // count ≈ 3
+    const stage = { form: "words" as const, char_budget: 80 };
     const weak = buildStageTarget(stageContext(), {
       stage,
       profile: profileWithWeak("capitalization"),

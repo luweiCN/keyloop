@@ -191,6 +191,9 @@ describe("OpenTUI renderer adapter", () => {
     expect(findNodeById(kit.addedNodes, "keyloop-menu-item-settings-language")).toBeUndefined();
     expect(content).toContain("Interface language");
     expect(content).toContain("Code settings");
+    expect(content).toContain("Words & audio");
+    expect(content).toContain("Comprehensive training");
+    expect(content).toContain("Goal training");
     expect(content).toContain("Code language/framework");
     expect(content).toContain("Code difficulty");
     expect(content).toContain("Code length");
@@ -200,6 +203,58 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).not.toContain("Word breakdown in full practice");
     expect(findNodeById(kit.addedNodes, "keyloop-route-panel")).toBeUndefined();
     expect(content).not.toContain("Scope framework: react");
+  });
+
+  test("localizes settings section labels in Chinese", async () => {
+    const kit = fakeKit();
+    const state = activateOpenTuiMenuItem(
+      createOpenTuiInitialState("zh"),
+      "settings",
+      appContext(),
+    );
+
+    await renderOpenTuiAppOnce(state, kit);
+
+    const content = flattenContent(kit.addedNodes);
+    expect(content).toContain("全局设置");
+    expect(content).toContain("代码设置");
+    expect(content).toContain("单词与发音");
+    expect(content).toContain("综合训练");
+    expect(content).toContain("目标训练");
+    expect(content).not.toContain("Code settings");
+    expect(content).not.toContain("Words & audio");
+  });
+
+  test("renders Youdao credentials as fields and keychain actions as buttons", async () => {
+    const kit = fakeKit();
+    const base = createOpenTuiSettingsState("zh", "youdao_tts");
+    const state: OpenTuiAppState = {
+      ...base,
+      route: {
+        screen: "settings",
+        view: "youdao_tts",
+        selected_index: 1,
+        youdao_app_key_input: "app-key",
+        youdao_app_secret_input: "app-secret",
+      },
+    };
+
+    await renderOpenTuiAppOnce(state, kit);
+
+    const content = flattenContent(kit.addedNodes);
+    expect(findNodeById(kit.addedNodes, "keyloop-youdao-field-app-key-input")?.props.border).toBe(true);
+    expect(findNodeById(kit.addedNodes, "keyloop-youdao-field-app-secret-input")?.props.border).toBe(true);
+    expect(findNodeById(kit.addedNodes, "keyloop-youdao-action-save-button")?.props.content).toBe(
+      "[ 保存到 macOS 钥匙串 ]",
+    );
+    expect(findNodeById(kit.addedNodes, "keyloop-youdao-action-clear-button")?.props.content).toBe(
+      "[ 清除 macOS 钥匙串配置 ]",
+    );
+    expect(findNodeById(kit.addedNodes, "keyloop-youdao-field-app-secret-value")?.props.content).toBe(
+      "••••••••••",
+    );
+    expect(content).toContain("有道发音");
+    expect(content).not.toContain("> 有道智云 App Secret");
   });
 
   test("renders code scope as an independent picker panel", async () => {
@@ -2182,6 +2237,8 @@ describe("OpenTUI renderer adapter", () => {
         duration_ms: 60_000,
         correct_chars: 150,
         typed_len: 160,
+        wpm: 30,
+        raw_wpm: 32,
         accuracy: 93.75,
         error_count: 4,
         backspace_count: 2,
@@ -2191,6 +2248,8 @@ describe("OpenTUI renderer adapter", () => {
         duration_ms: 60_000,
         correct_chars: 100,
         typed_len: 100,
+        wpm: 20,
+        raw_wpm: 22,
         accuracy: 100,
         backspace_count: 1,
       }),
@@ -2200,8 +2259,11 @@ describe("OpenTUI renderer adapter", () => {
 
     const content = flattenContent(kit.addedNodes);
     expect(content).toContain("Daily summary");
-    expect(content).toContain("2 sessions | active 2m | WPM 25.0 | accuracy 96.2%");
+    expect(content).toContain(
+      "2 sessions | active 2m | WPM 25.0 | Raw WPM 27.0 | Best/slowest 30.0/20.0 | accuracy 96.2%",
+    );
     expect(content).toContain("Errors 4 | Backspace 3");
+    expectDefaultForeground(findNodeById(kit.addedNodes, "keyloop-route-panel-line-1")?.props.fg);
   });
 
   test("goal onboarding welcome renders directions and actions", async () => {
@@ -2383,6 +2445,38 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("Stats");
     expect(content).toContain("Date 2026-06-05  (1/1)  Left/Right switches date");
     expect(content).toContain("Day 1 sessions");
+  });
+
+  test("renders stage plan as structured sections without the temporary-minute copy", async () => {
+    const kit = fakeKit();
+    const state = activateOpenTuiMenuItem(
+      {
+        ...createOpenTuiInitialState("zh"),
+        mainGoal: {
+          form: "code" as const,
+          target_wpm: 55,
+          deadline: "2026-09-14",
+          created_at: "2026-06-15T00:00:00.000Z",
+        },
+      },
+      "comprehensive",
+      appContext(),
+    );
+    if (state.route.screen !== "stage_plan") {
+      throw new Error("expected stage_plan route");
+    }
+
+    await renderOpenTuiAppOnce(state, kit);
+
+    const content = flattenContent(kit.addedNodes);
+    expect(findNodeById(kit.addedNodes, "keyloop-stage-plan")?.props.border).toBe(true);
+    expect(findNodeById(kit.addedNodes, "keyloop-stage-plan-goal-section")?.type).toBe("Box");
+    expect(findNodeById(kit.addedNodes, "keyloop-stage-plan-diagnosis-section")?.type).toBe("Box");
+    expect(findNodeById(kit.addedNodes, "keyloop-stage-plan-lessons-section")?.type).toBe("Box");
+    expect(findNodeById(kit.addedNodes, "keyloop-stage-plan-duration-section")?.type).toBe("Box");
+    expect(content).toContain("建议每日约");
+    expect(content).not.toContain("暂按");
+    expect(content).not.toContain("[Enter] 开始");
   });
 });
 

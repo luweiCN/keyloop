@@ -441,7 +441,7 @@ export function plannedDurationValue(
   minutes: number,
   language: OpenTuiAppState["language"],
 ): string {
-  return language === "zh" ? `${minutes} 分` : `${minutes} min`;
+  return language === "zh" ? `${minutes} 分钟` : `${minutes} min`;
 }
 
 export function codeStatusSegments(

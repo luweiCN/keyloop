@@ -1267,6 +1267,12 @@ export function stateOptions(state: OpenTuiAppState): OpenTuiStateOptions {
   if (state.mainGoal !== undefined) {
     options.mainGoal = state.mainGoal;
   }
+  if (state.goalPromptOptedOut !== undefined) {
+    options.goalPromptOptedOut = state.goalPromptOptedOut;
+  }
+  if (state.goalPromptLastShown !== undefined) {
+    options.goalPromptLastShown = state.goalPromptLastShown;
+  }
   if (state.dictionaryTier !== undefined) {
     options.dictionaryTier = state.dictionaryTier;
   }

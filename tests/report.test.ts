@@ -71,7 +71,7 @@ describe("CLI report parity", () => {
     expect(report).toContain("WPM: 0.8");
     expect(report).toContain("原始 WPM: 0.8");
     expect(report).toContain("正确率: 62.5%");
-    expect(report).toContain("计时: active 1 分 0 秒 | idle 1 分 0 秒 | pause 10 秒");
+    expect(report).toContain("计时: active 1 分钟 0 秒 | idle 1 分钟 0 秒 | pause 10 秒");
   });
 
   test("today report uses the configured speed unit", () => {
@@ -109,7 +109,7 @@ describe("CLI report parity", () => {
     });
 
     expect(report).toContain("综合练习: 1 次 / active 30 秒");
-    expect(report).toContain("专项练习: 1 次 / active 1 分 0 秒");
+    expect(report).toContain("专项练习: 1 次 / active 1 分钟 0 秒");
   });
 
   test("today report uses legacy error tokens and filters generated identifiers", () => {

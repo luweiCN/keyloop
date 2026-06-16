@@ -81,6 +81,34 @@ export interface OpenTuiSettingsState {
   route: OpenTuiSettingsRoute;
 }
 
+function sharedSettingsSessionOptions(
+  appState: OpenTuiAppState,
+  context: OpenTuiAppSessionContext,
+): OpenTuiStateOptions {
+  const options: OpenTuiStateOptions = {
+    speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
+    customLibraries: appState.customLibraries ?? context.customLibraries ?? [],
+    dictionaryTier: appState.dictionaryTier ?? context.dictionary?.tier ?? "none",
+    youdaoTtsCredentialStatus:
+      appState.youdaoTtsCredentialStatus ?? youdaoTtsCredentialStatusFromContext(context),
+  };
+  if (appState.enabledModules !== undefined) {
+    options.enabledModules = appState.enabledModules;
+  } else if (context.enabledModules !== undefined) {
+    options.enabledModules = context.enabledModules;
+  }
+  if (appState.mainGoal !== undefined) {
+    options.mainGoal = appState.mainGoal;
+  }
+  if (appState.goalPromptOptedOut !== undefined) {
+    options.goalPromptOptedOut = appState.goalPromptOptedOut;
+  }
+  if (appState.goalPromptLastShown !== undefined) {
+    options.goalPromptLastShown = appState.goalPromptLastShown;
+  }
+  return options;
+}
+
 export function settingsViewState(
   language: Language,
   view: Exclude<OpenTuiSettingsView, "menu">,
@@ -90,6 +118,7 @@ export function settingsViewState(
   switch (view) {
     case "language":
       return createOpenTuiSettingsState(language, "language", {
+        ...sharedSettingsSessionOptions(appState, context),
         codeFilters: appState.codeFilters,
         codeSettings: appState.codeSettings,
         codeStyleSettings: appState.codeStyleSettings,
@@ -97,10 +126,10 @@ export function settingsViewState(
         wordFormSettings: appState.wordFormSettings,
         wordAudioSettings: appState.wordAudioSettings,
         customLibrarySettings: appState.customLibrarySettings,
-        speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
       });
     case "code_filters":
       return createOpenTuiSettingsState(language, "code_filters", {
+        ...sharedSettingsSessionOptions(appState, context),
         codeFilters: appState.codeFilters ?? codeFilterStateFromContext(context),
         codeSettings: appState.codeSettings,
         codeStyleSettings: appState.codeStyleSettings,
@@ -108,28 +137,32 @@ export function settingsViewState(
         wordFormSettings: appState.wordFormSettings,
         wordAudioSettings: appState.wordAudioSettings,
         customLibrarySettings: appState.customLibrarySettings,
-        speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
       });
     case "everyday":
       return createOpenTuiSettingsState(language, "everyday", {
+        ...sharedSettingsSessionOptions(appState, context),
         codeFilters: appState.codeFilters,
         codeSettings: appState.codeSettings,
         codeStyleSettings: appState.codeStyleSettings,
         everydaySettings: appState.everydaySettings ?? everydaySettingsFromContext(context),
         wordFormSettings: appState.wordFormSettings,
-        speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
+        wordAudioSettings: appState.wordAudioSettings,
+        customLibrarySettings: appState.customLibrarySettings,
       });
     case "word_forms":
       return createOpenTuiSettingsState(language, "word_forms", {
+        ...sharedSettingsSessionOptions(appState, context),
         codeFilters: appState.codeFilters,
         codeSettings: appState.codeSettings,
         codeStyleSettings: appState.codeStyleSettings,
         everydaySettings: appState.everydaySettings,
         wordFormSettings: appState.wordFormSettings ?? wordFormSettingsFromContext(context),
-        speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
+        wordAudioSettings: appState.wordAudioSettings,
+        customLibrarySettings: appState.customLibrarySettings,
       });
     case "code_difficulty":
       return createOpenTuiSettingsState(language, "code_difficulty", {
+        ...sharedSettingsSessionOptions(appState, context),
         codeFilters: appState.codeFilters,
         codeSettings: appState.codeSettings ?? codeSettingsFromContext(context),
         codeStyleSettings: appState.codeStyleSettings,
@@ -137,10 +170,10 @@ export function settingsViewState(
         wordFormSettings: appState.wordFormSettings,
         wordAudioSettings: appState.wordAudioSettings,
         customLibrarySettings: appState.customLibrarySettings,
-        speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
       });
     case "code_style":
       return createOpenTuiSettingsState(language, "code_style", {
+        ...sharedSettingsSessionOptions(appState, context),
         codeFilters: appState.codeFilters,
         codeSettings: appState.codeSettings,
         codeStyleSettings: appState.codeStyleSettings ?? codeStyleSettingsFromContext(context),
@@ -148,11 +181,11 @@ export function settingsViewState(
         wordFormSettings: appState.wordFormSettings,
         wordAudioSettings: appState.wordAudioSettings,
         customLibrarySettings: appState.customLibrarySettings,
-        speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
       });
     case "youdao_tts":
       return {
         ...createOpenTuiSettingsState(language, "youdao_tts", {
+          ...sharedSettingsSessionOptions(appState, context),
           codeFilters: appState.codeFilters,
           codeSettings: appState.codeSettings,
           codeStyleSettings: appState.codeStyleSettings,
@@ -160,9 +193,6 @@ export function settingsViewState(
           wordFormSettings: appState.wordFormSettings,
           wordAudioSettings: appState.wordAudioSettings,
           customLibrarySettings: appState.customLibrarySettings,
-          speedUnit: appState.speed_unit ?? speedUnitFromContext(context),
-          youdaoTtsCredentialStatus:
-            appState.youdaoTtsCredentialStatus ?? youdaoTtsCredentialStatusFromContext(context),
         }),
         route: {
           screen: "settings",
@@ -181,6 +211,7 @@ export function settingsRootState(
   selectedIndex = 0,
 ): OpenTuiAppState {
   const nextState = createOpenTuiSettingsState(state.language, "menu", {
+    ...sharedSettingsSessionOptions(state, context),
     codeFilters: state.codeFilters ?? codeFilterStateFromContext(context),
     codeSettings: state.codeSettings ?? codeSettingsFromContext(context),
     codeStyleSettings: state.codeStyleSettings ?? codeStyleSettingsFromContext(context),
@@ -188,9 +219,6 @@ export function settingsRootState(
     wordFormSettings: state.wordFormSettings ?? wordFormSettingsFromContext(context),
     wordAudioSettings: state.wordAudioSettings ?? wordAudioSettingsFromContext(context),
     customLibrarySettings: state.customLibrarySettings ?? customLibrarySettingsFromContext(context),
-    speedUnit: state.speed_unit ?? speedUnitFromContext(context),
-    youdaoTtsCredentialStatus:
-      state.youdaoTtsCredentialStatus ?? youdaoTtsCredentialStatusFromContext(context),
     todayElapsedMs: state.today_elapsed_ms,
   });
   return {
@@ -747,7 +775,9 @@ export function reduceYoudaoTtsSettingsKey(
           state: youdaoTtsSettingsState(
             state,
             selected,
-            state.language === "zh" ? "请填写 App Key 和 App Secret" : "Enter both App Key and App Secret",
+            state.language === "zh"
+              ? "请填写有道智云 App Key 和 App Secret"
+              : "Enter both Youdao App Key and App Secret",
           ),
           action: "continue",
         };
@@ -757,7 +787,7 @@ export function reduceYoudaoTtsSettingsKey(
           ...youdaoTtsSettingsState(
             state,
             selected,
-            state.language === "zh" ? "已保存到钥匙串" : "Saved to Keychain",
+            state.language === "zh" ? "已保存到 macOS 钥匙串" : "Saved to macOS Keychain",
           ),
           youdaoTtsCredentialStatus: "keychain",
         },
@@ -774,7 +804,9 @@ export function reduceYoudaoTtsSettingsKey(
           ...youdaoTtsSettingsState(
             state,
             selected,
-            state.language === "zh" ? "已清除钥匙串配置" : "Cleared Keychain credentials",
+            state.language === "zh"
+              ? "已清除 macOS 钥匙串配置"
+              : "Cleared macOS Keychain credentials",
           ),
           youdaoTtsCredentialStatus: "none",
         },
