@@ -45,7 +45,7 @@ function profileWith(
   return {
     dimensions: statuses.map(([id, status]) => diagnosis(id, status)),
     form_speeds: [],
-    focus: { words: [], sentences: [], code: [], chars: [] },
+    focus: { words: [], code: [], chars: [] },
     daily_active_minutes_7d: habitMinutes,
     generated_at: "2026-06-13T08:00:00Z",
   };
@@ -355,7 +355,6 @@ describe("end-to-end: spec acceptance scenarios", () => {
     });
     const profile = buildSkillProfile([record], emptyPlan, now);
     expect(profile.focus.words).toContain("algorithm");
-    expect(profile.focus.sentences).not.toContain("algorithm");
     expect(profile.focus.code).not.toContain("algorithm");
   });
 });

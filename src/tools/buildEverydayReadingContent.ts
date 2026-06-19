@@ -83,7 +83,7 @@ async function main(): Promise<void> {
   const seed = await loadReadingSeed(seedPath);
   const vocabulary = await loadReadingVocabulary(everydayWordsPath);
   const sentencesCorpus = buildEverydaySentencesCorpus(seed, vocabulary);
-  const articlesCorpus = buildEverydayArticlesCorpus(seed);
+  const articlesCorpus = buildEverydayArticlesCorpus(seed, vocabulary);
 
   await mkdir(dirname(sentencesOutput), { recursive: true });
   await mkdir(dirname(articlesOutput), { recursive: true });
@@ -123,9 +123,13 @@ export function buildEverydaySentencesCorpus(
   };
 }
 
-export function buildEverydayArticlesCorpus(seed: ReadingSeed): EverydayArticlesCorpus {
+export function buildEverydayArticlesCorpus(
+  seed: ReadingSeed,
+  vocabulary: ReadingVocabularyProfile,
+): EverydayArticlesCorpus {
   validateSources(seed.sources);
-  const entries = limitEntriesByCell(seed.articles, articleTargetPerCell).map((article) => ({
+  const cleaned = dedupeAndRelevelArticles(seed.articles, vocabulary);
+  const entries = limitEntriesByCell(cleaned, articleTargetPerCell).map((article) => ({
     title: article.title,
     level: article.level,
     length: article.length,
@@ -142,6 +146,53 @@ export function buildEverydayArticlesCorpus(seed: ReadingSeed): EverydayArticles
     sources: seed.sources,
     entries,
   };
+}
+
+const readingLevelsByDifficulty: readonly EverydayLevel[] = [
+  "high_school",
+  "cet4",
+  "cet6",
+  "postgraduate",
+  "toefl_ielts",
+];
+
+/**
+ * 文章重建核心：跨档位按正文去重（同一篇只保留首次出现，现代语料在前因此优先保留），
+ * 剔除书目/习题/书单等非正文污染，并按词汇内容把每篇归到最低适配难度档位，
+ * 最后简化冗长的来源标题。解决"同一篇被复制进全部 5 个难度档位"造成的大量重复。
+ */
+function dedupeAndRelevelArticles(
+  articles: readonly ReadingArticleSeed[],
+  vocabulary: ReadingVocabularyProfile,
+): ReadingArticleSeed[] {
+  const seen = new Set<string>();
+  const result: ReadingArticleSeed[] = [];
+  for (const article of articles) {
+    const text = articleSeedText(article);
+    if (seen.has(text)) {
+      continue;
+    }
+    seen.add(text);
+    if (readingArticleTextQualityIssues(text).length > 0) {
+      continue;
+    }
+    const level =
+      readingLevelsByDifficulty.find((candidate) =>
+        passesReadingVocabularyLevel(text, candidate, vocabulary),
+      ) ?? article.level;
+    result.push({ ...article, level, title: simplifyReadingTitle(article.title) });
+  }
+  return result;
+}
+
+function articleSeedText(article: ReadingArticleSeed): string {
+  return article.paragraphs
+    .map((paragraph) => paragraph.sentences.map((sentence) => sentence.text.trim()).join(" "))
+    .join(" ");
+}
+
+function simplifyReadingTitle(title: string): string {
+  return title.replace(/^Project Gutenberg:\s*/u, "").trim();
 }
 
 function deriveSentences(

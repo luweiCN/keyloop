@@ -1727,10 +1727,12 @@ function codeMixTarget(
     difficulty,
     codePickerOptions(context.random),
   );
-  const formatted = formatCodeSnippetsForContext(
-    [...localSnippets, ...builtinSnippets],
-    context,
-  );
+  const chosen = [...localSnippets, ...builtinSnippets];
+  const filled =
+    charBudget === undefined
+      ? chosen
+      : refillCodeSnippetsToBudget(chosen, context, codeConfig, difficulty, charBudget);
+  const formatted = formatCodeSnippetsForContext(filled, context);
   const snippets =
     charBudget === undefined
       ? formatted
@@ -1768,6 +1770,57 @@ function selectSnippetsWithinBudget(
     }
   }
   return picked;
+}
+
+/**
+ * 预算模式下代码语料不足以填满时长时，逐级放宽筛选补足候选：
+ * 先解除"近期已练"排除（允许复用更早练过的片段），再放宽难度，最后解除语言/框架/项目筛选。
+ * 解决代码段在筛选过窄 + 历史片段被排除时只抽到一两段、远填不满预算的问题。
+ */
+function refillCodeSnippetsToBudget(
+  chosen: CodeSnippet[],
+  context: BuildTargetContext,
+  codeConfig: Partial<CodePracticeConfig>,
+  difficulty: string | undefined,
+  charBudget: number,
+): CodeSnippet[] {
+  const result = [...chosen];
+  const seen = new Set(result.map((snippet) => snippet.text));
+  const totalChars = (): number =>
+    result.reduce((sum, snippet) => sum + [...snippet.text].length, 0);
+  const levels: Array<{ difficulty: string | undefined; config: Partial<CodePracticeConfig> }> = [
+    { difficulty, config: codeConfig },
+    { difficulty: undefined, config: codeConfig },
+    { difficulty: undefined, config: {} },
+  ];
+  for (const level of levels) {
+    while (totalChars() < charBudget) {
+      const more = pickLibraryCodeSnippetsExcludingByDifficulty(
+        context.library,
+        context.plan.focus_code,
+        level.config,
+        STAGE_CODE_MAX_SNIPPETS,
+        new Set(seen),
+        level.difficulty,
+        codePickerOptions(context.random),
+      );
+      const fresh = more.filter((snippet) => !seen.has(snippet.text));
+      if (fresh.length === 0) {
+        break;
+      }
+      for (const snippet of fresh) {
+        result.push(snippet);
+        seen.add(snippet.text);
+        if (totalChars() >= charBudget) {
+          break;
+        }
+      }
+    }
+    if (totalChars() >= charBudget) {
+      break;
+    }
+  }
+  return result;
 }
 
 function formatCodeSnippetsForContext(
@@ -1926,12 +1979,12 @@ function codeDifficultyForContext(context: BuildTargetContext): string | undefin
   }
 }
 
-function usedCodeSnippetTexts(records: SessionRecord[]): Set<string> {
+export function usedCodeSnippetTexts(records: SessionRecord[]): Set<string> {
   const used = new Set<string>();
-  for (const record of records) {
-    if (record.mode !== "code") {
-      continue;
-    }
+  const recentCodeRecords = records
+    .filter((entry) => entry.mode === "code")
+    .slice(-STAGE_CODE_RECENT_RECORDS);
+  for (const record of recentCodeRecords) {
     for (const snippet of record.target_text.split("\n\n")) {
       const trimmed = snippet.trim();
       if (trimmed.length > 0) {
@@ -2748,6 +2801,8 @@ const STAGE_SENTENCE_ARTICLE_THRESHOLD = 360;
 const STAGE_SENTENCE_MAX_ARTICLES = 3;
 /** 代码阶段防御性硬上限：再大的预算也不超这么多片 */
 const STAGE_CODE_MAX_SNIPPETS = 8;
+/** 代码"近期已练"排除的滑动窗口：只排除最近这么多条代码记录，更早的允许重新出现 */
+const STAGE_CODE_RECENT_RECORDS = 30;
 /** 最后一片完整保留可略超预算，但总量不超 budget × 此容差 */
 const STAGE_CODE_BUDGET_TOLERANCE = 1.3;
 
@@ -3130,16 +3185,9 @@ function sentencesStageTarget(
     }
   }
 
-  const selected: StageSentenceCandidate[] = [];
-  for (const sentence of options.profile.focus.sentences) {
-    const hit = pool.get(sentence);
-    if (hit !== undefined && !selected.includes(hit)) {
-      selected.push(hit);
-    }
-  }
-  const fill = [...pool.values()].filter((item) => !selected.includes(item));
-  shuffleInPlace(fill, random);
-  selected.push(...fill);
+  // 综合应用层不做错题回流(见 ADR 0001)：句子从库纯随机选取，不针对用户错过的具体句子
+  const selected = [...pool.values()];
+  shuffleInPlace(selected, random);
   const articleBlocks = stageArticleBlocks(context, settings, random);
   const mix = chooseSentenceArticleMix(selected, articleBlocks, options.stage.char_budget);
   const picked = selected.slice(0, mix.sentenceCount);

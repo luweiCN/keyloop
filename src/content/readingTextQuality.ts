@@ -101,7 +101,24 @@ export function readingArticleTextQualityIssues(text: string): ReadingTextQualit
   if (sentences.length < 3) {
     issues.push("too_few_sentences");
   }
+  if (looksLikeCatalogOrExercise(trimmed)) {
+    issues.push("source_residue");
+  }
   return uniqueIssues(issues);
+}
+
+/**
+ * 识别非正文页：售卖单价广告（"$X each" 书目页）、编号习题/讨论清单（≥3 个 "N. " 编号项）、
+ * 或推荐书单（≥2 个 "书名," by 作者 条目）。锚定售卖语境而非货币符号本身，
+ * 避免误伤叙事文中的普通金额（如税收数字 $9,000,000 a year）。
+ */
+function looksLikeCatalogOrExercise(text: string): boolean {
+  if (/\$\s?[\d,.]+\s+each\b/iu.test(text)) {
+    return true;
+  }
+  const numberedItems = (text.match(/\b\d+\.\s/gu) ?? []).length;
+  const bylineEntries = (text.match(/"[^"]+,"\s+by\s+[A-Z]/gu) ?? []).length;
+  return numberedItems >= 3 || bylineEntries >= 2;
 }
 
 function baseReadingTextQualityIssues(text: string): ReadingTextQualityIssue[] {

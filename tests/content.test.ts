@@ -233,9 +233,13 @@ describe("content library", () => {
     for (const level of ["high_school", "cet4", "cet6", "postgraduate", "toefl_ielts"]) {
       expect(library.everyday_sentences.entries.some((entry) => entry.level === level)).toBe(true);
       expect(library.everyday_articles.entries.some((entry) => entry.level === level)).toBe(true);
+    }
+    // 主力难度档位需充足供给；cet6+ 等高难度档位的独特文章数受现有公版语料限制
+    // （童书/教材偏简单），按词汇内容如实分级后偏少，待重抓更难来源 + 翻译批次后补足。
+    for (const level of ["high_school", "cet4"]) {
       expect(
         library.everyday_articles.entries.filter((entry) => entry.level === level).length,
-      ).toBeGreaterThanOrEqual(6);
+      ).toBeGreaterThanOrEqual(20);
     }
   });
 
@@ -288,6 +292,33 @@ describe("content library", () => {
           "They looked back at the road and laughed at their muddy shoes.",
           "By the time they came home, the whole kitchen was bright with afternoon sun.",
         ].join(" "),
+      ),
+    ).toBe(true);
+  });
+
+  test("reading article quality rejects catalog, exercise, and booklist pages", () => {
+    // 出版商书目/价格广告页
+    expect(
+      isCompleteReadingArticleText(
+        "CALDECOTT, RANDOLPH--Toy Books. Warne, (4 vols.) $1.25 each. The separate stories are sold at $0.25 each, and comprise the following: The Farmer's Boy; The House That Jack Built; The Milk Maid; The Queen of Hearts.",
+      ),
+    ).toBe(false);
+    // 习题/讨论页
+    expect(
+      isCompleteReadingArticleText(
+        "Discussion: 1. What became of the arrow? 2. Where was the arrow found? When? 3. Where was the Song found? 4. Point out lines that rime. 5. What is the purpose in this poem?",
+      ),
+    ).toBe(false);
+    // 推荐书单页
+    expect(
+      isCompleteReadingArticleText(
+        'Numerous short and simple stories of heroic lives have recently been written for boys and girls. A few of the best are: "Fifty Missionary Heroes Every Boy and Girl Should Know," by Julia H. Johnson; "Love Stories of Great Missionaries," by Belle M. Brain.',
+      ),
+    ).toBe(false);
+    // 正常叙事文章不应被误判
+    expect(
+      isCompleteReadingArticleText(
+        "The market opened early that morning. Vendors arranged their baskets while the first customers wandered in. By noon the square was full of voices and the smell of fresh bread.",
       ),
     ).toBe(true);
   });

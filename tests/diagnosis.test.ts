@@ -242,25 +242,6 @@ describe("buildSkillProfile", () => {
     expect(profile.focus.chars).toEqual(expect.arrayContaining(["b", ";"]));
   });
 
-  test("sentence errors flow into sentence pool as full lines", () => {
-    const sentenceSession = defaultSessionRecord({
-      started_at: "2026-06-10T08:00:00Z",
-      category: "everyday_sentences",
-      module: "everyday_english",
-      typed_len: 80,
-      correct_chars: 70,
-      active_ms: 60_000,
-      target_text: "The weather is nice today.\nShe finished the report.",
-      error_tokens: { weather: 2 },
-    });
-    const profile = buildSkillProfile(
-      [sentenceSession],
-      emptyPlan,
-      new Date("2026-06-13T08:00:00Z"),
-    );
-    expect(profile.focus.sentences).toContain("The weather is nice today.");
-  });
-
   test("daily active minutes uses 7-day median", () => {
     // 三天，每天一条 10 分钟会话
     const records = [10, 11, 12].map((day) =>

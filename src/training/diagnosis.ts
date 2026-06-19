@@ -262,10 +262,8 @@ export interface FormSpeed {
 }
 
 export interface FocusPools {
-  /** 仅供单词形态回流 */
+  /** 仅供单词形态回流（薄弱词，靶向训练层） */
   words: string[];
-  /** 仅供句子形态回流（整句） */
-  sentences: string[];
   /** 仅供代码形态回流 */
   code: string[];
   /** 键位/符号技能特征，全形态可用于调整语料特征含量 */
@@ -323,7 +321,6 @@ export function formForCategory(category: TrainingCategory): TrainingForm | null
 }
 
 const FOCUS_WORDS_LIMIT = 12;
-const FOCUS_SENTENCES_LIMIT = 5;
 const FOCUS_CODE_LIMIT = 8;
 
 function formSpeeds(records: SessionRecord[]): FormSpeed[] {
@@ -353,11 +350,11 @@ function formSpeeds(records: SessionRecord[]): FormSpeed[] {
 
 function focusPools(records: SessionRecord[], plan: PracticePlan): FocusPools {
   const wordErrors = new Map<string, number>();
-  const sentenceErrors = new Map<string, number>();
   const codeErrors = new Map<string, number>();
   const window = [...records]
     .sort((left, right) => Date.parse(left.started_at) - Date.parse(right.started_at))
     .slice(-DIAGNOSIS_WINDOW_SESSIONS * 3);
+  // 句子/文章属综合应用层，不做错题回流(见 ADR 0001)：只收集词/代码的薄弱回流，不收集整句
   for (const record of window) {
     const form = formForCategory(record.category);
     if (form === null) {
@@ -368,19 +365,11 @@ function focusPools(records: SessionRecord[], plan: PracticePlan): FocusPools {
         wordErrors.set(token, (wordErrors.get(token) ?? 0) + count);
       } else if (form === "code") {
         codeErrors.set(token, (codeErrors.get(token) ?? 0) + count);
-      } else if (form === "sentences" || form === "articles") {
-        const line = record.target_text
-          .split("\n")
-          .find((candidate) => candidate.includes(token));
-        if (line !== undefined && line.trim().length > 0) {
-          sentenceErrors.set(line, (sentenceErrors.get(line) ?? 0) + count);
-        }
       }
     }
   }
   return {
     words: topEntries(wordErrors, FOCUS_WORDS_LIMIT),
-    sentences: topEntries(sentenceErrors, FOCUS_SENTENCES_LIMIT),
     code: topEntries(codeErrors, FOCUS_CODE_LIMIT),
     chars: [...new Set([...plan.focus_keys, ...plan.focus_symbols])],
   };

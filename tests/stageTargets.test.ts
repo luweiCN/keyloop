@@ -13,9 +13,11 @@ import {
   buildProgrammingBasicsMixStageTarget,
   buildStageTarget,
   refreshModuleMixTarget,
+  usedCodeSnippetTexts,
   type BuildTargetContext,
 } from "../src/training/targets";
 import { comprehensivePlanMinutes } from "../src/ui/opentui/routeLines";
+import { defaultSessionRecord } from "../src/index";
 
 function stageLibrary(): ContentLibrary {
   return {
@@ -128,7 +130,7 @@ function emptyProfile(
   return {
     dimensions: [],
     form_speeds: formSpeeds,
-    focus: { words: [], sentences: [], code: [], chars: [], ...overrides },
+    focus: { words: [], code: [], chars: [], ...overrides },
     daily_active_minutes_7d: 0,
     generated_at: "2026-06-13T08:00:00Z",
   };
@@ -384,12 +386,30 @@ describe("buildStageTarget sentences", () => {
     expect([...target.text].length).toBeGreaterThanOrEqual(70);
   });
 
-  test("focus sentences flow back first", () => {
-    const target = buildStageTarget(stageContext(), {
-      stage: { form: "sentences", char_budget: 80 },
-      profile: emptyProfile({ sentences: ["We watched a movie tonight."] }),
-    });
-    expect(target.text).toContain("We watched a movie tonight.");
+  test("sentence stage varies sentences across sessions (no mistake replay, pure random)", () => {
+    const context = stageContext();
+    context.library.everyday_articles.entries = [];
+    context.library.everyday_sentences.entries = Array.from({ length: 10 }, (_, index) => ({
+      text: `Pool sentence ${String(index).padStart(2, "0")} carries enough words here.`,
+      translation_zh: `池${index}`,
+      level: "cet4" as const,
+      length: "short" as const,
+      source_id: "test",
+      source_title: "Test Source",
+    }));
+    // 综合应用层不靶向、不回流错题：句子纯随机，不同会话开头不应固定为同一句
+    const leadingLines = new Set<string>();
+    for (const seed of [0.07, 0.43, 0.91]) {
+      const target = buildStageTarget(
+        { ...context, random: () => seed },
+        {
+          stage: { form: "sentences", char_budget: 220 },
+          profile: emptyProfile(),
+        },
+      );
+      leadingLines.add(target.text.split("\n")[0] ?? "");
+    }
+    expect(leadingLines.size).toBeGreaterThan(1);
   });
 
   test("custom library sentences join the pool", () => {
@@ -499,6 +519,37 @@ describe("buildStageTarget code and keys", () => {
       profile: emptyProfile(),
     });
     expect(target.text).toContain("It was a sunny day.");
+  });
+
+  test("code stage refills the budget by reusing older snippets when fresh ones run out", () => {
+    const context = stageContext();
+    context.codeConfig = { difficulty: "all" };
+    context.library.code_snippets = Array.from({ length: 20 }, (_, index) => ({
+      text: `function compute${String(index).padStart(2, "0")}(alpha, beta) {\n  return alpha + beta + ${index};\n}`,
+      source: `test:snippet-${index}`,
+      language: "typescript",
+      framework: "none",
+      project: "test",
+      level: "block" as const,
+    }));
+    // 最近把全部片段都练过：旧逻辑会把它们永久排除，代码段几乎为空、填不满预算
+    context.records = context.library.code_snippets.map((snippet) =>
+      defaultSessionRecord({ mode: "code", category: "code_mix", target_text: snippet.text }),
+    );
+    const target = buildStageTarget(context, {
+      stage: { form: "code", char_budget: 1000 },
+      profile: emptyProfile(),
+    });
+    expect([...target.text].length).toBeGreaterThanOrEqual(700);
+  });
+
+  test("usedCodeSnippetTexts only excludes snippets within the recent window", () => {
+    const records = Array.from({ length: 50 }, (_, index) =>
+      defaultSessionRecord({ mode: "code", category: "code_mix", target_text: `snippet ${index}` }),
+    );
+    const used = usedCodeSnippetTexts(records);
+    expect(used.has("snippet 49")).toBe(true);
+    expect(used.has("snippet 0")).toBe(false);
   });
 });
 
@@ -637,7 +688,7 @@ describe("buildStageTarget words skill feature-biasing", () => {
         },
       ],
       form_speeds: [],
-      focus: { words: [], sentences: [], code: [], chars: [] },
+      focus: { words: [], code: [], chars: [] },
       daily_active_minutes_7d: 0,
       generated_at: "2026-06-13T08:00:00Z",
     };
