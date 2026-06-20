@@ -2974,14 +2974,9 @@ function wordsStageTarget(
     }
   }
 
-  // 同形态回流：focus.words 中能在池里找到的优先入选（内容不跨形态）
+  // 单词层不回流具体薄弱词（ADR-0002 废弃 focus_words ③）：选材仅靠随机轮换 +
+  // 字符类/技能维度加权（见下 ②），不把历史错过的具体词优先排到最前。
   const selected: StageWordCandidate[] = [];
-  for (const word of options.profile.focus.words) {
-    const hit = pool.get(word.toLowerCase());
-    if (hit !== undefined && !selected.includes(hit)) {
-      selected.push(hit);
-    }
-  }
   // 技能跨阶段（特征偏重）：弱维度偏好对应特征的词
   // —— 大小写弱 → 多选含大写/驼峰词；长词弱 → 多选长词（spec §3.4/§4.5）
   const capWeak = isDimensionWeak(options.profile, "capitalization");

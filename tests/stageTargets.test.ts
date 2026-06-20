@@ -279,12 +279,17 @@ describe("buildStageTarget words", () => {
     expect([...small.text].length).toBeGreaterThanOrEqual(40);
   });
 
-  test("focus words flow back into words stage", () => {
-    const target = buildStageTarget(stageContext(), {
-      stage: { form: "words", char_budget: 45 },
+  test("单词模块不再回流具体薄弱词（focus_words 废弃，仅留维度加权②；ADR-0002）", () => {
+    const withFocus = buildStageTarget(stageContext(), {
+      stage: { form: "words", char_budget: 200 },
       profile: emptyProfile({ words: ["algorithm"] }),
     });
-    expect(target.text).toContain("algorithm");
+    const withoutFocus = buildStageTarget(stageContext(), {
+      stage: { form: "words", char_budget: 200 },
+      profile: emptyProfile(),
+    });
+    // focus.words（具体错词）不再改变选词；选材仅由随机 + 字符类/技能维度加权决定
+    expect(withFocus.text).toBe(withoutFocus.text);
   });
 
   test("programming and custom library words join the pool", () => {
