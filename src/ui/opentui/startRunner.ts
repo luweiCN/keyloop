@@ -128,6 +128,7 @@ import {
   startRunnerContextWithRuntimeSettings,
   startRunnerContextWithWordBreakdownSettings,
   todayElapsedMsForRun,
+  todayRunCompletedRecords,
   type LessonSelection,
 } from "./runnerSelection";
 
@@ -1380,11 +1381,16 @@ export async function showSummaryPage(
   reusableRenderer: OpenTuiRenderer | undefined,
 ): Promise<SummaryDismissResult> {
   const renderer = await rendererForState(
-    createOpenTuiSummaryState(context.language, completedRecords, {
-      dailyRunId: context.dailyPlan.run_id,
-      speedUnit: context.speedUnit ?? "wpm",
-      lessons,
-    }),
+    createOpenTuiSummaryState(
+      context.language,
+      todayRunCompletedRecords(context.records, context.dailyPlan.run_id, completedRecords),
+      {
+        dailyRunId: context.dailyPlan.run_id,
+        speedUnit: context.speedUnit ?? "wpm",
+        lessons,
+        todayElapsedMs: todayElapsedMsForRun(context, completedRecords),
+      },
+    ),
     options,
     reusableRenderer,
   );

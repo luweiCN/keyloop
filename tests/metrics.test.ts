@@ -38,6 +38,26 @@ describe("metrics parity", () => {
     expect(tokens).toContain("!==");
   });
 
+  test("tokenSpans 对多字符符号组合做最长优先匹配", () => {
+    const tok = (text: string): string[] => tokenSpans(text).map((span) => span.token);
+    expect(tok("a === b")).toContain("===");
+    expect(tok("a !== b")).toContain("!==");
+    expect(tok("x => y")).toContain("=>");
+    expect(tok("a ?? b")).toContain("??");
+    expect(tok("obj?.prop")).toContain("?.");
+    expect(tok("ns::name")).toContain("::");
+    expect(tok("a && b")).toContain("&&");
+    expect(tok("a || b")).toContain("||");
+  });
+
+  test("tokenSpans 识别单字符标点", () => {
+    const tokens = tokenSpans("a;b,c.d:e").map((span) => span.token);
+    expect(tokens).toContain(";");
+    expect(tokens).toContain(",");
+    expect(tokens).toContain(".");
+    expect(tokens).toContain(":");
+  });
+
   test("accuracy counts corrected mistakes", () => {
     const events: KeyEventRecord[] = [
       insert(100, 0, "a", true),
