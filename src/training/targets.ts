@@ -3301,7 +3301,7 @@ function symbolsStageTarget(
   };
 }
 
-function fitSymbolsTargetToBudget(
+export function fitSymbolsTargetToBudget(
   context: BuildTargetContext,
   target: PracticeTarget,
   budget: number,
@@ -3313,6 +3313,8 @@ function fitSymbolsTargetToBudget(
   if (supplement.length === 0) {
     return target;
   }
+  // #3：补充前随机打乱，避免每次都从同一段（如数字 10-29）开始、跨天雷同（见 ADR-0002）
+  shuffleInPlace(supplement, context.random ?? Math.random);
   const lines = target.text.split("\n");
   let chars = target.text.length;
   let index = 0;

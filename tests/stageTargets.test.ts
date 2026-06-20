@@ -12,6 +12,7 @@ import {
   buildEverydayMixStageTarget,
   buildProgrammingBasicsMixStageTarget,
   buildStageTarget,
+  fitSymbolsTargetToBudget,
   refreshModuleMixTarget,
   usedCodeSnippetTexts,
   type BuildTargetContext,
@@ -301,6 +302,26 @@ describe("buildStageTarget words", () => {
     // 预算足够大时全池入选
     expect(target.text).toContain("closure");
     expect(target.text).toContain("bespoke");
+  });
+
+  test("符号卡不足预算时补充行随机化，不每次从同一段数字开始 (#3)", () => {
+    const cycling = (values: number[]): (() => number) => {
+      let i = 0;
+      return () => values[i++ % values.length] ?? 0;
+    };
+    const base = { mode: "symbols" as const, text: "seed", source: "t" };
+    const context = { ...stageContext(), library: { ...stageLibrary(), foundation_drills: [] } };
+    const a = fitSymbolsTargetToBudget(
+      { ...context, random: cycling([0.05, 0.95, 0.4, 0.6]) },
+      base,
+      60,
+    );
+    const b = fitSymbolsTargetToBudget(
+      { ...context, random: cycling([0.9, 0.1, 0.7, 0.2]) },
+      base,
+      60,
+    );
+    expect(a.text).not.toBe(b.text);
   });
 
   test("large word budgets use a uniform repeat count before exploding unique words", () => {
