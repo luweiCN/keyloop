@@ -73,6 +73,22 @@ const SYMBOL_PATTERNS = [
   "`",
 ] as const;
 
+// 按首字符索引，避免每个字符位置都线性扫描全部 48 个 pattern。
+// 组内保持 SYMBOL_PATTERNS 的原始顺序（长度降序），从而维持"最长优先"匹配语义。
+const SYMBOL_PATTERNS_BY_FIRST_CHAR: ReadonlyMap<string, readonly string[]> = (() => {
+  const map = new Map<string, string[]>();
+  for (const pattern of SYMBOL_PATTERNS) {
+    const first = Array.from(pattern)[0];
+    if (first === undefined) {
+      continue;
+    }
+    const group = map.get(first) ?? [];
+    group.push(pattern);
+    map.set(first, group);
+  }
+  return map;
+})();
+
 const IDLE_THRESHOLD_MS = 10_000;
 
 export function buildSessionRecord(
@@ -352,7 +368,15 @@ function adjustedKeyEvents(
 }
 
 function matchSymbolAt(chars: string[], index: number): string | null {
-  for (const pattern of SYMBOL_PATTERNS) {
+  const current = chars[index];
+  if (current === undefined) {
+    return null;
+  }
+  const candidates = SYMBOL_PATTERNS_BY_FIRST_CHAR.get(current);
+  if (candidates === undefined) {
+    return null;
+  }
+  for (const pattern of candidates) {
     const patternChars = Array.from(pattern);
     const end = index + patternChars.length;
     if (end <= chars.length && chars.slice(index, end).join("") === pattern) {

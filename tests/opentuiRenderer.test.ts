@@ -701,6 +701,28 @@ describe("OpenTUI renderer adapter", () => {
     );
   });
 
+  test("折行行末的待打分隔空格还原为普通空格，光标贴词尾不画圆点 (#1)", () => {
+    const text = ["infrastructure", "infrastructure", "infrastructure"].join(" ");
+    const [row] = ghostRows(text, "infrastructure infrastructure", undefined, false, {
+      spaceDot: true,
+    });
+
+    const blockRows = wrapGhostWordBlockLoose(
+      row ?? [],
+      [
+        { srcStartCol: 0, srcEndCol: 14, translation: "", loose: true },
+        { srcStartCol: 15, srcEndCol: 29, translation: "", loose: true },
+        { srcStartCol: 30, srcEndCol: 44, translation: "", loose: true },
+      ],
+      32,
+    );
+
+    const firstRow = flattenGhostSegments(blockRows[0]?.segments ?? []);
+    // 行内已打完的空格仍是圆点·；行末待打的分隔空格还原为普通空格（光标块贴词尾）
+    expect(firstRow).toBe("infrastructure·infrastructure ");
+    expect(firstRow.endsWith("·")).toBe(false);
+  });
+
   test("wraps long decomposition rows and shows the full translation below", async () => {
     const text =
       "information in in for for ma ma tion tion information information information";

@@ -12,6 +12,7 @@ import {
   buildEverydayMixStageTarget,
   buildProgrammingBasicsMixStageTarget,
   buildStageTarget,
+  fitSymbolsTargetToBudget,
   refreshModuleMixTarget,
   usedCodeSnippetTexts,
   type BuildTargetContext,
@@ -279,12 +280,17 @@ describe("buildStageTarget words", () => {
     expect([...small.text].length).toBeGreaterThanOrEqual(40);
   });
 
-  test("focus words flow back into words stage", () => {
-    const target = buildStageTarget(stageContext(), {
-      stage: { form: "words", char_budget: 45 },
+  test("单词模块不再回流具体薄弱词（focus_words 废弃，仅留维度加权②；ADR-0002）", () => {
+    const withFocus = buildStageTarget(stageContext(), {
+      stage: { form: "words", char_budget: 200 },
       profile: emptyProfile({ words: ["algorithm"] }),
     });
-    expect(target.text).toContain("algorithm");
+    const withoutFocus = buildStageTarget(stageContext(), {
+      stage: { form: "words", char_budget: 200 },
+      profile: emptyProfile(),
+    });
+    // focus.words（具体错词）不再改变选词；选材仅由随机 + 字符类/技能维度加权决定
+    expect(withFocus.text).toBe(withoutFocus.text);
   });
 
   test("programming and custom library words join the pool", () => {
@@ -296,6 +302,26 @@ describe("buildStageTarget words", () => {
     // 预算足够大时全池入选
     expect(target.text).toContain("closure");
     expect(target.text).toContain("bespoke");
+  });
+
+  test("符号卡不足预算时补充行随机化，不每次从同一段数字开始 (#3)", () => {
+    const cycling = (values: number[]): (() => number) => {
+      let i = 0;
+      return () => values[i++ % values.length] ?? 0;
+    };
+    const base = { mode: "symbols" as const, text: "seed", source: "t" };
+    const context = { ...stageContext(), library: { ...stageLibrary(), foundation_drills: [] } };
+    const a = fitSymbolsTargetToBudget(
+      { ...context, random: cycling([0.05, 0.95, 0.4, 0.6]) },
+      base,
+      60,
+    );
+    const b = fitSymbolsTargetToBudget(
+      { ...context, random: cycling([0.9, 0.1, 0.7, 0.2]) },
+      base,
+      60,
+    );
+    expect(a.text).not.toBe(b.text);
   });
 
   test("large word budgets use a uniform repeat count before exploding unique words", () => {

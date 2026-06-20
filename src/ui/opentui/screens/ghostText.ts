@@ -765,9 +765,14 @@ function looseSeparatorCellsForRowItem(
   if (index < itemCount - 1) {
     return item.separatorCells;
   }
-  return item.separatorCells.some((cell) => cell.state !== "pending")
-    ? item.separatorCells
-    : [];
+  if (item.separatorCells.every((cell) => cell.state === "pending")) {
+    return [];
+  }
+  // 行末：保留分隔以让光标可见，但把空格圆点 · 还原为普通空格，
+  // 使光标紧贴词尾、不再像"越过词停在一个圆点上、卡在本行"（见 #1 / docs/adr/0003）。
+  return item.separatorCells.map((cell) =>
+    cell.text === "·" ? { ...cell, text: " " } : cell,
+  );
 }
 
 export function ghostWordGroupSegments(

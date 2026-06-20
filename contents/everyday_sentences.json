@@ -766,6 +766,23 @@
         "length"
       ],
       "notes": "Native-speaker example sentences with Simplified Chinese translations; filtered through completeness, word-count, and per-level reading-vocabulary gates, leveled by lowest passing vocabulary level."
+    },
+    {
+      "source_id": "wikipedia:en",
+      "source_name": "Wikipedia (English)",
+      "source_url": "https://en.wikipedia.org",
+      "license": "CC BY-SA 4.0",
+      "retrieved_at": "2026-06-20",
+      "generation_script": "Wikipedia REST extracts (natural-start paragraphs) + Claude review & translation",
+      "included_fields": [
+        "text",
+        "level",
+        "length",
+        "source_id",
+        "paragraphs",
+        "translation_zh"
+      ],
+      "notes": "English paragraph extracts from Wikipedia, vocabulary-leveled, human-reviewed (dropped poems/fragments/broken), Chinese by Claude."
     }
   ],
   "entries": [

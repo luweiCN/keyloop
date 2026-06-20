@@ -210,7 +210,7 @@ describe("buildSkillProfile", () => {
     expect(code?.ewma_wpm).toBeNull();
   });
 
-  test("focus pools bucket by form - words stay out of other pools", () => {
+  test("单词不回流(focus_words 废弃 ADR-0002)，代码标识符仍按形态收集", () => {
     const wordSession = defaultSessionRecord({
       started_at: "2026-06-10T08:00:00Z",
       category: "everyday_words",
@@ -234,8 +234,8 @@ describe("buildSkillProfile", () => {
       emptyPlan,
       new Date("2026-06-13T08:00:00Z"),
     );
-    expect(profile.focus.words).toContain("algorithm");
-    expect(profile.focus.words).not.toContain("useEffect");
+    // 单词层已废弃具体错词回流（focus_words ③, ADR-0002）：focus.words 恒为空
+    expect(profile.focus.words).toEqual([]);
     expect(profile.focus.code).toContain("useEffect");
     expect(profile.focus.code).not.toContain("algorithm");
     // chars 池来自 PracticePlan 的 focus_keys + focus_symbols

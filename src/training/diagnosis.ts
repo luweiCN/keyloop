@@ -320,7 +320,6 @@ export function formForCategory(category: TrainingCategory): TrainingForm | null
   }
 }
 
-const FOCUS_WORDS_LIMIT = 12;
 const FOCUS_CODE_LIMIT = 8;
 
 function formSpeeds(records: SessionRecord[]): FormSpeed[] {
@@ -349,27 +348,22 @@ function formSpeeds(records: SessionRecord[]): FormSpeed[] {
 }
 
 function focusPools(records: SessionRecord[], plan: PracticePlan): FocusPools {
-  const wordErrors = new Map<string, number>();
   const codeErrors = new Map<string, number>();
   const window = [...records]
     .sort((left, right) => Date.parse(left.started_at) - Date.parse(right.started_at))
     .slice(-DIAGNOSIS_WINDOW_SESSIONS * 3);
-  // 句子/文章属综合应用层，不做错题回流(见 ADR 0001)：只收集词/代码的薄弱回流，不收集整句
+  // 单词层不回流具体错词（ADR-0002 废弃 focus_words ③）；句子/文章本就不回流（ADR-0001）。
+  // 仅代码标识符暂按形态收集（code 内容回流的移除作为 follow-up）。
   for (const record of window) {
-    const form = formForCategory(record.category);
-    if (form === null) {
+    if (formForCategory(record.category) !== "code") {
       continue;
     }
     for (const [token, count] of Object.entries(record.error_tokens)) {
-      if (form === "words") {
-        wordErrors.set(token, (wordErrors.get(token) ?? 0) + count);
-      } else if (form === "code") {
-        codeErrors.set(token, (codeErrors.get(token) ?? 0) + count);
-      }
+      codeErrors.set(token, (codeErrors.get(token) ?? 0) + count);
     }
   }
   return {
-    words: topEntries(wordErrors, FOCUS_WORDS_LIMIT),
+    words: [],
     code: topEntries(codeErrors, FOCUS_CODE_LIMIT),
     chars: [...new Set([...plan.focus_keys, ...plan.focus_symbols])],
   };

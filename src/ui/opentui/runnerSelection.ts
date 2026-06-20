@@ -333,6 +333,28 @@ export function completedLessonsForRun(records: SessionRecord[], runId: string):
   );
 }
 
+/**
+ * 今日该 daily run 的全部已完成记录（按 lesson 去重、按计划顺序）。
+ * 合并持久化历史（含本次退出前完成的前段 lesson）与本次运行内存中的新记录，
+ * 供总结页重建"今天练了哪些模块"——避免只取本段而漏掉跨退出重进的前段。
+ */
+export function todayRunCompletedRecords(
+  records: SessionRecord[],
+  runId: string,
+  newRecords: SessionRecord[] = [],
+): SessionRecord[] {
+  const byLesson = new Map<string, SessionRecord>();
+  for (const record of [...records, ...newRecords]) {
+    if (record.daily_run_id !== runId || record.completion_state !== "completed") {
+      continue;
+    }
+    byLesson.set(record.lesson_id, record);
+  }
+  return [...byLesson.values()].sort(
+    (left, right) => (left.lesson_index ?? 0) - (right.lesson_index ?? 0),
+  );
+}
+
 export async function saveRecordIfAvailable(
   context: StartRunnerContext,
   record: SessionRecord,

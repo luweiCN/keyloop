@@ -343,7 +343,7 @@ describe("end-to-end: spec acceptance scenarios", () => {
     expect(symbolsStage?.weak).toBe(true);
   });
 
-  test("word errors never leak into non-word focus pools", () => {
+  test("词错误不再回流(focus_words 废弃 ADR-0002)，也不泄漏到代码池", () => {
     const record = defaultSessionRecord({
       started_at: "2026-06-12T08:00:00Z",
       category: "everyday_words",
@@ -354,7 +354,8 @@ describe("end-to-end: spec acceptance scenarios", () => {
       error_tokens: { algorithm: 3 },
     });
     const profile = buildSkillProfile([record], emptyPlan, now);
-    expect(profile.focus.words).toContain("algorithm");
+    // 单词层已废弃具体错词回流（focus_words ③, ADR-0002）：词错误不再进任何回流池
+    expect(profile.focus.words).toEqual([]);
     expect(profile.focus.code).not.toContain("algorithm");
   });
 });
