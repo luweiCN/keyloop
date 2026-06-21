@@ -25,6 +25,7 @@ import {
   type TrainingCategory,
   type TrainingModule,
 } from "../src/index";
+import { conciseChineseMeaning } from "../src/training/targets";
 
 describe("target generation core", () => {
   test("identifier parts split acronym digit and camel boundaries", () => {
@@ -2120,3 +2121,22 @@ function dailyArticle(
     paragraphs: paragraphs.map(([text, translation_zh]) => ({ text, translation_zh })),
   };
 }
+
+describe("conciseChineseMeaning 释义压缩", () => {
+  test("词内顿号不当义项分隔，避免释义被腰斩为「（机器」", () => {
+    const full = "n. （机器、电子设备等的）控制台( console的名词复数 )；操纵台；悬臂";
+    const result = conciseChineseMeaning(full);
+    // 旧 bug：顿号「、」被归一成「；」后 split，首段只剩「n. （机器」→ 清洗成「（机器」
+    expect(result).not.toBe("（机器");
+    // 修复后：词义「控制台」打头（去掉词性前缀与全角语境括号），而非语境注释碎片
+    expect(result.startsWith("控制台")).toBe(true);
+  });
+
+  test("顿号并列在单义项内整体保留", () => {
+    expect(conciseChineseMeaning("控制台、操纵台")).toBe("控制台、操纵台");
+  });
+
+  test("分号仍作义项分隔，maxParts=1 取首义项", () => {
+    expect(conciseChineseMeaning("vt. 控制；操纵；安慰")).toBe("控制");
+  });
+});

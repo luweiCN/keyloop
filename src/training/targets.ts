@@ -1286,7 +1286,9 @@ function annotationForOptionalItem(
 export function conciseChineseMeaning(value: string, maxParts = 1): string {
   const normalized = value
     .replace(/\s+/gu, " ")
-    .replace(/[；;，,、]+/gu, "；")
+    // 顿号「、」是义项内部的并列号（如「机器、电子设备等的」），不是义项分隔符；
+    // 只把分号/逗号归一为分隔符，避免把一条释义从顿号处腰斩。
+    .replace(/[；;，,]+/gu, "；")
     .trim();
   const parts = normalized
     .split("；")
@@ -1300,7 +1302,7 @@ export function conciseChineseMeaning(value: string, maxParts = 1): string {
 function cleanChineseMeaningPart(value: string): string {
   return value
     .replace(/^\s*(?:n|v|vt|vi|adj|adv|a|prep|conj|pron|art|abbr|num|int|aux|modal|pl|pref|suf)\.\s*/iu, "")
-    .replace(/^\s*(?:\[[^\]]+\]|\([^)]*\))\s*/u, "")
+    .replace(/^\s*(?:\[[^\]]+\]|\([^)]*\)|（[^）]*）)\s*/u, "")
     .replace(/^[A-Za-z][A-Za-z -]*\s+(?=\p{Script=Han})/u, "")
     .replace(/^[：:，,；;\s]+/u, "")
     .trim();
