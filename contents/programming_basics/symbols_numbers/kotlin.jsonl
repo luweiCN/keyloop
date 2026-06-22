@@ -1,124 +1,367 @@
-{"text":"#ef4444","topic":"literal","form":"value","note_zh":"十六进制颜色","source_id":"keyloop:programming-basics:seeds"}
-{"text":"#0ea5e9cc","topic":"literal","form":"value","note_zh":"带透明度颜色","source_id":"keyloop:programming-basics:seeds"}
-{"text":"0xFF","topic":"literal","form":"value","note_zh":"十六进制数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"0b1010","topic":"literal","form":"value","note_zh":"二进制数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"8080","topic":"literal","form":"value","note_zh":"端口号","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1_500_000L","topic":"literal","form":"value","note_zh":"数字分隔符长整型","source_id":"keyloop:programming-basics:seeds"}
-{"text":"30_000","topic":"literal","form":"value","note_zh":"毫秒超时","source_id":"keyloop:programming-basics:seeds"}
-{"text":"3.14f","topic":"literal","form":"value","note_zh":"单精度浮点","source_id":"keyloop:programming-basics:seeds"}
-{"text":"-273.15","topic":"literal","form":"value","note_zh":"负浮点数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"2.5e-3","topic":"literal","form":"value","note_zh":"科学计数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"127.0.0.1:8080","topic":"literal","form":"value","note_zh":"本机地址","source_id":"keyloop:programming-basics:seeds"}
-{"text":"255u","topic":"literal","form":"value","note_zh":"无符号整数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1..10","topic":"literal","form":"value","note_zh":"闭区间范围","source_id":"keyloop:programming-basics:seeds"}
-{"text":"Int.MAX_VALUE","topic":"literal","form":"value","note_zh":"最大整数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"@JvmStatic","topic":"literal","form":"value","note_zh":"JVM 静态注解","source_id":"keyloop:programming-basics:seeds"}
-{"text":"\"2.1.20\"","topic":"string","form":"value","note_zh":"Kotlin 版本串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"\"1.0.0-SNAPSHOT\"","topic":"string","form":"value","note_zh":"快照版本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"https://api.example.com/v1/users\"","topic":"string","form":"value","note_zh":"接口地址","source_id":"keyloop:programming-basics:seeds"}
 {"text":"\"./config/app.yaml\"","topic":"string","form":"value","note_zh":"相对路径","source_id":"keyloop:programming-basics:seeds"}
-{"text":"\"src/**/*Test.kt\"","topic":"string","form":"value","note_zh":"通配符模式","source_id":"keyloop:programming-basics:seeds"}
-{"text":"\"https://api.example.com/v1\"","topic":"string","form":"value","note_zh":"接口地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"/usr/local/bin/keyloop\"","topic":"string","form":"value","note_zh":"绝对路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"2026-06-22\"","topic":"string","form":"value","note_zh":"日期","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"2026-06-22T08:30:00Z\"","topic":"string","form":"value","note_zh":"ISO 时间戳","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"08:30:45\"","topic":"string","form":"value","note_zh":"时间","source_id":"keyloop:programming-basics:seeds"}
 {"text":"\"application/json\"","topic":"string","form":"value","note_zh":"MIME 类型","source_id":"keyloop:programming-basics:seeds"}
-{"text":"\"Content-Type\"","topic":"string","form":"value","note_zh":"请求头名","source_id":"keyloop:programming-basics:seeds"}
-{"text":"\"PT30S\"","topic":"string","form":"value","note_zh":"Duration 字符串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"\"$base/api/users\"","topic":"string","form":"value","note_zh":"字符串模板","source_id":"keyloop:programming-basics:seeds"}
-{"text":"\"res/raw/intro.json\"","topic":"string","form":"value","note_zh":"资源路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"text/html;charset=utf-8\"","topic":"string","form":"value","note_zh":"带字符集 MIME","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"1.4.2\"","topic":"string","form":"value","note_zh":"语义化版本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"2.1.0-rc.1\"","topic":"string","form":"value","note_zh":"预发布版本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"#1E90FF\"","topic":"string","form":"value","note_zh":"十六进制颜色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"dev@example.com\"","topic":"string","form":"value","note_zh":"邮箱地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"192.168.1.1\"","topic":"string","form":"value","note_zh":"IP 地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"127.0.0.1:3000\"","topic":"string","form":"value","note_zh":"主机端口","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"USD2,499.00\"","topic":"string","form":"value","note_zh":"金额","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"86.5%\"","topic":"string","form":"value","note_zh":"百分比","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"page=2&size=20&sort=desc\"","topic":"string","form":"value","note_zh":"查询串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"yyyy-MM-dd\"","topic":"string","form":"value","note_zh":"日期格式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"^\\\\d{4}-\\\\d{2}$\"","topic":"string","form":"value","note_zh":"正则模式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"src/**/*.kt\"","topic":"string","form":"value","note_zh":"通配符路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"Asia/Shanghai\"","topic":"string","form":"value","note_zh":"时区名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"en-US\"","topic":"string","form":"value","note_zh":"语言区域","source_id":"keyloop:programming-basics:seeds"}
+{"text":"\"PT30S\"","topic":"string","form":"value","note_zh":"ISO 时长","source_id":"keyloop:programming-basics:seeds"}
+{"text":"3000","topic":"literal","form":"value","note_zh":"端口号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"404","topic":"literal","form":"value","note_zh":"HTTP 状态码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"200","topic":"literal","form":"value","note_zh":"HTTP 成功码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"30_000","topic":"literal","form":"value","note_zh":"毫秒超时","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1499.99","topic":"literal","form":"value","note_zh":"价格","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1024","topic":"literal","form":"value","note_zh":"字节数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"86400","topic":"literal","form":"value","note_zh":"一天秒数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"3.14159","topic":"literal","form":"value","note_zh":"圆周率","source_id":"keyloop:programming-basics:seeds"}
+{"text":"-1","topic":"literal","form":"value","note_zh":"哨兵值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0.5","topic":"literal","form":"value","note_zh":"系数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1_000_000","topic":"literal","form":"value","note_zh":"百万分隔","source_id":"keyloop:programming-basics:seeds"}
+{"text":"-273.15","topic":"literal","form":"value","note_zh":"负浮点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"6.022e23","topic":"literal","form":"value","note_zh":"科学计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1_000L","topic":"literal","form":"value","note_zh":"长整型分隔","source_id":"keyloop:programming-basics:seeds"}
+{"text":"255u","topic":"literal","form":"value","note_zh":"无符号整数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0xFF","topic":"literal","form":"value","note_zh":"十六进制掩码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0x7FFFFFFF","topic":"literal","form":"value","note_zh":"十六进制上限","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val items = mutableListOf<Item>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val users = mutableListOf<User>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val orders = mutableListOf<Order>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val tasks = mutableListOf<Task>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val rows = mutableListOf<Row>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val events = mutableListOf<Event>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val files = mutableListOf<File>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val paths = emptyList<Path>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val records = emptyList<Record>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val nodes = mutableListOf<Node>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sessions = mutableListOf<Session>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val files = mutableListOf<File>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val jobs = mutableListOf<Job>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val posts = emptyList<Post>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val buckets = mutableListOf<Bucket>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val frames = mutableListOf<Frame>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val edges = emptyList<Edge>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val tickets = mutableListOf<Ticket>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val samples = mutableListOf<Sample>()","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"var selectedItem: Item? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
 {"text":"var selectedUser: User? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
 {"text":"var selectedOrder: Order? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
 {"text":"var selectedTask: Task? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
 {"text":"var selectedRow: Row? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
 {"text":"var selectedEvent: Event? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"var selectedFile: File? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"var selectedPath: Path? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"var selectedRecord: Record? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
 {"text":"var selectedNode: Node? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"var selectedSession: Session? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"var selectedFile: File? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"var selectedJob: Job? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"var selectedPost: Post? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"var selectedBucket: Bucket? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"var selectedFrame: Frame? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"var selectedEdge: Edge? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"var selectedTicket: Ticket? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"var selectedSample: Sample? = null","topic":"declaration","form":"statement","focus":["?",":"],"note_zh":"可空变量","source_id":"keyloop:programming-basics:seeds"}
 {"text":"data class ItemRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"data class UserRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"data class OrderRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"data class TaskRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"data class RowRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"data class EventRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
-{"text":"data class FileRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"data class PathRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"data class RecordRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"data class NodeRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"data class SessionRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"data class FileRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"data class JobRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"data class PostRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"data class BucketRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"data class FrameRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"data class EdgeRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"data class TicketRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"data class SampleRef(val id: Long, val label: String)","topic":"declaration","form":"statement","focus":["()",":"],"note_zh":"数据类声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"fun loadItem(id: Long): Item? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
 {"text":"fun loadUser(id: Long): User? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
 {"text":"fun loadOrder(id: Long): Order? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
 {"text":"fun loadTask(id: Long): Task? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
 {"text":"fun loadRow(id: Long): Row? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
 {"text":"fun loadEvent(id: Long): Event? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"fun loadFile(id: Long): File? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fun loadPath(id: Long): Path? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fun loadRecord(id: Long): Record? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
 {"text":"fun loadNode(id: Long): Node? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fun loadSession(id: Long): Session? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fun loadFile(id: Long): File? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fun loadJob(id: Long): Job? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fun loadPost(id: Long): Post? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fun loadBucket(id: Long): Bucket? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fun loadFrame(id: Long): Frame? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fun loadEdge(id: Long): Edge? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fun loadTicket(id: Long): Ticket? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"fun loadSample(id: Long): Sample? = index[id]","topic":"declaration","form":"statement","focus":["?","[]"],"note_zh":"表达式函数","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val labels = items.map { item -> item.id }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val labels = users.map { user -> user.name }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val labels = orders.map { order -> order.total }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val labels = tasks.map { task -> task.done }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val labels = rows.map { row -> row.score }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val labels = events.map { event -> event.kind }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val labels = files.map { file -> file.path }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val labels = nodes.map { node -> node.label }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val labels = paths.map { path -> path.stem }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val labels = records.map { record -> record.label }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val labels = nodes.map { node -> node.depth }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val labels = sessions.map { session -> session.token }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val labels = files.map { file -> file.size }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val labels = jobs.map { job -> job.status }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val labels = posts.map { post -> post.slug }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val labels = buckets.map { bucket -> bucket.count }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val labels = frames.map { frame -> frame.index }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val labels = edges.map { edge -> edge.weight }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val labels = tickets.map { ticket -> ticket.state }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val labels = samples.map { sample -> sample.value }","topic":"call","form":"statement","focus":["{}","->"],"note_zh":"集合映射","source_id":"keyloop:programming-basics:seeds"}
 {"text":"items.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
 {"text":"users.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
 {"text":"orders.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
 {"text":"tasks.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
 {"text":"rows.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
 {"text":"events.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
-{"text":"files.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
+{"text":"paths.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
+{"text":"records.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
 {"text":"nodes.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sessions.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
+{"text":"files.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
+{"text":"jobs.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
+{"text":"posts.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
+{"text":"buckets.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
+{"text":"frames.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
+{"text":"edges.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
+{"text":"tickets.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
+{"text":"samples.forEach { render(it) }","topic":"call","form":"statement","focus":["{}","()"],"note_zh":"遍历渲染","source_id":"keyloop:programming-basics:seeds"}
 {"text":"repository.saveItem(item)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
 {"text":"repository.saveUser(user)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
 {"text":"repository.saveOrder(order)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
 {"text":"repository.saveTask(task)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
 {"text":"repository.saveRow(row)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
 {"text":"repository.saveEvent(event)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
-{"text":"repository.saveFile(file)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repository.savePath(path)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repository.saveRecord(record)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
 {"text":"repository.saveNode(node)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repository.saveSession(session)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repository.saveFile(file)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repository.saveJob(job)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repository.savePost(post)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repository.saveBucket(bucket)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repository.saveFrame(frame)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repository.saveEdge(edge)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repository.saveTicket(ticket)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repository.saveSample(sample)","topic":"call","form":"statement","focus":["()","."],"note_zh":"保存调用","source_id":"keyloop:programming-basics:seeds"}
 {"text":"return item?.id ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
 {"text":"return user?.name ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
 {"text":"return order?.total ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
 {"text":"return task?.done ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
 {"text":"return row?.score ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
 {"text":"return event?.kind ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
-{"text":"return file?.path ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
-{"text":"return node?.label ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"return path?.stem ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"return record?.label ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"return node?.depth ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"return session?.token ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"return file?.size ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"return job?.status ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"return post?.slug ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"return bucket?.count ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"return frame?.index ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"return edge?.weight ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"return ticket?.state ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"return sample?.value ?: fallback","topic":"control","form":"statement","focus":["?.","?:"],"note_zh":"Elvis 返回","source_id":"keyloop:programming-basics:seeds"}
 {"text":"if (item.id == null) return fallbackItem","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
 {"text":"if (user.name == null) return fallbackUser","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
 {"text":"if (order.total == null) return fallbackOrder","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
 {"text":"if (task.done == null) return fallbackTask","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
 {"text":"if (row.score == null) return fallbackRow","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
 {"text":"if (event.kind == null) return fallbackEvent","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (file.path == null) return fallbackFile","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
-{"text":"if (node.label == null) return fallbackNode","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (path.stem == null) return fallbackPath","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (record.label == null) return fallbackRecord","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (node.depth == null) return fallbackNode","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (session.token == null) return fallbackSession","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (file.size == null) return fallbackFile","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (job.status == null) return fallbackJob","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (post.slug == null) return fallbackPost","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (bucket.count == null) return fallbackBucket","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (frame.index == null) return fallbackFrame","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (edge.weight == null) return fallbackEdge","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (ticket.state == null) return fallbackTicket","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (sample.value == null) return fallbackSample","topic":"control","form":"statement","focus":["==","()"],"note_zh":"单行判空返回","source_id":"keyloop:programming-basics:seeds"}
 {"text":"while (items.isNotEmpty()) process(items.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
 {"text":"while (users.isNotEmpty()) process(users.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
 {"text":"while (orders.isNotEmpty()) process(orders.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
 {"text":"while (tasks.isNotEmpty()) process(tasks.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
 {"text":"while (rows.isNotEmpty()) process(rows.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
 {"text":"while (events.isNotEmpty()) process(events.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
-{"text":"while (files.isNotEmpty()) process(files.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
+{"text":"while (paths.isNotEmpty()) process(paths.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
+{"text":"while (records.isNotEmpty()) process(records.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
 {"text":"while (nodes.isNotEmpty()) process(nodes.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
+{"text":"while (sessions.isNotEmpty()) process(sessions.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
+{"text":"while (files.isNotEmpty()) process(files.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
+{"text":"while (jobs.isNotEmpty()) process(jobs.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
+{"text":"while (posts.isNotEmpty()) process(posts.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
+{"text":"while (buckets.isNotEmpty()) process(buckets.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
+{"text":"while (frames.isNotEmpty()) process(frames.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
+{"text":"while (edges.isNotEmpty()) process(edges.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
+{"text":"while (tickets.isNotEmpty()) process(tickets.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
+{"text":"while (samples.isNotEmpty()) process(samples.removeFirst())","topic":"control","form":"statement","focus":["!","()"],"note_zh":"单行循环消费","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val first = items[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val first = users[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val first = orders[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val first = tasks[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val first = rows[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val first = events[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val first = files[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val first = paths[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val first = records[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val first = nodes[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val first = sessions[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val first = files[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val first = jobs[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val first = posts[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val first = buckets[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val first = frames[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val first = edges[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val first = tickets[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val first = samples[0]","topic":"index","form":"statement","focus":["[]","="],"note_zh":"取首元素","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val page = items.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val page = users.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val page = orders.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val page = tasks.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val page = rows.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val page = events.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
-{"text":"val page = files.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val page = paths.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val page = records.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val page = nodes.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val page = sessions.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val page = files.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val page = jobs.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val page = posts.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val page = buckets.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val page = frames.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val page = edges.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val page = tickets.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val page = samples.take(10)","topic":"index","form":"statement","focus":["()","."],"note_zh":"取前十","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedItems = items.sortedByDescending { it.id }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedUsers = users.sortedByDescending { it.name }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedOrders = orders.sortedByDescending { it.total }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedTasks = tasks.sortedByDescending { it.done }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedRows = rows.sortedByDescending { it.score }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedEvents = events.sortedByDescending { it.kind }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedPaths = paths.sortedByDescending { it.stem }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedRecords = records.sortedByDescending { it.label }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedNodes = nodes.sortedByDescending { it.depth }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedSessions = sessions.sortedByDescending { it.token }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedFiles = files.sortedByDescending { it.size }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedJobs = jobs.sortedByDescending { it.status }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedPosts = posts.sortedByDescending { it.slug }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedBuckets = buckets.sortedByDescending { it.count }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedFrames = frames.sortedByDescending { it.index }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedEdges = edges.sortedByDescending { it.weight }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedTickets = tickets.sortedByDescending { it.state }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sortedSamples = samples.sortedByDescending { it.value }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"降序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedItems = items.groupBy { it.id }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedUsers = users.groupBy { it.name }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedOrders = orders.groupBy { it.total }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedTasks = tasks.groupBy { it.done }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedRows = rows.groupBy { it.score }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedEvents = events.groupBy { it.kind }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedPaths = paths.groupBy { it.stem }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedRecords = records.groupBy { it.label }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedNodes = nodes.groupBy { it.depth }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedSessions = sessions.groupBy { it.token }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedFiles = files.groupBy { it.size }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedJobs = jobs.groupBy { it.status }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedPosts = posts.groupBy { it.slug }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedBuckets = buckets.groupBy { it.count }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedFrames = frames.groupBy { it.index }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedEdges = edges.groupBy { it.weight }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedTickets = tickets.groupBy { it.state }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val groupedSamples = samples.groupBy { it.value }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"按字段分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val itemValues = items.map { it.id }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val userValues = users.map { it.name }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val orderValues = orders.map { it.total }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val taskValues = tasks.map { it.done }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val rowValues = rows.map { it.score }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val eventValues = events.map { it.kind }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val pathValues = paths.map { it.stem }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val recordValues = records.map { it.label }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val nodeValues = nodes.map { it.depth }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sessionValues = sessions.map { it.token }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val fileValues = files.map { it.size }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val jobValues = jobs.map { it.status }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val postValues = posts.map { it.slug }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val bucketValues = buckets.map { it.count }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val frameValues = frames.map { it.index }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val edgeValues = edges.map { it.weight }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val ticketValues = tickets.map { it.state }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val sampleValues = samples.map { it.value }.distinct()","topic":"call","form":"statement","focus":["{}","."],"note_zh":"映射去重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeItem = items.firstOrNull { it.id == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeUser = users.firstOrNull { it.name == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeOrder = orders.firstOrNull { it.total == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeTask = tasks.firstOrNull { it.done == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeRow = rows.firstOrNull { it.score == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeEvent = events.firstOrNull { it.kind == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybePath = paths.firstOrNull { it.stem == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeRecord = records.firstOrNull { it.label == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeNode = nodes.firstOrNull { it.depth == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeSession = sessions.firstOrNull { it.token == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeFile = files.firstOrNull { it.size == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeJob = jobs.firstOrNull { it.status == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybePost = posts.firstOrNull { it.slug == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeBucket = buckets.firstOrNull { it.count == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeFrame = frames.firstOrNull { it.index == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeEdge = edges.firstOrNull { it.weight == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeTicket = tickets.firstOrNull { it.state == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val maybeSample = samples.firstOrNull { it.value == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"条件查找","source_id":"keyloop:programming-basics:seeds"}
+{"text":"items += newItem","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"users += newUser","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"orders += newOrder","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"tasks += newTask","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rows += newRow","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"events += newEvent","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"paths += newPath","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"records += newRecord","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"nodes += newNode","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sessions += newSession","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"files += newFile","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"jobs += newJob","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"posts += newPost","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"buckets += newBucket","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"frames += newFrame","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"edges += newEdge","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"tickets += newTicket","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"samples += newSample","topic":"call","form":"statement","focus":["+="],"note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasItem = items.any { it.id == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasUser = users.any { it.name == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasOrder = orders.any { it.total == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasTask = tasks.any { it.done == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasRow = rows.any { it.score == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasEvent = events.any { it.kind == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasPath = paths.any { it.stem == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasRecord = records.any { it.label == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasNode = nodes.any { it.depth == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasSession = sessions.any { it.token == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasFile = files.any { it.size == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasJob = jobs.any { it.status == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasPost = posts.any { it.slug == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasBucket = buckets.any { it.count == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasFrame = frames.any { it.index == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasEdge = edges.any { it.weight == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasTicket = tickets.any { it.state == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hasSample = samples.any { it.value == target }","topic":"control","form":"statement","focus":["{}","=="],"note_zh":"存在判断","source_id":"keyloop:programming-basics:seeds"}
 {"text":"const val ACCENT = \"#ef4444\"","topic":"literal","form":"statement","focus":["#","\""],"note_zh":"颜色常量","source_id":"keyloop:programming-basics:seeds"}
 {"text":"const val DEFAULT_PORT = 8080","topic":"literal","form":"statement","focus":["="],"note_zh":"端口常量","source_id":"keyloop:programming-basics:seeds"}
 {"text":"const val VERSION = \"2.1.20\"","topic":"literal","form":"statement","focus":["\"","."],"note_zh":"版本号常量","source_id":"keyloop:programming-basics:seeds"}
@@ -145,6 +388,26 @@
 {"text":"val name = user?.profile?.name ?: \"guest\"","topic":"declaration","form":"statement","focus":["?.","?:"],"note_zh":"安全调用带默认","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val theme = prefs[\"theme\"] ?: \"light\"","topic":"declaration","form":"statement","focus":["[]","?:"],"note_zh":"取值带默认","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val active = users.filter { it.active }.map { it.name }","topic":"call","form":"statement","focus":["{}","."],"note_zh":"链式调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val mask = 0b1111 shl 4","topic":"literal","form":"statement","focus":["shl","0b"],"note_zh":"左移掩码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val packed = (high shl 8) or low","topic":"literal","form":"statement","focus":["shl","or"],"note_zh":"位拼接","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val checksum = payload.sum() and 0xFF","topic":"literal","form":"statement","focus":["and","0x"],"note_zh":"校验和","source_id":"keyloop:programming-basics:seeds"}
+{"text":"flags = flags or 0x04","topic":"literal","form":"statement","focus":["or","0x"],"note_zh":"置位","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val coords = Pair(lat, lng)","topic":"literal","form":"statement","focus":["()",","],"note_zh":"二元组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val inRange = score in 0..100","topic":"literal","form":"statement","focus":["..","in"],"note_zh":"区间判断","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val pct = \"%.1f%%\".format(ratio * 100)","topic":"literal","form":"statement","focus":["%","()"],"note_zh":"百分比格式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val headers = mapOf(\"Authorization\" to \"Bearer $token\")","topic":"literal","form":"statement","focus":["()","$"],"note_zh":"鉴权头","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val matrix = Array(3) { IntArray(3) }","topic":"literal","form":"statement","focus":["{}","()"],"note_zh":"二维初始化","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val merged = defaults + overrides","topic":"literal","form":"statement","focus":["+"],"note_zh":"映射合并","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val tail = path.substringAfterLast(\"/\")","topic":"string","form":"statement","focus":["()","/"],"note_zh":"取末段","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val name = data[\"name\"]?.trim() ?: \"\"","topic":"string","form":"statement","focus":["?.","?:"],"note_zh":"取值去空白","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val slug = title.replace(Regex(\"\\\\W+\"), \"-\")","topic":"string","form":"statement","focus":["()","-"],"note_zh":"生成 slug","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val result = if (a > b) a else b","topic":"control","form":"statement","focus":[">","()"],"note_zh":"三元取大","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val retries = maxOf(0, limit - 1)","topic":"control","form":"statement","focus":["()","-"],"note_zh":"下限保护","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val hex = color.removePrefix(\"#\")","topic":"string","form":"statement","focus":["()","#"],"note_zh":"去井号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val bytes = text.toByteArray(Charsets.UTF_8)","topic":"string","form":"statement","focus":["()","_"],"note_zh":"转字节","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val pairs = keys.zip(values).toMap()","topic":"index","form":"statement","focus":["()","."],"note_zh":"配对成映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val clamped = volume.coerceIn(0, 100)","topic":"literal","form":"statement","focus":["()",","],"note_zh":"范围夹取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val percent = done * 100 / total","topic":"literal","form":"statement","focus":["*","/"],"note_zh":"百分比计算","source_id":"keyloop:programming-basics:seeds"}
 {"text":"if (user == null || user.name.isBlank()) {\n  return fallback\n}","topic":"control","form":"block","note_zh":"判空守卫块","source_id":"keyloop:programming-basics:seeds"}
 {"text":"for (order in orders) {\n  render(order)\n}","topic":"control","form":"block","note_zh":"for-in 循环块","source_id":"keyloop:programming-basics:seeds"}
 {"text":"try {\n  parse(raw)\n} catch (e: NumberFormatException) {\n  report(e)\n}","topic":"control","form":"block","note_zh":"异常捕获块","source_id":"keyloop:programming-basics:seeds"}
@@ -158,3 +421,16 @@
 {"text":"val names = users\n  .filter { it.active }\n  .map { it.name }","topic":"call","form":"block","note_zh":"链式调用块","source_id":"keyloop:programming-basics:seeds"}
 {"text":"scope.launch {\n  refresh()\n}","topic":"call","form":"block","note_zh":"协程启动块","source_id":"keyloop:programming-basics:seeds"}
 {"text":"val summary = buildString {\n  append(\"count: ${list.size}\")\n}","topic":"call","form":"block","note_zh":"构建字符串块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"when {\n  score >= 90 -> grade = \"A\"\n  else -> grade = \"B\"\n}","topic":"control","form":"block","note_zh":"when 条件块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"data class Config(\n  val retries: Int = 3,\n  val timeoutMs: Long = 30_000L,\n)","topic":"declaration","form":"block","note_zh":"数据类默认值块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"user?.let {\n  render(it)\n}","topic":"call","form":"block","note_zh":"let 作用域块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val headers = buildMap {\n  put(\"Accept\", \"application/json\")\n}","topic":"call","form":"block","note_zh":"构建映射块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"for ((index, line) in lines.withIndex()) {\n  println(\"$index: $line\")\n}","topic":"control","form":"block","note_zh":"带下标遍历块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val result = runCatching {\n  parse(raw)\n}.getOrNull()","topic":"call","form":"block","note_zh":"异常捕获块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"enum class Status {\n  OPEN, CLOSED, DRAFT\n}","topic":"declaration","form":"block","note_zh":"枚举定义块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val cache by lazy {\n  loadAll()\n}","topic":"declaration","form":"block","note_zh":"惰性初始化块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"if (n % 2 == 0) {\n  even += 1\n} else {\n  odd += 1\n}","topic":"control","form":"block","note_zh":"奇偶分支块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val total = prices.fold(0) { acc, p ->\n  acc + p\n}","topic":"call","form":"block","note_zh":"折叠累加块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val deferred = scope.async {\n  loadUser(id)\n}","topic":"call","form":"block","note_zh":"异步求值块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"val pairs = entries.map { (k, v) ->\n  \"$k=$v\"\n}","topic":"call","form":"block","note_zh":"解构映射块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repeat(3) { attempt ->\n  send(attempt)\n}","topic":"call","form":"block","note_zh":"重复执行块","source_id":"keyloop:programming-basics:seeds"}

@@ -5,6 +5,7 @@
     "c",
     "cpp",
     "csharp",
+    "css",
     "go",
     "java",
     "javascript",
@@ -13,6 +14,9 @@
     "python",
     "ruby",
     "rust",
+    "scss",
+    "solidity",
+    "sql",
     "swift",
     "typescript"
   ]

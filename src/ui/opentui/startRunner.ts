@@ -1,5 +1,7 @@
 import { join } from "node:path";
 
+import { logPerfEvent } from "./perfLog";
+
 import type {
   CodePracticeConfig,
   CompletionState,
@@ -1242,14 +1244,24 @@ export async function runLessonUntilComplete(
         return;
       }
 
-      await settleRecord(
-        sessionRecordFromLiveSession(session, {
-          ...recordOptions(currentContext, selection, "completed"),
-          started_at: new Date(startedAtMs ?? currentMs).toISOString(),
-          duration_ms: elapsedMs,
-          manual_pause_ms: pausedTotalMs,
-        }),
-      );
+      const completeAtMs = performance.now();
+      const completedRecord = sessionRecordFromLiveSession(session, {
+        ...recordOptions(currentContext, selection, "completed"),
+        started_at: new Date(startedAtMs ?? currentMs).toISOString(),
+        duration_ms: elapsedMs,
+        manual_pause_ms: pausedTotalMs,
+      });
+      const builtAtMs = performance.now();
+      await settleRecord(completedRecord);
+      const savedAtMs = performance.now();
+      // 结算卡顿取证：记录"句号打完→记录构造(含 collectTokenStats)→落盘"各阶段耗时
+      logPerfEvent(currentContext.dataDir, "lesson_settle", {
+        category: completedRecord.category,
+        lesson: selection.lesson.id,
+        record_build: builtAtMs - completeAtMs,
+        record_save: savedAtMs - builtAtMs,
+        total: savedAtMs - completeAtMs,
+      });
     };
 
     const triggerWordAudioForInput = (key: LiveKey, beforeInputLength: number): void => {
@@ -1341,6 +1353,7 @@ export async function showCompletionPage(
           speedUnit: context.speedUnit ?? "wpm",
           todayElapsedMs: todayElapsedBeforeLesson,
         };
+  const renderStartMs = performance.now();
   const state = createOpenTuiCompletionState(
     context.language,
     record,
@@ -1351,6 +1364,12 @@ export async function showCompletionPage(
     options,
     reusableRenderer,
   );
+  // 结算卡顿取证：记录完成页渲染（不含等待用户输入）的耗时
+  logPerfEvent(context.dataDir, "completion_render", {
+    category: record.category,
+    lesson: completedLesson.id,
+    render: performance.now() - renderStartMs,
+  });
   const action = await waitForPostCompletionAction(renderer, state, {
     codeControlsEnabled: isLiveCodeSettingsEnabled(context),
     destroyOnSettle: false,
@@ -1380,6 +1399,7 @@ export async function showSummaryPage(
   options: OpenTuiStartRunnerOptions,
   reusableRenderer: OpenTuiRenderer | undefined,
 ): Promise<SummaryDismissResult> {
+  const renderStartMs = performance.now();
   const renderer = await rendererForState(
     createOpenTuiSummaryState(
       context.language,
@@ -1394,6 +1414,11 @@ export async function showSummaryPage(
     options,
     reusableRenderer,
   );
+  // 结算卡顿取证：记录总结页渲染（不含等待用户输入）的耗时
+  logPerfEvent(context.dataDir, "summary_render", {
+    lessons: lessons.length,
+    render: performance.now() - renderStartMs,
+  });
   const action = await waitForSummaryDismiss(renderer, {
     enterAction: context.returnState === undefined ? "quit" : "return",
   });

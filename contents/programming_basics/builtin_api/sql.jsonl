@@ -1,0 +1,74 @@
+{"text":"COUNT(id)","topic":"aggregate","api":"COUNT","note_zh":"计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"COUNT(*)","topic":"aggregate","api":"COUNT","note_zh":"总行数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"COUNT(DISTINCT user_id)","topic":"aggregate","api":"COUNT","note_zh":"去重计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SUM(amount)","topic":"aggregate","api":"SUM","note_zh":"求和","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SUM(price * quantity)","topic":"aggregate","api":"SUM","note_zh":"加权求和","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SUM(quantity)","topic":"aggregate","api":"SUM","note_zh":"数量合计","source_id":"keyloop:programming-basics:seeds"}
+{"text":"AVG(price)","topic":"aggregate","api":"AVG","note_zh":"均价","source_id":"keyloop:programming-basics:seeds"}
+{"text":"AVG(score)","topic":"aggregate","api":"AVG","note_zh":"平均分","source_id":"keyloop:programming-basics:seeds"}
+{"text":"MAX(score)","topic":"aggregate","api":"MAX","note_zh":"最大值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"MAX(created_at)","topic":"aggregate","api":"MAX","note_zh":"最近时间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"MIN(score)","topic":"aggregate","api":"MIN","note_zh":"最小值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"GROUP_CONCAT(name)","topic":"aggregate","api":"GROUP_CONCAT","note_zh":"拼接分组","source_id":"keyloop:programming-basics:seeds"}
+{"text":"STDDEV(x)","topic":"aggregate","api":"STDDEV","note_zh":"标准差","source_id":"keyloop:programming-basics:seeds"}
+{"text":"VARIANCE(x)","topic":"aggregate","api":"VARIANCE","note_zh":"方差","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPPER(name)","topic":"string_ops","api":"UPPER","note_zh":"转大写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPPER(country_code)","topic":"string_ops","api":"UPPER","note_zh":"国家码大写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"LOWER(email)","topic":"string_ops","api":"LOWER","note_zh":"转小写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"LOWER(slug)","topic":"string_ops","api":"LOWER","note_zh":"slug 小写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"LENGTH(title)","topic":"string_ops","api":"LENGTH","note_zh":"字符长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"LENGTH(description)","topic":"string_ops","api":"LENGTH","note_zh":"描述长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SUBSTR(code, 1, 4)","topic":"string_ops","api":"SUBSTR","note_zh":"截取子串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SUBSTR(token, 1, 8)","topic":"string_ops","api":"SUBSTR","note_zh":"截取令牌","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CONCAT(first_name, last_name)","topic":"string_ops","api":"CONCAT","note_zh":"拼接姓名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CONCAT(a, b)","topic":"string_ops","api":"CONCAT","note_zh":"拼接字段","source_id":"keyloop:programming-basics:seeds"}
+{"text":"TRIM(name)","topic":"string_ops","api":"TRIM","note_zh":"去空白","source_id":"keyloop:programming-basics:seeds"}
+{"text":"REPLACE(phone, '-', '')","topic":"string_ops","api":"REPLACE","note_zh":"去连字符","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSTR(email, '@')","topic":"string_ops","api":"INSTR","note_zh":"查找位置","source_id":"keyloop:programming-basics:seeds"}
+{"text":"NOW()","topic":"datetime","api":"NOW","note_zh":"当前时刻","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CURDATE()","topic":"datetime","api":"CURDATE","note_zh":"当前日期","source_id":"keyloop:programming-basics:seeds"}
+{"text":"EXTRACT(year FROM dt)","topic":"datetime","api":"EXTRACT","note_zh":"提取年份","source_id":"keyloop:programming-basics:seeds"}
+{"text":"EXTRACT(month FROM created_at)","topic":"datetime","api":"EXTRACT","note_zh":"提取月份","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DATE_FORMAT(dt, '%Y-%m-%d')","topic":"datetime","api":"DATE_FORMAT","note_zh":"格式化日期","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DATE_FORMAT(now, '%H:%M:%S')","topic":"datetime","api":"DATE_FORMAT","note_zh":"格式化时间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DATE_ADD(dt, INTERVAL 1 DAY)","topic":"datetime","api":"DATE_ADD","note_zh":"日期加一天","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DATE_ADD(created_at, INTERVAL 7 DAY)","topic":"datetime","api":"DATE_ADD","note_zh":"加七天","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DATEDIFF(end_date, start_date)","topic":"datetime","api":"DATEDIFF","note_zh":"日期差","source_id":"keyloop:programming-basics:seeds"}
+{"text":"YEAR(dt)","topic":"datetime","api":"YEAR","note_zh":"取年","source_id":"keyloop:programming-basics:seeds"}
+{"text":"YEAR(created_at)","topic":"datetime","api":"YEAR","note_zh":"取创建年","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DATEDIFF(a, b)","topic":"datetime","api":"DATEDIFF","note_zh":"天数差","source_id":"keyloop:programming-basics:seeds"}
+{"text":"MONTH(dt)","topic":"datetime","api":"MONTH","note_zh":"取月","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ABS(x)","topic":"math","api":"ABS","note_zh":"绝对值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ABS(balance)","topic":"math","api":"ABS","note_zh":"余额绝对值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ROUND(price, 2)","topic":"math","api":"ROUND","note_zh":"四舍五入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ROUND(rate, 4)","topic":"math","api":"ROUND","note_zh":"保留四位","source_id":"keyloop:programming-basics:seeds"}
+{"text":"FLOOR(x)","topic":"math","api":"FLOOR","note_zh":"向下取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"FLOOR(total)","topic":"math","api":"FLOOR","note_zh":"总额取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CEIL(x)","topic":"math","api":"CEIL","note_zh":"向上取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"MOD(a, b)","topic":"math","api":"MOD","note_zh":"取模","source_id":"keyloop:programming-basics:seeds"}
+{"text":"MOD(id, 10)","topic":"math","api":"MOD","note_zh":"分桶取模","source_id":"keyloop:programming-basics:seeds"}
+{"text":"POWER(x, 2)","topic":"math","api":"POWER","note_zh":"幂运算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"POWER(base, exp)","topic":"math","api":"POWER","note_zh":"底数幂","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CEIL(amount)","topic":"math","api":"CEIL","note_zh":"金额上取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SQRT(x)","topic":"math","api":"SQRT","note_zh":"平方根","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SIGN(x)","topic":"math","api":"SIGN","note_zh":"符号函数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CAST(x AS INT)","topic":"conversion","api":"CAST","note_zh":"转整型","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CAST(price AS DECIMAL)","topic":"conversion","api":"CAST","note_zh":"转小数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CAST(created_at AS DATE)","topic":"conversion","api":"CAST","note_zh":"转日期","source_id":"keyloop:programming-basics:seeds"}
+{"text":"COALESCE(a, b)","topic":"conversion","api":"COALESCE","note_zh":"取首个非空","source_id":"keyloop:programming-basics:seeds"}
+{"text":"COALESCE(nickname, name, 'guest')","topic":"conversion","api":"COALESCE","note_zh":"多级兜底","source_id":"keyloop:programming-basics:seeds"}
+{"text":"COALESCE(phone, 'n/a')","topic":"conversion","api":"COALESCE","note_zh":"电话兜底","source_id":"keyloop:programming-basics:seeds"}
+{"text":"IFNULL(x, 0)","topic":"conversion","api":"IFNULL","note_zh":"空值替零","source_id":"keyloop:programming-basics:seeds"}
+{"text":"IFNULL(discount, 0)","topic":"conversion","api":"IFNULL","note_zh":"折扣兜底","source_id":"keyloop:programming-basics:seeds"}
+{"text":"NULLIF(a, b)","topic":"conversion","api":"NULLIF","note_zh":"相等转空","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CONVERT(x, CHAR)","topic":"conversion","api":"CONVERT","note_zh":"转字符","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ROW_NUMBER() OVER()","topic":"window","api":"ROW_NUMBER","note_zh":"行号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"RANK() OVER()","topic":"window","api":"RANK","note_zh":"排名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"RANK() OVER(ORDER BY score)","topic":"window","api":"RANK","note_zh":"按分排名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DENSE_RANK() OVER()","topic":"window","api":"DENSE_RANK","note_zh":"密集排名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"LAG(x) OVER()","topic":"window","api":"LAG","note_zh":"上一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"LAG(amount) OVER()","topic":"window","api":"LAG","note_zh":"上一笔金额","source_id":"keyloop:programming-basics:seeds"}
+{"text":"LEAD(x) OVER()","topic":"window","api":"LEAD","note_zh":"下一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"LEAD(price) OVER()","topic":"window","api":"LEAD","note_zh":"下一价格","source_id":"keyloop:programming-basics:seeds"}
+{"text":"NTILE(4) OVER()","topic":"window","api":"NTILE","note_zh":"四分位","source_id":"keyloop:programming-basics:seeds"}
+{"text":"NTILE(10) OVER()","topic":"window","api":"NTILE","note_zh":"十分位","source_id":"keyloop:programming-basics:seeds"}

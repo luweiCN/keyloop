@@ -1,0 +1,89 @@
+{"text":"#FF0000","topic":"literal","form":"value","note_zh":"红色十六进制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#3B82F6","topic":"literal","form":"value","note_zh":"蓝色十六进制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#0F172A","topic":"literal","form":"value","note_zh":"深底色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#00000080","topic":"literal","form":"value","note_zh":"半透明黑","source_id":"keyloop:programming-basics:seeds"}
+{"text":"100px","topic":"literal","form":"value","note_zh":"像素长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"16px","topic":"literal","form":"value","note_zh":"字号像素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1.5em","topic":"literal","form":"value","note_zh":"相对长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2rem","topic":"literal","form":"value","note_zh":"根相对长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1.5rem","topic":"literal","form":"value","note_zh":"根相对长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"50%","topic":"literal","form":"value","note_zh":"百分比","source_id":"keyloop:programming-basics:seeds"}
+{"text":"100%","topic":"literal","form":"value","note_zh":"全宽","source_id":"keyloop:programming-basics:seeds"}
+{"text":"100vh","topic":"literal","form":"value","note_zh":"视口高","source_id":"keyloop:programming-basics:seeds"}
+{"text":"100vw","topic":"literal","form":"value","note_zh":"视口宽","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0.3s","topic":"literal","form":"value","note_zh":"时间秒","source_id":"keyloop:programming-basics:seeds"}
+{"text":"300ms","topic":"literal","form":"value","note_zh":"毫秒","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1fr","topic":"literal","form":"value","note_zh":"网格分数单位","source_id":"keyloop:programming-basics:seeds"}
+{"text":"90deg","topic":"literal","form":"value","note_zh":"角度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0.5","topic":"literal","form":"value","note_zh":"透明度系数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"999","topic":"literal","form":"value","note_zh":"层叠层级","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1.2","topic":"literal","form":"value","note_zh":"行高倍数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"color: #FF0000;","topic":"declaration","form":"statement","focus":[":","#"],"note_zh":"文字颜色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"background-color: #3B82F6;","topic":"declaration","form":"statement","focus":[":","#"],"note_zh":"背景色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"margin: 0 auto;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"水平居中","source_id":"keyloop:programming-basics:seeds"}
+{"text":"padding: 8px 16px;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"内边距","source_id":"keyloop:programming-basics:seeds"}
+{"text":"display: flex;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"弹性布局","source_id":"keyloop:programming-basics:seeds"}
+{"text":"display: grid;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"网格布局","source_id":"keyloop:programming-basics:seeds"}
+{"text":"position: absolute;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"绝对定位","source_id":"keyloop:programming-basics:seeds"}
+{"text":"position: relative;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"相对定位","source_id":"keyloop:programming-basics:seeds"}
+{"text":"width: calc(100% - 20px);","topic":"call","form":"statement","focus":["()","-"],"note_zh":"计算宽度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"height: 100vh;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"视口高度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"z-index: 999;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"层叠顺序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"opacity: 0.5;","topic":"declaration","form":"statement","focus":[":","."],"note_zh":"不透明度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"border: 1px solid #ccc;","topic":"declaration","form":"statement","focus":[":","#"],"note_zh":"边框","source_id":"keyloop:programming-basics:seeds"}
+{"text":"border-radius: 8px;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"圆角","source_id":"keyloop:programming-basics:seeds"}
+{"text":"font-size: 1.5rem;","topic":"declaration","form":"statement","focus":[":","."],"note_zh":"字号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"font-weight: 700;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"字重","source_id":"keyloop:programming-basics:seeds"}
+{"text":"line-height: 1.5;","topic":"declaration","form":"statement","focus":[":","."],"note_zh":"行高","source_id":"keyloop:programming-basics:seeds"}
+{"text":"flex: 1 1 auto;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"弹性简写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"flex-direction: column;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"主轴方向","source_id":"keyloop:programming-basics:seeds"}
+{"text":"justify-content: space-between;","topic":"declaration","form":"statement","focus":[":","-"],"note_zh":"主轴对齐","source_id":"keyloop:programming-basics:seeds"}
+{"text":"align-items: center;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"交叉轴对齐","source_id":"keyloop:programming-basics:seeds"}
+{"text":"gap: 16px;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"间距","source_id":"keyloop:programming-basics:seeds"}
+{"text":"grid-template-columns: repeat(3, 1fr);","topic":"call","form":"statement","focus":["()",","],"note_zh":"网格列定义","source_id":"keyloop:programming-basics:seeds"}
+{"text":"transition: all 0.3s ease;","topic":"call","form":"statement","focus":[":","."],"note_zh":"过渡动画","source_id":"keyloop:programming-basics:seeds"}
+{"text":"background: rgba(0, 0, 0, 0.5);","topic":"call","form":"statement","focus":["()",","],"note_zh":"半透明背景","source_id":"keyloop:programming-basics:seeds"}
+{"text":"transform: translateX(10px);","topic":"call","form":"statement","focus":["()"],"note_zh":"水平位移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"box-shadow: 0 2px 4px #0003;","topic":"declaration","form":"statement","focus":[":","#"],"note_zh":"投影","source_id":"keyloop:programming-basics:seeds"}
+{"text":"text-align: center;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"文本居中","source_id":"keyloop:programming-basics:seeds"}
+{"text":"overflow: hidden;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"溢出隐藏","source_id":"keyloop:programming-basics:seeds"}
+{"text":"cursor: pointer;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"指针手型","source_id":"keyloop:programming-basics:seeds"}
+{"text":"top: 0;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"顶部偏移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"left: 50%;","topic":"declaration","form":"statement","focus":[":","%"],"note_zh":"左偏移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"right: 0;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"右偏移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"bottom: 0;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"底部偏移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"max-width: 1200px;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"最大宽度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"min-height: 100vh;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"最小高度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"color: rgba(15, 23, 42, 0.8);","topic":"call","form":"statement","focus":["()",","],"note_zh":"半透明文字","source_id":"keyloop:programming-basics:seeds"}
+{"text":"background: linear-gradient(45deg, red, blue);","topic":"call","form":"statement","focus":["()",","],"note_zh":"渐变背景","source_id":"keyloop:programming-basics:seeds"}
+{"text":"font-family: 'Inter', sans-serif;","topic":"declaration","form":"statement","focus":[":","'"],"note_zh":"字体族","source_id":"keyloop:programming-basics:seeds"}
+{"text":"letter-spacing: 0.05em;","topic":"declaration","form":"statement","focus":[":","."],"note_zh":"字间距","source_id":"keyloop:programming-basics:seeds"}
+{"text":"text-decoration: none;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"去下划线","source_id":"keyloop:programming-basics:seeds"}
+{"text":"list-style: none;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"去列表符号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"object-fit: cover;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"图片填充","source_id":"keyloop:programming-basics:seeds"}
+{"text":"white-space: nowrap;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"不换行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"pointer-events: none;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"禁用指针事件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"visibility: hidden;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"隐藏但占位","source_id":"keyloop:programming-basics:seeds"}
+{"text":"outline: 2px solid #3B82F6;","topic":"call","form":"statement","focus":[":","#"],"note_zh":"焦点轮廓","source_id":"keyloop:programming-basics:seeds"}
+{"text":"filter: blur(4px);","topic":"call","form":"statement","focus":["()"],"note_zh":"模糊滤镜","source_id":"keyloop:programming-basics:seeds"}
+{"text":"backdrop-filter: blur(10px);","topic":"call","form":"statement","focus":["()"],"note_zh":"背景模糊","source_id":"keyloop:programming-basics:seeds"}
+{"text":"content: '';","topic":"declaration","form":"statement","focus":[":","'"],"note_zh":"伪元素内容","source_id":"keyloop:programming-basics:seeds"}
+{"text":"--primary: #3B82F6;","topic":"declaration","form":"statement","focus":["--","#"],"note_zh":"自定义属性","source_id":"keyloop:programming-basics:seeds"}
+{"text":"color: var(--primary);","topic":"call","form":"statement","focus":["()","--"],"note_zh":"引用变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"width: min(100%, 600px);","topic":"call","form":"statement","focus":["()",","],"note_zh":"取较小值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"aspect-ratio: 16 / 9;","topic":"declaration","form":"statement","focus":[":","/"],"note_zh":"宽高比","source_id":"keyloop:programming-basics:seeds"}
+{"text":".btn {\n  color: #fff;\n  padding: 8px;\n}","topic":"declaration","form":"block","note_zh":"按钮规则块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"@media (max-width: 768px) {\n  .nav { display: none; }\n}","topic":"declaration","form":"block","note_zh":"媒体查询块","source_id":"keyloop:programming-basics:seeds"}
+{"text":":root {\n  --primary: #3B82F6;\n}","topic":"declaration","form":"block","note_zh":"根变量块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"@keyframes spin {\n  to { transform: rotate(360deg); }\n}","topic":"declaration","form":"block","note_zh":"关键帧块","source_id":"keyloop:programming-basics:seeds"}
+{"text":".card {\n  display: flex;\n  gap: 16px;\n}","topic":"declaration","form":"block","note_zh":"卡片布局块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"a:hover {\n  color: #3B82F6;\n}","topic":"declaration","form":"block","note_zh":"悬停状态块","source_id":"keyloop:programming-basics:seeds"}
+{"text":".grid {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n}","topic":"declaration","form":"block","note_zh":"网格容器块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"* {\n  margin: 0;\n  box-sizing: border-box;\n}","topic":"declaration","form":"block","note_zh":"全局重置块","source_id":"keyloop:programming-basics:seeds"}
+{"text":".modal::before {\n  content: '';\n  position: absolute;\n}","topic":"declaration","form":"block","note_zh":"伪元素块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"@media (min-width: 1024px) {\n  .sidebar { width: 280px; }\n}","topic":"declaration","form":"block","note_zh":"桌面端查询块","source_id":"keyloop:programming-basics:seeds"}
+{"text":".badge {\n  border-radius: 9999px;\n  padding: 2px 8px;\n}","topic":"declaration","form":"block","note_zh":"徽标样式块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"input:focus {\n  outline: 2px solid #3B82F6;\n}","topic":"declaration","form":"block","note_zh":"聚焦轮廓块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"@keyframes fade {\n  from { opacity: 0; }\n  to { opacity: 1; }\n}","topic":"declaration","form":"block","note_zh":"淡入动画块","source_id":"keyloop:programming-basics:seeds"}
+{"text":".btn:disabled {\n  opacity: 0.5;\n  cursor: not-allowed;\n}","topic":"declaration","form":"block","note_zh":"禁用状态块","source_id":"keyloop:programming-basics:seeds"}
+{"text":"body {\n  font-family: 'Inter', sans-serif;\n  line-height: 1.5;\n}","topic":"declaration","form":"block","note_zh":"正文基础块","source_id":"keyloop:programming-basics:seeds"}

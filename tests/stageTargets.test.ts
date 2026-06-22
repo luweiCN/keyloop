@@ -14,11 +14,30 @@ import {
   buildStageTarget,
   fitSymbolsTargetToBudget,
   refreshModuleMixTarget,
+  selectSnippetsWithinBudget,
+  symbolSupplementLines,
   usedCodeSnippetTexts,
   type BuildTargetContext,
 } from "../src/training/targets";
+import type { CodeSnippet } from "../src/content/snippets";
 import { comprehensivePlanMinutes } from "../src/ui/opentui/routeLines";
 import { defaultSessionRecord } from "../src/index";
+
+/** 构造指定字符数的代码片段，用于验证按预算选片的边界行为 */
+function coarseSnippet(chars: number, id: number): CodeSnippet {
+  const prefix = `// snippet ${id}\n`;
+  const body = "x".repeat(Math.max(0, chars - prefix.length));
+  return {
+    text: prefix + body,
+    source: `test:coarse-${id}`,
+    difficulty: "medium",
+    score: 1,
+    language: "solidity",
+    framework: "",
+    project: "test",
+    level: "block",
+  };
+}
 
 function stageLibrary(): ContentLibrary {
   return {
@@ -567,6 +586,61 @@ describe("buildStageTarget code and keys", () => {
       profile: emptyProfile(),
     });
     expect([...target.text].length).toBeGreaterThanOrEqual(700);
+  });
+
+  test("symbolSupplementLines returns a large generic literal/symbol pool, independent of foundation drills", () => {
+    const context = stageContext();
+    // 真实 foundation_drills 的 number-row/punctuation-edges 是按宽度硬折行的英文语篇
+    context.library.foundation_drills = [
+      {
+        id: "number-row",
+        title_zh: "",
+        title_en: "",
+        hint_zh: "",
+        hint_en: "",
+        items: [
+          "cent of the students may type less than 20 words per minute.",
+          "and then a dozen seize Dan. In a daze he sees the zoo seized.",
+        ],
+      },
+      {
+        id: "punctuation-edges",
+        title_zh: "",
+        title_en: "",
+        hint_zh: "",
+        hint_en: "",
+        items: ["in just the mood to end her quota of visits in sixteen weeks."],
+      },
+    ];
+    const lines = symbolSupplementLines(context);
+    // 池足够大：冷门 / 符号不足的语言靠它兜底 8-10 分钟也不循环重复同几行
+    expect(lines.length).toBeGreaterThanOrEqual(40);
+    // 绝不泄漏 foundation 的折行英文语篇
+    expect(lines.some((line) => /\b(students|minute|dozen|seize|quota)\b/.test(line))).toBe(false);
+    // 每行都是真实字面量 / 运算符（含符号或数字），而非自然语言句
+    for (const line of lines) {
+      expect(/[^A-Za-z\s]/.test(line)).toBe(true);
+    }
+  });
+
+  test("selectSnippetsWithinBudget relaxes the ceiling when a coarse next snippet would otherwise leave it severely underfilled", () => {
+    // 第一片中等(50% 预算)、后续片很大：旧逻辑因第二片超 1.3× 容差直接 break，只剩 1 片 ~500(严重欠填)
+    const snippets: CodeSnippet[] = [
+      coarseSnippet(500, 0),
+      coarseSnippet(850, 1),
+      coarseSnippet(850, 2),
+    ];
+    const result = selectSnippetsWithinBudget(snippets, 1000);
+    const chars = result.reduce((sum, snippet) => sum + [...snippet.text].length, 0);
+    expect(chars).toBeGreaterThanOrEqual(1000);
+  });
+
+  test("selectSnippetsWithinBudget keeps the tolerance ceiling when already acceptably filled", () => {
+    // 第一片已达 85% 预算：轻微欠填不放宽，保持防超量上限(不超 1.3×)
+    const snippets: CodeSnippet[] = [coarseSnippet(850, 0), coarseSnippet(850, 1)];
+    const result = selectSnippetsWithinBudget(snippets, 1000);
+    const chars = result.reduce((sum, snippet) => sum + [...snippet.text].length, 0);
+    expect(chars).toBeLessThanOrEqual(Math.round(1000 * 1.3));
   });
 
   test("usedCodeSnippetTexts only excludes snippets within the recent window", () => {

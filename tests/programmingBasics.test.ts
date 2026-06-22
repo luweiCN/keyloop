@@ -226,21 +226,24 @@ describe("symbols numbers target", () => {
     expect(declarationLines.length).toBe(target.text.split("\n").length);
   });
 
-  test("avoids lines used in recent records", () => {
+  test("symbols selection is purely random and unaffected by recent records", () => {
     const contentRoot = makeFixtureRootWithManyCards();
     const options = { env: { KEYLOOP_TS_CONTENT_ROOT: contentRoot }, exists: () => true };
-    const first = buildSymbolsNumbersTarget(basicsContext([], ["typescript"]), options);
+    const fresh = buildSymbolsNumbersTarget(basicsContext([], ["typescript"], () => 0.42), options);
     const records = [
       defaultSessionRecord({
         module: "programming_basics",
         category: "symbols_numbers" as TrainingCategory,
-        target_text: first.text,
+        target_text: fresh.text,
       }),
     ];
-    const second = buildSymbolsNumbersTarget(basicsContext(records, ["typescript"]), options);
-    const firstLines = new Set(first.text.split("\n"));
-    const overlap = second.text.split("\n").filter((line) => firstLines.has(line));
-    expect(overlap.length).toBe(0);
+    const withHistory = buildSymbolsNumbersTarget(
+      basicsContext(records, ["typescript"], () => 0.42),
+      options,
+    );
+    // 纯随机：相同 rng 下历史记录不改变选择（去掉"偏好/硬排除已练卡"，靠随机+大池降低重复，
+    // 而非确定性轮转导致"今天三句明天又这三句、顺序还一样"）。
+    expect(withHistory.text).toBe(fresh.text);
   });
 });
 

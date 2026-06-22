@@ -181,6 +181,7 @@ export interface OpenTuiStateOptions {
   youdaoTtsCredentialStatus?: OpenTuiYoudaoTtsCredentialStatus | undefined;
   enabledModules?: TrainingModule[] | undefined;
   mainGoal?: MainGoal | undefined;
+  mainGoalCleared?: boolean | undefined;
   goalPromptOptedOut?: boolean | undefined;
   goalPromptLastShown?: string | undefined;
 }
@@ -365,6 +366,8 @@ export interface OpenTuiSessionState {
   today_elapsed_ms?: number | undefined;
   enabledModules?: TrainingModule[] | undefined;
   mainGoal?: MainGoal | undefined;
+  /** 用户在设置里显式关闭目标时置 true，区分「主动清除」与「偶然缺失」 */
+  mainGoalCleared?: boolean | undefined;
   goalPromptOptedOut?: boolean | undefined;
   goalPromptLastShown?: string | undefined;
 }
@@ -634,7 +637,8 @@ export function nextOpenTuiStatsView(state: OpenTuiAppState): OpenTuiAppState {
     return state;
   }
   const nextView = nextStatsView(state.route.view);
-  const options: OpenTuiStatsStateOptions = { view: nextView };
+  // stateOptions(state) 透传全部会话级字段（含 mainGoal），切页不丢目标
+  const options: OpenTuiStatsStateOptions = { ...stateOptions(state), view: nextView };
   if (state.route.now !== undefined) {
     options.now = state.route.now;
   }
@@ -646,21 +650,6 @@ export function nextOpenTuiStatsView(state: OpenTuiAppState): OpenTuiAppState {
   }
   if (state.route.dailyIndex !== undefined) {
     options.dailyIndex = state.route.dailyIndex;
-  }
-  if (state.speed_unit !== undefined) {
-    options.speedUnit = state.speed_unit;
-  }
-  if (state.codeFilters !== undefined) {
-    options.codeFilters = state.codeFilters;
-  }
-  if (state.codeSettings !== undefined) {
-    options.codeSettings = state.codeSettings;
-  }
-  if (state.everydaySettings !== undefined) {
-    options.everydaySettings = state.everydaySettings;
-  }
-  if (state.wordFormSettings !== undefined) {
-    options.wordFormSettings = state.wordFormSettings;
   }
   return createOpenTuiStatsState(state.language, state.route.records, options);
 }
@@ -1149,6 +1138,9 @@ function appState(
   if (options.mainGoal !== undefined) {
     state.mainGoal = options.mainGoal;
   }
+  if (options.mainGoalCleared !== undefined) {
+    state.mainGoalCleared = options.mainGoalCleared;
+  }
   if (options.goalPromptOptedOut !== undefined) {
     state.goalPromptOptedOut = options.goalPromptOptedOut;
   }
@@ -1266,6 +1258,9 @@ export function stateOptions(state: OpenTuiAppState): OpenTuiStateOptions {
   }
   if (state.mainGoal !== undefined) {
     options.mainGoal = state.mainGoal;
+  }
+  if (state.mainGoalCleared !== undefined) {
+    options.mainGoalCleared = state.mainGoalCleared;
   }
   if (state.goalPromptOptedOut !== undefined) {
     options.goalPromptOptedOut = state.goalPromptOptedOut;

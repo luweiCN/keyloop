@@ -298,7 +298,7 @@ export function reduceOpenTuiAppKey(
       };
     }
     case "stats":
-      return reduceStatsKey({ language: state.language, route: state.route }, event);
+      return reduceStatsKey({ ...state, route: state.route }, event);
     case "settings":
       return reduceSettingsKey(
         { language: state.language, route: state.route },
@@ -492,7 +492,7 @@ function reduceMenuKey(
     item.id === "settings"
       ? settingsRootState(state, context)
       : item.id === "stats"
-        ? statsState(state.language, context, "overview")
+        ? statsState(state, context, "overview")
         : activateOpenTuiMenuItem(state, item.id as OpenTuiMenuItemId, context);
   const routedState =
     nextState.route.screen === "running"

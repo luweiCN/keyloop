@@ -1,0 +1,221 @@
+{"text":"0","topic":"literal","form":"value","note_zh":"零值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1","topic":"literal","form":"value","note_zh":"单位值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"100","topic":"literal","form":"value","note_zh":"整百","source_id":"keyloop:programming-basics:seeds"}
+{"text":"42","topic":"literal","form":"value","note_zh":"整型字面量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"255","topic":"literal","form":"value","note_zh":"字节上限","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2026","topic":"literal","form":"value","note_zh":"年份","source_id":"keyloop:programming-basics:seeds"}
+{"text":"-1","topic":"literal","form":"value","note_zh":"哨兵值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"3.14","topic":"literal","form":"value","note_zh":"浮点数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0.5","topic":"literal","form":"value","note_zh":"系数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1000000","topic":"literal","form":"value","note_zh":"百万","source_id":"keyloop:programming-basics:seeds"}
+{"text":"NULL","topic":"literal","form":"value","note_zh":"空值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"TRUE","topic":"literal","form":"value","note_zh":"布尔真","source_id":"keyloop:programming-basics:seeds"}
+{"text":"FALSE","topic":"literal","form":"value","note_zh":"布尔假","source_id":"keyloop:programming-basics:seeds"}
+{"text":"'active'","topic":"string","form":"value","note_zh":"状态串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"'paid'","topic":"string","form":"value","note_zh":"状态串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"'2026-06-22'","topic":"string","form":"value","note_zh":"日期串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"'2026-06-22T09:30:00Z'","topic":"string","form":"value","note_zh":"ISO 时间戳","source_id":"keyloop:programming-basics:seeds"}
+{"text":"'%Y-%m-%d'","topic":"string","form":"value","note_zh":"日期格式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"'admin@x.com'","topic":"string","form":"value","note_zh":"邮箱地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"'%@example.com'","topic":"string","form":"value","note_zh":"LIKE 模式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"'getting-started'","topic":"string","form":"value","note_zh":"slug 串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"'10.5'","topic":"string","form":"value","note_zh":"数字字符串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT email FROM users","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT status FROM orders","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT price FROM products","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT name FROM customers","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT amount FROM invoices","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT method FROM payments","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT token FROM sessions","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT level FROM logs","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT balance FROM accounts","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT title FROM employees","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT slug FROM categories","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT rating FROM reviews","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT state FROM tickets","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT carrier FROM shipments","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT body FROM comments","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT label FROM tags","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE email = 'active'","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE status = 'paid'","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE price = 0","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE name = 'admin'","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE amount = 100","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE method = 'card'","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE token = NULL","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE level = 'error'","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE balance = 0","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE title = 'manager'","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE slug = 'books'","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE rating = 5","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE state = 'open'","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE carrier = 'ups'","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE body = NULL","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE label = 'new'","topic":"control","form":"statement","focus":["=","WHERE"],"note_zh":"条件过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE users SET email = 'active'","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE orders SET status = 'paid'","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE products SET price = 0","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE customers SET name = 'admin'","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE invoices SET amount = 100","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE payments SET method = 'card'","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE sessions SET token = NULL","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE logs SET level = 'error'","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE accounts SET balance = 0","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE employees SET title = 'manager'","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE categories SET slug = 'books'","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE reviews SET rating = 5","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE tickets SET state = 'open'","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE shipments SET carrier = 'ups'","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE comments SET body = NULL","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE tags SET label = 'new'","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"更新赋值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO users (email) VALUES ('active')","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO orders (status) VALUES ('paid')","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO products (price) VALUES (0)","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO customers (name) VALUES ('admin')","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO invoices (amount) VALUES (100)","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO payments (method) VALUES ('card')","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO sessions (token) VALUES (NULL)","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO logs (level) VALUES ('error')","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO accounts (balance) VALUES (0)","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO employees (title) VALUES ('manager')","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO categories (slug) VALUES ('books')","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO reviews (rating) VALUES (5)","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO tickets (state) VALUES ('open')","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO shipments (carrier) VALUES ('ups')","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO comments (body) VALUES (NULL)","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO tags (label) VALUES ('new')","topic":"call","form":"statement","focus":["()"],"note_zh":"插入一行","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM users WHERE email = 'active'","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM orders WHERE status = 'paid'","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM products WHERE price = 0","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM customers WHERE name = 'admin'","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM invoices WHERE amount = 100","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM payments WHERE method = 'card'","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM sessions WHERE token = NULL","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM logs WHERE level = 'error'","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM accounts WHERE balance = 0","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM employees WHERE title = 'manager'","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM categories WHERE slug = 'books'","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM reviews WHERE rating = 5","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM tickets WHERE state = 'open'","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM shipments WHERE carrier = 'ups'","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM comments WHERE body = NULL","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM tags WHERE label = 'new'","topic":"call","form":"statement","focus":["WHERE"],"note_zh":"条件删除","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT email, COUNT(*) FROM users GROUP BY email","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT status, COUNT(*) FROM orders GROUP BY status","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT price, COUNT(*) FROM products GROUP BY price","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT name, COUNT(*) FROM customers GROUP BY name","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT amount, COUNT(*) FROM invoices GROUP BY amount","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT method, COUNT(*) FROM payments GROUP BY method","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT token, COUNT(*) FROM sessions GROUP BY token","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT level, COUNT(*) FROM logs GROUP BY level","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT balance, COUNT(*) FROM accounts GROUP BY balance","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT title, COUNT(*) FROM employees GROUP BY title","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT slug, COUNT(*) FROM categories GROUP BY slug","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT rating, COUNT(*) FROM reviews GROUP BY rating","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT state, COUNT(*) FROM tickets GROUP BY state","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT carrier, COUNT(*) FROM shipments GROUP BY carrier","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT body, COUNT(*) FROM comments GROUP BY body","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT label, COUNT(*) FROM tags GROUP BY label","topic":"call","form":"statement","focus":["()","*"],"note_zh":"分组计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT email FROM users ORDER BY email DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT status FROM orders ORDER BY status DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT price FROM products ORDER BY price DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT name FROM customers ORDER BY name DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT amount FROM invoices ORDER BY amount DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT method FROM payments ORDER BY method DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT token FROM sessions ORDER BY token DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT level FROM logs ORDER BY level DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT balance FROM accounts ORDER BY balance DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT title FROM employees ORDER BY title DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT slug FROM categories ORDER BY slug DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT rating FROM reviews ORDER BY rating DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT state FROM tickets ORDER BY state DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT carrier FROM shipments ORDER BY carrier DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT body FROM comments ORDER BY body DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT label FROM tags ORDER BY label DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"倒序排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM users WHERE email IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM orders WHERE status IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM products WHERE price IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM customers WHERE name IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM invoices WHERE amount IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM payments WHERE method IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM sessions WHERE token IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM logs WHERE level IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM accounts WHERE balance IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM employees WHERE title IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM categories WHERE slug IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM reviews WHERE rating IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM tickets WHERE state IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM shipments WHERE carrier IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM comments WHERE body IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM tags WHERE label IS NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"判空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT email FROM users","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT status FROM orders","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT price FROM products","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT name FROM customers","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT amount FROM invoices","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT method FROM payments","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT token FROM sessions","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT level FROM logs","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT balance FROM accounts","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT title FROM employees","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT slug FROM categories","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT rating FROM reviews","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT state FROM tickets","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT carrier FROM shipments","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT body FROM comments","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT DISTINCT label FROM tags","topic":"call","form":"statement","focus":["DISTINCT"],"note_zh":"去重查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT email FROM users GROUP BY email HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT status FROM orders GROUP BY status HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT price FROM products GROUP BY price HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT name FROM customers GROUP BY name HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT amount FROM invoices GROUP BY amount HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT method FROM payments GROUP BY method HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT token FROM sessions GROUP BY token HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT level FROM logs GROUP BY level HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT balance FROM accounts GROUP BY balance HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT title FROM employees GROUP BY title HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT slug FROM categories GROUP BY slug HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT rating FROM reviews GROUP BY rating HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT state FROM tickets GROUP BY state HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT carrier FROM shipments GROUP BY carrier HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT body FROM comments GROUP BY body HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT label FROM tags GROUP BY label HAVING COUNT(*) > 1","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组筛选","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT COUNT(*) FROM logs;","topic":"call","form":"statement","focus":["()","*"],"note_zh":"总行数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"LIMIT 10 OFFSET 20","topic":"control","form":"statement","focus":["LIMIT"],"note_zh":"分页","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ON a.id = b.user_id","topic":"control","form":"statement","focus":["=","."],"note_zh":"连接条件","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CASE WHEN x > 0 THEN 1 ELSE 0 END","topic":"control","form":"statement","focus":[">","CASE"],"note_zh":"条件表达式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM users LIMIT 100","topic":"call","form":"statement","focus":["*","LIMIT"],"note_zh":"限量查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE status IN ('paid', 'shipped')","topic":"control","form":"statement","focus":["()","IN"],"note_zh":"集合匹配","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE created_at >= '2026-01-01'","topic":"control","form":"statement","focus":[">=","'"],"note_zh":"日期范围","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE price BETWEEN 10 AND 100","topic":"control","form":"statement","focus":["BETWEEN"],"note_zh":"区间过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INNER JOIN orders ON orders.user_id = users.id","topic":"call","form":"statement","focus":["=","JOIN"],"note_zh":"内连接","source_id":"keyloop:programming-basics:seeds"}
+{"text":"LEFT JOIN payments ON payments.order_id = orders.id","topic":"call","form":"statement","focus":["=","JOIN"],"note_zh":"左连接","source_id":"keyloop:programming-basics:seeds"}
+{"text":"GROUP BY category ORDER BY total DESC","topic":"call","form":"statement","focus":["DESC"],"note_zh":"分组排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ORDER BY created_at DESC, id ASC","topic":"call","form":"statement","focus":["DESC","ASC"],"note_zh":"多列排序","source_id":"keyloop:programming-basics:seeds"}
+{"text":"HAVING COUNT(*) > 5","topic":"control","form":"statement","focus":["()",">"],"note_zh":"分组过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SET status = 'closed' WHERE id = 42","topic":"declaration","form":"statement","focus":["=","SET"],"note_zh":"条件更新","source_id":"keyloop:programming-basics:seeds"}
+{"text":"VALUES (1, 'active', NULL, 3.14)","topic":"literal","form":"statement","focus":["()",","],"note_zh":"多类型值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT col FROM t WHERE rownum <= 10","topic":"index","form":"statement","focus":["<="],"note_zh":"行号限制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT name FROM users WHERE id = 1","topic":"call","form":"statement","focus":["=","WHERE"],"note_zh":"主键查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE email LIKE '%@example.com'","topic":"string","form":"statement","focus":["LIKE","%"],"note_zh":"后缀匹配","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE name LIKE 'A%'","topic":"string","form":"statement","focus":["LIKE","%"],"note_zh":"前缀匹配","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE slug = 'getting-started'","topic":"string","form":"statement","focus":["=","'"],"note_zh":"字面量过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT 1 + 2 * 3 AS result","topic":"literal","form":"statement","focus":["+","*"],"note_zh":"算术表达式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"TRUNCATE TABLE sessions","topic":"call","form":"statement","focus":["TABLE"],"note_zh":"清空表","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ALTER TABLE users ADD COLUMN age INT","topic":"declaration","form":"statement","focus":["ADD"],"note_zh":"新增列","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DROP INDEX idx_users_email","topic":"call","form":"statement","focus":["INDEX"],"note_zh":"删除索引","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM dual","topic":"call","form":"statement","focus":["*"],"note_zh":"占位查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WHERE deleted_at IS NOT NULL","topic":"control","form":"statement","focus":["NULL"],"note_zh":"非空过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WITH active_users AS (\n  SELECT id FROM users WHERE status = 'active'\n)\nSELECT * FROM active_users","topic":"call","form":"block","note_zh":"公共表表达式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CREATE TABLE tags (\n  id INT PRIMARY KEY,\n  label VARCHAR(50) NOT NULL\n)","topic":"declaration","form":"block","note_zh":"建表语句","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT id, name, email\nFROM users\nWHERE status = 'active'\nORDER BY created_at DESC","topic":"call","form":"block","note_zh":"多行查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"UPDATE orders\nSET status = 'shipped'\nWHERE id = 100","topic":"declaration","form":"block","note_zh":"多行更新","source_id":"keyloop:programming-basics:seeds"}
+{"text":"INSERT INTO logs (level, message)\nVALUES ('error', 'timeout')","topic":"call","form":"block","note_zh":"插入日志","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT o.id, u.name\nFROM orders o\nJOIN users u ON u.id = o.user_id","topic":"call","form":"block","note_zh":"连接查询","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT name,\n  CASE WHEN score > 90 THEN 'A' ELSE 'B' END\nFROM students","topic":"control","form":"block","note_zh":"分支表达式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT category, COUNT(*)\nFROM products\nGROUP BY category\nHAVING COUNT(*) > 10","topic":"call","form":"block","note_zh":"分组聚合","source_id":"keyloop:programming-basics:seeds"}
+{"text":"WITH totals AS (\n  SELECT user_id, SUM(amount) AS total\n  FROM payments\n  GROUP BY user_id\n)","topic":"call","form":"block","note_zh":"聚合 CTE","source_id":"keyloop:programming-basics:seeds"}
+{"text":"CREATE INDEX idx_email\nON users (email)","topic":"declaration","form":"block","note_zh":"创建索引","source_id":"keyloop:programming-basics:seeds"}
+{"text":"SELECT * FROM orders\nWHERE user_id IN (\n  SELECT id FROM users WHERE status = 'active'\n)","topic":"control","form":"block","note_zh":"子查询过滤","source_id":"keyloop:programming-basics:seeds"}
+{"text":"DELETE FROM sessions\nWHERE expires_at < NOW()","topic":"control","form":"block","note_zh":"过期清理","source_id":"keyloop:programming-basics:seeds"}
+{"text":"BEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\nUPDATE accounts SET balance = balance + 100 WHERE id = 2;\nCOMMIT;","topic":"declaration","form":"block","note_zh":"转账事务","source_id":"keyloop:programming-basics:seeds"}

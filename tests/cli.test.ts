@@ -470,6 +470,71 @@ describe("TS CLI command dispatch", () => {
     }
   });
 
+  test("bare keyloop keeps a main goal after browsing the stats screen", async () => {
+    const dir = await tempDir();
+    try {
+      const goal = {
+        form: "code" as const,
+        target_wpm: 50,
+        deadline: "2026-09-14",
+        created_at: "2026-06-15T00:00:00.000Z",
+      };
+      await savePreferencesToPath(
+        { ...defaultPreferences("zh"), main_goal: goal },
+        preferencesPath(dir),
+      );
+
+      await runCli([], {
+        env: { KEYLOOP_HOME: dir },
+        appRunner: async (context) => {
+          const initial = {
+            ...createOpenTuiInitialState(context.language),
+            mainGoal: context.mainGoal,
+          };
+          // 主菜单进入「数据」屏（第 8 项）再切页，是一条非清除路径
+          const stats = reduceOpenTuiAppKey(initial, key("8", "8"), context);
+          const tabbed = reduceOpenTuiAppKey(stats.state, key("tab", "\t"), context);
+          return { state: tabbed.state, action: "quit" };
+        },
+      });
+
+      const preferences = await loadPreferencesFromPath(preferencesPath(dir));
+      expect(preferences.main_goal).toEqual(goal);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
+  test("bare keyloop keeps a persisted main goal when the session omits it", async () => {
+    const dir = await tempDir();
+    try {
+      const goal = {
+        form: "code" as const,
+        target_wpm: 50,
+        deadline: "2026-09-14",
+        created_at: "2026-06-15T00:00:00.000Z",
+      };
+      await savePreferencesToPath(
+        { ...defaultPreferences("zh"), main_goal: goal },
+        preferencesPath(dir),
+      );
+
+      await runCli([], {
+        env: { KEYLOOP_HOME: dir },
+        appRunner: async (context) => {
+          // 偶然丢失 mainGoal 字段（无显式清除标志）不应抹掉已持久化目标
+          const state = createOpenTuiInitialState(context.language);
+          return { state, action: "quit" };
+        },
+      });
+
+      const preferences = await loadPreferencesFromPath(preferencesPath(dir));
+      expect(preferences.main_goal).toEqual(goal);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
   test("bare keyloop persists word pronunciation setting changed in app settings", async () => {
     const dir = await tempDir();
     try {

@@ -1,12 +1,14 @@
-import type { KeyAggregate, Language } from "../../domain/model";
+import type { KeyAggregate } from "../../domain/model";
 import type { KeyStatsSort } from "../../report/stats";
 import {
   createOpenTuiStatsState,
   nextOpenTuiStatsView,
+  stateOptions,
   type OpenTuiAppState,
+  type OpenTuiSessionState,
   type OpenTuiStatsStateOptions,
-  openTuiStatsViews,
   type OpenTuiStatsView,
+  openTuiStatsViews,
 } from "./appModel";
 import type { OpenTuiKeyEvent } from "./kit";
 import type { OpenTuiAppKeyResult, OpenTuiAppSessionContext } from "./appSession";
@@ -22,8 +24,7 @@ export const keyStatsSorts: KeyStatsSort[] = [
 
 export type OpenTuiStatsRoute = Extract<OpenTuiAppState["route"], { screen: "stats" }>;
 
-export interface OpenTuiStatsState {
-  language: Language;
+export interface OpenTuiStatsState extends OpenTuiSessionState {
   route: OpenTuiStatsRoute;
 }
 
@@ -97,25 +98,29 @@ export function reduceDailyStatsKey(
 }
 
 export function statsState(
-  language: Language,
+  state: OpenTuiAppState,
   context: OpenTuiAppSessionContext,
   view: OpenTuiStatsView,
 ): OpenTuiAppState {
-  const options: OpenTuiStatsStateOptions = { view };
+  // stateOptions(state) 透传会话级字段（含 mainGoal），避免进入数据屏丢失目标
+  const options: OpenTuiStatsStateOptions = { ...stateOptions(state), view };
   if (context.now !== undefined) {
     options.now = context.now;
   }
   if (context.keyAggregates !== undefined) {
     options.keyAggregates = context.keyAggregates;
   }
-  return createOpenTuiStatsState(language, context.records, options);
+  return createOpenTuiStatsState(state.language, context.records, options);
 }
 
 export function statsStateFromRoute(
   state: OpenTuiStatsState,
   overrides: OpenTuiStatsStateOptions,
 ): OpenTuiAppState {
-  const options: OpenTuiStatsStateOptions = { view: overrides.view ?? state.route.view };
+  const options: OpenTuiStatsStateOptions = {
+    ...stateOptions(state),
+    view: overrides.view ?? state.route.view,
+  };
   if (state.route.now !== undefined) {
     options.now = state.route.now;
   }

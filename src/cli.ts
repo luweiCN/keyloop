@@ -616,11 +616,16 @@ export function preferencesFromAppState(
 
   if (!mainGoalEqual(state.mainGoal, preferences.main_goal)) {
     if (state.mainGoal === undefined) {
-      delete next.main_goal;
+      // 仅在用户「在设置里显式关闭目标」时删除（mainGoalCleared=true）；
+      // 若只是某条转换偶然丢失了 mainGoal 字段，则保留已持久化目标，防数据丢失
+      if (state.mainGoalCleared === true) {
+        delete next.main_goal;
+        changed = true;
+      }
     } else {
       next.main_goal = { ...state.mainGoal };
+      changed = true;
     }
-    changed = true;
   }
 
   if (
