@@ -2,182 +2,1636 @@
   "language": "kotlin",
   "source_id": "keyloop:programming-basics:seeds",
   "identifier_sets": [
-    { "collection": "items", "element": "item", "field": "id", "value": "mutableListOf<Item>()" },
-    { "collection": "users", "element": "user", "field": "name", "value": "mutableListOf<User>()" },
-    { "collection": "orders", "element": "order", "field": "total", "value": "mutableListOf<Order>()" },
-    { "collection": "tasks", "element": "task", "field": "done", "value": "mutableListOf<Task>()" },
-    { "collection": "rows", "element": "row", "field": "score", "value": "mutableListOf<Row>()" },
-    { "collection": "events", "element": "event", "field": "kind", "value": "mutableListOf<Event>()" },
-    { "collection": "files", "element": "file", "field": "path", "value": "mutableListOf<File>()" },
-    { "collection": "nodes", "element": "node", "field": "label", "value": "mutableListOf<Node>()" }
+    {
+      "collection": "items",
+      "element": "item",
+      "field": "id",
+      "value": "mutableListOf<Item>()"
+    },
+    {
+      "collection": "users",
+      "element": "user",
+      "field": "name",
+      "value": "mutableListOf<User>()"
+    },
+    {
+      "collection": "orders",
+      "element": "order",
+      "field": "total",
+      "value": "mutableListOf<Order>()"
+    },
+    {
+      "collection": "tasks",
+      "element": "task",
+      "field": "done",
+      "value": "mutableListOf<Task>()"
+    },
+    {
+      "collection": "rows",
+      "element": "row",
+      "field": "score",
+      "value": "mutableListOf<Row>()"
+    },
+    {
+      "collection": "events",
+      "element": "event",
+      "field": "kind",
+      "value": "mutableListOf<Event>()"
+    },
+    {
+      "collection": "paths",
+      "element": "path",
+      "field": "stem",
+      "value": "emptyList<Path>()"
+    },
+    {
+      "collection": "records",
+      "element": "record",
+      "field": "label",
+      "value": "emptyList<Record>()"
+    },
+    {
+      "collection": "nodes",
+      "element": "node",
+      "field": "depth",
+      "value": "mutableListOf<Node>()"
+    },
+    {
+      "collection": "sessions",
+      "element": "session",
+      "field": "token",
+      "value": "mutableListOf<Session>()"
+    },
+    {
+      "collection": "files",
+      "element": "file",
+      "field": "size",
+      "value": "mutableListOf<File>()"
+    },
+    {
+      "collection": "jobs",
+      "element": "job",
+      "field": "status",
+      "value": "mutableListOf<Job>()"
+    },
+    {
+      "collection": "posts",
+      "element": "post",
+      "field": "slug",
+      "value": "emptyList<Post>()"
+    },
+    {
+      "collection": "buckets",
+      "element": "bucket",
+      "field": "count",
+      "value": "mutableListOf<Bucket>()"
+    },
+    {
+      "collection": "frames",
+      "element": "frame",
+      "field": "index",
+      "value": "mutableListOf<Frame>()"
+    },
+    {
+      "collection": "edges",
+      "element": "edge",
+      "field": "weight",
+      "value": "emptyList<Edge>()"
+    },
+    {
+      "collection": "tickets",
+      "element": "ticket",
+      "field": "state",
+      "value": "mutableListOf<Ticket>()"
+    },
+    {
+      "collection": "samples",
+      "element": "sample",
+      "field": "value",
+      "value": "mutableListOf<Sample>()"
+    }
   ],
   "symbols_numbers_values": [
-    { "topic": "literal", "text": "#ef4444", "note_zh": "十六进制颜色" },
-    { "topic": "literal", "text": "#0ea5e9cc", "note_zh": "带透明度颜色" },
-    { "topic": "literal", "text": "0xFF", "note_zh": "十六进制数" },
-    { "topic": "literal", "text": "0b1010", "note_zh": "二进制数" },
-    { "topic": "literal", "text": "8080", "note_zh": "端口号" },
-    { "topic": "literal", "text": "1_500_000L", "note_zh": "数字分隔符长整型" },
-    { "topic": "literal", "text": "30_000", "note_zh": "毫秒超时" },
-    { "topic": "literal", "text": "3.14f", "note_zh": "单精度浮点" },
-    { "topic": "literal", "text": "-273.15", "note_zh": "负浮点数" },
-    { "topic": "literal", "text": "2.5e-3", "note_zh": "科学计数" },
-    { "topic": "literal", "text": "127.0.0.1:8080", "note_zh": "本机地址" },
-    { "topic": "literal", "text": "255u", "note_zh": "无符号整数" },
-    { "topic": "literal", "text": "1..10", "note_zh": "闭区间范围" },
-    { "topic": "literal", "text": "Int.MAX_VALUE", "note_zh": "最大整数" },
-    { "topic": "literal", "text": "@JvmStatic", "note_zh": "JVM 静态注解" },
-    { "topic": "string", "text": "\"2.1.20\"", "note_zh": "Kotlin 版本串" },
-    { "topic": "string", "text": "\"1.0.0-SNAPSHOT\"", "note_zh": "快照版本" },
-    { "topic": "string", "text": "\"./config/app.yaml\"", "note_zh": "相对路径" },
-    { "topic": "string", "text": "\"src/**/*Test.kt\"", "note_zh": "通配符模式" },
-    { "topic": "string", "text": "\"https://api.example.com/v1\"", "note_zh": "接口地址" },
-    { "topic": "string", "text": "\"application/json\"", "note_zh": "MIME 类型" },
-    { "topic": "string", "text": "\"Content-Type\"", "note_zh": "请求头名" },
-    { "topic": "string", "text": "\"PT30S\"", "note_zh": "Duration 字符串" },
-    { "topic": "string", "text": "\"$base/api/users\"", "note_zh": "字符串模板" },
-    { "topic": "string", "text": "\"res/raw/intro.json\"", "note_zh": "资源路径" }
+    {
+      "topic": "string",
+      "text": "\"https://api.example.com/v1/users\"",
+      "note_zh": "接口地址"
+    },
+    {
+      "topic": "string",
+      "text": "\"./config/app.yaml\"",
+      "note_zh": "相对路径"
+    },
+    {
+      "topic": "string",
+      "text": "\"/usr/local/bin/keyloop\"",
+      "note_zh": "绝对路径"
+    },
+    {
+      "topic": "string",
+      "text": "\"2026-06-22\"",
+      "note_zh": "日期"
+    },
+    {
+      "topic": "string",
+      "text": "\"2026-06-22T08:30:00Z\"",
+      "note_zh": "ISO 时间戳"
+    },
+    {
+      "topic": "string",
+      "text": "\"08:30:45\"",
+      "note_zh": "时间"
+    },
+    {
+      "topic": "string",
+      "text": "\"application/json\"",
+      "note_zh": "MIME 类型"
+    },
+    {
+      "topic": "string",
+      "text": "\"text/html;charset=utf-8\"",
+      "note_zh": "带字符集 MIME"
+    },
+    {
+      "topic": "string",
+      "text": "\"1.4.2\"",
+      "note_zh": "语义化版本"
+    },
+    {
+      "topic": "string",
+      "text": "\"2.1.0-rc.1\"",
+      "note_zh": "预发布版本"
+    },
+    {
+      "topic": "string",
+      "text": "\"#1E90FF\"",
+      "note_zh": "十六进制颜色"
+    },
+    {
+      "topic": "string",
+      "text": "\"dev@example.com\"",
+      "note_zh": "邮箱地址"
+    },
+    {
+      "topic": "string",
+      "text": "\"192.168.1.1\"",
+      "note_zh": "IP 地址"
+    },
+    {
+      "topic": "string",
+      "text": "\"127.0.0.1:3000\"",
+      "note_zh": "主机端口"
+    },
+    {
+      "topic": "string",
+      "text": "\"USD2,499.00\"",
+      "note_zh": "金额"
+    },
+    {
+      "topic": "string",
+      "text": "\"86.5%\"",
+      "note_zh": "百分比"
+    },
+    {
+      "topic": "string",
+      "text": "\"page=2&size=20&sort=desc\"",
+      "note_zh": "查询串"
+    },
+    {
+      "topic": "string",
+      "text": "\"yyyy-MM-dd\"",
+      "note_zh": "日期格式"
+    },
+    {
+      "topic": "string",
+      "text": "\"^\\\\d{4}-\\\\d{2}$\"",
+      "note_zh": "正则模式"
+    },
+    {
+      "topic": "string",
+      "text": "\"src/**/*.kt\"",
+      "note_zh": "通配符路径"
+    },
+    {
+      "topic": "string",
+      "text": "\"Asia/Shanghai\"",
+      "note_zh": "时区名"
+    },
+    {
+      "topic": "string",
+      "text": "\"en-US\"",
+      "note_zh": "语言区域"
+    },
+    {
+      "topic": "string",
+      "text": "\"PT30S\"",
+      "note_zh": "ISO 时长"
+    },
+    {
+      "topic": "literal",
+      "text": "3000",
+      "note_zh": "端口号"
+    },
+    {
+      "topic": "literal",
+      "text": "404",
+      "note_zh": "HTTP 状态码"
+    },
+    {
+      "topic": "literal",
+      "text": "200",
+      "note_zh": "HTTP 成功码"
+    },
+    {
+      "topic": "literal",
+      "text": "30_000",
+      "note_zh": "毫秒超时"
+    },
+    {
+      "topic": "literal",
+      "text": "1499.99",
+      "note_zh": "价格"
+    },
+    {
+      "topic": "literal",
+      "text": "1024",
+      "note_zh": "字节数"
+    },
+    {
+      "topic": "literal",
+      "text": "86400",
+      "note_zh": "一天秒数"
+    },
+    {
+      "topic": "literal",
+      "text": "3.14159",
+      "note_zh": "圆周率"
+    },
+    {
+      "topic": "literal",
+      "text": "-1",
+      "note_zh": "哨兵值"
+    },
+    {
+      "topic": "literal",
+      "text": "0.5",
+      "note_zh": "系数"
+    },
+    {
+      "topic": "literal",
+      "text": "1_000_000",
+      "note_zh": "百万分隔"
+    },
+    {
+      "topic": "literal",
+      "text": "-273.15",
+      "note_zh": "负浮点"
+    },
+    {
+      "topic": "literal",
+      "text": "6.022e23",
+      "note_zh": "科学计数"
+    },
+    {
+      "topic": "literal",
+      "text": "1_000L",
+      "note_zh": "长整型分隔"
+    },
+    {
+      "topic": "literal",
+      "text": "255u",
+      "note_zh": "无符号整数"
+    },
+    {
+      "topic": "literal",
+      "text": "0xFF",
+      "note_zh": "十六进制掩码"
+    },
+    {
+      "topic": "literal",
+      "text": "0x7FFFFFFF",
+      "note_zh": "十六进制上限"
+    }
   ],
   "symbols_numbers_templates": [
-    { "topic": "declaration", "template": "val {collection} = {value}", "focus": ["=", "<>"], "note_zh": "列表声明" },
-    { "topic": "declaration", "template": "var selected{Element}: {Element}? = null", "focus": ["?", ":"], "note_zh": "可空变量" },
-    { "topic": "declaration", "template": "data class {Element}Ref(val id: Long, val label: String)", "focus": ["()", ":"], "note_zh": "数据类声明" },
-    { "topic": "declaration", "template": "fun load{Element}(id: Long): {Element}? = index[id]", "focus": ["?", "[]"], "note_zh": "表达式函数" },
-    { "topic": "call", "template": "val labels = {collection}.map { {element} -> {element}.{field} }", "focus": ["{}", "->"], "note_zh": "集合映射" },
-    { "topic": "call", "template": "{collection}.forEach { render(it) }", "focus": ["{}", "()"], "note_zh": "遍历渲染" },
-    { "topic": "call", "template": "repository.save{Element}({element})", "focus": ["()", "."], "note_zh": "保存调用" },
-    { "topic": "control", "template": "return {element}?.{field} ?: fallback", "focus": ["?.", "?:"], "note_zh": "Elvis 返回" },
-    { "topic": "control", "template": "if ({element}.{field} == null) return fallback{Element}", "focus": ["==", "()"], "note_zh": "单行判空返回" },
-    { "topic": "control", "template": "while ({collection}.isNotEmpty()) process({collection}.removeFirst())", "focus": ["!", "()"], "note_zh": "单行循环消费" },
-    { "topic": "index", "template": "val first = {collection}[0]", "focus": ["[]", "="], "note_zh": "取首元素" },
-    { "topic": "index", "template": "val page = {collection}.take(10)", "focus": ["()", "."], "note_zh": "取前十" }
+    {
+      "topic": "declaration",
+      "template": "val {collection} = {value}",
+      "focus": [
+        "=",
+        "<>"
+      ],
+      "note_zh": "列表声明"
+    },
+    {
+      "topic": "declaration",
+      "template": "var selected{Element}: {Element}? = null",
+      "focus": [
+        "?",
+        ":"
+      ],
+      "note_zh": "可空变量"
+    },
+    {
+      "topic": "declaration",
+      "template": "data class {Element}Ref(val id: Long, val label: String)",
+      "focus": [
+        "()",
+        ":"
+      ],
+      "note_zh": "数据类声明"
+    },
+    {
+      "topic": "declaration",
+      "template": "fun load{Element}(id: Long): {Element}? = index[id]",
+      "focus": [
+        "?",
+        "[]"
+      ],
+      "note_zh": "表达式函数"
+    },
+    {
+      "topic": "call",
+      "template": "val labels = {collection}.map { {element} -> {element}.{field} }",
+      "focus": [
+        "{}",
+        "->"
+      ],
+      "note_zh": "集合映射"
+    },
+    {
+      "topic": "call",
+      "template": "{collection}.forEach { render(it) }",
+      "focus": [
+        "{}",
+        "()"
+      ],
+      "note_zh": "遍历渲染"
+    },
+    {
+      "topic": "call",
+      "template": "repository.save{Element}({element})",
+      "focus": [
+        "()",
+        "."
+      ],
+      "note_zh": "保存调用"
+    },
+    {
+      "topic": "control",
+      "template": "return {element}?.{field} ?: fallback",
+      "focus": [
+        "?.",
+        "?:"
+      ],
+      "note_zh": "Elvis 返回"
+    },
+    {
+      "topic": "control",
+      "template": "if ({element}.{field} == null) return fallback{Element}",
+      "focus": [
+        "==",
+        "()"
+      ],
+      "note_zh": "单行判空返回"
+    },
+    {
+      "topic": "control",
+      "template": "while ({collection}.isNotEmpty()) process({collection}.removeFirst())",
+      "focus": [
+        "!",
+        "()"
+      ],
+      "note_zh": "单行循环消费"
+    },
+    {
+      "topic": "index",
+      "template": "val first = {collection}[0]",
+      "focus": [
+        "[]",
+        "="
+      ],
+      "note_zh": "取首元素"
+    },
+    {
+      "topic": "index",
+      "template": "val page = {collection}.take(10)",
+      "focus": [
+        "()",
+        "."
+      ],
+      "note_zh": "取前十"
+    },
+    {
+      "topic": "call",
+      "template": "val sorted{Element}s = {collection}.sortedByDescending { it.{field} }",
+      "focus": [
+        "{}",
+        "."
+      ],
+      "note_zh": "降序排序"
+    },
+    {
+      "topic": "call",
+      "template": "val grouped{Element}s = {collection}.groupBy { it.{field} }",
+      "focus": [
+        "{}",
+        "."
+      ],
+      "note_zh": "按字段分组"
+    },
+    {
+      "topic": "call",
+      "template": "val {element}Values = {collection}.map { it.{field} }.distinct()",
+      "focus": [
+        "{}",
+        "."
+      ],
+      "note_zh": "映射去重"
+    },
+    {
+      "topic": "control",
+      "template": "val maybe{Element} = {collection}.firstOrNull { it.{field} == target }",
+      "focus": [
+        "{}",
+        "=="
+      ],
+      "note_zh": "条件查找"
+    },
+    {
+      "topic": "call",
+      "template": "{collection} += new{Element}",
+      "focus": [
+        "+="
+      ],
+      "note_zh": "追加元素"
+    },
+    {
+      "topic": "control",
+      "template": "val has{Element} = {collection}.any { it.{field} == target }",
+      "focus": [
+        "{}",
+        "=="
+      ],
+      "note_zh": "存在判断"
+    }
   ],
   "symbols_numbers_static": [
-    { "topic": "literal", "text": "const val ACCENT = \"#ef4444\"", "focus": ["#", "\""], "note_zh": "颜色常量" },
-    { "topic": "literal", "text": "const val DEFAULT_PORT = 8080", "focus": ["="], "note_zh": "端口常量" },
-    { "topic": "literal", "text": "const val VERSION = \"2.1.20\"", "focus": ["\"", "."], "note_zh": "版本号常量" },
-    { "topic": "literal", "text": "val flags = value and 0xFF", "focus": ["0x"], "note_zh": "位掩码" },
-    { "topic": "literal", "text": "val ratio = done.toDouble() / total", "focus": ["()", "/"], "note_zh": "浮点比例" },
-    { "topic": "literal", "text": "const val BUDGET = 1_500_000L", "focus": ["_", "L"], "note_zh": "数字分隔符" },
-    { "topic": "literal", "text": "val offset = Point(x = 120, y = 480)", "focus": ["()", "="], "note_zh": "命名参数" },
-    { "topic": "literal", "text": "val steps = intArrayOf(10, 20, 40, 80)", "focus": ["()", ","], "note_zh": "整型数组" },
-    { "topic": "string", "text": "import kotlinx.coroutines.launch", "focus": ["."], "note_zh": "包导入" },
-    { "topic": "string", "text": "val url = \"$base/api/users\"", "focus": ["$", "\""], "note_zh": "字符串模板" },
-    { "topic": "string", "text": "val label = \"total: ${count + extra}\"", "focus": ["${}", "\""], "note_zh": "表达式插值" },
-    { "topic": "string", "text": "val home = System.getenv(\"HOME\") ?: \"/tmp\"", "focus": ["?:", "\""], "note_zh": "环境变量带默认" },
-    { "topic": "string", "text": "val parts = name.split(\"-\")", "focus": ["()", "\""], "note_zh": "字符串切分" },
-    { "topic": "string", "text": "val glob = \"src/**/*Test.kt\"", "focus": ["*", "/"], "note_zh": "通配符模式" },
-    { "topic": "control", "text": "val badge = if (count > 9) \"9+\" else count.toString()", "focus": ["()", ">"], "note_zh": "if 表达式" },
-    { "topic": "control", "text": "when (status) { 200 -> handleOk() }", "focus": ["->", "{}"], "note_zh": "when 单行分支" },
-    { "topic": "control", "text": "for (i in 1..10) render(i)", "focus": ["..", "()"], "note_zh": "范围循环" },
-    { "topic": "control", "text": "require(port in 1..65535) { \"bad port\" }", "focus": ["..", "{}"], "note_zh": "范围断言" },
-    { "topic": "index", "text": "val last = items[items.size - 1]", "focus": ["[]", "-"], "note_zh": "取末元素" },
-    { "topic": "index", "text": "grid[2][3] = 42", "focus": ["[]", "="], "note_zh": "二维索引" },
-    { "topic": "index", "text": "val window = series.takeLast(7)", "focus": ["()", "."], "note_zh": "尾部窗口" },
-    { "topic": "declaration", "text": "val (first, second) = pair", "focus": ["()", ","], "note_zh": "解构声明" },
-    { "topic": "declaration", "text": "data class Point(val x: Int, val y: Int)", "focus": ["()", ":"], "note_zh": "单行数据类" },
-    { "topic": "declaration", "text": "val name = user?.profile?.name ?: \"guest\"", "focus": ["?.", "?:"], "note_zh": "安全调用带默认" },
-    { "topic": "declaration", "text": "val theme = prefs[\"theme\"] ?: \"light\"", "focus": ["[]", "?:"], "note_zh": "取值带默认" },
-    { "topic": "call", "text": "val active = users.filter { it.active }.map { it.name }", "focus": ["{}", "."], "note_zh": "链式调用" }
+    {
+      "topic": "literal",
+      "text": "const val ACCENT = \"#ef4444\"",
+      "focus": [
+        "#",
+        "\""
+      ],
+      "note_zh": "颜色常量"
+    },
+    {
+      "topic": "literal",
+      "text": "const val DEFAULT_PORT = 8080",
+      "focus": [
+        "="
+      ],
+      "note_zh": "端口常量"
+    },
+    {
+      "topic": "literal",
+      "text": "const val VERSION = \"2.1.20\"",
+      "focus": [
+        "\"",
+        "."
+      ],
+      "note_zh": "版本号常量"
+    },
+    {
+      "topic": "literal",
+      "text": "val flags = value and 0xFF",
+      "focus": [
+        "0x"
+      ],
+      "note_zh": "位掩码"
+    },
+    {
+      "topic": "literal",
+      "text": "val ratio = done.toDouble() / total",
+      "focus": [
+        "()",
+        "/"
+      ],
+      "note_zh": "浮点比例"
+    },
+    {
+      "topic": "literal",
+      "text": "const val BUDGET = 1_500_000L",
+      "focus": [
+        "_",
+        "L"
+      ],
+      "note_zh": "数字分隔符"
+    },
+    {
+      "topic": "literal",
+      "text": "val offset = Point(x = 120, y = 480)",
+      "focus": [
+        "()",
+        "="
+      ],
+      "note_zh": "命名参数"
+    },
+    {
+      "topic": "literal",
+      "text": "val steps = intArrayOf(10, 20, 40, 80)",
+      "focus": [
+        "()",
+        ","
+      ],
+      "note_zh": "整型数组"
+    },
+    {
+      "topic": "string",
+      "text": "import kotlinx.coroutines.launch",
+      "focus": [
+        "."
+      ],
+      "note_zh": "包导入"
+    },
+    {
+      "topic": "string",
+      "text": "val url = \"$base/api/users\"",
+      "focus": [
+        "$",
+        "\""
+      ],
+      "note_zh": "字符串模板"
+    },
+    {
+      "topic": "string",
+      "text": "val label = \"total: ${count + extra}\"",
+      "focus": [
+        "${}",
+        "\""
+      ],
+      "note_zh": "表达式插值"
+    },
+    {
+      "topic": "string",
+      "text": "val home = System.getenv(\"HOME\") ?: \"/tmp\"",
+      "focus": [
+        "?:",
+        "\""
+      ],
+      "note_zh": "环境变量带默认"
+    },
+    {
+      "topic": "string",
+      "text": "val parts = name.split(\"-\")",
+      "focus": [
+        "()",
+        "\""
+      ],
+      "note_zh": "字符串切分"
+    },
+    {
+      "topic": "string",
+      "text": "val glob = \"src/**/*Test.kt\"",
+      "focus": [
+        "*",
+        "/"
+      ],
+      "note_zh": "通配符模式"
+    },
+    {
+      "topic": "control",
+      "text": "val badge = if (count > 9) \"9+\" else count.toString()",
+      "focus": [
+        "()",
+        ">"
+      ],
+      "note_zh": "if 表达式"
+    },
+    {
+      "topic": "control",
+      "text": "when (status) { 200 -> handleOk() }",
+      "focus": [
+        "->",
+        "{}"
+      ],
+      "note_zh": "when 单行分支"
+    },
+    {
+      "topic": "control",
+      "text": "for (i in 1..10) render(i)",
+      "focus": [
+        "..",
+        "()"
+      ],
+      "note_zh": "范围循环"
+    },
+    {
+      "topic": "control",
+      "text": "require(port in 1..65535) { \"bad port\" }",
+      "focus": [
+        "..",
+        "{}"
+      ],
+      "note_zh": "范围断言"
+    },
+    {
+      "topic": "index",
+      "text": "val last = items[items.size - 1]",
+      "focus": [
+        "[]",
+        "-"
+      ],
+      "note_zh": "取末元素"
+    },
+    {
+      "topic": "index",
+      "text": "grid[2][3] = 42",
+      "focus": [
+        "[]",
+        "="
+      ],
+      "note_zh": "二维索引"
+    },
+    {
+      "topic": "index",
+      "text": "val window = series.takeLast(7)",
+      "focus": [
+        "()",
+        "."
+      ],
+      "note_zh": "尾部窗口"
+    },
+    {
+      "topic": "declaration",
+      "text": "val (first, second) = pair",
+      "focus": [
+        "()",
+        ","
+      ],
+      "note_zh": "解构声明"
+    },
+    {
+      "topic": "declaration",
+      "text": "data class Point(val x: Int, val y: Int)",
+      "focus": [
+        "()",
+        ":"
+      ],
+      "note_zh": "单行数据类"
+    },
+    {
+      "topic": "declaration",
+      "text": "val name = user?.profile?.name ?: \"guest\"",
+      "focus": [
+        "?.",
+        "?:"
+      ],
+      "note_zh": "安全调用带默认"
+    },
+    {
+      "topic": "declaration",
+      "text": "val theme = prefs[\"theme\"] ?: \"light\"",
+      "focus": [
+        "[]",
+        "?:"
+      ],
+      "note_zh": "取值带默认"
+    },
+    {
+      "topic": "call",
+      "text": "val active = users.filter { it.active }.map { it.name }",
+      "focus": [
+        "{}",
+        "."
+      ],
+      "note_zh": "链式调用"
+    },
+    {
+      "topic": "literal",
+      "text": "val mask = 0b1111 shl 4",
+      "focus": [
+        "shl",
+        "0b"
+      ],
+      "note_zh": "左移掩码"
+    },
+    {
+      "topic": "literal",
+      "text": "val packed = (high shl 8) or low",
+      "focus": [
+        "shl",
+        "or"
+      ],
+      "note_zh": "位拼接"
+    },
+    {
+      "topic": "literal",
+      "text": "val checksum = payload.sum() and 0xFF",
+      "focus": [
+        "and",
+        "0x"
+      ],
+      "note_zh": "校验和"
+    },
+    {
+      "topic": "literal",
+      "text": "flags = flags or 0x04",
+      "focus": [
+        "or",
+        "0x"
+      ],
+      "note_zh": "置位"
+    },
+    {
+      "topic": "literal",
+      "text": "val coords = Pair(lat, lng)",
+      "focus": [
+        "()",
+        ","
+      ],
+      "note_zh": "二元组"
+    },
+    {
+      "topic": "literal",
+      "text": "val inRange = score in 0..100",
+      "focus": [
+        "..",
+        "in"
+      ],
+      "note_zh": "区间判断"
+    },
+    {
+      "topic": "literal",
+      "text": "val pct = \"%.1f%%\".format(ratio * 100)",
+      "focus": [
+        "%",
+        "()"
+      ],
+      "note_zh": "百分比格式"
+    },
+    {
+      "topic": "literal",
+      "text": "val headers = mapOf(\"Authorization\" to \"Bearer $token\")",
+      "focus": [
+        "()",
+        "$"
+      ],
+      "note_zh": "鉴权头"
+    },
+    {
+      "topic": "literal",
+      "text": "val matrix = Array(3) { IntArray(3) }",
+      "focus": [
+        "{}",
+        "()"
+      ],
+      "note_zh": "二维初始化"
+    },
+    {
+      "topic": "literal",
+      "text": "val merged = defaults + overrides",
+      "focus": [
+        "+"
+      ],
+      "note_zh": "映射合并"
+    },
+    {
+      "topic": "string",
+      "text": "val tail = path.substringAfterLast(\"/\")",
+      "focus": [
+        "()",
+        "/"
+      ],
+      "note_zh": "取末段"
+    },
+    {
+      "topic": "string",
+      "text": "val name = data[\"name\"]?.trim() ?: \"\"",
+      "focus": [
+        "?.",
+        "?:"
+      ],
+      "note_zh": "取值去空白"
+    },
+    {
+      "topic": "string",
+      "text": "val slug = title.replace(Regex(\"\\\\W+\"), \"-\")",
+      "focus": [
+        "()",
+        "-"
+      ],
+      "note_zh": "生成 slug"
+    },
+    {
+      "topic": "control",
+      "text": "val result = if (a > b) a else b",
+      "focus": [
+        ">",
+        "()"
+      ],
+      "note_zh": "三元取大"
+    },
+    {
+      "topic": "control",
+      "text": "val retries = maxOf(0, limit - 1)",
+      "focus": [
+        "()",
+        "-"
+      ],
+      "note_zh": "下限保护"
+    },
+    {
+      "topic": "string",
+      "text": "val hex = color.removePrefix(\"#\")",
+      "focus": [
+        "()",
+        "#"
+      ],
+      "note_zh": "去井号"
+    },
+    {
+      "topic": "string",
+      "text": "val bytes = text.toByteArray(Charsets.UTF_8)",
+      "focus": [
+        "()",
+        "_"
+      ],
+      "note_zh": "转字节"
+    },
+    {
+      "topic": "index",
+      "text": "val pairs = keys.zip(values).toMap()",
+      "focus": [
+        "()",
+        "."
+      ],
+      "note_zh": "配对成映射"
+    },
+    {
+      "topic": "literal",
+      "text": "val clamped = volume.coerceIn(0, 100)",
+      "focus": [
+        "()",
+        ","
+      ],
+      "note_zh": "范围夹取"
+    },
+    {
+      "topic": "literal",
+      "text": "val percent = done * 100 / total",
+      "focus": [
+        "*",
+        "/"
+      ],
+      "note_zh": "百分比计算"
+    }
   ],
   "symbols_numbers_blocks": [
-    { "topic": "control", "lines": ["if (user == null || user.name.isBlank()) {", "  return fallback", "}"], "note_zh": "判空守卫块" },
-    { "topic": "control", "lines": ["for (order in orders) {", "  render(order)", "}"], "note_zh": "for-in 循环块" },
-    { "topic": "control", "lines": ["try {", "  parse(raw)", "} catch (e: NumberFormatException) {", "  report(e)", "}"], "note_zh": "异常捕获块" },
-    { "topic": "control", "lines": ["while (queue.isNotEmpty()) {", "  process(queue.removeFirst())", "}"], "note_zh": "队列循环块" },
-    { "topic": "control", "lines": ["when (status) {", "  200 -> handleOk()", "  else -> handleError(status)", "}"], "note_zh": "when 分支块" },
-    { "topic": "control", "lines": ["if (count > limit) {", "  trim(count - limit)", "} else {", "  grow(limit - count)", "}"], "note_zh": "if-else 块" },
-    { "topic": "declaration", "lines": ["fun findUser(id: Long): User? {", "  return users.firstOrNull { it.id == id }", "}"], "note_zh": "函数声明块" },
-    { "topic": "declaration", "lines": ["class UserService(private val repo: Repository) {", "  fun count(): Int = repo.count()", "}"], "note_zh": "类声明块" },
-    { "topic": "declaration", "lines": ["object Registry {", "  val handlers = mutableMapOf<String, Handler>()", "}"], "note_zh": "单例对象块" },
-    { "topic": "declaration", "lines": ["val config = Config().apply {", "  retries = 3", "  timeoutMs = 30_000", "}"], "note_zh": "apply 初始化块" },
-    { "topic": "call", "lines": ["val names = users", "  .filter { it.active }", "  .map { it.name }"], "note_zh": "链式调用块" },
-    { "topic": "call", "lines": ["scope.launch {", "  refresh()", "}"], "note_zh": "协程启动块" },
-    { "topic": "call", "lines": ["val summary = buildString {", "  append(\"count: ${list.size}\")", "}"], "note_zh": "构建字符串块" }
+    {
+      "topic": "control",
+      "lines": [
+        "if (user == null || user.name.isBlank()) {",
+        "  return fallback",
+        "}"
+      ],
+      "note_zh": "判空守卫块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "for (order in orders) {",
+        "  render(order)",
+        "}"
+      ],
+      "note_zh": "for-in 循环块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "try {",
+        "  parse(raw)",
+        "} catch (e: NumberFormatException) {",
+        "  report(e)",
+        "}"
+      ],
+      "note_zh": "异常捕获块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "while (queue.isNotEmpty()) {",
+        "  process(queue.removeFirst())",
+        "}"
+      ],
+      "note_zh": "队列循环块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "when (status) {",
+        "  200 -> handleOk()",
+        "  else -> handleError(status)",
+        "}"
+      ],
+      "note_zh": "when 分支块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "if (count > limit) {",
+        "  trim(count - limit)",
+        "} else {",
+        "  grow(limit - count)",
+        "}"
+      ],
+      "note_zh": "if-else 块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "fun findUser(id: Long): User? {",
+        "  return users.firstOrNull { it.id == id }",
+        "}"
+      ],
+      "note_zh": "函数声明块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "class UserService(private val repo: Repository) {",
+        "  fun count(): Int = repo.count()",
+        "}"
+      ],
+      "note_zh": "类声明块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "object Registry {",
+        "  val handlers = mutableMapOf<String, Handler>()",
+        "}"
+      ],
+      "note_zh": "单例对象块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "val config = Config().apply {",
+        "  retries = 3",
+        "  timeoutMs = 30_000",
+        "}"
+      ],
+      "note_zh": "apply 初始化块"
+    },
+    {
+      "topic": "call",
+      "lines": [
+        "val names = users",
+        "  .filter { it.active }",
+        "  .map { it.name }"
+      ],
+      "note_zh": "链式调用块"
+    },
+    {
+      "topic": "call",
+      "lines": [
+        "scope.launch {",
+        "  refresh()",
+        "}"
+      ],
+      "note_zh": "协程启动块"
+    },
+    {
+      "topic": "call",
+      "lines": [
+        "val summary = buildString {",
+        "  append(\"count: ${list.size}\")",
+        "}"
+      ],
+      "note_zh": "构建字符串块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "when {",
+        "  score >= 90 -> grade = \"A\"",
+        "  else -> grade = \"B\"",
+        "}"
+      ],
+      "note_zh": "when 条件块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "data class Config(",
+        "  val retries: Int = 3,",
+        "  val timeoutMs: Long = 30_000L,",
+        ")"
+      ],
+      "note_zh": "数据类默认值块"
+    },
+    {
+      "topic": "call",
+      "lines": [
+        "user?.let {",
+        "  render(it)",
+        "}"
+      ],
+      "note_zh": "let 作用域块"
+    },
+    {
+      "topic": "call",
+      "lines": [
+        "val headers = buildMap {",
+        "  put(\"Accept\", \"application/json\")",
+        "}"
+      ],
+      "note_zh": "构建映射块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "for ((index, line) in lines.withIndex()) {",
+        "  println(\"$index: $line\")",
+        "}"
+      ],
+      "note_zh": "带下标遍历块"
+    },
+    {
+      "topic": "call",
+      "lines": [
+        "val result = runCatching {",
+        "  parse(raw)",
+        "}.getOrNull()"
+      ],
+      "note_zh": "异常捕获块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "enum class Status {",
+        "  OPEN, CLOSED, DRAFT",
+        "}"
+      ],
+      "note_zh": "枚举定义块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "val cache by lazy {",
+        "  loadAll()",
+        "}"
+      ],
+      "note_zh": "惰性初始化块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "if (n % 2 == 0) {",
+        "  even += 1",
+        "} else {",
+        "  odd += 1",
+        "}"
+      ],
+      "note_zh": "奇偶分支块"
+    },
+    {
+      "topic": "call",
+      "lines": [
+        "val total = prices.fold(0) { acc, p ->",
+        "  acc + p",
+        "}"
+      ],
+      "note_zh": "折叠累加块"
+    },
+    {
+      "topic": "call",
+      "lines": [
+        "val deferred = scope.async {",
+        "  loadUser(id)",
+        "}"
+      ],
+      "note_zh": "异步求值块"
+    },
+    {
+      "topic": "call",
+      "lines": [
+        "val pairs = entries.map { (k, v) ->",
+        "  \"$k=$v\"",
+        "}"
+      ],
+      "note_zh": "解构映射块"
+    },
+    {
+      "topic": "call",
+      "lines": [
+        "repeat(3) { attempt ->",
+        "  send(attempt)",
+        "}"
+      ],
+      "note_zh": "重复执行块"
+    }
   ],
   "builtin_api_cards": [
-    { "topic": "string", "api": "split", "text": "path.split(\"/\")", "note_zh": "路径切分" },
-    { "topic": "string", "api": "trim", "text": "query.trim()", "note_zh": "去除空白" },
-    { "topic": "string", "api": "replace", "text": "title.replace(\" \", \"-\")", "note_zh": "替换字符" },
-    { "topic": "string", "api": "startsWith", "text": "url.startsWith(\"https://\")", "note_zh": "前缀判断" },
-    { "topic": "string", "api": "endsWith", "text": "name.endsWith(\".json\")", "note_zh": "后缀判断" },
-    { "topic": "string", "api": "contains", "text": "message.contains(\"error\")", "note_zh": "包含判断" },
-    { "topic": "string", "api": "uppercase", "text": "currency.uppercase()", "note_zh": "转大写" },
-    { "topic": "string", "api": "lowercase", "text": "header.lowercase()", "note_zh": "转小写" },
-    { "topic": "string", "api": "joinToString", "text": "fields.joinToString(\",\")", "note_zh": "拼接为串" },
-    { "topic": "string", "api": "padStart", "text": "index.toString().padStart(4, '0')", "note_zh": "前导补零" },
-    { "topic": "string", "api": "removePrefix", "text": "branch.removePrefix(\"feature/\")", "note_zh": "去除前缀" },
-    { "topic": "string", "api": "substringAfterLast", "text": "file.substringAfterLast('.')", "note_zh": "截取扩展名" },
-    { "topic": "list", "api": "map", "text": "items.map { it.id }", "note_zh": "集合映射" },
-    { "topic": "list", "api": "filter", "text": "users.filter { it.active }", "note_zh": "集合过滤" },
-    { "topic": "list", "api": "firstOrNull", "text": "members.firstOrNull { it.role == \"admin\" }", "note_zh": "查找首个" },
-    { "topic": "list", "api": "any", "text": "fields.any { it.changed }", "note_zh": "存在判断" },
-    { "topic": "list", "api": "all", "text": "inputs.all { it.ok }", "note_zh": "全量判断" },
-    { "topic": "list", "api": "groupBy", "text": "events.groupBy { it.kind }", "note_zh": "分组" },
-    { "topic": "list", "api": "associateBy", "text": "items.associateBy { it.id }", "note_zh": "转映射" },
-    { "topic": "list", "api": "sortedBy", "text": "orders.sortedBy { it.total }", "note_zh": "升序排序" },
-    { "topic": "list", "api": "sortedByDescending", "text": "rows.sortedByDescending { it.score }", "note_zh": "降序排序" },
-    { "topic": "list", "api": "sumOf", "text": "orders.sumOf { it.total }", "note_zh": "求和" },
-    { "topic": "list", "api": "distinct", "text": "tags.distinct()", "note_zh": "去重" },
-    { "topic": "list", "api": "flatMap", "text": "posts.flatMap { it.tags }", "note_zh": "映射拍平" },
-    { "topic": "list", "api": "fold", "text": "prices.fold(0) { acc, p -> acc + p }", "note_zh": "折叠累加" },
-    { "topic": "list", "api": "chunked", "text": "records.chunked(100)", "note_zh": "分批" },
-    { "topic": "list", "api": "zip", "text": "names.zip(scores)", "note_zh": "配对" },
-    { "topic": "list", "api": "count", "text": "results.count { it.failed }", "note_zh": "条件计数" },
-    { "topic": "map", "api": "mapOf", "text": "mapOf(\"Accept\" to \"application/json\")", "note_zh": "不可变映射" },
-    { "topic": "map", "api": "mutableMapOf", "text": "mutableMapOf<String, Int>()", "note_zh": "可变映射" },
-    { "topic": "map", "api": "getOrDefault", "text": "options.getOrDefault(\"limit\", 20)", "note_zh": "取值带默认" },
-    { "topic": "map", "api": "getOrPut", "text": "groups.getOrPut(kind) { mutableListOf() }", "note_zh": "缺失即建" },
-    { "topic": "map", "api": "containsKey", "text": "index.containsKey(id)", "note_zh": "键存在判断" },
-    { "topic": "map", "api": "buildMap", "text": "buildMap { put(\"PORT\", \"8080\") }", "note_zh": "构建映射" },
-    { "topic": "map", "api": "mapValues", "text": "stats.mapValues { it.value * 2 }", "note_zh": "映射值变换" },
-    { "topic": "map", "api": "toMap", "text": "names.zip(scores).toMap()", "note_zh": "配对转映射" },
-    { "topic": "null_safety", "api": "?.", "text": "user?.profile?.name", "note_zh": "链式空安全" },
-    { "topic": "null_safety", "api": "?:", "text": "stored ?: \"light\"", "note_zh": "Elvis 默认" },
-    { "topic": "null_safety", "api": "requireNotNull", "text": "requireNotNull(params[\"id\"])", "note_zh": "非空断言" },
-    { "topic": "null_safety", "api": "checkNotNull", "text": "checkNotNull(repository) { \"repo missing\" }", "note_zh": "状态断言" },
-    { "topic": "null_safety", "api": "filterNotNull", "text": "optionals.filterNotNull()", "note_zh": "过滤空值" },
-    { "topic": "null_safety", "api": "mapNotNull", "text": "lines.mapNotNull { parseOrNull(it) }", "note_zh": "映射去空" },
-    { "topic": "null_safety", "api": "orEmpty", "text": "post.tags.orEmpty()", "note_zh": "空集合默认" },
-    { "topic": "null_safety", "api": "ifEmpty", "text": "found.ifEmpty { defaults }", "note_zh": "空集合回退" },
-    { "topic": "scope", "api": "let", "text": "user?.let { render(it) }", "note_zh": "非空执行" },
-    { "topic": "scope", "api": "apply", "text": "StringBuilder().apply { append(header) }", "note_zh": "配置初始化" },
-    { "topic": "scope", "api": "also", "text": "compute().also { log(it) }", "note_zh": "旁路日志" },
-    { "topic": "scope", "api": "run", "text": "rect.run { width * height }", "note_zh": "作用域计算" },
-    { "topic": "scope", "api": "with", "text": "with(builder) { append(name); append(count) }", "note_zh": "批量调用" },
-    { "topic": "scope", "api": "takeIf", "text": "input.takeIf { it.isNotEmpty() }", "note_zh": "条件保留" },
-    { "topic": "scope", "api": "use", "text": "file.inputStream().use { stream -> load(stream) }", "note_zh": "自动关闭" },
-    { "topic": "scope", "api": "repeat", "text": "repeat(3) { attempt -> retry(attempt) }", "note_zh": "重复执行" },
-    { "topic": "number", "api": "toInt", "text": "raw.toInt()", "note_zh": "解析整数" },
-    { "topic": "number", "api": "toIntOrNull", "text": "input.toIntOrNull() ?: 20", "note_zh": "安全解析" },
-    { "topic": "number", "api": "toDouble", "text": "cell.toDouble()", "note_zh": "解析浮点" },
-    { "topic": "number", "api": "maxOf", "text": "maxOf(minWidth, measured)", "note_zh": "下限约束" },
-    { "topic": "number", "api": "minOf", "text": "minOf(page + 1, lastPage)", "note_zh": "上限约束" },
-    { "topic": "number", "api": "coerceIn", "text": "volume.coerceIn(0, 100)", "note_zh": "范围夹取" },
-    { "topic": "number", "api": "roundToInt", "text": "(score * 100).roundToInt()", "note_zh": "四舍五入" },
-    { "topic": "number", "api": "format", "text": "\"%.1f%%\".format(ratio * 100)", "note_zh": "格式化百分比" },
-    { "topic": "io", "api": "readText", "text": "File(\"config.json\").readText()", "note_zh": "读取文本" },
-    { "topic": "io", "api": "writeText", "text": "File(\"report.json\").writeText(output)", "note_zh": "写入文本" },
-    { "topic": "io", "api": "exists", "text": "lockFile.exists()", "note_zh": "存在性检查" },
-    { "topic": "io", "api": "mkdirs", "text": "cacheDir.mkdirs()", "note_zh": "递归建目录" },
-    { "topic": "io", "api": "readLines", "text": "logFile.readLines()", "note_zh": "按行读取" },
-    { "topic": "io", "api": "resolve", "text": "outDir.resolve(\"report.html\")", "note_zh": "拼接路径" },
-    { "topic": "io", "api": "appendText", "text": "logFile.appendText(entry + \"\\n\")", "note_zh": "追加写入" },
-    { "topic": "io", "api": "deleteRecursively", "text": "scratchDir.deleteRecursively()", "note_zh": "递归删除" },
-    { "topic": "coroutines", "api": "launch", "text": "scope.launch { refresh() }", "note_zh": "启动协程" },
-    { "topic": "coroutines", "api": "async", "text": "scope.async { loadUser(id) }", "note_zh": "异步求值" },
-    { "topic": "coroutines", "api": "await", "text": "deferred.await()", "note_zh": "等待结果" },
-    { "topic": "coroutines", "api": "withContext", "text": "withContext(Dispatchers.IO) { fetch() }", "note_zh": "切换调度器" },
-    { "topic": "coroutines", "api": "delay", "text": "delay(1_000)", "note_zh": "协程延时" },
-    { "topic": "coroutines", "api": "runBlocking", "text": "runBlocking { warmCache() }", "note_zh": "阻塞入口" },
-    { "topic": "coroutines", "api": "awaitAll", "text": "jobs.awaitAll()", "note_zh": "并发等待" },
-    { "topic": "coroutines", "api": "flowOf", "text": "flowOf(first, second)", "note_zh": "构造流" },
-    { "topic": "time", "api": "Instant.now", "text": "Instant.now()", "note_zh": "当前时刻" },
-    { "topic": "time", "api": "Duration.between", "text": "Duration.between(started, Instant.now())", "note_zh": "耗时计算" },
-    { "topic": "time", "api": "LocalDate.parse", "text": "LocalDate.parse(\"2026-06-12\")", "note_zh": "解析日期" },
-    { "topic": "time", "api": "DateTimeFormatter.ofPattern", "text": "DateTimeFormatter.ofPattern(\"HH:mm:ss\")", "note_zh": "时间格式器" },
-    { "topic": "time", "api": "measureTimeMillis", "text": "measureTimeMillis { rebuild() }", "note_zh": "计时执行" },
-    { "topic": "time", "api": "seconds", "text": "30.seconds", "note_zh": "时长扩展" },
-    { "topic": "time", "api": "System.currentTimeMillis", "text": "System.currentTimeMillis()", "note_zh": "毫秒时间戳" }
+    {
+      "topic": "string",
+      "api": "split",
+      "text": "path.split(\"/\")",
+      "note_zh": "路径切分"
+    },
+    {
+      "topic": "string",
+      "api": "trim",
+      "text": "query.trim()",
+      "note_zh": "去除空白"
+    },
+    {
+      "topic": "string",
+      "api": "replace",
+      "text": "title.replace(\" \", \"-\")",
+      "note_zh": "替换字符"
+    },
+    {
+      "topic": "string",
+      "api": "startsWith",
+      "text": "url.startsWith(\"https://\")",
+      "note_zh": "前缀判断"
+    },
+    {
+      "topic": "string",
+      "api": "endsWith",
+      "text": "name.endsWith(\".json\")",
+      "note_zh": "后缀判断"
+    },
+    {
+      "topic": "string",
+      "api": "contains",
+      "text": "message.contains(\"error\")",
+      "note_zh": "包含判断"
+    },
+    {
+      "topic": "string",
+      "api": "uppercase",
+      "text": "currency.uppercase()",
+      "note_zh": "转大写"
+    },
+    {
+      "topic": "string",
+      "api": "lowercase",
+      "text": "header.lowercase()",
+      "note_zh": "转小写"
+    },
+    {
+      "topic": "string",
+      "api": "joinToString",
+      "text": "fields.joinToString(\",\")",
+      "note_zh": "拼接为串"
+    },
+    {
+      "topic": "string",
+      "api": "padStart",
+      "text": "index.toString().padStart(4, '0')",
+      "note_zh": "前导补零"
+    },
+    {
+      "topic": "string",
+      "api": "removePrefix",
+      "text": "branch.removePrefix(\"feature/\")",
+      "note_zh": "去除前缀"
+    },
+    {
+      "topic": "string",
+      "api": "substringAfterLast",
+      "text": "file.substringAfterLast('.')",
+      "note_zh": "截取扩展名"
+    },
+    {
+      "topic": "list",
+      "api": "map",
+      "text": "items.map { it.id }",
+      "note_zh": "集合映射"
+    },
+    {
+      "topic": "list",
+      "api": "filter",
+      "text": "users.filter { it.active }",
+      "note_zh": "集合过滤"
+    },
+    {
+      "topic": "list",
+      "api": "firstOrNull",
+      "text": "members.firstOrNull { it.role == \"admin\" }",
+      "note_zh": "查找首个"
+    },
+    {
+      "topic": "list",
+      "api": "any",
+      "text": "fields.any { it.changed }",
+      "note_zh": "存在判断"
+    },
+    {
+      "topic": "list",
+      "api": "all",
+      "text": "inputs.all { it.ok }",
+      "note_zh": "全量判断"
+    },
+    {
+      "topic": "list",
+      "api": "groupBy",
+      "text": "events.groupBy { it.kind }",
+      "note_zh": "分组"
+    },
+    {
+      "topic": "list",
+      "api": "associateBy",
+      "text": "items.associateBy { it.id }",
+      "note_zh": "转映射"
+    },
+    {
+      "topic": "list",
+      "api": "sortedBy",
+      "text": "orders.sortedBy { it.total }",
+      "note_zh": "升序排序"
+    },
+    {
+      "topic": "list",
+      "api": "sortedByDescending",
+      "text": "rows.sortedByDescending { it.score }",
+      "note_zh": "降序排序"
+    },
+    {
+      "topic": "list",
+      "api": "sumOf",
+      "text": "orders.sumOf { it.total }",
+      "note_zh": "求和"
+    },
+    {
+      "topic": "list",
+      "api": "distinct",
+      "text": "tags.distinct()",
+      "note_zh": "去重"
+    },
+    {
+      "topic": "list",
+      "api": "flatMap",
+      "text": "posts.flatMap { it.tags }",
+      "note_zh": "映射拍平"
+    },
+    {
+      "topic": "list",
+      "api": "fold",
+      "text": "prices.fold(0) { acc, p -> acc + p }",
+      "note_zh": "折叠累加"
+    },
+    {
+      "topic": "list",
+      "api": "chunked",
+      "text": "records.chunked(100)",
+      "note_zh": "分批"
+    },
+    {
+      "topic": "list",
+      "api": "zip",
+      "text": "names.zip(scores)",
+      "note_zh": "配对"
+    },
+    {
+      "topic": "list",
+      "api": "count",
+      "text": "results.count { it.failed }",
+      "note_zh": "条件计数"
+    },
+    {
+      "topic": "map",
+      "api": "mapOf",
+      "text": "mapOf(\"Accept\" to \"application/json\")",
+      "note_zh": "不可变映射"
+    },
+    {
+      "topic": "map",
+      "api": "mutableMapOf",
+      "text": "mutableMapOf<String, Int>()",
+      "note_zh": "可变映射"
+    },
+    {
+      "topic": "map",
+      "api": "getOrDefault",
+      "text": "options.getOrDefault(\"limit\", 20)",
+      "note_zh": "取值带默认"
+    },
+    {
+      "topic": "map",
+      "api": "getOrPut",
+      "text": "groups.getOrPut(kind) { mutableListOf() }",
+      "note_zh": "缺失即建"
+    },
+    {
+      "topic": "map",
+      "api": "containsKey",
+      "text": "index.containsKey(id)",
+      "note_zh": "键存在判断"
+    },
+    {
+      "topic": "map",
+      "api": "buildMap",
+      "text": "buildMap { put(\"PORT\", \"8080\") }",
+      "note_zh": "构建映射"
+    },
+    {
+      "topic": "map",
+      "api": "mapValues",
+      "text": "stats.mapValues { it.value * 2 }",
+      "note_zh": "映射值变换"
+    },
+    {
+      "topic": "map",
+      "api": "toMap",
+      "text": "names.zip(scores).toMap()",
+      "note_zh": "配对转映射"
+    },
+    {
+      "topic": "null_safety",
+      "api": "?.",
+      "text": "user?.profile?.name",
+      "note_zh": "链式空安全"
+    },
+    {
+      "topic": "null_safety",
+      "api": "?:",
+      "text": "stored ?: \"light\"",
+      "note_zh": "Elvis 默认"
+    },
+    {
+      "topic": "null_safety",
+      "api": "requireNotNull",
+      "text": "requireNotNull(params[\"id\"])",
+      "note_zh": "非空断言"
+    },
+    {
+      "topic": "null_safety",
+      "api": "checkNotNull",
+      "text": "checkNotNull(repository) { \"repo missing\" }",
+      "note_zh": "状态断言"
+    },
+    {
+      "topic": "null_safety",
+      "api": "filterNotNull",
+      "text": "optionals.filterNotNull()",
+      "note_zh": "过滤空值"
+    },
+    {
+      "topic": "null_safety",
+      "api": "mapNotNull",
+      "text": "lines.mapNotNull { parseOrNull(it) }",
+      "note_zh": "映射去空"
+    },
+    {
+      "topic": "null_safety",
+      "api": "orEmpty",
+      "text": "post.tags.orEmpty()",
+      "note_zh": "空集合默认"
+    },
+    {
+      "topic": "null_safety",
+      "api": "ifEmpty",
+      "text": "found.ifEmpty { defaults }",
+      "note_zh": "空集合回退"
+    },
+    {
+      "topic": "scope",
+      "api": "let",
+      "text": "user?.let { render(it) }",
+      "note_zh": "非空执行"
+    },
+    {
+      "topic": "scope",
+      "api": "apply",
+      "text": "StringBuilder().apply { append(header) }",
+      "note_zh": "配置初始化"
+    },
+    {
+      "topic": "scope",
+      "api": "also",
+      "text": "compute().also { log(it) }",
+      "note_zh": "旁路日志"
+    },
+    {
+      "topic": "scope",
+      "api": "run",
+      "text": "rect.run { width * height }",
+      "note_zh": "作用域计算"
+    },
+    {
+      "topic": "scope",
+      "api": "with",
+      "text": "with(builder) { append(name); append(count) }",
+      "note_zh": "批量调用"
+    },
+    {
+      "topic": "scope",
+      "api": "takeIf",
+      "text": "input.takeIf { it.isNotEmpty() }",
+      "note_zh": "条件保留"
+    },
+    {
+      "topic": "scope",
+      "api": "use",
+      "text": "file.inputStream().use { stream -> load(stream) }",
+      "note_zh": "自动关闭"
+    },
+    {
+      "topic": "scope",
+      "api": "repeat",
+      "text": "repeat(3) { attempt -> retry(attempt) }",
+      "note_zh": "重复执行"
+    },
+    {
+      "topic": "number",
+      "api": "toInt",
+      "text": "raw.toInt()",
+      "note_zh": "解析整数"
+    },
+    {
+      "topic": "number",
+      "api": "toIntOrNull",
+      "text": "input.toIntOrNull() ?: 20",
+      "note_zh": "安全解析"
+    },
+    {
+      "topic": "number",
+      "api": "toDouble",
+      "text": "cell.toDouble()",
+      "note_zh": "解析浮点"
+    },
+    {
+      "topic": "number",
+      "api": "maxOf",
+      "text": "maxOf(minWidth, measured)",
+      "note_zh": "下限约束"
+    },
+    {
+      "topic": "number",
+      "api": "minOf",
+      "text": "minOf(page + 1, lastPage)",
+      "note_zh": "上限约束"
+    },
+    {
+      "topic": "number",
+      "api": "coerceIn",
+      "text": "volume.coerceIn(0, 100)",
+      "note_zh": "范围夹取"
+    },
+    {
+      "topic": "number",
+      "api": "roundToInt",
+      "text": "(score * 100).roundToInt()",
+      "note_zh": "四舍五入"
+    },
+    {
+      "topic": "number",
+      "api": "format",
+      "text": "\"%.1f%%\".format(ratio * 100)",
+      "note_zh": "格式化百分比"
+    },
+    {
+      "topic": "io",
+      "api": "readText",
+      "text": "File(\"config.json\").readText()",
+      "note_zh": "读取文本"
+    },
+    {
+      "topic": "io",
+      "api": "writeText",
+      "text": "File(\"report.json\").writeText(output)",
+      "note_zh": "写入文本"
+    },
+    {
+      "topic": "io",
+      "api": "exists",
+      "text": "lockFile.exists()",
+      "note_zh": "存在性检查"
+    },
+    {
+      "topic": "io",
+      "api": "mkdirs",
+      "text": "cacheDir.mkdirs()",
+      "note_zh": "递归建目录"
+    },
+    {
+      "topic": "io",
+      "api": "readLines",
+      "text": "logFile.readLines()",
+      "note_zh": "按行读取"
+    },
+    {
+      "topic": "io",
+      "api": "resolve",
+      "text": "outDir.resolve(\"report.html\")",
+      "note_zh": "拼接路径"
+    },
+    {
+      "topic": "io",
+      "api": "appendText",
+      "text": "logFile.appendText(entry + \"\\n\")",
+      "note_zh": "追加写入"
+    },
+    {
+      "topic": "io",
+      "api": "deleteRecursively",
+      "text": "scratchDir.deleteRecursively()",
+      "note_zh": "递归删除"
+    },
+    {
+      "topic": "coroutines",
+      "api": "launch",
+      "text": "scope.launch { refresh() }",
+      "note_zh": "启动协程"
+    },
+    {
+      "topic": "coroutines",
+      "api": "async",
+      "text": "scope.async { loadUser(id) }",
+      "note_zh": "异步求值"
+    },
+    {
+      "topic": "coroutines",
+      "api": "await",
+      "text": "deferred.await()",
+      "note_zh": "等待结果"
+    },
+    {
+      "topic": "coroutines",
+      "api": "withContext",
+      "text": "withContext(Dispatchers.IO) { fetch() }",
+      "note_zh": "切换调度器"
+    },
+    {
+      "topic": "coroutines",
+      "api": "delay",
+      "text": "delay(1_000)",
+      "note_zh": "协程延时"
+    },
+    {
+      "topic": "coroutines",
+      "api": "runBlocking",
+      "text": "runBlocking { warmCache() }",
+      "note_zh": "阻塞入口"
+    },
+    {
+      "topic": "coroutines",
+      "api": "awaitAll",
+      "text": "jobs.awaitAll()",
+      "note_zh": "并发等待"
+    },
+    {
+      "topic": "coroutines",
+      "api": "flowOf",
+      "text": "flowOf(first, second)",
+      "note_zh": "构造流"
+    },
+    {
+      "topic": "time",
+      "api": "Instant.now",
+      "text": "Instant.now()",
+      "note_zh": "当前时刻"
+    },
+    {
+      "topic": "time",
+      "api": "Duration.between",
+      "text": "Duration.between(started, Instant.now())",
+      "note_zh": "耗时计算"
+    },
+    {
+      "topic": "time",
+      "api": "LocalDate.parse",
+      "text": "LocalDate.parse(\"2026-06-12\")",
+      "note_zh": "解析日期"
+    },
+    {
+      "topic": "time",
+      "api": "DateTimeFormatter.ofPattern",
+      "text": "DateTimeFormatter.ofPattern(\"HH:mm:ss\")",
+      "note_zh": "时间格式器"
+    },
+    {
+      "topic": "time",
+      "api": "measureTimeMillis",
+      "text": "measureTimeMillis { rebuild() }",
+      "note_zh": "计时执行"
+    },
+    {
+      "topic": "time",
+      "api": "seconds",
+      "text": "30.seconds",
+      "note_zh": "时长扩展"
+    },
+    {
+      "topic": "time",
+      "api": "System.currentTimeMillis",
+      "text": "System.currentTimeMillis()",
+      "note_zh": "毫秒时间戳"
+    }
   ]
 }

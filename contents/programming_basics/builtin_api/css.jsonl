@@ -1,0 +1,78 @@
+{"text":"rgb(255, 0, 0)","topic":"color","api":"rgb","note_zh":"RGB 颜色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rgb(59, 130, 246)","topic":"color","api":"rgb","note_zh":"RGB 蓝色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rgb(34, 197, 94)","topic":"color","api":"rgb","note_zh":"RGB 绿色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rgba(0, 0, 0, 0.5)","topic":"color","api":"rgba","note_zh":"半透明黑","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rgba(255, 255, 255, 0.8)","topic":"color","api":"rgba","note_zh":"半透明白","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rgba(15, 23, 42, 0.9)","topic":"color","api":"rgba","note_zh":"半透明深色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"hsl(210, 50%, 50%)","topic":"color","api":"hsl","note_zh":"HSL 颜色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"hsl(0, 0%, 20%)","topic":"color","api":"hsl","note_zh":"HSL 灰色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"hsl(280, 70%, 60%)","topic":"color","api":"hsl","note_zh":"HSL 紫色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"hsla(0, 0%, 0%, 0.5)","topic":"color","api":"hsla","note_zh":"HSLA 半透明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"hsla(210, 50%, 50%, 0.6)","topic":"color","api":"hsla","note_zh":"HSLA 半透明蓝","source_id":"keyloop:programming-basics:seeds"}
+{"text":"hwb(194 0% 0%)","topic":"color","api":"hwb","note_zh":"HWB 颜色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"color-mix(in srgb, red, blue)","topic":"color","api":"color-mix","note_zh":"颜色混合","source_id":"keyloop:programming-basics:seeds"}
+{"text":"color-mix(in oklch, #FF0000, #3B82F6)","topic":"color","api":"color-mix","note_zh":"感知混合","source_id":"keyloop:programming-basics:seeds"}
+{"text":"lab(50% 40 59)","topic":"color","api":"lab","note_zh":"LAB 颜色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"lch(52% 72 56)","topic":"color","api":"lch","note_zh":"LCH 颜色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"calc(100% - 20px)","topic":"math","api":"calc","note_zh":"减法计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"calc(50vh + 40px)","topic":"math","api":"calc","note_zh":"加法计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"calc(100vw - 2rem)","topic":"math","api":"calc","note_zh":"视口计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"calc(50% + 10px)","topic":"math","api":"calc","note_zh":"混合计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"min(50%, 200px)","topic":"math","api":"min","note_zh":"取较小值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"min(100%, 600px)","topic":"math","api":"min","note_zh":"限制最大宽","source_id":"keyloop:programming-basics:seeds"}
+{"text":"min(10vw, 80px)","topic":"math","api":"min","note_zh":"响应式取小","source_id":"keyloop:programming-basics:seeds"}
+{"text":"max(10px, 2vw)","topic":"math","api":"max","note_zh":"取较大值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"max(50%, 320px)","topic":"math","api":"max","note_zh":"限制最小宽","source_id":"keyloop:programming-basics:seeds"}
+{"text":"max(1rem, 3vh)","topic":"math","api":"max","note_zh":"响应式取大","source_id":"keyloop:programming-basics:seeds"}
+{"text":"clamp(1rem, 2vw, 3rem)","topic":"math","api":"clamp","note_zh":"区间钳制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"clamp(16px, 4vw, 48px)","topic":"math","api":"clamp","note_zh":"流式字号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"clamp(12px, 1.5vw, 24px)","topic":"math","api":"clamp","note_zh":"流式间距","source_id":"keyloop:programming-basics:seeds"}
+{"text":"round(1.5px)","topic":"math","api":"round","note_zh":"取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"mod(7, 3)","topic":"math","api":"mod","note_zh":"取模","source_id":"keyloop:programming-basics:seeds"}
+{"text":"translate(50px, 100px)","topic":"transform","api":"translate","note_zh":"平移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"translate(-50%, -50%)","topic":"transform","api":"translate","note_zh":"居中平移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"translateX(10px)","topic":"transform","api":"translateX","note_zh":"水平平移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"translateX(-100%)","topic":"transform","api":"translateX","note_zh":"滑出平移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"translateY(20px)","topic":"transform","api":"translateY","note_zh":"垂直平移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"translate3d(0, 0, 0)","topic":"transform","api":"translate3d","note_zh":"三维平移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"scale(1.5)","topic":"transform","api":"scale","note_zh":"放大","source_id":"keyloop:programming-basics:seeds"}
+{"text":"scale(0.95)","topic":"transform","api":"scale","note_zh":"缩小","source_id":"keyloop:programming-basics:seeds"}
+{"text":"scale(1.2)","topic":"transform","api":"scale","note_zh":"悬停放大","source_id":"keyloop:programming-basics:seeds"}
+{"text":"scaleX(2)","topic":"transform","api":"scaleX","note_zh":"水平缩放","source_id":"keyloop:programming-basics:seeds"}
+{"text":"scaleY(0.5)","topic":"transform","api":"scaleY","note_zh":"垂直缩放","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rotate(45deg)","topic":"transform","api":"rotate","note_zh":"旋转","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rotate(-15deg)","topic":"transform","api":"rotate","note_zh":"逆时针旋转","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rotateX(30deg)","topic":"transform","api":"rotateX","note_zh":"绕 X 旋转","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rotateY(60deg)","topic":"transform","api":"rotateY","note_zh":"绕 Y 旋转","source_id":"keyloop:programming-basics:seeds"}
+{"text":"skew(10deg)","topic":"transform","api":"skew","note_zh":"倾斜","source_id":"keyloop:programming-basics:seeds"}
+{"text":"skew(5deg, 10deg)","topic":"transform","api":"skew","note_zh":"双向倾斜","source_id":"keyloop:programming-basics:seeds"}
+{"text":"perspective(500px)","topic":"transform","api":"perspective","note_zh":"透视距离","source_id":"keyloop:programming-basics:seeds"}
+{"text":"linear-gradient(45deg, red, blue)","topic":"gradient","api":"linear-gradient","note_zh":"线性渐变","source_id":"keyloop:programming-basics:seeds"}
+{"text":"linear-gradient(to right, #FF0000, #3B82F6)","topic":"gradient","api":"linear-gradient","note_zh":"横向渐变","source_id":"keyloop:programming-basics:seeds"}
+{"text":"linear-gradient(180deg, #0F172A, #1E293B)","topic":"gradient","api":"linear-gradient","note_zh":"纵向渐变","source_id":"keyloop:programming-basics:seeds"}
+{"text":"linear-gradient(90deg, transparent, #000)","topic":"gradient","api":"linear-gradient","note_zh":"渐隐遮罩","source_id":"keyloop:programming-basics:seeds"}
+{"text":"radial-gradient(circle, red, blue)","topic":"gradient","api":"radial-gradient","note_zh":"径向渐变","source_id":"keyloop:programming-basics:seeds"}
+{"text":"radial-gradient(ellipse, #fff, #000)","topic":"gradient","api":"radial-gradient","note_zh":"椭圆渐变","source_id":"keyloop:programming-basics:seeds"}
+{"text":"radial-gradient(circle at top, red, transparent)","topic":"gradient","api":"radial-gradient","note_zh":"定位径向渐变","source_id":"keyloop:programming-basics:seeds"}
+{"text":"conic-gradient(red, blue)","topic":"gradient","api":"conic-gradient","note_zh":"锥形渐变","source_id":"keyloop:programming-basics:seeds"}
+{"text":"conic-gradient(from 90deg, red, blue)","topic":"gradient","api":"conic-gradient","note_zh":"带起角锥形渐变","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repeating-linear-gradient(red, blue 10px)","topic":"gradient","api":"repeating-linear-gradient","note_zh":"重复线性渐变","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repeating-linear-gradient(45deg, #000, #000 5px)","topic":"gradient","api":"repeating-linear-gradient","note_zh":"斜纹重复渐变","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repeating-radial-gradient(red, blue 10px)","topic":"gradient","api":"repeating-radial-gradient","note_zh":"重复径向渐变","source_id":"keyloop:programming-basics:seeds"}
+{"text":"image-set('a.png' 1x)","topic":"gradient","api":"image-set","note_zh":"响应式图集","source_id":"keyloop:programming-basics:seeds"}
+{"text":"brightness(1.2)","topic":"filter","api":"brightness","note_zh":"提亮","source_id":"keyloop:programming-basics:seeds"}
+{"text":"brightness(0.5)","topic":"filter","api":"brightness","note_zh":"压暗","source_id":"keyloop:programming-basics:seeds"}
+{"text":"contrast(0.8)","topic":"filter","api":"contrast","note_zh":"降对比","source_id":"keyloop:programming-basics:seeds"}
+{"text":"contrast(1.2)","topic":"filter","api":"contrast","note_zh":"增对比","source_id":"keyloop:programming-basics:seeds"}
+{"text":"saturate(2)","topic":"filter","api":"saturate","note_zh":"加饱和","source_id":"keyloop:programming-basics:seeds"}
+{"text":"saturate(1.5)","topic":"filter","api":"saturate","note_zh":"增饱和","source_id":"keyloop:programming-basics:seeds"}
+{"text":"invert(1)","topic":"filter","api":"invert","note_zh":"反色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"invert(0.8)","topic":"filter","api":"invert","note_zh":"部分反色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"blur(4px)","topic":"filter","api":"blur","note_zh":"模糊","source_id":"keyloop:programming-basics:seeds"}
+{"text":"blur(2px)","topic":"filter","api":"blur","note_zh":"轻模糊","source_id":"keyloop:programming-basics:seeds"}
+{"text":"drop-shadow(0 2px 4px #000)","topic":"filter","api":"drop-shadow","note_zh":"投影滤镜","source_id":"keyloop:programming-basics:seeds"}
+{"text":"drop-shadow(0 4px 8px #0003)","topic":"filter","api":"drop-shadow","note_zh":"柔和投影","source_id":"keyloop:programming-basics:seeds"}
+{"text":"grayscale(0.5)","topic":"filter","api":"grayscale","note_zh":"灰度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sepia(0.6)","topic":"filter","api":"sepia","note_zh":"怀旧棕","source_id":"keyloop:programming-basics:seeds"}
+{"text":"hue-rotate(90deg)","topic":"filter","api":"hue-rotate","note_zh":"色相旋转","source_id":"keyloop:programming-basics:seeds"}
+{"text":"opacity(0.7)","topic":"filter","api":"opacity","note_zh":"滤镜透明度","source_id":"keyloop:programming-basics:seeds"}

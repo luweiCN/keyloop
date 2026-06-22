@@ -2,165 +2,1606 @@
   "language": "c",
   "source_id": "keyloop:programming-basics:seeds",
   "identifier_sets": [
-    { "collection": "items", "element": "item", "field": "id", "value": "{0}" },
-    { "collection": "users", "element": "user", "field": "name", "value": "{0}" },
-    { "collection": "orders", "element": "order", "field": "total", "value": "{0}" },
-    { "collection": "tasks", "element": "task", "field": "done", "value": "{0}" },
-    { "collection": "rows", "element": "row", "field": "score", "value": "{0}" },
-    { "collection": "events", "element": "event", "field": "kind", "value": "{0}" },
-    { "collection": "buffers", "element": "buffer", "field": "size", "value": "{0}" },
-    { "collection": "nodes", "element": "node", "field": "label", "value": "{0}" }
+    {
+      "collection": "items",
+      "element": "item",
+      "field": "id",
+      "value": "{0}"
+    },
+    {
+      "collection": "users",
+      "element": "user",
+      "field": "name",
+      "value": "{0}"
+    },
+    {
+      "collection": "orders",
+      "element": "order",
+      "field": "total",
+      "value": "{0}"
+    },
+    {
+      "collection": "tasks",
+      "element": "task",
+      "field": "done",
+      "value": "{0}"
+    },
+    {
+      "collection": "rows",
+      "element": "row",
+      "field": "score",
+      "value": "{0}"
+    },
+    {
+      "collection": "events",
+      "element": "event",
+      "field": "kind",
+      "value": "{0}"
+    },
+    {
+      "collection": "buffers",
+      "element": "buffer",
+      "field": "size",
+      "value": "{0}"
+    },
+    {
+      "collection": "nodes",
+      "element": "node",
+      "field": "label",
+      "value": "{0}"
+    },
+    {
+      "collection": "paths",
+      "element": "path",
+      "field": "stem",
+      "value": "{0}"
+    },
+    {
+      "collection": "records",
+      "element": "record",
+      "field": "label",
+      "value": "{0}"
+    },
+    {
+      "collection": "sessions",
+      "element": "session",
+      "field": "token",
+      "value": "{0}"
+    },
+    {
+      "collection": "files",
+      "element": "file",
+      "field": "size",
+      "value": "{0}"
+    },
+    {
+      "collection": "jobs",
+      "element": "job",
+      "field": "status",
+      "value": "{0}"
+    },
+    {
+      "collection": "buckets",
+      "element": "bucket",
+      "field": "count",
+      "value": "{0}"
+    },
+    {
+      "collection": "frames",
+      "element": "frame",
+      "field": "index",
+      "value": "{0}"
+    },
+    {
+      "collection": "edges",
+      "element": "edge",
+      "field": "weight",
+      "value": "{0}"
+    },
+    {
+      "collection": "tickets",
+      "element": "ticket",
+      "field": "state",
+      "value": "{0}"
+    },
+    {
+      "collection": "samples",
+      "element": "sample",
+      "field": "value",
+      "value": "{0}"
+    }
   ],
   "symbols_numbers_values": [
-    { "topic": "string", "text": "\"#dc2626\"", "note_zh": "十六进制颜色串" },
-    { "topic": "literal", "text": "0xFF", "note_zh": "十六进制数" },
-    { "topic": "literal", "text": "0x1F", "note_zh": "位掩码" },
-    { "topic": "literal", "text": "0xDEADBEEF", "note_zh": "魔术数字" },
-    { "topic": "literal", "text": "0755", "note_zh": "八进制权限" },
-    { "topic": "literal", "text": "8080", "note_zh": "端口号" },
-    { "topic": "literal", "text": "3.14159", "note_zh": "浮点数" },
-    { "topic": "literal", "text": "-273.15f", "note_zh": "单精度负数" },
-    { "topic": "literal", "text": "1e9", "note_zh": "科学计数" },
-    { "topic": "string", "text": "\"3.2.1\"", "note_zh": "版本号字符串" },
-    { "topic": "literal", "text": "CLOCKS_PER_SEC", "note_zh": "时钟频率宏" },
-    { "topic": "literal", "text": "EXIT_FAILURE", "note_zh": "失败退出码" },
-    { "topic": "literal", "text": "EXIT_SUCCESS", "note_zh": "成功退出码" },
-    { "topic": "literal", "text": "SIZE_MAX", "note_zh": "size_t 上限" },
-    { "topic": "literal", "text": "INT_MAX", "note_zh": "整型上限" },
-    { "topic": "literal", "text": "UINT32_MAX", "note_zh": "无符号上限" },
-    { "topic": "literal", "text": "NULL", "note_zh": "空指针" },
-    { "topic": "literal", "text": "'\\n'", "note_zh": "换行字符" },
-    { "topic": "string", "text": "\"./config/app.conf\"", "note_zh": "相对路径" },
-    { "topic": "string", "text": "\"%s:%d\"", "note_zh": "格式串" },
-    { "topic": "string", "text": "\"*.log\"", "note_zh": "通配符模式" }
+    {
+      "topic": "string",
+      "text": "\"https://api.example.com/v1\"",
+      "note_zh": "API 接口地址"
+    },
+    {
+      "topic": "string",
+      "text": "\"./src/main.c\"",
+      "note_zh": "相对路径"
+    },
+    {
+      "topic": "string",
+      "text": "\"/var/log/app.log\"",
+      "note_zh": "绝对路径"
+    },
+    {
+      "topic": "string",
+      "text": "\"2026-06-22\"",
+      "note_zh": "日期"
+    },
+    {
+      "topic": "string",
+      "text": "\"2026-06-22T08:30:00Z\"",
+      "note_zh": "ISO 时间戳"
+    },
+    {
+      "topic": "string",
+      "text": "\"23:59:59\"",
+      "note_zh": "时间"
+    },
+    {
+      "topic": "string",
+      "text": "\"application/json\"",
+      "note_zh": "MIME 类型"
+    },
+    {
+      "topic": "string",
+      "text": "\"image/png\"",
+      "note_zh": "MIME 类型"
+    },
+    {
+      "topic": "string",
+      "text": "\"1.4.2\"",
+      "note_zh": "版本号"
+    },
+    {
+      "topic": "string",
+      "text": "\"#1E90FF\"",
+      "note_zh": "颜色值"
+    },
+    {
+      "topic": "string",
+      "text": "\"192.168.0.1\"",
+      "note_zh": "IP 地址"
+    },
+    {
+      "topic": "string",
+      "text": "\"127.0.0.1:3000\"",
+      "note_zh": "主机端口"
+    },
+    {
+      "topic": "string",
+      "text": "\"$2,499.00\"",
+      "note_zh": "金额"
+    },
+    {
+      "topic": "string",
+      "text": "\"86.5%\"",
+      "note_zh": "百分比"
+    },
+    {
+      "topic": "string",
+      "text": "\"%Y-%m-%d\"",
+      "note_zh": "日期格式串"
+    },
+    {
+      "topic": "string",
+      "text": "\"%05d\"",
+      "note_zh": "补零格式串"
+    },
+    {
+      "topic": "string",
+      "text": "\"%.2f\"",
+      "note_zh": "浮点格式串"
+    },
+    {
+      "topic": "string",
+      "text": "\"user@example.com\"",
+      "note_zh": "邮箱地址"
+    },
+    {
+      "topic": "literal",
+      "text": "3000",
+      "note_zh": "端口号"
+    },
+    {
+      "topic": "literal",
+      "text": "404",
+      "note_zh": "HTTP 状态码"
+    },
+    {
+      "topic": "literal",
+      "text": "200",
+      "note_zh": "HTTP 成功码"
+    },
+    {
+      "topic": "literal",
+      "text": "30000",
+      "note_zh": "超时毫秒"
+    },
+    {
+      "topic": "literal",
+      "text": "1499.99",
+      "note_zh": "价格"
+    },
+    {
+      "topic": "literal",
+      "text": "1024",
+      "note_zh": "字节数"
+    },
+    {
+      "topic": "literal",
+      "text": "86400",
+      "note_zh": "一天秒数"
+    },
+    {
+      "topic": "literal",
+      "text": "3.14159",
+      "note_zh": "圆周率"
+    },
+    {
+      "topic": "literal",
+      "text": "1e6",
+      "note_zh": "科学计数"
+    },
+    {
+      "topic": "literal",
+      "text": "-1",
+      "note_zh": "哨兵值"
+    },
+    {
+      "topic": "literal",
+      "text": "0.5",
+      "note_zh": "系数"
+    },
+    {
+      "topic": "literal",
+      "text": "255",
+      "note_zh": "字节上限"
+    },
+    {
+      "topic": "literal",
+      "text": "'\\n'",
+      "note_zh": "换行字符"
+    },
+    {
+      "topic": "literal",
+      "text": "'\\0'",
+      "note_zh": "空字符"
+    },
+    {
+      "topic": "literal",
+      "text": "'\\t'",
+      "note_zh": "制表符"
+    },
+    {
+      "topic": "literal",
+      "text": "0xFF",
+      "note_zh": "十六进制字节"
+    },
+    {
+      "topic": "literal",
+      "text": "1UL",
+      "note_zh": "无符号长整型后缀"
+    },
+    {
+      "topic": "literal",
+      "text": "3.14f",
+      "note_zh": "单精度浮点后缀"
+    }
   ],
   "symbols_numbers_templates": [
-    { "topic": "declaration", "template": "int {collection}[16] = {value};", "focus": ["[]", "{}"], "note_zh": "数组声明" },
-    { "topic": "declaration", "template": "struct {element} *selected_{element} = NULL;", "focus": ["*", "="], "note_zh": "指针变量" },
-    { "topic": "declaration", "template": "typedef struct {element} {element}_t;", "focus": ["_", ";"], "note_zh": "类型别名" },
-    { "topic": "call", "template": "process_{element}(&{collection}[i]);", "focus": ["&", "[]"], "note_zh": "传地址调用" },
-    { "topic": "call", "template": "printf(\"{element}: %d\\n\", {element}->{field});", "focus": ["->", "%"], "note_zh": "格式化打印" },
-    { "topic": "index", "template": "int first = {collection}[0];", "focus": ["[]", "="], "note_zh": "取首元素" },
-    { "topic": "index", "template": "{collection}[i] = {collection}[i + 1];", "focus": ["[]", "+"], "note_zh": "元素移位" }
+    {
+      "topic": "declaration",
+      "template": "int {collection}[16] = {value};",
+      "focus": [
+        "[]",
+        "{}"
+      ],
+      "note_zh": "数组声明"
+    },
+    {
+      "topic": "declaration",
+      "template": "struct {element} *selected_{element} = NULL;",
+      "focus": [
+        "*",
+        "="
+      ],
+      "note_zh": "指针变量"
+    },
+    {
+      "topic": "declaration",
+      "template": "typedef struct {element} {element}_t;",
+      "focus": [
+        "_",
+        ";"
+      ],
+      "note_zh": "类型别名"
+    },
+    {
+      "topic": "call",
+      "template": "process_{element}(&{collection}[i]);",
+      "focus": [
+        "&",
+        "[]"
+      ],
+      "note_zh": "传地址调用"
+    },
+    {
+      "topic": "call",
+      "template": "printf(\"{element}: %d\\n\", {element}->{field});",
+      "focus": [
+        "->",
+        "%"
+      ],
+      "note_zh": "格式化打印"
+    },
+    {
+      "topic": "index",
+      "template": "int first = {collection}[0];",
+      "focus": [
+        "[]",
+        "="
+      ],
+      "note_zh": "取首元素"
+    },
+    {
+      "topic": "index",
+      "template": "{collection}[i] = {collection}[i + 1];",
+      "focus": [
+        "[]",
+        "+"
+      ],
+      "note_zh": "元素移位"
+    },
+    {
+      "topic": "declaration",
+      "template": "{element}_t *{element} = malloc(sizeof(*{element}));",
+      "focus": [
+        "*",
+        "()"
+      ],
+      "note_zh": "堆分配指针"
+    },
+    {
+      "topic": "call",
+      "template": "qsort({collection}, n, sizeof(*{collection}), cmp_{element});",
+      "focus": [
+        "()",
+        ","
+      ],
+      "note_zh": "数组排序"
+    },
+    {
+      "topic": "control",
+      "template": "if ({element} != NULL) free({element}->{field});",
+      "focus": [
+        "!=",
+        "->"
+      ],
+      "note_zh": "判空释放"
+    },
+    {
+      "topic": "control",
+      "template": "for (int i = 0; i < n; i++) sum += {collection}[i];",
+      "focus": [
+        "++",
+        "[]"
+      ],
+      "note_zh": "累加遍历"
+    },
+    {
+      "topic": "index",
+      "template": "{element}_t last = {collection}[count - 1];",
+      "focus": [
+        "[]",
+        "-"
+      ],
+      "note_zh": "取末元素"
+    },
+    {
+      "topic": "call",
+      "template": "memcpy(&dst, &{collection}[i], sizeof(dst));",
+      "focus": [
+        "&",
+        "()"
+      ],
+      "note_zh": "内存复制"
+    },
+    {
+      "topic": "call",
+      "template": "unsigned mask = 1u << {element}_bit;",
+      "focus": [
+        "<<",
+        "u"
+      ],
+      "note_zh": "位移掩码"
+    },
+    {
+      "topic": "call",
+      "template": "snprintf(buf, sizeof(buf), \"%s\", {element}->{field});",
+      "focus": [
+        "%",
+        "()"
+      ],
+      "note_zh": "安全格式化"
+    },
+    {
+      "topic": "declaration",
+      "template": "const {element}_t *{element}_ptr = &{collection}[0];",
+      "focus": [
+        "*",
+        "&"
+      ],
+      "note_zh": "常量指针"
+    },
+    {
+      "topic": "declaration",
+      "template": "while ({element} != NULL) {element} = {element}->next;",
+      "focus": [
+        "!=",
+        "->"
+      ],
+      "note_zh": "链表推进"
+    }
   ],
   "symbols_numbers_static": [
-    { "topic": "literal", "text": "#define ACCENT \"#dc2626\"", "focus": ["#", "\""], "note_zh": "颜色宏" },
-    { "topic": "literal", "text": "#define DEFAULT_PORT 8080", "focus": ["#"], "note_zh": "端口宏" },
-    { "topic": "literal", "text": "static const char *VERSION = \"3.2.1\";", "focus": ["*", "\""], "note_zh": "版本号" },
-    { "topic": "literal", "text": "unsigned flags = value & 0xFF;", "focus": ["&", "0x"], "note_zh": "位掩码" },
-    { "topic": "literal", "text": "double ratio = (double)done / total;", "focus": ["()", "/"], "note_zh": "浮点比例" },
-    { "topic": "literal", "text": "size_t capacity = 4096 * 2;", "focus": ["*", ";"], "note_zh": "容量计算" },
-    { "topic": "literal", "text": "struct point origin = { .x = 120, .y = 480 };", "focus": ["{}", "."], "note_zh": "指定初始化" },
-    { "topic": "literal", "text": "int steps[] = {10, 20, 40, 80};", "focus": ["[]", "{}"], "note_zh": "数组字面量" },
-    { "topic": "string", "text": "#include <string.h>", "focus": ["<>", "#"], "note_zh": "头文件引入" },
-    { "topic": "string", "text": "snprintf(url, sizeof(url), \"%s/api/users\", base);", "focus": ["()", "%"], "note_zh": "安全拼接" },
-    { "topic": "string", "text": "const char *config_path = \"./config/app.conf\";", "focus": ["*", "/"], "note_zh": "相对路径" },
-    { "topic": "string", "text": "fprintf(stderr, \"total: %d\\n\", count);", "focus": ["%", "\\n"], "note_zh": "错误输出" },
-    { "topic": "string", "text": "const char *home = getenv(\"HOME\");", "focus": ["()", "\""], "note_zh": "环境变量" },
-    { "topic": "string", "text": "char *token = strtok(line, \",\");", "focus": ["*", "\""], "note_zh": "字符串切分" },
-    { "topic": "string", "text": "static const char PATTERN[] = \"*.log\";", "focus": ["[]", "*"], "note_zh": "模式常量" },
-    { "topic": "string", "text": "puts(\"press \\\"enter\\\" to start\");", "focus": ["\\\"", "()"], "note_zh": "转义引号" },
-    { "topic": "control", "text": "if (fp == NULL) { perror(\"open\"); return 1; }", "focus": ["{}", "()"], "note_zh": "错误处理" },
-    { "topic": "control", "text": "int badge = count > 9 ? 9 : count;", "focus": ["?:", ">"], "note_zh": "三元截断" },
-    { "topic": "control", "text": "while (head != NULL) head = head->next;", "focus": ["!=", "->"], "note_zh": "链表推进" },
-    { "topic": "control", "text": "switch (status) { case 200: break; default: abort(); }", "focus": ["{}", ":"], "note_zh": "switch 分支" },
-    { "topic": "index", "text": "int last = items[count - 1];", "focus": ["[]", "-"], "note_zh": "取末元素" },
-    { "topic": "index", "text": "grid[2][3] = 42;", "focus": ["[]", "="], "note_zh": "二维索引" },
-    { "topic": "index", "text": "char ch = line[strlen(line) - 1];", "focus": ["[]", "()"], "note_zh": "末字符" }
+    {
+      "topic": "literal",
+      "text": "#define ACCENT \"#dc2626\"",
+      "focus": [
+        "#",
+        "\""
+      ],
+      "note_zh": "颜色宏"
+    },
+    {
+      "topic": "literal",
+      "text": "#define DEFAULT_PORT 8080",
+      "focus": [
+        "#"
+      ],
+      "note_zh": "端口宏"
+    },
+    {
+      "topic": "literal",
+      "text": "static const char *VERSION = \"3.2.1\";",
+      "focus": [
+        "*",
+        "\""
+      ],
+      "note_zh": "版本号"
+    },
+    {
+      "topic": "literal",
+      "text": "unsigned flags = value & 0xFF;",
+      "focus": [
+        "&",
+        "0x"
+      ],
+      "note_zh": "位掩码"
+    },
+    {
+      "topic": "literal",
+      "text": "double ratio = (double)done / total;",
+      "focus": [
+        "()",
+        "/"
+      ],
+      "note_zh": "浮点比例"
+    },
+    {
+      "topic": "literal",
+      "text": "size_t capacity = 4096 * 2;",
+      "focus": [
+        "*",
+        ";"
+      ],
+      "note_zh": "容量计算"
+    },
+    {
+      "topic": "literal",
+      "text": "struct point origin = { .x = 120, .y = 480 };",
+      "focus": [
+        "{}",
+        "."
+      ],
+      "note_zh": "指定初始化"
+    },
+    {
+      "topic": "literal",
+      "text": "int steps[] = {10, 20, 40, 80};",
+      "focus": [
+        "[]",
+        "{}"
+      ],
+      "note_zh": "数组字面量"
+    },
+    {
+      "topic": "string",
+      "text": "#include <string.h>",
+      "focus": [
+        "<>",
+        "#"
+      ],
+      "note_zh": "头文件引入"
+    },
+    {
+      "topic": "string",
+      "text": "snprintf(url, sizeof(url), \"%s/api/users\", base);",
+      "focus": [
+        "()",
+        "%"
+      ],
+      "note_zh": "安全拼接"
+    },
+    {
+      "topic": "string",
+      "text": "const char *config_path = \"./config/app.conf\";",
+      "focus": [
+        "*",
+        "/"
+      ],
+      "note_zh": "相对路径"
+    },
+    {
+      "topic": "string",
+      "text": "fprintf(stderr, \"total: %d\\n\", count);",
+      "focus": [
+        "%",
+        "\\n"
+      ],
+      "note_zh": "错误输出"
+    },
+    {
+      "topic": "string",
+      "text": "const char *home = getenv(\"HOME\");",
+      "focus": [
+        "()",
+        "\""
+      ],
+      "note_zh": "环境变量"
+    },
+    {
+      "topic": "string",
+      "text": "char *token = strtok(line, \",\");",
+      "focus": [
+        "*",
+        "\""
+      ],
+      "note_zh": "字符串切分"
+    },
+    {
+      "topic": "string",
+      "text": "static const char PATTERN[] = \"*.log\";",
+      "focus": [
+        "[]",
+        "*"
+      ],
+      "note_zh": "模式常量"
+    },
+    {
+      "topic": "string",
+      "text": "puts(\"press \\\"enter\\\" to start\");",
+      "focus": [
+        "\\\"",
+        "()"
+      ],
+      "note_zh": "转义引号"
+    },
+    {
+      "topic": "control",
+      "text": "if (fp == NULL) { perror(\"open\"); return 1; }",
+      "focus": [
+        "{}",
+        "()"
+      ],
+      "note_zh": "错误处理"
+    },
+    {
+      "topic": "control",
+      "text": "int badge = count > 9 ? 9 : count;",
+      "focus": [
+        "?:",
+        ">"
+      ],
+      "note_zh": "三元截断"
+    },
+    {
+      "topic": "control",
+      "text": "while (head != NULL) head = head->next;",
+      "focus": [
+        "!=",
+        "->"
+      ],
+      "note_zh": "链表推进"
+    },
+    {
+      "topic": "control",
+      "text": "switch (status) { case 200: break; default: abort(); }",
+      "focus": [
+        "{}",
+        ":"
+      ],
+      "note_zh": "switch 分支"
+    },
+    {
+      "topic": "index",
+      "text": "int last = items[count - 1];",
+      "focus": [
+        "[]",
+        "-"
+      ],
+      "note_zh": "取末元素"
+    },
+    {
+      "topic": "index",
+      "text": "grid[2][3] = 42;",
+      "focus": [
+        "[]",
+        "="
+      ],
+      "note_zh": "二维索引"
+    },
+    {
+      "topic": "index",
+      "text": "char ch = line[strlen(line) - 1];",
+      "focus": [
+        "[]",
+        "()"
+      ],
+      "note_zh": "末字符"
+    },
+    {
+      "topic": "literal",
+      "text": "int flags = (1 << 0) | (1 << 3);",
+      "focus": [
+        "<<",
+        "|"
+      ],
+      "note_zh": "标志位组合"
+    },
+    {
+      "topic": "literal",
+      "text": "uint8_t high = (value >> 8) & 0xFF;",
+      "focus": [
+        ">>",
+        "&"
+      ],
+      "note_zh": "取高字节"
+    },
+    {
+      "topic": "literal",
+      "text": "long total = a * 1000L + b;",
+      "focus": [
+        "*",
+        "+"
+      ],
+      "note_zh": "长整运算"
+    },
+    {
+      "topic": "literal",
+      "text": "double pct = count * 100.0 / max;",
+      "focus": [
+        "*",
+        "/"
+      ],
+      "note_zh": "百分比"
+    },
+    {
+      "topic": "literal",
+      "text": "int delta = abs(x - y) % 256;",
+      "focus": [
+        "%",
+        "-"
+      ],
+      "note_zh": "取模差值"
+    },
+    {
+      "topic": "literal",
+      "text": "flags &= ~0x04;",
+      "focus": [
+        "&=",
+        "~"
+      ],
+      "note_zh": "清除标志位"
+    },
+    {
+      "topic": "literal",
+      "text": "size_t n = sizeof(arr) / sizeof(arr[0]);",
+      "focus": [
+        "/",
+        "[]"
+      ],
+      "note_zh": "数组长度"
+    },
+    {
+      "topic": "literal",
+      "text": "char grid[3][3] = {{0}};",
+      "focus": [
+        "[]",
+        "{}"
+      ],
+      "note_zh": "二维清零"
+    },
+    {
+      "topic": "literal",
+      "text": "unsigned crc = 0xFFFFFFFFu;",
+      "focus": [
+        "0x",
+        "u"
+      ],
+      "note_zh": "校验初值"
+    },
+    {
+      "topic": "literal",
+      "text": "int mask = ~(~0 << bits);",
+      "focus": [
+        "~",
+        "<<"
+      ],
+      "note_zh": "低位掩码"
+    },
+    {
+      "topic": "string",
+      "text": "printf(\"%-20s|%5d\\n\", name, count);",
+      "focus": [
+        "%",
+        "|"
+      ],
+      "note_zh": "对齐输出"
+    },
+    {
+      "topic": "string",
+      "text": "fprintf(stderr, \"[%s] %d\\n\", tag, code);",
+      "focus": [
+        "[]",
+        "%"
+      ],
+      "note_zh": "带标签错误"
+    },
+    {
+      "topic": "string",
+      "text": "snprintf(path, sizeof(path), \"%s/%s\", dir, name);",
+      "focus": [
+        "%",
+        "/"
+      ],
+      "note_zh": "路径拼接"
+    },
+    {
+      "topic": "string",
+      "text": "const char *ext = strrchr(name, '.') + 1;",
+      "focus": [
+        "()",
+        "+"
+      ],
+      "note_zh": "取扩展名"
+    },
+    {
+      "topic": "string",
+      "text": "if (strcmp(cmd, \"--all\") == 0) run_all();",
+      "focus": [
+        "==",
+        "\""
+      ],
+      "note_zh": "命令匹配"
+    },
+    {
+      "topic": "string",
+      "text": "printf(\"progress: %3d%%\\n\", percent);",
+      "focus": [
+        "%",
+        "\\n"
+      ],
+      "note_zh": "百分号转义"
+    },
+    {
+      "topic": "control",
+      "text": "for (int i = n - 1; i >= 0; i--) pop(i);",
+      "focus": [
+        "--",
+        ">="
+      ],
+      "note_zh": "逆序遍历"
+    },
+    {
+      "topic": "control",
+      "text": "result = (a > b) ? a : (b > c ? b : c);",
+      "focus": [
+        "?:",
+        ">"
+      ],
+      "note_zh": "嵌套三元"
+    },
+    {
+      "topic": "control",
+      "text": "do { tick(); } while (--count > 0);",
+      "focus": [
+        "--",
+        ">"
+      ],
+      "note_zh": "单行 do-while"
+    },
+    {
+      "topic": "control",
+      "text": "assert(ptr != NULL && len > 0);",
+      "focus": [
+        "&&",
+        "!="
+      ],
+      "note_zh": "复合断言"
+    },
+    {
+      "topic": "index",
+      "text": "matrix[i][j] += scale * input[k];",
+      "focus": [
+        "[]",
+        "*"
+      ],
+      "note_zh": "矩阵累加"
+    },
+    {
+      "topic": "index",
+      "text": "swap(&a[i], &a[j]);",
+      "focus": [
+        "&",
+        "[]"
+      ],
+      "note_zh": "交换元素"
+    },
+    {
+      "topic": "declaration",
+      "text": "*dst++ = *src++;",
+      "focus": [
+        "*",
+        "++"
+      ],
+      "note_zh": "指针复制"
+    },
+    {
+      "topic": "declaration",
+      "text": "node->next->prev = node->prev;",
+      "focus": [
+        "->",
+        ";"
+      ],
+      "note_zh": "链表重连"
+    },
+    {
+      "topic": "call",
+      "text": "parity ^= bit & 1;",
+      "focus": [
+        "^=",
+        "&"
+      ],
+      "note_zh": "奇偶校验"
+    }
   ],
   "symbols_numbers_blocks": [
-    { "topic": "control", "lines": ["if (fp == NULL) {", "    perror(\"fopen\");", "    return 1;", "}"], "note_zh": "判空守卫块" },
-    { "topic": "control", "lines": ["for (size_t i = 0; i < count; i++) {", "    total += items[i];", "}"], "note_zh": "for 循环块" },
-    { "topic": "declaration", "lines": ["static int get_count(const char *name) {", "    return name != NULL ? 1 : 0;", "}"], "note_zh": "静态函数定义块" },
-    { "topic": "declaration", "lines": ["struct node {", "    int id;", "    struct node *next;", "};"], "note_zh": "结构体定义块" },
-    { "topic": "control", "lines": ["while (head != NULL) {", "    visit(head);", "    head = head->next;", "}"], "note_zh": "链表循环块" },
-    { "topic": "declaration", "lines": ["typedef struct {", "    int x;", "    int y;", "} point_t;"], "note_zh": "匿名结构别名块" },
-    { "topic": "control", "lines": ["for (cur = head; cur != NULL; cur = next) {", "    next = cur->next;", "    free(cur);", "}"], "note_zh": "释放链表块" },
-    { "topic": "control", "lines": ["if (count > capacity) {", "    capacity *= 2;", "    items = realloc(items, capacity * sizeof(*items));", "}"], "note_zh": "扩容守卫块" },
-    { "topic": "control", "lines": ["switch (status) {", "    case 200: puts(\"ok\"); break;", "    default: abort();", "}"], "note_zh": "switch 块" },
-    { "topic": "control", "lines": ["do {", "    chunk = fread(buffer, 1, sizeof(buffer), fp);", "} while (chunk > 0);"], "note_zh": "do while 块" },
-    { "topic": "declaration", "lines": ["enum status {", "    STATUS_OPEN,", "    STATUS_CLOSED", "};"], "note_zh": "枚举定义块" },
-    { "topic": "declaration", "lines": ["int main(int argc, char **argv) {", "    if (argc < 2) return 1;", "    return run(argv[1]);", "}"], "note_zh": "main 函数块" }
+    {
+      "topic": "control",
+      "lines": [
+        "if (fp == NULL) {",
+        "    perror(\"fopen\");",
+        "    return 1;",
+        "}"
+      ],
+      "note_zh": "判空守卫块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "for (size_t i = 0; i < count; i++) {",
+        "    total += items[i];",
+        "}"
+      ],
+      "note_zh": "for 循环块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "static int get_count(const char *name) {",
+        "    return name != NULL ? 1 : 0;",
+        "}"
+      ],
+      "note_zh": "静态函数定义块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "struct node {",
+        "    int id;",
+        "    struct node *next;",
+        "};"
+      ],
+      "note_zh": "结构体定义块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "while (head != NULL) {",
+        "    visit(head);",
+        "    head = head->next;",
+        "}"
+      ],
+      "note_zh": "链表循环块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "typedef struct {",
+        "    int x;",
+        "    int y;",
+        "} point_t;"
+      ],
+      "note_zh": "匿名结构别名块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "for (cur = head; cur != NULL; cur = next) {",
+        "    next = cur->next;",
+        "    free(cur);",
+        "}"
+      ],
+      "note_zh": "释放链表块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "if (count > capacity) {",
+        "    capacity *= 2;",
+        "    items = realloc(items, capacity * sizeof(*items));",
+        "}"
+      ],
+      "note_zh": "扩容守卫块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "switch (status) {",
+        "    case 200: puts(\"ok\"); break;",
+        "    default: abort();",
+        "}"
+      ],
+      "note_zh": "switch 块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "do {",
+        "    chunk = fread(buffer, 1, sizeof(buffer), fp);",
+        "} while (chunk > 0);"
+      ],
+      "note_zh": "do while 块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "enum status {",
+        "    STATUS_OPEN,",
+        "    STATUS_CLOSED",
+        "};"
+      ],
+      "note_zh": "枚举定义块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "int main(int argc, char **argv) {",
+        "    if (argc < 2) return 1;",
+        "    return run(argv[1]);",
+        "}"
+      ],
+      "note_zh": "main 函数块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "if (n == 0) {",
+        "    return 1;",
+        "} else {",
+        "    return n * fact(n - 1);",
+        "}"
+      ],
+      "note_zh": "递归分支块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "for (int i = 0; i < rows; i++) {",
+        "    for (int j = 0; j < cols; j++) {",
+        "        grid[i][j] = 0;",
+        "    }",
+        "}"
+      ],
+      "note_zh": "嵌套循环块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "while ((c = getchar()) != EOF) {",
+        "    if (c == '\\n') lines++;",
+        "}"
+      ],
+      "note_zh": "逐字符读取块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "typedef struct {",
+        "    char *key;",
+        "    int value;",
+        "} entry_t;"
+      ],
+      "note_zh": "键值结构块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "union packet {",
+        "    uint32_t raw;",
+        "    uint8_t bytes[4];",
+        "};"
+      ],
+      "note_zh": "联合体定义块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "if (flags & 0x01) {",
+        "    enable();",
+        "} else {",
+        "    disable();",
+        "}"
+      ],
+      "note_zh": "位标志分支块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "for (p = head; p; p = p->next) {",
+        "    count++;",
+        "}"
+      ],
+      "note_zh": "链表计数块"
+    },
+    {
+      "topic": "call",
+      "lines": [
+        "qsort(items, n, sizeof(*items),",
+        "      compare_items);"
+      ],
+      "note_zh": "多行调用块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "switch (ch) {",
+        "    case 'a': return 1;",
+        "    case 'b': return 2;",
+        "    default: return 0;",
+        "}"
+      ],
+      "note_zh": "字符分支块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "#define MAX(a, b) \\",
+        "    ((a) > (b) ? (a) : (b))"
+      ],
+      "note_zh": "宏定义块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "if (argc < 2) {",
+        "    fprintf(stderr, \"usage: %s <file>\\n\", argv[0]);",
+        "    return 1;",
+        "}"
+      ],
+      "note_zh": "参数校验块"
+    },
+    {
+      "topic": "declaration",
+      "lines": [
+        "static const int primes[] = {",
+        "    2, 3, 5, 7, 11, 13,",
+        "    17, 19, 23, 29,",
+        "};"
+      ],
+      "note_zh": "常量数组块"
+    },
+    {
+      "topic": "control",
+      "lines": [
+        "ptr = malloc(size);",
+        "if (ptr == NULL) {",
+        "    return -1;",
+        "}"
+      ],
+      "note_zh": "分配判空块"
+    }
   ],
   "builtin_api_cards": [
-    { "topic": "stdio", "api": "printf", "text": "printf(\"loaded %d rows\\n\", count)", "note_zh": "格式化打印" },
-    { "topic": "stdio", "api": "fprintf", "text": "fprintf(stderr, \"usage: app <path>\\n\")", "note_zh": "标准错误" },
-    { "topic": "stdio", "api": "snprintf", "text": "snprintf(key, sizeof(key), \"%s:%d\", host, port)", "note_zh": "安全格式化" },
-    { "topic": "stdio", "api": "fopen", "text": "fopen(path, \"r\")", "note_zh": "打开文件" },
-    { "topic": "stdio", "api": "fclose", "text": "fclose(fp)", "note_zh": "关闭文件" },
-    { "topic": "stdio", "api": "fgets", "text": "fgets(line, sizeof(line), fp)", "note_zh": "按行读取" },
-    { "topic": "stdio", "api": "fread", "text": "fread(buffer, 1, sizeof(buffer), fp)", "note_zh": "块读取" },
-    { "topic": "stdio", "api": "fwrite", "text": "fwrite(data, 1, length, out)", "note_zh": "块写入" },
-    { "topic": "stdio", "api": "sscanf", "text": "sscanf(line, \"%d,%63s\", &id, name)", "note_zh": "格式化解析" },
-    { "topic": "stdio", "api": "perror", "text": "perror(\"fopen\")", "note_zh": "错误信息" },
-    { "topic": "stdio", "api": "fseek", "text": "fseek(fp, 0, SEEK_END)", "note_zh": "定位文件尾" },
-    { "topic": "stdio", "api": "ftell", "text": "ftell(fp)", "note_zh": "取文件大小" },
-    { "topic": "stdio", "api": "getline", "text": "getline(&line, &cap, fp)", "note_zh": "动态读行" },
-    { "topic": "stdio", "api": "remove", "text": "remove(lock_path)", "note_zh": "删除文件" },
-    { "topic": "stdio", "api": "rename", "text": "rename(tmp_path, final_path)", "note_zh": "原子改名" },
-    { "topic": "stdio", "api": "fflush", "text": "fflush(stdout)", "note_zh": "刷新缓冲" },
-    { "topic": "stdlib", "api": "malloc", "text": "malloc(capacity)", "note_zh": "堆分配" },
-    { "topic": "stdlib", "api": "calloc", "text": "calloc(n, sizeof(int))", "note_zh": "清零分配" },
-    { "topic": "stdlib", "api": "realloc", "text": "realloc(items, capacity * 2 * sizeof(*items))", "note_zh": "扩容" },
-    { "topic": "stdlib", "api": "free", "text": "free(buffer)", "note_zh": "释放内存" },
-    { "topic": "stdlib", "api": "atoi", "text": "atoi(argv[1])", "note_zh": "解析整数" },
-    { "topic": "stdlib", "api": "strtol", "text": "strtol(field, &end, 10)", "note_zh": "安全解析" },
-    { "topic": "stdlib", "api": "qsort", "text": "qsort(rows, count, sizeof(*rows), compare_rows)", "note_zh": "快速排序" },
-    { "topic": "stdlib", "api": "exit", "text": "exit(EXIT_FAILURE)", "note_zh": "失败退出" },
-    { "topic": "stdlib", "api": "getenv", "text": "getenv(\"DEBUG\")", "note_zh": "环境变量" },
-    { "topic": "stdlib", "api": "bsearch", "text": "bsearch(&key, table, n, sizeof(*table), compare_keys)", "note_zh": "二分查找" },
-    { "topic": "stdlib", "api": "rand", "text": "rand() % pool_size", "note_zh": "随机索引" },
-    { "topic": "stdlib", "api": "srand", "text": "srand((unsigned)time(NULL))", "note_zh": "随机种子" },
-    { "topic": "stdlib", "api": "abort", "text": "abort()", "note_zh": "异常终止" },
-    { "topic": "stdlib", "api": "system", "text": "system(\"mkdir -p cache\")", "note_zh": "执行命令" },
-    { "topic": "stdlib", "api": "labs", "text": "labs(target - actual)", "note_zh": "长整型绝对值" },
-    { "topic": "string_h", "api": "strlen", "text": "strlen(input)", "note_zh": "字符串长度" },
-    { "topic": "string_h", "api": "strcpy", "text": "strcpy(dest, source)", "note_zh": "字符串复制" },
-    { "topic": "string_h", "api": "strncpy", "text": "strncpy(name, field, sizeof(name) - 1)", "note_zh": "限长复制" },
-    { "topic": "string_h", "api": "strcmp", "text": "strcmp(command, \"start\")", "note_zh": "字符串比较" },
-    { "topic": "string_h", "api": "strncmp", "text": "strncmp(url, \"https://\", 8)", "note_zh": "前缀比较" },
-    { "topic": "string_h", "api": "strcat", "text": "strcat(path, \"/contents\")", "note_zh": "字符串拼接" },
-    { "topic": "string_h", "api": "strstr", "text": "strstr(message, \"error\")", "note_zh": "子串查找" },
-    { "topic": "string_h", "api": "strchr", "text": "strchr(name, '.')", "note_zh": "字符查找" },
-    { "topic": "string_h", "api": "memset", "text": "memset(buffer, 0, sizeof(buffer))", "note_zh": "内存清零" },
-    { "topic": "string_h", "api": "memcpy", "text": "memcpy(dest, src, length)", "note_zh": "内存复制" },
-    { "topic": "string_h", "api": "memcmp", "text": "memcmp(digest, expected, 16)", "note_zh": "内存比较" },
-    { "topic": "string_h", "api": "strdup", "text": "strdup(original)", "note_zh": "复制字符串" },
-    { "topic": "string_h", "api": "strrchr", "text": "strrchr(filename, '.')", "note_zh": "反向查找" },
-    { "topic": "string_h", "api": "strspn", "text": "strspn(input, \"0123456789\")", "note_zh": "前缀跨度" },
-    { "topic": "math_h", "api": "abs", "text": "abs(current - previous)", "note_zh": "绝对值" },
-    { "topic": "math_h", "api": "pow", "text": "pow(radius, 2) * M_PI", "note_zh": "幂运算" },
-    { "topic": "math_h", "api": "sqrt", "text": "sqrt(dx * dx + dy * dy)", "note_zh": "平方根" },
-    { "topic": "math_h", "api": "ceil", "text": "ceil(total / (double)page_size)", "note_zh": "向上取整" },
-    { "topic": "math_h", "api": "floor", "text": "floor(ratio * n)", "note_zh": "向下取整" },
-    { "topic": "math_h", "api": "fabs", "text": "fabs(a - b)", "note_zh": "浮点绝对值" },
-    { "topic": "math_h", "api": "fmin", "text": "fmin(limit, requested)", "note_zh": "最小值" },
-    { "topic": "math_h", "api": "fmax", "text": "fmax(min_width, measured)", "note_zh": "最大值" },
-    { "topic": "math_h", "api": "lround", "text": "lround(score * 100.0)", "note_zh": "四舍五入" },
-    { "topic": "math_h", "api": "log2", "text": "log2((double)capacity)", "note_zh": "对数计算" },
-    { "topic": "ctype_convert", "api": "isdigit", "text": "isdigit((unsigned char)*p)", "note_zh": "数字判断" },
-    { "topic": "ctype_convert", "api": "isspace", "text": "isspace((unsigned char)*p)", "note_zh": "空白判断" },
-    { "topic": "ctype_convert", "api": "tolower", "text": "tolower((unsigned char)key[i])", "note_zh": "转小写" },
-    { "topic": "ctype_convert", "api": "toupper", "text": "toupper((unsigned char)code[i])", "note_zh": "转大写" },
-    { "topic": "ctype_convert", "api": "isalpha", "text": "isalpha((unsigned char)ch)", "note_zh": "字母判断" },
-    { "topic": "ctype_convert", "api": "atof", "text": "atof(cell)", "note_zh": "解析浮点" },
-    { "topic": "ctype_convert", "api": "strtod", "text": "strtod(field, &end)", "note_zh": "安全解析浮点" },
-    { "topic": "ctype_convert", "api": "isalnum", "text": "isalnum((unsigned char)*p)", "note_zh": "字母数字判断" },
-    { "topic": "ctype_convert", "api": "strtoul", "text": "strtoul(hex, NULL, 16)", "note_zh": "十六进制解析" },
-    { "topic": "time_h", "api": "time", "text": "time(NULL)", "note_zh": "当前时间" },
-    { "topic": "time_h", "api": "localtime", "text": "localtime(&now)", "note_zh": "本地时间" },
-    { "topic": "time_h", "api": "strftime", "text": "strftime(stamp, sizeof(stamp), \"%H:%M:%S\", tm_info)", "note_zh": "格式化时间" },
-    { "topic": "time_h", "api": "clock", "text": "clock()", "note_zh": "CPU 计时" },
-    { "topic": "time_h", "api": "difftime", "text": "difftime(finished, started)", "note_zh": "时间差" },
-    { "topic": "time_h", "api": "mktime", "text": "mktime(&deadline)", "note_zh": "构造时间戳" },
-    { "topic": "time_h", "api": "nanosleep", "text": "nanosleep(&interval, NULL)", "note_zh": "纳秒休眠" },
-    { "topic": "memory_struct", "api": "sizeof", "text": "sizeof(struct node)", "note_zh": "大小计算" },
-    { "topic": "memory_struct", "api": "offsetof", "text": "offsetof(struct node, label)", "note_zh": "字段偏移" },
-    { "topic": "memory_struct", "api": "assert", "text": "assert(index < capacity)", "note_zh": "断言检查" },
-    { "topic": "memory_struct", "api": "malloc", "text": "malloc(sizeof(*node))", "note_zh": "结构体分配" },
-    { "topic": "memory_struct", "api": "memmove", "text": "memmove(items + i, items + i + 1, (count - i - 1) * sizeof(*items))", "note_zh": "重叠移动" },
-    { "topic": "memory_struct", "api": "sizeof", "text": "sizeof(steps) / sizeof(steps[0])", "note_zh": "数组长度" },
-    { "topic": "memory_struct", "api": "assert", "text": "assert(node != NULL && node->label != NULL)", "note_zh": "复合断言" },
-    { "topic": "memory_struct", "api": "calloc", "text": "calloc(row_count, sizeof(*rows))", "note_zh": "数组分配" }
+    {
+      "topic": "stdio",
+      "api": "printf",
+      "text": "printf(\"loaded %d rows\\n\", count)",
+      "note_zh": "格式化打印"
+    },
+    {
+      "topic": "stdio",
+      "api": "fprintf",
+      "text": "fprintf(stderr, \"usage: app <path>\\n\")",
+      "note_zh": "标准错误"
+    },
+    {
+      "topic": "stdio",
+      "api": "snprintf",
+      "text": "snprintf(key, sizeof(key), \"%s:%d\", host, port)",
+      "note_zh": "安全格式化"
+    },
+    {
+      "topic": "stdio",
+      "api": "fopen",
+      "text": "fopen(path, \"r\")",
+      "note_zh": "打开文件"
+    },
+    {
+      "topic": "stdio",
+      "api": "fclose",
+      "text": "fclose(fp)",
+      "note_zh": "关闭文件"
+    },
+    {
+      "topic": "stdio",
+      "api": "fgets",
+      "text": "fgets(line, sizeof(line), fp)",
+      "note_zh": "按行读取"
+    },
+    {
+      "topic": "stdio",
+      "api": "fread",
+      "text": "fread(buffer, 1, sizeof(buffer), fp)",
+      "note_zh": "块读取"
+    },
+    {
+      "topic": "stdio",
+      "api": "fwrite",
+      "text": "fwrite(data, 1, length, out)",
+      "note_zh": "块写入"
+    },
+    {
+      "topic": "stdio",
+      "api": "sscanf",
+      "text": "sscanf(line, \"%d,%63s\", &id, name)",
+      "note_zh": "格式化解析"
+    },
+    {
+      "topic": "stdio",
+      "api": "perror",
+      "text": "perror(\"fopen\")",
+      "note_zh": "错误信息"
+    },
+    {
+      "topic": "stdio",
+      "api": "fseek",
+      "text": "fseek(fp, 0, SEEK_END)",
+      "note_zh": "定位文件尾"
+    },
+    {
+      "topic": "stdio",
+      "api": "ftell",
+      "text": "ftell(fp)",
+      "note_zh": "取文件大小"
+    },
+    {
+      "topic": "stdio",
+      "api": "getline",
+      "text": "getline(&line, &cap, fp)",
+      "note_zh": "动态读行"
+    },
+    {
+      "topic": "stdio",
+      "api": "remove",
+      "text": "remove(lock_path)",
+      "note_zh": "删除文件"
+    },
+    {
+      "topic": "stdio",
+      "api": "rename",
+      "text": "rename(tmp_path, final_path)",
+      "note_zh": "原子改名"
+    },
+    {
+      "topic": "stdio",
+      "api": "fflush",
+      "text": "fflush(stdout)",
+      "note_zh": "刷新缓冲"
+    },
+    {
+      "topic": "stdlib",
+      "api": "malloc",
+      "text": "malloc(capacity)",
+      "note_zh": "堆分配"
+    },
+    {
+      "topic": "stdlib",
+      "api": "calloc",
+      "text": "calloc(n, sizeof(int))",
+      "note_zh": "清零分配"
+    },
+    {
+      "topic": "stdlib",
+      "api": "realloc",
+      "text": "realloc(items, capacity * 2 * sizeof(*items))",
+      "note_zh": "扩容"
+    },
+    {
+      "topic": "stdlib",
+      "api": "free",
+      "text": "free(buffer)",
+      "note_zh": "释放内存"
+    },
+    {
+      "topic": "stdlib",
+      "api": "atoi",
+      "text": "atoi(argv[1])",
+      "note_zh": "解析整数"
+    },
+    {
+      "topic": "stdlib",
+      "api": "strtol",
+      "text": "strtol(field, &end, 10)",
+      "note_zh": "安全解析"
+    },
+    {
+      "topic": "stdlib",
+      "api": "qsort",
+      "text": "qsort(rows, count, sizeof(*rows), compare_rows)",
+      "note_zh": "快速排序"
+    },
+    {
+      "topic": "stdlib",
+      "api": "exit",
+      "text": "exit(EXIT_FAILURE)",
+      "note_zh": "失败退出"
+    },
+    {
+      "topic": "stdlib",
+      "api": "getenv",
+      "text": "getenv(\"DEBUG\")",
+      "note_zh": "环境变量"
+    },
+    {
+      "topic": "stdlib",
+      "api": "bsearch",
+      "text": "bsearch(&key, table, n, sizeof(*table), compare_keys)",
+      "note_zh": "二分查找"
+    },
+    {
+      "topic": "stdlib",
+      "api": "rand",
+      "text": "rand() % pool_size",
+      "note_zh": "随机索引"
+    },
+    {
+      "topic": "stdlib",
+      "api": "srand",
+      "text": "srand((unsigned)time(NULL))",
+      "note_zh": "随机种子"
+    },
+    {
+      "topic": "stdlib",
+      "api": "abort",
+      "text": "abort()",
+      "note_zh": "异常终止"
+    },
+    {
+      "topic": "stdlib",
+      "api": "system",
+      "text": "system(\"mkdir -p cache\")",
+      "note_zh": "执行命令"
+    },
+    {
+      "topic": "stdlib",
+      "api": "labs",
+      "text": "labs(target - actual)",
+      "note_zh": "长整型绝对值"
+    },
+    {
+      "topic": "string_h",
+      "api": "strlen",
+      "text": "strlen(input)",
+      "note_zh": "字符串长度"
+    },
+    {
+      "topic": "string_h",
+      "api": "strcpy",
+      "text": "strcpy(dest, source)",
+      "note_zh": "字符串复制"
+    },
+    {
+      "topic": "string_h",
+      "api": "strncpy",
+      "text": "strncpy(name, field, sizeof(name) - 1)",
+      "note_zh": "限长复制"
+    },
+    {
+      "topic": "string_h",
+      "api": "strcmp",
+      "text": "strcmp(command, \"start\")",
+      "note_zh": "字符串比较"
+    },
+    {
+      "topic": "string_h",
+      "api": "strncmp",
+      "text": "strncmp(url, \"https://\", 8)",
+      "note_zh": "前缀比较"
+    },
+    {
+      "topic": "string_h",
+      "api": "strcat",
+      "text": "strcat(path, \"/contents\")",
+      "note_zh": "字符串拼接"
+    },
+    {
+      "topic": "string_h",
+      "api": "strstr",
+      "text": "strstr(message, \"error\")",
+      "note_zh": "子串查找"
+    },
+    {
+      "topic": "string_h",
+      "api": "strchr",
+      "text": "strchr(name, '.')",
+      "note_zh": "字符查找"
+    },
+    {
+      "topic": "string_h",
+      "api": "memset",
+      "text": "memset(buffer, 0, sizeof(buffer))",
+      "note_zh": "内存清零"
+    },
+    {
+      "topic": "string_h",
+      "api": "memcpy",
+      "text": "memcpy(dest, src, length)",
+      "note_zh": "内存复制"
+    },
+    {
+      "topic": "string_h",
+      "api": "memcmp",
+      "text": "memcmp(digest, expected, 16)",
+      "note_zh": "内存比较"
+    },
+    {
+      "topic": "string_h",
+      "api": "strdup",
+      "text": "strdup(original)",
+      "note_zh": "复制字符串"
+    },
+    {
+      "topic": "string_h",
+      "api": "strrchr",
+      "text": "strrchr(filename, '.')",
+      "note_zh": "反向查找"
+    },
+    {
+      "topic": "string_h",
+      "api": "strspn",
+      "text": "strspn(input, \"0123456789\")",
+      "note_zh": "前缀跨度"
+    },
+    {
+      "topic": "math_h",
+      "api": "abs",
+      "text": "abs(current - previous)",
+      "note_zh": "绝对值"
+    },
+    {
+      "topic": "math_h",
+      "api": "pow",
+      "text": "pow(radius, 2) * M_PI",
+      "note_zh": "幂运算"
+    },
+    {
+      "topic": "math_h",
+      "api": "sqrt",
+      "text": "sqrt(dx * dx + dy * dy)",
+      "note_zh": "平方根"
+    },
+    {
+      "topic": "math_h",
+      "api": "ceil",
+      "text": "ceil(total / (double)page_size)",
+      "note_zh": "向上取整"
+    },
+    {
+      "topic": "math_h",
+      "api": "floor",
+      "text": "floor(ratio * n)",
+      "note_zh": "向下取整"
+    },
+    {
+      "topic": "math_h",
+      "api": "fabs",
+      "text": "fabs(a - b)",
+      "note_zh": "浮点绝对值"
+    },
+    {
+      "topic": "math_h",
+      "api": "fmin",
+      "text": "fmin(limit, requested)",
+      "note_zh": "最小值"
+    },
+    {
+      "topic": "math_h",
+      "api": "fmax",
+      "text": "fmax(min_width, measured)",
+      "note_zh": "最大值"
+    },
+    {
+      "topic": "math_h",
+      "api": "lround",
+      "text": "lround(score * 100.0)",
+      "note_zh": "四舍五入"
+    },
+    {
+      "topic": "math_h",
+      "api": "log2",
+      "text": "log2((double)capacity)",
+      "note_zh": "对数计算"
+    },
+    {
+      "topic": "ctype_convert",
+      "api": "isdigit",
+      "text": "isdigit((unsigned char)*p)",
+      "note_zh": "数字判断"
+    },
+    {
+      "topic": "ctype_convert",
+      "api": "isspace",
+      "text": "isspace((unsigned char)*p)",
+      "note_zh": "空白判断"
+    },
+    {
+      "topic": "ctype_convert",
+      "api": "tolower",
+      "text": "tolower((unsigned char)key[i])",
+      "note_zh": "转小写"
+    },
+    {
+      "topic": "ctype_convert",
+      "api": "toupper",
+      "text": "toupper((unsigned char)code[i])",
+      "note_zh": "转大写"
+    },
+    {
+      "topic": "ctype_convert",
+      "api": "isalpha",
+      "text": "isalpha((unsigned char)ch)",
+      "note_zh": "字母判断"
+    },
+    {
+      "topic": "ctype_convert",
+      "api": "atof",
+      "text": "atof(cell)",
+      "note_zh": "解析浮点"
+    },
+    {
+      "topic": "ctype_convert",
+      "api": "strtod",
+      "text": "strtod(field, &end)",
+      "note_zh": "安全解析浮点"
+    },
+    {
+      "topic": "ctype_convert",
+      "api": "isalnum",
+      "text": "isalnum((unsigned char)*p)",
+      "note_zh": "字母数字判断"
+    },
+    {
+      "topic": "ctype_convert",
+      "api": "strtoul",
+      "text": "strtoul(hex, NULL, 16)",
+      "note_zh": "十六进制解析"
+    },
+    {
+      "topic": "time_h",
+      "api": "time",
+      "text": "time(NULL)",
+      "note_zh": "当前时间"
+    },
+    {
+      "topic": "time_h",
+      "api": "localtime",
+      "text": "localtime(&now)",
+      "note_zh": "本地时间"
+    },
+    {
+      "topic": "time_h",
+      "api": "strftime",
+      "text": "strftime(stamp, sizeof(stamp), \"%H:%M:%S\", tm_info)",
+      "note_zh": "格式化时间"
+    },
+    {
+      "topic": "time_h",
+      "api": "clock",
+      "text": "clock()",
+      "note_zh": "CPU 计时"
+    },
+    {
+      "topic": "time_h",
+      "api": "difftime",
+      "text": "difftime(finished, started)",
+      "note_zh": "时间差"
+    },
+    {
+      "topic": "time_h",
+      "api": "mktime",
+      "text": "mktime(&deadline)",
+      "note_zh": "构造时间戳"
+    },
+    {
+      "topic": "time_h",
+      "api": "nanosleep",
+      "text": "nanosleep(&interval, NULL)",
+      "note_zh": "纳秒休眠"
+    },
+    {
+      "topic": "memory_struct",
+      "api": "sizeof",
+      "text": "sizeof(struct node)",
+      "note_zh": "大小计算"
+    },
+    {
+      "topic": "memory_struct",
+      "api": "offsetof",
+      "text": "offsetof(struct node, label)",
+      "note_zh": "字段偏移"
+    },
+    {
+      "topic": "memory_struct",
+      "api": "assert",
+      "text": "assert(index < capacity)",
+      "note_zh": "断言检查"
+    },
+    {
+      "topic": "memory_struct",
+      "api": "malloc",
+      "text": "malloc(sizeof(*node))",
+      "note_zh": "结构体分配"
+    },
+    {
+      "topic": "memory_struct",
+      "api": "memmove",
+      "text": "memmove(items + i, items + i + 1, (count - i - 1) * sizeof(*items))",
+      "note_zh": "重叠移动"
+    },
+    {
+      "topic": "memory_struct",
+      "api": "sizeof",
+      "text": "sizeof(steps) / sizeof(steps[0])",
+      "note_zh": "数组长度"
+    },
+    {
+      "topic": "memory_struct",
+      "api": "assert",
+      "text": "assert(node != NULL && node->label != NULL)",
+      "note_zh": "复合断言"
+    },
+    {
+      "topic": "memory_struct",
+      "api": "calloc",
+      "text": "calloc(row_count, sizeof(*rows))",
+      "note_zh": "数组分配"
+    }
   ]
 }

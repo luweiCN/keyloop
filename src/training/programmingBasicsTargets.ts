@@ -1,4 +1,4 @@
-import type { PracticeTarget, SessionRecord } from "../domain/model";
+import type { PracticeTarget } from "../domain/model";
 import {
   listProgrammingBasicsLanguages,
   loadProgrammingBasicsCards,
@@ -11,7 +11,6 @@ import { chunkWords, type BuildTargetContext } from "./targets";
 
 const CARDS_PER_LESSON_MIN = 8;
 const CARDS_PER_LESSON_MAX = 10;
-const RECENT_RECORDS_FOR_DEDUP = 10;
 
 export function resolveProgrammingBasicsLanguage(
   codeConfig: { languages?: string[] } | undefined,
@@ -28,21 +27,6 @@ export function resolveProgrammingBasicsLanguage(
   return pool[Math.min(pool.length - 1, Math.floor(random() * pool.length))] ?? pool[0]!;
 }
 
-function recentBasicsLines(records: SessionRecord[]): Set<string> {
-  const lines = new Set<string>();
-  const basics = records
-    .filter((record) => record.module === "programming_basics")
-    .slice(-RECENT_RECORDS_FOR_DEDUP);
-  for (const record of basics) {
-    for (const line of record.target_text.split("\n")) {
-      if (line.trim().length > 0) {
-        lines.add(line);
-      }
-    }
-  }
-  return lines;
-}
-
 function shuffled<T>(values: T[], random: () => number): T[] {
   const result = [...values];
   for (let i = result.length - 1; i > 0; i--) {
@@ -52,9 +36,11 @@ function shuffled<T>(values: T[], random: () => number): T[] {
   return result;
 }
 
+// 纯随机均衡组卷：每个 topic 桶内随机打乱后按 topic 轮流取卡（保证 topic 覆盖均衡）。
+// 不再"偏好/排除最近练过的卡"——那会造成确定性轮转（今天 ABC、明天 DEF、循环回 ABC 顺序还一样）；
+// 改为每次独立随机，靠卡池规模自然降低跨天重复（见 ADR-0002 跨天去重 follow-up）。
 function pickBalancedCards(
   cards: ProgrammingBasicsCard[],
-  used: Set<string>,
   random: () => number,
 ): ProgrammingBasicsCard[] {
   const buckets = new Map<string, ProgrammingBasicsCard[]>();
@@ -64,9 +50,7 @@ function pickBalancedCards(
     buckets.set(card.topic, bucket);
   }
   for (const [topic, bucket] of buckets) {
-    const randomized = shuffled(bucket, random);
-    randomized.sort((a, b) => Number(used.has(a.text)) - Number(used.has(b.text)));
-    buckets.set(topic, randomized);
+    buckets.set(topic, shuffled(bucket, random));
   }
   const topics = shuffled([...buckets.keys()], random);
   const picked: ProgrammingBasicsCard[] = [];
@@ -132,7 +116,7 @@ function basicsTarget(
   const available = listProgrammingBasicsLanguages(options);
   const language = resolveProgrammingBasicsLanguage(context.codeConfig, available, random);
   const cards = loadProgrammingBasicsCards(kind, language, options);
-  const picked = pickBalancedCards(cards, recentBasicsLines(context.records), random);
+  const picked = pickBalancedCards(cards, random);
   const text =
     kind === "symbols_numbers"
       ? symbolsNumbersText(picked)
@@ -183,18 +167,14 @@ export function buildProgrammingBasicsMixTarget(
   const random = context.random ?? Math.random;
   const available = listProgrammingBasicsLanguages(options);
   const language = resolveProgrammingBasicsLanguage(context.codeConfig, available, random);
-  const used = recentBasicsLines(context.records);
-
   const symbolCards = pickBalancedCards(
     loadProgrammingBasicsCards("symbols_numbers", language, options).filter(
       (card) => card.form !== "block",
     ),
-    used,
     random,
   ).slice(0, 3);
   const apiCards = pickBalancedCards(
     loadProgrammingBasicsCards("builtin_api", language, options),
-    used,
     random,
   ).slice(0, 3);
 

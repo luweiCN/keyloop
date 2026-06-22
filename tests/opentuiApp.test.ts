@@ -721,6 +721,21 @@ describe("OpenTUI app model", () => {
     ]);
   });
 
+  test("switching the stats view keeps the session main goal", () => {
+    const goal = {
+      form: "code" as const,
+      target_wpm: 50,
+      deadline: "2026-09-14",
+      created_at: "2026-06-15T00:00:00.000Z",
+    };
+    const overview = createOpenTuiStatsState("en", statsRecords(), {
+      view: "overview",
+      mainGoal: goal,
+    });
+    expect(overview.mainGoal).toEqual(goal);
+    expect(nextOpenTuiStatsView(overview).mainGoal).toEqual(goal);
+  });
+
   test("stats route supports all stats pages and next view", () => {
     const records = statsRecords();
     const today = createOpenTuiStatsState("en", records, {

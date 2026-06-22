@@ -100,6 +100,9 @@ function sharedSettingsSessionOptions(
   if (appState.mainGoal !== undefined) {
     options.mainGoal = appState.mainGoal;
   }
+  if (appState.mainGoalCleared !== undefined) {
+    options.mainGoalCleared = appState.mainGoalCleared;
+  }
   if (appState.goalPromptOptedOut !== undefined) {
     options.goalPromptOptedOut = appState.goalPromptOptedOut;
   }
@@ -487,12 +490,15 @@ export function reduceFlatSettingsItem(
       });
     case "goal_enabled": {
       if (state.mainGoal !== undefined) {
+        // 用户主动关闭目标：置 mainGoalCleared 标志，使持久化层真正删除目标
         return flatSettingsResult(state.language, state, selectedIndex, {
           mainGoal: undefined,
+          mainGoalCleared: true,
         });
       }
       return flatSettingsResult(state.language, state, selectedIndex, {
         mainGoal: defaultMainGoal(context.now ?? new Date()),
+        mainGoalCleared: false,
       });
     }
     case "goal_form": {
@@ -631,6 +637,9 @@ export function flatSettingsOptions(
   const enabledModules = overrides.enabledModules ?? state.enabledModules;
   // mainGoal 可被显式清除（关闭目标 → undefined），故用 "in" 判断而非 ?? 合并
   const mainGoal = "mainGoal" in overrides ? overrides.mainGoal : state.mainGoal;
+  // mainGoalCleared 标志区分「主动关闭目标」与「偶然缺失」，须随导航透传
+  const mainGoalCleared =
+    "mainGoalCleared" in overrides ? overrides.mainGoalCleared : state.mainGoalCleared;
   if (codeFilters !== undefined) {
     options.codeFilters = codeFilters;
   }
@@ -663,6 +672,9 @@ export function flatSettingsOptions(
   }
   if (mainGoal !== undefined) {
     options.mainGoal = mainGoal;
+  }
+  if (mainGoalCleared !== undefined) {
+    options.mainGoalCleared = mainGoalCleared;
   }
   return options;
 }

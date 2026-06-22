@@ -1,0 +1,77 @@
+{"text":"require(amount > 0)","topic":"validation","api":"require","note_zh":"校验正数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"require(msg.sender == owner, \"not owner\")","topic":"validation","api":"require","note_zh":"校验所有者","source_id":"keyloop:programming-basics:seeds"}
+{"text":"require(success, \"call failed\")","topic":"validation","api":"require","note_zh":"校验调用成功","source_id":"keyloop:programming-basics:seeds"}
+{"text":"require(balances[from] >= amount)","topic":"validation","api":"require","note_zh":"校验余额","source_id":"keyloop:programming-basics:seeds"}
+{"text":"require(deadline >= block.timestamp, \"expired\")","topic":"validation","api":"require","note_zh":"校验未过期","source_id":"keyloop:programming-basics:seeds"}
+{"text":"assert(totalSupply <= MAX)","topic":"validation","api":"assert","note_zh":"不变量断言","source_id":"keyloop:programming-basics:seeds"}
+{"text":"assert(x + y >= x)","topic":"validation","api":"assert","note_zh":"溢出断言","source_id":"keyloop:programming-basics:seeds"}
+{"text":"revert(\"insufficient balance\")","topic":"validation","api":"revert","note_zh":"字符串回滚","source_id":"keyloop:programming-basics:seeds"}
+{"text":"revert InsufficientFunds(available, required)","topic":"validation","api":"revert","note_zh":"自定义错误回滚","source_id":"keyloop:programming-basics:seeds"}
+{"text":"keccak256(data)","topic":"crypto","api":"keccak256","note_zh":"原始哈希","source_id":"keyloop:programming-basics:seeds"}
+{"text":"keccak256(abi.encodePacked(a, b))","topic":"crypto","api":"keccak256","note_zh":"紧打包哈希","source_id":"keyloop:programming-basics:seeds"}
+{"text":"keccak256(bytes(name))","topic":"crypto","api":"keccak256","note_zh":"字符串哈希","source_id":"keyloop:programming-basics:seeds"}
+{"text":"keccak256(abi.encode(owner, nonce))","topic":"crypto","api":"keccak256","note_zh":"结构编码哈希","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sha256(data)","topic":"crypto","api":"sha256","note_zh":"SHA256 哈希","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sha256(abi.encode(id))","topic":"crypto","api":"sha256","note_zh":"编码后哈希","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ripemd160(payload)","topic":"crypto","api":"ripemd160","note_zh":"RIPEMD 哈希","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ecrecover(hash, v, r, s)","topic":"crypto","api":"ecrecover","note_zh":"恢复签名地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"abi.encode(sender, amount)","topic":"abi","api":"abi.encode","note_zh":"标准编码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"abi.encode(id, status, owner)","topic":"abi","api":"abi.encode","note_zh":"多字段编码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"abi.encodePacked(prefix, id)","topic":"abi","api":"abi.encodePacked","note_zh":"紧打包编码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"abi.decode(data, (uint256, address))","topic":"abi","api":"abi.decode","note_zh":"解码多类型","source_id":"keyloop:programming-basics:seeds"}
+{"text":"abi.decode(result, (bool))","topic":"abi","api":"abi.decode","note_zh":"解码布尔","source_id":"keyloop:programming-basics:seeds"}
+{"text":"abi.encodeWithSelector(selector, to, amount)","topic":"abi","api":"abi.encodeWithSelector","note_zh":"带选择器编码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"abi.encodeWithSignature(\"transfer(address,uint256)\", to, amount)","topic":"abi","api":"abi.encodeWithSignature","note_zh":"带签名编码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"abi.encodeCall(IERC20.transfer, (to, amount))","topic":"abi","api":"abi.encodeCall","note_zh":"类型安全编码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"payable(owner).transfer(amount)","topic":"address","api":"address.transfer","note_zh":"转账并回滚","source_id":"keyloop:programming-basics:seeds"}
+{"text":"payable(recipient).send(amount)","topic":"address","api":"address.send","note_zh":"转账返回布尔","source_id":"keyloop:programming-basics:seeds"}
+{"text":"target.call(data)","topic":"address","api":"address.call","note_zh":"低级调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"token.call(abi.encodeWithSelector(sel, to))","topic":"address","api":"address.call","note_zh":"编码后调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"oracle.staticcall(payload)","topic":"address","api":"address.staticcall","note_zh":"只读调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"implementation.delegatecall(payload)","topic":"address","api":"address.delegatecall","note_zh":"委托调用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"payable(msg.sender)","topic":"address","api":"payable","note_zh":"转可收款地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"payable(address(this))","topic":"address","api":"payable","note_zh":"本合约可收款","source_id":"keyloop:programming-basics:seeds"}
+{"text":"uint256(value)","topic":"cast","api":"uint256","note_zh":"转 uint256","source_id":"keyloop:programming-basics:seeds"}
+{"text":"uint256(int256(value))","topic":"cast","api":"uint256","note_zh":"有符号转无符号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"uint128(amount)","topic":"cast","api":"uint128","note_zh":"转 uint128","source_id":"keyloop:programming-basics:seeds"}
+{"text":"uint64(timestamp)","topic":"cast","api":"uint64","note_zh":"转 uint64","source_id":"keyloop:programming-basics:seeds"}
+{"text":"uint32(blockNumber)","topic":"cast","api":"uint32","note_zh":"转 uint32","source_id":"keyloop:programming-basics:seeds"}
+{"text":"uint16(port)","topic":"cast","api":"uint16","note_zh":"转 uint16","source_id":"keyloop:programming-basics:seeds"}
+{"text":"uint8(decimals)","topic":"cast","api":"uint8","note_zh":"转 uint8","source_id":"keyloop:programming-basics:seeds"}
+{"text":"uint160(account)","topic":"cast","api":"uint160","note_zh":"地址转整型","source_id":"keyloop:programming-basics:seeds"}
+{"text":"int256(delta)","topic":"cast","api":"int256","note_zh":"转有符号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"int128(signedDelta)","topic":"cast","api":"int128","note_zh":"转 int128","source_id":"keyloop:programming-basics:seeds"}
+{"text":"bytes32(uint256(id))","topic":"cast","api":"bytes32","note_zh":"转定长字节","source_id":"keyloop:programming-basics:seeds"}
+{"text":"bytes32(blockHash)","topic":"cast","api":"bytes32","note_zh":"哈希转字节","source_id":"keyloop:programming-basics:seeds"}
+{"text":"bytes16(half)","topic":"cast","api":"bytes16","note_zh":"转 16 字节","source_id":"keyloop:programming-basics:seeds"}
+{"text":"bytes4(hash)","topic":"cast","api":"bytes4","note_zh":"取选择器","source_id":"keyloop:programming-basics:seeds"}
+{"text":"address(uint160(raw))","topic":"cast","api":"address","note_zh":"整型转地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"address(this)","topic":"cast","api":"address","note_zh":"本合约地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"addmod(a, b, modulus)","topic":"math","api":"addmod","note_zh":"模加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"addmod(x, y, p)","topic":"math","api":"addmod","note_zh":"模加运算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"addmod(total, fee, k)","topic":"math","api":"addmod","note_zh":"带模累加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"addmod(sum, delta, modulus)","topic":"math","api":"addmod","note_zh":"增量模加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"mulmod(a, b, modulus)","topic":"math","api":"mulmod","note_zh":"模乘","source_id":"keyloop:programming-basics:seeds"}
+{"text":"mulmod(price, quantity, k)","topic":"math","api":"mulmod","note_zh":"带模相乘","source_id":"keyloop:programming-basics:seeds"}
+{"text":"type(uint256).max","topic":"typeinfo","api":"type","note_zh":"整型最大值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"type(uint8).max","topic":"typeinfo","api":"type","note_zh":"字节最大值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"type(int256).min","topic":"typeinfo","api":"type","note_zh":"有符号最小值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"type(uint128).max","topic":"typeinfo","api":"type","note_zh":"128 位上限","source_id":"keyloop:programming-basics:seeds"}
+{"text":"type(IERC20).interfaceId","topic":"typeinfo","api":"type","note_zh":"接口标识符","source_id":"keyloop:programming-basics:seeds"}
+{"text":"type(MyToken).creationCode","topic":"typeinfo","api":"type","note_zh":"创建字节码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"blockhash(block.number - 1)","topic":"block","api":"blockhash","note_zh":"上一区块哈希","source_id":"keyloop:programming-basics:seeds"}
+{"text":"blockhash(height)","topic":"block","api":"blockhash","note_zh":"指定区块哈希","source_id":"keyloop:programming-basics:seeds"}
+{"text":"blockhash(block.number - 256)","topic":"block","api":"blockhash","note_zh":"历史区块哈希","source_id":"keyloop:programming-basics:seeds"}
+{"text":"blockhash(lastBlock)","topic":"block","api":"blockhash","note_zh":"末区块哈希","source_id":"keyloop:programming-basics:seeds"}
+{"text":"gasleft()","topic":"block","api":"gasleft","note_zh":"剩余 gas","source_id":"keyloop:programming-basics:seeds"}
+{"text":"selfdestruct(payable(owner))","topic":"block","api":"selfdestruct","note_zh":"自毁转余额","source_id":"keyloop:programming-basics:seeds"}
+{"text":"selfdestruct(payable(recipient))","topic":"block","api":"selfdestruct","note_zh":"自毁退款","source_id":"keyloop:programming-basics:seeds"}
+{"text":"holders.push(msg.sender)","topic":"array","api":"array.push","note_zh":"追加地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"orders.push(newOrder)","topic":"array","api":"array.push","note_zh":"追加订单","source_id":"keyloop:programming-basics:seeds"}
+{"text":"tokens.push(minted)","topic":"array","api":"array.push","note_zh":"追加代币","source_id":"keyloop:programming-basics:seeds"}
+{"text":"queue.pop()","topic":"array","api":"array.pop","note_zh":"弹出末尾","source_id":"keyloop:programming-basics:seeds"}
+{"text":"stack.pop()","topic":"array","api":"array.pop","note_zh":"出栈","source_id":"keyloop:programming-basics:seeds"}
+{"text":"string.concat(first, last)","topic":"array","api":"string.concat","note_zh":"拼接字符串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"string.concat(\"id-\", suffix)","topic":"array","api":"string.concat","note_zh":"前缀拼接","source_id":"keyloop:programming-basics:seeds"}
+{"text":"bytes.concat(prefix, payload)","topic":"array","api":"bytes.concat","note_zh":"拼接字节","source_id":"keyloop:programming-basics:seeds"}
+{"text":"bytes.concat(header, body)","topic":"array","api":"bytes.concat","note_zh":"字节流合并","source_id":"keyloop:programming-basics:seeds"}

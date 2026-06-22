@@ -1,0 +1,77 @@
+{"text":"darken($primary, 10%)","topic":"color","api":"darken","note_zh":"加深颜色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"lighten($primary, 5%)","topic":"color","api":"lighten","note_zh":"提亮颜色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"saturate($color, 20%)","topic":"color","api":"saturate","note_zh":"增加饱和度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"desaturate($color, 10%)","topic":"color","api":"desaturate","note_zh":"降低饱和度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"adjust-hue($color, 30deg)","topic":"color","api":"adjust-hue","note_zh":"调整色相","source_id":"keyloop:programming-basics:seeds"}
+{"text":"mix($start, $end)","topic":"color","api":"mix","note_zh":"混合两色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rgba($color, 0.5)","topic":"color","api":"rgba","note_zh":"设置透明度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"complement($color)","topic":"color","api":"complement","note_zh":"取补色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"invert($color)","topic":"color","api":"invert","note_zh":"反相颜色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"transparentize($color, 0.2)","topic":"color","api":"transparentize","note_zh":"增加透明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"opacify($color, 0.3)","topic":"color","api":"opacify","note_zh":"增加不透明","source_id":"keyloop:programming-basics:seeds"}
+{"text":"red($color)","topic":"color","api":"red","note_zh":"取红色分量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"hsl(200, 50%, 40%)","topic":"color","api":"hsl","note_zh":"HSL 构色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"darken($accent, 15%)","topic":"color","api":"darken","note_zh":"加深强调色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"lighten($bg, 10%)","topic":"color","api":"lighten","note_zh":"提亮背景","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rgba(0, 0, 0, 0.5)","topic":"color","api":"rgba","note_zh":"半透明黑","source_id":"keyloop:programming-basics:seeds"}
+{"text":"mix($primary, white, 50%)","topic":"color","api":"mix","note_zh":"按比例混合","source_id":"keyloop:programming-basics:seeds"}
+{"text":"str-length($name)","topic":"string","api":"str-length","note_zh":"字符串长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"str-slice($name, 1, 4)","topic":"string","api":"str-slice","note_zh":"截取子串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"str-index($name, 'x')","topic":"string","api":"str-index","note_zh":"查找位置","source_id":"keyloop:programming-basics:seeds"}
+{"text":"to-upper-case($name)","topic":"string","api":"to-upper-case","note_zh":"转大写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"to-lower-case($name)","topic":"string","api":"to-lower-case","note_zh":"转小写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"quote($name)","topic":"string","api":"quote","note_zh":"加引号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"unquote($name)","topic":"string","api":"unquote","note_zh":"去引号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"str-insert($name, 'x', 2)","topic":"string","api":"str-insert","note_zh":"插入字符","source_id":"keyloop:programming-basics:seeds"}
+{"text":"str-slice($path, 2)","topic":"string","api":"str-slice","note_zh":"从位置截取","source_id":"keyloop:programming-basics:seeds"}
+{"text":"to-upper-case($code)","topic":"string","api":"to-upper-case","note_zh":"编码转大写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"quote($label)","topic":"string","api":"quote","note_zh":"标签加引号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"length($list)","topic":"list","api":"length","note_zh":"列表长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"nth($list, 1)","topic":"list","api":"nth","note_zh":"取第 n 项","source_id":"keyloop:programming-basics:seeds"}
+{"text":"append($list, $item)","topic":"list","api":"append","note_zh":"追加元素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"join($first, $second)","topic":"list","api":"join","note_zh":"合并列表","source_id":"keyloop:programming-basics:seeds"}
+{"text":"index($list, $item)","topic":"list","api":"index","note_zh":"查元素下标","source_id":"keyloop:programming-basics:seeds"}
+{"text":"set-nth($list, 1, $item)","topic":"list","api":"set-nth","note_zh":"替换第 n 项","source_id":"keyloop:programming-basics:seeds"}
+{"text":"list-separator($list)","topic":"list","api":"list-separator","note_zh":"取分隔符","source_id":"keyloop:programming-basics:seeds"}
+{"text":"zip($a, $b)","topic":"list","api":"zip","note_zh":"并行配对","source_id":"keyloop:programming-basics:seeds"}
+{"text":"nth($colors, 2)","topic":"list","api":"nth","note_zh":"取第二色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"length($items)","topic":"list","api":"length","note_zh":"项目数量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"append($list, $item, comma)","topic":"list","api":"append","note_zh":"逗号追加","source_id":"keyloop:programming-basics:seeds"}
+{"text":"map-get($map, 'key')","topic":"map","api":"map-get","note_zh":"按键取值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"map-keys($map)","topic":"map","api":"map-keys","note_zh":"取所有键","source_id":"keyloop:programming-basics:seeds"}
+{"text":"map-values($map)","topic":"map","api":"map-values","note_zh":"取所有值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"map-has-key($map, 'key')","topic":"map","api":"map-has-key","note_zh":"判断键存在","source_id":"keyloop:programming-basics:seeds"}
+{"text":"map-merge($base, $extra)","topic":"map","api":"map-merge","note_zh":"合并映射","source_id":"keyloop:programming-basics:seeds"}
+{"text":"map-remove($map, 'key')","topic":"map","api":"map-remove","note_zh":"移除键","source_id":"keyloop:programming-basics:seeds"}
+{"text":"map-get($theme, 'primary')","topic":"map","api":"map-get","note_zh":"取主色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"map-has-key($config, 'gap')","topic":"map","api":"map-has-key","note_zh":"判断间距键","source_id":"keyloop:programming-basics:seeds"}
+{"text":"map-keys($theme)","topic":"map","api":"map-keys","note_zh":"取主题键","source_id":"keyloop:programming-basics:seeds"}
+{"text":"map-merge($defaults, $options)","topic":"map","api":"map-merge","note_zh":"合并默认项","source_id":"keyloop:programming-basics:seeds"}
+{"text":"round($value)","topic":"math","api":"round","note_zh":"四舍五入","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ceil($value)","topic":"math","api":"ceil","note_zh":"向上取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"floor($value)","topic":"math","api":"floor","note_zh":"向下取整","source_id":"keyloop:programming-basics:seeds"}
+{"text":"abs($value)","topic":"math","api":"abs","note_zh":"绝对值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"min($a, $b)","topic":"math","api":"min","note_zh":"取最小","source_id":"keyloop:programming-basics:seeds"}
+{"text":"max($a, $b)","topic":"math","api":"max","note_zh":"取最大","source_id":"keyloop:programming-basics:seeds"}
+{"text":"percentage($ratio)","topic":"math","api":"percentage","note_zh":"转百分比","source_id":"keyloop:programming-basics:seeds"}
+{"text":"pow($base, 2)","topic":"math","api":"pow","note_zh":"幂运算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"sqrt($value)","topic":"math","api":"sqrt","note_zh":"平方根","source_id":"keyloop:programming-basics:seeds"}
+{"text":"random(100)","topic":"math","api":"random","note_zh":"随机数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"round($width * 1.5)","topic":"math","api":"round","note_zh":"取整宽度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"floor($total / 2)","topic":"math","api":"floor","note_zh":"取整折半","source_id":"keyloop:programming-basics:seeds"}
+{"text":"percentage(1 / 3)","topic":"math","api":"percentage","note_zh":"三分比例","source_id":"keyloop:programming-basics:seeds"}
+{"text":"max(0, $value)","topic":"math","api":"max","note_zh":"下限保护","source_id":"keyloop:programming-basics:seeds"}
+{"text":"calc(100% - 20px)","topic":"cssfn","api":"calc","note_zh":"混合单位计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"clamp(1rem, 2vw, 3rem)","topic":"cssfn","api":"clamp","note_zh":"区间取值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"translate(50px, 0)","topic":"cssfn","api":"translate","note_zh":"平移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rotate(45deg)","topic":"cssfn","api":"rotate","note_zh":"旋转","source_id":"keyloop:programming-basics:seeds"}
+{"text":"linear-gradient(red, blue)","topic":"cssfn","api":"linear-gradient","note_zh":"线性渐变","source_id":"keyloop:programming-basics:seeds"}
+{"text":"scale(1.5)","topic":"cssfn","api":"scale","note_zh":"缩放","source_id":"keyloop:programming-basics:seeds"}
+{"text":"minmax(100px, 1fr)","topic":"cssfn","api":"minmax","note_zh":"网格区间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repeat(3, 1fr)","topic":"cssfn","api":"repeat","note_zh":"重复轨道","source_id":"keyloop:programming-basics:seeds"}
+{"text":"url('logo.png')","topic":"cssfn","api":"url","note_zh":"资源引用","source_id":"keyloop:programming-basics:seeds"}
+{"text":"calc(50% + #{$gap})","topic":"cssfn","api":"calc","note_zh":"插值计算","source_id":"keyloop:programming-basics:seeds"}
+{"text":"translate(0, -50%)","topic":"cssfn","api":"translate","note_zh":"垂直居中位移","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rotate(-90deg)","topic":"cssfn","api":"rotate","note_zh":"逆向旋转","source_id":"keyloop:programming-basics:seeds"}
+{"text":"linear-gradient(to right, $start, $end)","topic":"cssfn","api":"linear-gradient","note_zh":"横向渐变","source_id":"keyloop:programming-basics:seeds"}
+{"text":"repeat(auto-fill, 120px)","topic":"cssfn","api":"repeat","note_zh":"自动填充","source_id":"keyloop:programming-basics:seeds"}
