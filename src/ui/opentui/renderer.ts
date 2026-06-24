@@ -42,10 +42,30 @@ export async function renderOpenTuiAppOnce(
   const resolvedKit = kit ?? (await loadOpenTuiKit());
   const renderer = await resolvedKit.createCliRenderer({ exitOnCtrlC: true });
   renderer.root.add(await renderRoute(state, resolvedKit));
+  // 启用终端 focus reporting(mode 1004):切 tab / pane / 应用时终端发 focus 序列,
+  // OpenTUI 会解析成 blur/focus 事件。OpenTUI 自身不启用这个模式、也不会帮我们清理,
+  // 故这里自行启用、destroy 时还原,避免残留给用户终端。仅在真实 TTY 下写。
+  const FOCUS_REPORTING_ON = "\x1b[?1004h";
+  const FOCUS_REPORTING_OFF = "\x1b[?1004l";
+  if (process.stdout.isTTY) {
+    process.stdout.write(FOCUS_REPORTING_ON);
+  }
+  // 把底层 CliRenderer 的 "blur" 事件(它是 EventEmitter)透传给 onBlur。
+  const blurEmitter = renderer as unknown as {
+    on?: (event: string, handler: () => void) => void;
+  };
+  if (typeof blurEmitter.on === "function") {
+    renderer.onBlur = (handler: () => void): void => {
+      blurEmitter.on?.("blur", handler);
+    };
+  }
   let destroyed = false;
   const originalDestroy = renderer.destroy;
   renderer.destroy = (): void => {
     destroyed = true;
+    if (process.stdout.isTTY) {
+      process.stdout.write(FOCUS_REPORTING_OFF);
+    }
     originalDestroy?.call(renderer);
   };
   // 渲染队列：每个状态按序渲染，但积压时（快速打字）中间帧跳过 idle 等待，
