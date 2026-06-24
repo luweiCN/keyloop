@@ -48,6 +48,8 @@ export interface OpenTuiRenderer {
   renderState?: (state: OpenTuiAppState) => Promise<void>;
   idle?: () => Promise<void>;
   destroy?: () => void;
+  /** 订阅终端窗口失焦(切 tab / pane / 应用)。底层是 OpenTUI CliRenderer 的 "blur" 事件。 */
+  onBlur?: (handler: () => void) => void;
 }
 
 export interface OpenTuiKeyInput {

@@ -615,6 +615,7 @@ export async function runLessonUntilComplete(
         return;
       }
       renderer.keyInput.on("keypress", handleKeypress);
+      renderer.onBlur?.(handleBlur);
     };
     const transitionRenderer = async (state: OpenTuiAppState): Promise<void> => {
       if (renderer.renderState !== undefined) {
@@ -665,6 +666,18 @@ export async function runLessonUntilComplete(
         return;
       }
       await renderCurrentRunning(currentMs);
+    };
+    // 终端窗口失焦(切 tab / pane / 应用)立即暂停。与 idle 不同:从切走当下计,
+    // 切走前的时间照常算。复用 resumeOnNextInput——切回来按下一个键即恢复,
+    // 且那个键正常算输入(不被吞)。
+    const handleBlur = (): void => {
+      if (settled || startedAtMs === undefined || pausedAtMs !== undefined) {
+        return;
+      }
+      const currentMs = nowMs(options);
+      pausedAtMs = currentMs;
+      resumeOnNextInput = true;
+      void renderCurrentRunning(currentMs);
     };
     const clearTimer = (): void => {
       if (timer !== undefined) {
@@ -1298,6 +1311,7 @@ export async function runLessonUntilComplete(
     };
 
     renderer.keyInput?.on("keypress", handleKeypress);
+    renderer.onBlur?.(handleBlur);
     scheduleWordAudioPrefetch();
     if (openPracticeOptionsInitially) {
       void showPracticeOptions(nowMs(options));

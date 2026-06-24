@@ -259,6 +259,57 @@ describe("OpenTUI start runner", () => {
     expect(record?.duration_ms).toBe(100);
   });
 
+  test("blur pauses immediately and excludes the away time, keeping the resume key", async () => {
+    const kit = fakeKit({ keyInput: true });
+    let nowMs = 1_000;
+    const runner = createOpenTuiStartRunner({
+      kit,
+      nowMs: () => nowMs,
+      timerIntervalMs: 5,
+    });
+    const plan = testSingleLessonPlan("abc");
+
+    const runPromise = runner(contextWithPlan(plan));
+    await kit.waitForKeyListener(1);
+
+    nowMs = 1_100;
+    kit.emitKey({ name: "a", sequence: "a" });
+    await kit.waitForRenderRequest(1);
+    nowMs = 1_200;
+    kit.emitKey({ name: "b", sequence: "b" });
+    await kit.waitForRenderRequest(2);
+
+    // Switch away (tab/pane/app) — the blur event should pause immediately,
+    // without waiting for the 10s idle timeout.
+    nowMs = 1_300;
+    kit.emitBlur();
+    const deadline = Date.now() + 1_000;
+    while (Date.now() < deadline && !flattenContent(kit.addedNodes).includes("Paused")) {
+      await delay(10);
+    }
+    expect(flattenContent(kit.addedNodes)).toContain("Paused");
+
+    // Come back 30s later and type "c" straight away: it resumes AND counts as
+    // the keystroke (not swallowed). Away time is excluded.
+    nowMs = 1_300 + 30_000;
+    kit.emitKey({ name: "c", sequence: "c" });
+
+    await kit.waitForKeyListener(2);
+    await dismissCompletionResult(kit);
+    kit.emitKey({ name: "enter", sequence: "\r" });
+    await kit.waitForKeyListener(3);
+    kit.emitKey({ name: "enter", sequence: "\r" });
+
+    const result = await runPromise;
+    const record = result.completedRecords[0];
+
+    expect(result.completedRecords).toHaveLength(1);
+    expect(record?.user_input).toBe("abc");
+    // a(1100)→blur(1300) = 200ms active; the 30s away is excluded; the resume
+    // key "c" lands at the resume instant with no extra elapsed time.
+    expect(record?.duration_ms).toBe(200);
+  });
+
   test("ctrl-n restarts the current group without changing the target", async () => {
     const kit = fakeKit({ keyInput: true });
     let nowMs = 1_000;
@@ -2492,6 +2543,7 @@ type FakeKit = OpenTuiRendererKit & {
   destroyed: number;
   renderRequests: number;
   emitKey(event: Partial<FakeKeyEvent>): void;
+  emitBlur(): void;
   waitForKeyListener(count?: number): Promise<void>;
   waitForRenderRequest(count?: number): Promise<void>;
 };
@@ -2501,6 +2553,7 @@ function fakeKit(options: { idleDelayMs?: number; keyInput?: boolean } = {}): Fa
   const createdOptions: Array<{ exitOnCtrlC: boolean }> = [];
   let destroyed = 0;
   let keyHandler: ((event: FakeKeyEvent) => void) | undefined;
+  let blurHandler: (() => void) | undefined;
   let keyListenerCount = 0;
   let renderRequestCount = 0;
   const keyListenerWaiters: Array<{
@@ -2549,6 +2602,9 @@ function fakeKit(options: { idleDelayMs?: number; keyInput?: boolean } = {}): Fa
         meta: event.meta ?? false,
       });
     },
+    emitBlur: () => {
+      blurHandler?.();
+    },
     waitForKeyListener: (count = 1) => {
       if (keyListenerCount >= count) {
         return Promise.resolve();
@@ -2593,6 +2649,9 @@ function fakeKit(options: { idleDelayMs?: number; keyInput?: boolean } = {}): Fa
         },
         destroy: () => {
           destroyed += 1;
+        },
+        onBlur: (handler: () => void) => {
+          blurHandler = handler;
         },
       };
       if (options.keyInput === true) {
