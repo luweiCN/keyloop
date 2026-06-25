@@ -13,8 +13,7 @@ export type SkillDimensionId =
   | "digits"
   | "symbols"
   | "capitalization"
-  | "word_fluency"
-  | "long_words";
+  | "word_fluency";
 
 export type SkillTrend = "improving" | "stable" | "declining" | "insufficient";
 export type SkillStatus = "weak" | "normal" | "stable" | "unrated";
@@ -233,7 +232,8 @@ export function diagnoseCharSkills(records: SessionRecord[]): SkillDiagnosis[] {
       ewma_error_rate: ewmaErrorRate,
       ewma_speed: ewmaInterval,
       trend,
-      status: dimensionStatus(window.length, ewmaErrorRate, trend),
+      // 占位：最终 status 由 buildSkillProfile 的 applyRelativeStatus 按相对基线统一判定
+      status: "normal",
     };
   });
 }
@@ -401,13 +401,64 @@ function dailyActiveMinutesMedian7d(records: SessionRecord[], now: Date): number
     : (minutes[middle - 1]! + minutes[middle]!) / 2;
 }
 
+/** 相对基线判弱：错误率超出基线的容差（百分点）。低于此差距的"天生难"维度不算弱。 */
+const WEAK_RELATIVE_MARGIN = 4;
+/** 判 stable 的错误率上限（百分比） */
+const STABLE_ERROR_RATE = 2.5;
+
+function medianOf(values: number[]): number | null {
+  if (values.length === 0) {
+    return null;
+  }
+  const sorted = [...values].sort((left, right) => left - right);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 1 ? sorted[mid]! : (sorted[mid - 1]! + sorted[mid]!) / 2;
+}
+
+/**
+ * 问题1：相对基线判弱——一个维度只有「明显差于你自己的平均水平」（错误率超过所有
+ * 已评估维度的中位数 + 容差）或「在退步」才判弱，不再用绝对 8% 阈值。天生难的维度
+ * （符号/数字/大写）只要和你其它技能水平一致，就不会被单独拎出来当弱点。
+ */
+export function applyRelativeStatus(dimensions: SkillDiagnosis[]): SkillDiagnosis[] {
+  const baseline = medianOf(
+    dimensions
+      .map((dimension) => dimension.ewma_error_rate)
+      .filter((rate): rate is number => rate !== null),
+  );
+  return dimensions.map((dimension) => ({
+    ...dimension,
+    status: relativeDimensionStatus(dimension, baseline),
+  }));
+}
+
+function relativeDimensionStatus(dimension: SkillDiagnosis, baseline: number | null): SkillStatus {
+  const errorRate = dimension.ewma_error_rate;
+  if (errorRate === null) {
+    return "unrated";
+  }
+  if (
+    (baseline !== null && errorRate >= baseline + WEAK_RELATIVE_MARGIN) ||
+    dimension.trend === "declining"
+  ) {
+    return "weak";
+  }
+  if (dimension.samples >= 3 && errorRate <= STABLE_ERROR_RATE) {
+    return "stable";
+  }
+  return "normal";
+}
+
 export function buildSkillProfile(
   records: SessionRecord[],
   plan: PracticePlan,
   now: Date = new Date(),
 ): SkillProfile {
   return {
-    dimensions: [...diagnoseCharSkills(records), ...diagnoseTokenSkills(records)],
+    dimensions: applyRelativeStatus([
+      ...diagnoseCharSkills(records),
+      ...diagnoseTokenSkills(records),
+    ]),
     form_speeds: formSpeeds(records),
     focus: focusPools(records, plan),
     daily_active_minutes_7d: dailyActiveMinutesMedian7d(records, now),
@@ -415,30 +466,17 @@ export function buildSkillProfile(
   };
 }
 
-/** 词级维度：word_fluency（普通词）与 long_words（长度 ≥8 的词） */
-const LONG_WORD_MIN_LENGTH = 8;
-
+/** 词级维度：word_fluency（所有词的流畅度）。长度不再单独成弱点维度（问题1）。 */
 function diagnoseTokenSkills(records: SessionRecord[]): SkillDiagnosis[] {
   const ordered = [...records].sort(
     (left, right) => Date.parse(left.started_at) - Date.parse(right.started_at),
   );
   const fluencySessions: Array<{ wpm: number; errorRate: number; events: number }> = [];
-  const longWordSessions: Array<{ wpm: number; errorRate: number; events: number }> = [];
   for (const record of ordered) {
     const wordStats = record.token_stats.filter((stat) => stat.kind === "word");
-    collectTokenSample(
-      wordStats.filter((stat) => [...stat.token].length < LONG_WORD_MIN_LENGTH),
-      fluencySessions,
-    );
-    collectTokenSample(
-      wordStats.filter((stat) => [...stat.token].length >= LONG_WORD_MIN_LENGTH),
-      longWordSessions,
-    );
+    collectTokenSample(wordStats, fluencySessions);
   }
-  return [
-    tokenDiagnosis("word_fluency", fluencySessions),
-    tokenDiagnosis("long_words", longWordSessions),
-  ];
+  return [tokenDiagnosis("word_fluency", fluencySessions)];
 }
 
 function collectTokenSample(
@@ -488,24 +526,9 @@ function tokenDiagnosis(
     ewma_error_rate: ewmaErrorRate,
     ewma_speed: ewmaAverage(wpmSeries),
     trend,
-    status: dimensionStatus(window.length, ewmaErrorRate, trend),
+    // 占位：最终 status 由 buildSkillProfile 的 applyRelativeStatus 按相对基线统一判定
+    status: "normal",
   };
 }
 
-function dimensionStatus(
-  samples: number,
-  ewmaErrorRate: number | null,
-  trend: SkillTrend,
-): SkillStatus {
-  if (ewmaErrorRate === null) {
-    return "unrated";
-  }
-  if (ewmaErrorRate >= 8 || trend === "declining") {
-    return "weak";
-  }
-  // 到这里 trend 必非 declining，无需再判
-  if (samples >= 3 && ewmaErrorRate <= 2.5) {
-    return "stable";
-  }
-  return "normal";
-}
+// 旧的绝对阈值 dimensionStatus 已由 applyRelativeStatus / relativeDimensionStatus 取代（问题1）。

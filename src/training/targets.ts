@@ -2986,13 +2986,11 @@ function wordsStageTarget(
   // 单词层不回流具体薄弱词（ADR-0002 废弃 focus_words ③）：选材仅靠随机轮换 +
   // 字符类/技能维度加权（见下 ②），不把历史错过的具体词优先排到最前。
   const selected: StageWordCandidate[] = [];
-  // 技能跨阶段（特征偏重）：弱维度偏好对应特征的词
-  // —— 大小写弱 → 多选含大写/驼峰词；长词弱 → 多选长词（spec §3.4/§4.5）
+  // 技能跨阶段（特征偏重）：大小写弱 → 多选含大写/驼峰词（spec §3.4）。
+  // 长度不再是弱点维度（问题1：长词错多是普世现象、非个人短板），故取消长词加权。
   const capWeak = isDimensionWeak(options.profile, "capitalization");
-  const longWeak = isDimensionWeak(options.profile, "long_words");
   const wordBiasScore = (text: string): number =>
-    (capWeak && /[A-Z]/u.test(text) ? 1 : 0) +
-    (longWeak && Array.from(text).length >= 8 ? 1 : 0);
+    capWeak && /[A-Z]/u.test(text) ? 1 : 0;
   const fill = [...pool.values()].filter((item) => !selected.includes(item));
   shuffleInPlace(fill, random);
   // 稳定排序把弱特征匹配的词排前；同分保持上面 shuffle 的随机序（JSC 排序稳定）

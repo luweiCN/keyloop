@@ -95,11 +95,10 @@ describe("recommendedDailyMinutes", () => {
         ["digits", "weak"],
         ["symbols", "weak"],
         ["word_fluency", "weak"],
-        ["long_words", "weak"],
       ],
       8,
     );
-    // 15 + 4*5 = 35，习惯上限 max(15, 8*1.5)=15
+    // 15 + 3*5 = 30，习惯上限 max(15, 8*1.5)=15
     expect(recommendedDailyMinutes(profile)).toBe(15);
   });
 
@@ -113,11 +112,10 @@ describe("recommendedDailyMinutes", () => {
         ["symbols", "weak"],
         ["capitalization", "weak"],
         ["word_fluency", "weak"],
-        ["long_words", "weak"],
       ],
       60,
     );
-    // 15 + 8*5 = 55 → clamp 45（习惯上限 90 不约束）
+    // 15 + 7*5 = 50 → clamp 45（习惯上限 90 不约束）
     expect(recommendedDailyMinutes(manyWeak)).toBe(45);
   });
 });
