@@ -72,9 +72,9 @@ function pickBalancedCards(
   return picked.slice(0, Math.min(picked.length, CARDS_PER_LESSON_MAX));
 }
 
-function basicsCodeBlock(language: string, lineCount: number) {
+function basicsCodeBlock(language: string, startLine: number, lineCount: number) {
   return {
-    start_line: 0,
+    start_line: startLine,
     line_count: lineCount,
     language,
     framework: "",
@@ -87,23 +87,27 @@ function basicsCodeBlock(language: string, lineCount: number) {
 // block 卡保留多行且块间以空行分隔（与代码实战一致的输入体验）。
 const VALUES_PER_LINE = 4;
 
-function symbolsNumbersText(cards: ProgrammingBasicsCard[]): string {
+export function symbolsNumbersText(cards: ProgrammingBasicsCard[]): {
+  text: string;
+  highlightFromLine: number;
+} {
   const values = cards.filter((card) => card.form === "value");
   const statements = cards.filter((card) => card.form !== "value" && card.form !== "block");
   const blocks = cards.filter((card) => card.form === "block");
-  const singleLines: string[] = [];
+  const valueLines: string[] = [];
   for (let index = 0; index < values.length; index += VALUES_PER_LINE) {
-    singleLines.push(
+    valueLines.push(
       values
         .slice(index, index + VALUES_PER_LINE)
         .map((card) => card.text)
         .join(" "),
     );
   }
-  singleLines.push(...statements.map((card) => card.text));
+  const singleLines = [...valueLines, ...statements.map((card) => card.text)];
   const sections = singleLines.length > 0 ? [singleLines.join("\n")] : [];
   sections.push(...blocks.map((card) => card.text));
-  return sections.join("\n\n");
+  // value 行排在最前、不做代码高亮（裸值统一普通色）；从 statement 行起才高亮。
+  return { text: sections.join("\n\n"), highlightFromLine: valueLines.length };
 }
 
 function basicsTarget(
@@ -117,15 +121,24 @@ function basicsTarget(
   const language = resolveProgrammingBasicsLanguage(context.codeConfig, available, random);
   const cards = loadProgrammingBasicsCards(kind, language, options);
   const picked = pickBalancedCards(cards, random);
-  const text =
+  const built =
     kind === "symbols_numbers"
       ? symbolsNumbersText(picked)
-      : picked.map((card) => card.text).join("\n");
+      : { text: picked.map((card) => card.text).join("\n"), highlightFromLine: 0 };
+  const totalLines = built.text.split("\n").length;
   return {
     mode: "code",
-    text,
+    text: built.text,
     source: `keyloop:module:programming-basics:${sourceSlug}:${language}`,
-    code_blocks: [basicsCodeBlock(language, text.split("\n").length)],
+    // 只高亮 value 之后的 statement/block 行；value 行落在块外 → 渲染层按普通色显示。
+    // 始终保留一个 declared block(即便 line_count=0)，以走"按声明块高亮"而非整体推断高亮。
+    code_blocks: [
+      basicsCodeBlock(
+        language,
+        built.highlightFromLine,
+        Math.max(0, totalLines - built.highlightFromLine),
+      ),
+    ],
   };
 }
 

@@ -85,6 +85,54 @@ function makeFixtureRootWithManyCards(): string {
   return root;
 }
 
+function makeFixtureRootWithValueCards(): string {
+  const root = mkdtempSync(join(tmpdir(), "keyloop-basics-val-"));
+  const base = join(root, "programming_basics");
+  mkdirSync(join(base, "symbols_numbers"), { recursive: true });
+  mkdirSync(join(base, "builtin_api"), { recursive: true });
+  writeFileSync(
+    join(base, "index.json"),
+    JSON.stringify({
+      schema: "keyloop.programming_basics",
+      schema_version: 2,
+      languages: ["typescript"],
+    }),
+  );
+  const cards: string[] = [];
+  for (let i = 0; i < 12; i += 1) {
+    cards.push(
+      JSON.stringify({
+        text: `10.0.0.${i}`,
+        topic: "string",
+        form: "value",
+        note_zh: "ip",
+        source_id: "keyloop:programming-basics:seeds",
+      }),
+    );
+    cards.push(
+      JSON.stringify({
+        text: `const value${i} = compute(${i});`,
+        topic: "declaration",
+        form: "statement",
+        note_zh: "stmt",
+        source_id: "keyloop:programming-basics:seeds",
+      }),
+    );
+  }
+  writeFileSync(join(base, "symbols_numbers", "typescript.jsonl"), cards.join("\n") + "\n");
+  writeFileSync(
+    join(base, "builtin_api", "typescript.jsonl"),
+    JSON.stringify({
+      text: "items.map((item) => item.id);",
+      topic: "array",
+      api: "Array.map",
+      note_zh: "",
+      source_id: "keyloop:programming-basics:seeds",
+    }) + "\n",
+  );
+  return root;
+}
+
 function fixtureOptions(root: string): ProgrammingBasicsOptions {
   return { env: { KEYLOOP_TS_CONTENT_ROOT: root }, exists: () => true };
 }
@@ -244,6 +292,22 @@ describe("symbols numbers target", () => {
     // 纯随机：相同 rng 下历史记录不改变选择（去掉"偏好/硬排除已练卡"，靠随机+大池降低重复，
     // 而非确定性轮转导致"今天三句明天又这三句、顺序还一样"）。
     expect(withHistory.text).toBe(fresh.text);
+  });
+
+  test("value 行排在高亮块之外（裸值不做语法高亮，问题3）", () => {
+    const root = makeFixtureRootWithValueCards();
+    const target = buildSymbolsNumbersTarget(basicsContext([], ["typescript"]), fixtureOptions(root));
+    expect(target.code_blocks).toHaveLength(1);
+    const block = target.code_blocks![0]!;
+    const lines = target.text.split("\n");
+    // 有 value 卡 → 高亮块从 value 之后开始，并覆盖到末尾
+    expect(block.start_line).toBeGreaterThan(0);
+    expect(block.start_line + block.line_count).toBe(lines.length);
+    // 块外是裸值(IP)、块内是 statement(compute)
+    const outside = lines.slice(0, block.start_line).join("\n");
+    const inside = lines.slice(block.start_line, block.start_line + block.line_count).join("\n");
+    expect(outside).toContain("10.0.0.");
+    expect(inside).toContain("compute");
   });
 });
 
