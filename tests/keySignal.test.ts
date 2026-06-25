@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { defaultSessionRecord, type KeyEventRecord } from "../src/domain/model";
-import { effectiveTimeMs, perKeyStats } from "../src/training/keySignal";
+import { effectiveTimeMs, keySignals, perKeyStats } from "../src/training/keySignal";
 
 /** 构造连续 insert 事件：每项 [expected, correct]，相邻间隔 intervalMs。 */
 function keyEvents(entries: Array<[string, boolean]>, intervalMs = 200): KeyEventRecord[] {
@@ -72,5 +72,38 @@ describe("effectiveTimeMs", () => {
 
   test("惩罚系数可配", () => {
     expect(effectiveTimeMs(200, 0.5, 2)).toBe(400); // 200 × (1 + 2×0.5)
+  });
+});
+
+describe("keySignals", () => {
+  test("confidence = 你的键速中位数 / 该键有效耗时；越快越高、越慢越低", () => {
+    // 三键各打 6 次(满足最小样本)，段间用大跳分隔以过滤跨段间隔：
+    // a 间隔100(快) / b 间隔200(中) / c 间隔400(慢)，全对
+    const record = defaultSessionRecord({
+      key_events: [
+        ...keysAt("a", 6, 0, 100),
+        ...keysAt("b", 6, 10_000, 200),
+        ...keysAt("c", 6, 30_000, 400),
+      ],
+    });
+    const signals = keySignals([record]);
+    const conf = (k: string): number => signals.find((s) => s.key === k)?.confidence ?? 0;
+    // 有效耗时 a=100 b=200 c=400 → 中位数 200 → target=200
+    // confidence a=2.0 b=1.0 c=0.5
+    expect(conf("a")).toBeGreaterThan(conf("b"));
+    expect(conf("b")).toBeGreaterThan(conf("c"));
+    expect(conf("c")).toBeLessThan(1); // 慢键低于中位达标线
+    expect(conf("b")).toBeCloseTo(1, 1); // 中位键≈1
+  });
+
+  test("样本不足的键 confidence 记为 null（不参与评估）", () => {
+    const record = defaultSessionRecord({
+      key_events: [
+        ...keysAt("a", 6, 0, 100), // 足够
+        ...keysAt("z", 2, 50_000, 100), // 仅 2 次 < MIN_KEY_SAMPLES
+      ],
+    });
+    const signals = keySignals([record]);
+    expect(signals.find((s) => s.key === "z")?.confidence).toBeNull();
   });
 });

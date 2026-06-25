@@ -76,3 +76,76 @@ export function effectiveTimeMs(
 ): number {
   return avgIntervalMs * (1 + penalty * errorRate);
 }
+
+/** 样本数低于此值的键不评估 confidence（数据不足）。可调。 */
+export const MIN_KEY_SAMPLES = 5;
+/** 目标键速取「你自己各键有效耗时」的分位（0.5=中位数）。相对基线，避免绝对阈值。可调。 */
+export const TARGET_PERCENTILE = 0.5;
+
+export interface KeySignal {
+  key: string;
+  samples: number;
+  errorRate: number;
+  avgIntervalMs: number | null;
+  /** 有效耗时；样本不足或无速度样本时为 null */
+  effectiveTimeMs: number | null;
+  /** 目标键速/有效耗时，≥1 达标，越低越弱；无法评估时为 null */
+  confidence: number | null;
+}
+
+export interface KeySignalOptions {
+  penalty?: number;
+  minSamples?: number;
+  targetPercentile?: number;
+}
+
+function percentile(values: readonly number[], p: number): number | null {
+  if (values.length === 0) {
+    return null;
+  }
+  const sorted = [...values].sort((left, right) => left - right);
+  const index = Math.min(sorted.length - 1, Math.max(0, Math.round(p * (sorted.length - 1))));
+  return sorted[index]!;
+}
+
+/**
+ * per-key 弱点账本：每个键的有效耗时 + confidence（相对你自己键速中位数）。
+ * confidence ≥1 表示该键达到/超过你的中位水平；<1 表示落后。
+ */
+export function keySignals(
+  records: readonly SessionRecord[],
+  options: KeySignalOptions = {},
+): KeySignal[] {
+  const penalty = options.penalty ?? KEY_PENALTY;
+  const minSamples = options.minSamples ?? MIN_KEY_SAMPLES;
+  const targetPercentile = options.targetPercentile ?? TARGET_PERCENTILE;
+
+  const raw = perKeyStats(records);
+  const effByKey = new Map<string, number | null>();
+  const ratedEff: number[] = [];
+  for (const [key, stat] of raw) {
+    const eff =
+      stat.avgIntervalMs === null || stat.samples < minSamples
+        ? null
+        : effectiveTimeMs(stat.avgIntervalMs, stat.errorRate, penalty);
+    effByKey.set(key, eff);
+    if (eff !== null) {
+      ratedEff.push(eff);
+    }
+  }
+  const target = percentile(ratedEff, targetPercentile);
+
+  const signals: KeySignal[] = [];
+  for (const [key, stat] of raw) {
+    const eff = effByKey.get(key) ?? null;
+    signals.push({
+      key,
+      samples: stat.samples,
+      errorRate: stat.errorRate,
+      avgIntervalMs: stat.avgIntervalMs,
+      effectiveTimeMs: eff,
+      confidence: eff === null || target === null ? null : target / eff,
+    });
+  }
+  return signals;
+}
