@@ -1,6 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import { defaultSessionRecord, type KeyEventRecord } from "../src/domain/model";
-import { effectiveTimeMs, keySignals, perKeyStats } from "../src/training/keySignal";
+import {
+  effectiveTimeMs,
+  keySignals,
+  perKeyStats,
+  weakestKeys,
+  type KeySignal,
+} from "../src/training/keySignal";
 
 /** 构造连续 insert 事件：每项 [expected, correct]，相邻间隔 intervalMs。 */
 function keyEvents(entries: Array<[string, boolean]>, intervalMs = 200): KeyEventRecord[] {
@@ -105,5 +111,28 @@ describe("keySignals", () => {
     });
     const signals = keySignals([record]);
     expect(signals.find((s) => s.key === "z")?.confidence).toBeNull();
+  });
+});
+
+describe("weakestKeys", () => {
+  function sig(key: string, confidence: number | null): KeySignal {
+    return {
+      key,
+      samples: 10,
+      errorRate: 0,
+      avgIntervalMs: 200,
+      effectiveTimeMs: 200,
+      confidence,
+    };
+  }
+
+  test("返回 confidence 最低的若干键，跳过未评估(null)的", () => {
+    const signals = [sig("a", 2.0), sig("b", 0.5), sig("c", 1.0), sig("d", null)];
+    expect(weakestKeys(signals, 2).map((s) => s.key)).toEqual(["b", "c"]);
+  });
+
+  test("count 超过可评估键数时返回全部已评估键(升序)", () => {
+    const signals = [sig("a", 1.2), sig("b", 0.3), sig("z", null)];
+    expect(weakestKeys(signals, 10).map((s) => s.key)).toEqual(["b", "a"]);
   });
 });

@@ -149,3 +149,11 @@ export function keySignals(
   }
   return signals;
 }
+
+/** confidence 最低的若干键（升序），跳过未评估(null)的。用于原子层靶向选材。 */
+export function weakestKeys(signals: readonly KeySignal[], count: number): KeySignal[] {
+  return signals
+    .filter((signal) => signal.confidence !== null)
+    .sort((left, right) => (left.confidence ?? 0) - (right.confidence ?? 0))
+    .slice(0, Math.max(0, count));
+}
