@@ -1,6 +1,25 @@
 import { describe, expect, test } from "bun:test";
+import { defaultSessionRecord, type KeyEventRecord, type SessionRecord } from "../src/domain/model";
 import type { ProgrammingBasicsCard } from "../src/content/programmingBasics";
-import { symbolsNumbersText } from "../src/training/programmingBasicsTargets";
+import { symbolsNumbersText, symbolWeakKeyWeights } from "../src/training/programmingBasicsTargets";
+
+/** 一段同键事件，段内固定间隔（段间用大跳分隔以过滤跨段间隔）。 */
+function keysAt(
+  key: string,
+  count: number,
+  startMs: number,
+  intervalMs: number,
+  correct = true,
+): KeyEventRecord[] {
+  return Array.from({ length: count }, (_, i) => ({
+    at_ms: startMs + i * intervalMs,
+    action: "insert" as const,
+    position: i,
+    expected: key,
+    input: correct ? key : "?",
+    correct,
+  }));
+}
 
 describe("symbolsNumbersText（问题3：裸值不计入代码高亮范围）", () => {
   test("value 行排在最前且不计入 highlightFromLine，statement/block 才计入", () => {
@@ -34,5 +53,26 @@ describe("symbolsNumbersText（问题3：裸值不计入代码高亮范围）", 
     ];
     const { text, highlightFromLine } = symbolsNumbersText(cards);
     expect(highlightFromLine).toBe(text.split("\n").length);
+  });
+});
+
+describe("symbolWeakKeyWeights", () => {
+  test("只保留数字/符号弱键，滤掉字母弱键", () => {
+    // 6 快键做基线（把中位数分位拉到快键区），a 字母 / = 符号 / 2 数字 又慢又错 → confidence<1
+    const fast = ["t", "e", "o", "i", "n", "r"].flatMap((k, idx) =>
+      keysAt(k, 6, idx * 20_000, 100),
+    );
+    const record = defaultSessionRecord({
+      key_events: [
+        ...fast,
+        ...keysAt("a", 6, 200_000, 600, false),
+        ...keysAt("=", 6, 400_000, 600, false),
+        ...keysAt("2", 6, 600_000, 600, false),
+      ],
+    });
+    const weights = symbolWeakKeyWeights([record]);
+    expect(weights.has("a")).toBe(false); // 字母键被滤掉
+    expect(weights.has("=")).toBe(true); // 符号键保留
+    expect(weights.has("2")).toBe(true); // 数字键保留
   });
 });

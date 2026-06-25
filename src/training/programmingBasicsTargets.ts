@@ -1,4 +1,4 @@
-import type { PracticeTarget } from "../domain/model";
+import type { PracticeTarget, SessionRecord } from "../domain/model";
 import {
   listProgrammingBasicsLanguages,
   loadProgrammingBasicsCards,
@@ -8,6 +8,7 @@ import {
 } from "../content/programmingBasics";
 import { recentFeedbackTerms } from "./feedback";
 import { chunkWords, type BuildTargetContext } from "./targets";
+import { weakKeyWeights } from "./wordTargeting";
 
 const CARDS_PER_LESSON_MIN = 8;
 const CARDS_PER_LESSON_MAX = 10;
@@ -34,6 +35,20 @@ function shuffled<T>(values: T[], random: () => number): T[] {
     [result[i], result[j]] = [result[j]!, result[i]!];
   }
   return result;
+}
+
+/**
+ * 符号专项弱键账本：从统一 per-key 弱键里只取「数字 / 符号键」（滤掉 a-zA-Z 字母键），
+ * 这样符号专项靶向只被你弱的符号/数字键驱动，不因卡里恰好含某个弱字母（如 items 的 i）跑偏。
+ */
+export function symbolWeakKeyWeights(records: readonly SessionRecord[]): Map<string, number> {
+  const out = new Map<string, number>();
+  for (const [key, weight] of weakKeyWeights(records)) {
+    if (!/[a-zA-Z]/u.test(key)) {
+      out.set(key, weight);
+    }
+  }
+  return out;
 }
 
 // 纯随机均衡组卷：每个 topic 桶内随机打乱后按 topic 轮流取卡（保证 topic 覆盖均衡）。
