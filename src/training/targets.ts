@@ -3355,15 +3355,24 @@ function articlesStageTarget(
   };
 }
 
+const SYMBOL_VALUE_RATIO = 0.45; // 裸值占符号专项时长比例（裸值与代码语句大致各半、裸值略多）
+const SYMBOL_VALUE_AVG_LEN = 14; // value 卡平均字符（IP/日期/金额量级）
+
+/** 综合训练：按符号阶段 char_budget 算该练几张 value（覆盖几种形式），随时长伸缩，下限 2。 */
+export function symbolValueCountForBudget(charBudget: number): number {
+  return Math.max(2, Math.round((charBudget * SYMBOL_VALUE_RATIO) / SYMBOL_VALUE_AVG_LEN));
+}
+
 function symbolsStageTarget(
   context: BuildTargetContext,
   options: StageTargetOptions,
 ): PracticeTarget {
   if (stageModuleEnabled(options, "programming_basics")) {
-    const target = buildSymbolsNumbersTarget(context);
+    // 综合训练：value 裸值数随分到的时长（char_budget）伸缩，覆盖更多/更少真实形式
+    const valueCount = symbolValueCountForBudget(options.stage.char_budget);
+    const target = buildSymbolsNumbersTarget(context, {}, valueCount);
     if (target.text.trim().length > 0) {
-      // 按形态预算缩放：符号卡固定 8-10 张，对慢用户（小预算）按行裁剪，
-      // 避免快慢用户拿到一样多的符号语料
+      // 按形态预算缩放：对慢用户（小预算）按行裁剪。value 行排最前 → 裁尾部时天然受保护
       return fitSymbolsTargetToBudget(context, target, options.stage.char_budget);
     }
   }

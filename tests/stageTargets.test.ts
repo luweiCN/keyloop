@@ -16,6 +16,7 @@ import {
   refreshModuleMixTarget,
   selectSnippetsWithinBudget,
   symbolSupplementLines,
+  symbolValueCountForBudget,
   usedCodeSnippetTexts,
   type BuildTargetContext,
 } from "../src/training/targets";
@@ -887,4 +888,25 @@ test("comprehensivePlanMinutes sums lesson estimated_minutes (honest plan time)"
   const plan = buildDailyPracticePlan(stageContext(), { targetMinutesOverride: 20 });
   const expected = plan.lessons.reduce((sum, lesson) => sum + lesson.estimated_minutes, 0);
   expect(comprehensivePlanMinutes(plan)).toBe(expected);
+});
+
+describe("symbolValueCountForBudget（综合训练 value 数随时长伸缩）", () => {
+  test("大预算比小预算覆盖更多 value（形式），有下限 2", () => {
+    expect(symbolValueCountForBudget(600)).toBeGreaterThan(symbolValueCountForBudget(150));
+    expect(symbolValueCountForBudget(10)).toBeGreaterThanOrEqual(2);
+  });
+
+  test("裁剪保留排最前的 value 裸值行（小预算不把形式覆盖裁没）", () => {
+    const valueFirst = {
+      mode: "code" as const,
+      text: "10.0.0.1 2026-12-31\nconst a = run(1);\nconst b = run(2);\nconst c = run(3);",
+      source: "test",
+      code_blocks: [
+        { start_line: 1, line_count: 3, language: "ts", framework: "", project: "p", source: "s" },
+      ],
+    };
+    const fitted = fitSymbolsTargetToBudget(stageContext(), valueFirst, 24);
+    expect(fitted.text.split("\n")[0]).toContain("10.0.0.1"); // value 行排最前 → 裁尾部时保留
+    expect(fitted.text.length).toBeLessThan(valueFirst.text.length); // 确实裁了尾部 statement
+  });
 });
