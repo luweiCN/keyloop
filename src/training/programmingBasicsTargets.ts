@@ -12,6 +12,7 @@ import { weakKeyWeights, weightedSampleWithoutReplacement, wordKeyWeight } from 
 
 const CARDS_PER_LESSON_MIN = 8;
 const CARDS_PER_LESSON_MAX = 10;
+const DEFAULT_SYMBOL_VALUE_COUNT = 6;
 
 export function resolveProgrammingBasicsLanguage(
   codeConfig: { languages?: string[] } | undefined,
@@ -192,19 +193,33 @@ function basicsTarget(
   sourceSlug: string,
   context: BuildTargetContext,
   options: ProgrammingBasicsOptions = {},
+  valueCount?: number,
 ): PracticeTarget {
   const random = context.random ?? Math.random;
   const available = listProgrammingBasicsLanguages(options);
   const language = resolveProgrammingBasicsLanguage(context.codeConfig, available, random);
   const cards = loadProgrammingBasicsCards(kind, language, options);
-  // 符号/数字专项：有弱符号/数字键 → 偏重含弱键的真实卡（阶段3靶向）；
-  // 无弱键（无记录/全达标）→ 回退 topic 均衡随机，行为不变。其余 kind 不变。
+  // 符号/数字专项：value 裸值走形式覆盖（round-robin 多形式）、statement/block 走弱键靶向，
+  // 合并成卷——保证每课覆盖多种真实形式，且你弱的符号/数字键照样偏重（两者正交叠加）。
+  // 其余 kind 不变。
   const picked = ((): ProgrammingBasicsCard[] => {
     if (kind === "symbols_numbers") {
       const weak = symbolWeakKeyWeights(context.records ?? []);
-      if (weak.size > 0) {
-        return pickWeakKeyTargetedCards(cards, weak, CARDS_PER_LESSON_MAX, random);
-      }
+      const valueCards = cards.filter((card) => card.form === "value");
+      const restCards = cards.filter((card) => card.form !== "value");
+      const pickedValue = pickFormCoveredValueCards(
+        valueCards,
+        weak,
+        valueCount ?? DEFAULT_SYMBOL_VALUE_COUNT,
+        random,
+      );
+      const pickedRest = pickWeakKeyTargetedCards(
+        restCards,
+        weak,
+        Math.max(0, CARDS_PER_LESSON_MAX - pickedValue.length),
+        random,
+      );
+      return [...pickedValue, ...pickedRest];
     }
     return pickBalancedCards(cards, random);
   })();
@@ -232,8 +247,9 @@ function basicsTarget(
 export function buildSymbolsNumbersTarget(
   context: BuildTargetContext,
   options: ProgrammingBasicsOptions = {},
+  valueCount?: number,
 ): PracticeTarget {
-  return basicsTarget("symbols_numbers", "symbols-numbers", context, options);
+  return basicsTarget("symbols_numbers", "symbols-numbers", context, options, valueCount);
 }
 
 export function buildBuiltinApiTarget(

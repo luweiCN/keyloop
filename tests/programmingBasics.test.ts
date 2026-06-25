@@ -485,3 +485,49 @@ describe("programming submenu", () => {
     );
   });
 });
+
+/** 形式覆盖 fixture：24 张 value 卡覆盖 8 种 format（每种 3 张）+ 20 张 statement。 */
+function makeFixtureRootWithFormats(): string {
+  const root = mkdtempSync(join(tmpdir(), "keyloop-fmts-"));
+  const base = join(root, "programming_basics");
+  mkdirSync(join(base, "symbols_numbers"), { recursive: true });
+  mkdirSync(join(base, "builtin_api"), { recursive: true });
+  writeFileSync(
+    join(base, "index.json"),
+    JSON.stringify({
+      schema: "keyloop.programming_basics",
+      schema_version: 1,
+      languages: ["typescript"],
+    }),
+  );
+  const cards: string[] = [];
+  const fmts = ["ip", "date", "money", "version", "time", "url", "email", "port"];
+  for (const f of fmts)
+    for (let i = 0; i < 3; i += 1)
+      cards.push(
+        JSON.stringify({ text: `${f}${i}val`, topic: "x", form: "value", format: f, note_zh: "", source_id: "s" }),
+      );
+  for (let i = 0; i < 20; i += 1)
+    cards.push(
+      JSON.stringify({ text: `const v${i} = run(${i});`, topic: "x", form: "statement", note_zh: "", source_id: "s" }),
+    );
+  writeFileSync(join(base, "symbols_numbers", "typescript.jsonl"), cards.join("\n") + "\n");
+  writeFileSync(
+    join(base, "builtin_api", "typescript.jsonl"),
+    JSON.stringify({ text: "x.y()", topic: "array", api: "A.b", note_zh: "", source_id: "s" }) + "\n",
+  );
+  return root;
+}
+
+describe("symbols 专项形式覆盖（默认 6）", () => {
+  test("专项产出含 ≥6 种不同形式的 value 行", () => {
+    const target = buildSymbolsNumbersTarget(
+      basicsContext([], ["typescript"], lcg(1)),
+      fixtureOptions(makeFixtureRootWithFormats()),
+    );
+    const formats = new Set<string>();
+    for (const m of target.text.matchAll(/\b(ip|date|money|version|time|url|email|port)\d/gu))
+      formats.add(m[1]!);
+    expect(formats.size).toBeGreaterThanOrEqual(6);
+  });
+});
