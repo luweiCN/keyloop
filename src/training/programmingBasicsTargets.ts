@@ -8,7 +8,7 @@ import {
 } from "../content/programmingBasics";
 import { recentFeedbackTerms } from "./feedback";
 import { chunkWords, type BuildTargetContext } from "./targets";
-import { weakKeyWeights } from "./wordTargeting";
+import { weakKeyWeights, weightedSampleWithoutReplacement, wordKeyWeight } from "./wordTargeting";
 
 const CARDS_PER_LESSON_MIN = 8;
 const CARDS_PER_LESSON_MAX = 10;
@@ -49,6 +49,25 @@ export function symbolWeakKeyWeights(records: readonly SessionRecord[]): Map<str
     }
   }
   return out;
+}
+
+/**
+ * 偏重「含弱符号/数字键」的真实卡：按弱键覆盖分加权无放回抽样。
+ * 保底权重 1 让普通卡也掺入（避免怪卷，仿阶段二单词靶向）；绝不改写卡内容——只筛选。
+ * weakWeights 为空（无弱键/无记录）时全卡权重 1，退化为均匀随机。
+ */
+export function pickWeakKeyTargetedCards(
+  cards: ProgrammingBasicsCard[],
+  weakWeights: ReadonlyMap<string, number>,
+  count: number,
+  random: () => number,
+): ProgrammingBasicsCard[] {
+  return weightedSampleWithoutReplacement(
+    cards,
+    (card) => 1 + wordKeyWeight(card.text, weakWeights),
+    count,
+    random,
+  );
 }
 
 // 纯随机均衡组卷：每个 topic 桶内随机打乱后按 topic 轮流取卡（保证 topic 覆盖均衡）。

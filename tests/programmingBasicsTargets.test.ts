@@ -1,7 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import { defaultSessionRecord, type KeyEventRecord, type SessionRecord } from "../src/domain/model";
 import type { ProgrammingBasicsCard } from "../src/content/programmingBasics";
-import { symbolsNumbersText, symbolWeakKeyWeights } from "../src/training/programmingBasicsTargets";
+import {
+  pickWeakKeyTargetedCards,
+  symbolsNumbersText,
+  symbolWeakKeyWeights,
+} from "../src/training/programmingBasicsTargets";
 
 /** 一段同键事件，段内固定间隔（段间用大跳分隔以过滤跨段间隔）。 */
 function keysAt(
@@ -74,5 +78,53 @@ describe("symbolWeakKeyWeights", () => {
     expect(weights.has("a")).toBe(false); // 字母键被滤掉
     expect(weights.has("=")).toBe(true); // 符号键保留
     expect(weights.has("2")).toBe(true); // 数字键保留
+  });
+});
+
+/** 可重复随机源（LCG），每 trial 独立；预热避免小种子首个输出极小。 */
+function lcg(seed: number): () => number {
+  let s = seed % 2147483647;
+  if (s <= 0) s += 2147483646;
+  const rand = (): number => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 5; i += 1) rand();
+  return rand;
+}
+
+describe("pickWeakKeyTargetedCards", () => {
+  const cards: ProgrammingBasicsCard[] = [
+    { text: "a[0] = b => !c", topic: "x", source_id: "t" }, // 含 [ ] = > ! 五个弱键
+    { text: "one two", topic: "x", source_id: "t" },
+    { text: "three four", topic: "x", source_id: "t" },
+    { text: "five six", topic: "x", source_id: "t" },
+  ];
+  const weights = new Map<string, number>([
+    ["[", 0.9],
+    ["]", 0.9],
+    ["=", 0.9],
+    [">", 0.9],
+    ["!", 0.9],
+  ]);
+
+  function hitRate(weightOf: ReadonlyMap<string, number>, trials: number): number {
+    let hits = 0;
+    for (let i = 0; i < trials; i += 1) {
+      const picked = pickWeakKeyTargetedCards(cards, weightOf, 1, lcg(i + 1));
+      if (picked[0]?.text === "a[0] = b => !c") hits += 1;
+    }
+    return hits;
+  }
+
+  test("含弱符号键的卡入选频率显著高于无弱键(随机)对照", () => {
+    const trials = 80;
+    const targeted = hitRate(weights, trials);
+    const control = hitRate(new Map(), trials); // 无弱键 → 纯随机 ≈ 25%
+    expect(targeted).toBeGreaterThan(control + trials * 0.15);
+  });
+
+  test("count 超量返回全部、不重复、不改写卡", () => {
+    const out = pickWeakKeyTargetedCards(cards, weights, 99, lcg(1));
+    expect(out).toHaveLength(4);
+    expect(new Set(out.map((c) => c.text)).size).toBe(4);
+    expect(out.every((c) => cards.some((s) => s.text === c.text))).toBe(true);
   });
 });
