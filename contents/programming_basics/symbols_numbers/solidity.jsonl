@@ -1,9 +1,9 @@
-{"text":"\"https://meta.example/0\"","topic":"string","form":"value","note_zh":"tokenURI 元数据","source_id":"keyloop:programming-basics:seeds"}
-{"text":"\"ipfs://bafybeigdyr\"","topic":"string","form":"value","note_zh":"IPFS 地址","source_id":"keyloop:programming-basics:seeds"}
-{"text":"\"v1.0.0\"","topic":"string","form":"value","note_zh":"版本号","source_id":"keyloop:programming-basics:seeds"}
-{"text":"\"2026-12-31\"","topic":"string","form":"value","note_zh":"解锁日期","source_id":"keyloop:programming-basics:seeds"}
-{"text":"\"transfer(address,uint256)\"","topic":"string","form":"value","note_zh":"函数签名","source_id":"keyloop:programming-basics:seeds"}
-{"text":"\"MINTER_ROLE\"","topic":"string","form":"value","note_zh":"角色名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"https://meta.example/0","topic":"string","form":"value","note_zh":"tokenURI 元数据","source_id":"keyloop:programming-basics:seeds"}
+{"text":"ipfs://bafybeigdyr","topic":"string","form":"value","note_zh":"IPFS 地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"v1.0.0","topic":"string","form":"value","note_zh":"版本号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2026-12-31","topic":"string","form":"value","note_zh":"解锁日期","source_id":"keyloop:programming-basics:seeds"}
+{"text":"transfer(address,uint256)","topic":"string","form":"value","note_zh":"函数签名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"MINTER_ROLE","topic":"string","form":"value","note_zh":"角色名","source_id":"keyloop:programming-basics:seeds"}
 {"text":"1e18","topic":"literal","form":"value","note_zh":"一枚以太(wei)","source_id":"keyloop:programming-basics:seeds"}
 {"text":"0.5e18","topic":"literal","form":"value","note_zh":"半枚以太","source_id":"keyloop:programming-basics:seeds"}
 {"text":"2e18","topic":"literal","form":"value","note_zh":"两枚以太","source_id":"keyloop:programming-basics:seeds"}

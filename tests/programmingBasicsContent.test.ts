@@ -39,6 +39,13 @@ describe("programming basics corpus", () => {
           expect(lines).toHaveLength(1);
           expect(card.text).not.toInclude(" ");
           expect(card.text.length).toBeLessThanOrEqual(40);
+          // 问题2：string 类裸值不再被外层引号包裹（literal 的字符字面量 'A' 不受此约束）
+          if (card.topic === "string") {
+            expect(
+              card.text,
+              `${language} value should be unquoted: ${card.text}`,
+            ).not.toMatch(/^[rR]?(['"]).*\1$/u);
+          }
         }
         if (card.form === "statement") {
           expect(lines).toHaveLength(1);

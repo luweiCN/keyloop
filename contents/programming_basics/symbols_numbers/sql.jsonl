@@ -11,15 +11,15 @@
 {"text":"NULL","topic":"literal","form":"value","note_zh":"空值","source_id":"keyloop:programming-basics:seeds"}
 {"text":"TRUE","topic":"literal","form":"value","note_zh":"布尔真","source_id":"keyloop:programming-basics:seeds"}
 {"text":"FALSE","topic":"literal","form":"value","note_zh":"布尔假","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'active'","topic":"string","form":"value","note_zh":"状态串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'paid'","topic":"string","form":"value","note_zh":"状态串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'2026-06-22'","topic":"string","form":"value","note_zh":"日期串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'2026-06-22T09:30:00Z'","topic":"string","form":"value","note_zh":"ISO 时间戳","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'%Y-%m-%d'","topic":"string","form":"value","note_zh":"日期格式","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'admin@x.com'","topic":"string","form":"value","note_zh":"邮箱地址","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'%@example.com'","topic":"string","form":"value","note_zh":"LIKE 模式","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'getting-started'","topic":"string","form":"value","note_zh":"slug 串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'10.5'","topic":"string","form":"value","note_zh":"数字字符串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"active","topic":"string","form":"value","note_zh":"状态串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"paid","topic":"string","form":"value","note_zh":"状态串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2026-06-22","topic":"string","form":"value","note_zh":"日期串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2026-06-22T09:30:00Z","topic":"string","form":"value","note_zh":"ISO 时间戳","source_id":"keyloop:programming-basics:seeds"}
+{"text":"%Y-%m-%d","topic":"string","form":"value","note_zh":"日期格式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"admin@x.com","topic":"string","form":"value","note_zh":"邮箱地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"%@example.com","topic":"string","form":"value","note_zh":"LIKE 模式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"getting-started","topic":"string","form":"value","note_zh":"slug 串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"10.5","topic":"string","form":"value","note_zh":"数字字符串","source_id":"keyloop:programming-basics:seeds"}
 {"text":"SELECT email FROM users","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
 {"text":"SELECT status FROM orders","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
 {"text":"SELECT price FROM products","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}

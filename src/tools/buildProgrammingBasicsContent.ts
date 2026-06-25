@@ -74,6 +74,19 @@ function expandTemplate(template: string, ids: IdentifierSet): string {
     .replaceAll("{value}", ids.value);
 }
 
+/**
+ * 问题2：符号专项「裸值」去掉外层引号——只对 string 类的完整引号字面量
+ * （双引号 / 单引号 / raw 前缀 r"..."）剥掉外层引号；裸正则、literal（数字、
+ * 字符字面量 'A'）一律不动。内容里含同种引号的表达式不匹配，避免误伤。
+ */
+export function bareValueText(text: string, topic: string): string {
+  if (topic !== "string") {
+    return text;
+  }
+  const match = /^[rR]?(["'])((?:(?!\1).)*)\1$/su.exec(text);
+  return match === null ? text : match[2]!;
+}
+
 function validateLine(line: string, seedPath: string, label: string): void {
   if (line.length > 90 || !/^[\x20-\x7e]*$/.test(line)) {
     throw new Error(`${label} line invalid in ${seedPath}: ${line}`);
@@ -138,9 +151,10 @@ export function buildLanguageCorpus(
   };
 
   for (const card of seed.symbols_numbers_values) {
-    validateValue(card.text, seedPath);
+    const valueText = bareValueText(card.text, card.topic);
+    validateValue(valueText, seedPath);
     push({
-      text: card.text,
+      text: valueText,
       topic: card.topic,
       form: "value",
       ...(card.focus !== undefined ? { focus: card.focus } : {}),

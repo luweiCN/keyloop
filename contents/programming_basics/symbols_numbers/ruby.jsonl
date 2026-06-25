@@ -1,26 +1,26 @@
-{"text":"'https://api.example.com/v1'","topic":"string","form":"value","note_zh":"接口地址","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'api.example.com'","topic":"string","form":"value","note_zh":"主机名","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'127.0.0.1:3000'","topic":"string","form":"value","note_zh":"本机地址端口","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'192.168.1.1'","topic":"string","form":"value","note_zh":"IPv4 地址","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'user@example.com'","topic":"string","form":"value","note_zh":"邮箱地址","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'./config/app.yml'","topic":"string","form":"value","note_zh":"相对路径","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'/var/log/app.log'","topic":"string","form":"value","note_zh":"绝对路径","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'report.json'","topic":"string","form":"value","note_zh":"文件名","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'application/json'","topic":"string","form":"value","note_zh":"MIME 类型","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'2026-06-22'","topic":"string","form":"value","note_zh":"日期","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'2026-06-22T08:30:00Z'","topic":"string","form":"value","note_zh":"ISO 时间戳","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'08:30:45'","topic":"string","form":"value","note_zh":"时间","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'%Y-%m-%d'","topic":"string","form":"value","note_zh":"日期格式","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'%H:%M:%S'","topic":"string","form":"value","note_zh":"时间格式","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'3.3.6'","topic":"string","form":"value","note_zh":"版本串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'#1E90FF'","topic":"string","form":"value","note_zh":"颜色值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'$2,499.00'","topic":"string","form":"value","note_zh":"金额","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'86.5%'","topic":"string","form":"value","note_zh":"百分比","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'page=2&limit=20'","topic":"string","form":"value","note_zh":"查询串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'my-first-post'","topic":"string","form":"value","note_zh":"slug 标识","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'en-US'","topic":"string","form":"value","note_zh":"语言标签","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'+1-555-0100'","topic":"string","form":"value","note_zh":"电话号","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'550e8400-e29b-41d4-a716-446655440000'","topic":"string","form":"value","note_zh":"UUID","source_id":"keyloop:programming-basics:seeds"}
+{"text":"https://api.example.com/v1","topic":"string","form":"value","note_zh":"接口地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"api.example.com","topic":"string","form":"value","note_zh":"主机名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"127.0.0.1:3000","topic":"string","form":"value","note_zh":"本机地址端口","source_id":"keyloop:programming-basics:seeds"}
+{"text":"192.168.1.1","topic":"string","form":"value","note_zh":"IPv4 地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"user@example.com","topic":"string","form":"value","note_zh":"邮箱地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"./config/app.yml","topic":"string","form":"value","note_zh":"相对路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"/var/log/app.log","topic":"string","form":"value","note_zh":"绝对路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"report.json","topic":"string","form":"value","note_zh":"文件名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"application/json","topic":"string","form":"value","note_zh":"MIME 类型","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2026-06-22","topic":"string","form":"value","note_zh":"日期","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2026-06-22T08:30:00Z","topic":"string","form":"value","note_zh":"ISO 时间戳","source_id":"keyloop:programming-basics:seeds"}
+{"text":"08:30:45","topic":"string","form":"value","note_zh":"时间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"%Y-%m-%d","topic":"string","form":"value","note_zh":"日期格式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"%H:%M:%S","topic":"string","form":"value","note_zh":"时间格式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"3.3.6","topic":"string","form":"value","note_zh":"版本串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#1E90FF","topic":"string","form":"value","note_zh":"颜色值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$2,499.00","topic":"string","form":"value","note_zh":"金额","source_id":"keyloop:programming-basics:seeds"}
+{"text":"86.5%","topic":"string","form":"value","note_zh":"百分比","source_id":"keyloop:programming-basics:seeds"}
+{"text":"page=2&limit=20","topic":"string","form":"value","note_zh":"查询串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"my-first-post","topic":"string","form":"value","note_zh":"slug 标识","source_id":"keyloop:programming-basics:seeds"}
+{"text":"en-US","topic":"string","form":"value","note_zh":"语言标签","source_id":"keyloop:programming-basics:seeds"}
+{"text":"+1-555-0100","topic":"string","form":"value","note_zh":"电话号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"550e8400-e29b-41d4-a716-446655440000","topic":"string","form":"value","note_zh":"UUID","source_id":"keyloop:programming-basics:seeds"}
 {"text":"/^\\d{4}$/","topic":"literal","form":"value","note_zh":"正则字面量","source_id":"keyloop:programming-basics:seeds"}
 {"text":"3000","topic":"literal","form":"value","note_zh":"端口号","source_id":"keyloop:programming-basics:seeds"}
 {"text":"404","topic":"literal","form":"value","note_zh":"HTTP 状态码","source_id":"keyloop:programming-basics:seeds"}
