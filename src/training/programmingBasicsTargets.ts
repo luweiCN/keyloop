@@ -70,6 +70,49 @@ export function pickWeakKeyTargetedCards(
   );
 }
 
+/**
+ * value 卡形式覆盖选材：按 format 分组，round-robin 跨形式逐张取（组内用弱键加权抽样），
+ * 保证选出的卡尽量覆盖不同形式。count 超形式种数时各组继续取下一张、不重复。绝不改写卡。
+ */
+export function pickFormCoveredValueCards(
+  valueCards: ProgrammingBasicsCard[],
+  weakWeights: ReadonlyMap<string, number>,
+  count: number,
+  random: () => number,
+): ProgrammingBasicsCard[] {
+  const groups = new Map<string, ProgrammingBasicsCard[]>();
+  for (const card of valueCards) {
+    const key = card.format ?? "other";
+    const bucket = groups.get(key) ?? [];
+    bucket.push(card);
+    groups.set(key, bucket);
+  }
+  // 组内按弱键加权排好序（无放回抽样得到顺序），每组当作一个队列，round-robin 跨形式取
+  const queues = [...groups.values()].map((bucket) =>
+    weightedSampleWithoutReplacement(
+      bucket,
+      (card) => 1 + wordKeyWeight(card.text, weakWeights),
+      bucket.length,
+      random,
+    ),
+  );
+  const picked: ProgrammingBasicsCard[] = [];
+  let round = 0;
+  while (picked.length < count) {
+    let advanced = false;
+    for (const queue of queues) {
+      if (picked.length >= count) break;
+      const card = queue[round];
+      if (card === undefined) continue;
+      picked.push(card);
+      advanced = true;
+    }
+    if (!advanced) break; // 所有组耗尽
+    round += 1;
+  }
+  return picked;
+}
+
 // 纯随机均衡组卷：每个 topic 桶内随机打乱后按 topic 轮流取卡（保证 topic 覆盖均衡）。
 // 不再"偏好/排除最近练过的卡"——那会造成确定性轮转（今天 ABC、明天 DEF、循环回 ABC 顺序还一样）；
 // 改为每次独立随机，靠卡池规模自然降低跨天重复（见 ADR-0002 跨天去重 follow-up）。

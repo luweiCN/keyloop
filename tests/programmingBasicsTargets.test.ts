@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { defaultSessionRecord, type KeyEventRecord, type SessionRecord } from "../src/domain/model";
 import type { ProgrammingBasicsCard } from "../src/content/programmingBasics";
 import {
+  pickFormCoveredValueCards,
   pickWeakKeyTargetedCards,
   symbolsNumbersText,
   symbolWeakKeyWeights,
@@ -126,5 +127,42 @@ describe("pickWeakKeyTargetedCards", () => {
     expect(out).toHaveLength(4);
     expect(new Set(out.map((c) => c.text)).size).toBe(4);
     expect(out.every((c) => cards.some((s) => s.text === c.text))).toBe(true);
+  });
+});
+
+describe("pickFormCoveredValueCards", () => {
+  const cards: ProgrammingBasicsCard[] = [
+    { text: "10.0.0.1", topic: "x", form: "value", format: "ip", source_id: "s" },
+    { text: "10.0.0.2", topic: "x", form: "value", format: "ip", source_id: "s" },
+    { text: "2026-12-31", topic: "x", form: "value", format: "date", source_id: "s" },
+    { text: "2026-01-01", topic: "x", form: "value", format: "date", source_id: "s" },
+    { text: "$9.99", topic: "x", form: "value", format: "money", source_id: "s" },
+    { text: "3.2.1", topic: "x", form: "value", format: "version", source_id: "s" },
+  ];
+
+  test("round-robin 覆盖尽量多形式：取 4 张 ≈ 4 种不同 format", () => {
+    const picked = pickFormCoveredValueCards(cards, new Map(), 4, () => 0.42);
+    const formats = new Set(picked.map((c) => c.format));
+    expect(picked).toHaveLength(4);
+    expect(formats.size).toBe(4); // ip/date/money/version 各一，不会同 format 连取
+  });
+
+  test("count 超可用形式时每形式可取多张、不重复卡", () => {
+    const picked = pickFormCoveredValueCards(cards, new Map(), 6, () => 0.42);
+    expect(picked).toHaveLength(6);
+    expect(new Set(picked.map((c) => c.text)).size).toBe(6);
+  });
+
+  test("弱键加权：组内偏重含弱键的卡", () => {
+    const two: ProgrammingBasicsCard[] = [
+      { text: "$1=2", topic: "x", form: "value", format: "money", source_id: "s" }, // 含弱键 =
+      { text: "$9.99", topic: "x", form: "value", format: "money", source_id: "s" },
+    ];
+    const weights = new Map([["=", 0.9]]);
+    let hits = 0;
+    for (let i = 0; i < 60; i += 1) {
+      if (pickFormCoveredValueCards(two, weights, 1, lcg(i + 1))[0]?.text === "$1=2") hits += 1;
+    }
+    expect(hits).toBeGreaterThan(30); // 偏重含 = 的卡（>50%）
   });
 });
