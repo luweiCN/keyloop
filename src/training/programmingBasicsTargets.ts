@@ -210,6 +210,6 @@ export function buildProgrammingBasicsMixTarget(
     mode: "code",
     text,
     source: `keyloop:module:programming-basics-mix:${language}`,
-    code_blocks: [basicsCodeBlock(language, text.split("\n").length)],
+    code_blocks: [basicsCodeBlock(language, 0, text.split("\n").length)],
   };
 }
