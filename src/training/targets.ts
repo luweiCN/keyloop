@@ -4,7 +4,11 @@ import {
   formatCodeSnippetsForPractice,
   formatCodeSnippetsForPracticeAsync,
 } from "../content/codeFormatter";
-import { weakKeyWeights, wordKeyWeight } from "./wordTargeting";
+import {
+  weakKeyWeights,
+  weightedSampleWithoutReplacement,
+  wordKeyWeight,
+} from "./wordTargeting";
 import {
   pickBuiltinCodeExcludingByDifficulty,
   pickCodeSnippetsExcludingByDifficulty,
@@ -3063,12 +3067,15 @@ function wordsStageTarget(
     1 +
     (capWeak && /[A-Z]/u.test(item.text) ? CAP_WEIGHT : 0) +
     wordKeyWeight(item.text, weakWeights);
-  const fill = [...pool.values()];
-  shuffleInPlace(fill, random);
-  // 稳定排序：权重高的（含弱键/大写）排前，同权重保持上面 shuffle 的随机序（JSC 排序稳定）
-  fill.sort((left, right) => wordWeightOf(right) - wordWeightOf(left));
-  const dose = chooseStageWordDose(fill, options.stage.char_budget);
-  const picked = fill.slice(0, dose.count);
+  const candidates = [...pool.values()];
+  const ordered = weightedSampleWithoutReplacement(
+    candidates,
+    wordWeightOf,
+    candidates.length,
+    random,
+  );
+  const dose = chooseStageWordDose(ordered, options.stage.char_budget);
+  const picked = ordered.slice(0, dose.count);
 
   const annotated = annotatedOptionalTokenText(
     picked.map((item) => ({

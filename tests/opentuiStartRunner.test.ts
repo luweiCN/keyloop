@@ -122,9 +122,12 @@ describe("OpenTUI start runner", () => {
     const runPromise = runner(contextWithStageLibrary(pendingComprehensivePlan()));
 
     await kit.waitForKeyListener(1);
-    // 惰性课开练时必须组卷成可打 target：首帧渲染真实单词而非空 pending 文本
-    const ghost = findNodeById(kit.addedNodes, "keyloop-ghost-pending-0-0");
-    expect((ghost?.props.content as string)?.length ?? 0).toBeGreaterThan(0);
+    // 惰性课开练时必须组卷成可打 target：首帧渲染真实单词、首字符落在光标段
+    //（input='' 必有且仅一个 cursor 段，可立即开打），而非空 pending 占位文本。
+    // 不锁定具体 segment id：word block 网格布局下首段是 cursor 还是 pending
+    // 取决于词的列排布（实现细节），只验证「有光标可打」这一稳定契约。
+    const cursor = findNodeByIdIncludes(kit.addedNodes, "keyloop-ghost-cursor-");
+    expect((cursor?.props.content as string)?.length ?? 0).toBeGreaterThan(0);
     expect(flattenContent(kit.addedNodes)).toMatch(/today|practice|information/);
 
     kit.emitKey({ name: "c", sequence: "c", ctrl: true });
@@ -2701,6 +2704,20 @@ function findNodeById(nodes: FakeNode[], id: string): FakeNode | undefined {
       return node;
     }
     const child = findNodeById(node.children, id);
+    if (child !== undefined) {
+      return child;
+    }
+  }
+  return undefined;
+}
+
+/** 按 id 子串查找（位置无关）：用于断言"存在某类 segment"而不锁定其行列下标。 */
+function findNodeByIdIncludes(nodes: FakeNode[], fragment: string): FakeNode | undefined {
+  for (const node of nodes) {
+    if (typeof node.props.id === "string" && node.props.id.includes(fragment)) {
+      return node;
+    }
+    const child = findNodeByIdIncludes(node.children, fragment);
     if (child !== undefined) {
       return child;
     }
