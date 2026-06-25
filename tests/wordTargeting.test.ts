@@ -126,7 +126,6 @@ describe("wordsStageTarget 靶向接入", () => {
     stage: { form: "words", char_budget: 18 },
     profile: {
       dimensions: [], form_speeds: [],
-      focus: { words: [], code: [], chars: [] },
       daily_active_minutes_7d: 0, generated_at: "",
     },
   } as never;

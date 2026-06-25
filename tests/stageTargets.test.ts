@@ -146,14 +146,10 @@ function stageLibrary(): ContentLibrary {
   };
 }
 
-function emptyProfile(
-  overrides: Partial<SkillProfile["focus"]> = {},
-  formSpeeds: FormSpeed[] = [],
-): SkillProfile {
+function emptyProfile(formSpeeds: FormSpeed[] = []): SkillProfile {
   return {
     dimensions: [],
     form_speeds: formSpeeds,
-    focus: { words: [], code: [], chars: [], ...overrides },
     daily_active_minutes_7d: 0,
     generated_at: "2026-06-13T08:00:00Z",
   };
@@ -302,19 +298,6 @@ describe("buildStageTarget words", () => {
     expect([...small.text].length).toBeGreaterThanOrEqual(40);
   });
 
-  test("单词模块不再回流具体薄弱词（focus_words 废弃，仅留维度加权②；ADR-0002）", () => {
-    const withFocus = buildStageTarget(stageContext(), {
-      stage: { form: "words", char_budget: 200 },
-      profile: emptyProfile({ words: ["algorithm"] }),
-    });
-    const withoutFocus = buildStageTarget(stageContext(), {
-      stage: { form: "words", char_budget: 200 },
-      profile: emptyProfile(),
-    });
-    // focus.words（具体错词）不再改变选词；选材仅由随机 + 字符类/技能维度加权决定
-    expect(withFocus.text).toBe(withoutFocus.text);
-  });
-
   test("programming and custom library words join the pool", () => {
     const target = buildStageTarget(stageContext(), {
       stage: { form: "words", char_budget: 700 },
@@ -359,7 +342,7 @@ describe("buildStageTarget words", () => {
 
     const target = buildStageTarget(context, {
       stage: { form: "words", char_budget: 700 },
-      profile: emptyProfile({}, [{ form: "words", ewma_wpm: 70, samples: 20 }]),
+      profile: emptyProfile([{ form: "words", ewma_wpm: 70, samples: 20 }]),
       enabledModules: ["everyday_english"],
     });
 
@@ -432,10 +415,10 @@ describe("buildStageTarget symbols", () => {
     expect(target.text.length).toBeGreaterThan(0);
   });
 
-  test("focus words never leak into symbols stage", () => {
+  test("everyday-library words never leak into symbols stage", () => {
     const target = buildStageTarget(stageContext(), {
       stage: { form: "symbols", char_budget: 80 },
-      profile: emptyProfile({ words: ["algorithm"] }),
+      profile: emptyProfile(),
       enabledModules: ["foundation_input"],
     });
     expect(target.text).not.toContain("algorithm");
@@ -516,7 +499,7 @@ describe("buildStageTarget sentences", () => {
 
     const target = buildStageTarget(context, {
       stage: { form: "sentences", char_budget: 800 },
-      profile: emptyProfile({}, [{ form: "sentences", ewma_wpm: 70, samples: 20 }]),
+      profile: emptyProfile([{ form: "sentences", ewma_wpm: 70, samples: 20 }]),
     });
 
     const lineAnnotations = (target.annotations ?? []).filter(
@@ -678,10 +661,10 @@ describe("module mix stage targets (secondary menus)", () => {
   test("everyday mix combines words and sentences, excludes programming words", () => {
     const target = buildEverydayMixStageTarget(
       stageContext(),
-      emptyProfile({ words: ["algorithm"] }),
+      emptyProfile(),
       [customLibraryFixture()],
     );
-    // focus 回流 + 自建词库混入
+    // 日常库词 + 自建词库混入
     expect(target.text).toContain("algorithm");
     expect(target.text).toContain("bespoke");
     // 句子段存在（库中句子之一出现）
@@ -809,7 +792,6 @@ describe("buildStageTarget words skill feature-biasing", () => {
         },
       ],
       form_speeds: [],
-      focus: { words: [], code: [], chars: [] },
       daily_active_minutes_7d: 0,
       generated_at: "2026-06-13T08:00:00Z",
     };

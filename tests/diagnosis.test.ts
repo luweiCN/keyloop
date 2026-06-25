@@ -277,38 +277,6 @@ describe("buildSkillProfile", () => {
     expect(code?.ewma_wpm).toBeNull();
   });
 
-  test("单词不回流(focus_words 废弃 ADR-0002)，代码标识符仍按形态收集", () => {
-    const wordSession = defaultSessionRecord({
-      started_at: "2026-06-10T08:00:00Z",
-      category: "everyday_words",
-      module: "everyday_english",
-      typed_len: 100,
-      correct_chars: 90,
-      active_ms: 60_000,
-      error_tokens: { algorithm: 3 },
-    });
-    const codeSession = defaultSessionRecord({
-      started_at: "2026-06-11T08:00:00Z",
-      category: "code_snippet",
-      module: "code_practice",
-      typed_len: 100,
-      correct_chars: 90,
-      active_ms: 60_000,
-      error_tokens: { useEffect: 2 },
-    });
-    const profile = buildSkillProfile(
-      [wordSession, codeSession],
-      emptyPlan,
-      new Date("2026-06-13T08:00:00Z"),
-    );
-    // 单词层已废弃具体错词回流（focus_words ③, ADR-0002）：focus.words 恒为空
-    expect(profile.focus.words).toEqual([]);
-    expect(profile.focus.code).toContain("useEffect");
-    expect(profile.focus.code).not.toContain("algorithm");
-    // chars 池来自 PracticePlan 的 focus_keys + focus_symbols
-    expect(profile.focus.chars).toEqual(expect.arrayContaining(["b", ";"]));
-  });
-
   test("daily active minutes uses 7-day median", () => {
     // 三天，每天一条 10 分钟会话
     const records = [10, 11, 12].map((day) =>

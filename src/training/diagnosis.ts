@@ -261,19 +261,9 @@ export interface FormSpeed {
   ewma_wpm: number | null;
 }
 
-export interface FocusPools {
-  /** 仅供单词形态回流（薄弱词，靶向训练层） */
-  words: string[];
-  /** 仅供代码形态回流 */
-  code: string[];
-  /** 键位/符号技能特征，全形态可用于调整语料特征含量 */
-  chars: string[];
-}
-
 export interface SkillProfile {
   dimensions: SkillDiagnosis[];
   form_speeds: FormSpeed[];
-  focus: FocusPools;
   /** 近 7 天有练习的日子的日均活跃分钟（中位数），无数据为 0 */
   daily_active_minutes_7d: number;
   generated_at: string;
@@ -320,8 +310,6 @@ export function formForCategory(category: TrainingCategory): TrainingForm | null
   }
 }
 
-const FOCUS_CODE_LIMIT = 8;
-
 function formSpeeds(records: SessionRecord[]): FormSpeed[] {
   const ordered = [...records].sort(
     (left, right) => Date.parse(left.started_at) - Date.parse(right.started_at),
@@ -345,37 +333,6 @@ function formSpeeds(records: SessionRecord[]): FormSpeed[] {
       ewma_wpm: ewmaAverage(window),
     };
   });
-}
-
-function focusPools(records: SessionRecord[], plan: PracticePlan): FocusPools {
-  const codeErrors = new Map<string, number>();
-  const window = [...records]
-    .sort((left, right) => Date.parse(left.started_at) - Date.parse(right.started_at))
-    .slice(-DIAGNOSIS_WINDOW_SESSIONS * 3);
-  // 单词层不回流具体错词（ADR-0002 废弃 focus_words ③）；句子/文章本就不回流（ADR-0001）。
-  // 仅代码标识符暂按形态收集（code 内容回流的移除作为 follow-up）。
-  for (const record of window) {
-    if (formForCategory(record.category) !== "code") {
-      continue;
-    }
-    for (const [token, count] of Object.entries(record.error_tokens)) {
-      codeErrors.set(token, (codeErrors.get(token) ?? 0) + count);
-    }
-  }
-  return {
-    words: [],
-    code: topEntries(codeErrors, FOCUS_CODE_LIMIT),
-    chars: [...new Set([...plan.focus_keys, ...plan.focus_symbols])],
-  };
-}
-
-function topEntries(map: Map<string, number>, limit: number): string[] {
-  return [...map.entries()]
-    .sort(([leftKey, left], [rightKey, right]) =>
-      right === left ? leftKey.localeCompare(rightKey) : right - left,
-    )
-    .slice(0, limit)
-    .map(([key]) => key);
 }
 
 function dailyActiveMinutesMedian7d(records: SessionRecord[], now: Date): number {
@@ -451,7 +408,7 @@ function relativeDimensionStatus(dimension: SkillDiagnosis, baseline: number | n
 
 export function buildSkillProfile(
   records: SessionRecord[],
-  plan: PracticePlan,
+  _plan: PracticePlan,
   now: Date = new Date(),
 ): SkillProfile {
   return {
@@ -460,7 +417,6 @@ export function buildSkillProfile(
       ...diagnoseTokenSkills(records),
     ]),
     form_speeds: formSpeeds(records),
-    focus: focusPools(records, plan),
     daily_active_minutes_7d: dailyActiveMinutesMedian7d(records, now),
     generated_at: now.toISOString(),
   };
