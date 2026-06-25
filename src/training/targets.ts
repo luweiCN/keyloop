@@ -1,6 +1,14 @@
 import type { ContentLibrary, EverydayArticleEntry, ProgrammingWordEntry } from "../content/library";
 import { pickCodeCorpusSnippetsExcludingByDifficulty } from "../content/codeCorpus";
-import { formatCodeSnippetsForPractice } from "../content/codeFormatter";
+import {
+  formatCodeSnippetsForPractice,
+  formatCodeSnippetsForPracticeAsync,
+} from "../content/codeFormatter";
+import {
+  weakKeyWeights,
+  weightedSampleWithoutReplacement,
+  wordKeyWeight,
+} from "./wordTargeting";
 import {
   pickBuiltinCodeExcludingByDifficulty,
   pickCodeSnippetsExcludingByDifficulty,
@@ -511,6 +519,30 @@ export function buildCodeMixPracticeTarget(
   return codeMixTarget(context, count);
 }
 
+/** 问题4：异步版组卷，供练课时后台预组下一课。 */
+export async function buildCodeMixPracticeTargetAsync(
+  context: BuildTargetContext,
+  count?: number,
+): Promise<PracticeTarget> {
+  return codeMixTargetAsync(context, count);
+}
+
+/**
+ * 问题4：练当前课时后台预组下一节阶段课——仅对 code 阶段（组卷慢）异步预组，用异步
+ * 格式化不阻塞主线程；非 code 阶段返回 null（它们组卷快、无需预组）。
+ */
+export async function prebuildStageCodeTargetAsync(
+  lesson: PracticeLesson,
+  context: BuildTargetContext,
+): Promise<PracticeTarget | null> {
+  if (stageFormFromLesson(lesson) !== "code") {
+    return null;
+  }
+  const profile = buildSkillProfile(context.records, context.plan, context.now);
+  const budget = charBudget("code", lesson.estimated_minutes, profile.form_speeds);
+  return codeMixTargetAsync(context, undefined, budget);
+}
+
 export function buildCodeSpecialistPracticeTarget(
   context: BuildTargetContext,
   count = 4,
@@ -844,6 +876,15 @@ function foundationMixTarget(context: BuildTargetContext): PracticeTarget {
   };
 }
 
+/**
+ * 基础键位钻头的「弱键来源」：统一到 per-key 账本——有击键数据用 weakKeyWeights 的弱键，
+ * 无（冷启动）降级到 plan.focus_keys（旧聚合快照）。消除基础键位的旧 focus_keys 专用信号。
+ */
+export function foundationDrillFocusKeys(context: BuildTargetContext): string[] {
+  const weak = weakKeyWeights(context.records ?? []);
+  return weak.size > 0 ? [...weak.keys()] : context.plan.focus_keys;
+}
+
 function weightedFoundationDrillId(
   context: BuildTargetContext,
   random: () => number,
@@ -855,7 +896,7 @@ function weightedFoundationDrillId(
   const recentDrillIds = recentFoundationDrillIds(context.records, 6);
   const availableDrillIds = drillIds.filter((drillId) => !recentDrillIds.has(drillId));
   const pool = availableDrillIds.length > 0 ? availableDrillIds : drillIds;
-  const focusWeights = foundationDrillFocusWeights(context.plan.focus_keys);
+  const focusWeights = foundationDrillFocusWeights(foundationDrillFocusKeys(context));
   const weightedPool = pool.map((id): WeightedFoundationDrill => ({
     id,
     weight: 1 + (focusWeights.get(id) ?? 0),
@@ -1693,11 +1734,17 @@ function everydayWordDecompositionTarget(context: BuildTargetContext): PracticeT
   };
 }
 
-function codeMixTarget(
+interface SelectedCodeMix {
+  filled: CodeSnippet[];
+  localCount: number;
+}
+
+/** 选片段（纯同步、快）：与格式化解耦，供同步组卷与异步预组共用。 */
+function selectCodeMixSnippets(
   context: BuildTargetContext,
   count?: number,
   charBudget?: number,
-): PracticeTarget {
+): SelectedCodeMix {
   const codeConfig = context.codeConfig ?? {};
   const excludedTexts = usedCodeSnippetTexts(context.records);
   const difficulty = codeDifficultyForContext(context);
@@ -1734,15 +1781,22 @@ function codeMixTarget(
     charBudget === undefined
       ? chosen
       : refillCodeSnippetsToBudget(chosen, context, codeConfig, difficulty, charBudget);
-  const formatted = formatCodeSnippetsForContext(filled, context);
+  return { filled, localCount: localSnippets.length };
+}
+
+/** 格式化后的收尾（按预算截取 + 拼装 target）：同步异步共用。 */
+function finishCodeMixTarget(
+  formatted: CodeSnippet[],
+  localCount: number,
+  charBudget: number | undefined,
+  context: BuildTargetContext,
+): PracticeTarget {
   const snippets =
-    charBudget === undefined
-      ? formatted
-      : selectSnippetsWithinBudget(formatted, charBudget);
+    charBudget === undefined ? formatted : selectSnippetsWithinBudget(formatted, charBudget);
   const source = codeMixSource(
     context.localCodeSource,
     context.localCodeScanError,
-    localSnippets.length,
+    localCount,
     snippets.length,
   );
   return {
@@ -1751,6 +1805,27 @@ function codeMixTarget(
     source,
     code_blocks: codeBlocksFromSnippets(snippets),
   };
+}
+
+function codeMixTarget(
+  context: BuildTargetContext,
+  count?: number,
+  charBudget?: number,
+): PracticeTarget {
+  const { filled, localCount } = selectCodeMixSnippets(context, count, charBudget);
+  const formatted = formatCodeSnippetsForContext(filled, context);
+  return finishCodeMixTarget(formatted, localCount, charBudget, context);
+}
+
+/** 问题4：异步组卷——格式化用异步 spawn，等外部格式化器时让出主线程，供练课时后台预组。 */
+async function codeMixTargetAsync(
+  context: BuildTargetContext,
+  count?: number,
+  charBudget?: number,
+): Promise<PracticeTarget> {
+  const { filled, localCount } = selectCodeMixSnippets(context, count, charBudget);
+  const formatted = await formatCodeSnippetsForContextAsync(filled, context);
+  return finishCodeMixTarget(formatted, localCount, charBudget, context);
 }
 
 /** 按字符预算累加完整片段：至少 1 片，每片完整不切碎，总量不超 budget × 容差 */
@@ -1835,6 +1910,13 @@ function formatCodeSnippetsForContext(
   context: BuildTargetContext,
 ): CodeSnippet[] {
   return formatCodeSnippetsForPractice(snippets, context.codeStyle);
+}
+
+async function formatCodeSnippetsForContextAsync(
+  snippets: CodeSnippet[],
+  context: BuildTargetContext,
+): Promise<CodeSnippet[]> {
+  return formatCodeSnippetsForPracticeAsync(snippets, context.codeStyle);
 }
 
 function codeBlocksFromSnippets(snippets: CodeSnippet[]): PracticeTargetCodeBlock[] {
@@ -2983,23 +3065,26 @@ function wordsStageTarget(
     }
   }
 
-  // 单词层不回流具体薄弱词（ADR-0002 废弃 focus_words ③）：选材仅靠随机轮换 +
-  // 字符类/技能维度加权（见下 ②），不把历史错过的具体词优先排到最前。
-  const selected: StageWordCandidate[] = [];
-  // 技能跨阶段（特征偏重）：弱维度偏好对应特征的词
-  // —— 大小写弱 → 多选含大写/驼峰词；长词弱 → 多选长词（spec §3.4/§4.5）
+  // 原子层靶向（弱点重构阶段2）：含你弱键的真实词加权随机偏重，绝不改写词；
+  // capitalization 跨键特征叠加（设计 §4.1）；普通词保底权重 1，故仍会掺入。
+  // 原子层靶向（弱点重构阶段2）：含你弱键的真实词权重更高、排到前面，绝不改写词。
+  // capitalization 跨键特征叠加（设计 §4.1）；普通词保底权重 1，弱键词不足时仍会掺入。
+  const weakWeights = weakKeyWeights(context.records ?? []);
   const capWeak = isDimensionWeak(options.profile, "capitalization");
-  const longWeak = isDimensionWeak(options.profile, "long_words");
-  const wordBiasScore = (text: string): number =>
-    (capWeak && /[A-Z]/u.test(text) ? 1 : 0) +
-    (longWeak && Array.from(text).length >= 8 ? 1 : 0);
-  const fill = [...pool.values()].filter((item) => !selected.includes(item));
-  shuffleInPlace(fill, random);
-  // 稳定排序把弱特征匹配的词排前；同分保持上面 shuffle 的随机序（JSC 排序稳定）
-  fill.sort((left, right) => wordBiasScore(right.text) - wordBiasScore(left.text));
-  selected.push(...fill);
-  const dose = chooseStageWordDose(selected, options.stage.char_budget);
-  const picked = selected.slice(0, dose.count);
+  const CAP_WEIGHT = 1;
+  const wordWeightOf = (item: StageWordCandidate): number =>
+    1 +
+    (capWeak && /[A-Z]/u.test(item.text) ? CAP_WEIGHT : 0) +
+    wordKeyWeight(item.text, weakWeights);
+  const candidates = [...pool.values()];
+  const ordered = weightedSampleWithoutReplacement(
+    candidates,
+    wordWeightOf,
+    candidates.length,
+    random,
+  );
+  const dose = chooseStageWordDose(ordered, options.stage.char_budget);
+  const picked = ordered.slice(0, dose.count);
 
   const annotated = annotatedOptionalTokenText(
     picked.map((item) => ({
@@ -3279,15 +3364,24 @@ function articlesStageTarget(
   };
 }
 
+const SYMBOL_VALUE_RATIO = 0.45; // 裸值占符号专项时长比例（裸值与代码语句大致各半、裸值略多）
+const SYMBOL_VALUE_AVG_LEN = 14; // value 卡平均字符（IP/日期/金额量级）
+
+/** 综合训练：按符号阶段 char_budget 算该练几张 value（覆盖几种形式），随时长伸缩，下限 2。 */
+export function symbolValueCountForBudget(charBudget: number): number {
+  return Math.max(2, Math.round((charBudget * SYMBOL_VALUE_RATIO) / SYMBOL_VALUE_AVG_LEN));
+}
+
 function symbolsStageTarget(
   context: BuildTargetContext,
   options: StageTargetOptions,
 ): PracticeTarget {
   if (stageModuleEnabled(options, "programming_basics")) {
-    const target = buildSymbolsNumbersTarget(context);
+    // 综合训练：value 裸值数随分到的时长（char_budget）伸缩，覆盖更多/更少真实形式
+    const valueCount = symbolValueCountForBudget(options.stage.char_budget);
+    const target = buildSymbolsNumbersTarget(context, {}, valueCount);
     if (target.text.trim().length > 0) {
-      // 按形态预算缩放：符号卡固定 8-10 张，对慢用户（小预算）按行裁剪，
-      // 避免快慢用户拿到一样多的符号语料
+      // 按形态预算缩放：对慢用户（小预算）按行裁剪。value 行排最前 → 裁尾部时天然受保护
       return fitSymbolsTargetToBudget(context, target, options.stage.char_budget);
     }
   }

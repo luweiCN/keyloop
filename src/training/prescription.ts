@@ -125,7 +125,6 @@ const DIMENSION_FORM: Record<SkillDimensionId, TrainingForm> = {
   symbols: "symbols",
   capitalization: "words",
   word_fluency: "words",
-  long_words: "words",
 };
 
 export function buildDailyPrescription(input: PrescriptionInput): DailyPrescription {

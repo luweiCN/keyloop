@@ -45,7 +45,6 @@ function profileWith(
   return {
     dimensions: statuses.map(([id, status]) => diagnosis(id, status)),
     form_speeds: [],
-    focus: { words: [], code: [], chars: [] },
     daily_active_minutes_7d: habitMinutes,
     generated_at: "2026-06-13T08:00:00Z",
   };
@@ -95,11 +94,10 @@ describe("recommendedDailyMinutes", () => {
         ["digits", "weak"],
         ["symbols", "weak"],
         ["word_fluency", "weak"],
-        ["long_words", "weak"],
       ],
       8,
     );
-    // 15 + 4*5 = 35，习惯上限 max(15, 8*1.5)=15
+    // 15 + 3*5 = 30，习惯上限 max(15, 8*1.5)=15
     expect(recommendedDailyMinutes(profile)).toBe(15);
   });
 
@@ -113,11 +111,10 @@ describe("recommendedDailyMinutes", () => {
         ["symbols", "weak"],
         ["capitalization", "weak"],
         ["word_fluency", "weak"],
-        ["long_words", "weak"],
       ],
       60,
     );
-    // 15 + 8*5 = 55 → clamp 45（习惯上限 90 不约束）
+    // 15 + 7*5 = 50 → clamp 45（习惯上限 90 不约束）
     expect(recommendedDailyMinutes(manyWeak)).toBe(45);
   });
 });
@@ -341,22 +338,6 @@ describe("end-to-end: spec acceptance scenarios", () => {
     });
     const symbolsStage = prescription.stages.find((stage) => stage.form === "symbols");
     expect(symbolsStage?.weak).toBe(true);
-  });
-
-  test("词错误不再回流(focus_words 废弃 ADR-0002)，也不泄漏到代码池", () => {
-    const record = defaultSessionRecord({
-      started_at: "2026-06-12T08:00:00Z",
-      category: "everyday_words",
-      module: "everyday_english",
-      typed_len: 100,
-      correct_chars: 95,
-      active_ms: 60_000,
-      error_tokens: { algorithm: 3 },
-    });
-    const profile = buildSkillProfile([record], emptyPlan, now);
-    // 单词层已废弃具体错词回流（focus_words ③, ADR-0002）：词错误不再进任何回流池
-    expect(profile.focus.words).toEqual([]);
-    expect(profile.focus.code).not.toContain("algorithm");
   });
 });
 

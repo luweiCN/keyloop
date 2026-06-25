@@ -3,6 +3,7 @@ import {
   listProgrammingBasicsLanguages,
   loadProgrammingBasicsCards,
 } from "../src/content/programmingBasics";
+import { buildLanguageCorpus, inferValueFormat } from "../src/tools/buildProgrammingBasicsContent";
 
 const SYMBOL_TOPICS = new Set(["declaration", "call", "control", "index", "literal", "string"]);
 const FORMS = new Set(["value", "statement", "block"]);
@@ -39,6 +40,13 @@ describe("programming basics corpus", () => {
           expect(lines).toHaveLength(1);
           expect(card.text).not.toInclude(" ");
           expect(card.text.length).toBeLessThanOrEqual(40);
+          // 问题2：string 类裸值不再被外层引号包裹（literal 的字符字面量 'A' 不受此约束）
+          if (card.topic === "string") {
+            expect(
+              card.text,
+              `${language} value should be unquoted: ${card.text}`,
+            ).not.toMatch(/^[rR]?(['"]).*\1$/u);
+          }
         }
         if (card.form === "statement") {
           expect(lines).toHaveLength(1);
@@ -85,4 +93,56 @@ describe("programming basics corpus", () => {
       expect(apis.size).toBeGreaterThanOrEqual(40);
     });
   }
+});
+
+describe("inferValueFormat", () => {
+  test("text 强模式优先识别", () => {
+    expect(inferValueFormat("10.0.0.1", "IP 地址")).toBe("ip");
+    expect(inferValueFormat("2026-12-31", "日期串")).toBe("date");
+    expect(inferValueFormat("2026-06-22T23:59:59Z", "ISO 时间戳")).toBe("datetime");
+    expect(inferValueFormat("08:30:00", "时间串")).toBe("time");
+    expect(inferValueFormat("3.2.1", "语义化版本")).toBe("version");
+    expect(inferValueFormat("dev@example.org", "邮箱")).toBe("email");
+    expect(inferValueFormat("https://api.example.com/v2", "接口地址")).toBe("url");
+    expect(inferValueFormat("#0ea5e9", "十六进制颜色")).toBe("color");
+    expect(inferValueFormat("/^[a-z]+$/", "正则字面量")).toBe("regex");
+    expect(inferValueFormat("99.9%", "百分比")).toBe("percent");
+    expect(inferValueFormat("$1,299.00", "金额")).toBe("money");
+  });
+
+  test("纯数字/歧义靠 note_zh 关键词兜底", () => {
+    expect(inferValueFormat("3000", "端口号")).toBe("port");
+    expect(inferValueFormat("404", "HTTP 状态")).toBe("http_status");
+    expect(inferValueFormat("GET", "HTTP 方法字面量")).toBe("http_method");
+    expect(inferValueFormat("application/xml", "MIME 类型")).toBe("mime");
+    expect(inferValueFormat("60_000", "毫秒超时")).toBe("number");
+  });
+
+  test("都不中归 other", () => {
+    expect(inferValueFormat("pending", "状态字面量")).toBe("other");
+    expect(inferValueFormat("text-sm", "CSS 类名")).toBe("other");
+  });
+});
+
+describe("buildLanguageCorpus 写入 value 卡 format", () => {
+  test("编译时给 value 卡推断并写入 format", () => {
+    const { symbolsNumbers } = buildLanguageCorpus(
+      {
+        language: "typescript",
+        source_id: "s",
+        identifier_sets: [],
+        symbols_numbers_values: [
+          { text: "10.0.0.1", topic: "string", note_zh: "IP 地址" },
+          { text: "2026-12-31", topic: "string", note_zh: "日期串" },
+        ],
+        symbols_numbers_templates: [],
+        symbols_numbers_static: [],
+        symbols_numbers_blocks: [],
+        builtin_api_cards: [],
+      },
+      "test-seed",
+    );
+    expect(symbolsNumbers.find((c) => c.text === "10.0.0.1")?.format).toBe("ip");
+    expect(symbolsNumbers.find((c) => c.text === "2026-12-31")?.format).toBe("date");
+  });
 });

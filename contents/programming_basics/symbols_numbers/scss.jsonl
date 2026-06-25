@@ -1,27 +1,27 @@
-{"text":"#FF0000","topic":"literal","form":"value","note_zh":"红色十六进制","source_id":"keyloop:programming-basics:seeds"}
-{"text":"#3B82F6","topic":"literal","form":"value","note_zh":"蓝色十六进制","source_id":"keyloop:programming-basics:seeds"}
-{"text":"#0ea5e9","topic":"literal","form":"value","note_zh":"天蓝十六进制","source_id":"keyloop:programming-basics:seeds"}
-{"text":"#1E293B","topic":"literal","form":"value","note_zh":"深灰十六进制","source_id":"keyloop:programming-basics:seeds"}
-{"text":"#fff","topic":"literal","form":"value","note_zh":"白色短写","source_id":"keyloop:programming-basics:seeds"}
-{"text":"$primary","topic":"literal","form":"value","note_zh":"主色变量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"$spacing","topic":"literal","form":"value","note_zh":"间距变量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"$base","topic":"literal","form":"value","note_zh":"基准变量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"$gap","topic":"literal","form":"value","note_zh":"间隙变量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"$radius","topic":"literal","form":"value","note_zh":"圆角变量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1.5em","topic":"literal","form":"value","note_zh":"em 长度","source_id":"keyloop:programming-basics:seeds"}
-{"text":"16px","topic":"literal","form":"value","note_zh":"像素长度","source_id":"keyloop:programming-basics:seeds"}
-{"text":"2rem","topic":"literal","form":"value","note_zh":"rem 长度","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1px","topic":"literal","form":"value","note_zh":"边框宽度","source_id":"keyloop:programming-basics:seeds"}
-{"text":"24px","topic":"literal","form":"value","note_zh":"像素长度","source_id":"keyloop:programming-basics:seeds"}
-{"text":"50%","topic":"literal","form":"value","note_zh":"百分比","source_id":"keyloop:programming-basics:seeds"}
-{"text":"100%","topic":"literal","form":"value","note_zh":"满宽百分比","source_id":"keyloop:programming-basics:seeds"}
-{"text":"0.3s","topic":"literal","form":"value","note_zh":"过渡时长","source_id":"keyloop:programming-basics:seeds"}
-{"text":"0.15s","topic":"literal","form":"value","note_zh":"过渡时长","source_id":"keyloop:programming-basics:seeds"}
-{"text":"%card","topic":"literal","form":"value","note_zh":"占位符选择器","source_id":"keyloop:programming-basics:seeds"}
-{"text":"%button","topic":"literal","form":"value","note_zh":"占位符选择器","source_id":"keyloop:programming-basics:seeds"}
-{"text":"0.5","topic":"literal","form":"value","note_zh":"系数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"999","topic":"literal","form":"value","note_zh":"层级数值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"45deg","topic":"literal","form":"value","note_zh":"角度值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#FF0000","topic":"literal","form":"value","format":"color","note_zh":"红色十六进制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#3B82F6","topic":"literal","form":"value","format":"color","note_zh":"蓝色十六进制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#0ea5e9","topic":"literal","form":"value","format":"color","note_zh":"天蓝十六进制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#1E293B","topic":"literal","form":"value","format":"color","note_zh":"深灰十六进制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#fff","topic":"literal","form":"value","format":"color","note_zh":"白色短写","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$primary","topic":"literal","form":"value","format":"money","note_zh":"主色变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$spacing","topic":"literal","form":"value","format":"money","note_zh":"间距变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$base","topic":"literal","form":"value","format":"money","note_zh":"基准变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$gap","topic":"literal","form":"value","format":"money","note_zh":"间隙变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$radius","topic":"literal","form":"value","format":"money","note_zh":"圆角变量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1.5em","topic":"literal","form":"value","format":"other","note_zh":"em 长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"16px","topic":"literal","form":"value","format":"other","note_zh":"像素长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2rem","topic":"literal","form":"value","format":"other","note_zh":"rem 长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1px","topic":"literal","form":"value","format":"other","note_zh":"边框宽度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"24px","topic":"literal","form":"value","format":"other","note_zh":"像素长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"50%","topic":"literal","form":"value","format":"percent","note_zh":"百分比","source_id":"keyloop:programming-basics:seeds"}
+{"text":"100%","topic":"literal","form":"value","format":"percent","note_zh":"满宽百分比","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0.3s","topic":"literal","form":"value","format":"other","note_zh":"过渡时长","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0.15s","topic":"literal","form":"value","format":"other","note_zh":"过渡时长","source_id":"keyloop:programming-basics:seeds"}
+{"text":"%card","topic":"literal","form":"value","format":"other","note_zh":"占位符选择器","source_id":"keyloop:programming-basics:seeds"}
+{"text":"%button","topic":"literal","form":"value","format":"other","note_zh":"占位符选择器","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0.5","topic":"literal","form":"value","format":"other","note_zh":"系数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"999","topic":"literal","form":"value","format":"number","note_zh":"层级数值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"45deg","topic":"literal","form":"value","format":"other","note_zh":"角度值","source_id":"keyloop:programming-basics:seeds"}
 {"text":"color: $primary;","topic":"declaration","form":"statement","focus":["$",":"],"note_zh":"应用主色变量","source_id":"keyloop:programming-basics:seeds"}
 {"text":"$spacing: 8px;","topic":"declaration","form":"statement","focus":["$",":"],"note_zh":"声明间距变量","source_id":"keyloop:programming-basics:seeds"}
 {"text":"margin: $spacing * 2;","topic":"declaration","form":"statement","focus":["*","$"],"note_zh":"变量乘法","source_id":"keyloop:programming-basics:seeds"}

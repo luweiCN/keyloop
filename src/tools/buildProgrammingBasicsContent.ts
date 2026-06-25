@@ -45,6 +45,7 @@ interface OutputCard {
   text: string;
   topic: string;
   form?: "value" | "statement" | "block";
+  format?: string;
   focus?: string[];
   api?: string;
   note_zh: string;
@@ -72,6 +73,62 @@ function expandTemplate(template: string, ids: IdentifierSet): string {
     .replaceAll("{Element}", capitalize(ids.element))
     .replaceAll("{field}", ids.field)
     .replaceAll("{value}", ids.value);
+}
+
+/**
+ * 问题2：符号专项「裸值」去掉外层引号——只对 string 类的完整引号字面量
+ * （双引号 / 单引号 / raw 前缀 r"..."）剥掉外层引号；裸正则、literal（数字、
+ * 字符字面量 'A'）一律不动。内容里含同种引号的表达式不匹配，避免误伤。
+ */
+export function bareValueText(text: string, topic: string): string {
+  if (topic !== "string") {
+    return text;
+  }
+  const match = /^[rR]?(["'])((?:(?!\1).)*)\1$/su.exec(text);
+  return match === null ? text : match[2]!;
+}
+
+export type ValueFormat =
+  | "date" | "time" | "datetime" | "ip" | "port" | "version" | "money"
+  | "percent" | "email" | "url" | "path" | "mime" | "color" | "regex"
+  | "http_method" | "http_status" | "number" | "other";
+
+/**
+ * 推断 value 裸值卡的「形式」：text 强模式优先 → note_zh 中文关键词兜底 → other。
+ * 形式覆盖对精度不敏感，个别误判可接受（绝不因此改写卡内容）。
+ */
+export function inferValueFormat(text: string, noteZh: string): ValueFormat {
+  // text 强模式（顺序敏感：datetime 在 date 前、mime 在 path 前）
+  if (/^https?:\/\//u.test(text)) return "url";
+  if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/u.test(text)) return "email";
+  if (/^#[0-9a-fA-F]{3,8}$/u.test(text) || /^rgba?\(/u.test(text)) return "color";
+  if (/^\/.+\/[gimsuy]*$/u.test(text)) return "regex";
+  if (/^\d{1,3}(\.\d{1,3}){3}$/u.test(text)) return "ip";
+  if (/^\d{4}-\d{2}-\d{2}T/u.test(text)) return "datetime";
+  if (/^\d{4}-\d{2}-\d{2}$/u.test(text)) return "date";
+  if (/^\d{1,2}:\d{2}(:\d{2})?$/u.test(text)) return "time";
+  if (/^[~^]?v?\d+\.\d+\.\d+/u.test(text)) return "version";
+  if (/%$/u.test(text)) return "percent";
+  if (/^[$€£¥]/u.test(text)) return "money";
+  if (/^(application|text|image|audio|video|multipart)\/[\w.+-]+$/u.test(text)) return "mime";
+  // note_zh 中文关键词兜底（纯数字/歧义）
+  if (noteZh.includes("端口")) return "port";
+  if (noteZh.includes("金额") || noteZh.includes("价格")) return "money";
+  if (noteZh.includes("HTTP 状态") || noteZh.includes("状态码")) return "http_status";
+  if (noteZh.includes("HTTP 方法")) return "http_method";
+  if (noteZh.includes("MIME")) return "mime";
+  if (
+    noteZh.includes("超时") || noteZh.includes("毫秒") || noteZh.includes("计数") || noteZh.includes("数量")
+  )
+    return "number";
+  if (noteZh.includes("百分")) return "percent";
+  if (noteZh.includes("颜色")) return "color";
+  if (noteZh.includes("版本")) return "version";
+  // 光秃数字兜底
+  if (/^\d[\d_]*$/u.test(text)) return "number";
+  // 路径（含 / 但非上面任何）
+  if (/^\.{0,2}\/.*\//u.test(text)) return "path";
+  return "other";
 }
 
 function validateLine(line: string, seedPath: string, label: string): void {
@@ -138,11 +195,13 @@ export function buildLanguageCorpus(
   };
 
   for (const card of seed.symbols_numbers_values) {
-    validateValue(card.text, seedPath);
+    const valueText = bareValueText(card.text, card.topic);
+    validateValue(valueText, seedPath);
     push({
-      text: card.text,
+      text: valueText,
       topic: card.topic,
       form: "value",
+      format: inferValueFormat(valueText, card.note_zh),
       ...(card.focus !== undefined ? { focus: card.focus } : {}),
       note_zh: card.note_zh,
       source_id: seed.source_id,
@@ -253,6 +312,17 @@ function assertCorpusQuality(
   const apis = new Set(builtinApi.map((card) => card.api));
   if (apis.size < MIN_APIS) {
     throw new Error(`${language}/builtin_api: only ${apis.size} distinct apis, need >= ${MIN_APIS}`);
+  }
+
+  // 形式维度软校验：value 卡 format=other 占比过高 → 告警（不阻断），提示补推断规则或 note
+  const values = symbolsNumbers.filter((card) => card.form === "value");
+  const others = values.filter((card) => card.format === "other" || card.format === undefined);
+  if (values.length > 0 && others.length / values.length > 0.4) {
+    console.warn(
+      `[${language}] value 卡 format=other 占比 ${Math.round(
+        (others.length / values.length) * 100,
+      )}% 偏高，可补推断规则或 note`,
+    );
   }
 }
 

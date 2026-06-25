@@ -79,7 +79,6 @@ function profileWithCodeWpm(wpm: number | null): SkillProfile {
   return {
     dimensions: [],
     form_speeds: [{ form: "code", samples: 10, ewma_wpm: wpm }],
-    focus: { words: [], code: [], chars: [] },
     daily_active_minutes_7d: 0,
     generated_at: "2026-06-21T00:00:00Z",
   };

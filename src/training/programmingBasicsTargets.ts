@@ -1,4 +1,4 @@
-import type { PracticeTarget } from "../domain/model";
+import type { PracticeTarget, SessionRecord } from "../domain/model";
 import {
   listProgrammingBasicsLanguages,
   loadProgrammingBasicsCards,
@@ -8,9 +8,11 @@ import {
 } from "../content/programmingBasics";
 import { recentFeedbackTerms } from "./feedback";
 import { chunkWords, type BuildTargetContext } from "./targets";
+import { weakKeyWeights, weightedSampleWithoutReplacement, wordKeyWeight } from "./wordTargeting";
 
 const CARDS_PER_LESSON_MIN = 8;
 const CARDS_PER_LESSON_MAX = 10;
+const DEFAULT_SYMBOL_VALUE_COUNT = 6;
 
 export function resolveProgrammingBasicsLanguage(
   codeConfig: { languages?: string[] } | undefined,
@@ -34,6 +36,82 @@ function shuffled<T>(values: T[], random: () => number): T[] {
     [result[i], result[j]] = [result[j]!, result[i]!];
   }
   return result;
+}
+
+/**
+ * 符号专项弱键账本：从统一 per-key 弱键里只取「数字 / 符号键」（滤掉 a-zA-Z 字母键），
+ * 这样符号专项靶向只被你弱的符号/数字键驱动，不因卡里恰好含某个弱字母（如 items 的 i）跑偏。
+ */
+export function symbolWeakKeyWeights(records: readonly SessionRecord[]): Map<string, number> {
+  const out = new Map<string, number>();
+  for (const [key, weight] of weakKeyWeights(records)) {
+    if (!/[a-zA-Z]/u.test(key)) {
+      out.set(key, weight);
+    }
+  }
+  return out;
+}
+
+/**
+ * 偏重「含弱符号/数字键」的真实卡：按弱键覆盖分加权无放回抽样。
+ * 保底权重 1 让普通卡也掺入（避免怪卷，仿阶段二单词靶向）；绝不改写卡内容——只筛选。
+ * weakWeights 为空（无弱键/无记录）时全卡权重 1，退化为均匀随机。
+ */
+export function pickWeakKeyTargetedCards(
+  cards: ProgrammingBasicsCard[],
+  weakWeights: ReadonlyMap<string, number>,
+  count: number,
+  random: () => number,
+): ProgrammingBasicsCard[] {
+  return weightedSampleWithoutReplacement(
+    cards,
+    (card) => 1 + wordKeyWeight(card.text, weakWeights),
+    count,
+    random,
+  );
+}
+
+/**
+ * value 卡形式覆盖选材：按 format 分组，round-robin 跨形式逐张取（组内用弱键加权抽样），
+ * 保证选出的卡尽量覆盖不同形式。count 超形式种数时各组继续取下一张、不重复。绝不改写卡。
+ */
+export function pickFormCoveredValueCards(
+  valueCards: ProgrammingBasicsCard[],
+  weakWeights: ReadonlyMap<string, number>,
+  count: number,
+  random: () => number,
+): ProgrammingBasicsCard[] {
+  const groups = new Map<string, ProgrammingBasicsCard[]>();
+  for (const card of valueCards) {
+    const key = card.format ?? "other";
+    const bucket = groups.get(key) ?? [];
+    bucket.push(card);
+    groups.set(key, bucket);
+  }
+  // 组内按弱键加权排好序（无放回抽样得到顺序），每组当作一个队列，round-robin 跨形式取
+  const queues = [...groups.values()].map((bucket) =>
+    weightedSampleWithoutReplacement(
+      bucket,
+      (card) => 1 + wordKeyWeight(card.text, weakWeights),
+      bucket.length,
+      random,
+    ),
+  );
+  const picked: ProgrammingBasicsCard[] = [];
+  let round = 0;
+  while (picked.length < count) {
+    let advanced = false;
+    for (const queue of queues) {
+      if (picked.length >= count) break;
+      const card = queue[round];
+      if (card === undefined) continue;
+      picked.push(card);
+      advanced = true;
+    }
+    if (!advanced) break; // 所有组耗尽
+    round += 1;
+  }
+  return picked;
 }
 
 // 纯随机均衡组卷：每个 topic 桶内随机打乱后按 topic 轮流取卡（保证 topic 覆盖均衡）。
@@ -72,9 +150,9 @@ function pickBalancedCards(
   return picked.slice(0, Math.min(picked.length, CARDS_PER_LESSON_MAX));
 }
 
-function basicsCodeBlock(language: string, lineCount: number) {
+function basicsCodeBlock(language: string, startLine: number, lineCount: number) {
   return {
-    start_line: 0,
+    start_line: startLine,
     line_count: lineCount,
     language,
     framework: "",
@@ -87,23 +165,27 @@ function basicsCodeBlock(language: string, lineCount: number) {
 // block 卡保留多行且块间以空行分隔（与代码实战一致的输入体验）。
 const VALUES_PER_LINE = 4;
 
-function symbolsNumbersText(cards: ProgrammingBasicsCard[]): string {
+export function symbolsNumbersText(cards: ProgrammingBasicsCard[]): {
+  text: string;
+  highlightFromLine: number;
+} {
   const values = cards.filter((card) => card.form === "value");
   const statements = cards.filter((card) => card.form !== "value" && card.form !== "block");
   const blocks = cards.filter((card) => card.form === "block");
-  const singleLines: string[] = [];
+  const valueLines: string[] = [];
   for (let index = 0; index < values.length; index += VALUES_PER_LINE) {
-    singleLines.push(
+    valueLines.push(
       values
         .slice(index, index + VALUES_PER_LINE)
         .map((card) => card.text)
         .join(" "),
     );
   }
-  singleLines.push(...statements.map((card) => card.text));
+  const singleLines = [...valueLines, ...statements.map((card) => card.text)];
   const sections = singleLines.length > 0 ? [singleLines.join("\n")] : [];
   sections.push(...blocks.map((card) => card.text));
-  return sections.join("\n\n");
+  // value 行排在最前、不做代码高亮（裸值统一普通色）；从 statement 行起才高亮。
+  return { text: sections.join("\n\n"), highlightFromLine: valueLines.length };
 }
 
 function basicsTarget(
@@ -111,29 +193,63 @@ function basicsTarget(
   sourceSlug: string,
   context: BuildTargetContext,
   options: ProgrammingBasicsOptions = {},
+  valueCount?: number,
 ): PracticeTarget {
   const random = context.random ?? Math.random;
   const available = listProgrammingBasicsLanguages(options);
   const language = resolveProgrammingBasicsLanguage(context.codeConfig, available, random);
   const cards = loadProgrammingBasicsCards(kind, language, options);
-  const picked = pickBalancedCards(cards, random);
-  const text =
+  // 符号/数字专项：value 裸值走形式覆盖（round-robin 多形式）、statement/block 走弱键靶向，
+  // 合并成卷——保证每课覆盖多种真实形式，且你弱的符号/数字键照样偏重（两者正交叠加）。
+  // 其余 kind 不变。
+  const picked = ((): ProgrammingBasicsCard[] => {
+    if (kind === "symbols_numbers") {
+      const weak = symbolWeakKeyWeights(context.records ?? []);
+      const valueCards = cards.filter((card) => card.form === "value");
+      const restCards = cards.filter((card) => card.form !== "value");
+      const pickedValue = pickFormCoveredValueCards(
+        valueCards,
+        weak,
+        valueCount ?? DEFAULT_SYMBOL_VALUE_COUNT,
+        random,
+      );
+      const pickedRest = pickWeakKeyTargetedCards(
+        restCards,
+        weak,
+        Math.max(0, CARDS_PER_LESSON_MAX - pickedValue.length),
+        random,
+      );
+      return [...pickedValue, ...pickedRest];
+    }
+    return pickBalancedCards(cards, random);
+  })();
+  const built =
     kind === "symbols_numbers"
       ? symbolsNumbersText(picked)
-      : picked.map((card) => card.text).join("\n");
+      : { text: picked.map((card) => card.text).join("\n"), highlightFromLine: 0 };
+  const totalLines = built.text.split("\n").length;
   return {
     mode: "code",
-    text,
+    text: built.text,
     source: `keyloop:module:programming-basics:${sourceSlug}:${language}`,
-    code_blocks: [basicsCodeBlock(language, text.split("\n").length)],
+    // 只高亮 value 之后的 statement/block 行；value 行落在块外 → 渲染层按普通色显示。
+    // 始终保留一个 declared block(即便 line_count=0)，以走"按声明块高亮"而非整体推断高亮。
+    code_blocks: [
+      basicsCodeBlock(
+        language,
+        built.highlightFromLine,
+        Math.max(0, totalLines - built.highlightFromLine),
+      ),
+    ],
   };
 }
 
 export function buildSymbolsNumbersTarget(
   context: BuildTargetContext,
   options: ProgrammingBasicsOptions = {},
+  valueCount?: number,
 ): PracticeTarget {
-  return basicsTarget("symbols_numbers", "symbols-numbers", context, options);
+  return basicsTarget("symbols_numbers", "symbols-numbers", context, options, valueCount);
 }
 
 export function buildBuiltinApiTarget(
@@ -197,6 +313,6 @@ export function buildProgrammingBasicsMixTarget(
     mode: "code",
     text,
     source: `keyloop:module:programming-basics-mix:${language}`,
-    code_blocks: [basicsCodeBlock(language, text.split("\n").length)],
+    code_blocks: [basicsCodeBlock(language, 0, text.split("\n").length)],
   };
 }

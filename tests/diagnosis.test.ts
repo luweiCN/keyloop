@@ -3,13 +3,17 @@ import { describe, expect, test } from "bun:test";
 import { defaultSessionRecord } from "../src/domain/model";
 import type { KeyEventRecord } from "../src/domain/model";
 import {
+  applyRelativeStatus,
   buildSkillProfile,
   charSkillDimensions,
   diagnoseCharSkills,
   ewmaAverage,
   formForCategory,
   seriesTrend,
+  type SkillDiagnosis,
   type SkillDimensionId,
+  type SkillStatus,
+  type SkillTrend,
 } from "../src/training/diagnosis";
 
 /** 构造 insert 事件序列：每个条目 [expected, correct]，间隔 intervalMs */
@@ -126,7 +130,7 @@ describe("diagnoseCharSkills", () => {
     const records = [1, 2, 3, 4].map((day) =>
       sessionWithKeys(events, `2026-06-${String(day).padStart(2, "0")}T08:00:00Z`),
     );
-    const result = diagnoseCharSkills(records);
+    const result = applyRelativeStatus(diagnoseCharSkills(records));
     const digits = result.find((item) => item.id === "digits");
     expect(digits?.status).toBe("weak");
     const homeRow = result.find((item) => item.id === "home_row");
@@ -140,7 +144,7 @@ describe("diagnoseCharSkills", () => {
     const records = [1, 2, 3, 4].map((day) =>
       sessionWithKeys(events, `2026-06-0${day}T08:00:00Z`),
     );
-    const result = diagnoseCharSkills(records);
+    const result = applyRelativeStatus(diagnoseCharSkills(records));
     const homeRow = result.find((item) => item.id === "home_row");
     expect(homeRow?.status).toBe("stable");
   });
@@ -157,9 +161,72 @@ describe("diagnoseCharSkills", () => {
     const records = [1, 2, 3, 4, 5].map((day) =>
       sessionWithKeys(events, `2026-06-0${day}T08:00:00Z`),
     );
-    const result = diagnoseCharSkills(records);
+    const result = applyRelativeStatus(diagnoseCharSkills(records));
     const cap = result.find((item) => item.id === "capitalization");
     expect(cap?.status).toBe("weak");
+  });
+});
+
+describe("applyRelativeStatus（问题1：相对基线判弱）", () => {
+  function dim(
+    id: SkillDimensionId,
+    errorRate: number | null,
+    trend: SkillTrend = "stable",
+    samples = 4,
+  ): SkillDiagnosis {
+    return {
+      id,
+      samples,
+      events: 30,
+      ewma_error_rate: errorRate,
+      ewma_speed: null,
+      trend,
+      status: "unrated",
+    };
+  }
+  function statusOf(dims: SkillDiagnosis[], id: SkillDimensionId): SkillStatus | undefined {
+    return dims.find((item) => item.id === id)?.status;
+  }
+
+  test("天生难但和基线一致的维度不判弱", () => {
+    const out = applyRelativeStatus([
+      dim("home_row", 2),
+      dim("word_fluency", 3),
+      dim("symbols", 9),
+      dim("digits", 8),
+      dim("capitalization", 7),
+    ]);
+    // baseline=median([2,3,7,8,9])=7，阈值 7+4=11；9、8 都 <11 → 不判弱
+    expect(statusOf(out, "symbols")).not.toBe("weak");
+    expect(statusOf(out, "digits")).not.toBe("weak");
+  });
+
+  test("明显高于基线的维度判弱", () => {
+    const out = applyRelativeStatus([
+      dim("home_row", 2),
+      dim("word_fluency", 3),
+      dim("symbols", 18),
+    ]);
+    // baseline=median([2,3,18])=3，阈值 7；18>=7 → weak
+    expect(statusOf(out, "symbols")).toBe("weak");
+  });
+
+  test("退步的维度仍判弱（与基线无关）", () => {
+    const out = applyRelativeStatus([
+      dim("home_row", 2),
+      dim("word_fluency", 2),
+      dim("top_row", 2, "declining"),
+    ]);
+    expect(statusOf(out, "top_row")).toBe("weak");
+  });
+
+  test("数据不足（errorRate 为 null）保持 unrated", () => {
+    expect(statusOf(applyRelativeStatus([dim("symbols", null)]), "symbols")).toBe("unrated");
+  });
+
+  test("低错误率且样本足判 stable", () => {
+    const out = applyRelativeStatus([dim("home_row", 1), dim("word_fluency", 2)]);
+    expect(statusOf(out, "home_row")).toBe("stable");
   });
 });
 
@@ -208,38 +275,6 @@ describe("buildSkillProfile", () => {
     expect(words?.ewma_wpm).toBeCloseTo(30, 0);
     const code = profile.form_speeds.find((item) => item.form === "code");
     expect(code?.ewma_wpm).toBeNull();
-  });
-
-  test("单词不回流(focus_words 废弃 ADR-0002)，代码标识符仍按形态收集", () => {
-    const wordSession = defaultSessionRecord({
-      started_at: "2026-06-10T08:00:00Z",
-      category: "everyday_words",
-      module: "everyday_english",
-      typed_len: 100,
-      correct_chars: 90,
-      active_ms: 60_000,
-      error_tokens: { algorithm: 3 },
-    });
-    const codeSession = defaultSessionRecord({
-      started_at: "2026-06-11T08:00:00Z",
-      category: "code_snippet",
-      module: "code_practice",
-      typed_len: 100,
-      correct_chars: 90,
-      active_ms: 60_000,
-      error_tokens: { useEffect: 2 },
-    });
-    const profile = buildSkillProfile(
-      [wordSession, codeSession],
-      emptyPlan,
-      new Date("2026-06-13T08:00:00Z"),
-    );
-    // 单词层已废弃具体错词回流（focus_words ③, ADR-0002）：focus.words 恒为空
-    expect(profile.focus.words).toEqual([]);
-    expect(profile.focus.code).toContain("useEffect");
-    expect(profile.focus.code).not.toContain("algorithm");
-    // chars 池来自 PracticePlan 的 focus_keys + focus_symbols
-    expect(profile.focus.chars).toEqual(expect.arrayContaining(["b", ";"]));
   });
 
   test("daily active minutes uses 7-day median", () => {

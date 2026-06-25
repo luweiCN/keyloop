@@ -16,12 +16,15 @@ import {
   refreshModuleMixTarget,
   selectSnippetsWithinBudget,
   symbolSupplementLines,
+  symbolValueCountForBudget,
   usedCodeSnippetTexts,
+  foundationDrillFocusKeys,
   type BuildTargetContext,
 } from "../src/training/targets";
 import type { CodeSnippet } from "../src/content/snippets";
 import { comprehensivePlanMinutes } from "../src/ui/opentui/routeLines";
 import { defaultSessionRecord } from "../src/index";
+import type { KeyEventRecord } from "../src/domain/model";
 
 /** 构造指定字符数的代码片段，用于验证按预算选片的边界行为 */
 function coarseSnippet(chars: number, id: number): CodeSnippet {
@@ -143,14 +146,10 @@ function stageLibrary(): ContentLibrary {
   };
 }
 
-function emptyProfile(
-  overrides: Partial<SkillProfile["focus"]> = {},
-  formSpeeds: FormSpeed[] = [],
-): SkillProfile {
+function emptyProfile(formSpeeds: FormSpeed[] = []): SkillProfile {
   return {
     dimensions: [],
     form_speeds: formSpeeds,
-    focus: { words: [], code: [], chars: [], ...overrides },
     daily_active_minutes_7d: 0,
     generated_at: "2026-06-13T08:00:00Z",
   };
@@ -299,19 +298,6 @@ describe("buildStageTarget words", () => {
     expect([...small.text].length).toBeGreaterThanOrEqual(40);
   });
 
-  test("单词模块不再回流具体薄弱词（focus_words 废弃，仅留维度加权②；ADR-0002）", () => {
-    const withFocus = buildStageTarget(stageContext(), {
-      stage: { form: "words", char_budget: 200 },
-      profile: emptyProfile({ words: ["algorithm"] }),
-    });
-    const withoutFocus = buildStageTarget(stageContext(), {
-      stage: { form: "words", char_budget: 200 },
-      profile: emptyProfile(),
-    });
-    // focus.words（具体错词）不再改变选词；选材仅由随机 + 字符类/技能维度加权决定
-    expect(withFocus.text).toBe(withoutFocus.text);
-  });
-
   test("programming and custom library words join the pool", () => {
     const target = buildStageTarget(stageContext(), {
       stage: { form: "words", char_budget: 700 },
@@ -356,7 +342,7 @@ describe("buildStageTarget words", () => {
 
     const target = buildStageTarget(context, {
       stage: { form: "words", char_budget: 700 },
-      profile: emptyProfile({}, [{ form: "words", ewma_wpm: 70, samples: 20 }]),
+      profile: emptyProfile([{ form: "words", ewma_wpm: 70, samples: 20 }]),
       enabledModules: ["everyday_english"],
     });
 
@@ -381,13 +367,31 @@ describe("buildStageTarget words", () => {
     }));
     context.records = [];
 
-    const target = buildStageTarget(context, {
-      stage: { form: "words", char_budget: 45 },
-      profile: emptyProfile(),
-      enabledModules: ["everyday_english"],
-    });
-
-    expect(target.text).toContain("recent0");
+    const lcg = (seed: number): (() => number) => {
+      let s = seed % 2147483647;
+      if (s <= 0) s += 2147483646;
+      const rand = (): number => (s = (s * 16807) % 2147483647) / 2147483647;
+      for (let i = 0; i < 5; i += 1) rand(); // 预热
+      return rand;
+    };
+    // 无历史 → 弱键权重空 → 候选均匀；多次抽样中练过/未练的词都应能出现（不被历史排除）
+    const appears = (word: string): boolean => {
+      for (let i = 1; i <= 40; i += 1) {
+        context.random = lcg(i);
+        if (
+          buildStageTarget(context, {
+            stage: { form: "words", char_budget: 45 },
+            profile: emptyProfile(),
+            enabledModules: ["everyday_english"],
+          }).text.includes(word)
+        ) {
+          return true;
+        }
+      }
+      return false;
+    };
+    expect(appears("recent0")).toBe(true);
+    expect(appears("fresh19")).toBe(true);
   });
 
   test("disabling programming module excludes programming words", () => {
@@ -411,10 +415,10 @@ describe("buildStageTarget symbols", () => {
     expect(target.text.length).toBeGreaterThan(0);
   });
 
-  test("focus words never leak into symbols stage", () => {
+  test("everyday-library words never leak into symbols stage", () => {
     const target = buildStageTarget(stageContext(), {
       stage: { form: "symbols", char_budget: 80 },
-      profile: emptyProfile({ words: ["algorithm"] }),
+      profile: emptyProfile(),
       enabledModules: ["foundation_input"],
     });
     expect(target.text).not.toContain("algorithm");
@@ -495,7 +499,7 @@ describe("buildStageTarget sentences", () => {
 
     const target = buildStageTarget(context, {
       stage: { form: "sentences", char_budget: 800 },
-      profile: emptyProfile({}, [{ form: "sentences", ewma_wpm: 70, samples: 20 }]),
+      profile: emptyProfile([{ form: "sentences", ewma_wpm: 70, samples: 20 }]),
     });
 
     const lineAnnotations = (target.annotations ?? []).filter(
@@ -657,10 +661,10 @@ describe("module mix stage targets (secondary menus)", () => {
   test("everyday mix combines words and sentences, excludes programming words", () => {
     const target = buildEverydayMixStageTarget(
       stageContext(),
-      emptyProfile({ words: ["algorithm"] }),
+      emptyProfile(),
       [customLibraryFixture()],
     );
-    // focus 回流 + 自建词库混入
+    // 日常库词 + 自建词库混入
     expect(target.text).toContain("algorithm");
     expect(target.text).toContain("bespoke");
     // 句子段存在（库中句子之一出现）
@@ -788,7 +792,6 @@ describe("buildStageTarget words skill feature-biasing", () => {
         },
       ],
       form_speeds: [],
-      focus: { words: [], code: [], chars: [] },
       daily_active_minutes_7d: 0,
       generated_at: "2026-06-13T08:00:00Z",
     };
@@ -807,24 +810,29 @@ describe("buildStageTarget words skill feature-biasing", () => {
     articles: [],
   };
 
-  test("capitalization weak prioritizes uppercase-containing words", () => {
+  test("capitalization weak biases toward uppercase-containing words", () => {
     const stage = { form: "words" as const, char_budget: 80 };
-    const weak = buildStageTarget(stageContext(), {
-      stage,
-      profile: profileWithWeak("capitalization"),
-      customLibraries: [camelLib],
-    });
-    const normal = buildStageTarget(stageContext(), {
-      stage,
-      profile: emptyProfile(),
-      customLibraries: [camelLib],
-    });
-    const countUpper = (text: string) =>
+    const lcg = (seed: number): (() => number) => {
+      let s = seed % 2147483647;
+      if (s <= 0) s += 2147483646;
+      const rand = (): number => (s = (s * 16807) % 2147483647) / 2147483647;
+      for (let i = 0; i < 5; i += 1) rand(); // 预热
+      return rand;
+    };
+    const countUpper = (text: string): number =>
       text.split(" ").filter((w) => /[A-Z]/u.test(w)).length;
-    // 弱项时 3 个驼峰词被排到最前，全部入选
-    expect(countUpper(weak.text)).toBe(3);
-    // 非弱项（纯随机）通常不会把 3 个驼峰词都排到前 3
-    expect(countUpper(normal.text)).toBeLessThan(3);
+    const totalUpper = (profile: SkillProfile): number => {
+      let total = 0;
+      for (let i = 1; i <= 40; i += 1) {
+        const context = { ...stageContext(), random: lcg(i) };
+        total += countUpper(
+          buildStageTarget(context, { stage, profile, customLibraries: [camelLib] }).text,
+        );
+      }
+      return total;
+    };
+    // 弱项时大写/驼峰词被加权偏重（非置顶）：多次抽样累计应明显多于非弱项
+    expect(totalUpper(profileWithWeak("capitalization"))).toBeGreaterThan(totalUpper(emptyProfile()));
   });
 });
 
@@ -864,4 +872,61 @@ test("comprehensivePlanMinutes sums lesson estimated_minutes (honest plan time)"
   const plan = buildDailyPracticePlan(stageContext(), { targetMinutesOverride: 20 });
   const expected = plan.lessons.reduce((sum, lesson) => sum + lesson.estimated_minutes, 0);
   expect(comprehensivePlanMinutes(plan)).toBe(expected);
+});
+
+describe("symbolValueCountForBudget（综合训练 value 数随时长伸缩）", () => {
+  test("大预算比小预算覆盖更多 value（形式），有下限 2", () => {
+    expect(symbolValueCountForBudget(600)).toBeGreaterThan(symbolValueCountForBudget(150));
+    expect(symbolValueCountForBudget(10)).toBeGreaterThanOrEqual(2);
+  });
+
+  test("裁剪保留排最前的 value 裸值行（小预算不把形式覆盖裁没）", () => {
+    const valueFirst = {
+      mode: "code" as const,
+      text: "10.0.0.1 2026-12-31\nconst a = run(1);\nconst b = run(2);\nconst c = run(3);",
+      source: "test",
+      code_blocks: [
+        { start_line: 1, line_count: 3, language: "ts", framework: "", project: "p", source: "s" },
+      ],
+    };
+    const fitted = fitSymbolsTargetToBudget(stageContext(), valueFirst, 24);
+    expect(fitted.text.split("\n")[0]).toContain("10.0.0.1"); // value 行排最前 → 裁尾部时保留
+    expect(fitted.text.length).toBeLessThan(valueFirst.text.length); // 确实裁了尾部 statement
+  });
+});
+
+function keysAtForDrill(
+  key: string,
+  count: number,
+  startMs: number,
+  intervalMs: number,
+  correct = true,
+): KeyEventRecord[] {
+  return Array.from({ length: count }, (_, i) => ({
+    at_ms: startMs + i * intervalMs,
+    action: "insert" as const,
+    position: i,
+    expected: key,
+    input: correct ? key : "?",
+    correct,
+  }));
+}
+
+describe("foundationDrillFocusKeys（基础键位信号统一）", () => {
+  test("有 per-key 弱键时用 weakKeyWeights 的键（不再用 focus_keys）", () => {
+    const fast = ["a", "e", "t", "o", "i", "n"].flatMap((k, idx) =>
+      keysAtForDrill(k, 6, idx * 20_000, 100),
+    );
+    const slowW = keysAtForDrill("w", 8, 200_000, 600, false); // w 又慢又错 → 弱键
+    const records = [defaultSessionRecord({ key_events: [...fast, ...slowW] })];
+    const ctx = { records, plan: { focus_keys: ["z"] } } as unknown as BuildTargetContext;
+    const keys = foundationDrillFocusKeys(ctx);
+    expect(keys).toContain("w"); // 来自 per-key 弱键
+    expect(keys).not.toContain("z"); // 不再用 plan.focus_keys
+  });
+
+  test("无记录（冷启动）降级到 plan.focus_keys", () => {
+    const ctx = { records: [], plan: { focus_keys: ["z", "q"] } } as unknown as BuildTargetContext;
+    expect(foundationDrillFocusKeys(ctx)).toEqual(["z", "q"]);
+  });
 });

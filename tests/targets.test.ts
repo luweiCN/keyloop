@@ -3,6 +3,8 @@ import { describe, expect, test } from "bun:test";
 import {
   buildDailyPracticePlan,
   buildCodeMixPracticeTarget,
+  buildCodeMixPracticeTargetAsync,
+  prebuildStageCodeTargetAsync,
   buildFoundationMixPracticeTarget,
   buildCodeSpecialistPracticeTarget,
   buildEverydayPracticeTarget,
@@ -1344,6 +1346,70 @@ describe("target generation core", () => {
 
     expect(code.text).toContain("hardAlpha");
     expect(code.text).not.toContain("easyAlpha");
+  });
+
+  test("buildCodeMixPracticeTargetAsync 与同步版产出一致（问题4：异步预组用）", async () => {
+    const makeCtx = () => {
+      const library = testLibrary();
+      library.code_snippets = [...easyCodeSnippets(), ...hardCodeSnippets()];
+      return {
+        records: weakCodeRecords(),
+        plan: unfocusedPlan(),
+        library,
+        random: () => 0,
+      };
+    };
+    const sync = buildCodeMixPracticeTarget(makeCtx());
+    const asyncTarget = await buildCodeMixPracticeTargetAsync(makeCtx());
+    expect(asyncTarget.mode).toBe("code");
+    expect(asyncTarget.text).toBe(sync.text);
+    expect(asyncTarget.code_blocks?.length).toBe(sync.code_blocks?.length);
+  });
+
+  test("prebuildStageCodeTargetAsync 对非 code 阶段课返回 null（不预组）", async () => {
+    const lesson = {
+      mix_profile: "comprehensive",
+      category: "everyday_words",
+    } as unknown as PracticeLesson;
+    const target = await prebuildStageCodeTargetAsync(lesson, {
+      records: [],
+      plan: unfocusedPlan(),
+      library: testLibrary(),
+    });
+    expect(target).toBeNull();
+  });
+
+  test("prebuildStageCodeTargetAsync 对独立练习课（非 comprehensive）返回 null", async () => {
+    const lesson = {
+      mix_profile: "single",
+      category: "code_mix",
+    } as unknown as PracticeLesson;
+    const target = await prebuildStageCodeTargetAsync(lesson, {
+      records: [],
+      plan: unfocusedPlan(),
+      library: testLibrary(),
+    });
+    expect(target).toBeNull();
+  });
+
+  test("prebuildStageCodeTargetAsync 对 code 阶段课预组出 code target", async () => {
+    const lesson = {
+      mix_profile: "comprehensive",
+      category: "code_mix",
+      estimated_minutes: 3,
+    } as unknown as PracticeLesson;
+    const library = testLibrary();
+    library.code_snippets = [...easyCodeSnippets(), ...hardCodeSnippets()];
+    const target = await prebuildStageCodeTargetAsync(lesson, {
+      records: [],
+      plan: unfocusedPlan(),
+      library,
+      random: () => 0,
+      now: new Date("2026-06-25T00:00:00Z"),
+    });
+    expect(target).not.toBeNull();
+    expect(target?.mode).toBe("code");
+    expect(target?.text.length ?? 0).toBeGreaterThan(0);
   });
 
   test("daily code practice follows weak recent code performance with easy snippets", () => {
