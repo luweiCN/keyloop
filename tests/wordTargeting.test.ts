@@ -1,6 +1,10 @@
 import { describe, expect, test } from "bun:test";
 import { defaultSessionRecord, type KeyEventRecord } from "../src/domain/model";
-import { weakKeyWeights, wordKeyWeight } from "../src/training/wordTargeting";
+import {
+  weakKeyWeights,
+  weightedSampleWithoutReplacement,
+  wordKeyWeight,
+} from "../src/training/wordTargeting";
 
 /** 一段同键事件，从 startMs 起、段内固定间隔（段间用大跳分隔以过滤跨段间隔）。 */
 function keysAt(
@@ -60,5 +64,33 @@ describe("wordKeyWeight", () => {
     expect(wordKeyWeight("quiz", weights)).toBeCloseTo(1.3, 5); // q 0.8 + z 0.5
     expect(wordKeyWeight("zzz", weights)).toBeCloseTo(0.5, 5); // z 去重只算一次
     expect(wordKeyWeight("apple", weights)).toBe(0); // 不含弱键
+  });
+});
+
+describe("weightedSampleWithoutReplacement", () => {
+  const items = [
+    { k: "a", w: 1 },
+    { k: "b", w: 100 },
+  ];
+  const weightOf = (x: { k: string; w: number }): number => x.w;
+
+  test("rng→1 偏向高权重项，rng→0 偏向先出现项", () => {
+    expect(weightedSampleWithoutReplacement(items, weightOf, 1, () => 0.99)[0]?.k).toBe("b");
+    expect(weightedSampleWithoutReplacement(items, weightOf, 1, () => 0.001)[0]?.k).toBe("a");
+  });
+
+  test("无放回：抽 count 个不重复；count 超量时返回全部", () => {
+    const out = weightedSampleWithoutReplacement(items, weightOf, 5, () => 0.5);
+    expect(out).toHaveLength(2);
+    expect(new Set(out.map((x) => x.k)).size).toBe(2);
+  });
+
+  test("全为 0 权重时退化为随机、仍不重复", () => {
+    const zero = [
+      { k: "x", w: 0 },
+      { k: "y", w: 0 },
+    ];
+    const out = weightedSampleWithoutReplacement(zero, (x) => x.w, 2, () => 0.4);
+    expect(new Set(out.map((x) => x.k)).size).toBe(2);
   });
 });

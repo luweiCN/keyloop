@@ -35,3 +35,38 @@ export function wordKeyWeight(text: string, weights: ReadonlyMap<string, number>
   }
   return sum;
 }
+
+/**
+ * 加权无放回抽样：按 weightOf 抽 count 个不重复项（权重高更可能被抽中）。
+ * 剩余全为 0 权重时退化为均匀随机。负权重按 0 处理。
+ */
+export function weightedSampleWithoutReplacement<T>(
+  items: readonly T[],
+  weightOf: (item: T) => number,
+  count: number,
+  random: () => number,
+): T[] {
+  const pool = items.map((item) => ({ item, weight: Math.max(0, weightOf(item)) }));
+  const result: T[] = [];
+  const target = Math.min(count, pool.length);
+  for (let picked = 0; picked < target; picked += 1) {
+    const total = pool.reduce((sum, entry) => sum + entry.weight, 0);
+    let index: number;
+    if (total <= 0) {
+      index = Math.min(pool.length - 1, Math.floor(random() * pool.length));
+    } else {
+      let r = random() * total;
+      index = pool.length - 1;
+      for (let i = 0; i < pool.length; i += 1) {
+        r -= pool[i]!.weight;
+        if (r <= 0) {
+          index = i;
+          break;
+        }
+      }
+    }
+    result.push(pool[index]!.item);
+    pool.splice(index, 1);
+  }
+  return result;
+}
