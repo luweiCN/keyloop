@@ -3,6 +3,7 @@ import {
   listProgrammingBasicsLanguages,
   loadProgrammingBasicsCards,
 } from "../src/content/programmingBasics";
+import { inferValueFormat } from "../src/tools/buildProgrammingBasicsContent";
 
 const SYMBOL_TOPICS = new Set(["declaration", "call", "control", "index", "literal", "string"]);
 const FORMS = new Set(["value", "statement", "block"]);
@@ -92,4 +93,33 @@ describe("programming basics corpus", () => {
       expect(apis.size).toBeGreaterThanOrEqual(40);
     });
   }
+});
+
+describe("inferValueFormat", () => {
+  test("text 强模式优先识别", () => {
+    expect(inferValueFormat("10.0.0.1", "IP 地址")).toBe("ip");
+    expect(inferValueFormat("2026-12-31", "日期串")).toBe("date");
+    expect(inferValueFormat("2026-06-22T23:59:59Z", "ISO 时间戳")).toBe("datetime");
+    expect(inferValueFormat("08:30:00", "时间串")).toBe("time");
+    expect(inferValueFormat("3.2.1", "语义化版本")).toBe("version");
+    expect(inferValueFormat("dev@example.org", "邮箱")).toBe("email");
+    expect(inferValueFormat("https://api.example.com/v2", "接口地址")).toBe("url");
+    expect(inferValueFormat("#0ea5e9", "十六进制颜色")).toBe("color");
+    expect(inferValueFormat("/^[a-z]+$/", "正则字面量")).toBe("regex");
+    expect(inferValueFormat("99.9%", "百分比")).toBe("percent");
+    expect(inferValueFormat("$1,299.00", "金额")).toBe("money");
+  });
+
+  test("纯数字/歧义靠 note_zh 关键词兜底", () => {
+    expect(inferValueFormat("3000", "端口号")).toBe("port");
+    expect(inferValueFormat("404", "HTTP 状态")).toBe("http_status");
+    expect(inferValueFormat("GET", "HTTP 方法字面量")).toBe("http_method");
+    expect(inferValueFormat("application/xml", "MIME 类型")).toBe("mime");
+    expect(inferValueFormat("60_000", "毫秒超时")).toBe("number");
+  });
+
+  test("都不中归 other", () => {
+    expect(inferValueFormat("pending", "状态字面量")).toBe("other");
+    expect(inferValueFormat("text-sm", "CSS 类名")).toBe("other");
+  });
 });

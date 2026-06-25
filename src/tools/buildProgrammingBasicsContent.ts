@@ -87,6 +87,49 @@ export function bareValueText(text: string, topic: string): string {
   return match === null ? text : match[2]!;
 }
 
+export type ValueFormat =
+  | "date" | "time" | "datetime" | "ip" | "port" | "version" | "money"
+  | "percent" | "email" | "url" | "path" | "mime" | "color" | "regex"
+  | "http_method" | "http_status" | "number" | "other";
+
+/**
+ * 推断 value 裸值卡的「形式」：text 强模式优先 → note_zh 中文关键词兜底 → other。
+ * 形式覆盖对精度不敏感，个别误判可接受（绝不因此改写卡内容）。
+ */
+export function inferValueFormat(text: string, noteZh: string): ValueFormat {
+  // text 强模式（顺序敏感：datetime 在 date 前、mime 在 path 前）
+  if (/^https?:\/\//u.test(text)) return "url";
+  if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/u.test(text)) return "email";
+  if (/^#[0-9a-fA-F]{3,8}$/u.test(text) || /^rgba?\(/u.test(text)) return "color";
+  if (/^\/.+\/[gimsuy]*$/u.test(text)) return "regex";
+  if (/^\d{1,3}(\.\d{1,3}){3}$/u.test(text)) return "ip";
+  if (/^\d{4}-\d{2}-\d{2}T/u.test(text)) return "datetime";
+  if (/^\d{4}-\d{2}-\d{2}$/u.test(text)) return "date";
+  if (/^\d{1,2}:\d{2}(:\d{2})?$/u.test(text)) return "time";
+  if (/^[~^]?v?\d+\.\d+\.\d+/u.test(text)) return "version";
+  if (/%$/u.test(text)) return "percent";
+  if (/^[$€£¥]/u.test(text)) return "money";
+  if (/^(application|text|image|audio|video|multipart)\/[\w.+-]+$/u.test(text)) return "mime";
+  // note_zh 中文关键词兜底（纯数字/歧义）
+  if (noteZh.includes("端口")) return "port";
+  if (noteZh.includes("金额") || noteZh.includes("价格")) return "money";
+  if (noteZh.includes("HTTP 状态") || noteZh.includes("状态码")) return "http_status";
+  if (noteZh.includes("HTTP 方法")) return "http_method";
+  if (noteZh.includes("MIME")) return "mime";
+  if (
+    noteZh.includes("超时") || noteZh.includes("毫秒") || noteZh.includes("计数") || noteZh.includes("数量")
+  )
+    return "number";
+  if (noteZh.includes("百分")) return "percent";
+  if (noteZh.includes("颜色")) return "color";
+  if (noteZh.includes("版本")) return "version";
+  // 光秃数字兜底
+  if (/^\d[\d_]*$/u.test(text)) return "number";
+  // 路径（含 / 但非上面任何）
+  if (/^\.{0,2}\/.*\//u.test(text)) return "path";
+  return "other";
+}
+
 function validateLine(line: string, seedPath: string, label: string): void {
   if (line.length > 90 || !/^[\x20-\x7e]*$/.test(line)) {
     throw new Error(`${label} line invalid in ${seedPath}: ${line}`);
