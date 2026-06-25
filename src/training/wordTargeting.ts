@@ -26,3 +26,12 @@ export function weakKeyWeights(
   }
   return weights;
 }
+
+/** 词的弱键覆盖分：词里出现的弱键的权重之和（同一字符只算一次）。 */
+export function wordKeyWeight(text: string, weights: ReadonlyMap<string, number>): number {
+  let sum = 0;
+  for (const char of new Set(text)) {
+    sum += weights.get(char) ?? 0;
+  }
+  return sum;
+}

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { defaultSessionRecord, type KeyEventRecord } from "../src/domain/model";
-import { weakKeyWeights } from "../src/training/wordTargeting";
+import { weakKeyWeights, wordKeyWeight } from "../src/training/wordTargeting";
 
 /** 一段同键事件，从 startMs 起、段内固定间隔（段间用大跳分隔以过滤跨段间隔）。 */
 function keysAt(
@@ -47,5 +47,18 @@ describe("weakKeyWeights", () => {
     });
     const weights = weakKeyWeights([record], { count: 1 });
     expect(weights.size).toBe(1); // 只留最弱的一个
+  });
+});
+
+describe("wordKeyWeight", () => {
+  const weights = new Map<string, number>([
+    ["q", 0.8],
+    ["z", 0.5],
+  ]);
+
+  test("词里出现的弱键权重之和（字符去重）", () => {
+    expect(wordKeyWeight("quiz", weights)).toBeCloseTo(1.3, 5); // q 0.8 + z 0.5
+    expect(wordKeyWeight("zzz", weights)).toBeCloseTo(0.5, 5); // z 去重只算一次
+    expect(wordKeyWeight("apple", weights)).toBe(0); // 不含弱键
   });
 });
