@@ -1,25 +1,25 @@
-{"text":"0","topic":"literal","form":"value","note_zh":"零值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1","topic":"literal","form":"value","note_zh":"单位值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"100","topic":"literal","form":"value","note_zh":"整百","source_id":"keyloop:programming-basics:seeds"}
-{"text":"42","topic":"literal","form":"value","note_zh":"整型字面量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"255","topic":"literal","form":"value","note_zh":"字节上限","source_id":"keyloop:programming-basics:seeds"}
-{"text":"2026","topic":"literal","form":"value","note_zh":"年份","source_id":"keyloop:programming-basics:seeds"}
-{"text":"-1","topic":"literal","form":"value","note_zh":"哨兵值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"3.14","topic":"literal","form":"value","note_zh":"浮点数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"0.5","topic":"literal","form":"value","note_zh":"系数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1000000","topic":"literal","form":"value","note_zh":"百万","source_id":"keyloop:programming-basics:seeds"}
-{"text":"NULL","topic":"literal","form":"value","note_zh":"空值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"TRUE","topic":"literal","form":"value","note_zh":"布尔真","source_id":"keyloop:programming-basics:seeds"}
-{"text":"FALSE","topic":"literal","form":"value","note_zh":"布尔假","source_id":"keyloop:programming-basics:seeds"}
-{"text":"active","topic":"string","form":"value","note_zh":"状态串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"paid","topic":"string","form":"value","note_zh":"状态串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"2026-06-22","topic":"string","form":"value","note_zh":"日期串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"2026-06-22T09:30:00Z","topic":"string","form":"value","note_zh":"ISO 时间戳","source_id":"keyloop:programming-basics:seeds"}
-{"text":"%Y-%m-%d","topic":"string","form":"value","note_zh":"日期格式","source_id":"keyloop:programming-basics:seeds"}
-{"text":"admin@x.com","topic":"string","form":"value","note_zh":"邮箱地址","source_id":"keyloop:programming-basics:seeds"}
-{"text":"%@example.com","topic":"string","form":"value","note_zh":"LIKE 模式","source_id":"keyloop:programming-basics:seeds"}
-{"text":"getting-started","topic":"string","form":"value","note_zh":"slug 串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"10.5","topic":"string","form":"value","note_zh":"数字字符串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0","topic":"literal","form":"value","format":"number","note_zh":"零值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1","topic":"literal","form":"value","format":"number","note_zh":"单位值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"100","topic":"literal","form":"value","format":"number","note_zh":"整百","source_id":"keyloop:programming-basics:seeds"}
+{"text":"42","topic":"literal","form":"value","format":"number","note_zh":"整型字面量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"255","topic":"literal","form":"value","format":"number","note_zh":"字节上限","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2026","topic":"literal","form":"value","format":"number","note_zh":"年份","source_id":"keyloop:programming-basics:seeds"}
+{"text":"-1","topic":"literal","form":"value","format":"other","note_zh":"哨兵值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"3.14","topic":"literal","form":"value","format":"other","note_zh":"浮点数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0.5","topic":"literal","form":"value","format":"other","note_zh":"系数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1000000","topic":"literal","form":"value","format":"number","note_zh":"百万","source_id":"keyloop:programming-basics:seeds"}
+{"text":"NULL","topic":"literal","form":"value","format":"other","note_zh":"空值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"TRUE","topic":"literal","form":"value","format":"other","note_zh":"布尔真","source_id":"keyloop:programming-basics:seeds"}
+{"text":"FALSE","topic":"literal","form":"value","format":"other","note_zh":"布尔假","source_id":"keyloop:programming-basics:seeds"}
+{"text":"active","topic":"string","form":"value","format":"other","note_zh":"状态串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"paid","topic":"string","form":"value","format":"other","note_zh":"状态串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2026-06-22","topic":"string","form":"value","format":"date","note_zh":"日期串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2026-06-22T09:30:00Z","topic":"string","form":"value","format":"datetime","note_zh":"ISO 时间戳","source_id":"keyloop:programming-basics:seeds"}
+{"text":"%Y-%m-%d","topic":"string","form":"value","format":"other","note_zh":"日期格式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"admin@x.com","topic":"string","form":"value","format":"email","note_zh":"邮箱地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"%@example.com","topic":"string","form":"value","format":"email","note_zh":"LIKE 模式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"getting-started","topic":"string","form":"value","format":"other","note_zh":"slug 串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"10.5","topic":"string","form":"value","format":"other","note_zh":"数字字符串","source_id":"keyloop:programming-basics:seeds"}
 {"text":"SELECT email FROM users","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
 {"text":"SELECT status FROM orders","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}
 {"text":"SELECT price FROM products","topic":"call","form":"statement","focus":["FROM"],"note_zh":"基础查询","source_id":"keyloop:programming-basics:seeds"}

@@ -45,6 +45,7 @@ interface OutputCard {
   text: string;
   topic: string;
   form?: "value" | "statement" | "block";
+  format?: string;
   focus?: string[];
   api?: string;
   note_zh: string;
@@ -200,6 +201,7 @@ export function buildLanguageCorpus(
       text: valueText,
       topic: card.topic,
       form: "value",
+      format: inferValueFormat(valueText, card.note_zh),
       ...(card.focus !== undefined ? { focus: card.focus } : {}),
       note_zh: card.note_zh,
       source_id: seed.source_id,
@@ -310,6 +312,17 @@ function assertCorpusQuality(
   const apis = new Set(builtinApi.map((card) => card.api));
   if (apis.size < MIN_APIS) {
     throw new Error(`${language}/builtin_api: only ${apis.size} distinct apis, need >= ${MIN_APIS}`);
+  }
+
+  // 形式维度软校验：value 卡 format=other 占比过高 → 告警（不阻断），提示补推断规则或 note
+  const values = symbolsNumbers.filter((card) => card.form === "value");
+  const others = values.filter((card) => card.format === "other" || card.format === undefined);
+  if (values.length > 0 && others.length / values.length > 0.4) {
+    console.warn(
+      `[${language}] value 卡 format=other 占比 ${Math.round(
+        (others.length / values.length) * 100,
+      )}% 偏高，可补推断规则或 note`,
+    );
   }
 }
 

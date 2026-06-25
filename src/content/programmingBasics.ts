@@ -13,6 +13,7 @@ export interface ProgrammingBasicsCard {
   text: string;
   topic: string;
   form?: ProgrammingBasicsCardForm;
+  format?: string;
   focus?: string[];
   api?: string;
   note_zh?: string;

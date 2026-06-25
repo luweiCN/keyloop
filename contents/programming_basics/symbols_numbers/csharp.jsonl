@@ -1,40 +1,40 @@
-{"text":"https://api.example.com/v1","topic":"string","form":"value","note_zh":"接口地址","source_id":"keyloop:programming-basics:seeds"}
-{"text":"./config/app.json","topic":"string","form":"value","note_zh":"相对路径","source_id":"keyloop:programming-basics:seeds"}
-{"text":"/var/log/app.log","topic":"string","form":"value","note_zh":"绝对路径","source_id":"keyloop:programming-basics:seeds"}
-{"text":"2026-06-22","topic":"string","form":"value","note_zh":"日期","source_id":"keyloop:programming-basics:seeds"}
-{"text":"2026-06-22T08:30:00Z","topic":"string","form":"value","note_zh":"ISO 时间戳","source_id":"keyloop:programming-basics:seeds"}
-{"text":"08:30:00","topic":"string","form":"value","note_zh":"时间","source_id":"keyloop:programming-basics:seeds"}
-{"text":"application/json","topic":"string","form":"value","note_zh":"MIME 类型","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1.4.2","topic":"string","form":"value","note_zh":"版本号","source_id":"keyloop:programming-basics:seeds"}
-{"text":"#1E90FF","topic":"string","form":"value","note_zh":"十六进制颜色","source_id":"keyloop:programming-basics:seeds"}
-{"text":"user@example.com","topic":"string","form":"value","note_zh":"邮箱地址","source_id":"keyloop:programming-basics:seeds"}
-{"text":"192.168.1.1","topic":"string","form":"value","note_zh":"IP 地址","source_id":"keyloop:programming-basics:seeds"}
-{"text":"127.0.0.1:3000","topic":"string","form":"value","note_zh":"主机端口","source_id":"keyloop:programming-basics:seeds"}
-{"text":"$2,499.00","topic":"string","form":"value","note_zh":"金额","source_id":"keyloop:programming-basics:seeds"}
-{"text":"86.5%","topic":"string","form":"value","note_zh":"百分比","source_id":"keyloop:programming-basics:seeds"}
-{"text":"page=2&limit=20","topic":"string","form":"value","note_zh":"查询串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"yyyy-MM-dd","topic":"string","form":"value","note_zh":"日期格式","source_id":"keyloop:programming-basics:seeds"}
-{"text":"^\\\\d{4}-\\\\d{2}$","topic":"string","form":"value","note_zh":"正则匹配","source_id":"keyloop:programming-basics:seeds"}
-{"text":"Content-Type","topic":"string","form":"value","note_zh":"请求头名","source_id":"keyloop:programming-basics:seeds"}
-{"text":"3000","topic":"literal","form":"value","note_zh":"端口号","source_id":"keyloop:programming-basics:seeds"}
-{"text":"404","topic":"literal","form":"value","note_zh":"HTTP 状态码","source_id":"keyloop:programming-basics:seeds"}
-{"text":"30_000","topic":"literal","form":"value","note_zh":"毫秒超时","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1499.99","topic":"literal","form":"value","note_zh":"价格","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1024","topic":"literal","form":"value","note_zh":"字节数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"86400","topic":"literal","form":"value","note_zh":"一天秒数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"3.14159","topic":"literal","form":"value","note_zh":"圆周率","source_id":"keyloop:programming-basics:seeds"}
-{"text":"-1","topic":"literal","form":"value","note_zh":"哨兵值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"0.5","topic":"literal","form":"value","note_zh":"系数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1_000_000L","topic":"literal","form":"value","note_zh":"长整型","source_id":"keyloop:programming-basics:seeds"}
-{"text":"3.14f","topic":"literal","form":"value","note_zh":"float 字面量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"-273.15","topic":"literal","form":"value","note_zh":"负浮点","source_id":"keyloop:programming-basics:seeds"}
-{"text":"2.5e-3","topic":"literal","form":"value","note_zh":"科学计数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"255","topic":"literal","form":"value","note_zh":"字节上限","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'A'","topic":"literal","form":"value","note_zh":"字符字面量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"'\\n'","topic":"literal","form":"value","note_zh":"换行字符","source_id":"keyloop:programming-basics:seeds"}
-{"text":"0xFF","topic":"literal","form":"value","note_zh":"十六进制","source_id":"keyloop:programming-basics:seeds"}
-{"text":"19.99m","topic":"literal","form":"value","note_zh":"decimal 金额","source_id":"keyloop:programming-basics:seeds"}
-{"text":"@\"C:\\logs\\app.log\"","topic":"literal","form":"value","note_zh":"逐字路径串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"https://api.example.com/v1","topic":"string","form":"value","format":"url","note_zh":"接口地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"./config/app.json","topic":"string","form":"value","format":"path","note_zh":"相对路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"/var/log/app.log","topic":"string","form":"value","format":"path","note_zh":"绝对路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2026-06-22","topic":"string","form":"value","format":"date","note_zh":"日期","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2026-06-22T08:30:00Z","topic":"string","form":"value","format":"datetime","note_zh":"ISO 时间戳","source_id":"keyloop:programming-basics:seeds"}
+{"text":"08:30:00","topic":"string","form":"value","format":"time","note_zh":"时间","source_id":"keyloop:programming-basics:seeds"}
+{"text":"application/json","topic":"string","form":"value","format":"mime","note_zh":"MIME 类型","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1.4.2","topic":"string","form":"value","format":"version","note_zh":"版本号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#1E90FF","topic":"string","form":"value","format":"color","note_zh":"十六进制颜色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"user@example.com","topic":"string","form":"value","format":"email","note_zh":"邮箱地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"192.168.1.1","topic":"string","form":"value","format":"ip","note_zh":"IP 地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"127.0.0.1:3000","topic":"string","form":"value","format":"version","note_zh":"主机端口","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$2,499.00","topic":"string","form":"value","format":"money","note_zh":"金额","source_id":"keyloop:programming-basics:seeds"}
+{"text":"86.5%","topic":"string","form":"value","format":"percent","note_zh":"百分比","source_id":"keyloop:programming-basics:seeds"}
+{"text":"page=2&limit=20","topic":"string","form":"value","format":"other","note_zh":"查询串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"yyyy-MM-dd","topic":"string","form":"value","format":"other","note_zh":"日期格式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"^\\\\d{4}-\\\\d{2}$","topic":"string","form":"value","format":"other","note_zh":"正则匹配","source_id":"keyloop:programming-basics:seeds"}
+{"text":"Content-Type","topic":"string","form":"value","format":"other","note_zh":"请求头名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"3000","topic":"literal","form":"value","format":"port","note_zh":"端口号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"404","topic":"literal","form":"value","format":"http_status","note_zh":"HTTP 状态码","source_id":"keyloop:programming-basics:seeds"}
+{"text":"30_000","topic":"literal","form":"value","format":"number","note_zh":"毫秒超时","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1499.99","topic":"literal","form":"value","format":"money","note_zh":"价格","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1024","topic":"literal","form":"value","format":"number","note_zh":"字节数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"86400","topic":"literal","form":"value","format":"number","note_zh":"一天秒数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"3.14159","topic":"literal","form":"value","format":"other","note_zh":"圆周率","source_id":"keyloop:programming-basics:seeds"}
+{"text":"-1","topic":"literal","form":"value","format":"other","note_zh":"哨兵值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0.5","topic":"literal","form":"value","format":"other","note_zh":"系数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1_000_000L","topic":"literal","form":"value","format":"other","note_zh":"长整型","source_id":"keyloop:programming-basics:seeds"}
+{"text":"3.14f","topic":"literal","form":"value","format":"other","note_zh":"float 字面量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"-273.15","topic":"literal","form":"value","format":"other","note_zh":"负浮点","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2.5e-3","topic":"literal","form":"value","format":"number","note_zh":"科学计数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"255","topic":"literal","form":"value","format":"number","note_zh":"字节上限","source_id":"keyloop:programming-basics:seeds"}
+{"text":"'A'","topic":"literal","form":"value","format":"other","note_zh":"字符字面量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"'\\n'","topic":"literal","form":"value","format":"other","note_zh":"换行字符","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0xFF","topic":"literal","form":"value","format":"other","note_zh":"十六进制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"19.99m","topic":"literal","form":"value","format":"money","note_zh":"decimal 金额","source_id":"keyloop:programming-basics:seeds"}
+{"text":"@\"C:\\logs\\app.log\"","topic":"literal","form":"value","format":"other","note_zh":"逐字路径串","source_id":"keyloop:programming-basics:seeds"}
 {"text":"var items = new List<Item>();","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"var users = new List<User>();","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"var orders = new List<Order>();","topic":"declaration","form":"statement","focus":["=","<>"],"note_zh":"列表声明","source_id":"keyloop:programming-basics:seeds"}

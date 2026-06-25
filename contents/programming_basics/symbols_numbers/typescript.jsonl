@@ -1,43 +1,43 @@
-{"text":"https://api.example.com/v2","topic":"string","form":"value","note_zh":"接口地址","source_id":"keyloop:programming-basics:seeds"}
-{"text":"./src/components/App.tsx","topic":"string","form":"value","note_zh":"相对路径","source_id":"keyloop:programming-basics:seeds"}
-{"text":"/var/lib/data.db","topic":"string","form":"value","note_zh":"绝对路径","source_id":"keyloop:programming-basics:seeds"}
-{"text":"2026-12-31","topic":"string","form":"value","note_zh":"日期串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"2026-06-22T23:59:59Z","topic":"string","form":"value","note_zh":"ISO 时间戳","source_id":"keyloop:programming-basics:seeds"}
-{"text":"08:30:00","topic":"string","form":"value","note_zh":"时间串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"application/xml","topic":"string","form":"value","note_zh":"MIME 类型","source_id":"keyloop:programming-basics:seeds"}
-{"text":"3.2.1","topic":"string","form":"value","note_zh":"语义化版本","source_id":"keyloop:programming-basics:seeds"}
-{"text":"~4.1.0","topic":"string","form":"value","note_zh":"npm 版本范围","source_id":"keyloop:programming-basics:seeds"}
-{"text":"#0ea5e9","topic":"string","form":"value","note_zh":"十六进制颜色","source_id":"keyloop:programming-basics:seeds"}
-{"text":"rgb(0,128,255)","topic":"string","form":"value","note_zh":"RGB 颜色","source_id":"keyloop:programming-basics:seeds"}
-{"text":"dev@example.org","topic":"string","form":"value","note_zh":"邮箱地址","source_id":"keyloop:programming-basics:seeds"}
-{"text":"10.0.0.1","topic":"string","form":"value","note_zh":"IP 地址","source_id":"keyloop:programming-basics:seeds"}
-{"text":"localhost:8080","topic":"string","form":"value","note_zh":"主机端口","source_id":"keyloop:programming-basics:seeds"}
-{"text":"$1,299.00","topic":"string","form":"value","note_zh":"金额","source_id":"keyloop:programming-basics:seeds"}
-{"text":"99.9%","topic":"string","form":"value","note_zh":"百分比","source_id":"keyloop:programming-basics:seeds"}
-{"text":"?q=test&limit=20","topic":"string","form":"value","note_zh":"查询串","source_id":"keyloop:programming-basics:seeds"}
-{"text":"HH:mm:ss","topic":"string","form":"value","note_zh":"时间格式","source_id":"keyloop:programming-basics:seeds"}
-{"text":"text-sm","topic":"string","form":"value","note_zh":"CSS 类名","source_id":"keyloop:programming-basics:seeds"}
-{"text":"/^[a-z]+$/","topic":"string","form":"value","note_zh":"正则字面量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"GET","topic":"string","form":"value","note_zh":"HTTP 方法字面量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"POST","topic":"string","form":"value","note_zh":"HTTP 方法字面量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"pending","topic":"string","form":"value","note_zh":"状态字面量","source_id":"keyloop:programming-basics:seeds"}
-{"text":"3000","topic":"literal","form":"value","note_zh":"端口号","source_id":"keyloop:programming-basics:seeds"}
-{"text":"5432","topic":"literal","form":"value","note_zh":"数据库端口","source_id":"keyloop:programming-basics:seeds"}
-{"text":"201","topic":"literal","form":"value","note_zh":"HTTP 状态","source_id":"keyloop:programming-basics:seeds"}
-{"text":"404","topic":"literal","form":"value","note_zh":"HTTP 状态","source_id":"keyloop:programming-basics:seeds"}
-{"text":"500","topic":"literal","form":"value","note_zh":"HTTP 状态","source_id":"keyloop:programming-basics:seeds"}
-{"text":"60_000","topic":"literal","form":"value","note_zh":"毫秒超时","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1299.99","topic":"literal","form":"value","note_zh":"价格","source_id":"keyloop:programming-basics:seeds"}
-{"text":"9.99","topic":"literal","form":"value","note_zh":"价格","source_id":"keyloop:programming-basics:seeds"}
-{"text":"2048","topic":"literal","form":"value","note_zh":"字节数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"32768","topic":"literal","form":"value","note_zh":"字节上限","source_id":"keyloop:programming-basics:seeds"}
-{"text":"3600","topic":"literal","form":"value","note_zh":"一小时秒数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"604800","topic":"literal","form":"value","note_zh":"一周秒数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"2.71828","topic":"literal","form":"value","note_zh":"自然常数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"-1","topic":"literal","form":"value","note_zh":"哨兵值","source_id":"keyloop:programming-basics:seeds"}
-{"text":"0.25","topic":"literal","form":"value","note_zh":"系数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"0xff","topic":"literal","form":"value","note_zh":"十六进制","source_id":"keyloop:programming-basics:seeds"}
-{"text":"0n","topic":"literal","form":"value","note_zh":"BigInt 零","source_id":"keyloop:programming-basics:seeds"}
+{"text":"https://api.example.com/v2","topic":"string","form":"value","format":"url","note_zh":"接口地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"./src/components/App.tsx","topic":"string","form":"value","format":"path","note_zh":"相对路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"/var/lib/data.db","topic":"string","form":"value","format":"path","note_zh":"绝对路径","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2026-12-31","topic":"string","form":"value","format":"date","note_zh":"日期串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2026-06-22T23:59:59Z","topic":"string","form":"value","format":"datetime","note_zh":"ISO 时间戳","source_id":"keyloop:programming-basics:seeds"}
+{"text":"08:30:00","topic":"string","form":"value","format":"time","note_zh":"时间串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"application/xml","topic":"string","form":"value","format":"mime","note_zh":"MIME 类型","source_id":"keyloop:programming-basics:seeds"}
+{"text":"3.2.1","topic":"string","form":"value","format":"version","note_zh":"语义化版本","source_id":"keyloop:programming-basics:seeds"}
+{"text":"~4.1.0","topic":"string","form":"value","format":"version","note_zh":"npm 版本范围","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#0ea5e9","topic":"string","form":"value","format":"color","note_zh":"十六进制颜色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"rgb(0,128,255)","topic":"string","form":"value","format":"color","note_zh":"RGB 颜色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"dev@example.org","topic":"string","form":"value","format":"email","note_zh":"邮箱地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"10.0.0.1","topic":"string","form":"value","format":"ip","note_zh":"IP 地址","source_id":"keyloop:programming-basics:seeds"}
+{"text":"localhost:8080","topic":"string","form":"value","format":"port","note_zh":"主机端口","source_id":"keyloop:programming-basics:seeds"}
+{"text":"$1,299.00","topic":"string","form":"value","format":"money","note_zh":"金额","source_id":"keyloop:programming-basics:seeds"}
+{"text":"99.9%","topic":"string","form":"value","format":"percent","note_zh":"百分比","source_id":"keyloop:programming-basics:seeds"}
+{"text":"?q=test&limit=20","topic":"string","form":"value","format":"other","note_zh":"查询串","source_id":"keyloop:programming-basics:seeds"}
+{"text":"HH:mm:ss","topic":"string","form":"value","format":"other","note_zh":"时间格式","source_id":"keyloop:programming-basics:seeds"}
+{"text":"text-sm","topic":"string","form":"value","format":"other","note_zh":"CSS 类名","source_id":"keyloop:programming-basics:seeds"}
+{"text":"/^[a-z]+$/","topic":"string","form":"value","format":"regex","note_zh":"正则字面量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"GET","topic":"string","form":"value","format":"http_method","note_zh":"HTTP 方法字面量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"POST","topic":"string","form":"value","format":"http_method","note_zh":"HTTP 方法字面量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"pending","topic":"string","form":"value","format":"other","note_zh":"状态字面量","source_id":"keyloop:programming-basics:seeds"}
+{"text":"3000","topic":"literal","form":"value","format":"port","note_zh":"端口号","source_id":"keyloop:programming-basics:seeds"}
+{"text":"5432","topic":"literal","form":"value","format":"port","note_zh":"数据库端口","source_id":"keyloop:programming-basics:seeds"}
+{"text":"201","topic":"literal","form":"value","format":"http_status","note_zh":"HTTP 状态","source_id":"keyloop:programming-basics:seeds"}
+{"text":"404","topic":"literal","form":"value","format":"http_status","note_zh":"HTTP 状态","source_id":"keyloop:programming-basics:seeds"}
+{"text":"500","topic":"literal","form":"value","format":"http_status","note_zh":"HTTP 状态","source_id":"keyloop:programming-basics:seeds"}
+{"text":"60_000","topic":"literal","form":"value","format":"number","note_zh":"毫秒超时","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1299.99","topic":"literal","form":"value","format":"money","note_zh":"价格","source_id":"keyloop:programming-basics:seeds"}
+{"text":"9.99","topic":"literal","form":"value","format":"money","note_zh":"价格","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2048","topic":"literal","form":"value","format":"number","note_zh":"字节数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"32768","topic":"literal","form":"value","format":"number","note_zh":"字节上限","source_id":"keyloop:programming-basics:seeds"}
+{"text":"3600","topic":"literal","form":"value","format":"number","note_zh":"一小时秒数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"604800","topic":"literal","form":"value","format":"number","note_zh":"一周秒数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2.71828","topic":"literal","form":"value","format":"other","note_zh":"自然常数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"-1","topic":"literal","form":"value","format":"other","note_zh":"哨兵值","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0.25","topic":"literal","form":"value","format":"other","note_zh":"系数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0xff","topic":"literal","form":"value","format":"other","note_zh":"十六进制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0n","topic":"literal","form":"value","format":"other","note_zh":"BigInt 零","source_id":"keyloop:programming-basics:seeds"}
 {"text":"const items = [];","topic":"declaration","form":"statement","focus":["=",";"],"note_zh":"常量声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"const users = [];","topic":"declaration","form":"statement","focus":["=",";"],"note_zh":"常量声明","source_id":"keyloop:programming-basics:seeds"}
 {"text":"const orders = [];","topic":"declaration","form":"statement","focus":["=",";"],"note_zh":"常量声明","source_id":"keyloop:programming-basics:seeds"}

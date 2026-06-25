@@ -3,7 +3,7 @@ import {
   listProgrammingBasicsLanguages,
   loadProgrammingBasicsCards,
 } from "../src/content/programmingBasics";
-import { inferValueFormat } from "../src/tools/buildProgrammingBasicsContent";
+import { buildLanguageCorpus, inferValueFormat } from "../src/tools/buildProgrammingBasicsContent";
 
 const SYMBOL_TOPICS = new Set(["declaration", "call", "control", "index", "literal", "string"]);
 const FORMS = new Set(["value", "statement", "block"]);
@@ -121,5 +121,28 @@ describe("inferValueFormat", () => {
   test("都不中归 other", () => {
     expect(inferValueFormat("pending", "状态字面量")).toBe("other");
     expect(inferValueFormat("text-sm", "CSS 类名")).toBe("other");
+  });
+});
+
+describe("buildLanguageCorpus 写入 value 卡 format", () => {
+  test("编译时给 value 卡推断并写入 format", () => {
+    const { symbolsNumbers } = buildLanguageCorpus(
+      {
+        language: "typescript",
+        source_id: "s",
+        identifier_sets: [],
+        symbols_numbers_values: [
+          { text: "10.0.0.1", topic: "string", note_zh: "IP 地址" },
+          { text: "2026-12-31", topic: "string", note_zh: "日期串" },
+        ],
+        symbols_numbers_templates: [],
+        symbols_numbers_static: [],
+        symbols_numbers_blocks: [],
+        builtin_api_cards: [],
+      },
+      "test-seed",
+    );
+    expect(symbolsNumbers.find((c) => c.text === "10.0.0.1")?.format).toBe("ip");
+    expect(symbolsNumbers.find((c) => c.text === "2026-12-31")?.format).toBe("date");
   });
 });

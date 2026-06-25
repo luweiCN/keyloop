@@ -1,23 +1,23 @@
-{"text":"#FF0000","topic":"literal","form":"value","note_zh":"红色十六进制","source_id":"keyloop:programming-basics:seeds"}
-{"text":"#3B82F6","topic":"literal","form":"value","note_zh":"蓝色十六进制","source_id":"keyloop:programming-basics:seeds"}
-{"text":"#0F172A","topic":"literal","form":"value","note_zh":"深底色","source_id":"keyloop:programming-basics:seeds"}
-{"text":"#00000080","topic":"literal","form":"value","note_zh":"半透明黑","source_id":"keyloop:programming-basics:seeds"}
-{"text":"100px","topic":"literal","form":"value","note_zh":"像素长度","source_id":"keyloop:programming-basics:seeds"}
-{"text":"16px","topic":"literal","form":"value","note_zh":"字号像素","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1.5em","topic":"literal","form":"value","note_zh":"相对长度","source_id":"keyloop:programming-basics:seeds"}
-{"text":"2rem","topic":"literal","form":"value","note_zh":"根相对长度","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1.5rem","topic":"literal","form":"value","note_zh":"根相对长度","source_id":"keyloop:programming-basics:seeds"}
-{"text":"50%","topic":"literal","form":"value","note_zh":"百分比","source_id":"keyloop:programming-basics:seeds"}
-{"text":"100%","topic":"literal","form":"value","note_zh":"全宽","source_id":"keyloop:programming-basics:seeds"}
-{"text":"100vh","topic":"literal","form":"value","note_zh":"视口高","source_id":"keyloop:programming-basics:seeds"}
-{"text":"100vw","topic":"literal","form":"value","note_zh":"视口宽","source_id":"keyloop:programming-basics:seeds"}
-{"text":"0.3s","topic":"literal","form":"value","note_zh":"时间秒","source_id":"keyloop:programming-basics:seeds"}
-{"text":"300ms","topic":"literal","form":"value","note_zh":"毫秒","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1fr","topic":"literal","form":"value","note_zh":"网格分数单位","source_id":"keyloop:programming-basics:seeds"}
-{"text":"90deg","topic":"literal","form":"value","note_zh":"角度","source_id":"keyloop:programming-basics:seeds"}
-{"text":"0.5","topic":"literal","form":"value","note_zh":"透明度系数","source_id":"keyloop:programming-basics:seeds"}
-{"text":"999","topic":"literal","form":"value","note_zh":"层叠层级","source_id":"keyloop:programming-basics:seeds"}
-{"text":"1.2","topic":"literal","form":"value","note_zh":"行高倍数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#FF0000","topic":"literal","form":"value","format":"color","note_zh":"红色十六进制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#3B82F6","topic":"literal","form":"value","format":"color","note_zh":"蓝色十六进制","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#0F172A","topic":"literal","form":"value","format":"color","note_zh":"深底色","source_id":"keyloop:programming-basics:seeds"}
+{"text":"#00000080","topic":"literal","form":"value","format":"color","note_zh":"半透明黑","source_id":"keyloop:programming-basics:seeds"}
+{"text":"100px","topic":"literal","form":"value","format":"other","note_zh":"像素长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"16px","topic":"literal","form":"value","format":"other","note_zh":"字号像素","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1.5em","topic":"literal","form":"value","format":"other","note_zh":"相对长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"2rem","topic":"literal","form":"value","format":"other","note_zh":"根相对长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1.5rem","topic":"literal","form":"value","format":"other","note_zh":"根相对长度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"50%","topic":"literal","form":"value","format":"percent","note_zh":"百分比","source_id":"keyloop:programming-basics:seeds"}
+{"text":"100%","topic":"literal","form":"value","format":"percent","note_zh":"全宽","source_id":"keyloop:programming-basics:seeds"}
+{"text":"100vh","topic":"literal","form":"value","format":"other","note_zh":"视口高","source_id":"keyloop:programming-basics:seeds"}
+{"text":"100vw","topic":"literal","form":"value","format":"other","note_zh":"视口宽","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0.3s","topic":"literal","form":"value","format":"other","note_zh":"时间秒","source_id":"keyloop:programming-basics:seeds"}
+{"text":"300ms","topic":"literal","form":"value","format":"number","note_zh":"毫秒","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1fr","topic":"literal","form":"value","format":"other","note_zh":"网格分数单位","source_id":"keyloop:programming-basics:seeds"}
+{"text":"90deg","topic":"literal","form":"value","format":"other","note_zh":"角度","source_id":"keyloop:programming-basics:seeds"}
+{"text":"0.5","topic":"literal","form":"value","format":"other","note_zh":"透明度系数","source_id":"keyloop:programming-basics:seeds"}
+{"text":"999","topic":"literal","form":"value","format":"number","note_zh":"层叠层级","source_id":"keyloop:programming-basics:seeds"}
+{"text":"1.2","topic":"literal","form":"value","format":"other","note_zh":"行高倍数","source_id":"keyloop:programming-basics:seeds"}
 {"text":"color: #FF0000;","topic":"declaration","form":"statement","focus":[":","#"],"note_zh":"文字颜色","source_id":"keyloop:programming-basics:seeds"}
 {"text":"background-color: #3B82F6;","topic":"declaration","form":"statement","focus":[":","#"],"note_zh":"背景色","source_id":"keyloop:programming-basics:seeds"}
 {"text":"margin: 0 auto;","topic":"declaration","form":"statement","focus":[":"],"note_zh":"水平居中","source_id":"keyloop:programming-basics:seeds"}
