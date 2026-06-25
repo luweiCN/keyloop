@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 import prettier from "@prettier/sync";
@@ -85,6 +85,23 @@ export function formatCodeSnippetsForPractice(
   settings: CodeStyleSettings = defaultCodeStyleSettings(),
 ): CodeSnippet[] {
   return snippets.map((snippet) => formatCodeSnippetForPractice(snippet, settings));
+}
+
+/** 问题4：异步并行格式化——各片段并发 spawn，总耗时≈最慢单个而非累加；填同一缓存。 */
+export async function formatCodeSnippetsForPracticeAsync(
+  snippets: CodeSnippet[],
+  settings: CodeStyleSettings = defaultCodeStyleSettings(),
+): Promise<CodeSnippet[]> {
+  return Promise.all(
+    snippets.map(async (snippet) => ({
+      ...snippet,
+      text: await formatCodeForPracticeAsync(
+        snippet.text,
+        snippet.syntax_language ?? snippet.language,
+        settings,
+      ),
+    })),
+  );
 }
 
 export function formatCodeForPractice(
@@ -374,4 +391,145 @@ function addAncestorRoots(roots: string[], path: string | undefined): void {
 
 function stripFinalNewline(text: string): string {
   return text.replace(/\n+$/u, "");
+}
+
+/**
+ * 问题4：异步格式化——进程内 prettier core 保持同步（快、纯 CPU）；外部格式化器
+ * （prettier 插件 CLI / rustfmt / gofmt / ruff / black）改用异步 spawn，等子进程时
+ * 让出事件循环，主线程可继续渲染。结果填入与同步版共用的缓存，便于后台预热。
+ */
+export async function formatCodeForPracticeAsync(
+  text: string,
+  language: string,
+  settings: CodeStyleSettings = defaultCodeStyleSettings(),
+): Promise<string> {
+  const normalized = normalizeSnippetText(text);
+  const languageKey = language.toLowerCase();
+  const cacheKey = formatCodePracticeCacheKey(normalized, languageKey, settings);
+  const cached = formatCodePracticeCache.get(cacheKey);
+  if (cached !== undefined) {
+    formatCodePracticeCache.delete(cacheKey);
+    formatCodePracticeCache.set(cacheKey, cached);
+    return cached;
+  }
+
+  let result: string;
+  if (settings.formatter === "off") {
+    result = normalized;
+  } else {
+    const formatted = await formatWithSelectedFormatterAsync(normalized, languageKey, settings);
+    result = formatted ?? normalized;
+  }
+
+  rememberFormatCodePracticeCache(cacheKey, result);
+  return result;
+}
+
+async function formatWithSelectedFormatterAsync(
+  text: string,
+  language: string,
+  settings: CodeStyleSettings,
+): Promise<string | null> {
+  switch (settings.formatter) {
+    case "auto":
+      return (
+        formatWithPrettierCore(text, language, settings) ??
+        (await formatWithPrettierPluginCliAsync(text, language, settings)) ??
+        (await formatWithNativeToolAsync(text, language))
+      );
+    case "prettier":
+      return (
+        formatWithPrettierCore(text, language, settings) ??
+        (await formatWithPrettierPluginCliAsync(text, language, settings))
+      );
+    case "native":
+      return formatWithNativeToolAsync(text, language);
+    case "off":
+      return text;
+    default: {
+      const exhaustive: never = settings.formatter;
+      return exhaustive;
+    }
+  }
+}
+
+async function formatWithPrettierPluginCliAsync(
+  text: string,
+  language: string,
+  settings: CodeStyleSettings,
+): Promise<string | null> {
+  const config = prettierPluginConfigs.get(language);
+  const command = prettierCommand();
+  if (config === undefined || command === null) {
+    return null;
+  }
+  return runFormatterCommandAsync(
+    command,
+    [
+      "--parser",
+      config.parser,
+      "--plugin",
+      resolvePrettierPlugin(config.plugin),
+      "--stdin-filepath",
+      config.filePath,
+      "--tab-width",
+      String(settings.indent_width),
+      settings.indent_style === "tab" ? "--use-tabs" : "--no-use-tabs",
+      settings.semicolons === "always" ? "--semi" : "--no-semi",
+      settings.quotes === "single" ? "--single-quote" : "--no-single-quote",
+      "--trailing-comma",
+      settings.trailing_commas,
+    ],
+    text,
+  );
+}
+
+async function formatWithNativeToolAsync(text: string, language: string): Promise<string | null> {
+  switch (language) {
+    case "rust":
+    case "rs":
+      return runFormatterCommandAsync("rustfmt", ["--emit", "stdout", "--edition", "2021"], text);
+    case "go":
+      return runFormatterCommandAsync("gofmt", [], text);
+    case "python":
+    case "py":
+      return (
+        (await runFormatterCommandAsync(
+          "ruff",
+          ["format", "--stdin-filename", "snippet.py", "-"],
+          text,
+        )) ?? (await runFormatterCommandAsync("black", ["--quiet", "-"], text))
+      );
+    default:
+      return null;
+  }
+}
+
+/** 异步运行格式化子进程：写 stdin、收 stdout，超时/出错/非零退出一律返回 null（沿用同步版语义）。 */
+function runFormatterCommandAsync(
+  command: string,
+  args: string[],
+  text: string,
+): Promise<string | null> {
+  return new Promise((resolve) => {
+    let stdout = "";
+    let settled = false;
+    const finish = (value: string | null): void => {
+      if (!settled) {
+        settled = true;
+        resolve(value);
+      }
+    };
+    const child = spawn(command, args, { timeout: formatterTimeoutMs });
+    child.stdout?.on("data", (chunk: Buffer) => {
+      stdout += chunk.toString("utf8");
+    });
+    child.on("error", () => finish(null));
+    child.on("close", (code) => {
+      finish(code === 0 && stdout.length > 0 ? stripFinalNewline(stdout) : null);
+    });
+    child.stdin?.on("error", () => finish(null));
+    child.stdin?.write(text);
+    child.stdin?.end();
+  });
 }

@@ -47,6 +47,7 @@ import {
 } from "./appModel";
 import { buildPlan } from "../../training/plan";
 import {
+  prebuildStageCodeTargetAsync,
   refreshModuleMixTarget,
   type BuildTargetContext,
 } from "../../training/targets";
@@ -223,6 +224,9 @@ export async function openTuiStartRunner(
   let forcedSelection: LessonSelection | undefined;
   let reusableRenderer = context.initialRenderer;
   const materializedLessons = [...context.dailyPlan.lessons];
+  // 问题4：练当前课时后台异步预组下一节 code 课的 target（lessonId → target），
+  // 开练/完成时直接取用，避免在主线程同步组卷（外部格式化器 spawnSync）阻塞渲染。
+  const prebuiltTargets = new Map<string, PracticeTarget>();
   let runtimeCodeConfig = cloneCodeConfig(context.codeConfig);
   let runtimeEverydaySettings =
     context.targetContext?.everydaySettings === undefined
@@ -269,10 +273,13 @@ export async function openTuiStartRunner(
       reusableRenderer?.destroy?.();
       return withRuntimeSettings({ completedRecords });
     }
+    const prebuiltTarget = prebuiltTargets.get(storedSelection.lesson.id);
     const refreshedSelection =
-      forced === undefined
-        ? refreshSelectionForCurrentRecords(runtimeContext, storedSelection, completedRecords)
-        : storedSelection;
+      forced !== undefined
+        ? storedSelection
+        : prebuiltTarget !== undefined
+          ? prebuiltSelection(storedSelection, prebuiltTarget)
+          : refreshSelectionForCurrentRecords(runtimeContext, storedSelection, completedRecords);
     // 惰性课开练时组卷成可打 target（pending 为空的课原样返回）
     const selection = materializeSelection(
       runtimeContext,
@@ -292,6 +299,9 @@ export async function openTuiStartRunner(
     if (renderer.keyInput === undefined) {
       return withRuntimeSettings({ completedRecords });
     }
+
+    // 问题4：练当前课时后台异步预组下一节 code 课（不阻塞主线程），开练/完成时取用
+    schedulePrebuildNextLesson(runtimeContext, selection.index, completedRecords, prebuiltTargets);
 
     const runResult = await runLessonUntilComplete(
       runtimeContext,
@@ -340,14 +350,9 @@ export async function openTuiStartRunner(
     const nextSelection = isStandaloneRun(context)
       ? undefined
       : firstUnfinishedLesson(context, completedRecords);
-    const nextLesson =
-      nextSelection === undefined
-        ? undefined
-        : refreshSelectionForCurrentRecords(
-            context,
-            nextSelection,
-            completedRecords,
-          ).lesson;
+    // 问题4：完成页只显示下一课模块名预览、不需要组好的 target——直接用 pending 课，
+    // 不在"打完最后一字→完成页"之间同步组卷（消除卡顿）；真正组卷在开练下一课时用预组结果。
+    const nextLesson = nextSelection?.lesson;
     const completedLesson =
       runResult.target === undefined
         ? selection.lesson
@@ -1336,6 +1341,49 @@ export function liveStateFromSession(
       elapsedMs,
     ),
   };
+}
+
+function prebuiltSelection<T extends { lesson: PracticeLesson }>(
+  selection: T,
+  target: PracticeTarget,
+): T {
+  const lesson: PracticeLesson = { ...selection.lesson, target };
+  delete lesson.pending;
+  return { ...selection, lesson };
+}
+
+/** 问题4：练当前课时调度后台预组下一节课（仅 code 阶段实际预组，其余返回 null 跳过）。 */
+function schedulePrebuildNextLesson(
+  context: StartRunnerContext,
+  currentIndex: number,
+  completedRecords: SessionRecord[],
+  store: Map<string, PracticeTarget>,
+): void {
+  const nextLesson = context.dailyPlan.lessons[currentIndex + 1];
+  if (nextLesson === undefined || store.has(nextLesson.id)) {
+    return;
+  }
+  void prebuildNextLessonTarget(context, nextLesson, completedRecords, store);
+}
+
+async function prebuildNextLessonTarget(
+  context: StartRunnerContext,
+  lesson: PracticeLesson,
+  completedRecords: SessionRecord[],
+  store: Map<string, PracticeTarget>,
+): Promise<void> {
+  try {
+    const targetContext = refreshTargetContext(context, lesson, completedRecords);
+    if (targetContext === undefined) {
+      return;
+    }
+    const target = await prebuildStageCodeTargetAsync(lesson, targetContext);
+    if (target !== null) {
+      store.set(lesson.id, target);
+    }
+  } catch {
+    // 预组失败静默：开练时同步组卷兜底
+  }
 }
 
 export async function showCompletionPage(

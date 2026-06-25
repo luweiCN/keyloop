@@ -1,6 +1,9 @@
 import type { ContentLibrary, EverydayArticleEntry, ProgrammingWordEntry } from "../content/library";
 import { pickCodeCorpusSnippetsExcludingByDifficulty } from "../content/codeCorpus";
-import { formatCodeSnippetsForPractice } from "../content/codeFormatter";
+import {
+  formatCodeSnippetsForPractice,
+  formatCodeSnippetsForPracticeAsync,
+} from "../content/codeFormatter";
 import {
   pickBuiltinCodeExcludingByDifficulty,
   pickCodeSnippetsExcludingByDifficulty,
@@ -509,6 +512,30 @@ export function buildCodeMixPracticeTarget(
   count?: number,
 ): PracticeTarget {
   return codeMixTarget(context, count);
+}
+
+/** 问题4：异步版组卷，供练课时后台预组下一课。 */
+export async function buildCodeMixPracticeTargetAsync(
+  context: BuildTargetContext,
+  count?: number,
+): Promise<PracticeTarget> {
+  return codeMixTargetAsync(context, count);
+}
+
+/**
+ * 问题4：练当前课时后台预组下一节阶段课——仅对 code 阶段（组卷慢）异步预组，用异步
+ * 格式化不阻塞主线程；非 code 阶段返回 null（它们组卷快、无需预组）。
+ */
+export async function prebuildStageCodeTargetAsync(
+  lesson: PracticeLesson,
+  context: BuildTargetContext,
+): Promise<PracticeTarget | null> {
+  if (stageFormFromLesson(lesson) !== "code") {
+    return null;
+  }
+  const profile = buildSkillProfile(context.records, context.plan, context.now);
+  const budget = charBudget("code", lesson.estimated_minutes, profile.form_speeds);
+  return codeMixTargetAsync(context, undefined, budget);
 }
 
 export function buildCodeSpecialistPracticeTarget(
@@ -1693,11 +1720,17 @@ function everydayWordDecompositionTarget(context: BuildTargetContext): PracticeT
   };
 }
 
-function codeMixTarget(
+interface SelectedCodeMix {
+  filled: CodeSnippet[];
+  localCount: number;
+}
+
+/** 选片段（纯同步、快）：与格式化解耦，供同步组卷与异步预组共用。 */
+function selectCodeMixSnippets(
   context: BuildTargetContext,
   count?: number,
   charBudget?: number,
-): PracticeTarget {
+): SelectedCodeMix {
   const codeConfig = context.codeConfig ?? {};
   const excludedTexts = usedCodeSnippetTexts(context.records);
   const difficulty = codeDifficultyForContext(context);
@@ -1734,15 +1767,22 @@ function codeMixTarget(
     charBudget === undefined
       ? chosen
       : refillCodeSnippetsToBudget(chosen, context, codeConfig, difficulty, charBudget);
-  const formatted = formatCodeSnippetsForContext(filled, context);
+  return { filled, localCount: localSnippets.length };
+}
+
+/** 格式化后的收尾（按预算截取 + 拼装 target）：同步异步共用。 */
+function finishCodeMixTarget(
+  formatted: CodeSnippet[],
+  localCount: number,
+  charBudget: number | undefined,
+  context: BuildTargetContext,
+): PracticeTarget {
   const snippets =
-    charBudget === undefined
-      ? formatted
-      : selectSnippetsWithinBudget(formatted, charBudget);
+    charBudget === undefined ? formatted : selectSnippetsWithinBudget(formatted, charBudget);
   const source = codeMixSource(
     context.localCodeSource,
     context.localCodeScanError,
-    localSnippets.length,
+    localCount,
     snippets.length,
   );
   return {
@@ -1751,6 +1791,27 @@ function codeMixTarget(
     source,
     code_blocks: codeBlocksFromSnippets(snippets),
   };
+}
+
+function codeMixTarget(
+  context: BuildTargetContext,
+  count?: number,
+  charBudget?: number,
+): PracticeTarget {
+  const { filled, localCount } = selectCodeMixSnippets(context, count, charBudget);
+  const formatted = formatCodeSnippetsForContext(filled, context);
+  return finishCodeMixTarget(formatted, localCount, charBudget, context);
+}
+
+/** 问题4：异步组卷——格式化用异步 spawn，等外部格式化器时让出主线程，供练课时后台预组。 */
+async function codeMixTargetAsync(
+  context: BuildTargetContext,
+  count?: number,
+  charBudget?: number,
+): Promise<PracticeTarget> {
+  const { filled, localCount } = selectCodeMixSnippets(context, count, charBudget);
+  const formatted = await formatCodeSnippetsForContextAsync(filled, context);
+  return finishCodeMixTarget(formatted, localCount, charBudget, context);
 }
 
 /** 按字符预算累加完整片段：至少 1 片，每片完整不切碎，总量不超 budget × 容差 */
@@ -1835,6 +1896,13 @@ function formatCodeSnippetsForContext(
   context: BuildTargetContext,
 ): CodeSnippet[] {
   return formatCodeSnippetsForPractice(snippets, context.codeStyle);
+}
+
+async function formatCodeSnippetsForContextAsync(
+  snippets: CodeSnippet[],
+  context: BuildTargetContext,
+): Promise<CodeSnippet[]> {
+  return formatCodeSnippetsForPracticeAsync(snippets, context.codeStyle);
 }
 
 function codeBlocksFromSnippets(snippets: CodeSnippet[]): PracticeTargetCodeBlock[] {
