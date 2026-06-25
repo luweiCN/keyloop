@@ -154,7 +154,17 @@ function basicsTarget(
   const available = listProgrammingBasicsLanguages(options);
   const language = resolveProgrammingBasicsLanguage(context.codeConfig, available, random);
   const cards = loadProgrammingBasicsCards(kind, language, options);
-  const picked = pickBalancedCards(cards, random);
+  // 符号/数字专项：有弱符号/数字键 → 偏重含弱键的真实卡（阶段3靶向）；
+  // 无弱键（无记录/全达标）→ 回退 topic 均衡随机，行为不变。其余 kind 不变。
+  const picked = ((): ProgrammingBasicsCard[] => {
+    if (kind === "symbols_numbers") {
+      const weak = symbolWeakKeyWeights(context.records ?? []);
+      if (weak.size > 0) {
+        return pickWeakKeyTargetedCards(cards, weak, CARDS_PER_LESSON_MAX, random);
+      }
+    }
+    return pickBalancedCards(cards, random);
+  })();
   const built =
     kind === "symbols_numbers"
       ? symbolsNumbersText(picked)
