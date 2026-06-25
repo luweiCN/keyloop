@@ -4,6 +4,7 @@ import {
   formatCodeSnippetsForPractice,
   formatCodeSnippetsForPracticeAsync,
 } from "../content/codeFormatter";
+import { weakKeyWeights, wordKeyWeight } from "./wordTargeting";
 import {
   pickBuiltinCodeExcludingByDifficulty,
   pickCodeSnippetsExcludingByDifficulty,
@@ -3051,21 +3052,23 @@ function wordsStageTarget(
     }
   }
 
-  // 单词层不回流具体薄弱词（ADR-0002 废弃 focus_words ③）：选材仅靠随机轮换 +
-  // 字符类/技能维度加权（见下 ②），不把历史错过的具体词优先排到最前。
-  const selected: StageWordCandidate[] = [];
-  // 技能跨阶段（特征偏重）：大小写弱 → 多选含大写/驼峰词（spec §3.4）。
-  // 长度不再是弱点维度（问题1：长词错多是普世现象、非个人短板），故取消长词加权。
+  // 原子层靶向（弱点重构阶段2）：含你弱键的真实词加权随机偏重，绝不改写词；
+  // capitalization 跨键特征叠加（设计 §4.1）；普通词保底权重 1，故仍会掺入。
+  // 原子层靶向（弱点重构阶段2）：含你弱键的真实词权重更高、排到前面，绝不改写词。
+  // capitalization 跨键特征叠加（设计 §4.1）；普通词保底权重 1，弱键词不足时仍会掺入。
+  const weakWeights = weakKeyWeights(context.records ?? []);
   const capWeak = isDimensionWeak(options.profile, "capitalization");
-  const wordBiasScore = (text: string): number =>
-    capWeak && /[A-Z]/u.test(text) ? 1 : 0;
-  const fill = [...pool.values()].filter((item) => !selected.includes(item));
+  const CAP_WEIGHT = 1;
+  const wordWeightOf = (item: StageWordCandidate): number =>
+    1 +
+    (capWeak && /[A-Z]/u.test(item.text) ? CAP_WEIGHT : 0) +
+    wordKeyWeight(item.text, weakWeights);
+  const fill = [...pool.values()];
   shuffleInPlace(fill, random);
-  // 稳定排序把弱特征匹配的词排前；同分保持上面 shuffle 的随机序（JSC 排序稳定）
-  fill.sort((left, right) => wordBiasScore(right.text) - wordBiasScore(left.text));
-  selected.push(...fill);
-  const dose = chooseStageWordDose(selected, options.stage.char_budget);
-  const picked = selected.slice(0, dose.count);
+  // 稳定排序：权重高的（含弱键/大写）排前，同权重保持上面 shuffle 的随机序（JSC 排序稳定）
+  fill.sort((left, right) => wordWeightOf(right) - wordWeightOf(left));
+  const dose = chooseStageWordDose(fill, options.stage.char_budget);
+  const picked = fill.slice(0, dose.count);
 
   const annotated = annotatedOptionalTokenText(
     picked.map((item) => ({

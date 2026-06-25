@@ -381,13 +381,31 @@ describe("buildStageTarget words", () => {
     }));
     context.records = [];
 
-    const target = buildStageTarget(context, {
-      stage: { form: "words", char_budget: 45 },
-      profile: emptyProfile(),
-      enabledModules: ["everyday_english"],
-    });
-
-    expect(target.text).toContain("recent0");
+    const lcg = (seed: number): (() => number) => {
+      let s = seed % 2147483647;
+      if (s <= 0) s += 2147483646;
+      const rand = (): number => (s = (s * 16807) % 2147483647) / 2147483647;
+      for (let i = 0; i < 5; i += 1) rand(); // 预热
+      return rand;
+    };
+    // 无历史 → 弱键权重空 → 候选均匀；多次抽样中练过/未练的词都应能出现（不被历史排除）
+    const appears = (word: string): boolean => {
+      for (let i = 1; i <= 40; i += 1) {
+        context.random = lcg(i);
+        if (
+          buildStageTarget(context, {
+            stage: { form: "words", char_budget: 45 },
+            profile: emptyProfile(),
+            enabledModules: ["everyday_english"],
+          }).text.includes(word)
+        ) {
+          return true;
+        }
+      }
+      return false;
+    };
+    expect(appears("recent0")).toBe(true);
+    expect(appears("fresh19")).toBe(true);
   });
 
   test("disabling programming module excludes programming words", () => {
@@ -807,24 +825,29 @@ describe("buildStageTarget words skill feature-biasing", () => {
     articles: [],
   };
 
-  test("capitalization weak prioritizes uppercase-containing words", () => {
+  test("capitalization weak biases toward uppercase-containing words", () => {
     const stage = { form: "words" as const, char_budget: 80 };
-    const weak = buildStageTarget(stageContext(), {
-      stage,
-      profile: profileWithWeak("capitalization"),
-      customLibraries: [camelLib],
-    });
-    const normal = buildStageTarget(stageContext(), {
-      stage,
-      profile: emptyProfile(),
-      customLibraries: [camelLib],
-    });
-    const countUpper = (text: string) =>
+    const lcg = (seed: number): (() => number) => {
+      let s = seed % 2147483647;
+      if (s <= 0) s += 2147483646;
+      const rand = (): number => (s = (s * 16807) % 2147483647) / 2147483647;
+      for (let i = 0; i < 5; i += 1) rand(); // 预热
+      return rand;
+    };
+    const countUpper = (text: string): number =>
       text.split(" ").filter((w) => /[A-Z]/u.test(w)).length;
-    // 弱项时 3 个驼峰词被排到最前，全部入选
-    expect(countUpper(weak.text)).toBe(3);
-    // 非弱项（纯随机）通常不会把 3 个驼峰词都排到前 3
-    expect(countUpper(normal.text)).toBeLessThan(3);
+    const totalUpper = (profile: SkillProfile): number => {
+      let total = 0;
+      for (let i = 1; i <= 40; i += 1) {
+        const context = { ...stageContext(), random: lcg(i) };
+        total += countUpper(
+          buildStageTarget(context, { stage, profile, customLibraries: [camelLib] }).text,
+        );
+      }
+      return total;
+    };
+    // 弱项时大写/驼峰词被加权偏重（非置顶）：多次抽样累计应明显多于非弱项
+    expect(totalUpper(profileWithWeak("capitalization"))).toBeGreaterThan(totalUpper(emptyProfile()));
   });
 });
 

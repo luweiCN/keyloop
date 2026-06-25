@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { defaultSessionRecord, type KeyEventRecord } from "../src/domain/model";
+import { defaultSessionRecord, type KeyEventRecord, type SessionRecord } from "../src/domain/model";
+import { buildStageTarget, type BuildTargetContext } from "../src/training/targets";
 import {
   weakKeyWeights,
   weightedSampleWithoutReplacement,
@@ -92,5 +93,65 @@ describe("weightedSampleWithoutReplacement", () => {
     ];
     const out = weightedSampleWithoutReplacement(zero, (x) => x.w, 2, () => 0.4);
     expect(new Set(out.map((x) => x.k)).size).toBe(2);
+  });
+});
+
+describe("wordsStageTarget 靶向接入", () => {
+  // 简单可重复随机源（LCG），每个 trial 独立
+  function lcg(seed: number): () => number {
+    let s = seed % 2147483647;
+    if (s <= 0) s += 2147483646;
+    const rand = (): number => (s = (s * 16807) % 2147483647) / 2147483647;
+    for (let i = 0; i < 5; i += 1) rand(); // 预热，避免小种子首个输出极小
+    return rand;
+  }
+
+  function wordsContext(records: SessionRecord[], random: () => number): BuildTargetContext {
+    const words = ["quiz", "apple", "table", "mango", "water", "plant", "stone", "bread"];
+    return {
+      records,
+      plan: {
+        focus_words: [], focus_symbols: [], focus_code: [], focus_keys: [],
+        advice: [], recommended_mode: "words", has_recent_history: false,
+      },
+      library: {
+        everyday_words: { entries: [] },
+        programming_words: words.map((word) => ({ word, note_zh: "释义" })),
+      },
+      random,
+    } as unknown as BuildTargetContext;
+  }
+
+  const wordsOptions = {
+    stage: { form: "words", char_budget: 18 },
+    profile: {
+      dimensions: [], form_speeds: [],
+      focus: { words: [], code: [], chars: [] },
+      daily_active_minutes_7d: 0, generated_at: "",
+    },
+  } as never;
+
+  // q、z 都很弱（quiz 同时含这两键 → 靶向强）
+  function recordsWithWeakQZ(): SessionRecord[] {
+    const fast = ["a", "e", "t", "o", "i", "n"].flatMap((k, idx) => keysAt(k, 6, idx * 20_000, 100));
+    const slowQ = keysAt("q", 6, 200_000, 600, false);
+    const slowZ = keysAt("z", 6, 400_000, 600, false);
+    return [defaultSessionRecord({ key_events: [...fast, ...slowQ, ...slowZ] })];
+  }
+
+  function countQuizHits(records: SessionRecord[], trials: number): number {
+    let hits = 0;
+    for (let i = 0; i < trials; i += 1) {
+      const target = buildStageTarget(wordsContext(records, lcg(i + 1)), wordsOptions);
+      if (target.text.includes("quiz")) hits += 1;
+    }
+    return hits;
+  }
+
+  test("含弱键的词在靶向下入选频率显著高于无弱键(随机)对照", () => {
+    const trials = 80;
+    const targeted = countQuizHits(recordsWithWeakQZ(), trials);
+    const control = countQuizHits([], trials); // 无记录 → 无弱键 → 纯随机
+    expect(targeted).toBeGreaterThan(control + trials * 0.15);
   });
 });
