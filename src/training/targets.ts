@@ -876,6 +876,15 @@ function foundationMixTarget(context: BuildTargetContext): PracticeTarget {
   };
 }
 
+/**
+ * 基础键位钻头的「弱键来源」：统一到 per-key 账本——有击键数据用 weakKeyWeights 的弱键，
+ * 无（冷启动）降级到 plan.focus_keys（旧聚合快照）。消除基础键位的旧 focus_keys 专用信号。
+ */
+export function foundationDrillFocusKeys(context: BuildTargetContext): string[] {
+  const weak = weakKeyWeights(context.records ?? []);
+  return weak.size > 0 ? [...weak.keys()] : context.plan.focus_keys;
+}
+
 function weightedFoundationDrillId(
   context: BuildTargetContext,
   random: () => number,
@@ -887,7 +896,7 @@ function weightedFoundationDrillId(
   const recentDrillIds = recentFoundationDrillIds(context.records, 6);
   const availableDrillIds = drillIds.filter((drillId) => !recentDrillIds.has(drillId));
   const pool = availableDrillIds.length > 0 ? availableDrillIds : drillIds;
-  const focusWeights = foundationDrillFocusWeights(context.plan.focus_keys);
+  const focusWeights = foundationDrillFocusWeights(foundationDrillFocusKeys(context));
   const weightedPool = pool.map((id): WeightedFoundationDrill => ({
     id,
     weight: 1 + (focusWeights.get(id) ?? 0),

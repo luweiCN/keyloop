@@ -18,11 +18,13 @@ import {
   symbolSupplementLines,
   symbolValueCountForBudget,
   usedCodeSnippetTexts,
+  foundationDrillFocusKeys,
   type BuildTargetContext,
 } from "../src/training/targets";
 import type { CodeSnippet } from "../src/content/snippets";
 import { comprehensivePlanMinutes } from "../src/ui/opentui/routeLines";
 import { defaultSessionRecord } from "../src/index";
+import type { KeyEventRecord } from "../src/domain/model";
 
 /** 构造指定字符数的代码片段，用于验证按预算选片的边界行为 */
 function coarseSnippet(chars: number, id: number): CodeSnippet {
@@ -908,5 +910,41 @@ describe("symbolValueCountForBudget（综合训练 value 数随时长伸缩）",
     const fitted = fitSymbolsTargetToBudget(stageContext(), valueFirst, 24);
     expect(fitted.text.split("\n")[0]).toContain("10.0.0.1"); // value 行排最前 → 裁尾部时保留
     expect(fitted.text.length).toBeLessThan(valueFirst.text.length); // 确实裁了尾部 statement
+  });
+});
+
+function keysAtForDrill(
+  key: string,
+  count: number,
+  startMs: number,
+  intervalMs: number,
+  correct = true,
+): KeyEventRecord[] {
+  return Array.from({ length: count }, (_, i) => ({
+    at_ms: startMs + i * intervalMs,
+    action: "insert" as const,
+    position: i,
+    expected: key,
+    input: correct ? key : "?",
+    correct,
+  }));
+}
+
+describe("foundationDrillFocusKeys（基础键位信号统一）", () => {
+  test("有 per-key 弱键时用 weakKeyWeights 的键（不再用 focus_keys）", () => {
+    const fast = ["a", "e", "t", "o", "i", "n"].flatMap((k, idx) =>
+      keysAtForDrill(k, 6, idx * 20_000, 100),
+    );
+    const slowW = keysAtForDrill("w", 8, 200_000, 600, false); // w 又慢又错 → 弱键
+    const records = [defaultSessionRecord({ key_events: [...fast, ...slowW] })];
+    const ctx = { records, plan: { focus_keys: ["z"] } } as unknown as BuildTargetContext;
+    const keys = foundationDrillFocusKeys(ctx);
+    expect(keys).toContain("w"); // 来自 per-key 弱键
+    expect(keys).not.toContain("z"); // 不再用 plan.focus_keys
+  });
+
+  test("无记录（冷启动）降级到 plan.focus_keys", () => {
+    const ctx = { records: [], plan: { focus_keys: ["z", "q"] } } as unknown as BuildTargetContext;
+    expect(foundationDrillFocusKeys(ctx)).toEqual(["z", "q"]);
   });
 });
