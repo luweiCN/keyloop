@@ -61,3 +61,18 @@ export function perKeyStats(records: readonly SessionRecord[]): Map<string, KeyR
   }
   return result;
 }
+
+/** 错误惩罚系数默认值：errorRate=1（全错）时有效耗时翻倍。可调（实测再定）。 */
+export const KEY_PENALTY = 1.0;
+
+/**
+ * 有效耗时 = 平均击键间隔 × (1 + penalty × 错误率)。
+ * 把「打错」折算成「变慢」，让"又慢"和"又错"都表现为有效速度低。
+ */
+export function effectiveTimeMs(
+  avgIntervalMs: number,
+  errorRate: number,
+  penalty: number = KEY_PENALTY,
+): number {
+  return avgIntervalMs * (1 + penalty * errorRate);
+}

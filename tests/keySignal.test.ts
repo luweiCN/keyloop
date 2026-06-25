@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { defaultSessionRecord, type KeyEventRecord } from "../src/domain/model";
-import { perKeyStats } from "../src/training/keySignal";
+import { effectiveTimeMs, perKeyStats } from "../src/training/keySignal";
 
 /** 构造连续 insert 事件：每项 [expected, correct]，相邻间隔 intervalMs。 */
 function keyEvents(entries: Array<[string, boolean]>, intervalMs = 200): KeyEventRecord[] {
@@ -60,5 +60,17 @@ describe("perKeyStats", () => {
     const stats = perKeyStats([record]);
     expect(stats.has(" ")).toBe(false);
     expect(stats.get("a")?.samples).toBe(2);
+  });
+});
+
+describe("effectiveTimeMs", () => {
+  test("错误率以放大耗时的形式体现（默认惩罚系数 1）", () => {
+    expect(effectiveTimeMs(200, 0)).toBe(200); // 不错 → 不放大
+    expect(effectiveTimeMs(200, 0.5)).toBe(300); // 200 × (1 + 1×0.5)
+    expect(effectiveTimeMs(200, 1)).toBe(400); // 全错 → 翻倍
+  });
+
+  test("惩罚系数可配", () => {
+    expect(effectiveTimeMs(200, 0.5, 2)).toBe(400); // 200 × (1 + 2×0.5)
   });
 });
