@@ -5,6 +5,10 @@ import {
   formatCodeSnippetsForPracticeAsync,
 } from "../content/codeFormatter";
 import {
+  loadProgrammingBasicsSymbolSupplements,
+  type ProgrammingBasicsOptions,
+} from "../content/programmingBasics";
+import {
   weakKeyWeights,
   weightedSampleWithoutReplacement,
   wordKeyWeight,
@@ -3442,57 +3446,14 @@ export function fitSymbolsTargetToBudget(
 
 /**
  * 符号段补充行：跨语言通用的「真实高频字面量 + 运算符」兜底池。
- * 两用：① 某语言符号卡填不满本形态预算时（冷门 / 语料少）在此循环补足，池足够大以免单调重复；
- * ② 与各语言 value 的通用部分同一套理念。内容是真实开发高频、自带符号的字面量
- *（URL / 日期 / 版本 / IP / 端口 / 金额 / 百分比 / 颜色 / MIME / 查询串 / 正则）+ 各类运算符标点，
- * 而非早期从 foundation_drills 抽来的折行英文语篇（会被腰斩、又被代码高亮误着色）。
+ * 内容存放在 programming_basics/symbol_supplements.jsonl；这里仅负责加载文本。
  * 调用方负责随机打乱。
  */
-export function symbolSupplementLines(_context: BuildTargetContext): string[] {
-  return [
-    "\"2026-06-22\" \"2026-12-31\" \"2027-03-15\"",
-    "\"2026-06-22T08:30:00Z\" \"2026-01-01T00:00:00Z\"",
-    "\"08:30:00\" \"23:59:59\" \"12:00:00\"",
-    "\"yyyy-MM-dd\" \"HH:mm:ss\"",
-    "\"https://api.example.com/v1/users\"",
-    "\"https://cdn.example.com/assets/app.js\"",
-    "\"./src/index.ts\" \"../lib/utils.js\"",
-    "\"/var/log/app.log\" \"/usr/local/bin\"",
-    "\"?page=1&size=20&sort=desc\"",
-    "\"1.0.0\" \"2.3.1\" \"0.12.5-beta\"",
-    "\"^1.2.0\" \"~2.0.0\" \">=3.1.0\"",
-    "\"192.168.1.1\" \"10.0.0.1\" \"127.0.0.1\"",
-    "\"127.0.0.1:3000\" \"localhost:8080\" \"0.0.0.0:5432\"",
-    "\"#3B82F6\" \"#EF4444\" \"#10B981\"",
-    "\"rgb(255,128,0)\" \"rgba(0,0,0,0.5)\"",
-    "$19.99 $1,299.00 $49.50",
-    "99.9% 12.5% 0.1% 100%",
-    "1499.99 29.95 999.00",
-    "3000 8080 5432 6379 27017",
-    "200 201 204 400 401 404 500",
-    "30_000 60_000 86_400 3_600",
-    "1024 2048 4096 65536",
-    "3.14159 2.71828 1.41421",
-    "-1 0 1 -273.15",
-    "\"application/json\" \"text/html\" \"image/png\"",
-    "\"utf-8\" \"gzip\" \"deflate\"",
-    "\"GET\" \"POST\" \"PUT\" \"DELETE\"",
-    "\"^[a-z0-9_-]+$\"",
-    "\"\\d{4}-\\d{2}-\\d{2}\"",
-    "\"[A-Z]{2,4}\\d{6}\"",
-    "\"user@example.com\" \"admin@test.org\"",
-    "\"#main\" \".container\" \"[data-id]\"",
-    "0xFF 0o755 0b1010",
-    "=> -> :: ?. ?? && ||",
-    "=== !== <= >= != <>",
-    "+= -= *= /= %= **=",
-    "( ) { } [ ] < >",
-    "! ? : ; , .",
-    "& | ^ ~ << >>",
-    "+ - * / % **",
-    "(0,0) (100,200) (-50,75)",
-    "[0..9] [1..100] [-1,1]",
-  ];
+export function symbolSupplementLines(
+  _context: BuildTargetContext,
+  options: ProgrammingBasicsOptions = {},
+): string[] {
+  return loadProgrammingBasicsSymbolSupplements(options).map((supplement) => supplement.text);
 }
 
 /** 按字符预算在行边界裁剪 target（至少保留 1 行），同步修正 code_blocks 行数 */

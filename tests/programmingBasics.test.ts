@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import {
   listProgrammingBasicsLanguages,
+  loadProgrammingBasicsSymbolSupplements,
   loadProgrammingBasicsCards,
   type ProgrammingBasicsOptions,
 } from "../src/content/programmingBasics";
@@ -213,6 +214,32 @@ function fixtureOptions(root: string): ProgrammingBasicsOptions {
   return { env: { KEYLOOP_TS_CONTENT_ROOT: root }, exists: () => true };
 }
 
+const UNIQUE_SYMBOL_SUPPLEMENT_TEXT = "fixture://bare-supplement 203.0.113.1";
+
+function makeSymbolSupplementsFixtureRoot(
+  rows: Array<{ text: string; source_id: string; topic?: string; format?: string }>,
+): string {
+  const root = mkdtempSync(join(tmpdir(), "keyloop-basics-symbol-supplements-"));
+  const base = join(root, "programming_basics");
+  mkdirSync(join(root, "code"), { recursive: true });
+  mkdirSync(base, { recursive: true });
+  writeFileSync(join(root, "code", "index.json"), "{}\n");
+  writeFileSync(
+    join(base, "index.json"),
+    JSON.stringify({
+      schema: "keyloop.programming_basics",
+      schema_version: 2,
+      languages: ["typescript"],
+    }) + "\n",
+  );
+  writeFileSync(
+    join(base, "symbol_supplements.jsonl"),
+    rows.map((row) => JSON.stringify(row)).join("\n") + "\n",
+  );
+  return root;
+}
+
+
 function makeFixtureRoot(): string {
   const root = mkdtempSync(join(tmpdir(), "keyloop-basics-"));
   const base = join(root, "programming_basics");
@@ -270,6 +297,27 @@ describe("programming basics content loader", () => {
     expect(cards[0]?.text).toBe("const items = [];");
     expect(cards[0]?.topic).toBe("declaration");
     expect(cards[0]?.focus).toEqual(["=", "[]", ";"]);
+  });
+
+  test("loads symbol supplements from symbol_supplements.jsonl", () => {
+    const root = makeSymbolSupplementsFixtureRoot([
+      {
+        text: UNIQUE_SYMBOL_SUPPLEMENT_TEXT,
+        source_id: "fixture:symbol-supplements",
+        topic: "string",
+        format: "ip",
+      },
+    ]);
+    const supplements = loadProgrammingBasicsSymbolSupplements(fixtureOptions(root));
+    expect(supplements.map((item) => item.text)).toEqual([UNIQUE_SYMBOL_SUPPLEMENT_TEXT]);
+    expect(supplements[0]?.source_id).toBe("fixture:symbol-supplements");
+  });
+
+  test("rejects symbol supplement rows with empty text", () => {
+    const root = makeSymbolSupplementsFixtureRoot([
+      { text: "", source_id: "fixture:symbol-supplements-empty" },
+    ]);
+    expect(() => loadProgrammingBasicsSymbolSupplements(fixtureOptions(root))).toThrow(/text/i);
   });
 
   test("loads builtin_api cards with api field", () => {

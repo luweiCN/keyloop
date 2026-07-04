@@ -20,6 +20,14 @@ export interface ProgrammingBasicsCard {
   source_id: string;
 }
 
+export interface ProgrammingBasicsSymbolSupplement {
+  text: string;
+  source_id: string;
+  topic?: string;
+  format?: string;
+  note_zh?: string;
+}
+
 export interface ProgrammingBasicsIndex {
   schema: string;
   schema_version: number;
@@ -63,4 +71,25 @@ export function loadProgrammingBasicsCards(
     cards.push(card);
   }
   return cards;
+}
+
+export function loadProgrammingBasicsSymbolSupplements(
+  options: ProgrammingBasicsOptions = {},
+): ProgrammingBasicsSymbolSupplement[] {
+  const path = join(basicsRoot(options), "symbol_supplements.jsonl");
+  const raw = readFileSync(path, "utf8");
+  const supplements: ProgrammingBasicsSymbolSupplement[] = [];
+  for (const line of raw.split("\n")) {
+    const trimmed = line.trim();
+    if (trimmed.length === 0) continue;
+    const supplement = JSON.parse(trimmed) as ProgrammingBasicsSymbolSupplement;
+    if (typeof supplement.text !== "string" || supplement.text.length === 0) {
+      throw new Error(`invalid programming basics symbol supplement text in ${path}`);
+    }
+    if (typeof supplement.source_id !== "string" || supplement.source_id.length === 0) {
+      throw new Error(`invalid programming basics symbol supplement source_id in ${path}`);
+    }
+    supplements.push(supplement);
+  }
+  return supplements;
 }

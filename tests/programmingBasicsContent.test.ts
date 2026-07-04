@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   listProgrammingBasicsLanguages,
   loadProgrammingBasicsCards,
+  loadProgrammingBasicsSymbolSupplements,
 } from "../src/content/programmingBasics";
 import { buildLanguageCorpus, inferValueFormat } from "../src/tools/buildProgrammingBasicsContent";
 
@@ -15,6 +16,20 @@ describe("programming basics corpus", () => {
 
   test("index lists at least one language", () => {
     expect(languages.length).toBeGreaterThanOrEqual(1);
+  });
+
+  test("symbol supplements are valid bare lines", () => {
+    const supplements = loadProgrammingBasicsSymbolSupplements();
+    expect(supplements.length).toBeGreaterThanOrEqual(40);
+    for (const supplement of supplements) {
+      expect(supplement.text.length).toBeGreaterThan(0);
+      expect(supplement.text.length).toBeLessThanOrEqual(90);
+      expect(supplement.text).not.toInclude("\n");
+      expect(supplement.text).toMatch(/^[\x20-\x7e]+$/);
+      expect(supplement.text).toMatch(/[^A-Za-z\s]/);
+      expect(supplement.text, supplement.text).not.toMatch(/(^|\s)[rR]?(['"])\S.*?\2(?=\s|$)/u);
+      expect(supplement.source_id.length).toBeGreaterThan(0);
+    }
   });
 
   for (const language of languages) {

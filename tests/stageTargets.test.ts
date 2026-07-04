@@ -1,5 +1,9 @@
 import { describe, expect, test } from "bun:test";
+import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
+import type { ProgrammingBasicsOptions } from "../src/content/programmingBasics";
 import type { ContentLibrary } from "../src/content/library";
 import type { CustomLibrary } from "../src/training/customLibrary";
 import type { FormSpeed } from "../src/training/diagnosis";
@@ -178,6 +182,35 @@ function stageContext(): BuildTargetContext {
     library: stageLibrary(),
     random: () => 0.42,
   };
+}
+
+const UNIQUE_SYMBOL_SUPPLEMENT_TEXT = "fixture://bare-supplement 203.0.113.1";
+
+function fixtureOptions(root: string): ProgrammingBasicsOptions {
+  return { env: { KEYLOOP_TS_CONTENT_ROOT: root } };
+}
+
+function makeSymbolSupplementsFixtureRoot(
+  rows: Array<{ text: string; source_id: string; topic?: string; format?: string }>,
+): string {
+  const root = mkdtempSync(join(tmpdir(), "keyloop-stage-symbol-supplements-"));
+  const base = join(root, "programming_basics");
+  mkdirSync(join(root, "code"), { recursive: true });
+  mkdirSync(base, { recursive: true });
+  writeFileSync(join(root, "code", "index.json"), "{}\n");
+  writeFileSync(
+    join(base, "index.json"),
+    JSON.stringify({
+      schema: "keyloop.programming_basics",
+      schema_version: 2,
+      languages: ["typescript"],
+    }) + "\n",
+  );
+  writeFileSync(
+    join(base, "symbol_supplements.jsonl"),
+    rows.map((row) => JSON.stringify(row)).join("\n") + "\n",
+  );
+  return root;
 }
 
 function customLibraryFixture(): CustomLibrary {
@@ -625,6 +658,46 @@ describe("buildStageTarget code and keys", () => {
     for (const line of lines) {
       expect(/[^A-Za-z\s]/.test(line)).toBe(true);
     }
+  });
+
+  test("symbolSupplementLines reads supplements from the configured content root", () => {
+    const root = makeSymbolSupplementsFixtureRoot([
+      {
+        text: UNIQUE_SYMBOL_SUPPLEMENT_TEXT,
+        source_id: "fixture:symbol-supplements",
+        topic: "string",
+        format: "ip",
+      },
+    ]);
+
+    expect(symbolSupplementLines(stageContext(), fixtureOptions(root))).toEqual([
+      UNIQUE_SYMBOL_SUPPLEMENT_TEXT,
+    ]);
+  });
+
+  test("symbolSupplementLines keeps standalone data literals bare", () => {
+    const lines = symbolSupplementLines(stageContext());
+    const standaloneDataLiterals = [
+      "2026-06-22",
+      "2026-06-22T08:30:00Z",
+      "08:30:00",
+      "https://api.example.com/v1/users",
+      "1.0.0",
+      "^1.2.0",
+      "192.168.1.1",
+      "127.0.0.1:3000",
+      "\\d{4}-\\d{2}-\\d{2}",
+    ];
+
+    const quotedDataLiterals = standaloneDataLiterals.flatMap((literal) => [
+      `"${literal}"`,
+      `'${literal}'`,
+    ]);
+    const quotedSupplementLines = lines.filter((line) =>
+      quotedDataLiterals.some((quotedLiteral) => line.includes(quotedLiteral)),
+    );
+
+    expect(quotedSupplementLines).toEqual([]);
   });
 
   test("selectSnippetsWithinBudget relaxes the ceiling when a coarse next snippet would otherwise leave it severely underfilled", () => {

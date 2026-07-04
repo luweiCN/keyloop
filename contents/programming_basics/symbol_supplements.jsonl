@@ -1,0 +1,42 @@
+{"text":"2026-06-22 2026-12-31 2027-03-15","topic":"string","format":"date","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"2026-06-22T08:30:00Z 2026-01-01T00:00:00Z","topic":"string","format":"datetime","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"08:30:00 23:59:59 12:00:00","topic":"string","format":"time","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"yyyy-MM-dd HH:mm:ss","topic":"string","format":"datetime","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"https://api.example.com/v1/users","topic":"string","format":"url","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"https://cdn.example.com/assets/app.js","topic":"string","format":"url","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"./src/index.ts ../lib/utils.js","topic":"string","format":"path","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"/var/log/app.log /usr/local/bin","topic":"string","format":"path","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"?page=1&size=20&sort=desc","topic":"string","format":"url","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"1.0.0 2.3.1 0.12.5-beta","topic":"string","format":"version","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"^1.2.0 ~2.0.0 >=3.1.0","topic":"string","format":"version","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"192.168.1.1 10.0.0.1 127.0.0.1","topic":"string","format":"ip","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"127.0.0.1:3000 localhost:8080 0.0.0.0:5432","topic":"string","format":"port","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"#3B82F6 #EF4444 #10B981","topic":"string","format":"color","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"rgb(255,128,0) rgba(0,0,0,0.5)","topic":"string","format":"color","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"$19.99 $1,299.00 $49.50","topic":"literal","format":"money","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"99.9% 12.5% 0.1% 100%","topic":"literal","format":"percent","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"1499.99 29.95 999.00","topic":"literal","format":"number","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"3000 8080 5432 6379 27017","topic":"literal","format":"port","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"200 201 204 400 401 404 500","topic":"literal","format":"http_status","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"30_000 60_000 86_400 3_600","topic":"literal","format":"number","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"1024 2048 4096 65536","topic":"literal","format":"number","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"3.14159 2.71828 1.41421","topic":"literal","format":"number","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"-1 0 1 -273.15","topic":"literal","format":"number","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"application/json text/html image/png","topic":"string","format":"mime","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"utf-8 gzip deflate","topic":"string","format":"other","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"GET / POST / PUT / DELETE","topic":"string","format":"http_method","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"^[a-z0-9_-]+$","topic":"string","format":"regex","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"\\d{4}-\\d{2}-\\d{2}","topic":"string","format":"regex","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"[A-Z]{2,4}\\d{6}","topic":"string","format":"regex","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"user@example.com admin@test.org","topic":"string","format":"email","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"#main .container [data-id]","topic":"string","format":"other","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"0xFF 0o755 0b1010","topic":"literal","format":"number","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"=> -> :: ?. ?? && ||","topic":"operator","format":"other","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"=== !== <= >= != <>","topic":"operator","format":"other","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"+= -= *= /= %= **=","topic":"operator","format":"other","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"( ) { } [ ] < >","topic":"operator","format":"other","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"! ? : ; , .","topic":"operator","format":"other","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"& | ^ ~ << >>","topic":"operator","format":"other","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"+ - * / % **","topic":"operator","format":"other","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"(0,0) (100,200) (-50,75)","topic":"literal","format":"number","source_id":"keyloop:programming-basics:symbol-supplements"}
+{"text":"[0..9] [1..100] [-1,1]","topic":"literal","format":"number","source_id":"keyloop:programming-basics:symbol-supplements"}
