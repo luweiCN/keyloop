@@ -1,5 +1,7 @@
 import { describe, expect, test } from "bun:test";
 
+import type { CustomLibrary } from "../src/training/customLibrary";
+import { buildLibraryWordsTarget } from "../src/training/customLibraryTargets";
 import {
   ghostViewportSlice,
   ghostVisualRowCount,
@@ -476,6 +478,42 @@ describe("OpenTUI renderer adapter", () => {
     expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
       (child) => child.props.id,
     )).toEqual(["keyloop-ghost-line-0", "keyloop-ghost-meaning-line-0"]);
+  });
+
+  test("keeps a leading custom word without a meaning visible and active", async () => {
+    const library: CustomLibrary = {
+      version: 1,
+      slug: "web3",
+      name: "Web3",
+      created_at: "2026-08-20T00:00:00.000Z",
+      words: [
+        { id: "w1", text: "verify", kind: "word", meaning_zh: "证明", source: "dict" },
+        { id: "w2", text: "privateKey", kind: "word", source: "dict" },
+      ],
+      sentences: [],
+      articles: [],
+    };
+    const target = buildLibraryWordsTarget(library, { random: () => 0 });
+    const running: OpenTuiAppState = {
+      language: "zh",
+      route: {
+        screen: "running",
+        source_item: "library_kind_web3:words",
+        target,
+      },
+    };
+    const kit = fakeKit();
+
+    expect(target.text).toBe("privateKey verify");
+    await renderOpenTuiAppOnce(running, kit);
+
+    const line = findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode;
+    expect(flattenContent([line]).replace(/\n/gu, "")).toContain("privateKey");
+    expect(
+      findNodesByIdPrefix(kit.addedNodes, "keyloop-ghost-cursor-").map(
+        (node) => node.props.content,
+      ),
+    ).toEqual(["p"]);
   });
 
   test("wraps the word stream into a uniform grid with aligned translations on every row", async () => {

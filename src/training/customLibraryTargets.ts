@@ -22,13 +22,17 @@ interface AppendState {
   annotations: PracticeTargetAnnotation[];
 }
 
-/** 与日常练习一致：单词空格连排成一段，渲染层按 word 标注排布；释义只取第一义并去词性 */
+/** 与日常练习一致：单词空格连排；有任一释义时为所有词保留列，释义只取第一义并去词性 */
 function appendWordRun(
   state: AppendState,
   words: readonly CustomWord[],
   wordRepeats = 1,
 ): void {
   const repeats = normalizedWordRepeats(wordRepeats);
+  const meanings = words.map((word) =>
+    word.meaning_zh === undefined ? "" : conciseChineseMeaning(word.meaning_zh),
+  );
+  const hasMeaningColumns = meanings.some((meaning) => meaning !== "");
   if (state.text !== "") {
     state.text += "\n";
   }
@@ -39,17 +43,14 @@ function appendWordRun(
     const word = words[index]!;
     const start = state.text.length;
     state.text += repeatedWordText(word.text, repeats);
-    if (word.meaning_zh !== undefined) {
-      const meaning = conciseChineseMeaning(word.meaning_zh);
-      if (meaning !== "") {
-        state.annotations.push({
-          start,
-          end: state.text.length,
-          translation_zh: meaning,
-          display: repeats > 1 ? "word_loose" : "word",
-          audio_text: word.text,
-        });
-      }
+    if (hasMeaningColumns) {
+      state.annotations.push({
+        start,
+        end: state.text.length,
+        translation_zh: meanings[index] ?? "",
+        display: repeats > 1 ? "word_loose" : "word",
+        audio_text: word.text,
+      });
     }
   }
 }

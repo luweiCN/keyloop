@@ -864,7 +864,7 @@ export function ghostWordColumnRows(
     }
     const translation = annotation.translation_zh.trim();
     const text = targetText.slice(annotation.start, annotation.end).replace(/\s+/gu, " ").trim();
-    if (text.length === 0 || translation.length === 0) {
+    if (text.length === 0) {
       continue;
     }
     const sourceLineIndex = sourceLineIndexForAnnotation(lineRanges, annotation);
