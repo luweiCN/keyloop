@@ -736,18 +736,15 @@ describe("OpenTUI app model", () => {
     expect(nextOpenTuiStatsView(overview).mainGoal).toEqual(goal);
   });
 
-  test("stats route supports all stats pages and next view", () => {
+  test("stats route supports the four dashboard views and cycles them", () => {
     const records = statsRecords();
-    const today = createOpenTuiStatsState("en", records, {
-      view: "today",
+    const overview = createOpenTuiStatsState("en", records, {
+      view: "overview",
       now: new Date("2026-06-05T08:00:00.000Z"),
     });
-    const comprehensive = createOpenTuiStatsState("en", records, {
-      view: "comprehensive",
-    });
-    const modules = createOpenTuiStatsState("en", records, { view: "modules" });
-    const keys = createOpenTuiStatsState("en", records, {
-      view: "keys",
+    const trends = createOpenTuiStatsState("en", records, { view: "trends" });
+    const skills = createOpenTuiStatsState("en", records, {
+      view: "skills",
       keyAggregates: [
         defaultKeyAggregate({
           key: "[",
@@ -760,92 +757,45 @@ describe("OpenTUI app model", () => {
         }),
       ],
     });
-    const tokens = createOpenTuiStatsState("en", records, { view: "tokens" });
-    const code = createOpenTuiStatsState("en", records, { view: "code" });
-    const daily = createOpenTuiStatsState("en", records, {
-      view: "daily",
+    const history = createOpenTuiStatsState("en", records, {
+      view: "history",
       dailyIndex: 0,
     });
-    const next = nextOpenTuiStatsView(
-      createOpenTuiStatsState("en", records, {
-        view: "overview",
-        now: new Date("2026-06-05T08:00:00.000Z"),
-      }),
-    );
-    const nextFromToday = nextOpenTuiStatsView(today);
-    const nextFromComprehensive = nextOpenTuiStatsView(comprehensive);
-    const nextFromModules = nextOpenTuiStatsView(
-      createOpenTuiStatsState("en", records, { view: "modules" }),
-    );
-    const nextFromKeys = nextOpenTuiStatsView(keys);
-    const nextFromCode = nextOpenTuiStatsView(code);
-    const nextFromDaily = nextOpenTuiStatsView(daily);
+    const nextFromOverview = nextOpenTuiStatsView(overview);
+    const nextFromTrends = nextOpenTuiStatsView(trends);
+    const nextFromSkills = nextOpenTuiStatsView(skills);
+    const nextFromHistory = nextOpenTuiStatsView(history);
 
-    expect(openTuiRouteLines(today).slice(0, 3)).toEqual([
-      "Today 2 sessions",
-      "Full practice  1 sessions | active 1m | WPM 30.0 | accuracy 93.8%",
-      "Standalone  1 sessions | active 1m | WPM 20.0 | accuracy 100.0%",
-    ]);
-    expect(openTuiRouteLines(comprehensive).slice(0, 2)).toEqual([
-      "Full practice runs",
-      "run-1  1 groups | 1 modules | active 1m | WPM 30.0",
-    ]);
-    expect(openTuiRouteLines(modules).slice(0, 3)).toEqual([
+    expect(openTuiRouteLines(trends).slice(0, 3)).toEqual([
       "Next driver  Programming basics | error 2.5% | accuracy 93.8%",
       "",
       "Programming basics  1 sessions | active 1m | WPM 30.0 | error 2.5%",
     ]);
-    expect(openTuiRouteLines(keys)[0]).toBe("Key stats  sort: slowest avg");
-    expect(openTuiRouteLines(keys)[2]).toContain("[");
-    expect(openTuiRouteLines(tokens)).toEqual(
-      expect.arrayContaining([
-        "Token stats",
-        "High-error words/chunks  pending(2)",
-        "High-error symbols  =>(2)",
-      ]),
-    );
-    expect(openTuiRouteLines(code)[0]).toBe(
-      "Code practice  1 sessions | active 1m | WPM 20.0 | accuracy 100.0%",
-    );
-    expect(openTuiRouteLines(daily)[0]).toBe(
+    expect(openTuiRouteLines(skills)[0]).toBe("Key stats  sort: slowest avg");
+    expect(openTuiRouteLines(skills)[2]).toContain("[");
+    expect(openTuiRouteLines(history)[0]).toBe(
       "Date 2026-06-05  (1/1)  Left/Right switches date",
     );
-    expect(next.route.screen).toBe("stats");
-    if (next.route.screen !== "stats") {
+    expect(nextFromOverview.route.screen).toBe("stats");
+    if (nextFromOverview.route.screen !== "stats") {
       throw new Error("expected stats route");
     }
-    expect(next.route.view).toBe("today");
-    expect(openTuiRouteLines(next)[0]).toBe("Today 2 sessions");
-    expect(nextFromToday.route.screen).toBe("stats");
-    if (nextFromToday.route.screen !== "stats") {
+    expect(nextFromOverview.route.view).toBe("trends");
+    expect(nextFromTrends.route.screen).toBe("stats");
+    if (nextFromTrends.route.screen !== "stats") {
       throw new Error("expected stats route");
     }
-    expect(nextFromToday.route.view).toBe("comprehensive");
-    expect(nextFromComprehensive.route.screen).toBe("stats");
-    if (nextFromComprehensive.route.screen !== "stats") {
+    expect(nextFromTrends.route.view).toBe("skills");
+    expect(nextFromSkills.route.screen).toBe("stats");
+    if (nextFromSkills.route.screen !== "stats") {
       throw new Error("expected stats route");
     }
-    expect(nextFromComprehensive.route.view).toBe("modules");
-    expect(nextFromModules.route.screen).toBe("stats");
-    if (nextFromModules.route.screen !== "stats") {
+    expect(nextFromSkills.route.view).toBe("history");
+    expect(nextFromHistory.route.screen).toBe("stats");
+    if (nextFromHistory.route.screen !== "stats") {
       throw new Error("expected stats route");
     }
-    expect(nextFromModules.route.view).toBe("keys");
-    expect(nextFromKeys.route.screen).toBe("stats");
-    if (nextFromKeys.route.screen !== "stats") {
-      throw new Error("expected stats route");
-    }
-    expect(nextFromKeys.route.view).toBe("tokens");
-    expect(nextFromCode.route.screen).toBe("stats");
-    if (nextFromCode.route.screen !== "stats") {
-      throw new Error("expected stats route");
-    }
-    expect(nextFromCode.route.view).toBe("daily");
-    expect(nextFromDaily.route.screen).toBe("stats");
-    if (nextFromDaily.route.screen !== "stats") {
-      throw new Error("expected stats route");
-    }
-    expect(nextFromDaily.route.view).toBe("overview");
+    expect(nextFromHistory.route.view).toBe("overview");
   });
 
   test("completion state exposes lesson metrics and next lesson copy", () => {

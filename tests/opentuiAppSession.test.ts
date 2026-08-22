@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 
 import {
   createOpenTuiInitialState,
+  createOpenTuiStatsState,
   openTuiMenuItems,
   openTuiFlatSettingsItems,
   defaultKeyAggregate,
@@ -40,44 +41,146 @@ describe("OpenTUI app session", () => {
     expect(stats.state.route.view).toBe("overview");
     expect(stats.state.route.keyAggregates).toHaveLength(1);
 
-    const today = reduceOpenTuiAppKey(stats.state, key("tab", "\t"), context);
-    expect(today.state.route.screen).toBe("stats");
-    if (today.state.route.screen !== "stats") {
+    const trends = reduceOpenTuiAppKey(stats.state, key("tab", "\t"), context);
+    expect(trends.state.route.screen).toBe("stats");
+    if (trends.state.route.screen !== "stats") {
       throw new Error("expected stats route");
     }
-    expect(today.state.route.view).toBe("today");
+    expect(trends.state.route.view).toBe("trends");
 
-    const daily = reduceOpenTuiAppKey(stats.state, key("8", "8"), context);
-    expect(daily.state.route.screen).toBe("stats");
-    if (daily.state.route.screen !== "stats") {
+    const history = reduceOpenTuiAppKey(stats.state, key("4", "4"), context);
+    expect(history.state.route.screen).toBe("stats");
+    if (history.state.route.screen !== "stats") {
       throw new Error("expected stats route");
     }
-    expect(daily.state.route.view).toBe("daily");
-    expect(daily.state.route.dailyIndex).toBe(0);
+    expect(history.state.route.view).toBe("history");
 
-    const olderDay = reduceOpenTuiAppKey(daily.state, key("right", ""), context);
+    const olderDay = reduceOpenTuiAppKey(history.state, key("right", ""), context);
     expect(olderDay.state.route.screen).toBe("stats");
     if (olderDay.state.route.screen !== "stats") {
       throw new Error("expected stats route");
     }
     expect(olderDay.state.route.dailyIndex).toBe(1);
 
-    const keys = reduceOpenTuiAppKey(stats.state, key("5", "5"), context);
-    const nextSort = reduceOpenTuiAppKey(keys.state, key("s", "s"), context);
-    expect(nextSort.state.route.screen).toBe("stats");
-    if (nextSort.state.route.screen !== "stats") {
+    const skills = reduceOpenTuiAppKey(stats.state, key("3", "3"), context);
+    const nextKey = reduceOpenTuiAppKey(skills.state, key("right", "\x1b[C"), context);
+    expect(nextKey.state.route.screen).toBe("stats");
+    if (nextKey.state.route.screen !== "stats") {
       throw new Error("expected stats route");
     }
-    expect(nextSort.state.route.view).toBe("keys");
-    expect(nextSort.state.route.keyStatsSort).toBe("fastest");
+    expect(nextKey.state.route.view).toBe("skills");
+    expect(nextKey.state.route.skillKey).toBe("s");
 
-    const menu = reduceOpenTuiAppKey(daily.state, key("escape", "\x1b"), context);
+    const menu = reduceOpenTuiAppKey(history.state, key("escape", "\x1b"), context);
     expect(menu.state.route.screen).toBe("main_menu");
     expect(menu.action).toBe("continue");
 
     const quit = reduceOpenTuiAppKey(menu.state, key("q", "q"), context);
     expect(quit.action).toBe("quit");
     expect(quit.state.route.screen).toBe("main_menu");
+  });
+
+  test("stats trend arrows inspect eligible sessions and clamp at both ends", () => {
+    const context = appContext();
+    const records = [20, 30, 25].map((wpm, index) =>
+      defaultSessionRecord({
+        id: `trend-${index}`,
+        started_at: `2026-06-0${index + 1}T12:00:00.000Z`,
+        category: "code_mix",
+        active_ms: 60_000,
+        duration_ms: 60_000,
+        typed_len: wpm * 5,
+        correct_chars: wpm * 5,
+      }),
+    );
+    const trends = createOpenTuiStatsState("en", records, { view: "trends" });
+
+    const previous = reduceOpenTuiAppKey(trends, key("left", "\x1b[D"), context);
+    expect(previous.state.route).toMatchObject({
+      screen: "stats",
+      view: "trends",
+      trendIndex: 1,
+    });
+    const first = reduceOpenTuiAppKey(previous.state, key("home", ""), context);
+    expect(first.state.route).toMatchObject({ trendIndex: 0 });
+    const stillFirst = reduceOpenTuiAppKey(
+      first.state,
+      key("arrowleft", "\x1b[D"),
+      context,
+    );
+    expect(stillFirst.state.route).toMatchObject({ trendIndex: 0 });
+    const next = reduceOpenTuiAppKey(
+      first.state,
+      key("arrowright", "\x1b[C"),
+      context,
+    );
+    expect(next.state.route).toMatchObject({ trendIndex: 1 });
+    const latest = reduceOpenTuiAppKey(next.state, key("end", ""), context);
+    expect(latest.state.route).toMatchObject({ trendIndex: 2 });
+  });
+
+  test("stats controls switch trend form metric range, keyboard focus, and history detail", () => {
+    const context = appContext();
+    const records = [
+      defaultSessionRecord({
+        id: "code",
+        started_at: "2026-06-03T12:00:00.000Z",
+        category: "code_mix",
+        active_ms: 60_000,
+        duration_ms: 60_000,
+        typed_len: 100,
+        correct_chars: 100,
+        accuracy: 98,
+      }),
+      defaultSessionRecord({
+        id: "word-new",
+        started_at: "2026-06-02T13:00:00.000Z",
+        category: "everyday_words",
+        active_ms: 60_000,
+        duration_ms: 60_000,
+        typed_len: 100,
+        correct_chars: 90,
+        accuracy: 95,
+      }),
+      defaultSessionRecord({
+        id: "word-old",
+        started_at: "2026-06-02T12:00:00.000Z",
+        category: "everyday_words",
+        active_ms: 60_000,
+        duration_ms: 60_000,
+        typed_len: 100,
+        correct_chars: 80,
+        accuracy: 94,
+      }),
+    ];
+    const trends = createOpenTuiStatsState("en", records, {
+      view: "trends",
+      trendForm: "code",
+    });
+
+    const accuracy = reduceOpenTuiAppKey(trends, key("m", "m"), context);
+    expect(accuracy.state.route).toMatchObject({ trendMetric: "accuracy" });
+    const wider = reduceOpenTuiAppKey(accuracy.state, key("]", "]"), context);
+    expect(wider.state.route).toMatchObject({ trendRange: "days_90" });
+    const words = reduceOpenTuiAppKey(wider.state, key("up", "\x1b[A"), context);
+    expect(words.state.route).toMatchObject({ trendForm: "words" });
+
+    const skills = createOpenTuiStatsState("en", records, {
+      view: "skills",
+      skillKey: "a",
+    });
+    expect(reduceOpenTuiAppKey(skills, key("up", "\x1b[A"), context).state.route).toMatchObject({
+      skillKey: "q",
+    });
+
+    const history = createOpenTuiStatsState("en", records, { view: "history" });
+    const secondSession = reduceOpenTuiAppKey(history, key("down", "\x1b[B"), context);
+    expect(secondSession.state.route).toMatchObject({ historySessionIndex: 0 });
+    const olderDay = reduceOpenTuiAppKey(history, key("right", "\x1b[C"), context);
+    const lowerSession = reduceOpenTuiAppKey(olderDay.state, key("down", "\x1b[B"), context);
+    expect(lowerSession.state.route).toMatchObject({ dailyIndex: 1, historySessionIndex: 1 });
+    const expanded = reduceOpenTuiAppKey(lowerSession.state, key("return", "\r"), context);
+    expect(expanded.state.route).toMatchObject({ historyExpanded: true });
   });
 
   test("custom submenu lists libraries and starts library practice", () => {
@@ -602,7 +705,7 @@ describe("OpenTUI app session", () => {
     );
   });
 
-  test("session runner rerenders menu stats today menu and quits", async () => {
+  test("session runner rerenders menu stats trends menu and quits", async () => {
     const kit = fakeKit();
     const runPromise = runOpenTuiAppSession(appContext(), {
       kit,
@@ -615,11 +718,11 @@ describe("OpenTUI app session", () => {
     kit.emitKey({ name: "8", sequence: "8" });
     await kit.waitForKeyListener(2);
     expect(flattenContent(kit.addedNodes)).toContain("Stats");
-    expect(flattenContent(kit.addedNodes)).toContain("Overview  2 sessions");
+    expect(flattenContent(kit.addedNodes)).toContain("Module share");
 
     kit.emitKey({ name: "tab", sequence: "\t" });
     await kit.waitForKeyListener(3);
-    expect(flattenContent(kit.addedNodes)).toContain("Today 1 sessions");
+    expect(flattenContent(kit.addedNodes)).toContain("No comparable data in this range");
 
     kit.emitKey({ name: "escape", sequence: "\x1b" });
     await kit.waitForKeyListener(4);

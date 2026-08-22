@@ -412,14 +412,19 @@ export function buildSkillProfile(
   now: Date = new Date(),
 ): SkillProfile {
   return {
-    dimensions: applyRelativeStatus([
-      ...diagnoseCharSkills(records),
-      ...diagnoseTokenSkills(records),
-    ]),
+    dimensions: diagnoseSkills(records),
     form_speeds: formSpeeds(records),
     daily_active_minutes_7d: dailyActiveMinutesMedian7d(records, now),
     generated_at: now.toISOString(),
   };
+}
+
+/** 统计页与组卷逻辑共享的完整结构诊断：字符维度 + 单词流畅度 + 相对基线状态。 */
+export function diagnoseSkills(records: SessionRecord[]): SkillDiagnosis[] {
+  return applyRelativeStatus([
+    ...diagnoseCharSkills(records),
+    ...diagnoseTokenSkills(records),
+  ]);
 }
 
 /** 词级维度：word_fluency（所有词的流畅度）。长度不再单独成弱点维度（问题1）。 */

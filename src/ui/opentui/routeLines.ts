@@ -8,14 +8,10 @@ import {
   localDateKey,
   speedFromWpm,
   speedUnitLabel,
-  statsCodeLines,
-  statsComprehensiveLines,
   statsDatesFromRecords,
   statsDayLines,
   statsModuleLines,
   statsOverviewLines,
-  statsTodayLines,
-  statsTokenLines,
   weightedAccuracy,
 } from "../../report/stats";
 import type {
@@ -461,26 +457,16 @@ export function statsRouteLines(
   switch (route.view) {
     case "overview":
       return statsOverviewLines(route.records, 8, language, { speedUnit });
-    case "today":
-      return route.now === undefined
-        ? statsTodayLines(route.records, 8, language, { speedUnit })
-        : statsTodayLines(route.records, 8, language, { now: route.now, speedUnit });
-    case "comprehensive":
-      return statsComprehensiveLines(route.records, 8, language, { speedUnit });
-    case "modules":
+    case "trends":
       return statsModuleLines(route.records, 8, language, { speedUnit });
-    case "keys":
+    case "skills":
       return keyStatsLines(
         route.keyAggregates ?? [],
         route.keyStatsSort ?? "slowest_average",
         8,
         language,
       );
-    case "tokens":
-      return statsTokenLines(route.records, 8, language);
-    case "code":
-      return statsCodeLines(route.records, 8, language, { speedUnit });
-    case "daily":
+    case "history":
       return statsDailyRouteLines(route, language, speedUnit);
   }
 }

@@ -59,6 +59,10 @@ import {
   speedUnitLabel,
   weightedAccuracy,
 } from "../../report/stats";
+import type {
+  StatsTrendMetric,
+  StatsTrendRange,
+} from "../../report/statsDashboard";
 import {
   buildCodeMixPracticeTarget,
   buildCodeSpecialistPracticeTarget,
@@ -80,7 +84,11 @@ import {
   buildSymbolsNumbersTarget,
 } from "../../training/programmingBasicsTargets";
 import type { LiveMetrics } from "../../training/liveSession";
-import { buildSkillProfile, type SkillProfile } from "../../training/diagnosis";
+import {
+  buildSkillProfile,
+  type SkillProfile,
+  type TrainingForm,
+} from "../../training/diagnosis";
 import {
   cyclePreset,
   recommendedDailyMinutes,
@@ -91,13 +99,9 @@ import { completedDailyLessonIds } from "../../storage/keyloopStore";
 
 export const openTuiStatsViews = [
   "overview",
-  "today",
-  "comprehensive",
-  "modules",
-  "keys",
-  "tokens",
-  "code",
-  "daily",
+  "trends",
+  "skills",
+  "history",
 ] as const;
 
 export type OpenTuiStatsView = (typeof openTuiStatsViews)[number];
@@ -210,6 +214,13 @@ export type OpenTuiRoute =
       keyAggregates?: KeyAggregate[];
       keyStatsSort?: KeyStatsSort;
       dailyIndex?: number;
+      trendIndex?: number;
+      trendForm?: TrainingForm;
+      trendMetric?: StatsTrendMetric;
+      trendRange?: StatsTrendRange;
+      skillKey?: string;
+      historySessionIndex?: number;
+      historyExpanded?: boolean;
     }
   | {
       screen: "running";
@@ -419,6 +430,13 @@ export interface OpenTuiStatsStateOptions extends OpenTuiStateOptions {
   keyAggregates?: KeyAggregate[];
   keyStatsSort?: KeyStatsSort;
   dailyIndex?: number;
+  trendIndex?: number;
+  trendForm?: TrainingForm;
+  trendMetric?: StatsTrendMetric;
+  trendRange?: StatsTrendRange;
+  skillKey?: string;
+  historySessionIndex?: number;
+  historyExpanded?: boolean;
 }
 
 export function createOpenTuiInitialState(
@@ -629,6 +647,27 @@ export function createOpenTuiStatsState(
   if (options.dailyIndex !== undefined) {
     route.dailyIndex = options.dailyIndex;
   }
+  if (options.trendIndex !== undefined) {
+    route.trendIndex = options.trendIndex;
+  }
+  if (options.trendForm !== undefined) {
+    route.trendForm = options.trendForm;
+  }
+  if (options.trendMetric !== undefined) {
+    route.trendMetric = options.trendMetric;
+  }
+  if (options.trendRange !== undefined) {
+    route.trendRange = options.trendRange;
+  }
+  if (options.skillKey !== undefined) {
+    route.skillKey = options.skillKey;
+  }
+  if (options.historySessionIndex !== undefined) {
+    route.historySessionIndex = options.historySessionIndex;
+  }
+  if (options.historyExpanded !== undefined) {
+    route.historyExpanded = options.historyExpanded;
+  }
   return appState(language, route, options);
 }
 
@@ -650,6 +689,27 @@ export function nextOpenTuiStatsView(state: OpenTuiAppState): OpenTuiAppState {
   }
   if (state.route.dailyIndex !== undefined) {
     options.dailyIndex = state.route.dailyIndex;
+  }
+  if (state.route.trendIndex !== undefined) {
+    options.trendIndex = state.route.trendIndex;
+  }
+  if (state.route.trendForm !== undefined) {
+    options.trendForm = state.route.trendForm;
+  }
+  if (state.route.trendMetric !== undefined) {
+    options.trendMetric = state.route.trendMetric;
+  }
+  if (state.route.trendRange !== undefined) {
+    options.trendRange = state.route.trendRange;
+  }
+  if (state.route.skillKey !== undefined) {
+    options.skillKey = state.route.skillKey;
+  }
+  if (state.route.historySessionIndex !== undefined) {
+    options.historySessionIndex = state.route.historySessionIndex;
+  }
+  if (state.route.historyExpanded !== undefined) {
+    options.historyExpanded = state.route.historyExpanded;
   }
   return createOpenTuiStatsState(state.language, state.route.records, options);
 }

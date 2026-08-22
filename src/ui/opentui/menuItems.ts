@@ -468,7 +468,7 @@ export function menuItemDescription(item: { id: string }): string {
     case "settings":
       return "界面语言、代码语言框架和代码格式化设置。";
     case "stats":
-      return "热力图、慢词块、高错键、综合练习完成情况。";
+      return "长期趋势、键盘掌握度、活动日历和综合训练回顾。";
     case "ansi_palette":
       return "临时调色工具，用来检查当前终端 ANSI 色槽。";
     case "foundation_mix":

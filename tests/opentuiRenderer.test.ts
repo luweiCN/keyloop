@@ -62,22 +62,39 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("Programming basics");
     expect(content).toContain("Stats");
 
-    const comprehensive = findNodeById(kit.addedNodes, "keyloop-menu-item-comprehensive");
+    const comprehensive = findNodeById(
+      kit.addedNodes,
+      "keyloop-menu-item-comprehensive",
+    );
     expect(comprehensive?.type).toBe("Box");
     expect(comprehensive?.props.height).toBe(2);
     expect(comprehensive?.props.flexShrink).toBe(0);
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-item-comprehensive-rail")?.type).toBe("Box");
     expect(
-      findNodeById(kit.addedNodes, "keyloop-menu-item-comprehensive-rail-0")?.props.content,
+      findNodeById(kit.addedNodes, "keyloop-menu-item-comprehensive-rail")
+        ?.type,
+    ).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-item-comprehensive-rail-0")
+        ?.props.content,
     ).toBe("▌");
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-item-comprehensive-number")?.props.content).toBe(" 1 ");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-item-comprehensive-number")
+        ?.props.content,
+    ).toBe(" 1 ");
     expectAnsiSlot(
-      findNodeById(kit.addedNodes, "keyloop-menu-item-comprehensive-number")?.props.fg,
+      findNodeById(kit.addedNodes, "keyloop-menu-item-comprehensive-number")
+        ?.props.fg,
       0,
       "black",
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-item-comprehensive-number")?.props.attributes).toBe(1);
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-item-comprehensive-tag")?.props.content).toBe(" adaptive ");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-item-comprehensive-number")
+        ?.props.attributes,
+    ).toBe(1);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-item-comprehensive-tag")?.props
+        .content,
+    ).toBe(" adaptive ");
   });
 
   test("keeps long second-level menus scrolled around the selected item", async () => {
@@ -99,23 +116,55 @@ describe("OpenTUI renderer adapter", () => {
       await renderOpenTuiAppOnce(state, kit);
     });
 
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-screen")?.props.flexGrow).toBe(1);
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-screen")?.props.height).toBe("100%");
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-panel")?.props.height).toBe("100%");
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-card-list")?.props.height).toBe("100%");
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-item-foundation_home_row")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-item-foundation_capitalization")?.type).toBe(
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-screen")?.props.flexGrow,
+    ).toBe(1);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-screen")?.props.height,
+    ).toBe("100%");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-panel")?.props.height,
+    ).toBe("100%");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-card-list")?.props.height,
+    ).toBe("100%");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-item-foundation_home_row"),
+    ).toBeUndefined();
+    expect(
+      findNodeById(
+        kit.addedNodes,
+        "keyloop-menu-item-foundation_capitalization",
+      )?.type,
+    ).toBe("Box");
+    expect(
+      findNodeById(
+        kit.addedNodes,
+        "keyloop-menu-item-foundation_capitalization",
+      )?.props.height,
+    ).toBe(2);
+    expect(
+      findNodeById(
+        kit.addedNodes,
+        "keyloop-menu-item-foundation_capitalization",
+      )?.props.flexShrink,
+    ).toBe(0);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-item-foundation_mix")?.type,
+    ).toBe("Box");
+    expect(findNodeById(kit.addedNodes, "keyloop-menu-scrollbar")?.type).toBe(
       "Box",
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-item-foundation_capitalization")?.props.height).toBe(2);
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-item-foundation_capitalization")?.props.flexShrink).toBe(0);
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-item-foundation_mix")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-scrollbar")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-scrollbar")?.props.height).toBe("100%");
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-scrollbar-thumb")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-scrollbar-thumb")?.props.flexGrow).toBeGreaterThan(
-      1,
-    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-scrollbar")?.props.height,
+    ).toBe("100%");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-scrollbar-thumb")?.type,
+    ).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-scrollbar-thumb")?.props
+        .flexGrow,
+    ).toBeGreaterThan(1);
   });
 
   test("renders temporary ANSI palette with color swatches and semantic mappings", async () => {
@@ -136,33 +185,48 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("brightBlack");
     expect(content).toContain("brightBlue");
     expect(content).toContain("wrong.bg -> red");
-    expect(findNodeById(kit.addedNodes, "keyloop-palette-scrollbox")?.type).toBe("ScrollBox");
-    expect(findNodeById(kit.addedNodes, "keyloop-palette-scrollbox")?.props.scrollY).toBe(true);
-    expect(findNodeById(kit.addedNodes, "keyloop-palette-scrollbox")?.props.flexGrow).toBe(1);
-    expectAnsiSlot(findNodeById(kit.addedNodes, "keyloop-palette-swatch-red")?.props.bg, 1, "red");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-palette-scrollbox")?.type,
+    ).toBe("ScrollBox");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-palette-scrollbox")?.props.scrollY,
+    ).toBe(true);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-palette-scrollbox")?.props.flexGrow,
+    ).toBe(1);
     expectAnsiSlot(
-      findNodeById(kit.addedNodes, "keyloop-palette-swatch-brightBlack")?.props.bg,
+      findNodeById(kit.addedNodes, "keyloop-palette-swatch-red")?.props.bg,
+      1,
+      "red",
+    );
+    expectAnsiSlot(
+      findNodeById(kit.addedNodes, "keyloop-palette-swatch-brightBlack")?.props
+        .bg,
       8,
       "brightBlack",
     );
     expectAnsiSlot(
-      findNodeById(kit.addedNodes, "keyloop-palette-swatch-brightBlue")?.props.bg,
+      findNodeById(kit.addedNodes, "keyloop-palette-swatch-brightBlue")?.props
+        .bg,
       12,
       "brightBlue",
     );
     expectDefaultForeground(
-      findNodeById(kit.addedNodes, "keyloop-palette-semantic-foreground")?.props.fg,
+      findNodeById(kit.addedNodes, "keyloop-palette-semantic-foreground")?.props
+        .fg,
     );
     expectDefaultForeground(
       findNodeById(kit.addedNodes, "keyloop-palette-semantic-white")?.props.fg,
     );
     expectAnsiSlot(
-      findNodeById(kit.addedNodes, "keyloop-palette-semantic-keyword")?.props.fg,
+      findNodeById(kit.addedNodes, "keyloop-palette-semantic-keyword")?.props
+        .fg,
       5,
       "magenta",
     );
     expectAnsiSlot(
-      findNodeById(kit.addedNodes, "keyloop-palette-semantic-function")?.props.fg,
+      findNodeById(kit.addedNodes, "keyloop-palette-semantic-function")?.props
+        .fg,
       4,
       "blue",
     );
@@ -184,13 +248,29 @@ describe("OpenTUI renderer adapter", () => {
     await renderOpenTuiAppOnce(state, kit);
 
     const content = flattenContent(kit.addedNodes);
-    expect(findNodeById(kit.addedNodes, "keyloop-settings-list")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-settings-list")?.props.border).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-settings-section-code-rule")?.type).toBe("Text");
-    expect(findNodeById(kit.addedNodes, "keyloop-settings-row-0")?.props.backgroundColor).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-settings-row-0-rail")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-settings-row-0-rail-0")?.props.content).toBe("▌");
-    expect(findNodeById(kit.addedNodes, "keyloop-menu-item-settings-language")).toBeUndefined();
+    expect(findNodeById(kit.addedNodes, "keyloop-settings-list")?.type).toBe(
+      "Box",
+    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-settings-list")?.props.border,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-settings-section-code-rule")?.type,
+    ).toBe("Text");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-settings-row-0")?.props
+        .backgroundColor,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-settings-row-0-rail")?.type,
+    ).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-settings-row-0-rail-0")?.props
+        .content,
+    ).toBe("▌");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-menu-item-settings-language"),
+    ).toBeUndefined();
     expect(content).toContain("Interface language");
     expect(content).toContain("Code settings");
     expect(content).toContain("Words & audio");
@@ -244,17 +324,26 @@ describe("OpenTUI renderer adapter", () => {
     await renderOpenTuiAppOnce(state, kit);
 
     const content = flattenContent(kit.addedNodes);
-    expect(findNodeById(kit.addedNodes, "keyloop-youdao-field-app-key-input")?.props.border).toBe(true);
-    expect(findNodeById(kit.addedNodes, "keyloop-youdao-field-app-secret-input")?.props.border).toBe(true);
-    expect(findNodeById(kit.addedNodes, "keyloop-youdao-action-save-button")?.props.content).toBe(
-      "[ 保存到 macOS 钥匙串 ]",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-youdao-action-clear-button")?.props.content).toBe(
-      "[ 清除 macOS 钥匙串配置 ]",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-youdao-field-app-secret-value")?.props.content).toBe(
-      "••••••••••",
-    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-youdao-field-app-key-input")?.props
+        .border,
+    ).toBe(true);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-youdao-field-app-secret-input")
+        ?.props.border,
+    ).toBe(true);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-youdao-action-save-button")?.props
+        .content,
+    ).toBe("[ 保存到 macOS 钥匙串 ]");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-youdao-action-clear-button")?.props
+        .content,
+    ).toBe("[ 清除 macOS 钥匙串配置 ]");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-youdao-field-app-secret-value")
+        ?.props.content,
+    ).toBe("••••••••••");
     expect(content).toContain("有道发音");
     expect(content).not.toContain("> 有道智云 App Secret");
   });
@@ -275,29 +364,81 @@ describe("OpenTUI renderer adapter", () => {
     await renderOpenTuiAppOnce(state, kit);
 
     const content = flattenContent(kit.addedNodes);
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker")?.props.height).toBe("100%");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker")?.props.border).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-header")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-label")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-search-panel")?.props.border).toBe(true);
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-body")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-body")?.props.flexGrow).toBe(1);
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-body")?.props.height).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-results")?.props.height).toBe("100%");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-list")?.props.height).toBe("100%");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-preview")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-accent")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-input")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-input")?.props.backgroundColor).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-query-label")?.props.content).toBe("⌕");
     expect(
-      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-search-panel")?.props.bottomTitle,
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker")?.type,
+    ).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker")?.props.height,
+    ).toBe("100%");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker")?.props.border,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-header"),
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-label"),
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-search-panel")
+        ?.props.border,
+    ).toBe(true);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-body")?.type,
+    ).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-body")?.props
+        .flexGrow,
+    ).toBe(1);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-body")?.props
+        .height,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-results")?.props
+        .height,
+    ).toBe("100%");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-list")?.props
+        .height,
+    ).toBe("100%");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-preview"),
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-accent"),
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-input")?.type,
+    ).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-input")?.props
+        .backgroundColor,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-query-label")
+        ?.props.content,
+    ).toBe("⌕");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-search-panel")
+        ?.props.bottomTitle,
     ).toBe(" 0 selected ");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-row-1")?.props.height).toBe(2);
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-row-1-rail")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-row-1-check")?.props.content).toBe("○");
-    expectDefaultForeground(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-row-1-check")?.props.fg);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-row-1")?.props
+        .height,
+    ).toBe(2);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-row-1-rail")
+        ?.type,
+    ).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-row-1-check")
+        ?.props.content,
+    ).toBe("○");
+    expectDefaultForeground(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-row-1-check")
+        ?.props.fg,
+    );
     expect(content).toContain("Code language/framework");
     expect(content).toContain("rea");
     expect(content).toContain("framework: react");
@@ -320,9 +461,13 @@ describe("OpenTUI renderer adapter", () => {
     await renderOpenTuiAppOnce(state, kit);
 
     const content = flattenContent(kit.addedNodes);
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-query-label")?.props.content).toBe("⌕");
     expect(
-      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-search-panel")?.props.bottomTitle,
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-query-label")
+        ?.props.content,
+    ).toBe("⌕");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-search-panel")
+        ?.props.bottomTitle,
     ).toBe(" 已选 1 ");
     expect(content).toContain("框架: react");
     expect(content).toContain("框架 · 30 个片段 · 已固定");
@@ -348,26 +493,48 @@ describe("OpenTUI renderer adapter", () => {
       await renderOpenTuiAppOnce(state, kit);
     });
 
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-body")?.props.flexGrow).toBe(1);
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-list")?.props.height).toBe("100%");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-row-13")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-scrollbar")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-scrollbar")?.props.height).toBe("100%");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-filter-picker-scrollbar-thumb")?.type).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-body")?.props
+        .flexGrow,
+    ).toBe(1);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-list")?.props
+        .height,
+    ).toBe("100%");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-row-13")?.type,
+    ).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-scrollbar")
+        ?.type,
+    ).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-scrollbar")
+        ?.props.height,
+    ).toBe("100%");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-filter-picker-scrollbar-thumb")
+        ?.type,
+    ).toBe("Box");
   });
 
   test("serializes concurrent state renders without duplicating the root", async () => {
     const kit = fakeKit();
-    const renderer = await renderOpenTuiAppOnce(createOpenTuiInitialState("en"), kit);
+    const renderer = await renderOpenTuiAppOnce(
+      createOpenTuiInitialState("en"),
+      kit,
+    );
 
     await Promise.all([
       renderer.renderState?.(createOpenTuiInitialState("zh")),
       renderer.renderState?.(createOpenTuiStatsState("en", [])),
     ]);
 
-    expect(kit.addedNodes.filter((node) => node.props.id === "keyloop-open-tui-root")).toHaveLength(
-      1,
-    );
+    expect(
+      kit.addedNodes.filter(
+        (node) => node.props.id === "keyloop-open-tui-root",
+      ),
+    ).toHaveLength(1);
     const content = flattenContent(kit.addedNodes);
     expect(content).toContain("Stats");
     expect(content).not.toContain("练习菜单");
@@ -403,7 +570,10 @@ describe("OpenTUI renderer adapter", () => {
         return renderer;
       },
     };
-    const renderer = await renderOpenTuiAppOnce(createOpenTuiInitialState("en"), kit);
+    const renderer = await renderOpenTuiAppOnce(
+      createOpenTuiInitialState("en"),
+      kit,
+    );
 
     renderer.destroy?.();
 
@@ -414,7 +584,11 @@ describe("OpenTUI renderer adapter", () => {
   test("renders running route target text", async () => {
     const context = appContext();
     const state = startStagePlanFirstLesson(
-      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
+      activateOpenTuiMenuItem(
+        createOpenTuiInitialState("en"),
+        "comprehensive",
+        context,
+      ),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -467,17 +641,24 @@ describe("OpenTUI renderer adapter", () => {
 
     // "信息；资料" is 10 columns wide, wider than "info" + space, so the word
     // row stretches: info starts at column 0, practice at column 11.
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode,
-    ]).replace(/\n/gu, "")).toBe("info       practice");
-    const meaningLine = findNodeById(kit.addedNodes, "keyloop-ghost-meaning-line-0");
+    expect(
+      flattenContent([
+        findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode,
+      ]).replace(/\n/gu, ""),
+    ).toBe("info       practice");
+    const meaningLine = findNodeById(
+      kit.addedNodes,
+      "keyloop-ghost-meaning-line-0",
+    );
     expect(meaningLine).toBeDefined();
     expect(flattenContent([meaningLine as FakeNode]).replace(/\n/gu, "")).toBe(
       "信息；资料 练习",
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
-      (child) => child.props.id,
-    )).toEqual(["keyloop-ghost-line-0", "keyloop-ghost-meaning-line-0"]);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
+        (child) => child.props.id,
+      ),
+    ).toEqual(["keyloop-ghost-line-0", "keyloop-ghost-meaning-line-0"]);
   });
 
   test("keeps a leading custom word without a meaning visible and active", async () => {
@@ -487,7 +668,13 @@ describe("OpenTUI renderer adapter", () => {
       name: "Web3",
       created_at: "2026-08-20T00:00:00.000Z",
       words: [
-        { id: "w1", text: "verify", kind: "word", meaning_zh: "证明", source: "dict" },
+        {
+          id: "w1",
+          text: "verify",
+          kind: "word",
+          meaning_zh: "证明",
+          source: "dict",
+        },
         { id: "w2", text: "privateKey", kind: "word", source: "dict" },
       ],
       sentences: [],
@@ -507,7 +694,10 @@ describe("OpenTUI renderer adapter", () => {
     expect(target.text).toBe("privateKey verify");
     await renderOpenTuiAppOnce(running, kit);
 
-    const line = findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode;
+    const line = findNodeById(
+      kit.addedNodes,
+      "keyloop-ghost-line-0",
+    ) as FakeNode;
     expect(flattenContent([line]).replace(/\n/gu, "")).toContain("privateKey");
     expect(
       findNodesByIdPrefix(kit.addedNodes, "keyloop-ghost-cursor-").map(
@@ -527,9 +717,24 @@ describe("OpenTUI renderer adapter", () => {
           text: "cat dog fox",
           source: "keyloop:module:everyday-english:words-1000",
           annotations: [
-            { start: 0, end: 3, translation_zh: "猫科动物宠物", display: "word" },
-            { start: 4, end: 7, translation_zh: "犬类动物伙伴", display: "word" },
-            { start: 8, end: 11, translation_zh: "狡猾的狐狸先生", display: "word" },
+            {
+              start: 0,
+              end: 3,
+              translation_zh: "猫科动物宠物",
+              display: "word",
+            },
+            {
+              start: 4,
+              end: 7,
+              translation_zh: "犬类动物伙伴",
+              display: "word",
+            },
+            {
+              start: 8,
+              end: 11,
+              translation_zh: "狡猾的狐狸先生",
+              display: "word",
+            },
           ],
         },
       },
@@ -542,26 +747,42 @@ describe("OpenTUI renderer adapter", () => {
       await renderOpenTuiAppOnce(running, kit);
     });
 
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
-      (child) => child.props.id,
-    )).toEqual([
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
+        (child) => child.props.id,
+      ),
+    ).toEqual([
       "keyloop-ghost-line-0",
       "keyloop-ghost-meaning-line-0",
       "keyloop-ghost-line-1",
       "keyloop-ghost-meaning-line-1",
     ]);
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode,
-    ]).replace(/\n/gu, "")).toBe("cat            dog ");
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-meaning-line-0") as FakeNode,
-    ]).replace(/\n/gu, "")).toBe("猫科动物宠物   犬类动物伙伴");
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-line-1") as FakeNode,
-    ]).replace(/\n/gu, "")).toBe("fox");
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-meaning-line-1") as FakeNode,
-    ]).replace(/\n/gu, "")).toBe("狡猾的狐狸先生");
+    expect(
+      flattenContent([
+        findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode,
+      ]).replace(/\n/gu, ""),
+    ).toBe("cat            dog ");
+    expect(
+      flattenContent([
+        findNodeById(
+          kit.addedNodes,
+          "keyloop-ghost-meaning-line-0",
+        ) as FakeNode,
+      ]).replace(/\n/gu, ""),
+    ).toBe("猫科动物宠物   犬类动物伙伴");
+    expect(
+      flattenContent([
+        findNodeById(kit.addedNodes, "keyloop-ghost-line-1") as FakeNode,
+      ]).replace(/\n/gu, ""),
+    ).toBe("fox");
+    expect(
+      flattenContent([
+        findNodeById(
+          kit.addedNodes,
+          "keyloop-ghost-meaning-line-1",
+        ) as FakeNode,
+      ]).replace(/\n/gu, ""),
+    ).toBe("狡猾的狐狸先生");
   });
 
   test("packs repeated long-word items without a uniform grid", async () => {
@@ -572,13 +793,17 @@ describe("OpenTUI renderer adapter", () => {
         source_item: "technical_long_words",
         target: {
           mode: "words",
-          text:
-            "alpha alpha beta beta gamma gamma delta delta",
+          text: "alpha alpha beta beta gamma gamma delta delta",
           source: "keyloop:module:word-breakdown:alpha",
           annotations: [
             { start: 0, end: 11, translation_zh: "甲", display: "word_loose" },
             { start: 12, end: 21, translation_zh: "乙", display: "word_loose" },
-            { start: 22, end: 33, translation_zh: "很长的伽马释义", display: "word_loose" },
+            {
+              start: 22,
+              end: 33,
+              translation_zh: "很长的伽马释义",
+              display: "word_loose",
+            },
             { start: 34, end: 45, translation_zh: "丁", display: "word_loose" },
           ],
         },
@@ -590,26 +815,42 @@ describe("OpenTUI renderer adapter", () => {
       await renderOpenTuiAppOnce(running, kit);
     });
 
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
-      (child) => child.props.id,
-    )).toEqual([
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
+        (child) => child.props.id,
+      ),
+    ).toEqual([
       "keyloop-ghost-line-0",
       "keyloop-ghost-meaning-line-0",
       "keyloop-ghost-line-1",
       "keyloop-ghost-meaning-line-1",
     ]);
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode,
-    ]).replace(/\n/gu, "")).toBe("alpha alpha beta beta");
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-meaning-line-0") as FakeNode,
-    ]).replace(/\n/gu, "")).toBe("甲          乙");
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-line-1") as FakeNode,
-    ]).replace(/\n/gu, "")).toBe("gamma gamma    delta delta");
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-meaning-line-1") as FakeNode,
-    ]).replace(/\n/gu, "")).toBe("很长的伽马释义 丁");
+    expect(
+      flattenContent([
+        findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode,
+      ]).replace(/\n/gu, ""),
+    ).toBe("alpha alpha beta beta");
+    expect(
+      flattenContent([
+        findNodeById(
+          kit.addedNodes,
+          "keyloop-ghost-meaning-line-0",
+        ) as FakeNode,
+      ]).replace(/\n/gu, ""),
+    ).toBe("甲          乙");
+    expect(
+      flattenContent([
+        findNodeById(kit.addedNodes, "keyloop-ghost-line-1") as FakeNode,
+      ]).replace(/\n/gu, ""),
+    ).toBe("gamma gamma    delta delta");
+    expect(
+      flattenContent([
+        findNodeById(
+          kit.addedNodes,
+          "keyloop-ghost-meaning-line-1",
+        ) as FakeNode,
+      ]).replace(/\n/gu, ""),
+    ).toBe("很长的伽马释义 丁");
   });
 
   test("keeps the cursor visible on the separator after a repeated long-word item", async () => {
@@ -631,7 +872,13 @@ describe("OpenTUI renderer adapter", () => {
           input: "alpha alpha",
           elapsed_ms: 1000,
           key_events: [],
-          metrics: { wpm: 0, raw_wpm: 0, accuracy: 100, errors: 0, backspaces: 0 },
+          metrics: {
+            wpm: 0,
+            raw_wpm: 0,
+            accuracy: 100,
+            errors: 0,
+            backspaces: 0,
+          },
         },
       },
     };
@@ -639,7 +886,10 @@ describe("OpenTUI renderer adapter", () => {
 
     await renderOpenTuiAppOnce(running, kit);
 
-    const cursorNodes = findNodesByIdPrefix(kit.addedNodes, "keyloop-ghost-cursor-");
+    const cursorNodes = findNodesByIdPrefix(
+      kit.addedNodes,
+      "keyloop-ghost-cursor-",
+    );
     expect(cursorNodes.map((node) => node.props.content)).toEqual([" "]);
   });
 
@@ -654,15 +904,27 @@ describe("OpenTUI renderer adapter", () => {
 
     const blockRows = wrapGhostWordBlockLoose(
       row ?? [],
-      [{ srcStartCol: 0, srcEndCol: text.length, translation: "基础设施", loose: true }],
+      [
+        {
+          srcStartCol: 0,
+          srcEndCol: text.length,
+          translation: "基础设施",
+          loose: true,
+        },
+      ],
       32,
     );
 
-    expect(blockRows.map((blockRow) => flattenGhostSegments(blockRow.segments))).toEqual([
+    expect(
+      blockRows.map((blockRow) => flattenGhostSegments(blockRow.segments)),
+    ).toEqual([
       "infrastructure infrastructure",
       "infrastructure infrastructure",
     ]);
-    expect(blockRows.map((blockRow) => blockRow.meaning)).toEqual(["", "基础设施"]);
+    expect(blockRows.map((blockRow) => blockRow.meaning)).toEqual([
+      "",
+      "基础设施",
+    ]);
   });
 
   test("renders wrapped repeated word translations below all English rows", async () => {
@@ -699,24 +961,33 @@ describe("OpenTUI renderer adapter", () => {
       await renderOpenTuiAppOnce(running, kit);
     });
 
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
-      (child) => child.props.id,
-    )).toEqual([
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
+        (child) => child.props.id,
+      ),
+    ).toEqual([
       "keyloop-ghost-line-0",
       "keyloop-ghost-line-1",
       "keyloop-ghost-meaning-line-1",
     ]);
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode,
-    ]).replace(/\n/gu, "")).toBe(
-      "availability availability availability availability",
-    );
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-line-1") as FakeNode,
-    ]).replace(/\n/gu, "")).toBe("availability");
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-meaning-line-1") as FakeNode,
-    ]).replace(/\n/gu, "")).toBe("有效性");
+    expect(
+      flattenContent([
+        findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode,
+      ]).replace(/\n/gu, ""),
+    ).toBe("availability availability availability availability");
+    expect(
+      flattenContent([
+        findNodeById(kit.addedNodes, "keyloop-ghost-line-1") as FakeNode,
+      ]).replace(/\n/gu, ""),
+    ).toBe("availability");
+    expect(
+      flattenContent([
+        findNodeById(
+          kit.addedNodes,
+          "keyloop-ghost-meaning-line-1",
+        ) as FakeNode,
+      ]).replace(/\n/gu, ""),
+    ).toBe("有效性");
   });
 
   test("keeps the cursor visible on a wrapped repeated long-word separator", () => {
@@ -726,11 +997,23 @@ describe("OpenTUI renderer adapter", () => {
       "infrastructure",
       "infrastructure",
     ].join(" ");
-    const [row] = ghostRows(text, "infrastructure infrastructure", undefined, false);
+    const [row] = ghostRows(
+      text,
+      "infrastructure infrastructure",
+      undefined,
+      false,
+    );
 
     const blockRows = wrapGhostWordBlockLoose(
       row ?? [],
-      [{ srcStartCol: 0, srcEndCol: text.length, translation: "基础设施", loose: true }],
+      [
+        {
+          srcStartCol: 0,
+          srcEndCol: text.length,
+          translation: "基础设施",
+          loose: true,
+        },
+      ],
       32,
     );
 
@@ -740,10 +1023,18 @@ describe("OpenTUI renderer adapter", () => {
   });
 
   test("折行行末的待打分隔空格还原为普通空格，光标贴词尾不画圆点 (#1)", () => {
-    const text = ["infrastructure", "infrastructure", "infrastructure"].join(" ");
-    const [row] = ghostRows(text, "infrastructure infrastructure", undefined, false, {
-      spaceDot: true,
-    });
+    const text = ["infrastructure", "infrastructure", "infrastructure"].join(
+      " ",
+    );
+    const [row] = ghostRows(
+      text,
+      "infrastructure infrastructure",
+      undefined,
+      false,
+      {
+        spaceDot: true,
+      },
+    );
 
     const blockRows = wrapGhostWordBlockLoose(
       row ?? [],
@@ -788,13 +1079,18 @@ describe("OpenTUI renderer adapter", () => {
 
     // The 78-column row must wrap instead of being cut off at 32 columns.
     expect(findNodeById(kit.addedNodes, "keyloop-ghost-line-1")).toBeDefined();
-    const ghost = findNodeById(kit.addedNodes, "keyloop-ghost-content") as FakeNode;
+    const ghost = findNodeById(
+      kit.addedNodes,
+      "keyloop-ghost-content",
+    ) as FakeNode;
     const ids = ghost.children.map((child) => String(child.props.id));
     expect(ids.at(-1)).toMatch(/^keyloop-ghost-line-translation-/u);
     const translationNode = ghost.children.at(-1) as FakeNode;
     // The 36-column translation wraps onto two lines instead of truncating.
     expect(translationNode.children.length).toBeGreaterThan(1);
-    expect(flattenContent([translationNode]).replace(/\n/gu, "")).toBe(translation);
+    expect(flattenContent([translationNode]).replace(/\n/gu, "")).toBe(
+      translation,
+    );
   });
 
   test("renders sentence translations directly below each sentence inside the typing panel", async () => {
@@ -828,21 +1124,35 @@ describe("OpenTUI renderer adapter", () => {
 
     await renderOpenTuiAppOnce(sentenceState, kit);
 
-    expect(findNodeById(kit.addedNodes, "keyloop-target-line-translations")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
-      (child) => child.props.id,
-    )).toEqual([
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-target-line-translations"),
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-content")?.children.map(
+        (child) => child.props.id,
+      ),
+    ).toEqual([
       "keyloop-ghost-line-0",
       "keyloop-ghost-line-translation-0",
       "keyloop-ghost-line-1",
       "keyloop-ghost-line-translation-1",
     ]);
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-line-translation-0") as FakeNode,
-    ])).toContain("练习培养技能。");
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-line-translation-1") as FakeNode,
-    ])).toContain("反馈指引进步。");
+    expect(
+      flattenContent([
+        findNodeById(
+          kit.addedNodes,
+          "keyloop-ghost-line-translation-0",
+        ) as FakeNode,
+      ]),
+    ).toContain("练习培养技能。");
+    expect(
+      flattenContent([
+        findNodeById(
+          kit.addedNodes,
+          "keyloop-ghost-line-translation-1",
+        ) as FakeNode,
+      ]),
+    ).toContain("反馈指引进步。");
   });
 
   test("renders the article translation as plain muted lines below the typed text", async () => {
@@ -871,18 +1181,28 @@ describe("OpenTUI renderer adapter", () => {
 
     await renderOpenTuiAppOnce(articleState, kit);
 
-    expect(findNodeById(kit.addedNodes, "keyloop-target-article-translation")).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-target-article-translation"),
+    ).toBeUndefined();
     // 文章翻译扁平化为内容列内的行（参与窗口滚动），不再是游离 Box
-    const content = findNodeById(kit.addedNodes, "keyloop-ghost-content") as FakeNode;
-    expect(flattenContent([content]).replace(/\n/gu, "")).toContain("第一段。 第二段。");
+    const content = findNodeById(
+      kit.addedNodes,
+      "keyloop-ghost-content",
+    ) as FakeNode;
+    expect(flattenContent([content]).replace(/\n/gu, "")).toContain(
+      "第一段。 第二段。",
+    );
     const ghostChildIds = content.children.map((child) => child.props.id);
-    expect(ghostChildIds.at(-1)).toMatch(/^keyloop-ghost-article-translation-/u);
+    expect(ghostChildIds.at(-1)).toMatch(
+      /^keyloop-ghost-article-translation-/u,
+    );
   });
 
   test("keeps the article translation fully visible by wrapping long text", async () => {
     const translation =
-      "这是一段非常长的文章翻译，用来验证整段翻译不会被截断成一行，而是按照可用宽度自动换行完整显示出来，确保练习者能够读到全部内容。"
-        .repeat(2);
+      "这是一段非常长的文章翻译，用来验证整段翻译不会被截断成一行，而是按照可用宽度自动换行完整显示出来，确保练习者能够读到全部内容。".repeat(
+        2,
+      );
     const articleState: OpenTuiAppState = {
       language: "zh",
       route: {
@@ -908,12 +1228,17 @@ describe("OpenTUI renderer adapter", () => {
     await renderOpenTuiAppOnce(articleState, kit);
 
     // 长翻译换行成多行 article_line，全部完整可见（非 TTY 测试不裁剪窗口）
-    const content = findNodeById(kit.addedNodes, "keyloop-ghost-content") as FakeNode;
+    const content = findNodeById(
+      kit.addedNodes,
+      "keyloop-ghost-content",
+    ) as FakeNode;
     const articleLines = content.children.filter((child) =>
       String(child.props.id).startsWith("keyloop-ghost-article-translation-"),
     );
     expect(articleLines.length).toBeGreaterThan(1);
-    expect(articleLines.map((node) => String(node.props.content)).join("")).toBe(translation);
+    expect(
+      articleLines.map((node) => String(node.props.content)).join(""),
+    ).toBe(translation);
   });
 
   test("renders per-article headers and translations for concatenated articles", async () => {
@@ -952,9 +1277,14 @@ describe("OpenTUI renderer adapter", () => {
 
     await renderOpenTuiAppOnce(articleState, kit);
 
-    const content = findNodeById(kit.addedNodes, "keyloop-ghost-content") as FakeNode;
+    const content = findNodeById(
+      kit.addedNodes,
+      "keyloop-ghost-content",
+    ) as FakeNode;
     const ids = content.children.map((child) => String(child.props.id));
-    expect(ids.some((id) => id.startsWith("keyloop-ghost-article-header-"))).toBe(true);
+    expect(
+      ids.some((id) => id.startsWith("keyloop-ghost-article-header-")),
+    ).toBe(true);
     const all = flattenContent([content]).replace(/\n/gu, "");
     expect(all).toContain("Article B");
     expect(all).toContain("甲一。");
@@ -980,7 +1310,9 @@ describe("OpenTUI renderer adapter", () => {
       await renderOpenTuiAppOnce(running, kit);
     });
 
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-line-1")?.type).toBe("Box");
+    expect(findNodeById(kit.addedNodes, "keyloop-ghost-line-1")?.type).toBe(
+      "Box",
+    );
   });
 
   test("wraps word decomposition rows without splitting tokens inside the fixed app width", async () => {
@@ -1004,16 +1336,24 @@ describe("OpenTUI renderer adapter", () => {
 
     const wrappedLine = findNodeById(kit.addedNodes, "keyloop-ghost-line-1");
     expect(wrappedLine?.type).toBe("Box");
-    expect(flattenContent([
-      findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode,
-    ])).toContain("information");
-    expect(flattenContent([wrappedLine as FakeNode])).toContain("communication");
+    expect(
+      flattenContent([
+        findNodeById(kit.addedNodes, "keyloop-ghost-line-0") as FakeNode,
+      ]),
+    ).toContain("information");
+    expect(flattenContent([wrappedLine as FakeNode])).toContain(
+      "communication",
+    );
   });
 
   test("renders running route with live metric strip above ghost text", async () => {
     const context = appContext();
     const state = startStagePlanFirstLesson(
-      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
+      activateOpenTuiMenuItem(
+        createOpenTuiInitialState("en"),
+        "comprehensive",
+        context,
+      ),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1071,18 +1411,28 @@ describe("OpenTUI renderer adapter", () => {
 
     await renderOpenTuiAppOnce(state, kit);
 
-    const runningScreen = findNodeById(kit.addedNodes, "keyloop-running-screen");
+    const runningScreen = findNodeById(
+      kit.addedNodes,
+      "keyloop-running-screen",
+    );
     expect(runningScreen?.children.map((child) => child.props.id)).toEqual([
       "keyloop-practice-overview",
       "keyloop-practice-data",
       "keyloop-ghost-text",
       "keyloop-diagnostics",
     ]);
-    expect(findNodeById(kit.addedNodes, "keyloop-lesson-banner")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-group-progress")?.props.border).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-topbar-today-duration")).toBeDefined();
     expect(
-      findNodeById(kit.addedNodes, "keyloop-topbar-today-duration-value")?.props.content,
+      findNodeById(kit.addedNodes, "keyloop-lesson-banner"),
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-group-progress")?.props.border,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-topbar-today-duration"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-topbar-today-duration-value")?.props
+        .content,
     ).toBe("3:05");
     const liveMetrics = findNodeById(kit.addedNodes, "keyloop-live-metrics");
     expect(liveMetrics?.props.flexDirection).toBe("row");
@@ -1095,35 +1445,66 @@ describe("OpenTUI renderer adapter", () => {
       "keyloop-live-metric-accuracy",
       "keyloop-live-metric-errors",
     ]);
-    expect(findNodeById(kit.addedNodes, "keyloop-live-metric-wpm")?.props.border).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-live-metric-raw")?.props.border).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-live-metric-accuracy")?.props.border).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-live-metric-errors")?.props.border).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-live-metric-wpm")?.props.border,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-live-metric-raw")?.props.border,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-live-metric-accuracy")?.props
+        .border,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-live-metric-errors")?.props.border,
+    ).toBeUndefined();
 
     const ghostText = findNodeById(kit.addedNodes, "keyloop-ghost-text");
     expect(ghostText?.props.title).toBe(" 跟打文本 ");
     expect(ghostText?.props.height).toBeUndefined();
     expect(ghostText?.props.flexGrow).toBe(1);
     expect(ghostText?.props.bottomTitle).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-typed-0-0")?.props.content).toBe("as");
-    expectAnsiSlot(findNodeById(kit.addedNodes, "keyloop-ghost-typed-0-0")?.props.fg, 2, "green");
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-wrong-0-1")?.props.content).toBe("d");
-    expectDefaultForeground(findNodeById(kit.addedNodes, "keyloop-ghost-wrong-0-1")?.props.fg);
-    expectAnsiSlot(findNodeById(kit.addedNodes, "keyloop-ghost-wrong-0-1")?.props.bg, 1, "red");
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-wrong-0-1")?.props.attributes).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-cursor-0-2")?.props.content).toBe("f");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-typed-0-0")?.props.content,
+    ).toBe("as");
+    expectAnsiSlot(
+      findNodeById(kit.addedNodes, "keyloop-ghost-typed-0-0")?.props.fg,
+      2,
+      "green",
+    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-wrong-0-1")?.props.content,
+    ).toBe("d");
+    expectDefaultForeground(
+      findNodeById(kit.addedNodes, "keyloop-ghost-wrong-0-1")?.props.fg,
+    );
+    expectAnsiSlot(
+      findNodeById(kit.addedNodes, "keyloop-ghost-wrong-0-1")?.props.bg,
+      1,
+      "red",
+    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-wrong-0-1")?.props.attributes,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-cursor-0-2")?.props.content,
+    ).toBe("f");
     expectAnsiSlot(
       findNodeById(kit.addedNodes, "keyloop-ghost-cursor-0-2")?.props.bg,
       3,
       "yellow",
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-pending-0-3")?.props.content).toBe(" jkl;");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-pending-0-3")?.props.content,
+    ).toBe(" jkl;");
     expectAnsiSlot(
       findNodeById(kit.addedNodes, "keyloop-ghost-pending-0-3")?.props.fg,
       8,
       "brightBlack",
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-pending-0-4")).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-pending-0-4"),
+    ).toBeUndefined();
 
     const content = flattenContent(kit.addedNodes);
     expect(content).not.toContain("ghost code");
@@ -1142,45 +1523,60 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("3:05");
     expect(content).toContain("Group");
     expect(content).toContain("1:05");
-    expect(findNodeById(kit.addedNodes, "keyloop-practice-overview")?.props.title).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-practice-data")?.props.bottomTitle).toBe(
-      " correct 2/9 · backspace 0 ",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-today-duration")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-practice-data")?.children.map((child) => child.props.id)).toEqual([
-      "keyloop-live-metrics",
-      "keyloop-group-progress-bar",
-    ]);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-practice-overview")?.props.title,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-practice-data")?.props.bottomTitle,
+    ).toBe(" correct 2/9 · backspace 0 ");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-today-duration"),
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-practice-data")?.children.map(
+        (child) => child.props.id,
+      ),
+    ).toEqual(["keyloop-live-metrics", "keyloop-group-progress-bar"]);
     const duration = findNodeById(kit.addedNodes, "keyloop-lesson-duration");
     expect(duration?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-lesson-duration-label")?.props.content).toBe(
-      "Group",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-lesson-duration-value")?.props.content).toBe(
-      "1:05",
-    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-lesson-duration-label")?.props
+        .content,
+    ).toBe("Group");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-lesson-duration-value")?.props
+        .content,
+    ).toBe("1:05");
     expectAnsiSlot(
       findNodeById(kit.addedNodes, "keyloop-lesson-duration-value")?.props.fg,
       2,
       "green",
     );
     expect(
-      findNodeById(kit.addedNodes, "keyloop-practice-overview")?.props.bottomTitle,
+      findNodeById(kit.addedNodes, "keyloop-practice-overview")?.props
+        .bottomTitle,
     ).toBeUndefined();
     expect(content).not.toContain("lesson 1");
     expect(content).not.toContain("20260605-1-d08cf9-01-foundation");
     expect(content).not.toContain("ANSI theme aware");
     expect(content).not.toContain("UTF-8 grid");
     expect(content).not.toContain("Ctrl+P pause");
-    expect(findNodeById(kit.addedNodes, "keyloop-terminal-state")).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-terminal-state"),
+    ).toBeUndefined();
     expect(findNodeById(kit.addedNodes, "keyloop-helpbar")).toBeUndefined();
     expect(findNodeById(kit.addedNodes, "keyloop-lesson-chip")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-line-number-0")).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-line-number-0"),
+    ).toBeUndefined();
 
-    const diagnostics = findNodeById(kit.addedNodes, "keyloop-training-diagnostics");
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostics")?.props.flexDirection).toBe(
-      "column",
+    const diagnostics = findNodeById(
+      kit.addedNodes,
+      "keyloop-training-diagnostics",
     );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostics")?.props.flexDirection,
+    ).toBe("column");
     expect(diagnostics?.props.height).toBe(4);
     expect(diagnostics?.props.overflow).toBeUndefined();
     expect(diagnostics?.props.bottomTitle).toBeUndefined();
@@ -1188,42 +1584,64 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("Speed:");
     expect(content).toContain("Errors:");
     // 零档（无数据/低速）不再上背景色
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-D")?.props.bg).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-row-0")?.props.flexWrap).toBe(
-      "nowrap",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-row-0")?.props.overflow).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-D")?.props.bg).toBe(
-      heatScaleColor("danger", 4),
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-S")?.props.bg).toBe(
-      heatScaleColor("success", 2),
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-S")?.props.bg).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-D")?.props.bg,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-row-0")?.props
+        .flexWrap,
+    ).toBe("nowrap");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-row-0")?.props
+        .overflow,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-D")?.props.bg,
+    ).toBe(heatScaleColor("danger", 4));
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-S")?.props.bg,
+    ).toBe(heatScaleColor("success", 2));
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-S")?.props.bg,
+    ).toBeUndefined();
     expectDefaultForeground(
       findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-D")?.props.fg,
     );
     expect(content).not.toContain("Focus symbols:");
     expect(content).not.toContain("Hot:");
     expect(content).not.toContain("reset hands");
-    const progressBar = findNodeById(kit.addedNodes, "keyloop-group-progress-bar");
+    const progressBar = findNodeById(
+      kit.addedNodes,
+      "keyloop-group-progress-bar",
+    );
     expect(progressBar?.props.flexDirection).toBe("row");
     expect(progressBar?.props.overflow).toBe("hidden");
-    const progressFill = findNodeById(kit.addedNodes, "keyloop-group-progress-bar-fill");
+    const progressFill = findNodeById(
+      kit.addedNodes,
+      "keyloop-group-progress-bar-fill",
+    );
     expect(progressFill?.type).toBe("Text");
     expect(progressFill?.props.content).toBe("█".repeat(16));
     expectAnsiSlot(progressFill?.props.fg, 2, "green");
-    const progressTrack = findNodeById(kit.addedNodes, "keyloop-group-progress-bar-track");
+    const progressTrack = findNodeById(
+      kit.addedNodes,
+      "keyloop-group-progress-bar-track",
+    );
     expect(progressTrack?.props.content).toBe("░".repeat(56));
     expect(
-      findNodeById(kit.addedNodes, "keyloop-group-progress-bar-percent")?.props.content,
+      findNodeById(kit.addedNodes, "keyloop-group-progress-bar-percent")?.props
+        .content,
     ).toBe(" 22%");
   });
 
   test("renders current target keys in the diagnostics panel before typing starts", async () => {
     const context = appContext();
     const state = startStagePlanFirstLesson(
-      activateOpenTuiMenuItem(createOpenTuiInitialState("zh"), "comprehensive", context),
+      activateOpenTuiMenuItem(
+        createOpenTuiInitialState("zh"),
+        "comprehensive",
+        context,
+      ),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1254,22 +1672,44 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).not.toContain("本组字符:");
     expect(content).toContain("速度:");
     expect(content).toContain("错误:");
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-A")).toBeDefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-Z")).toBeDefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-1")).toBeDefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")).toBeDefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-A")).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-A"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-Z"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-1"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-A"),
+    ).toBeDefined();
     // 开打前所有键零档：无背景色，一眼区分"练过的"和"没碰过的"
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-A")?.props.bg).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u2b")?.props.bg).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")?.props.bg).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-A")?.props.bg,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u2b")?.props
+        .bg,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")?.props
+        .bg,
+    ).toBeUndefined();
     expect(content).not.toContain("重点符号:");
   });
 
   test("renders live diagnostics for only the keys present in the current target", async () => {
     const context = appContext();
     const state = startStagePlanFirstLesson(
-      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
+      activateOpenTuiMenuItem(
+        createOpenTuiInitialState("en"),
+        "comprehensive",
+        context,
+      ),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1282,7 +1722,13 @@ describe("OpenTUI renderer adapter", () => {
     state.route.live = {
       input: "a1+z",
       elapsed_ms: 800,
-      metrics: { wpm: 20, raw_wpm: 20, accuracy: 100, errors: 0, backspaces: 0 },
+      metrics: {
+        wpm: 20,
+        raw_wpm: 20,
+        accuracy: 100,
+        errors: 0,
+        backspaces: 0,
+      },
       key_events: [
         {
           at_ms: 100,
@@ -1322,19 +1768,35 @@ describe("OpenTUI renderer adapter", () => {
 
     await renderOpenTuiAppOnce(state, kit);
 
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-A")).toBeDefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-Z")).toBeDefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-1")).toBeDefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")).toBeDefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u3b")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u3b")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-Z")?.props.bg).toBe(
-      heatScaleColor("success", 4),
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")?.props.bg).toBe(
-      heatScaleColor("success", 1),
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u2b")?.props.bg).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-A"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-Z"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-1"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u3b"),
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u3b"),
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-Z")?.props.bg,
+    ).toBe(heatScaleColor("success", 4));
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-u2b")?.props
+        .bg,
+    ).toBe(heatScaleColor("success", 1));
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-error-key-u2b")?.props
+        .bg,
+    ).toBeUndefined();
     expectDefaultForeground(
       findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-Z")?.props.fg,
     );
@@ -1343,7 +1805,11 @@ describe("OpenTUI renderer adapter", () => {
   test("keeps long diagnostic key rows aligned without clipping", async () => {
     const context = appContext();
     const state = startStagePlanFirstLesson(
-      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
+      activateOpenTuiMenuItem(
+        createOpenTuiInitialState("en"),
+        "comprehensive",
+        context,
+      ),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1363,25 +1829,50 @@ describe("OpenTUI renderer adapter", () => {
 
     await renderOpenTuiAppOnce(state, kit);
 
-    expect(findNodeById(kit.addedNodes, "keyloop-training-diagnostics")?.props.height).toBe(8);
-    expect(findNodeById(kit.addedNodes, "keyloop-training-diagnostics")?.props.overflow).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-row-1")).toBeDefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-row-1")).toBeDefined();
     expect(
-      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-row-1-label")?.props.width,
+      findNodeById(kit.addedNodes, "keyloop-training-diagnostics")?.props
+        .height,
     ).toBe(8);
     expect(
-      findNodeById(kit.addedNodes, "keyloop-diagnostic-error-row-1-label")?.props.width,
+      findNodeById(kit.addedNodes, "keyloop-training-diagnostics")?.props
+        .overflow,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-row-1"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-error-row-1"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-row-1-label")
+        ?.props.width,
     ).toBe(8);
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-row-1")?.props.flexWrap).toBe("nowrap");
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-error-row-1")?.props.overflow).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-A")?.props.width).toBe(3);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-error-row-1-label")
+        ?.props.width,
+    ).toBe(8);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-row-1")?.props
+        .flexWrap,
+    ).toBe("nowrap");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-error-row-1")?.props
+        .overflow,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-diagnostic-speed-key-A")?.props
+        .width,
+    ).toBe(3);
   });
 
   test("renders line numbers only for code targets", async () => {
     const context = appContext();
     const state = startStagePlanFirstLesson(
-      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
+      activateOpenTuiMenuItem(
+        createOpenTuiInitialState("en"),
+        "comprehensive",
+        context,
+      ),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1395,13 +1886,20 @@ describe("OpenTUI renderer adapter", () => {
 
     await renderOpenTuiAppOnce(state, kit);
 
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-line-number-0")?.props.content).toBe("01");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-line-number-0")?.props
+        .content,
+    ).toBe("01");
   });
 
   test("soft wraps long code rows instead of clipping hidden target text", async () => {
     const context = appContext();
     const state = startStagePlanFirstLesson(
-      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
+      activateOpenTuiMenuItem(
+        createOpenTuiInitialState("en"),
+        "comprehensive",
+        context,
+      ),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1419,15 +1917,27 @@ describe("OpenTUI renderer adapter", () => {
     const wrappedLine = findNodeById(kit.addedNodes, "keyloop-ghost-line-1");
     expect(firstLine?.type).toBe("Box");
     expect(wrappedLine?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-line-number-0")?.props.content).toBe("01");
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-line-number-1")?.props.content).toBe("  ");
-    expect(flattenContent([wrappedLine as FakeNode])).toContain("ran-after-wrap");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-line-number-0")?.props
+        .content,
+    ).toBe("01");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-line-number-1")?.props
+        .content,
+    ).toBe("  ");
+    expect(flattenContent([wrappedLine as FakeNode])).toContain(
+      "ran-after-wrap",
+    );
   });
 
   test("soft wraps long code rows at word boundaries when possible", async () => {
     const context = appContext();
     const state = startStagePlanFirstLesson(
-      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
+      activateOpenTuiMenuItem(
+        createOpenTuiInitialState("en"),
+        "comprehensive",
+        context,
+      ),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1445,13 +1955,19 @@ describe("OpenTUI renderer adapter", () => {
 
     const wrappedLine = findNodeById(kit.addedNodes, "keyloop-ghost-line-1");
     expect(wrappedLine?.type).toBe("Box");
-    expect(flattenContent([wrappedLine as FakeNode])).toContain("runner stays whole");
+    expect(flattenContent([wrappedLine as FakeNode])).toContain(
+      "runner stays whole",
+    );
   });
 
   test("does not apply syntax fallback colors to non-code targets", async () => {
     const context = appContext();
     const state = startStagePlanFirstLesson(
-      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
+      activateOpenTuiMenuItem(
+        createOpenTuiInitialState("en"),
+        "comprehensive",
+        context,
+      ),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1478,13 +1994,19 @@ describe("OpenTUI renderer adapter", () => {
     const firstTyped = findNodeById(kit.addedNodes, "keyloop-ghost-typed-0-0");
     expect(firstTyped?.props.content).toBe("const value =>");
     expectAnsiSlot(firstTyped?.props.fg, 2, "green");
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-typed-0-1")).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-typed-0-1"),
+    ).toBeUndefined();
   });
 
   test("renders explicit default foreground for plain code instead of ANSI white", async () => {
     const context = appContext();
     const state = startStagePlanFirstLesson(
-      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
+      activateOpenTuiMenuItem(
+        createOpenTuiInitialState("en"),
+        "comprehensive",
+        context,
+      ),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1508,13 +2030,19 @@ describe("OpenTUI renderer adapter", () => {
 
     await renderOpenTuiAppOnce(state, kit);
 
-    expectDefaultForeground(findNodeById(kit.addedNodes, "keyloop-ghost-typed-0-0")?.props.fg);
+    expectDefaultForeground(
+      findNodeById(kit.addedNodes, "keyloop-ghost-typed-0-0")?.props.fg,
+    );
   });
 
   test("renders cursor position and newline markers without an error hint row", async () => {
     const context = appContext();
     const state = startStagePlanFirstLesson(
-      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
+      activateOpenTuiMenuItem(
+        createOpenTuiInitialState("en"),
+        "comprehensive",
+        context,
+      ),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1539,11 +2067,15 @@ describe("OpenTUI renderer adapter", () => {
     await renderOpenTuiAppOnce(state, kit);
 
     const cursor = findNodeById(kit.addedNodes, "keyloop-ghost-cursor-0-1");
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-typed-0-0")?.props.content).toBe("a");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-typed-0-0")?.props.content,
+    ).toBe("a");
     expect(cursor?.props.content).toBe("⏎");
     expectAnsiSlot(cursor?.props.fg, 0, "black");
     expectAnsiSlot(cursor?.props.bg, 3, "yellow");
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-pending-1-0")?.props.content).toBe("b");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-pending-1-0")?.props.content,
+    ).toBe("b");
 
     const content = flattenContent(kit.addedNodes);
     expect(content).toContain("⏎");
@@ -1554,7 +2086,11 @@ describe("OpenTUI renderer adapter", () => {
   test("renders code practice with Shiki-backed syntax colors", async () => {
     const context = appContext();
     const state = startStagePlanFirstLesson(
-      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
+      activateOpenTuiMenuItem(
+        createOpenTuiInitialState("en"),
+        "comprehensive",
+        context,
+      ),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1579,7 +2115,9 @@ describe("OpenTUI renderer adapter", () => {
     await renderOpenTuiAppOnce(state, kit);
 
     const line = findNodeById(kit.addedNodes, "keyloop-ghost-line-0");
-    const comment = line?.children.find((child) => child.props.content === "// comment");
+    const comment = line?.children.find(
+      (child) => child.props.content === "// comment",
+    );
     expectAnsiSlot(comment?.props.fg, 2, "green");
   });
 
@@ -1633,14 +2171,19 @@ describe("OpenTUI renderer adapter", () => {
     await renderOpenTuiAppOnce(state, kit);
 
     const content = flattenContent(kit.addedNodes);
-    const runningScreen = findNodeById(kit.addedNodes, "keyloop-running-screen");
+    const runningScreen = findNodeById(
+      kit.addedNodes,
+      "keyloop-running-screen",
+    );
     expect(runningScreen?.children.map((child) => child.props.id)).toEqual([
       "keyloop-practice-overview",
       "keyloop-practice-data",
       "keyloop-ghost-text",
       "keyloop-diagnostics",
     ]);
-    expect(findNodeById(kit.addedNodes, "keyloop-code-status-bar")).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-status-bar"),
+    ).toBeUndefined();
     const overview = findNodeById(kit.addedNodes, "keyloop-practice-overview");
     expect(overview?.type).toBe("Box");
     expect(overview?.props.border).toBeUndefined();
@@ -1657,7 +2200,8 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("长度");
     expect(content).toContain("中等");
     expect(
-      findNodeById(kit.addedNodes, "keyloop-practice-status-label-2")?.props.content,
+      findNodeById(kit.addedNodes, "keyloop-practice-status-label-2")?.props
+        .content,
     ).toBe("难度");
     expectAnsiSlot(
       findNodeById(kit.addedNodes, "keyloop-practice-status-label-2")?.props.fg,
@@ -1670,10 +2214,12 @@ describe("OpenTUI renderer adapter", () => {
       "cyan",
     );
     expect(
-      findNodeById(kit.addedNodes, "keyloop-practice-options-hint-key")?.props.content,
+      findNodeById(kit.addedNodes, "keyloop-practice-options-hint-key")?.props
+        .content,
     ).toBe("Ctrl+O");
     expectAnsiSlot(
-      findNodeById(kit.addedNodes, "keyloop-practice-options-hint-key")?.props.fg,
+      findNodeById(kit.addedNodes, "keyloop-practice-options-hint-key")?.props
+        .fg,
       2,
       "green",
     );
@@ -1682,7 +2228,9 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).not.toContain("热键:");
     expect(content).not.toContain("手位回稳");
     expect(content).not.toContain("中等长度");
-    expect(findNodeById(kit.addedNodes, "keyloop-code-status-shortcuts")).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-code-status-shortcuts"),
+    ).toBeUndefined();
     const ghostText = findNodeById(kit.addedNodes, "keyloop-ghost-text");
     expect(ghostText?.props.bottomTitle).toBeUndefined();
     expect(ghostText?.props.title).toBe(" 代码 ");
@@ -1696,18 +2244,22 @@ describe("OpenTUI renderer adapter", () => {
     expect(metrics?.props.border).toBeUndefined();
     expect(metrics?.props.height).toBe(1);
     expect(metrics?.props.width).toBe("100%");
-    expect(findNodeById(kit.addedNodes, "keyloop-live-metric-wpm-label")?.props.content).toBe(
-      "WPM",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-live-metric-raw-label")?.props.content).toBe(
-      "原始 WPM",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-live-metric-accuracy-label")?.props.content).toBe(
-      "准确",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-live-metric-errors-label")?.props.content).toBe(
-      "错误",
-    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-live-metric-wpm-label")?.props
+        .content,
+    ).toBe("WPM");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-live-metric-raw-label")?.props
+        .content,
+    ).toBe("原始 WPM");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-live-metric-accuracy-label")?.props
+        .content,
+    ).toBe("准确");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-live-metric-errors-label")?.props
+        .content,
+    ).toBe("错误");
   });
 
   test("renders Ctrl+O options hint on everyday practice overview panels", async () => {
@@ -1755,7 +2307,13 @@ describe("OpenTUI renderer adapter", () => {
           input: "",
           elapsed_ms: 3_000,
           paused: true,
-          metrics: { wpm: 0, raw_wpm: 0, accuracy: 100, errors: 0, backspaces: 0 },
+          metrics: {
+            wpm: 0,
+            raw_wpm: 0,
+            accuracy: 100,
+            errors: 0,
+            backspaces: 0,
+          },
         },
         practiceOptions: {
           selected_index: 1,
@@ -1769,13 +2327,19 @@ describe("OpenTUI renderer adapter", () => {
 
     await renderOpenTuiAppOnce(state, kit);
 
-    const popup = findNodeById(kit.addedNodes, "keyloop-practice-options-popup");
+    const popup = findNodeById(
+      kit.addedNodes,
+      "keyloop-practice-options-popup",
+    );
     expect(popup?.type).toBe("Box");
     expect(popup?.props.title).toBe(" 练习选项 ");
     expect(popup?.props.borderStyle).toBe("double");
-    expect(popup?.props.bottomTitle).toBe(" ↑↓ 选择 · ←→ 调整 · Enter 继续 · Esc 关闭 ");
+    expect(popup?.props.bottomTitle).toBe(
+      " ↑↓ 选择 · ←→ 调整 · Enter 继续 · Esc 关闭 ",
+    );
     expect(
-      findNodeById(kit.addedNodes, "keyloop-practice-option-row-1-rail-0")?.props.content,
+      findNodeById(kit.addedNodes, "keyloop-practice-option-row-1-rail-0")
+        ?.props.content,
     ).toBe("▌");
     const content = flattenContent(kit.addedNodes);
     expect(content).toContain("难度");
@@ -1783,7 +2347,12 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("长度");
     expect(content).toContain("中等");
     expect(content).not.toContain("↑↓ 选择  ←→ 调整");
-    expectCenteredModalOverlay(kit.addedNodes, "keyloop-practice-options-overlay", "56%", "58%");
+    expectCenteredModalOverlay(
+      kit.addedNodes,
+      "keyloop-practice-options-overlay",
+      "56%",
+      "58%",
+    );
   });
 
   test("standalone running banner omits repeat-after-enter copy", async () => {
@@ -1810,7 +2379,11 @@ describe("OpenTUI renderer adapter", () => {
   test("keeps ghost text stable when repeated wrong enters are typed", async () => {
     const context = appContext();
     const state = startStagePlanFirstLesson(
-      activateOpenTuiMenuItem(createOpenTuiInitialState("en"), "comprehensive", context),
+      activateOpenTuiMenuItem(
+        createOpenTuiInitialState("en"),
+        "comprehensive",
+        context,
+      ),
     );
     if (state.route.screen !== "running") {
       throw new Error("expected running state");
@@ -1845,9 +2418,15 @@ describe("OpenTUI renderer adapter", () => {
     expectDefaultForeground(wrong?.props.fg);
     expectAnsiSlot(wrong?.props.bg, 1, "red");
     expect(wrong?.props.attributes).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-cursor-0-1")?.props.content).toBe("d");
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-pending-0-2")?.props.content).toBe("e");
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-line-1")).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-cursor-0-1")?.props.content,
+    ).toBe("d");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-pending-0-2")?.props.content,
+    ).toBe("e");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-line-1"),
+    ).toBeUndefined();
   });
 
   test("keeps word and sentence translations visible on the completion screen", async () => {
@@ -1882,7 +2461,9 @@ describe("OpenTUI renderer adapter", () => {
 
     await renderOpenTuiAppOnce(state, kit);
 
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-meaning-line-0")).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-meaning-line-0"),
+    ).toBeDefined();
     const content = flattenContent(kit.addedNodes);
     expect(content).toContain("信息；资料");
     expect(content).toContain("练习培养技能。");
@@ -1911,14 +2492,20 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("Lesson complete");
     expect(content).not.toContain("WPM 30.0 | Raw WPM 32.0 | Accuracy 93.8%");
     expect(content).not.toContain("Errors 4 | Backspace 2");
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-stat-row")?.props.border).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-stat-wpm-label")?.props.content).toBe(
-      "WPM",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-stat-wpm-value")?.props.content).toBe(
-      "30.0",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-cpm")).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-stat-row")?.props.border,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-stat-wpm-label")?.props
+        .content,
+    ).toBe("WPM");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-stat-wpm-value")?.props
+        .content,
+    ).toBe("30.0");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-cpm"),
+    ).toBeUndefined();
   });
 
   test("renders completion key diagnostics from per-key timing and errors", async () => {
@@ -1940,16 +2527,86 @@ describe("OpenTUI renderer adapter", () => {
         backspace_count: 1,
         error_chars: { ";": 1 },
         key_events: [
-          { at_ms: 0, action: "insert", position: 0, expected: "a", input: "a", correct: true },
-          { at_ms: 100, action: "insert", position: 1, expected: "b", input: "b", correct: true },
-          { at_ms: 220, action: "insert", position: 2, expected: "c", input: "c", correct: true },
-          { at_ms: 350, action: "insert", position: 3, expected: "d", input: "d", correct: true },
-          { at_ms: 490, action: "insert", position: 4, expected: "e", input: "e", correct: true },
-          { at_ms: 1_090, action: "insert", position: 5, expected: "{", input: "{", correct: true },
-          { at_ms: 1_690, action: "insert", position: 6, expected: "=", input: "=", correct: true },
-          { at_ms: 1_800, action: "insert", position: 7, expected: ";", input: ":", correct: false },
-          { at_ms: 1_900, action: "backspace", position: 7, expected: ";", input: null, correct: false },
-          { at_ms: 2_500, action: "insert", position: 7, expected: ";", input: ";", correct: true },
+          {
+            at_ms: 0,
+            action: "insert",
+            position: 0,
+            expected: "a",
+            input: "a",
+            correct: true,
+          },
+          {
+            at_ms: 100,
+            action: "insert",
+            position: 1,
+            expected: "b",
+            input: "b",
+            correct: true,
+          },
+          {
+            at_ms: 220,
+            action: "insert",
+            position: 2,
+            expected: "c",
+            input: "c",
+            correct: true,
+          },
+          {
+            at_ms: 350,
+            action: "insert",
+            position: 3,
+            expected: "d",
+            input: "d",
+            correct: true,
+          },
+          {
+            at_ms: 490,
+            action: "insert",
+            position: 4,
+            expected: "e",
+            input: "e",
+            correct: true,
+          },
+          {
+            at_ms: 1_090,
+            action: "insert",
+            position: 5,
+            expected: "{",
+            input: "{",
+            correct: true,
+          },
+          {
+            at_ms: 1_690,
+            action: "insert",
+            position: 6,
+            expected: "=",
+            input: "=",
+            correct: true,
+          },
+          {
+            at_ms: 1_800,
+            action: "insert",
+            position: 7,
+            expected: ";",
+            input: ":",
+            correct: false,
+          },
+          {
+            at_ms: 1_900,
+            action: "backspace",
+            position: 7,
+            expected: ";",
+            input: null,
+            correct: false,
+          },
+          {
+            at_ms: 2_500,
+            action: "insert",
+            position: 7,
+            expected: ";",
+            input: ";",
+            correct: true,
+          },
         ],
       }),
     );
@@ -1965,48 +2622,65 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("慢");
     expect(content).toContain("快");
     expect(content).toContain("错");
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-diagnostics")).toBeDefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-slow-label")?.props.content).toBe(
-      "慢 ",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-fast-label")?.props.content).toBe(
-      "快 ",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-error-label")?.props.content).toBe(
-      "错 ",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-slow-grid")?.props.flexDirection)
-      .toBe("row");
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-slow-cell-u3b")?.props.width)
-      .toBe(16);
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-fast-cell-B")?.props.width)
-      .toBe(16);
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-error-cell-u3b")?.props.width)
-      .toBe(16);
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-slow-u3b")?.props.content).toBe(
-      " ; ",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-slow-u3b")?.props.bg).toBe(
-      heatScaleColor("success", 1),
-    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-diagnostics"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-slow-label")?.props
+        .content,
+    ).toBe("慢 ");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-fast-label")?.props
+        .content,
+    ).toBe("快 ");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-error-label")?.props
+        .content,
+    ).toBe("错 ");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-slow-grid")?.props
+        .flexDirection,
+    ).toBe("row");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-slow-cell-u3b")?.props
+        .width,
+    ).toBe(16);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-fast-cell-B")?.props
+        .width,
+    ).toBe(16);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-error-cell-u3b")?.props
+        .width,
+    ).toBe(16);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-slow-u3b")?.props
+        .content,
+    ).toBe(" ; ");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-slow-u3b")?.props.bg,
+    ).toBe(heatScaleColor("success", 1));
     expectDefaultForeground(
       findNodeById(kit.addedNodes, "keyloop-complete-key-slow-u3b")?.props.fg,
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-slow-u3b-speed")?.props.content).toBe(
-      " 20.0 WPM  ",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-fast-B")?.props.content).toBe(
-      " B ",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-error-u3b")?.props.bg).toBe(
-      heatScaleColor("danger", 4),
-    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-slow-u3b-speed")?.props
+        .content,
+    ).toBe(" 20.0 WPM  ");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-fast-B")?.props
+        .content,
+    ).toBe(" B ");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-error-u3b")?.props.bg,
+    ).toBe(heatScaleColor("danger", 4));
     expectDefaultForeground(
       findNodeById(kit.addedNodes, "keyloop-complete-key-error-u3b")?.props.fg,
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-key-error-u3b-count")?.props.content).toBe(
-      " ×1  ",
-    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-key-error-u3b-count")
+        ?.props.content,
+    ).toBe(" ×1  ");
   });
 
   test("renders completion as result popup over the finished practice", async () => {
@@ -2027,10 +2701,20 @@ describe("OpenTUI renderer adapter", () => {
         backspace_count: 1,
       }),
       {
-        target: { mode: "words", text: "return value", source: "test:complete-popup" },
+        target: {
+          mode: "words",
+          text: "return value",
+          source: "test:complete-popup",
+        },
         live: {
           input: "return value",
-          metrics: { wpm: 30, raw_wpm: 32, accuracy: 100, errors: 0, backspaces: 1 },
+          metrics: {
+            wpm: 30,
+            raw_wpm: 32,
+            accuracy: 100,
+            errors: 0,
+            backspaces: 1,
+          },
         },
       },
     );
@@ -2044,25 +2728,38 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("Lesson complete");
     expect(content).not.toContain("Enter / Esc close result");
     expect(content).not.toContain("Enter again continue");
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-popup")).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-popup"),
+    ).toBeDefined();
     expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")).toBeDefined();
 
     const overlay = findNodeById(kit.addedNodes, "keyloop-complete-overlay");
     expect(overlay?.props.position).toBe("absolute");
-    expectCenteredModalOverlay(kit.addedNodes, "keyloop-complete-overlay", "94%", "80%");
+    expectCenteredModalOverlay(
+      kit.addedNodes,
+      "keyloop-complete-overlay",
+      "94%",
+      "80%",
+    );
     expectDefaultBackground(
-      findNodeById(kit.addedNodes, "keyloop-complete-card")?.props.backgroundColor,
+      findNodeById(kit.addedNodes, "keyloop-complete-card")?.props
+        .backgroundColor,
     );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-card")?.props.bottomTitle).toBe(
-      " Enter close · R repeat · Q quit ",
-    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-card")?.props.bottomTitle,
+    ).toBe(" Enter close · R repeat · Q quit ");
     expect(content).not.toContain("WPM 30.0 | Raw WPM 32.0 | Accuracy 100.0%");
     expect(content).not.toContain("Errors 0 | Backspace 1");
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-stat-row")?.props.border).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-stat-wpm-label")?.props.content).toBe(
-      "WPM",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-cpm")).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-stat-row")?.props.border,
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-stat-wpm-label")?.props
+        .content,
+    ).toBe("WPM");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-cpm"),
+    ).toBeUndefined();
   });
 
   test("renders speed metrics as cpm when the global speed unit is cpm", async () => {
@@ -2087,18 +2784,22 @@ describe("OpenTUI renderer adapter", () => {
 
     const content = flattenContent(kit.addedNodes);
     expect(content).not.toContain("WPM");
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-stat-wpm-label")?.props.content).toBe(
-      "CPM",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-stat-wpm-value")?.props.content).toBe(
-      "150.0",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-stat-raw-label")?.props.content).toBe(
-      "Raw CPM",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-stat-raw-value")?.props.content).toBe(
-      "160.0",
-    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-stat-wpm-label")?.props
+        .content,
+    ).toBe("CPM");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-stat-wpm-value")?.props
+        .content,
+    ).toBe("150.0");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-stat-raw-label")?.props
+        .content,
+    ).toBe("Raw CPM");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-stat-raw-value")?.props
+        .content,
+    ).toBe("160.0");
   });
 
   test("renders paused state prominently in the running banner", async () => {
@@ -2116,7 +2817,13 @@ describe("OpenTUI renderer adapter", () => {
           input: "as",
           elapsed_ms: 3_000,
           paused: true,
-          metrics: { wpm: 8, raw_wpm: 8, accuracy: 100, errors: 0, backspaces: 0 },
+          metrics: {
+            wpm: 8,
+            raw_wpm: 8,
+            accuracy: 100,
+            errors: 0,
+            backspaces: 0,
+          },
         },
       },
     };
@@ -2124,20 +2831,26 @@ describe("OpenTUI renderer adapter", () => {
 
     await renderOpenTuiAppOnce(state, kit);
 
-    expect(findNodeById(kit.addedNodes, "keyloop-lesson-pause-state")?.props.content).toBe(
-      "⏸ 已暂停",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-lesson-duration")?.children.map(
-      (child) => child.props.id,
-    )).toEqual([
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-lesson-pause-state")?.props.content,
+    ).toBe("⏸ 已暂停");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-lesson-duration")?.children.map(
+        (child) => child.props.id,
+      ),
+    ).toEqual([
       "keyloop-lesson-duration-label",
       "keyloop-lesson-duration-value",
       "keyloop-lesson-pause-state",
     ]);
-    expect(findNodeById(kit.addedNodes, "keyloop-practice-time-stack")?.props.alignItems).toBe(
-      "flex-end",
-    );
-    expect(findNodeById(kit.addedNodes, "keyloop-practice-time-stack")?.props.flexShrink).toBe(0);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-practice-time-stack")?.props
+        .alignItems,
+    ).toBe("flex-end");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-practice-time-stack")?.props
+        .flexShrink,
+    ).toBe(0);
     const pausedHints = collectHintTexts(kit.addedNodes);
     expect(pausedHints).toContain("继续");
   });
@@ -2157,7 +2870,11 @@ describe("OpenTUI renderer adapter", () => {
         accuracy: 100,
       }),
       {
-        target: { mode: "words", text: "i18n", source: "test:standalone-complete" },
+        target: {
+          mode: "words",
+          text: "i18n",
+          source: "test:standalone-complete",
+        },
         nextLesson: {
           id: "next",
           kind: "words",
@@ -2165,7 +2882,11 @@ describe("OpenTUI renderer adapter", () => {
           category: "review",
           mix_profile: "standalone",
           estimated_minutes: 4,
-          target: { mode: "words", text: "again", source: "test:standalone-next" },
+          target: {
+            mode: "words",
+            text: "again",
+            source: "test:standalone-next",
+          },
           reason_zh: "",
           reason_en: "",
         },
@@ -2176,11 +2897,15 @@ describe("OpenTUI renderer adapter", () => {
 
     const content = flattenContent(kit.addedNodes);
     expect(content).not.toContain("Next: unknown");
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-next")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-actions")).toBeUndefined();
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-card")?.props.bottomTitle).toBe(
-      " Enter close · R repeat · Q quit ",
-    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-next"),
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-actions"),
+    ).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-card")?.props.bottomTitle,
+    ).toBe(" Enter close · R repeat · Q quit ");
   });
 
   test("renders exit confirmation as a popup over the paused practice", async () => {
@@ -2192,7 +2917,13 @@ describe("OpenTUI renderer adapter", () => {
         live: {
           input: "ret",
           elapsed_ms: 12_000,
-          metrics: { wpm: 15, raw_wpm: 18, accuracy: 100, errors: 0, backspaces: 0 },
+          metrics: {
+            wpm: 15,
+            raw_wpm: 18,
+            accuracy: 100,
+            errors: 0,
+            backspaces: 0,
+          },
         },
       },
     );
@@ -2205,17 +2936,25 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("Exit confirmation");
     expect(content).toContain("Exit the current practice?");
     expect(content).toContain("Unfinished progress will not be saved.");
-    expect(content).not.toContain("Enter confirm exit | Esc return to practice");
+    expect(content).not.toContain(
+      "Enter confirm exit | Esc return to practice",
+    );
     expect(content).toContain("0:12");
-    expect(findNodeById(kit.addedNodes, "keyloop-exit-confirmation-popup")).toBeDefined();
     expect(
-      findNodeById(kit.addedNodes, "keyloop-exit-confirmation-popup")?.props.bottomTitle,
+      findNodeById(kit.addedNodes, "keyloop-exit-confirmation-popup"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-exit-confirmation-popup")?.props
+        .bottomTitle,
     ).toBe(" Enter confirm exit · Esc keep typing ");
 
     expect(findNodeById(kit.addedNodes, "keyloop-route-panel")).toBeUndefined();
     expect(findNodeById(kit.addedNodes, "keyloop-ghost-text")).toBeDefined();
 
-    const overlay = findNodeById(kit.addedNodes, "keyloop-exit-confirmation-overlay");
+    const overlay = findNodeById(
+      kit.addedNodes,
+      "keyloop-exit-confirmation-overlay",
+    );
     expect(overlay?.props.position).toBe("absolute");
     expectCenteredModalOverlay(
       kit.addedNodes,
@@ -2241,21 +2980,35 @@ describe("OpenTUI renderer adapter", () => {
         backspace_count: 1,
       }),
       {
-        target: { mode: "words", text: "return value", source: "test:complete-popup" },
+        target: {
+          mode: "words",
+          text: "return value",
+          source: "test:complete-popup",
+        },
         live: {
           input: "retXrn value",
-          metrics: { wpm: 30, raw_wpm: 32, accuracy: 90, errors: 1, backspaces: 1 },
+          metrics: {
+            wpm: 30,
+            raw_wpm: 32,
+            accuracy: 90,
+            errors: 1,
+            backspaces: 1,
+          },
         },
       },
     );
 
     await renderOpenTuiAppOnce(state, kit);
 
-    expect(findNodesByIdPrefix(kit.addedNodes, "keyloop-ghost-wrong-")).toHaveLength(0);
-    expect(findNodesByIdPrefix(kit.addedNodes, "keyloop-ghost-cursor-")).toHaveLength(0);
-    expect(findNodeById(kit.addedNodes, "keyloop-ghost-typed-0-0")?.props.content).toContain(
-      "return",
-    );
+    expect(
+      findNodesByIdPrefix(kit.addedNodes, "keyloop-ghost-wrong-"),
+    ).toHaveLength(0);
+    expect(
+      findNodesByIdPrefix(kit.addedNodes, "keyloop-ghost-cursor-"),
+    ).toHaveLength(0);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-ghost-typed-0-0")?.props.content,
+    ).toContain("return");
   });
 
   test("keeps dismissed completion snapshot anchored to the completed record", async () => {
@@ -2286,7 +3039,9 @@ describe("OpenTUI renderer adapter", () => {
     const content = flattenContent(kit.addedNodes);
     expect(content).toContain("previous");
     expect(content).not.toContain("next");
-    expect(findNodeById(kit.addedNodes, "keyloop-complete-popup")).toBeUndefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-complete-popup"),
+    ).toBeUndefined();
   });
 
   test("renders summary route aggregates", async () => {
@@ -2323,12 +3078,16 @@ describe("OpenTUI renderer adapter", () => {
       "2 sessions | active 2m | WPM 25.0 | Raw WPM 27.0 | Best/slowest 30.0/20.0 | accuracy 96.2%",
     );
     expect(content).toContain("Errors 4 | Backspace 3");
-    expectDefaultForeground(findNodeById(kit.addedNodes, "keyloop-route-panel-line-1")?.props.fg);
+    expectDefaultForeground(
+      findNodeById(kit.addedNodes, "keyloop-route-panel-line-1")?.props.fg,
+    );
   });
 
   test("goal onboarding welcome renders directions and actions", async () => {
     const kit = fakeKit();
-    const state = createOpenTuiGoalOnboardingState("zh", { scenario: "welcome" });
+    const state = createOpenTuiGoalOnboardingState("zh", {
+      scenario: "welcome",
+    });
     await renderOpenTuiAppOnce(state, kit);
     const content = flattenContent(kit.addedNodes);
     expect(content).toContain("普通打字");
@@ -2341,7 +3100,12 @@ describe("OpenTUI renderer adapter", () => {
     const kit = fakeKit();
     const state = createOpenTuiGoalOnboardingState("zh", {
       scenario: "achieved",
-      achievedGoal: { form: "code", target_wpm: 60, deadline: "2026-06-01", created_at: "2026-03-01" },
+      achievedGoal: {
+        form: "code",
+        target_wpm: 60,
+        deadline: "2026-06-01",
+        created_at: "2026-03-01",
+      },
     });
     await renderOpenTuiAppOnce(state, kit);
     expect(flattenContent(kit.addedNodes)).toContain("代码");
@@ -2362,7 +3126,13 @@ describe("OpenTUI renderer adapter", () => {
     };
     const state = createOpenTuiSummaryState(
       "en",
-      [defaultSessionRecord({ lesson_index: 0, active_ms: 180_000, duration_ms: 180_000 })],
+      [
+        defaultSessionRecord({
+          lesson_index: 0,
+          active_ms: 180_000,
+          duration_ms: 180_000,
+        }),
+      ],
       { lessons: [lesson] },
     );
 
@@ -2373,11 +3143,12 @@ describe("OpenTUI renderer adapter", () => {
     expect(content).toContain("planned 4m · actual 3.0m");
   });
 
-  test("renders stats route overview metrics", async () => {
+  test("renders a large interactive stats trend from eligible recomputed metrics", async () => {
     const kit = fakeKit();
     const records = [
       defaultSessionRecord({
         started_at: "2026-06-05T03:00:00.000Z",
+        category: "code_mix",
         duration_ms: 60_000,
         active_ms: 60_000,
         target_len: 160,
@@ -2390,6 +3161,7 @@ describe("OpenTUI renderer adapter", () => {
       }),
       defaultSessionRecord({
         started_at: "2026-06-05T04:00:00.000Z",
+        category: "code_mix",
         duration_ms: 60_000,
         active_ms: 60_000,
         target_len: 100,
@@ -2400,17 +3172,124 @@ describe("OpenTUI renderer adapter", () => {
         backspace_count: 1,
       }),
     ];
-    const state = createOpenTuiStatsState("en", records, { speedUnit: "cpm" });
+    const state = createOpenTuiStatsState("en", records, {
+      speedUnit: "cpm",
+      view: "trends",
+    });
+
+    await withStdoutColumns(96, () => renderOpenTuiAppOnce(state, kit));
+
+    const content = flattenContent(kit.addedNodes);
+    expect(content).toContain("Stats");
+    expect(content).toContain("‹Code›");
+    expect(content).toContain("‹WPM›");
+    expect(content).toContain("‹30 sessions›");
+    expect(content).toContain("Latest point");
+    expect(content).toContain("100.0 CPM");
+    expect(content).toContain("Recent 10");
+    expect(content).toContain("125.0 CPM");
+    expect(content).toContain("Coverage");
+    expect(content).toContain("2/2");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-trend-context")?.props.title,
+    ).toBe(" Recent practice by training type · WPM · up to 30 sessions ");
+    expect(content).toContain("Timeline, not distribution");
+    expect(content).toContain("1 bar/session");
+    expect(content).toContain("compare within type");
+    expect(content).toContain(
+      "◆ 2/2 · 06-05 · 1 session · 100.0 CPM · 100.0% · active 1m",
+    );
+    expect(content).toMatch(/[\u2801-\u28ff]/u);
+    expect(content).not.toContain("Speed  best CPM 200.0");
+    const trendPanel = findNodeById(
+      kit.addedNodes,
+      "keyloop-stats-trend-panel",
+    );
+    expect(trendPanel?.type).toBe("Box");
+    expect(trendPanel?.props.height).toBe(14);
+    expect(trendPanel?.props.flexGrow).toBeUndefined();
+    expect(trendPanel?.props.bottomTitle).toBeUndefined();
+    expectAnsiSlot(trendPanel?.props.borderColor, 8, "brightBlack");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-trend-content")?.props
+        .flexDirection,
+    ).toBe("row");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-trend-row-0")?.type,
+    ).toBe("Box");
+    const selectedRun = findNodesByIdPrefix(
+      kit.addedNodes,
+      "keyloop-stats-trend-row-",
+    ).find((node) => node.props.content === "◆");
+    expectAnsiSlot(selectedRun?.props.fg, 3, "yellow");
+    expect(collectHintTexts(kit.addedNodes)).toEqual(
+      expect.arrayContaining(["←/→", "point", "[ / ]", "range"]),
+    );
+
+    const inspectedKit = fakeKit();
+    const inspected = createOpenTuiStatsState("en", records, {
+      speedUnit: "cpm",
+      view: "trends",
+      trendIndex: 0,
+    });
+    await withStdoutColumns(96, () =>
+      renderOpenTuiAppOnce(inspected, inspectedKit),
+    );
+    expect(flattenContent(inspectedKit.addedNodes)).toContain(
+      "◆ 1/2 · 06-05 · 1 session · 150.0 CPM · 93.8% · active 1m",
+    );
+
+    const compactKit = fakeKit();
+    await withStdoutColumns(76, () => renderOpenTuiAppOnce(state, compactKit));
+    expect(flattenContent(compactKit.addedNodes)).toContain("‹30 sessions›");
+    expect(
+      findNodeById(compactKit.addedNodes, "keyloop-stats-trend-kpis"),
+    ).toBeUndefined();
+    const compactPanel = findNodeById(
+      compactKit.addedNodes,
+      "keyloop-stats-trend-panel",
+    );
+    expect(compactPanel?.props.width).toBe("100%");
+    expect(compactPanel?.props.height).toBe(12);
+  });
+
+  test("explains when stored records cannot form a comparable trend", async () => {
+    const kit = fakeKit();
+    const state = createOpenTuiStatsState(
+      "en",
+      [
+        defaultSessionRecord({
+          started_at: "2026-06-05T03:00:00.000Z",
+          category: "unknown",
+          active_ms: 60_000,
+          typed_len: 100,
+          correct_chars: 90,
+        }),
+      ],
+      { view: "trends" },
+    );
 
     await renderOpenTuiAppOnce(state, kit);
 
     const content = flattenContent(kit.addedNodes);
-    expect(content).toContain("Stats");
-    expect(content).toContain("Overview  2 sessions");
-    expect(content).toContain("Speed  best CPM 200.0 | average CPM 125.0");
+    expect(content).toContain("No comparable data in this range");
+    expect(content).toContain(
+      "Use ↑/↓ to change form or [ / ] to expand the range",
+    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-trend-row-0"),
+    ).toBeUndefined();
+    const emptyPanel = findNodeById(
+      kit.addedNodes,
+      "keyloop-stats-trend-panel",
+    );
+    expect(emptyPanel?.props.height).toBeUndefined();
+    expect(emptyPanel?.props.flexGrow).toBe(1);
+    expect(emptyPanel?.props.bottomTitle).toBeUndefined();
+    expectAnsiSlot(emptyPanel?.props.borderColor, 8, "brightBlack");
   });
 
-  test("renders stats route modules view", async () => {
+  test("renders module investment as a visual composition on overview", async () => {
     const kit = fakeKit();
     const state = createOpenTuiStatsState(
       "en",
@@ -2419,6 +3298,9 @@ describe("OpenTUI renderer adapter", () => {
           started_at: "2026-06-05T03:00:00.000Z",
           mode: "words",
           module: "programming_basics",
+          category: "everyday_words",
+          daily_run_id: "run-visual",
+          lesson_index: 0,
           duration_ms: 60_000,
           active_ms: 60_000,
           target_len: 160,
@@ -2431,6 +3313,9 @@ describe("OpenTUI renderer adapter", () => {
           started_at: "2026-06-05T04:00:00.000Z",
           mode: "code",
           module: "code_practice",
+          category: "code_mix",
+          daily_run_id: "run-visual",
+          lesson_index: 1,
           duration_ms: 60_000,
           active_ms: 60_000,
           target_len: 100,
@@ -2440,52 +3325,112 @@ describe("OpenTUI renderer adapter", () => {
           error_count: 1,
         }),
       ],
-      { view: "modules" },
+      { view: "overview", now: new Date("2026-06-05T12:00:00.000Z") },
     );
 
     await renderOpenTuiAppOnce(state, kit);
 
     const content = flattenContent(kit.addedNodes);
-    expect(content).toContain(
-      "Next driver  Programming basics | error 2.5% | accuracy 93.8%",
-    );
-    expect(content).toContain(
-      "Programming basics  1 sessions | active 1m | WPM 30.0 | error 2.5%",
-    );
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-overview-rhythm")?.props
+        .title,
+    ).toBe(" Training rhythm · last 30 days ");
+    expect(content).toContain("Module share");
+    expect(content).toContain("Code 50%");
+    expect(content).toContain("Programming 50%");
+    expect(content).toContain("Latest full practice");
+    expect(content).toContain("1 Words");
+    expect(content).toContain("2 Code");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-overview-activity-calendar"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-run-stage-0"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-module-code_practice"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-module-programming_basics"),
+    ).toBeDefined();
   });
 
-  test("renders stats route keys view", async () => {
-    const kit = fakeKit();
-    const state = createOpenTuiStatsState("en", [], {
-      view: "keys",
-      keyAggregates: [
-        defaultKeyAggregate({
-          key: "[",
-          sample_count: 5,
-          avg_ms: 400,
-          fastest_ms: 80,
-          slowest_ms: 900,
-          error_rate: 20,
-          confidence: 0.4,
-        }),
-      ],
-    });
-
-    await renderOpenTuiAppOnce(state, kit);
-
-    const content = flattenContent(kit.addedNodes);
-    expect(content).toContain("Stats");
-    expect(content).toContain("Key stats  sort: slowest avg");
-    expect(content).toContain("[");
-  });
-
-  test("renders stats route daily view", async () => {
+  test("renders canonical per-key signals as a physical keyboard heatmap", async () => {
     const kit = fakeKit();
     const state = createOpenTuiStatsState(
       "en",
       [
         defaultSessionRecord({
           started_at: "2026-06-05T03:00:00.000Z",
+          category: "foundation_mix",
+          duration_ms: 60_000,
+          active_ms: 60_000,
+          typed_len: 6,
+          correct_chars: 6,
+          key_events: Array.from({ length: 6 }, (_, index) => ({
+            at_ms: index * 120,
+            action: "insert" as const,
+            position: index,
+            expected: "[",
+            input: "[",
+            correct: true,
+          })),
+        }),
+      ],
+      { view: "skills" },
+    );
+
+    await renderOpenTuiAppOnce(state, kit);
+
+    const content = flattenContent(kit.addedNodes);
+    expect(content).toContain("Stats");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-keyboard-panel")?.props.title,
+    ).toBe(" Keyboard heatmap · selected [ / { ");
+    expect(content).toContain("[  mastered · mastery 100%");
+    expect(content).toContain("critical");
+    const selectedKey = findNodeById(kit.addedNodes, "keyloop-stats-key-5b");
+    expect(selectedKey).toBeDefined();
+    expectAnsiSlot(selectedKey?.props.bg, 15, "brightWhite");
+    const backspace = findNodeById(
+      kit.addedNodes,
+      "keyloop-stats-special-key-special-backspace",
+    );
+    expect(backspace).toBeDefined();
+    expectAnsiSlot(backspace?.props.bg, 8, "brightBlack");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-special-key-special-space")
+        ?.props.content,
+    ).toContain("Space");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-dimension-group-input"),
+    ).toBeDefined();
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-dimension-group-position"),
+    ).toBeDefined();
+    expect(content).toContain("Rows & hands · error / response");
+    expect(content).not.toContain("◆ok");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-keyboard-panel")?.props
+        .height,
+    ).toBe(15);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-keyboard")?.props,
+    ).toMatchObject({
+      gap: 1,
+      height: 11,
+    });
+  });
+
+  test("renders history as a 52-week activity calendar with session detail", async () => {
+    const kit = fakeKit();
+    const state = createOpenTuiStatsState(
+      "en",
+      [
+        defaultSessionRecord({
+          started_at: "2026-06-05T03:00:00.000Z",
+          module: "code_practice",
+          category: "code_mix",
           duration_ms: 60_000,
           active_ms: 60_000,
           target_len: 160,
@@ -2496,15 +3441,124 @@ describe("OpenTUI renderer adapter", () => {
           error_count: 4,
         }),
       ],
-      { view: "daily", dailyIndex: 0 },
+      {
+        view: "history",
+        dailyIndex: 0,
+        historyExpanded: true,
+        now: new Date("2026-06-05T12:00:00.000Z"),
+      },
     );
 
     await renderOpenTuiAppOnce(state, kit);
 
     const content = flattenContent(kit.addedNodes);
     expect(content).toContain("Stats");
-    expect(content).toContain("Date 2026-06-05  (1/1)  Left/Right switches date");
-    expect(content).toContain("Day 1 sessions");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-history-calendar-panel")
+        ?.props.title,
+    ).toBe(" 52-week training calendar · one cell = active minutes/day ");
+    expect(content).toContain("2026-06-05");
+    expect(content).toContain("Sessions  1");
+    expect(content).toContain("Time");
+    expect(content).toContain("Type");
+    expect(content).toContain("Speed");
+    expect(content).toContain("Accuracy");
+    expect(content).toContain("Active");
+    expect(content).toContain("Result");
+    expect(content).toContain("Performance");
+    expect(content).toContain("Typing");
+    expect(content).toContain("Timing");
+    expect(content).toContain("Included in trend");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-history-sessions")?.props,
+    ).toMatchObject({
+      flexGrow: 1,
+      bottomTitle: " 1/1 · Enter collapse details ",
+    });
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stats-activity-calendar"),
+    ).toBeDefined();
+  });
+
+  test("uses structural compact layouts for activity, keyboard, and history", async () => {
+    await withStdoutColumns(72, async () => {
+      const records = [
+        defaultSessionRecord({
+          started_at: "2026-06-05T03:00:00.000Z",
+          active_ms: 60_000,
+          duration_ms: 60_000,
+          typed_len: 120,
+          correct_chars: 110,
+          category: "foundation_mix",
+        }),
+      ];
+
+      const overviewKit = fakeKit();
+      await renderOpenTuiAppOnce(
+        createOpenTuiStatsState("zh", records, {
+          view: "overview",
+          now: new Date("2026-06-05T12:00:00.000Z"),
+        }),
+        overviewKit,
+      );
+      expect(
+        findNodeById(
+          overviewKit.addedNodes,
+          "keyloop-stats-overview-rhythm-summary",
+        )?.props.width,
+      ).toBe(46);
+      expect(
+        findNodeById(
+          overviewKit.addedNodes,
+          "keyloop-stats-overview-activity-calendar",
+        ),
+      ).toBeDefined();
+
+      const skillsKit = fakeKit();
+      await renderOpenTuiAppOnce(
+        createOpenTuiStatsState("zh", records, { view: "skills" }),
+        skillsKit,
+      );
+      expect(
+        findNodeById(skillsKit.addedNodes, "keyloop-stats-keyboard-row-0")
+          ?.props.justifyContent,
+      ).toBe("flex-start");
+      expect(
+        findNodeById(skillsKit.addedNodes, "keyloop-stats-dimensions-panel")
+          ?.props.height,
+      ).toBe(9);
+      const skillsContent = flattenContent(skillsKit.addedNodes);
+      expect(skillsContent).toContain("中排键");
+      expect(skillsContent).not.toContain("主键区");
+      expect(skillsContent).not.toContain("●常");
+      expect(
+        findNodeById(
+          skillsKit.addedNodes,
+          "keyloop-stats-dimension-rhythm-compact",
+        ),
+      ).toBeDefined();
+
+      const historyKit = fakeKit();
+      await renderOpenTuiAppOnce(
+        createOpenTuiStatsState("zh", records, {
+          view: "history",
+          now: new Date("2026-06-05T12:00:00.000Z"),
+        }),
+        historyKit,
+      );
+      expect(
+        findNodeById(
+          historyKit.addedNodes,
+          "keyloop-stats-history-calendar-panel",
+        )?.props.flexDirection,
+      ).toBe("column");
+      expect(
+        findNodeById(
+          historyKit.addedNodes,
+          "keyloop-stats-history-day-summary-compact",
+        ),
+      ).toBeDefined();
+    });
   });
 
   test("renders stage plan as structured sections without the temporary-minute copy", async () => {
@@ -2529,11 +3583,22 @@ describe("OpenTUI renderer adapter", () => {
     await renderOpenTuiAppOnce(state, kit);
 
     const content = flattenContent(kit.addedNodes);
-    expect(findNodeById(kit.addedNodes, "keyloop-stage-plan")?.props.border).toBe(true);
-    expect(findNodeById(kit.addedNodes, "keyloop-stage-plan-goal-section")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-stage-plan-diagnosis-section")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-stage-plan-lessons-section")?.type).toBe("Box");
-    expect(findNodeById(kit.addedNodes, "keyloop-stage-plan-duration-section")?.type).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stage-plan")?.props.border,
+    ).toBe(true);
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stage-plan-goal-section")?.type,
+    ).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stage-plan-diagnosis-section")
+        ?.type,
+    ).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stage-plan-lessons-section")?.type,
+    ).toBe("Box");
+    expect(
+      findNodeById(kit.addedNodes, "keyloop-stage-plan-duration-section")?.type,
+    ).toBe("Box");
     expect(content).toContain("建议每日约");
     expect(content).not.toContain("暂按");
     expect(content).not.toContain("[Enter] 开始");
@@ -2654,9 +3719,15 @@ function expectCenteredModalOverlay(
   expect(viewport?.props.maxHeight).toBe(maxHeight);
 }
 
-async function withStdoutColumns<T>(columns: number, run: () => Promise<T>): Promise<T> {
+async function withStdoutColumns<T>(
+  columns: number,
+  run: () => Promise<T>,
+): Promise<T> {
   const descriptor = Object.getOwnPropertyDescriptor(process.stdout, "columns");
-  Object.defineProperty(process.stdout, "columns", { configurable: true, value: columns });
+  Object.defineProperty(process.stdout, "columns", {
+    configurable: true,
+    value: columns,
+  });
   try {
     return await run();
   } finally {
@@ -2668,9 +3739,15 @@ async function withStdoutColumns<T>(columns: number, run: () => Promise<T>): Pro
   }
 }
 
-async function withStdoutRows<T>(rows: number, run: () => Promise<T>): Promise<T> {
+async function withStdoutRows<T>(
+  rows: number,
+  run: () => Promise<T>,
+): Promise<T> {
   const descriptor = Object.getOwnPropertyDescriptor(process.stdout, "rows");
-  Object.defineProperty(process.stdout, "rows", { configurable: true, value: rows });
+  Object.defineProperty(process.stdout, "rows", {
+    configurable: true,
+    value: rows,
+  });
   try {
     return await run();
   } finally {
@@ -2746,10 +3823,12 @@ function testLibrary(): ContentLibrary {
     everyday_sentences: { sources: [], entries: [] },
     everyday_articles: { sources: [], entries: [] },
     everyday_word_decomposition: { sources: [], entries: [] },
-    programming_words: ["enabled", "visible", "archived", "configuration"].map((word) => ({
-      word,
-      note_zh: "",
-    })),
+    programming_words: ["enabled", "visible", "archived", "configuration"].map(
+      (word) => ({
+        word,
+        note_zh: "",
+      }),
+    ),
     code_snippets: [
       {
         language: "typescript",
@@ -2766,7 +3845,9 @@ function testLibrary(): ContentLibrary {
 
 describe("ghostRows space glyph", () => {
   test("renders interior spaces as middle dot when spaceDot enabled", () => {
-    const rows = ghostRows("give up", "give", undefined, false, { spaceDot: true });
+    const rows = ghostRows("give up", "give", undefined, false, {
+      spaceDot: true,
+    });
     const texts = (rows[0] ?? []).map((segment) => segment.text).join("");
     expect(texts).toBe("give·up");
   });
@@ -2781,7 +3862,10 @@ describe("ghostRows space glyph", () => {
 describe("ghost viewport slice", () => {
   test("short content renders fully", () => {
     expect(ghostViewportSlice(10, 3, 20)).toEqual({ start: 0, end: 10 });
-    expect(ghostViewportSlice(10, 3, Number.POSITIVE_INFINITY)).toEqual({ start: 0, end: 10 });
+    expect(ghostViewportSlice(10, 3, Number.POSITIVE_INFINITY)).toEqual({
+      start: 0,
+      end: 10,
+    });
   });
 
   test("cursor near top keeps window at start", () => {
@@ -2807,23 +3891,46 @@ describe("ghost viewport slice", () => {
 
 describe("ghost visual row count", () => {
   test("counts one visual row per short code line", () => {
-    const text = Array.from({ length: 12 }, (_, i) => `const v${i} = ${i};`).join("\n");
-    expect(ghostVisualRowCount(text, text, "code", undefined, undefined)).toBe(12);
+    const text = Array.from(
+      { length: 12 },
+      (_, i) => `const v${i} = ${i};`,
+    ).join("\n");
+    expect(ghostVisualRowCount(text, text, "code", undefined, undefined)).toBe(
+      12,
+    );
   });
 
   test("counts sentence translation lines", () => {
     const text = "The weather is nice.\nShe left early.";
     const annotations = [
-      { start: 0, end: 20, translation_zh: "天气不错。", display: "line" as const },
-      { start: 21, end: 36, translation_zh: "她早走了。", display: "line" as const },
+      {
+        start: 0,
+        end: 20,
+        translation_zh: "天气不错。",
+        display: "line" as const,
+      },
+      {
+        start: 21,
+        end: 36,
+        translation_zh: "她早走了。",
+        display: "line" as const,
+      },
     ];
     // 2 句 + 2 行翻译 = 4 可视行
-    expect(ghostVisualRowCount(text, text, "words", annotations, undefined)).toBe(4);
+    expect(
+      ghostVisualRowCount(text, text, "words", annotations, undefined),
+    ).toBe(4);
   });
 
   test("counts the article translation rows (spacer + wrapped lines)", () => {
     const text = "First para.\nSecond para.";
-    const withoutArticle = ghostVisualRowCount(text, text, "words", undefined, undefined);
+    const withoutArticle = ghostVisualRowCount(
+      text,
+      text,
+      "words",
+      undefined,
+      undefined,
+    );
     const annotations = [
       {
         start: 0,
@@ -2832,7 +3939,13 @@ describe("ghost visual row count", () => {
         display: "article" as const,
       },
     ];
-    const withArticle = ghostVisualRowCount(text, text, "words", annotations, undefined);
+    const withArticle = ghostVisualRowCount(
+      text,
+      text,
+      "words",
+      annotations,
+      undefined,
+    );
     // 文章翻译现在计入行数（1 行间隔 + 至少 1 行翻译），否则复盘滚不到底
     expect(withArticle).toBeGreaterThanOrEqual(withoutArticle + 2);
   });
@@ -2841,13 +3954,24 @@ describe("ghost visual row count", () => {
 describe("ghost text review scroll windowing", () => {
   const ghostKit = (): OpenTuiRendererKit & { addedNodes: never } =>
     ({
-      Box: (props: unknown, ...children: unknown[]) => ({ type: "Box", props, children }),
-      ScrollBox: (props: unknown, ...children: unknown[]) => ({ type: "ScrollBox", props, children }),
+      Box: (props: unknown, ...children: unknown[]) => ({
+        type: "Box",
+        props,
+        children,
+      }),
+      ScrollBox: (props: unknown, ...children: unknown[]) => ({
+        type: "ScrollBox",
+        props,
+        children,
+      }),
       Text: (props: unknown) => ({ type: "Text", props, children: [] }),
     }) as never;
 
   function flattenText(node: unknown, out: string[] = []): string[] {
-    const value = node as { props?: { content?: unknown }; children?: unknown[] };
+    const value = node as {
+      props?: { content?: unknown };
+      children?: unknown[];
+    };
     if (typeof value.props?.content === "string") {
       out.push(value.props.content);
     }
@@ -2858,15 +3982,29 @@ describe("ghost text review scroll windowing", () => {
   }
 
   const longCode = Array.from({ length: 60 }, (_, i) =>
-    i === 0 ? "const FIRST = 1;" : i === 59 ? "const LAST = 60;" : `const v${i} = ${i};`,
+    i === 0
+      ? "const FIRST = 1;"
+      : i === 59
+        ? "const LAST = 60;"
+        : `const v${i} = ${i};`,
   ).join("\n");
   const blocks = [
-    { start_line: 0, line_count: 60, language: "typescript", framework: "l", project: "p", source: "s" },
+    {
+      start_line: 0,
+      line_count: 60,
+      language: "typescript",
+      framework: "l",
+      project: "p",
+      source: "s",
+    },
   ];
 
   async function withRows<T>(rows: number, run: () => Promise<T>): Promise<T> {
     const original = Object.getOwnPropertyDescriptor(process.stdout, "rows");
-    Object.defineProperty(process.stdout, "rows", { value: rows, configurable: true });
+    Object.defineProperty(process.stdout, "rows", {
+      value: rows,
+      configurable: true,
+    });
     try {
       return await run();
     } finally {
@@ -2879,8 +4017,16 @@ describe("ghost text review scroll windowing", () => {
   test("reviewScroll undefined on completed snapshot shows the bottom", async () => {
     await withRows(30, async () => {
       const tree = await renderGhostText(
-        longCode, longCode, "code", "s", blocks, undefined, ghostKit(),
-        "✓ done", undefined, undefined,
+        longCode,
+        longCode,
+        "code",
+        "s",
+        blocks,
+        undefined,
+        ghostKit(),
+        "✓ done",
+        undefined,
+        undefined,
       );
       const content = flattenText(tree).join("\n");
       // 完成态默认停底部：末行可见、首行不可见
@@ -2892,8 +4038,16 @@ describe("ghost text review scroll windowing", () => {
   test("reviewScroll 0 scrolls to the top", async () => {
     await withRows(30, async () => {
       const tree = await renderGhostText(
-        longCode, longCode, "code", "s", blocks, undefined, ghostKit(),
-        "✓ done", undefined, 0,
+        longCode,
+        longCode,
+        "code",
+        "s",
+        blocks,
+        undefined,
+        ghostKit(),
+        "✓ done",
+        undefined,
+        0,
       );
       const content = flattenText(tree).join("\n");
       expect(content).toContain("FIRST");
@@ -2904,8 +4058,16 @@ describe("ghost text review scroll windowing", () => {
   test("oversized reviewScroll clamps to the bottom", async () => {
     await withRows(30, async () => {
       const tree = await renderGhostText(
-        longCode, longCode, "code", "s", blocks, undefined, ghostKit(),
-        "✓ done", undefined, 9999,
+        longCode,
+        longCode,
+        "code",
+        "s",
+        blocks,
+        undefined,
+        ghostKit(),
+        "✓ done",
+        undefined,
+        9999,
       );
       const content = flattenText(tree).join("\n");
       expect(content).toContain("LAST");
@@ -2917,8 +4079,16 @@ describe("render tree disposal (memory-leak guard)", () => {
   test("replacing the route destroys the previous tree via destroyRecursively", async () => {
     let destroyCalls = 0;
     const kit = {
-      Box: (props: unknown, ...children: unknown[]) => ({ type: "Box", props, children }),
-      ScrollBox: (props: unknown, ...children: unknown[]) => ({ type: "ScrollBox", props, children }),
+      Box: (props: unknown, ...children: unknown[]) => ({
+        type: "Box",
+        props,
+        children,
+      }),
+      ScrollBox: (props: unknown, ...children: unknown[]) => ({
+        type: "ScrollBox",
+        props,
+        children,
+      }),
       Text: (props: unknown) => ({ type: "Text", props, children: [] }),
       createCliRenderer: async () => {
         const store = new Map<string, { destroyRecursively: () => void }>();
@@ -2947,7 +4117,10 @@ describe("render tree disposal (memory-leak guard)", () => {
       },
     } as unknown as OpenTuiRendererKit;
 
-    const renderer = await renderOpenTuiAppOnce(createOpenTuiInitialState("en"), kit);
+    const renderer = await renderOpenTuiAppOnce(
+      createOpenTuiInitialState("en"),
+      kit,
+    );
     expect(destroyCalls).toBe(0); // 首帧无旧树可销毁
     await renderer.renderState?.(createOpenTuiInitialState("zh"));
     // 替换路由树时旧树被 destroyRecursively（释放 yoga native 节点，修复泄漏）
